@@ -1,7 +1,7 @@
 from opyenxes.data_in.XUniversalParser import XUniversalParser
 
 
-def get_logs(file_path):
+def get_logs(file_path: str):
     """Read in event log from disk
 
     Uses XUniversalParser to parse log.

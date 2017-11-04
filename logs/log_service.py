@@ -1,4 +1,5 @@
 from collections import defaultdict, OrderedDict
+
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 
@@ -17,6 +18,7 @@ def events_by_date(logs):
                 date = timestamp.split("T")[0]
                 stamp_dict[date] += 1
     return OrderedDict(sorted(stamp_dict.items()))
+
 
 def resources_by_date(logs):
     """Creates dict of used unique resources orederd by date
@@ -41,6 +43,7 @@ def resources_by_date(logs):
         stamp_dict[key] = len(set(value))
 
     return OrderedDict(sorted(stamp_dict.items()))
+
 
 def event_executions(logs):
     """Creates dict of event execution count

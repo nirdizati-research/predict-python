@@ -1,8 +1,9 @@
 import pandas as pd
+from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from .log_util import *
+from .log_util import unique_events, remaining_time_id, elapsed_time_id, DEFAULT_COLUMNS
 
-classifier = XEventAttributeClassifier("Trace name", ["concept:name"])
+CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
 def encode_trace(data, prefix_length=1, next_activity=False):
@@ -18,15 +19,15 @@ def encode_simple_index(log: list, prefix_length: int):
     encoded_data = []
 
     for trace in log:
+        if len(trace) <= prefix_length:
+            continue
         trace_row = []
-        trace_name = classifier.get_class_identity(trace)
+        trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         trace_row.append(prefix_length)
-        remaining_time = calculate_remaining_time(trace, prefix_length)
-        trace_row.append(remaining_time)
-        elapsed_time = calculate_elapsed_time(trace, prefix_length)
-        trace_row.append(elapsed_time)
-        for idx, event in enumerate(events_to_consider):
+        trace_row.append(remaining_time_id(trace, prefix_length))
+        trace_row.append(elapsed_time_id(trace, prefix_length))
+        for idx, _ in enumerate(events_to_consider):
             trace_row.append(idx + 1)
         encoded_data.append(trace_row)
 
@@ -41,13 +42,13 @@ def encode_next_activity(log: list, prefix_length: int):
 
     for trace in log:
         trace_row = []
-        trace_name = classifier.get_class_identity(trace)
+        trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         trace_row.append(prefix_length)
 
-        for idx, event in enumerate(events_to_consider[:-1]):
+        for idx, _ in enumerate(events_to_consider[:-1]):
             trace_row.append(idx + 1)
-        for k in range(len(events_to_consider), prefix_length):
+        for _ in range(len(events_to_consider), prefix_length):
             trace_row.append(0)
 
         # last id of event

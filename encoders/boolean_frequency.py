@@ -30,16 +30,16 @@ def encode_boolean_frequency(log: list, boolean=True):
         # starts with all False, changes to event
         event_happened = create_event_happened(event_names, boolean)
         for event_index, event in enumerate(trace):
-            case_data = []
+            trace_row = []
             update_event_happened(event, event_names, event_happened, boolean)
-            case_data += event_happened
+            trace_row += event_happened
 
-            case_data.append(trace_name)
+            trace_row.append(trace_name)
             # Start counting at 1
-            case_data.append(event_index + 1)
-            case_data.append(remaining_time(trace, event))
-            case_data.append(elapsed_time(trace, event))
-            encoded_data.append(case_data)
+            trace_row.append(event_index + 1)
+            trace_row.append(remaining_time(trace, event))
+            trace_row.append(elapsed_time(trace, event))
+            encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 

@@ -1,8 +1,9 @@
 import pandas as pd
+from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from .log_util import *
+from .log_util import unique_events, remaining_time_id, elapsed_time_id, DEFAULT_COLUMNS
 
-classifier = XEventAttributeClassifier("Trace name", ["concept:name"])
+CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
 def encode_trace(data, prefix_length=1, next_activity=False):
@@ -19,7 +20,7 @@ def encode_simple_index(log: list, prefix_length: int):
 
     for trace in log:
         trace_row = []
-        trace_name = classifier.get_class_identity(trace)
+        trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         trace_row.append(prefix_length)
         remaining_time = remaining_time_id(trace, prefix_length)
@@ -41,7 +42,7 @@ def encode_next_activity(log: list, prefix_length: int):
 
     for trace in log:
         trace_row = []
-        trace_name = classifier.get_class_identity(trace)
+        trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         trace_row.append(prefix_length)
 

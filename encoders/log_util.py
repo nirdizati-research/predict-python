@@ -9,27 +9,42 @@ timestamp_classifier = XEventAttributeClassifier("Timestamp", ["time:timestamp"]
 
 
 def unique_events(log: list):
-    """List of unique events using event concept:name"""
+    """List of unique events using event concept:name
+
+    Adds all events into a list and removes duplicates while keeping order.
+    """
     classifier = XEventAttributeClassifier("Resource", ["concept:name"])
-    event_set = set()
+    event_list = []
     for trace in log:
         for event in trace:
             event_name = classifier.get_class_identity(event)
-            event_set.add(event_name)
-    return list(event_set)
+            event_list.append(event_name)
+    return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 
-def calculate_elapsed_time(trace, event_id):
+def elapsed_time_id(trace, event_index: int):
+    """Calculate elapsed time by event index in trace"""
+    return elapsed_time_event(trace, trace[event_index])
+
+
+def elapsed_time_event(trace, event):
+    """Calculate elapsed time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = timestamp_classifier.get_class_identity(trace[event_id])[:19]
+    event_time = timestamp_classifier.get_class_identity(event)[:19]
     first_time = timestamp_classifier.get_class_identity(trace[0])[:19]
     delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
     return delta.total_seconds()
 
 
-def calculate_remaining_time(trace, event_id):
+def remaining_time_id(trace, event_index: int):
+    """Calculate remaining time by event index in trace"""
+    return remaining_time_event(trace, trace[event_index])
+
+
+def remaining_time_event(trace, event):
+    """Calculate remaining time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = timestamp_classifier.get_class_identity(trace[event_id])[:19]
+    event_time = timestamp_classifier.get_class_identity(event)[:19]
     last_time = timestamp_classifier.get_class_identity(trace[-1])[:19]
     delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
     return delta.total_seconds()

@@ -22,9 +22,9 @@ def encode_simple_index(log: list, prefix_length: int):
         trace_name = classifier.get_class_identity(trace)
         trace_row.append(trace_name)
         trace_row.append(prefix_length)
-        remaining_time = calculate_remaining_time(trace, prefix_length)
+        remaining_time = remaining_time_id(trace, prefix_length)
         trace_row.append(remaining_time)
-        elapsed_time = calculate_elapsed_time(trace, prefix_length)
+        elapsed_time = elapsed_time_id(trace, prefix_length)
         trace_row.append(elapsed_time)
         for idx, event in enumerate(events_to_consider):
             trace_row.append(idx + 1)

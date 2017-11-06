@@ -15,12 +15,14 @@ class TestBooleanGeneral(TestCase):
                  'reinitiate request', 'examine thoroughly', 'pay compensation',
                  'reject request', 'case_id', 'event_nr', 'remaining_time',
                  'elapsed_time']
-        self.assertListEqual(names, df.columns.values.tolist())
+        for name in names:
+            self.assertIn(name, df.columns.values.tolist())
         self.assertEqual((42, 12), df.shape)
 
     def test_row(self):
         df = boolean(self.log)
-        row = df[(df.event_nr == 2) & (df.case_id == 2)].iloc[0]
+
+        row = df[(df.event_nr == 2) & (df.case_id == '2')].iloc[0]
 
         self.assertTrue(row['register request'])
         self.assertFalse(row['examine casually'])

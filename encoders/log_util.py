@@ -5,7 +5,7 @@ from opyenxes.classification.XEventAttributeClassifier import XEventAttributeCla
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 # TODO change to trace_id
 DEFAULT_COLUMNS = ["case_id", "event_nr", "remaining_time", "elapsed_time"]
-timestamp_classifier = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
+TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 
 
 def unique_events(log: list):
@@ -24,27 +24,27 @@ def unique_events(log: list):
 
 def elapsed_time_id(trace, event_index: int):
     """Calculate elapsed time by event index in trace"""
-    return elapsed_time_event(trace, trace[event_index])
+    return elapsed_time(trace, trace[event_index])
 
 
-def elapsed_time_event(trace, event):
+def elapsed_time(trace, event):
     """Calculate elapsed time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = timestamp_classifier.get_class_identity(event)[:19]
-    first_time = timestamp_classifier.get_class_identity(trace[0])[:19]
+    event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
+    first_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[0])[:19]
     delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
     return delta.total_seconds()
 
 
 def remaining_time_id(trace, event_index: int):
     """Calculate remaining time by event index in trace"""
-    return remaining_time_event(trace, trace[event_index])
+    return remaining_time(trace, trace[event_index])
 
 
-def remaining_time_event(trace, event):
+def remaining_time(trace, event):
     """Calculate remaining time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = timestamp_classifier.get_class_identity(event)[:19]
-    last_time = timestamp_classifier.get_class_identity(trace[-1])[:19]
+    event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
+    last_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[-1])[:19]
     delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
     return delta.total_seconds()

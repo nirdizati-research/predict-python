@@ -19,6 +19,8 @@ def encode_simple_index(log: list, prefix_length: int):
     encoded_data = []
 
     for trace in log:
+        if len(trace) <= prefix_length:
+            continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)

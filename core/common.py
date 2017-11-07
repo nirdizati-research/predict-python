@@ -12,13 +12,13 @@ from logs.file_service import get_logs
 def encode(job):
     """Get encoded data frame"""
     # print job.encoding
-    log = get_logs('/Users/tonis.kasekamp/other/predict-python/logdata/Production.xes')[0]
+    log = get_logs('log_cache/general_example.xes')[0]
     if job.encoding == "boolean":
         return boolean(log)
     elif job.encoding == "frequency":
         return frequency(log)
     elif job.encoding == "simpleIndex":
-        return simple_index(log, prefix_length=3)
+        return simple_index(log, prefix_length=1)
 
 
 def calculate_results(prediction, actual):

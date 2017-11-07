@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
-
 from sklearn import metrics
 from sklearn.cluster import KMeans
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 
 from core.common import encode, choose_classifier, fast_slow_encode, calculate_results
+
+pd.options.mode.chained_assignment = None
 
 
 def classifier(job):
@@ -53,15 +54,13 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
             clf.fit(clustered_train_data.drop('actual', 1), y)
             prediction = clf.predict(original_test_clustered_data.drop(['case_id', 'actual'], 1))
             scores = clf.predict_proba(original_test_clustered_data.drop(['case_id', 'actual'], 1))
-            #print(prediction)
-            #print(original_test_clustered_data)
-            original_test_clustered_data["predicted"] = pd.Series(prediction, index=original_test_clustered_data.index).copy()
-            #print(original_test_clustered_data)
+
+            original_test_clustered_data["predicted"] = prediction
             original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].map(
                 {True: 'Fast', False: 'Slow'})
             original_test_clustered_data["actual"] = original_test_clustered_data["actual"].map(
                 {True: 'Fast', False: 'Slow'})
-            print(original_test_clustered_data)
+
             # WTF is the following line
             if '1)' in str(scores.shape):
                 auc += 0

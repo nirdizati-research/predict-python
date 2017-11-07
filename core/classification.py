@@ -12,16 +12,15 @@ def classifier(job):
     df = encode(job)
     clf = choose_classifier(job)
 
-    print(df.shape)
     df = fast_slow_encode(df, job.rule, job.threshold)
-    print(df.shape)
-    #print(df)
+
+    # print(df)
     train_data, test_data, original_test_data = __split_class_data(df)
 
-    print(train_data)
-    print(test_data)
+    # print(train_data)
+    # print(test_data)
     if job.clustering == "kmeans":
-        auc = kmeans_clustering(original_test_data, train_data, clf, job)
+        results, auc = kmeans_clustering(original_test_data, train_data, clf, job)
     else:
         results, auc = no_clustering(original_test_data, train_data, test_data, clf, job)
 
@@ -37,8 +36,8 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
                               range(estimator.n_clusters)}
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
 
-    write_header = True
     x = 0
+    result_data = None
     for cluster_list in cluster_lists:
 
         # Train data
@@ -51,16 +50,19 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
         if original_test_clustered_data.shape[0] == 0:
             pass
         else:
-
             clf.fit(clustered_train_data.drop('actual', 1), y)
             prediction = clf.predict(original_test_clustered_data.drop(['case_id', 'actual'], 1))
             scores = clf.predict_proba(original_test_clustered_data.drop(['case_id', 'actual'], 1))
-            original_test_clustered_data["predicted"] = prediction
-            original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].apply(
-                lambda x: 'Fast' if x else 'Slow')
-            original_test_clustered_data["actual"] = original_test_clustered_data["actual"].apply(
-                lambda x: 'Fast' if x else 'Slow')
-
+            #print(prediction)
+            #print(original_test_clustered_data)
+            original_test_clustered_data["predicted"] = pd.Series(prediction, index=original_test_clustered_data.index).copy()
+            #print(original_test_clustered_data)
+            original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].map(
+                {True: 'Fast', False: 'Slow'})
+            original_test_clustered_data["actual"] = original_test_clustered_data["actual"].map(
+                {True: 'Fast', False: 'Slow'})
+            print(original_test_clustered_data)
+            # WTF is the following line
             if '1)' in str(scores.shape):
                 auc += 0
             else:
@@ -69,12 +71,15 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
                     x += 1
                 except Exception:
                     auc += 0
-
+            if result_data is None:
+                result_data = original_test_clustered_data
+            else:
+                result_data = result_data.append(original_test_clustered_data)
     try:
         auc = float(auc) / x
     except ZeroDivisionError:
         auc = 0
-    return auc
+    return result_data, auc
 
 
 def no_clustering(original_test_data, train_data, test_data, clf, job):

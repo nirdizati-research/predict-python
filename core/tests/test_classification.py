@@ -8,7 +8,7 @@ class TestClassification(TestCase):
     def get_job(self):
         json = dict()
         json['uuid'] = "ads69"
-        json["clustering"] = "None"
+        json["clustering"] = "kmeans"
         json["status"] = "completed"
         json["run"] = "RandomForest_simpleIndex_None"
         json["log"] = "Production.xes"

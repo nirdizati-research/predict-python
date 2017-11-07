@@ -6,7 +6,7 @@ from .log_util import unique_events, remaining_time_id, elapsed_time_id, DEFAULT
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def encode_trace(data, prefix_length=1, next_activity=False):
+def simple_index(data, prefix_length=1, next_activity=False):
     if next_activity:
         return encode_next_activity(data, prefix_length)
     return encode_simple_index(data, prefix_length)

@@ -21,7 +21,7 @@ def events_by_date(logs):
 
 
 def resources_by_date(logs):
-    """Creates dict of used unique resources orederd by date
+    """Creates dict of used unique resources ordered by date
 
     Resource and timestamp delimited by &&. If this is in resources name, bad stuff will happen.
     Returns a dict with a date and the number of unique resources used on that day.

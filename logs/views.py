@@ -16,7 +16,7 @@ def log_list(request):
     """List of logs with id and name"""
     logs = Log.objects.all()
     serializer = LogSerializer(logs, many=True)
-    logger.info("Returned {} logs".format(len(logs)))
+    logger.info("Returned %s logs", len(logs))
     return Response(serializer.data)
 
 
@@ -36,7 +36,7 @@ def get_log_stats(request, pk, stat):
     try:
         log_file = log.get_file()
     except FileNotFoundError:
-        logger.error("Log id: {}, path {} not found".format(log.id, log.path))
+        logger.error("Log id: %s, path %s not found", log.id, log.path)
         return Response({'error': 'log file not found'}, status=status.HTTP_404_NOT_FOUND)
 
     if stat == 'events':

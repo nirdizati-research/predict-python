@@ -61,8 +61,7 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
             original_test_clustered_data["actual"] = original_test_clustered_data["actual"].map(
                 {True: 'Fast', False: 'Slow'})
 
-            # WTF is the following line
-            if '1)' in str(scores.shape):
+            if scores.shape[1] == 1:
                 auc += 0
             else:
                 try:

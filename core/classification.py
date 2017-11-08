@@ -37,7 +37,7 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
                               range(estimator.n_clusters)}
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
 
-    x = 0
+    counter = 0
     result_data = None
     for cluster_list in cluster_lists:
 
@@ -61,20 +61,13 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
             original_test_clustered_data["actual"] = original_test_clustered_data["actual"].map(
                 {True: 'Fast', False: 'Slow'})
 
-            if scores.shape[1] == 1:
-                auc += 0
-            else:
-                try:
-                    auc += metrics.roc_auc_score(actual, scores[:, 1])
-                    x += 1
-                except Exception:
-                    auc += 0
+            auc = calculate_auc(actual, scores, auc, counter)
             if result_data is None:
                 result_data = original_test_clustered_data
             else:
                 result_data = result_data.append(original_test_clustered_data)
     try:
-        auc = float(auc) / x
+        auc = float(auc) / counter
     except ZeroDivisionError:
         auc = 0
     return result_data, auc
@@ -136,3 +129,15 @@ def __split_class_data(data):
     test_df = test_df.drop('case_id', 1)
 
     return train_df, test_df, original_test_df
+
+
+def calculate_auc(actual, scores, auc: int, counter: int):
+    if scores.shape[1] == 1:
+        auc += 0
+    else:
+        try:
+            auc += metrics.roc_auc_score(actual, scores[:, 1])
+            counter += 1
+        except Exception:
+            auc += 0
+    return auc

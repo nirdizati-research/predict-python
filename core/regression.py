@@ -2,7 +2,6 @@ from math import sqrt
 
 import numpy as np
 import pandas as pd
-import xgboost as xgb
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestRegressor
@@ -119,8 +118,6 @@ def __choose_regressor(job):
     regressor = None
     if job.regression == "linear":
         regressor = LinearRegression(fit_intercept=True)
-    elif job.regression == "xgboost":
-        regressor = xgb.XGBRegressor(n_estimators=2000, max_depth=10)
     elif job.regression == "randomforest":
         regressor = RandomForestRegressor(n_estimators=50, n_jobs=8, verbose=1)
     elif job.regression == "lasso":

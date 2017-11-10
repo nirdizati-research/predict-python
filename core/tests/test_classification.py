@@ -26,6 +26,7 @@ class TestClassification(TestCase):
 
     def test_class_randomForest(self):
         job = self.get_job()
+        job.clustering = 'None'
         classifier(job)
 
     # KNN Fails due to small dataset
@@ -57,4 +58,5 @@ class TestClassification(TestCase):
         job = self.get_job()
         job.classification = 'DecisionTree'
         job.type = 'NextActivity'
+        job.clustering = 'None'
         next_activity(job)

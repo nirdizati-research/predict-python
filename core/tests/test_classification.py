@@ -6,6 +6,8 @@ from core.next_activity import next_activity
 
 
 class TestClassification(TestCase):
+    """Proof of concept tests"""
+
     def get_job(self):
         json = dict()
         json['uuid'] = "ads69"
@@ -22,11 +24,37 @@ class TestClassification(TestCase):
         json["type"] = "Classification"
         return Job(json)
 
-    def test_job(self):
+    def test_class_randomForest(self):
         job = self.get_job()
         classifier(job)
 
-    def test_next_activity_job(self):
+    # KNN Fails due to small dataset
+    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
+    def class_KNN(self):
         job = self.get_job()
+        job.classification = 'KNN'
+        classifier(job)
+
+    def test_class_DecisionTree(self):
+        job = self.get_job()
+        job.classification = 'DecisionTree'
+        classifier(job)
+
+    def test_next_activity_randomForest(self):
+        job = self.get_job()
+        job.type = 'NextActivity'
+        next_activity(job)
+
+    # KNN Fails due to small dataset
+    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
+    def next_activity_KNN(self):
+        job = self.get_job()
+        job.classification = 'KNN'
+        job.type = 'NextActivity'
+        next_activity(job)
+
+    def test_next_activity_DecisionTree(self):
+        job = self.get_job()
+        job.classification = 'DecisionTree'
         job.type = 'NextActivity'
         next_activity(job)

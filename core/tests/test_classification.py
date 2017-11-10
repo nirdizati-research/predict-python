@@ -1,8 +1,7 @@
 from django.test import TestCase
 
-from core.classification import classifier
+from core.core import calculate
 from core.job import Job
-from core.next_activity import next_activity
 
 
 class TestClassification(TestCase):
@@ -20,30 +19,30 @@ class TestClassification(TestCase):
         json["rule"] = "remaining_time"
         json["prefix"] = 0
         json["threshold"] = "default"
-        json["type"] = "Classification"
+        json["type"] = "classification"
         return Job(json)
 
     def test_class_randomForest(self):
         job = self.get_job()
         job.clustering = 'None'
-        classifier(job)
+        calculate(job)
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
     def class_KNN(self):
         job = self.get_job()
         job.classification = 'KNN'
-        classifier(job)
+        calculate(job)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job.classification = 'decisionTree'
-        classifier(job)
+        calculate(job)
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job.type = 'nextActivity'
-        next_activity(job)
+        calculate(job)
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
@@ -51,11 +50,11 @@ class TestClassification(TestCase):
         job = self.get_job()
         job.classification = 'KNN'
         job.type = 'nextActivity'
-        next_activity(job)
+        calculate(job)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
         job.classification = 'decisionTree'
         job.type = 'nextActivity'
         job.clustering = 'None'
-        next_activity(job)
+        calculate(job)

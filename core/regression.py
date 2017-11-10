@@ -10,15 +10,13 @@ from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-from core.common import encode
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
 
 pd.options.mode.chained_assignment = None
 
 
-def regression(job):
-    df = encode(job)
-    regressor = __choose_regressor(job)
+def regression(df, job):
+    regressor = __choose_regressor(job.regression)
 
     train_data, test_data, original_test_data = prep_data(df)
 
@@ -27,7 +25,7 @@ def regression(job):
     else:
         results_df = no_clustering(original_test_data, train_data, test_data, regressor)
 
-    results = prepare_results(results_df, job)
+    results = prepare_results(results_df)
     return results
 
 
@@ -70,7 +68,7 @@ def no_clustering(original_test_data, train_data, test_data, regressor):
     return original_test_data
 
 
-def prepare_results(df, job):
+def prepare_results(df):
     # TODO are remaining time in seconds or hours?
     df['remaining_time'] = df['remaining_time'] / 3600
     df['prediction'] = df['prediction'] / 3600
@@ -78,9 +76,7 @@ def prepare_results(df, job):
     mae = mean_absolute_error(df['remaining_time'], df['prediction'])
     rscore = metrics.r2_score(df['remaining_time'], df['prediction'])
 
-    row = {'run': job.method_val(), 'rmse': rmse, 'mae': mae, 'rscore': rscore}
-    print("calculation done")
-    print(row)
+    row = {'rmse': rmse, 'mae': mae, 'rscore': rscore}
     return row
 
 
@@ -116,12 +112,12 @@ def prep_data(df):
     return train_data, test_data, original_test_data
 
 
-def __choose_regressor(job):
+def __choose_regressor(regression_type: str):
     regressor = None
-    if job.regression == LINEAR:
+    if regression_type == LINEAR:
         regressor = LinearRegression(fit_intercept=True)
-    elif job.regression == RANDOM_FOREST:
+    elif regression_type == RANDOM_FOREST:
         regressor = RandomForestRegressor(n_estimators=50, n_jobs=8, verbose=1)
-    elif job.regression == LASSO:
+    elif regression_type == LASSO:
         regressor = Lasso(fit_intercept=True, warm_start=True)
     return regressor

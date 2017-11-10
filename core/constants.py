@@ -19,4 +19,6 @@ KMEANS = 'kmeans'
 NO_CLUSTER = 'noCluster'
 
 # Job types
+CLASSIFICATION = 'classification'
+REGRESSION = 'regression'
 NEXT_ACTIVITY = 'nextActivity'

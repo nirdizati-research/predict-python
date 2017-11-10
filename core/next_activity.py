@@ -3,15 +3,14 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 
-from core.common import encode, choose_classifier, calculate_results
+from core.common import choose_classifier, calculate_results
 from core.constants import KMEANS
 
 pd.options.mode.chained_assignment = None
 
 
-def next_activity(job):
-    df = encode(job)
-    clf = choose_classifier(job)
+def next_activity(df, job):
+    clf = choose_classifier(job.classification)
 
     train_data, test_data, original_test_data = __split_next_activity(df)
 
@@ -20,7 +19,7 @@ def next_activity(job):
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
 
-    results = prepare_results(results_df, job, auc)
+    results = prepare_results(results_df, auc)
     return results
 
 
@@ -82,15 +81,13 @@ def no_clustering(original_test_data, train_data, clf):
     return original_test_data, auc
 
 
-def prepare_results(df, job, auc):
+def prepare_results(df, auc):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 
     f1score, acc = calculate_results(actual_, predicted_)
 
-    row = {'run': job.method_val(), 'f1score': f1score, 'acc': acc, 'auc': auc}
-    print("calculation done")
-    print(row)
+    row = {'f1score': f1score, 'acc': acc, 'auc': auc}
     return row
 
 

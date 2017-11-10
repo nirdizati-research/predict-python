@@ -10,16 +10,16 @@ from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
 
-def encode(job):
+def encode_log(encoding_type: str, job_type: str):
     """Get encoded data frame"""
     # print job.encoding
     log = get_logs('log_cache/general_example.xes')[0]
-    if job.encoding == BOOLEAN:
+    if encoding_type == BOOLEAN:
         return boolean(log)
-    elif job.encoding == FREQUENCY:
+    elif encoding_type == FREQUENCY:
         return frequency(log)
-    elif job.encoding == SIMPLE_INDEX:
-        return simple_index(log, prefix_length=1, next_activity=(job.type == NEXT_ACTIVITY))
+    elif encoding_type == SIMPLE_INDEX:
+        return simple_index(log, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
 
 
 def calculate_results(prediction, actual):
@@ -53,13 +53,13 @@ def calculate_results(prediction, actual):
     return f1score, acc
 
 
-def choose_classifier(job):
+def choose_classifier(class_type: str):
     clf = None
-    if job.classification == KNN:
+    if class_type == KNN:
         clf = KNeighborsClassifier()
-    elif job.classification == RANDOM_FOREST:
+    elif class_type == RANDOM_FOREST:
         clf = RandomForestClassifier()
-    elif job.classification == DECISION_TREE:
+    elif class_type == DECISION_TREE:
         clf = DecisionTreeClassifier()
     return clf
 

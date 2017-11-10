@@ -15,20 +15,18 @@ def classifier(job):
 
     df = fast_slow_encode(df, job.rule, job.threshold)
 
-    # print(df)
     train_data, test_data, original_test_data = __split_class_data(df)
 
-    # print(train_data)
-    # print(test_data)
     if job.clustering == "kmeans":
-        results, auc = kmeans_clustering(original_test_data, train_data, clf, job)
+        results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
-        results, auc = no_clustering(original_test_data, train_data, test_data, clf, job)
+        results_df, auc = no_clustering(original_test_data, train_data, clf)
 
-    write_calculate_results(results, job, auc)
+    results = write_calculate_results(results_df, job, auc)
+    return results
 
 
-def kmeans_clustering(original_test_data, train_data, clf, job):
+def kmeans_clustering(original_test_data, train_data, clf):
     auc = 0
     estimator = KMeans(n_clusters=3)
     estimator.fit(train_data.drop('actual', 1))
@@ -73,12 +71,11 @@ def kmeans_clustering(original_test_data, train_data, clf, job):
     return result_data, auc
 
 
-def no_clustering(original_test_data, train_data, test_data, clf, job):
+def no_clustering(original_test_data, train_data, clf):
     y = train_data['actual']
-    print(y.shape)
-    print(train_data.shape)
+
     clf.fit(train_data.drop('actual', 1), y)
-    print(train_data.shape)
+
     prediction = clf.predict(original_test_data.drop(['case_id', 'actual'], 1))
     scores = clf.predict_proba(original_test_data.drop(['case_id', 'actual'], 1))[:, 1]
     actual = original_test_data["actual"]
@@ -86,10 +83,6 @@ def no_clustering(original_test_data, train_data, test_data, clf, job):
     original_test_data["predicted"] = prediction
     original_test_data["predicted"] = original_test_data["predicted"].apply(lambda x: 'Fast' if x else 'Slow')
 
-    print('actual')
-    print(actual)
-    print('scores')
-    print(scores)
     # FPR,TPR,thresholds_unsorted=
     auc = 0
     try:
@@ -107,9 +100,9 @@ def write_calculate_results(df, job, auc):
     actual_[actual_ == "Slow"] = False
     predicted_[predicted_ == "Fast"] = True
     predicted_[predicted_ == "Slow"] = False
-    print(df)
+
     f1score, acc = calculate_results(actual_, predicted_)
-    print(df.shape)
+
     row = {'run': job.method_val(), 'f1score': f1score, 'acc': acc, 'auc': auc}
     print("calculation done")
     print(row)

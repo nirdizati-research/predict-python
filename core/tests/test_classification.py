@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.classification import classifier
 from core.job import Job
+from core.next_activity import next_activity
 
 
 class TestClassification(TestCase):
@@ -24,3 +25,7 @@ class TestClassification(TestCase):
     def test_job(self):
         job = self.get_job()
         classifier(job)
+
+    def test_next_activity_job(self):
+        job = self.get_job()
+        next_activity(job)

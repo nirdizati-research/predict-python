@@ -18,7 +18,7 @@ def encode(job):
     elif job.encoding == "frequency":
         return frequency(log)
     elif job.encoding == "simpleIndex":
-        return simple_index(log, prefix_length=1)
+        return simple_index(log, prefix_length=1, next_activity=(job.type == 'NextActivity'))
 
 
 def calculate_results(prediction, actual):

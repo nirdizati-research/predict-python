@@ -22,7 +22,7 @@ def classifier(job):
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
 
-    results = write_calculate_results(results_df, job, auc)
+    results = prepare_results(results_df, job, auc)
     return results
 
 
@@ -92,7 +92,7 @@ def no_clustering(original_test_data, train_data, clf):
     return original_test_data, auc
 
 
-def write_calculate_results(df, job, auc):
+def prepare_results(df, job, auc):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 

@@ -28,4 +28,5 @@ class TestClassification(TestCase):
 
     def test_next_activity_job(self):
         job = self.get_job()
+        job.type = 'NextActivity'
         next_activity(job)

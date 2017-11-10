@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 
 from core.common import encode, choose_classifier, fast_slow_encode, calculate_results
+from core.constants import KMEANS
 
 pd.options.mode.chained_assignment = None
 
@@ -17,7 +18,7 @@ def classifier(job):
 
     train_data, test_data, original_test_data = __split_class_data(df)
 
-    if job.clustering == "kmeans":
+    if job.clustering == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
@@ -79,9 +80,11 @@ def no_clustering(original_test_data, train_data, clf):
     prediction = clf.predict(original_test_data.drop(['case_id', 'actual'], 1))
     scores = clf.predict_proba(original_test_data.drop(['case_id', 'actual'], 1))[:, 1]
     actual = original_test_data["actual"]
-    original_test_data["actual"] = original_test_data["actual"].apply(lambda x: 'Fast' if x else 'Slow')
+    original_test_data["actual"] = original_test_data["actual"].map(
+                {True: 'Fast', False: 'Slow'})
     original_test_data["predicted"] = prediction
-    original_test_data["predicted"] = original_test_data["predicted"].apply(lambda x: 'Fast' if x else 'Slow')
+    original_test_data["predicted"] = original_test_data["predicted"].map(
+                {True: 'Fast', False: 'Slow'})
 
     # FPR,TPR,thresholds_unsorted=
     auc = 0

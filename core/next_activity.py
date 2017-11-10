@@ -4,6 +4,7 @@ from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
 
 from core.common import encode, choose_classifier, calculate_results
+from core.constants import KMEANS
 
 pd.options.mode.chained_assignment = None
 
@@ -14,7 +15,7 @@ def next_activity(job):
 
     train_data, test_data, original_test_data = __split_next_activity(df)
 
-    if job.clustering == "kmeans":
+    if job.clustering == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)

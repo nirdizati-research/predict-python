@@ -27,7 +27,7 @@ class TestRegression(TestCase):
 
     def test_reg_randomforest(self):
         job = self.get_job()
-        job.regression = 'randomforest'
+        job.regression = 'randomForest'
         regression(job)
 
     def test_reg_lasso(self):

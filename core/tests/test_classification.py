@@ -13,9 +13,8 @@ class TestClassification(TestCase):
         json['uuid'] = "ads69"
         json["clustering"] = "kmeans"
         json["status"] = "completed"
-        json["run"] = "RandomForest_simpleIndex_None"
         json["log"] = "Production.xes"
-        json["classification"] = "RandomForest"
+        json["classification"] = "randomForest"
         json["encoding"] = "simpleIndex"
         json["timestamp"] = "Oct 03 2017 13:26:53"
         json["rule"] = "remaining_time"
@@ -38,12 +37,12 @@ class TestClassification(TestCase):
 
     def test_class_DecisionTree(self):
         job = self.get_job()
-        job.classification = 'DecisionTree'
+        job.classification = 'decisionTree'
         classifier(job)
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
-        job.type = 'NextActivity'
+        job.type = 'nextActivity'
         next_activity(job)
 
     # KNN Fails due to small dataset
@@ -51,12 +50,12 @@ class TestClassification(TestCase):
     def next_activity_KNN(self):
         job = self.get_job()
         job.classification = 'KNN'
-        job.type = 'NextActivity'
+        job.type = 'nextActivity'
         next_activity(job)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
-        job.classification = 'DecisionTree'
-        job.type = 'NextActivity'
+        job.classification = 'decisionTree'
+        job.type = 'nextActivity'
         job.clustering = 'None'
         next_activity(job)

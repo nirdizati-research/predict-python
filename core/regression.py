@@ -11,6 +11,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from core.common import encode
+from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
 
 pd.options.mode.chained_assignment = None
 
@@ -21,7 +22,7 @@ def regression(job):
 
     train_data, test_data, original_test_data = prep_data(df)
 
-    if job.clustering == "kmeans":
+    if job.clustering == KMEANS:
         results_df = kmeans_clustering(original_test_data, train_data, regressor)
     else:
         results_df = no_clustering(original_test_data, train_data, test_data, regressor)
@@ -117,10 +118,10 @@ def prep_data(df):
 
 def __choose_regressor(job):
     regressor = None
-    if job.regression == "linear":
+    if job.regression == LINEAR:
         regressor = LinearRegression(fit_intercept=True)
-    elif job.regression == "randomforest":
+    elif job.regression == RANDOM_FOREST:
         regressor = RandomForestRegressor(n_estimators=50, n_jobs=8, verbose=1)
-    elif job.regression == "lasso":
+    elif job.regression == LASSO:
         regressor = Lasso(fit_intercept=True, warm_start=True)
     return regressor

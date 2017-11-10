@@ -116,7 +116,7 @@ class Job(object):
         """Defines job identity"""
         if self.type == "Classification":
             return run_classification(self.classification, self.encoding, self.clustering)
-        elif self.type == "NextActivity":
+        elif self.type == "nextActivity":
             return run_classification(self.classification, self.encoding, self.clustering)
         elif self.type == "Regression":
             return run_regression(self.regression, self.encoding, self.clustering)

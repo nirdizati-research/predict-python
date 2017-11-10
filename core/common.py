@@ -4,6 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
+from core.constants import SIMPLE_INDEX, BOOLEAN, FREQUENCY, KNN, RANDOM_FOREST, DECISION_TREE, NEXT_ACTIVITY
 from encoders.boolean_frequency import boolean, frequency
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
@@ -13,12 +14,12 @@ def encode(job):
     """Get encoded data frame"""
     # print job.encoding
     log = get_logs('log_cache/general_example.xes')[0]
-    if job.encoding == "boolean":
+    if job.encoding == BOOLEAN:
         return boolean(log)
-    elif job.encoding == "frequency":
+    elif job.encoding == FREQUENCY:
         return frequency(log)
-    elif job.encoding == "simpleIndex":
-        return simple_index(log, prefix_length=1, next_activity=(job.type == 'NextActivity'))
+    elif job.encoding == SIMPLE_INDEX:
+        return simple_index(log, prefix_length=1, next_activity=(job.type == NEXT_ACTIVITY))
 
 
 def calculate_results(prediction, actual):
@@ -54,11 +55,11 @@ def calculate_results(prediction, actual):
 
 def choose_classifier(job):
     clf = None
-    if job.classification == "KNN":
+    if job.classification == KNN:
         clf = KNeighborsClassifier()
-    elif job.classification == "RandomForest":
+    elif job.classification == RANDOM_FOREST:
         clf = RandomForestClassifier()
-    elif job.classification == "DecisionTree":
+    elif job.classification == DECISION_TREE:
         clf = DecisionTreeClassifier()
     return clf
 

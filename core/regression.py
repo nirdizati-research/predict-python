@@ -1,4 +1,3 @@
-import cPickle
 from math import sqrt
 
 import numpy as np
@@ -10,29 +9,22 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-
-from core_services.common import encode_if_needed
-from core_services.file_service import make_dir, write_to_path, write_results_to_general, write_results_to_db
+from core.common import encode, calculate_results
 
 
 def regression(job):
-    print 'regression queue'
-    print job.method_val()
-
-    encode_if_needed(job)
+    df = encode(job)
     regressor = __choose_regressor(job)
 
-    train_data, test_data, original_test_data = prep_data(job)
-
-    make_dir(job.prediction_model_dir())
-    make_dir(job.get_results_dir())
+    train_data, test_data, original_test_data = prep_data(df)
 
     if job.clustering == "kmeans":
-        kmeans_clustering(original_test_data, train_data, regressor, job)
+        results_df = kmeans_clustering(original_test_data, train_data, regressor, job)
     else:
-        no_clustering(original_test_data, train_data, test_data, regressor, job)
+        results_df = no_clustering(original_test_data, train_data, test_data, regressor, job)
 
-    calculate_results(job)
+    results = calculate_results(results_df, job)
+    return results
 
 
 def kmeans_clustering(original_test_data, train_data, regressor, job):
@@ -66,13 +58,10 @@ def kmeans_clustering(original_test_data, train_data, regressor, job):
 
 def no_clustering(original_test_data, train_data, test_data, regressor, job):
     y = train_data['remaining_time']
-    print y
+
     train_data = train_data.drop('remaining_time', 1)
 
     regressor.fit(train_data, y)
-
-    with open(job.prediction_model_path(), 'wb') as fid:
-        cPickle.dump(regressor, fid)
 
     original_test_data['prediction'] = regressor.predict(test_data)
     original_test_data.to_csv(job.get_results_path(), sep=',', mode='w+', index=False)
@@ -111,8 +100,7 @@ def split_data(data):
     return train_data, test_data
 
 
-def prep_data(job):
-    df = pd.read_csv(filepath_or_buffer=job.get_encoded_file_path(), header=0)
+def prep_data(df):
     train_data, test_data = split_data(df)
 
     train_data = train_data.drop('elapsed_time', 1)

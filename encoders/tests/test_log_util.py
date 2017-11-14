@@ -31,3 +31,8 @@ class TestSimpleGeneralExample(TestCase):
         trace2 = self.log[0]
         seconds = elapsed_time_id(trace2, 0)
         self.assertEqual(0.0, seconds)
+
+    def test_mxml_gz(self):
+        log = get_logs("log_cache/nonlocal.mxml.gz")[0]
+        events = unique_events(log)
+        self.assertEqual(7, len(events))

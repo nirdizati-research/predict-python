@@ -1,4 +1,9 @@
+from os import remove
+
 from django.test import SimpleTestCase, TestCase
+from django.urls.base import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log
 from .file_service import get_logs
@@ -39,3 +44,25 @@ class LogModelTest(TestCase):
 
         self.assertEqual(1, len(log_file))
         self.assertEqual(6, len(log_file[0]))
+
+
+class FileUploadTests(APITestCase):
+    def tearDown(self):
+        Log.objects.all().delete()
+        remove('log_cache/test_upload')
+
+    def _create_test_file(self, path):
+        f = open(path, 'w')
+        f.write('test123\n')
+        f.close()
+        f = open(path, 'rb')
+        return {'file': f}
+
+    def test_upload_file(self):
+        url = reverse('upload')
+        data = self._create_test_file('/tmp/test_upload')
+
+        client = APIClient()
+        response = client.post(url, data, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['name'], 'test_upload')

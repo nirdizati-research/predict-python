@@ -46,3 +46,20 @@ def get_log_stats(request, pk, stat):
     else:
         data = event_executions(log_file)
     return Response(data)
+
+
+@api_view(['POST'])
+def upload_file(request):
+    name = request.FILES['file'].name
+    path = 'log_cache/' + name
+    save_file(request.FILES['file'], path)
+    log = Log.objects.create(name=name, path=path)
+    serializer = LogSerializer(log)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+def save_file(file, path):
+    logger.info("Saving uploaded file to %s ", path)
+    with open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)

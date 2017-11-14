@@ -1,7 +1,6 @@
-from django.http.response import Http404
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from jobs.serializers import JobSerializer
 from .models import Job
@@ -31,18 +30,9 @@ class JobList(ListAPIView):
         return Response(serializer.errors, status=400)
 
 
-class JobDetail(APIView):
-    """
-    Retrieve job by id.
-    """
+class JobDetail(RetrieveModelMixin, GenericAPIView):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
 
-    def get_object(self, pk):
-        try:
-            return Job.objects.get(pk=pk)
-        except Job.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        snippet = self.get_object(pk)
-        serializer = JobSerializer(snippet)
-        return Response(serializer.data)
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)

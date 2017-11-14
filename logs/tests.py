@@ -1,7 +1,6 @@
 from os import remove
 
 from django.test import SimpleTestCase, TestCase
-from django.urls.base import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 

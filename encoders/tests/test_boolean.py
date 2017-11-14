@@ -13,7 +13,7 @@ class TestBooleanGeneral(TestCase):
         df = self.df
         names = ['register request', 'examine casually', 'check ticket', 'decide',
                  'reinitiate request', 'examine thoroughly', 'pay compensation',
-                 'reject request', 'case_id', 'event_nr', 'remaining_time',
+                 'reject request', 'trace_id', 'event_nr', 'remaining_time',
                  'elapsed_time']
         for name in names:
             self.assertIn(name, df.columns.values.tolist())
@@ -22,7 +22,7 @@ class TestBooleanGeneral(TestCase):
     def test_row(self):
         df = self.df
 
-        row = df[(df.event_nr == 2) & (df.case_id == '2')].iloc[0]
+        row = df[(df.event_nr == 2) & (df.trace_id == '2')].iloc[0]
 
         self.assertTrue(row['register request'])
         self.assertFalse(row['examine casually'])
@@ -33,7 +33,7 @@ class TestBooleanGeneral(TestCase):
 
     def test_row2(self):
         df = self.df
-        row = df[(df.event_nr == 5) & (df.case_id == '2')].iloc[0]
+        row = df[(df.event_nr == 5) & (df.trace_id == '2')].iloc[0]
 
         self.assertTrue(row['register request'])
         self.assertTrue(row['examine casually'])

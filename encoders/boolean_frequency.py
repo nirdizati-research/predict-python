@@ -7,12 +7,12 @@ from encoders.log_util import unique_events, DEFAULT_COLUMNS, remaining_time, el
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def boolean(data):
-    return encode_boolean_frequency(data, is_boolean=True)
+def boolean(log: list):
+    return encode_boolean_frequency(log, is_boolean=True)
 
 
-def frequency(data):
-    return encode_boolean_frequency(data, is_boolean=False)
+def frequency(log: list):
+    return encode_boolean_frequency(log, is_boolean=False)
 
 
 def encode_boolean_frequency(log: list, is_boolean=True):

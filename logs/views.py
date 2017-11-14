@@ -1,6 +1,6 @@
 import logging
 
-from rest_framework import status
+from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -11,13 +11,20 @@ from .serializers import LogSerializer
 logger = logging.getLogger(__name__)
 
 
-@api_view(['GET'])
-def log_list(request):
-    """List of logs with id and name"""
-    logs = Log.objects.all()
-    serializer = LogSerializer(logs, many=True)
-    logger.info("Returned %s logs", len(logs))
-    return Response(serializer.data)
+class LogList(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request):
+        name = self.request.FILES['file'].name
+        path = 'log_cache/' + name
+        save_file(self.request.FILES['file'], path)
+        log = Log.objects.create(name=name, path=path)
+        serializer = LogSerializer(log)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
@@ -46,16 +53,6 @@ def get_log_stats(request, pk, stat):
     else:
         data = event_executions(log_file)
     return Response(data)
-
-
-@api_view(['POST'])
-def upload_file(request):
-    name = request.FILES['file'].name
-    path = 'log_cache/' + name
-    save_file(request.FILES['file'], path)
-    log = Log.objects.create(name=name, path=path)
-    serializer = LogSerializer(log)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 def save_file(file, path):

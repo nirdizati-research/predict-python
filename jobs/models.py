@@ -16,3 +16,4 @@ class Job(BaseModel):
     config = JSONField()
     status = models.CharField(default='created', max_length=200)
     result = JSONField(default={})
+    type = models.CharField(max_length=20)

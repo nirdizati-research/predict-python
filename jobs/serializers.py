@@ -4,6 +4,9 @@ from .models import Job
 
 
 class JobSerializer(serializers.ModelSerializer):
+    config = serializers.JSONField()
+    result = serializers.JSONField(required=False)
+
     class Meta:
         model = Job
-        fields = ('id', 'created', 'updated', 'config', 'status', 'result')
+        fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result')

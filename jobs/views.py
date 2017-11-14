@@ -1,24 +1,29 @@
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
-from rest_framework.decorators import api_view
+from django.http.response import Http404
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from jobs.serializers import JobSerializer
 from .models import Job
 
 
-@csrf_exempt
-@api_view(['GET', 'POST'])
-def job_list(request):
+class JobList(ListAPIView):
     """
     List all jobs, or create a new job.
     """
-    if request.method == 'GET':
-        snippets = Job.objects.all()
-        serializer = JobSerializer(snippets, many=True)
-        return Response(serializer.data)
+    serializer_class = JobSerializer
 
-    elif request.method == 'POST':
+    def get_queryset(self):
+        jobs = Job.objects.all()
+        type = self.request.query_params.get('type', None)
+        status = self.request.query_params.get('status', None)
+        if type is not None:
+            jobs = jobs.filter(type=type)
+        elif type is not None:
+            jobs = jobs.filter(status=status)
+        return jobs
+
+    def post(self, request):
         serializer = JobSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -26,16 +31,18 @@ def job_list(request):
         return Response(serializer.errors, status=400)
 
 
-@api_view(['GET'])
-def job_detail(request, pk):
+class JobDetail(APIView):
     """
     Retrieve job by id.
     """
-    try:
-        snippet = Job.objects.get(pk=pk)
-    except Job.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
+    def get_object(self, pk):
+        try:
+            return Job.objects.get(pk=pk)
+        except Job.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        snippet = self.get_object(pk)
         serializer = JobSerializer(snippet)
         return Response(serializer.data)

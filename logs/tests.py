@@ -1,7 +1,6 @@
 from os import remove
 
 from django.test import SimpleTestCase, TestCase
-from django.urls.base import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
@@ -59,10 +58,9 @@ class FileUploadTests(APITestCase):
         return {'file': f}
 
     def test_upload_file(self):
-        url = reverse('upload')
         data = self._create_test_file('/tmp/test_upload')
 
         client = APIClient()
-        response = client.post(url, data, format='multipart')
+        response = client.post('/logs/', data, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'test_upload')

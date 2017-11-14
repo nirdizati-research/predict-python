@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'logs.apps.LogsConfig',
+    'jobs.apps.JobsConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

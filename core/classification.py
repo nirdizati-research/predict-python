@@ -31,7 +31,7 @@ def kmeans_clustering(original_test_data, train_data, clf):
     estimator = KMeans(n_clusters=3)
     estimator.fit(train_data.drop('actual', 1))
     original_cluster_lists = {i: original_test_data.iloc[
-        np.where(estimator.predict(original_test_data.drop(['case_id', 'actual'], 1)) == i)[0]] for i in
+        np.where(estimator.predict(original_test_data.drop(['trace_id', 'actual'], 1)) == i)[0]] for i in
                               range(estimator.n_clusters)}
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
 
@@ -50,8 +50,8 @@ def kmeans_clustering(original_test_data, train_data, clf):
             pass
         else:
             clf.fit(clustered_train_data.drop('actual', 1), y)
-            prediction = clf.predict(original_test_clustered_data.drop(['case_id', 'actual'], 1))
-            scores = clf.predict_proba(original_test_clustered_data.drop(['case_id', 'actual'], 1))
+            prediction = clf.predict(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
+            scores = clf.predict_proba(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
 
             original_test_clustered_data["predicted"] = prediction
             original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].map(
@@ -76,8 +76,8 @@ def no_clustering(original_test_data, train_data, clf):
 
     clf.fit(train_data.drop('actual', 1), y)
 
-    prediction = clf.predict(original_test_data.drop(['case_id', 'actual'], 1))
-    scores = clf.predict_proba(original_test_data.drop(['case_id', 'actual'], 1))[:, 1]
+    prediction = clf.predict(original_test_data.drop(['trace_id', 'actual'], 1))
+    scores = clf.predict_proba(original_test_data.drop(['trace_id', 'actual'], 1))[:, 1]
     actual = original_test_data["actual"]
     original_test_data["actual"] = original_test_data["actual"].map(
                 {True: 'Fast', False: 'Slow'})
@@ -118,8 +118,8 @@ def __split_class_data(data):
 
     train_df, test_df = train_test_split(data, test_size=0.2, random_state=3)
     original_test_df = test_df
-    train_df = train_df.drop('case_id', 1)
-    test_df = test_df.drop('case_id', 1)
+    train_df = train_df.drop('trace_id', 1)
+    test_df = test_df.drop('trace_id', 1)
 
     return train_df, test_df, original_test_df
 

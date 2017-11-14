@@ -67,7 +67,7 @@ def __create_columns(prefix_length: int):
 
 def __columns_next_activity(prefix_length):
     """Creates columns for next activity"""
-    columns = ["case_id", "event_nr"]
+    columns = ["trace_id", "event_nr"]
     for i in range(1, prefix_length):
         columns.append("prefix_" + str(i))
     columns.append("label")

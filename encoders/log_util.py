@@ -3,8 +3,7 @@ from datetime import datetime as dt
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
-# TODO change to trace_id
-DEFAULT_COLUMNS = ["case_id", "event_nr", "remaining_time", "elapsed_time"]
+DEFAULT_COLUMNS = ["trace_id", "event_nr", "remaining_time", "elapsed_time"]
 TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 
 

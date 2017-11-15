@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from encoders.log_util import unique_events, elapsed_time_id, remaining_time_id
+from encoders.log_util import unique_events, elapsed_time_id, remaining_time_id, unique_events2
 from logs.file_service import get_logs
 
 
@@ -36,3 +36,9 @@ class TestSimpleGeneralExample(TestCase):
         log = get_logs("log_cache/nonlocal.mxml.gz")[0]
         events = unique_events(log)
         self.assertEqual(7, len(events))
+
+    def test_multiple_unique_events(self):
+        test_log = get_logs("log_cache/general_example_test.xes")[0]
+        training_log = get_logs("log_cache/general_example_training.xes")[0]
+        events = unique_events2(training_log, test_log)
+        self.assertEqual(8, len(events))

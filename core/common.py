@@ -6,6 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 from core.constants import SIMPLE_INDEX, BOOLEAN, FREQUENCY, KNN, RANDOM_FOREST, DECISION_TREE, NEXT_ACTIVITY
 from encoders.boolean_frequency import boolean, frequency
+from encoders.log_util import unique_events
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
@@ -13,13 +14,16 @@ from logs.file_service import get_logs
 def encode_log(encoding_type: str, job_type: str):
     """Get encoded data frame"""
     # print job.encoding
+    # TODO remove hardcoded log path
     log = get_logs('log_cache/general_example.xes')[0]
+    event_names = unique_events(log)
     if encoding_type == BOOLEAN:
-        return boolean(log)
+        return boolean(log, event_names)
     elif encoding_type == FREQUENCY:
-        return frequency(log)
+        return frequency(log, event_names)
     elif encoding_type == SIMPLE_INDEX:
-        return simple_index(log, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
+        # TODO remove hardcoded prefix length
+        return simple_index(log, event_names, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
 
 
 def calculate_results(prediction, actual):

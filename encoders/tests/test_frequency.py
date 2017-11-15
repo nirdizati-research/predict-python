@@ -1,13 +1,15 @@
 from unittest import TestCase
 
 from encoders.boolean_frequency import frequency
+from encoders.log_util import unique_events
 from logs.file_service import get_logs
 
 
 class TestFrequencyGeneral(TestCase):
     def setUp(self):
         self.log = get_logs("log_cache/general_example.xes")[0]
-        self.df = frequency(self.log)
+        self.event_names = unique_events(self.log)
+        self.df = frequency(self.log, self.event_names)
 
     def test_shape(self):
         df = self.df

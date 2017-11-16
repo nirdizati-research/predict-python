@@ -41,7 +41,11 @@ def elapsed_time(trace, event):
     # FIXME using no timezone info for calculation
     event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
     first_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[0])[:19]
-    delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
+    try:
+        delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
+    except ValueError:
+        # Log has no timestamps
+        return 0
     return delta.total_seconds()
 
 
@@ -55,5 +59,9 @@ def remaining_time(trace, event):
     # FIXME using no timezone info for calculation
     event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
     last_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[-1])[:19]
-    delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
+    try:
+        delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
+    except ValueError:
+        # Log has no timestamps
+        return 0
     return delta.total_seconds()

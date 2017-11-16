@@ -14,14 +14,14 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
     event_names = unique_events2(training_log, test_log)
     training_df = None
     test_df = None
-    if encoding_type == SIMPLE_INDEX:
+    if encoding_type is SIMPLE_INDEX:
         next_activity = job_type == NEXT_ACTIVITY
         training_df = simple_index(training_log, event_names, prefix_length=prefix_length, next_activity=next_activity)
         test_df = simple_index(test_log, event_names, prefix_length=prefix_length, next_activity=next_activity)
-    elif encoding_type == BOOLEAN:
+    elif encoding_type is BOOLEAN:
         training_df = boolean(training_log, event_names)
         test_df = boolean(test_log, event_names)
-    elif encoding_type == FREQUENCY:
+    elif encoding_type is FREQUENCY:
         training_df = frequency(training_log, event_names)
         test_df = frequency(test_log, event_names)
     return training_df, test_df

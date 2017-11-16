@@ -6,10 +6,10 @@ from .log_util import remaining_time_id, elapsed_time_id, DEFAULT_COLUMNS
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def simple_index(data, event_names: list, prefix_length=1, next_activity=False):
+def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False):
     if next_activity:
-        return encode_next_activity(data, event_names, prefix_length)
-    return encode_simple_index(data, event_names, prefix_length)
+        return encode_next_activity(log, event_names, prefix_length)
+    return encode_simple_index(log, event_names, prefix_length)
 
 
 def encode_simple_index(log: list, event_names: list, prefix_length: int, ):

@@ -46,6 +46,8 @@ import time
 import uuid
 import copy
 
+from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
+
 TIME_FORMAT = "%b %d %Y %H:%M:%S"
 
 
@@ -114,11 +116,11 @@ class Job(object):
 
     def get_run(self):
         """Defines job identity"""
-        if self.type == "Classification":
+        if self.type == CLASSIFICATION:
             return run_classification(self.classification, self.encoding, self.clustering)
-        elif self.type == "nextActivity":
+        elif self.type == NEXT_ACTIVITY:
             return run_classification(self.classification, self.encoding, self.clustering)
-        elif self.type == "Regression":
+        elif self.type == REGRESSION:
             return run_regression(self.regression, self.encoding, self.clustering)
 
     # Private methods

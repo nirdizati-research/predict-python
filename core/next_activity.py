@@ -92,7 +92,6 @@ def prepare_results(df, auc):
 
 
 def __split_next_activity(data):
-    data = data.sample(frac=1)
     # data = data.drop('event_nr', 1)
 
     train_df, test_df = train_test_split(data, test_size=0.2, random_state=3)

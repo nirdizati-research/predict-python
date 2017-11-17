@@ -11,11 +11,9 @@ from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
 
-def encode_log(encoding_type: str, job_type: str):
+def encode_log(encoding_type: str, job_type: str, log_path: str):
     """Get encoded data frame"""
-    # print job.encoding
-    # TODO remove hardcoded log path
-    log = get_logs('log_cache/general_example.xes')[0]
+    log = get_logs(log_path)[0]
     event_names = unique_events(log)
     if encoding_type == BOOLEAN:
         return boolean(log, event_names)
@@ -68,6 +66,7 @@ def choose_classifier(class_type: str):
     return clf
 
 
+# TODO deprecate
 def fast_slow_encode(df, label, threshold):
     if threshold == "default":
         threshold_ = df[label].mean()

@@ -12,7 +12,7 @@ class TestRegression(TestCase):
         json['uuid'] = "ads69"
         json["clustering"] = "kmeans"
         json["status"] = "completed"
-        json["log"] = "Production.xes"
+        json["log"] = "log_cache/general_example.xes"
         json["regression"] = "linear"
         json["encoding"] = "simpleIndex"
         json["timestamp"] = "Oct 03 2017 13:26:53"

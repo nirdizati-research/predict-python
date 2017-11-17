@@ -12,7 +12,7 @@ class TestClassification(TestCase):
         json['uuid'] = "ads69"
         json["clustering"] = "kmeans"
         json["status"] = "completed"
-        json["log"] = "Production.xes"
+        json["log"] = "log_cache/general_example.xes"
         json["classification"] = "randomForest"
         json["encoding"] = "simpleIndex"
         json["timestamp"] = "Oct 03 2017 13:26:53"
@@ -25,7 +25,8 @@ class TestClassification(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         job.clustering = 'None'
-        calculate(job)
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.5})
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
@@ -37,7 +38,8 @@ class TestClassification(TestCase):
     def test_class_DecisionTree(self):
         job = self.get_job()
         job.classification = 'decisionTree'
-        calculate(job)
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0})
 
     def test_next_activity_randomForest(self):
         job = self.get_job()

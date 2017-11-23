@@ -6,20 +6,22 @@ from sklearn.tree import DecisionTreeClassifier
 
 from core.constants import SIMPLE_INDEX, BOOLEAN, FREQUENCY, KNN, RANDOM_FOREST, DECISION_TREE, NEXT_ACTIVITY
 from encoders.boolean_frequency import boolean, frequency
+from encoders.log_util import unique_events
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
 
-def encode_log(encoding_type: str, job_type: str):
+def encode_log(encoding_type: str, job_type: str, log_path: str):
     """Get encoded data frame"""
-    # print job.encoding
-    log = get_logs('log_cache/general_example.xes')[0]
+    log = get_logs(log_path)[0]
+    event_names = unique_events(log)
     if encoding_type == BOOLEAN:
-        return boolean(log)
+        return boolean(log, event_names)
     elif encoding_type == FREQUENCY:
-        return frequency(log)
+        return frequency(log, event_names)
     elif encoding_type == SIMPLE_INDEX:
-        return simple_index(log, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
+        # TODO remove hardcoded prefix length
+        return simple_index(log, event_names, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
 
 
 def calculate_results(prediction, actual):
@@ -64,6 +66,7 @@ def choose_classifier(class_type: str):
     return clf
 
 
+# TODO deprecate
 def fast_slow_encode(df, label, threshold):
     if threshold == "default":
         threshold_ = df[label].mean()
@@ -71,3 +74,14 @@ def fast_slow_encode(df, label, threshold):
         threshold_ = float(threshold)
     df['actual'] = df[label] < threshold_
     return df
+
+
+def fast_slow_encode2(training_df, test_df, label: str, threshold: float):
+    if threshold == "default":
+        complete_df = training_df.append(test_df)
+        threshold_ = complete_df[label].mean()
+    else:
+        threshold_ = float(threshold)
+    training_df['actual'] = training_df[label] < threshold_
+    test_df['actual'] = test_df[label] < threshold_
+    return training_df, test_df

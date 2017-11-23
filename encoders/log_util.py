@@ -21,6 +21,16 @@ def unique_events(log: list):
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 
+def unique_events2(training_log: list, test_log: list):
+    """ Combines unique events from two logs into one list.
+
+    Renamed to 2 because Python doesn't allow functions with same names.
+    Python is objectively the worst language.
+    """
+    event_list = unique_events(training_log) + unique_events(test_log)
+    return sorted(set(event_list), key=lambda x: event_list.index(x))
+
+
 def elapsed_time_id(trace, event_index: int):
     """Calculate elapsed time by event index in trace"""
     return elapsed_time(trace, trace[event_index])
@@ -31,7 +41,11 @@ def elapsed_time(trace, event):
     # FIXME using no timezone info for calculation
     event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
     first_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[0])[:19]
-    delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
+    try:
+        delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
+    except ValueError:
+        # Log has no timestamps
+        return 0
     return delta.total_seconds()
 
 
@@ -45,5 +59,9 @@ def remaining_time(trace, event):
     # FIXME using no timezone info for calculation
     event_time = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
     last_time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[-1])[:19]
-    delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
+    try:
+        delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
+    except ValueError:
+        # Log has no timestamps
+        return 0
     return delta.total_seconds()

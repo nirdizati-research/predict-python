@@ -15,12 +15,12 @@ from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
 pd.options.mode.chained_assignment = None
 
 
-def regression(df, job):
-    regressor = __choose_regressor(job.regression)
+def regression(training_df, test_df, job):
+    regressor = __choose_regressor(job['regression'])
 
-    train_data, test_data, original_test_data = prep_data(df)
+    train_data, test_data, original_test_data = prep_data(training_df, test_df)
 
-    if job.clustering == KMEANS:
+    if job['clustering'] == KMEANS:
         results_df = kmeans_clustering(original_test_data, train_data, regressor)
     else:
         results_df = no_clustering(original_test_data, train_data, test_data, regressor)
@@ -45,8 +45,7 @@ def kmeans_clustering(original_test_data, train_data, regressor):
         else:
             clustered_train_data = cluster_lists[cluster_list]
             clustered_test_data = original_cluster_lists[cluster_list]
-            clustered_test_data = clustered_test_data.drop('trace_id', 1)
-            clustered_test_data = clustered_test_data.drop('remaining_time', 1)
+            clustered_test_data = clustered_test_data.drop(['trace_id', 'remaining_time'], 1)
 
             y = clustered_train_data['remaining_time']
             clustered_train_data = clustered_train_data.drop('remaining_time', 1)
@@ -80,34 +79,14 @@ def prepare_results(df):
     return row
 
 
-def split_data(data):
-    cases = data['trace_id'].unique()
-    random.shuffle(cases)
-
-    cases_train_point = int(len(cases) * 0.8)
-
-    train_cases = cases[:cases_train_point]
-
-    ids = []
-    for i in range(0, len(data)):
-        ids.append(data['trace_id'][i] in train_cases)
-
-    train_data = data[ids]
-    test_data = data[np.invert(ids)]
-    return train_data, test_data
-
-
-def prep_data(df):
-    train_data, test_data = split_data(df)
-
-    train_data = train_data.drop('elapsed_time', 1)
-    test_data = test_data.drop('elapsed_time', 1)
+def prep_data(training_df, test_df):
+    train_data = training_df.drop('elapsed_time', 1)
+    test_data = test_df.drop('elapsed_time', 1)
 
     original_test_data = test_data
 
     train_data = train_data.drop('trace_id', 1)
-    test_data = test_data.drop('trace_id', 1)
-    test_data = test_data.drop('remaining_time', 1)
+    test_data = test_data.drop(['trace_id', 'remaining_time'], 1)
 
     return train_data, test_data, original_test_data
 

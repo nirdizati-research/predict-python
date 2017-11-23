@@ -2,26 +2,24 @@ import numpy as np
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import unique_events, DEFAULT_COLUMNS, remaining_time, elapsed_time
+from encoders.log_util import DEFAULT_COLUMNS, remaining_time, elapsed_time
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def boolean(log: list):
-    return encode_boolean_frequency(log, is_boolean=True)
+def boolean(log: list, event_names: list):
+    return encode_boolean_frequency(log, event_names, is_boolean=True)
 
 
-def frequency(log: list):
-    return encode_boolean_frequency(log, is_boolean=False)
+def frequency(log: list, event_names: list):
+    return encode_boolean_frequency(log, event_names, is_boolean=False)
 
 
-def encode_boolean_frequency(log: list, is_boolean=True):
+def encode_boolean_frequency(log: list, event_names: list, is_boolean=True):
     """Encodes the log by boolean or frequency
 
     :return pandas dataframe
     """
-    event_names = unique_events(log)
-
     columns = np.append(event_names, list(DEFAULT_COLUMNS))
     encoded_data = []
 

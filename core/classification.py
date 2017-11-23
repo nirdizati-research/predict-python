@@ -2,22 +2,20 @@ import numpy as np
 import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
-from sklearn.model_selection import train_test_split
 
-from core.common import choose_classifier, fast_slow_encode, calculate_results
+from core.common import choose_classifier, calculate_results, fast_slow_encode2
 from core.constants import KMEANS
 
 pd.options.mode.chained_assignment = None
 
 
-def classifier(df, job):
-    clf = choose_classifier(job.classification)
+def classifier(training_df, test_df, job):
+    clf = choose_classifier(job['classification'])
 
-    df = fast_slow_encode(df, job.rule, job.threshold)
+    training_df, test_df = fast_slow_encode2(training_df, test_df, job['rule'], job['threshold'])
 
-    train_data, test_data, original_test_data = __split_class_data(df)
-
-    if job.clustering == KMEANS:
+    train_data, test_data, original_test_data = drop_columns(training_df, test_df)
+    if job['clustering'] == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
@@ -80,10 +78,10 @@ def no_clustering(original_test_data, train_data, clf):
     scores = clf.predict_proba(original_test_data.drop(['trace_id', 'actual'], 1))[:, 1]
     actual = original_test_data["actual"]
     original_test_data["actual"] = original_test_data["actual"].map(
-                {True: 'Fast', False: 'Slow'})
+        {True: 'Fast', False: 'Slow'})
     original_test_data["predicted"] = prediction
     original_test_data["predicted"] = original_test_data["predicted"].map(
-                {True: 'Fast', False: 'Slow'})
+        {True: 'Fast', False: 'Slow'})
 
     # FPR,TPR,thresholds_unsorted=
     auc = 0
@@ -109,19 +107,12 @@ def prepare_results(df, auc: int):
     return row
 
 
-def __split_class_data(data):
-    data = data.sample(frac=1)
-    # data = data.drop('elapsed_time', 1)
-    data = data.drop('remaining_time', 1)
-
-    # cases_train_point = int(len(data) * 0.8)
-
-    train_df, test_df = train_test_split(data, test_size=0.2, random_state=3)
-    original_test_df = test_df
-    train_df = train_df.drop('trace_id', 1)
-    test_df = test_df.drop('trace_id', 1)
-
-    return train_df, test_df, original_test_df
+def drop_columns(training_df, test_df):
+    training_df = training_df.drop(['remaining_time', 'trace_id'], 1)
+    # original_test_df = test_df
+    original_test_df = test_df.drop('remaining_time', 1)
+    test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
+    return training_df, test_df, original_test_df
 
 
 def calculate_auc(actual, scores, auc: int, counter: int):

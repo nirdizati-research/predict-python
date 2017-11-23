@@ -1,20 +1,20 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from .log_util import unique_events, remaining_time_id, elapsed_time_id, DEFAULT_COLUMNS
+from .log_util import remaining_time_id, elapsed_time_id, DEFAULT_COLUMNS
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def simple_index(data, prefix_length=1, next_activity=False):
+def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False):
     if next_activity:
-        return encode_next_activity(data, prefix_length)
-    return encode_simple_index(data, prefix_length)
+        return encode_next_activity(log, event_names, prefix_length)
+    return encode_simple_index(log, event_names, prefix_length)
 
 
-def encode_simple_index(log: list, prefix_length: int):
+def encode_simple_index(log: list, event_names: list, prefix_length: int, ):
     # Events up to prefix_length
-    events_to_consider = unique_events(log)[:prefix_length]
+    events_to_consider = event_names[:prefix_length]
     columns = __create_columns(prefix_length)
     encoded_data = []
 
@@ -34,9 +34,9 @@ def encode_simple_index(log: list, prefix_length: int):
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def encode_next_activity(log: list, prefix_length: int):
+def encode_next_activity(log: list, event_names: list, prefix_length: int):
     # Events up to prefix_length
-    events_to_consider = unique_events(log)[:prefix_length]
+    events_to_consider = event_names[:prefix_length]
     columns = __columns_next_activity(prefix_length)
     encoded_data = []
 

@@ -35,8 +35,6 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, ):
 
 
 def encode_next_activity(log: list, event_names: list, prefix_length: int):
-    # Events up to prefix_length
-    events_to_consider = event_names[:prefix_length]
     columns = __columns_next_activity(prefix_length)
     encoded_data = []
 
@@ -44,15 +42,20 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
-        trace_row.append(prefix_length)
 
-        for idx, _ in enumerate(events_to_consider[:-1]):
-            trace_row.append(idx + 1)
-        for _ in range(len(events_to_consider), prefix_length):
+        event_index = None
+        for idx, event in enumerate(trace):
+            if idx == prefix_length:
+                break
+            event_name = CLASSIFIER.get_class_identity(event)
+            event_id = event_names.index(event_name)
+            trace_row.append(event_id + 1)
+            event_index = idx
+
+        for _ in range(event_index + 1, prefix_length):
             trace_row.append(0)
 
-        # last id of event
-        trace_row.append(len(events_to_consider))
+        trace_row.append(next_event_index(event_index, trace, event_names))
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
@@ -67,8 +70,21 @@ def __create_columns(prefix_length: int):
 
 def __columns_next_activity(prefix_length):
     """Creates columns for next activity"""
-    columns = ["trace_id", "event_nr"]
-    for i in range(1, prefix_length):
-        columns.append("prefix_" + str(i))
+    columns = ["trace_id"]
+    for i in range(0, prefix_length):
+        columns.append("prefix_" + str(i + 1))
     columns.append("label")
     return columns
+
+
+def next_event_index(event_index: int, trace: list, event_names: list):
+    """Return the event_name index of the one after at event_index.
+    Offset by +1.
+    Or 0 if out of range.
+    """
+    if event_index + 1 < len(trace):
+        next_event = trace[event_index + 1]
+        next_event_name = CLASSIFIER.get_class_identity(next_event)
+        return event_names.index(next_event_name) + 1
+    else:
+        return 0

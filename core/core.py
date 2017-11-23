@@ -1,7 +1,6 @@
 from sklearn.model_selection import train_test_split
 
 from core.classification import classifier
-from core.common import encode_log
 from core.constants import NEXT_ACTIVITY, \
     CLASSIFICATION, REGRESSION
 from core.next_activity import next_activity

@@ -11,19 +11,6 @@ from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
 
-def encode_log(encoding_type: str, job_type: str, log_path: str):
-    """Get encoded data frame"""
-    log = get_logs(log_path)[0]
-    event_names = unique_events(log)
-    if encoding_type == BOOLEAN:
-        return boolean(log, event_names)
-    elif encoding_type == FREQUENCY:
-        return frequency(log, event_names)
-    elif encoding_type == SIMPLE_INDEX:
-        # TODO remove hardcoded prefix length
-        return simple_index(log, event_names, prefix_length=1, next_activity=(job_type == NEXT_ACTIVITY))
-
-
 def calculate_results(prediction, actual):
     true_positive = 0
     false_positive = 0

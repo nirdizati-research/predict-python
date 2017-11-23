@@ -139,3 +139,22 @@ class TestSplitLogExample(TestCase):
         self.assertIn("prefix_3", training_df.columns.values)
         row = training_df[training_df.trace_id == '3'].iloc[0]
         self.assertListEqual(['3', 6, 1, 2, 3, 4, 5, 6], row.values.tolist())
+
+
+class TestNextActivity(TestCase):
+    """Making sure it actually works"""
+
+    def setUp(self):
+        self.log = get_logs("log_cache/general_example_test.xes")[0]
+
+    def test_prefix1(self):
+        event_names = unique_events(self.log)
+        df = simple_index(self.log, event_names, prefix_length=1, next_activity=True)
+
+        self.assertEqual(df.shape, (2, 3))
+        print(df)
+        print(event_names)
+        row1 = df[df.trace_id == '5'].iloc[0]
+        self.assertListEqual(['5', 1, 2], row1.values.tolist())
+        row2 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 1, 3], row2.values.tolist())

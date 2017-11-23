@@ -44,7 +44,7 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         for _ in range(len(trace), prefix_length):
             trace_row.append(0)
 
-        trace_row.append(next_event_index(prefix_length - 1, trace, event_names))
+        trace_row.append(next_event_index(trace, event_names, prefix_length))
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
@@ -78,13 +78,13 @@ def trace_prefixes(trace: list, event_names: list, prefix_length: int):
     return prefixes
 
 
-def next_event_index(event_index: int, trace: list, event_names: list):
-    """Return the event_name index of the one after at event_index.
+def next_event_index(trace: list, event_names: list, prefix_length: int):
+    """Return the event_name index of the one after at prefix_length.
     Offset by +1.
     Or 0 if out of range.
     """
-    if event_index + 1 < len(trace):
-        next_event = trace[event_index + 1]
+    if prefix_length < len(trace):
+        next_event = trace[prefix_length]
         next_event_name = CLASSIFIER.get_class_identity(next_event)
         return event_names.index(next_event_name) + 1
     else:

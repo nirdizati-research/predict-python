@@ -63,13 +63,16 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
             trace_row.append(0)
 
         # event that is next
-        next_event = trace[event_index + 1]
-        next_event_name = CLASSIFIER.get_class_identity(next_event)
-        print("NEXT ECENT NAME")
-        print(next_event_name)
-        next_event_id = event_names.index(next_event_name)
-        print(next_event_id)
-        trace_row.append(next_event_id + 1)
+        if event_index + 1 < len(trace):
+            next_event = trace[event_index + 1]
+            next_event_name = CLASSIFIER.get_class_identity(next_event)
+            print("NEXT ECENT NAME")
+            print(next_event_name)
+            next_event_id = event_names.index(next_event_name)
+            print(next_event_id)
+            trace_row.append(next_event_id + 1)
+        else:
+            trace_row.append(0)
         encoded_data.append(trace_row)
 
     print(encoded_data)

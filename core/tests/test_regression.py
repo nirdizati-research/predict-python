@@ -9,13 +9,10 @@ class TestRegression(TestCase):
 
     def get_job(self):
         json = dict()
-        json['uuid'] = "ads69"
         json["clustering"] = "kmeans"
-        json["status"] = "completed"
         json["log"] = "log_cache/general_example.xes"
         json["regression"] = "linear"
         json["encoding"] = "simpleIndex"
-        json["timestamp"] = "Oct 03 2017 13:26:53"
         json["rule"] = "remaining_time"
         json["type"] = "regression"
         return Job(json)

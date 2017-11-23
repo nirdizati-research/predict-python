@@ -21,7 +21,7 @@ def calculate(job):
     if job.type == CLASSIFICATION:
         results = classifier(training_df, test_df, job)
     elif job.type == REGRESSION:
-        results = regression(df, job)
+        results = regression(training_df, test_df, job)
     elif job.type == NEXT_ACTIVITY:
         results = next_activity(df, job)
     print("End job {}, {} . Results {}".format(job.type, job.get_run(), results))

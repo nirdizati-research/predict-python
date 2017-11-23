@@ -43,22 +43,29 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         # trace_row.append(prefix_length)
+        print("NEW LOOP")
+        for idx, event in enumerate(trace):
+            event_name = CLASSIFIER.get_class_identity(event)
+            print(event_name)
 
-        event_id = -100
+        print("asdsdasdafadfsdfsdfsdasfdfas")
+        event_index = -100
         for idx, event in enumerate(trace):
             if idx == prefix_length:
                 break
             event_name = CLASSIFIER.get_class_identity(event)
             event_id = event_names.index(event_name)
             trace_row.append(event_id + 1)
+            event_index = idx
 
         print(trace_row)
-        for _ in range(event_id + 1, prefix_length):
+        for _ in range(event_index + 1, prefix_length):
             trace_row.append(0)
 
         # event that is next
-        next_event = trace[event_id + 1]
+        next_event = trace[event_index + 1]
         next_event_name = CLASSIFIER.get_class_identity(next_event)
+        print("NEXT ECENT NAME")
         print(next_event_name)
         next_event_id = event_names.index(next_event_name)
         print(next_event_id)

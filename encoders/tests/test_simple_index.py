@@ -158,3 +158,15 @@ class TestNextActivity(TestCase):
         self.assertListEqual(['5', 1, 2], row1.values.tolist())
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 1, 3], row2.values.tolist())
+
+    def test_prefix2(self):
+        event_names = unique_events(self.log)
+        df = simple_index(self.log, event_names, prefix_length=2, next_activity=True)
+
+        self.assertEqual(df.shape, (2, 4))
+        print(df)
+        print(event_names)
+        row1 = df[df.trace_id == '5'].iloc[0]
+        self.assertListEqual(['5', 1, 2, 3], row1.values.tolist())
+        row2 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 1, 3, 7], row2.values.tolist())

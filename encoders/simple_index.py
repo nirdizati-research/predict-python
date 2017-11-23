@@ -24,12 +24,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int):
         trace_row.append(trace_name)
         trace_row.append(remaining_time_id(trace, prefix_length))
         trace_row.append(elapsed_time_id(trace, prefix_length))
-        for idx, event in enumerate(trace):
-            if idx == prefix_length:
-                break
-            event_name = CLASSIFIER.get_class_identity(event)
-            event_id = event_names.index(event_name)
-            trace_row.append(event_id + 1)
+        trace_row += trace_prefixes(trace, event_names, prefix_length)
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
@@ -44,19 +39,12 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
 
-        event_index = None
-        for idx, event in enumerate(trace):
-            if idx == prefix_length:
-                break
-            event_name = CLASSIFIER.get_class_identity(event)
-            event_id = event_names.index(event_name)
-            trace_row.append(event_id + 1)
-            event_index = idx
+        trace_row += trace_prefixes(trace, event_names, prefix_length)
 
-        for _ in range(event_index + 1, prefix_length):
+        for _ in range(len(trace), prefix_length):
             trace_row.append(0)
 
-        trace_row.append(next_event_index(event_index, trace, event_names))
+        trace_row.append(next_event_index(prefix_length - 1, trace, event_names))
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
@@ -76,6 +64,18 @@ def __columns_next_activity(prefix_length):
         columns.append("prefix_" + str(i + 1))
     columns.append("label")
     return columns
+
+
+def trace_prefixes(trace: list, event_names: list, prefix_length: int):
+    """List of indexes of the position they are in event_names"""
+    prefixes = list()
+    for idx, event in enumerate(trace):
+        if idx == prefix_length:
+            break
+        event_name = CLASSIFIER.get_class_identity(event)
+        event_id = event_names.index(event_name)
+        prefixes.append(event_id + 1)
+    return prefixes
 
 
 def next_event_index(event_index: int, trace: list, event_names: list):

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from core.constants import SIMPLE_INDEX, CLASSIFICATION, NEXT_ACTIVITY
+from core.constants import SIMPLE_INDEX, CLASSIFICATION
 from encoders.common import encode_logs
 from encoders.log_util import unique_events
 from encoders.simple_index import simple_index
@@ -43,31 +43,6 @@ class TestSimpleGeneralExample(TestCase):
         self.assertEqual(1.0, row.prefix_1)
         self.assertEqual(2040.0, row.elapsed_time)
         self.assertEqual(1366740.0, row.remaining_time)
-
-    def test_encodes_next_activity(self):
-        """Encodes for next activity"""
-        df = simple_index(self.log, self.event_names, next_activity=True)
-
-        self.assertEqual((6, 3), df.shape)
-        self.assertNotIn("remaining_time", df.columns.values)
-        self.assertNotIn("elapsed_time", df.columns.values)
-        self.assertIn("label", df.columns.values)
-        self.assertNotIn("prefix_1", df.columns.values)
-
-        row = df[df.trace_id == '3'].iloc[0]
-        self.assertEqual(1, row.label)
-        self.assertEqual(1, row.event_nr)
-
-    def test_encodes_next_activity_prefix(self):
-        """Encodes for next activity with prefix length"""
-        df = simple_index(self.log, self.event_names, prefix_length=6, next_activity=True)
-
-        self.assertEqual((6, 8), df.shape)
-        self.assertIn("prefix_1", df.columns.values)
-        self.assertIn("prefix_2", df.columns.values)
-        self.assertIn("prefix_3", df.columns.values)
-        row = df[df.trace_id == '3'].iloc[0]
-        self.assertListEqual(['3', 6, 1, 2, 3, 4, 5, 6], row.values.tolist())
 
 
 class TestSplitLogExample(TestCase):
@@ -113,72 +88,3 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(1.0, row.prefix_1)
         self.assertEqual(75840.0, row.elapsed_time)
         self.assertEqual(445080.0, row.remaining_time)
-
-    def test_encodes_next_activity(self):
-        """Encodes for next activity with test set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY)
-
-        self.assertEqual((2, 3), test_df.shape)
-        self.assertNotIn("remaining_time", test_df.columns.values)
-        self.assertNotIn("elapsed_time", test_df.columns.values)
-        self.assertIn("label", test_df.columns.values)
-        self.assertNotIn("prefix_1", test_df.columns.values)
-
-        row = test_df[test_df.trace_id == '4'].iloc[0]
-        self.assertEqual(1, row.label)
-        self.assertEqual(1, row.event_nr)
-
-    def test_encodes_next_activity_prefix(self):
-        """Encodes for next activity with prefix length with training set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY,
-                                           prefix_length=6)
-
-        self.assertEqual((4, 8), training_df.shape)
-        self.assertIn("prefix_1", training_df.columns.values)
-        self.assertIn("prefix_2", training_df.columns.values)
-        self.assertIn("prefix_3", training_df.columns.values)
-        row = training_df[training_df.trace_id == '3'].iloc[0]
-        self.assertListEqual(['3', 6, 1, 2, 3, 4, 5, 6], row.values.tolist())
-
-
-class TestNextActivity(TestCase):
-    """Making sure it actually works"""
-
-    def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
-
-    def test_prefix1(self):
-        event_names = unique_events(self.log)
-        df = simple_index(self.log, event_names, prefix_length=1, next_activity=True)
-
-        self.assertEqual(df.shape, (2, 3))
-        print(df)
-        print(event_names)
-        row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 1, 2], row1.values.tolist())
-        row2 = df[df.trace_id == '4'].iloc[0]
-        self.assertListEqual(['4', 1, 3], row2.values.tolist())
-
-    def test_prefix2(self):
-        event_names = unique_events(self.log)
-        df = simple_index(self.log, event_names, prefix_length=2, next_activity=True)
-
-        self.assertEqual(df.shape, (2, 4))
-        print(df)
-        print(event_names)
-        row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 1, 2, 3], row1.values.tolist())
-        row2 = df[df.trace_id == '4'].iloc[0]
-        self.assertListEqual(['4', 1, 3, 7], row2.values.tolist())
-
-    def test_prefix5(self):
-        event_names = unique_events(self.log)
-        df = simple_index(self.log, event_names, prefix_length=5, next_activity=True)
-
-        self.assertEqual(df.shape, (2, 7))
-        print(df)
-        print(event_names)
-        row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 1, 2, 3, 4, 5, 3], row1.values.tolist())
-        row2 = df[df.trace_id == '4'].iloc[0]
-        self.assertListEqual(['4', 1, 3, 7, 4, 6, 0], row2.values.tolist())

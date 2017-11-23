@@ -42,14 +42,8 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
-        # trace_row.append(prefix_length)
-        print("NEW LOOP")
-        for idx, event in enumerate(trace):
-            event_name = CLASSIFIER.get_class_identity(event)
-            print(event_name)
 
-        print("asdsdasdafadfsdfsdfsdasfdfas")
-        event_index = -100
+        event_index = None
         for idx, event in enumerate(trace):
             if idx == prefix_length:
                 break
@@ -58,25 +52,12 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
             trace_row.append(event_id + 1)
             event_index = idx
 
-        print(trace_row)
         for _ in range(event_index + 1, prefix_length):
             trace_row.append(0)
 
-        # event that is next
-        if event_index + 1 < len(trace):
-            next_event = trace[event_index + 1]
-            next_event_name = CLASSIFIER.get_class_identity(next_event)
-            print("NEXT ECENT NAME")
-            print(next_event_name)
-            next_event_id = event_names.index(next_event_name)
-            print(next_event_id)
-            trace_row.append(next_event_id + 1)
-        else:
-            trace_row.append(0)
+        trace_row.append(next_event_index(event_index, trace, event_names))
         encoded_data.append(trace_row)
 
-    print(encoded_data)
-    print(columns)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -94,3 +75,16 @@ def __columns_next_activity(prefix_length):
         columns.append("prefix_" + str(i + 1))
     columns.append("label")
     return columns
+
+
+def next_event_index(event_index: int, trace: list, event_names: list):
+    """Return the event_name index of the one after at event_index.
+    Offset by +1.
+    Or 0 if out of range.
+    """
+    if event_index + 1 < len(trace):
+        next_event = trace[event_index + 1]
+        next_event_name = CLASSIFIER.get_class_identity(next_event)
+        return event_names.index(next_event_name) + 1
+    else:
+        return 0

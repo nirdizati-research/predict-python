@@ -9,12 +9,12 @@ from core.constants import KMEANS
 pd.options.mode.chained_assignment = None
 
 
-def next_activity(df, job):
-    clf = choose_classifier(job.classification)
+def next_activity(training_df, test_df, job):
+    clf = choose_classifier(job['classification'])
 
-    train_data, test_data, original_test_data = __split_next_activity(df)
+    train_data, test_data, original_test_data = drop_columns(training_df, test_df)
 
-    if job.clustering == KMEANS:
+    if job['clustering'] == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
@@ -91,12 +91,9 @@ def prepare_results(df, auc):
     return row
 
 
-def __split_next_activity(data):
-    # data = data.drop('event_nr', 1)
-
-    train_df, test_df = train_test_split(data, test_size=0.2, random_state=3)
+def drop_columns(training_df, test_df):
     original_test_df = test_df
-    train_df = train_df.drop('trace_id', 1)
+    train_df = training_df.drop('trace_id', 1)
     test_df = test_df.drop('trace_id', 1)
 
     return train_df, test_df, original_test_df

@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from core.core import calculate
-from core.job import Job
 
 
 class TestRegression(TestCase):
@@ -15,19 +14,19 @@ class TestRegression(TestCase):
         json["encoding"] = "simpleIndex"
         json["rule"] = "remaining_time"
         json["type"] = "regression"
-        return Job(json)
+        return json
 
     def test_reg_linear(self):
         job = self.get_job()
-        job.clustering = 'None'
+        job['clustering'] = 'None'
         calculate(job)
 
     def test_reg_randomforest(self):
         job = self.get_job()
-        job.regression = 'randomForest'
+        job['regression'] = 'randomForest'
         calculate(job)
 
     def test_reg_lasso(self):
         job = self.get_job()
-        job.regression = 'lasso'
+        job['regression'] = 'lasso'
         calculate(job)

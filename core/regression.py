@@ -16,11 +16,11 @@ pd.options.mode.chained_assignment = None
 
 
 def regression(training_df, test_df, job):
-    regressor = __choose_regressor(job.regression)
+    regressor = __choose_regressor(job['regression'])
 
     train_data, test_data, original_test_data = prep_data(training_df, test_df)
 
-    if job.clustering == KMEANS:
+    if job['clustering'] == KMEANS:
         results_df = kmeans_clustering(original_test_data, train_data, regressor)
     else:
         results_df = no_clustering(original_test_data, train_data, test_data, regressor)

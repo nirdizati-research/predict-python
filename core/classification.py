@@ -10,12 +10,12 @@ pd.options.mode.chained_assignment = None
 
 
 def classifier(training_df, test_df, job):
-    clf = choose_classifier(job.classification)
+    clf = choose_classifier(job['classification'])
 
-    training_df, test_df = fast_slow_encode2(training_df, test_df, job.rule, job.threshold)
+    training_df, test_df = fast_slow_encode2(training_df, test_df, job['rule'], job['threshold'])
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
-    if job.clustering == KMEANS:
+    if job['clustering'] == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
     else:
         results_df, auc = no_clustering(original_test_data, train_data, clf)

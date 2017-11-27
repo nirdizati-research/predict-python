@@ -7,21 +7,21 @@ from .log_util import remaining_time_id, elapsed_time_id
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def complex_encode(data, event_names, prefix_length=1):
+def complex(log, event_names, prefix_length=1):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex(data, event_names, prefix_length, 'complex')
+    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex)
 
 
-def last_payload(data, event_names, prefix_length=1):
+def last_payload(log, event_names, prefix_length=1):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_last_payload(data, event_names, prefix_length, 'latest')
+    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload)
 
 
-def encode_complex(log: list, event_names: list, prefix_length: int, encoding='complex'):
+def encode_complex_latest(log: list, event_names: list, prefix_length: int, column_fun, data_fun):
     additional_columns = get_event_attributes(log)
-    columns = columns_complex(prefix_length, additional_columns)
+    columns = column_fun(prefix_length, additional_columns)
     encoded_data = []
 
     for trace in log:
@@ -33,27 +33,7 @@ def encode_complex(log: list, event_names: list, prefix_length: int, encoding='c
         # prefix_length - 1 == index
         trace_row.append(remaining_time_id(trace, prefix_length - 1))
         trace_row.append(elapsed_time_id(trace, prefix_length - 1))
-        trace_row += trace_data_complex(trace, event_names, prefix_length, additional_columns)
-        encoded_data.append(trace_row)
-
-    return pd.DataFrame(columns=columns, data=encoded_data)
-
-
-def encode_last_payload(log: list, event_names: list, prefix_length: int, encoding='complex'):
-    additional_columns = get_event_attributes(log)
-    columns = columns_last_payload(prefix_length, additional_columns)
-    encoded_data = []
-
-    for trace in log:
-        if len(trace) <= prefix_length - 1:
-            continue
-        trace_row = []
-        trace_name = CLASSIFIER.get_class_identity(trace)
-        trace_row.append(trace_name)
-        # prefix_length - 1 == index
-        trace_row.append(remaining_time_id(trace, prefix_length - 1))
-        trace_row.append(elapsed_time_id(trace, prefix_length - 1))
-        trace_row += trace_data_last_payload(trace, event_names, prefix_length, additional_columns)
+        trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
@@ -77,32 +57,7 @@ def columns_last_payload(prefix_length, additional_columns):
     return columns
 
 
-def __add_case_data(df, case_events, case_data, additional_columns, encoding):
-    if encoding == 'complex':
-        return __complex_case_data(df, case_events, case_data, additional_columns)
-    elif encoding == 'frequency':
-        return __index_latest_case_data(df, case_events, case_data, additional_columns)
-
-
-def __complex_case_data(df, case_events, case_data, additional_columns):
-    for index in range(0, len(case_events)):
-        case_data.append(case_events[index])
-        __add_additional_columns(df, case_events, case_data, additional_columns)
-
-
-def __index_latest_case_data(df, case_events, case_data, additional_columns):
-    for index in range(0, len(case_events)):
-        case_data.append(case_events[index])
-    __add_additional_columns(df, case_events, case_data, additional_columns)
-
-
-def __add_additional_columns(df, case_events, case_data, additional_columns):
-    for additional_column in additional_columns:
-        event_attribute = df[df['event_nr'] == len(case_events)][additional_column].apply(str).item()
-        case_data.append(event_attribute)
-
-
-def trace_data_complex(trace: list, event_names: list, prefix_length: int, additional_columns: list):
+def data_complex(trace: list, event_names: list, prefix_length: int, additional_columns: list):
     """Creates list in form [1, value1, value2, 2, ...]
 
     Event name index of the position they are in event_names
@@ -124,7 +79,7 @@ def trace_data_complex(trace: list, event_names: list, prefix_length: int, addit
     return data
 
 
-def trace_data_last_payload(trace: list, event_names: list, prefix_length: int, additional_columns: list):
+def data_last_payload(trace: list, event_names: list, prefix_length: int, additional_columns: list):
     """Creates list in form [1, 2, value1, value2,]
 
     Event name index of the position they are in event_names

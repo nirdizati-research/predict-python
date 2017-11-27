@@ -9,7 +9,9 @@ from logs.models import Log, Split
 class JobModelTest(TestCase):
     def setUp(self):
         self.config = {'key': 123}
-        Job.objects.create(config=self.config)
+        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        split = Split.objects.create(original_log=log)
+        Job.objects.create(config=self.config, split=split)
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -47,7 +49,7 @@ class CreateJobsTests(APITestCase):
     def test_class_job_creation(self):
         client = APIClient()
         response = client.post('/jobs/multiple', self.job_obj(), format='json')
-        print(response)
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')

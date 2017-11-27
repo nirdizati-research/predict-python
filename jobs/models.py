@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.constants import REGRESSION, CLASSIFICATION, NEXT_ACTIVITY
-from logs.models import Log
+from logs.models import Log, Split
 from jsonfield import JSONField
 
 CREATED = 'created'
@@ -36,3 +36,4 @@ class Job(BaseModel):
     status = models.CharField(choices=STATUSES, default=CREATED, max_length=20)
     result = JSONField(default={})
     type = models.CharField(choices=TYPES, max_length=20)
+    split = models.ForeignKey(Split, on_delete=models.DO_NOTHING)

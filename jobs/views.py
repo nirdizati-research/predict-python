@@ -71,7 +71,7 @@ def handle_classification(split, payload):
         for clustering in payload['config']['clusterings']:
             for method in payload['config']['methods']:
                 item = Job.objects.create(
-                    # split=split,
+                    split=split,
                     status=CREATED,
                     type=CLASSIFICATION,
                     config=classification_config(payload, encoding, clustering, method))

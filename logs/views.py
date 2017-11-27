@@ -5,6 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from logs.log_service import events_by_date, resources_by_date, event_executions
+from logs.models import Split
+from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
 from .serializers import LogSerializer
 
@@ -60,3 +62,29 @@ def save_file(file, path):
     with open(path, 'wb+') as destination:
         for chunk in file.chunks():
             destination.write(chunk)
+
+
+class SplitList(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Split.objects.all()
+    serializer_class = SplitSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request):
+        serializer = CreateSplitSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+
+        # Other serlializer for data
+        item = serializer.save()
+        result = SplitSerializer(item)
+        return Response(result.data, status=status.HTTP_201_CREATED)
+
+
+class SplitDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Split.objects.all()
+    serializer_class = SplitSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)

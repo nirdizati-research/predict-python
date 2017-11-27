@@ -1,6 +1,6 @@
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import DEFAULT_COLUMNS, unique_events, get_event_attributes
+from encoders.log_util import unique_events, get_event_attributes
 import pandas as pd
 from .log_util import remaining_time_id, elapsed_time_id
 
@@ -19,20 +19,19 @@ def encode_complex_index_latest(log: list, event_names: list, prefix_length: int
     additional_columns = get_event_attributes(log)
     columns = __create_columns(prefix_length, additional_columns, encoding)
     encoded_data = []
-    print(columns)
+
     for trace in log:
-        if len(trace) <= prefix_length:
+        if len(trace) <= prefix_length - 1:
             continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
-        trace_row.append(remaining_time_id(trace, prefix_length))
-        trace_row.append(elapsed_time_id(trace, prefix_length))
-        trace_row += trace_prefixes(trace, event_names, prefix_length, additional_columns)
-        #__add_case_data(trace, event_names, trace_row, additional_columns, encoding)
+        # prefix_length - 1 == index
+        trace_row.append(remaining_time_id(trace, prefix_length - 1))
+        trace_row.append(elapsed_time_id(trace, prefix_length - 1))
+        trace_row += trace_data(trace, event_names, prefix_length, additional_columns)
         encoded_data.append(trace_row)
 
-    print(encoded_data)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -62,7 +61,6 @@ def encode_complex_index_latest2(data, additional_columns, prefix_length=1, enco
 
         encoded_data.append(case_data)
 
-
     df = pd.DataFrame(columns=columns, data=encoded_data)
     return df
 
@@ -75,7 +73,6 @@ def __create_columns(prefix_length, additional_columns, encoding):
 
 
 def __create_complex_columns(prefix_length, additional_columns):
-    #print(prefix_length)
     columns = ['trace_id', 'remaining_time', 'elapsed_time']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
@@ -119,8 +116,12 @@ def __add_additional_columns(df, case_events, case_data, additional_columns):
         case_data.append(event_attribute)
 
 
-def trace_prefixes(trace: list, event_names: list, prefix_length: int, additional_columns: list):
-    """List of indexes of the position they are in event_names"""
+def trace_data(trace: list, event_names: list, prefix_length: int, additional_columns: list):
+    """Creates list in form [1, value1, value2, 2, ...]
+
+    Event name index of the position they are in event_names
+    Appends values in additional_columns
+    """
     prefixes = list()
     for idx, event in enumerate(trace):
         if idx == prefix_length:
@@ -130,18 +131,8 @@ def trace_prefixes(trace: list, event_names: list, prefix_length: int, additiona
         prefixes.append(event_id + 1)
 
         for att in additional_columns:
-            #value = XEventAttributeClassifier("Random thing", [att]).get_class_identity(event)
             # Basically XEventAttributeClassifier
             value = event.get_attributes().get(att).get_value()
             prefixes.append(value)
-        # for attribute in additional_columns:
-        #     prefixes.append(event.get_attributes().values()[])
-        #sorted_events =
-        # for attribute in event.get_attributes().values():
-        #    # print(attribute.get_key())
-        #     if attribute.get_key() in additional_columns:
-        #        # print(attribute.get_key())
-        #         prefixes.append(attribute.get_value())
-    # Sort event attributes by name
-    print(prefixes)
+
     return prefixes

@@ -23,11 +23,11 @@ class Complex(TestCase):
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
-                             ["5", 1576440.0, 0.0, "register request", 'Ellen', "50", "register request",
+                             ["5", 1576440.0, 0.0, 1, "register request", "50", 'Ellen', "Ellen",
                               "Ellen"])
         row2 = df[(df.trace_id == '4')].iloc[0].tolist()
         self.assertListEqual(row2,
-                             ["4", 520920.0, 0.0, "register request", 'Pete', "50", "register request",
+                             ["4", 520920.0, 0.0, 1, "register request", 'Pete', "50", "register request",
                               "Pete"])
 
     def test_prefix2(self):

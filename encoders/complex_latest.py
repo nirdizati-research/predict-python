@@ -128,10 +128,20 @@ def trace_prefixes(trace: list, event_names: list, prefix_length: int, additiona
         event_name = CLASSIFIER.get_class_identity(event)
         event_id = event_names.index(event_name)
         prefixes.append(event_id + 1)
-        for attribute in event.get_attributes().values():
-           # print(attribute.get_key())
-            if attribute.get_key() in additional_columns:
-               # print(attribute.get_key())
-                prefixes.append(attribute.get_value())
+
+        for att in additional_columns:
+            #value = XEventAttributeClassifier("Random thing", [att]).get_class_identity(event)
+            # Basically XEventAttributeClassifier
+            value = event.get_attributes().get(att).get_value()
+            prefixes.append(value)
+        # for attribute in additional_columns:
+        #     prefixes.append(event.get_attributes().values()[])
+        #sorted_events =
+        # for attribute in event.get_attributes().values():
+        #    # print(attribute.get_key())
+        #     if attribute.get_key() in additional_columns:
+        #        # print(attribute.get_key())
+        #         prefixes.append(attribute.get_value())
+    # Sort event attributes by name
     print(prefixes)
     return prefixes

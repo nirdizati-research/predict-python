@@ -59,3 +59,17 @@ class TestClassification(TestCase):
         job['clustering'] = 'None'
         result = calculate(job)
         self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0})
+
+    def test_class_complex(self):
+        job = self.get_job()
+        job['clustering'] = 'None'
+        job["encoding"] = "complex"
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.5})
+
+    def test_class_last_payload(self):
+        job = self.get_job()
+        job['clustering'] = 'None'
+        job["encoding"] = "lastPayload"
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.5})

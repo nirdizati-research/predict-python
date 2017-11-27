@@ -1,11 +1,13 @@
 from datetime import datetime as dt
 
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
+from opyenxes.model.XLog import XLog
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_COLUMNS = ["trace_id", "event_nr", "remaining_time", "elapsed_time"]
 TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 HEADER_COLUMNS = ['trace_id', 'remaining_time', 'elapsed_time']
+
 
 def unique_events(log: list):
     """List of unique events using event concept:name
@@ -68,7 +70,12 @@ def remaining_time(trace, event):
 
 
 def get_event_attributes(log):
-    """Get log event attributes that are not name or time"""
+    """Get log event attributes that are not name or time
+
+    Log can be XLog or list of events (meaning it was split). Cast to XLog.
+    """
+    if type(log) is list:
+        log = XLog(log)
     event_attributes = []
     for attribute in log.get_global_event_attributes():
         if attribute.get_key() not in ["concept:name", "time:timestamp"]:

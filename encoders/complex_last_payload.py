@@ -19,7 +19,7 @@ def last_payload(log, event_names, prefix_length=1):
     return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload)
 
 
-def encode_complex_latest(log: list, event_names: list, prefix_length: int, column_fun, data_fun):
+def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun):
     additional_columns = get_event_attributes(log)
     columns = column_fun(prefix_length, additional_columns)
     encoded_data = []

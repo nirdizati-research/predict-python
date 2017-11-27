@@ -4,6 +4,8 @@
 SIMPLE_INDEX = 'simpleIndex'
 BOOLEAN = 'boolean'
 FREQUENCY = 'frequency'
+COMPLEX = 'complex'
+LAST_PAYLOAD = 'lastPayload'
 
 # Classification methods
 KNN = 'knn'

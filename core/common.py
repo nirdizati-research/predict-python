@@ -4,11 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
-from core.constants import SIMPLE_INDEX, BOOLEAN, FREQUENCY, KNN, RANDOM_FOREST, DECISION_TREE, NEXT_ACTIVITY
-from encoders.boolean_frequency import boolean, frequency
-from encoders.log_util import unique_events
-from encoders.simple_index import simple_index
-from logs.file_service import get_logs
+from core.constants import KNN, RANDOM_FOREST, DECISION_TREE
 
 
 def calculate_results(prediction, actual):

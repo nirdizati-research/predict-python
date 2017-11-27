@@ -65,3 +65,12 @@ def remaining_time(trace, event):
         # Log has no timestamps
         return 0
     return delta.total_seconds()
+
+
+def get_event_attributes(log):
+    """Get log event attributes that are not name or time"""
+    event_attributes = []
+    for attribute in log.get_global_event_attributes():
+        if attribute.get_key() not in ["concept:name", "time:timestamp"]:
+            event_attributes.append(attribute.get_key())
+    return event_attributes

@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from encoders.complex_latest import last_payload
+from encoders.complex_last_payload import last_payload
 from encoders.log_util import unique_events
 from logs.file_service import get_logs
 

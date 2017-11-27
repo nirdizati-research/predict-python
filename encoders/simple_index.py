@@ -1,6 +1,7 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
+from encoders.log_util import HEADER_COLUMNS
 from .log_util import remaining_time_id, elapsed_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
@@ -53,7 +54,7 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
 
 
 def __create_columns(prefix_length: int):
-    columns = ["trace_id", "remaining_time", "elapsed_time"]
+    columns = list(HEADER_COLUMNS)
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     return columns

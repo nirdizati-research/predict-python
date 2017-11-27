@@ -1,7 +1,7 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import get_event_attributes
+from encoders.log_util import get_event_attributes, HEADER_COLUMNS
 from .log_util import remaining_time_id, elapsed_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
@@ -40,7 +40,7 @@ def encode_complex_latest(log: list, event_names: list, prefix_length: int, colu
 
 
 def columns_complex(prefix_length, additional_columns):
-    columns = ['trace_id', 'remaining_time', 'elapsed_time']
+    columns = list(HEADER_COLUMNS)
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
         for additional_column in additional_columns:
@@ -49,7 +49,7 @@ def columns_complex(prefix_length, additional_columns):
 
 
 def columns_last_payload(prefix_length, additional_columns):
-    columns = ['trace_id', 'remaining_time', 'elapsed_time']
+    columns = list(HEADER_COLUMNS)
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns:

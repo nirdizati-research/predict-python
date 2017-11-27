@@ -1,8 +1,15 @@
+import json
+
+from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
+from core.constants import CLASSIFICATION
+from jobs.models import CREATED
 from jobs.serializers import JobSerializer
+from logs.models import Split
 from .models import Job
 
 
@@ -22,6 +29,7 @@ class JobList(ListAPIView):
             jobs = jobs.filter(status=status)
         return jobs
 
+    # TODO remove?
     def post(self, request):
         serializer = JobSerializer(data=request.data)
         if serializer.is_valid():
@@ -36,3 +44,49 @@ class JobDetail(RetrieveModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
+
+@api_view(['POST'])
+def create_multiple(request):
+    """No request validation"""
+    payload = json.loads(request.body)
+
+    try:
+        split = Split.objects.get(pk=payload['split_id'])
+    except Split.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+    jobs = []
+    #print(split)
+    if payload['type'] == CLASSIFICATION:
+        jobs = handle_classification(split, payload)
+
+    serializer = JobSerializer(jobs, many=True)
+    return Response(serializer.data, status=201)
+
+
+def handle_classification(split, payload):
+    jobs = []
+
+    for encoding in payload['config']['encodings']:
+        for clustering in payload['config']['clusterings']:
+            for method in payload['config']['methods']:
+                item = Job.objects.create(
+                    # split=split,
+                    status=CREATED,
+                    type=CLASSIFICATION,
+                    config=classification_config(payload, encoding, clustering, method))
+                jobs.append(item)
+
+    return jobs
+
+
+def classification_config(payload, encoding, clustering, method):
+    """Turn lists to single values"""
+    config = dict(payload['config'])
+    del config['encodings']
+    del config['clusterings']
+    del config['methods']
+    config['encoding'] = encoding
+    config['clustering'] = clustering
+    config['method'] = method
+    return config

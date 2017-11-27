@@ -1,9 +1,12 @@
 from django.test import TestCase
+from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
 
 from jobs.models import Job
+from logs.models import Log, Split
 
 
-class LogModelTest(TestCase):
+class JobModelTest(TestCase):
     def setUp(self):
         self.config = {'key': 123}
         Job.objects.create(config=self.config)
@@ -22,3 +25,34 @@ class LogModelTest(TestCase):
         job.status = 'completed'
 
         self.assertNotEquals(job.created_date, job.modified_date)
+
+
+class CreateJobsTests(APITestCase):
+    def setUp(self):
+        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        Split.objects.create(original_log=log)
+
+    def job_obj(self):
+        config = dict()
+        config['encodings'] = ['simpleIndex']
+        config['clusterings'] = ['none']
+        config['methods'] = ['kmeans']
+        config['random'] = 123
+        obj = dict()
+        obj['type'] = 'classification'
+        obj['config'] = config
+        obj['split_id'] = 1
+        return obj
+
+    def test_class_job_creation(self):
+        client = APIClient()
+        response = client.post('/jobs/multiple', self.job_obj(), format='json')
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['type'], 'classification')
+        self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
+        self.assertEqual(response.data[0]['config']['clustering'], 'none')
+        self.assertEqual(response.data[0]['config']['method'], 'kmeans')
+        self.assertEqual(response.data[0]['config']['random'], 123)
+        self.assertEqual(response.data[0]['status'], 'created')

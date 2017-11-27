@@ -14,8 +14,8 @@ class Complex(TestCase):
         df = complex_encode(self.log, self.event_names, prefix_length=2)
         print(df)
         self.assertEqual((2, 13), df.shape)
-        headers = ["case_id", "remaining_time", "elapsed_time", "prefix_1", "Resource_1", "Costs_1",
-                   "Activity_1", "org:resource_1", "prefix_2", "Resource_2", "Costs_2", "Activity_2", "org:resource_2"]
+        headers = ['trace_id', 'remaining_time', 'elapsed_time', 'prefix_1', 'Activity_1', 'Costs_1', 'Resource_1',
+                   'org:resource_1', 'prefix_2', 'Activity_2', 'Costs_2', 'Resource_2', 'org:resource_2']
         self.assertListEqual(headers, df.columns.values.tolist())
 
     def test_prefix1(self):

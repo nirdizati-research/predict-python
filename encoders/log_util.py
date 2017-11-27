@@ -73,4 +73,4 @@ def get_event_attributes(log):
     for attribute in log.get_global_event_attributes():
         if attribute.get_key() not in ["concept:name", "time:timestamp"]:
             event_attributes.append(attribute.get_key())
-    return event_attributes
+    return sorted(event_attributes)

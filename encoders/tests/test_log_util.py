@@ -46,4 +46,4 @@ class TestSimpleGeneralExample(TestCase):
     def test_event_attributes(self):
         log = get_logs("log_cache/general_example_test.xes")[0]
         attributes = get_event_attributes(log)
-        self.assertListEqual(attributes, ['org:resource', 'Activity', 'Resource', 'Costs'])
+        self.assertListEqual(attributes, ['Activity', 'Costs', 'Resource', 'org:resource'])

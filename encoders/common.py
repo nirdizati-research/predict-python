@@ -1,5 +1,6 @@
-from core.constants import SIMPLE_INDEX, NEXT_ACTIVITY, BOOLEAN, FREQUENCY
+from core.constants import SIMPLE_INDEX, NEXT_ACTIVITY, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD
 from encoders.boolean_frequency import frequency
+from encoders.complex_last_payload import complex, last_payload
 from .boolean_frequency import boolean
 from .log_util import unique_events2
 from .simple_index import simple_index
@@ -8,7 +9,7 @@ from .simple_index import simple_index
 def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type: str, prefix_length=1):
     """Encodes test set and training set as data frames
 
-    :param prefix_length only for SIMPLE_INDEX
+    :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
@@ -24,4 +25,10 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
     elif encoding_type is FREQUENCY:
         training_df = frequency(training_log, event_names)
         test_df = frequency(test_log, event_names)
+    elif encoding_type is COMPLEX:
+        training_df = complex(training_log, event_names)
+        test_df = complex(test_log, event_names)
+    elif encoding_type is LAST_PAYLOAD:
+        training_df = last_payload(training_log, event_names)
+        test_df = last_payload(test_log, event_names)
     return training_df, test_df

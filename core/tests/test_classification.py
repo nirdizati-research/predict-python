@@ -41,7 +41,8 @@ class TestClassification(TestCase):
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
-        calculate(job)
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0})
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
@@ -56,4 +57,19 @@ class TestClassification(TestCase):
         job['classification'] = 'decisionTree'
         job['type'] = 'nextActivity'
         job['clustering'] = 'None'
-        calculate(job)
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0})
+
+    def test_class_complex(self):
+        job = self.get_job()
+        job['clustering'] = 'None'
+        job["encoding"] = "complex"
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.5})
+
+    def test_class_last_payload(self):
+        job = self.get_job()
+        job['clustering'] = 'None'
+        job["encoding"] = "lastPayload"
+        result = calculate(job)
+        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.5})

@@ -38,8 +38,8 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(1, row.prefix_1)
         self.assertEqual(2, row.prefix_2)
         self.assertEqual(3, row.prefix_3)
-        self.assertEqual(782820.0, row.remaining_time)
-        self.assertEqual(585960.0, row.elapsed_time)
+        self.assertEqual(1361460.0, row.remaining_time)
+        self.assertEqual(7320.0, row.elapsed_time)
 
     def test_row_test(self):
         training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, CLASSIFICATION)
@@ -47,8 +47,8 @@ class TestSplitLogExample(TestCase):
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(1.0, row.prefix_1)
-        self.assertEqual(75840.0, row.elapsed_time)
-        self.assertEqual(445080.0, row.remaining_time)
+        self.assertEqual(0.0, row.elapsed_time)
+        self.assertEqual(520920.0, row.remaining_time)
 
 
 class TestGeneralTest(TestCase):
@@ -71,29 +71,33 @@ class TestGeneralTest(TestCase):
 
         self.assertEqual(df.shape, (2, 4))
         row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 1485600.0, 90840.0, 1], row1.values.tolist())
+        self.assertListEqual(['5', 1576440.0, 0.0, 1], row1.values.tolist())
         row2 = df[df.trace_id == '4'].iloc[0]
-        self.assertListEqual(['4', 445080.0, 75840.0, 1], row2.values.tolist())
+        self.assertListEqual(['4', 520920.0, 0.0, 1], row2.values.tolist())
+
+    def test_prefix0(self):
+        self.assertRaises(ValueError,
+                          simple_index, self.log, self.event_names, prefix_length=0)
 
     def test_prefix2(self):
         df = simple_index(self.log, self.event_names, prefix_length=2)
 
         self.assertEqual(df.shape, (2, 5))
         row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 1395240.0, 181200.0, 1, 2], row1.values.tolist())
+        self.assertListEqual(['5', 1485600.0, 90840.0, 1, 2], row1.values.tolist())
         row2 = df[df.trace_id == '4'].iloc[0]
-        self.assertListEqual(['4', 349260.0, 171660.0, 1, 3], row2.values.tolist())
+        self.assertListEqual(['4', 445080.0, 75840.0, 1, 3], row2.values.tolist())
 
     def test_prefix5(self):
         df = simple_index(self.log, self.event_names, prefix_length=5)
 
-        self.assertEqual(df.shape, (1, 8))
+        self.assertEqual(df.shape, (2, 8))
         row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 865380.0, 711060.0, 1, 2, 3, 4, 5], row1.values.tolist())
+        self.assertListEqual(['5', 1118280.0, 458160.0, 1, 2, 3, 4, 5], row1.values.tolist())
 
     def test_prefix10(self):
         df = simple_index(self.log, self.event_names, prefix_length=10, next_activity=False)
 
         self.assertEqual(df.shape, (1, 13))
         row1 = df[df.trace_id == '5'].iloc[0]
-        self.assertListEqual(['5', 271320.0, 1305120.0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 2], row1.values.tolist())
+        self.assertListEqual(['5', 280200.0, 1296240.0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 2], row1.values.tolist())

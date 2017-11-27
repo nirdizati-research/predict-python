@@ -21,6 +21,12 @@ class TestRegression(TestCase):
         job['clustering'] = 'None'
         calculate(job)
 
+    def test_reg_linear_boolean(self):
+        job = self.get_job()
+        job['clustering'] = 'None'
+        job['encoding'] = 'boolean'
+        calculate(job)
+
     def test_reg_randomforest(self):
         job = self.get_job()
         job['regression'] = 'randomForest'
@@ -29,4 +35,16 @@ class TestRegression(TestCase):
     def test_reg_lasso(self):
         job = self.get_job()
         job['regression'] = 'lasso'
+        calculate(job)
+
+    def test_reg_lasso_complex(self):
+        job = self.get_job()
+        job['regression'] = 'lasso'
+        job['encoding'] = 'complex'
+        calculate(job)
+
+    def test_reg_lasso_last_payload(self):
+        job = self.get_job()
+        job['regression'] = 'lasso'
+        job['encoding'] = 'lastPayload'
         calculate(job)

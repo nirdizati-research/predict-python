@@ -7,6 +7,8 @@ CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
 def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False):
+    if prefix_length < 1:
+        raise ValueError("Prefix length must be greater than 1")
     if next_activity:
         return encode_next_activity(log, event_names, prefix_length)
     return encode_simple_index(log, event_names, prefix_length)
@@ -17,13 +19,13 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int):
     encoded_data = []
 
     for trace in log:
-        if len(trace) <= prefix_length:
+        if len(trace) <= prefix_length - 1:
             continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
-        trace_row.append(remaining_time_id(trace, prefix_length))
-        trace_row.append(elapsed_time_id(trace, prefix_length))
+        trace_row.append(remaining_time_id(trace, prefix_length - 1))
+        trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         encoded_data.append(trace_row)
 

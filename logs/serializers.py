@@ -19,9 +19,11 @@ class CreateSplitSerializer(serializers.ModelSerializer):
 
 
 class SplitSerializer(serializers.ModelSerializer):
-    original_log = LogSerializer(many=False, read_only=False)
+    original_log = LogSerializer(many=False, read_only=True)
+    test_log = LogSerializer(many=False, read_only=True)
+    training_log = LogSerializer(many=False, read_only=True)
     config = serializers.JSONField()
 
     class Meta:
         model = Split
-        fields = ('id', 'config', 'original_log', 'type')
+        fields = ('id', 'config', 'original_log', 'type', 'test_log', 'training_log')

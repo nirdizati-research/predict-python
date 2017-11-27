@@ -1,3 +1,4 @@
+import contextlib
 from os import remove
 
 from django.test import SimpleTestCase, TestCase
@@ -63,19 +64,39 @@ class SplitModelTest(TestCase):
 class FileUploadTests(APITestCase):
     def tearDown(self):
         Log.objects.all().delete()
-        remove('log_cache/test_upload')
+        # I hate that Python can't just delete
+        with contextlib.suppress(FileNotFoundError):
+            remove('log_cache/test_upload')
+        with contextlib.suppress(FileNotFoundError):
+            remove('log_cache/file1')
+        with contextlib.suppress(FileNotFoundError):
+            remove('log_cache/file2')
 
     def _create_test_file(self, path):
         f = open(path, 'w')
         f.write('test123\n')
         f.close()
         f = open(path, 'rb')
-        return {'file': f}
+        return f
 
     def test_upload_file(self):
-        data = self._create_test_file('/tmp/test_upload')
+        f = self._create_test_file('/tmp/test_upload')
 
         client = APIClient()
-        response = client.post('/logs/', data, format='multipart')
+        response = client.post('/logs/', {'single': f}, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'test_upload')
+
+    def test_upload_multiple_files(self):
+        f1 = self._create_test_file('/tmp/file1')
+        f2 = self._create_test_file('/tmp/file2')
+
+        client = APIClient()
+        response = client.post('/split/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')
+        self.assertEqual(response.data['type'], 'double')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['test_log']['name'], 'file1')
+        self.assertEqual(response.data['training_log']['name'], 'file2')
+        self.assertEqual(response.data['original_log'], None)
+        self.assertEqual(response.data['config'], {})

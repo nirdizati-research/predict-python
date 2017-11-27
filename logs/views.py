@@ -21,9 +21,9 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
     def post(self, request):
-        name = self.request.FILES['file'].name
+        name = self.request.FILES['single'].name
         path = 'log_cache/' + name
-        save_file(self.request.FILES['file'], path)
+        save_file(self.request.FILES['single'], path)
         log = Log.objects.create(name=name, path=path)
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -80,6 +80,25 @@ class SplitList(mixins.ListModelMixin, generics.GenericAPIView):
         item = serializer.save()
         result = SplitSerializer(item)
         return Response(result.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['POST'])
+def upload_multiple(request):
+    test_name = request.FILES['testSet'].name
+    training_name = request.FILES['trainingSet'].name
+    test_path = 'log_cache/' + test_name
+    training_path = 'log_cache/' + training_name
+    save_file(request.FILES['testSet'], test_path)
+    save_file(request.FILES['trainingSet'], training_path)
+    test_log = Log.objects.create(name=test_name, path=test_path)
+    training_log = Log.objects.create(name=training_name, path=training_path)
+
+    item = Split.objects.create(
+        type='double',
+        training_log=training_log,
+        test_log=test_log)
+    serializer = SplitSerializer(item)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class SplitDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):

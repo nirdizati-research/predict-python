@@ -6,7 +6,7 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from core.constants import CLASSIFICATION
+from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split
@@ -56,15 +56,18 @@ def create_multiple(request):
     except Split.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     jobs = []
-    #print(split)
-    if payload['type'] == CLASSIFICATION:
-        jobs = handle_classification(split, payload)
 
+    if payload['type'] == CLASSIFICATION:
+        jobs = generate(split, payload)
+    elif payload['type'] == NEXT_ACTIVITY:
+        jobs = generate(split, payload, NEXT_ACTIVITY)
+    elif payload['type'] == REGRESSION:
+        jobs = generate(split, payload, REGRESSION)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
 
-def handle_classification(split, payload):
+def generate(split, payload, type=CLASSIFICATION):
     jobs = []
 
     for encoding in payload['config']['encodings']:
@@ -73,14 +76,14 @@ def handle_classification(split, payload):
                 item = Job.objects.create(
                     split=split,
                     status=CREATED,
-                    type=CLASSIFICATION,
-                    config=classification_config(payload, encoding, clustering, method))
+                    type=type,
+                    config=create_config(payload, encoding, clustering, method))
                 jobs.append(item)
 
     return jobs
 
 
-def classification_config(payload, encoding, clustering, method):
+def create_config(payload, encoding, clustering, method):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']

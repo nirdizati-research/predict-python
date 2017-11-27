@@ -58,3 +58,30 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['method'], 'kmeans')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['status'], 'created')
+
+    def job_obj2(self):
+        config = dict()
+        config['encodings'] = ['simpleIndex', 'boolean', 'complex']
+        config['clusterings'] = ['none']
+        config['methods'] = ['linear', 'lasso']
+        config['random'] = 123
+        config['prefix_length'] = 1
+        obj = dict()
+        obj['type'] = 'regression'
+        obj['config'] = config
+        obj['split_id'] = 1
+        return obj
+
+    def test_reg_job_creation(self):
+        client = APIClient()
+        response = client.post('/jobs/multiple', self.job_obj2(), format='json')
+
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
+        self.assertEqual(6, len(response.data), )
+        self.assertEqual('regression', response.data[0]['type'])
+        self.assertEqual('simpleIndex', response.data[0]['config']['encoding'])
+        self.assertEqual('none', response.data[0]['config']['clustering'])
+        self.assertEqual('linear', response.data[0]['config']['method'])
+        self.assertEqual(123, response.data[0]['config']['random'])
+        self.assertEqual('created', response.data[0]['status'])
+        self.assertEqual(1, response.data[0]['split']['id'])

@@ -22,7 +22,8 @@ def calculate(job):
     else:
         prefix_length = 1
 
-    training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'], prefix_length=prefix_length)
+    training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
+                                       prefix_length=prefix_length)
 
     if job['type'] == CLASSIFICATION:
         results = classifier(training_df, test_df, job)
@@ -32,6 +33,19 @@ def calculate(job):
         results = next_activity(training_df, test_df, job)
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results
+
+
+def prepare_logs(split: dict):
+    """Returns training_log and test_log"""
+    if split['type'] == 'single':
+        log = get_logs(split['original_log_path'])[0]
+        training_log, test_log = split_log(log)
+        print("Loaded single log from {}".format(split['original_log_path']))
+    else:
+        training_log = get_logs(split['training_log_path'])[0]
+        test_log = get_logs(split['test_log_path'])[0]
+        print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
+    return training_log, test_log
 
 
 def split_log(log: list, test_size=0.2, random_state=4):
@@ -47,6 +61,7 @@ def get_run(job):
         return run_classification(job['classification'], job['encoding'], job['clustering'])
     elif job['type'] == REGRESSION:
         return run_regression(job['regression'], job['encoding'], job['clustering'])
+
 
 def run_classification(classification, encoding, clustering):
     return classification + '_' + encoding + '_' + clustering

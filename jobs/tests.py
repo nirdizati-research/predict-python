@@ -4,12 +4,20 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION
 from jobs.models import Job
+from jobs.tasks import prediction_task
 from logs.models import Log, Split
 
 
 class JobModelTest(TestCase):
     def setUp(self):
-        self.config = {'key': 123}
+        self.config = {'key': 123,
+                       'method': 'randomForest',
+                       'encoding': 'simpleIndex',
+                       'clustering': 'none',
+                       "rule": "remaining_time",
+                       "prefix_length": 1,
+                       "threshold": "default"
+                       }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
@@ -38,6 +46,26 @@ class JobModelTest(TestCase):
                               'config': {}},
                              job['split'])
         self.assertEquals(123, job['key'])
+
+    def test_prediction_task(self):
+        prediction_task(1)
+
+        job = Job.objects.get(id=1)
+
+        self.assertEqual('completed', job.status)
+        self.assertNotEqual({}, job.result)
+
+    def test_prediction_task_error(self):
+        job = Job.objects.get(id=1)
+        job.config['encoding'] = 'asdad'
+        job.save()
+        prediction_task(1)
+
+        job = Job.objects.get(id=1)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual({}, job.error)
 
 
 class CreateJobsTests(APITestCase):

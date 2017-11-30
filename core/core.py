@@ -13,8 +13,7 @@ def calculate(job):
     """ Main entry method for calculations"""
     results = None
     print("Start job {} with {}".format(job['type'], get_run(job)))
-    log = get_logs(job['log'])[0]
-    training_log, test_log = split_log(log)
+    training_log, test_log = prepare_logs(job['split'])
 
     # Python dicts are bad
     if 'prefix_length' in job:

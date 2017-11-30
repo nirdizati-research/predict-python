@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from core.core import calculate
+from core.tests.test_prepare import split_single
 
 
 class TestClassification(TestCase):
@@ -10,7 +11,7 @@ class TestClassification(TestCase):
         json = dict()
         json["clustering"] = "kmeans"
         json["status"] = "completed"
-        json["log"] = "log_cache/general_example.xes"
+        json["split"] = split_single()
         json["classification"] = "randomForest"
         json["encoding"] = "simpleIndex"
         json["rule"] = "remaining_time"

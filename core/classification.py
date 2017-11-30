@@ -10,7 +10,7 @@ pd.options.mode.chained_assignment = None
 
 
 def classifier(training_df, test_df, job):
-    clf = choose_classifier(job['classification'])
+    clf = choose_classifier(job['method'])
 
     training_df, test_df = fast_slow_encode2(training_df, test_df, job['rule'], job['threshold'])
 

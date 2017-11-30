@@ -55,16 +55,12 @@ def split_log(log: list, test_size=0.2, random_state=4):
 def get_run(job):
     """Defines job identity"""
     if job['type'] == CLASSIFICATION:
-        return run_classification(job['classification'], job['encoding'], job['clustering'])
+        return run_identity(job['method'], job['encoding'], job['clustering'])
     elif job['type'] == NEXT_ACTIVITY:
-        return run_classification(job['classification'], job['encoding'], job['clustering'])
+        return run_identity(job['method'], job['encoding'], job['clustering'])
     elif job['type'] == REGRESSION:
-        return run_regression(job['regression'], job['encoding'], job['clustering'])
+        return run_identity(job['method'], job['encoding'], job['clustering'])
 
 
-def run_classification(classification, encoding, clustering):
-    return classification + '_' + encoding + '_' + clustering
-
-
-def run_regression(regression, encoding, clustering):
-    return regression + '_' + encoding + '_' + clustering
+def run_identity(method, encoding, clustering):
+    return method + '_' + encoding + '_' + clustering

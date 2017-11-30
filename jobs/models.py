@@ -37,3 +37,9 @@ class Job(BaseModel):
     result = JSONField(default={})
     type = models.CharField(choices=TYPES, max_length=20)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING)
+
+    def to_dict(self):
+        job = self.config
+        job['type'] = self.type
+        job['split'] = self.split.to_dict()
+        return job

@@ -2,6 +2,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
+from core.constants import CLASSIFICATION
 from jobs.models import Job
 from logs.models import Log, Split
 
@@ -11,7 +12,7 @@ class JobModelTest(TestCase):
         self.config = {'key': 123}
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=self.config, split=split)
+        Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -27,6 +28,16 @@ class JobModelTest(TestCase):
         job.status = 'completed'
 
         self.assertNotEquals(job.created_date, job.modified_date)
+
+    def test_to_dict(self):
+        job = Job.objects.get(id=1).to_dict()
+
+        self.assertEquals(CLASSIFICATION, job['type'])
+        self.assertDictEqual({'type': 'single',
+                              'original_log_path': "log_cache/general_example.xes",
+                              'config': {}},
+                             job['split'])
+        self.assertEquals(123, job['key'])
 
 
 class CreateJobsTests(APITestCase):

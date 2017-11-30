@@ -10,7 +10,6 @@ class TestClassification(TestCase):
     def get_job(self):
         json = dict()
         json["clustering"] = "kmeans"
-        json["status"] = "completed"
         json["split"] = split_single()
         json["classification"] = "randomForest"
         json["encoding"] = "simpleIndex"

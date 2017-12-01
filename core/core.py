@@ -11,7 +11,6 @@ from logs.file_service import get_logs
 
 def calculate(job):
     """ Main entry method for calculations"""
-    results = None
     print("Start job {} with {}".format(job['type'], get_run(job)))
     training_log, test_log = prepare_logs(job['split'])
 
@@ -30,6 +29,8 @@ def calculate(job):
         results = regression(training_df, test_df, job)
     elif job['type'] == NEXT_ACTIVITY:
         results = next_activity(training_df, test_df, job)
+    else:
+        raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results
 

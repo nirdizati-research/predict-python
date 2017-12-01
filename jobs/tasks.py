@@ -1,7 +1,5 @@
-from logging import ERROR
-
 from core.core import calculate
-from jobs.models import Job, CREATED, RUNNING, COMPLETED
+from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 
 
 #@job("high", timeout='1h')

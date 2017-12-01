@@ -21,6 +21,7 @@ class JobModelTest(TestCase):
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
+        Job.objects.create(config=self.config, split=split, type='asdsd')
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -56,16 +57,13 @@ class JobModelTest(TestCase):
         self.assertNotEqual({}, job.result)
 
     def test_prediction_task_error(self):
-        job = Job.objects.get(id=1)
-        job.config['encoding'] = 'asdad'
-        job.save()
-        prediction_task(1)
+        prediction_task(2)
 
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(id=2)
 
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)
-        self.assertEqual({}, job.error)
+        self.assertEqual("('Type not supported', 'asdsd')", job.error)
 
 
 class CreateJobsTests(APITestCase):

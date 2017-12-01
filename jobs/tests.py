@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from core.constants import CLASSIFICATION
+from core.constants import CLASSIFICATION, REGRESSION
 from jobs.models import Job
 from jobs.tasks import prediction_task
 from logs.models import Log, Split
@@ -22,6 +22,8 @@ class JobModelTest(TestCase):
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
         Job.objects.create(config=self.config, split=split, type='asdsd')
+        del self.config['method']
+        Job.objects.create(config=self.config, split=split, type=REGRESSION)
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -57,13 +59,20 @@ class JobModelTest(TestCase):
         self.assertNotEqual({}, job.result)
 
     def test_prediction_task_error(self):
-        prediction_task(2)
-
+        self.assertRaises(ValueError, prediction_task, 2)
         job = Job.objects.get(id=2)
 
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)
-        self.assertEqual("('Type not supported', 'asdsd')", job.error)
+        self.assertEqual("ValueError('Type not supported', 'asdsd')", job.error)
+
+    def test_missing_attributes(self):
+        self.assertRaises(KeyError, prediction_task, 3)
+        job = Job.objects.get(id=3)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual("KeyError('method',)", job.error)
 
 
 class CreateJobsTests(APITestCase):

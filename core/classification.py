@@ -4,7 +4,7 @@ from sklearn import metrics
 from sklearn.cluster import KMeans
 
 from core.common import choose_classifier, calculate_results, fast_slow_encode2
-from core.constants import KMEANS
+from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
 
@@ -17,8 +17,10 @@ def classifier(training_df, test_df, job):
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
     if job['clustering'] == KMEANS:
         results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
-    else:
+    elif job['clustering'] == NO_CLUSTER:
         results_df, auc = no_clustering(original_test_data, train_data, clf)
+    else:
+        raise ValueError("Unexpected clustering {}".format(job['clustering']))
 
     results = prepare_results(results_df, auc)
     return results

@@ -14,7 +14,7 @@ class JobModelTest(TestCase):
         self.config = {'key': 123,
                        'method': 'randomForest',
                        'encoding': 'simpleIndex',
-                       'clustering': 'none',
+                       'clustering': 'noCluster',
                        "rule": "remaining_time",
                        "prefix_length": 1,
                        "threshold": "default"

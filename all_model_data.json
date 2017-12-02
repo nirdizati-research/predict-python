@@ -63,5 +63,19 @@
       "test_log": null,
       "training_log": null
     }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 1,
+    "fields": {
+      "created_date": "2017-11-14T20:52:36.469Z",
+      "modified_date": "2017-11-14T20:52:36.470Z",
+      "config": "{\"clustering\":\"noCluster\", \"method\":\"randomForest\", \"encoding\":\"simpleIndex\", \"rule\":\"remaining_time\", \"prefix_length\":1, \"threshold\":\"default\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"f1score\": 0.6666666666666666, \"acc\": 0.5, \"auc\": 0.5}",
+      "type": "classification",
+      "split": 1
+    }
   }
 ]

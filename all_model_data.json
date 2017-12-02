@@ -1,0 +1,34 @@
+[
+  {
+    "model": "logs.log",
+    "pk": 1,
+    "fields": {
+      "name": "general_example.xes",
+      "path": "log_cache/general_example.xes"
+    }
+  },
+  {
+    "model": "logs.log",
+    "pk": 2,
+    "fields": {
+      "name": "general_example_test.xes",
+      "path": "log_cache/general_example_test.xes"
+    }
+  },
+  {
+    "model": "logs.log",
+    "pk": 3,
+    "fields": {
+      "name": "general_example_training.xes",
+      "path": "log_cache/general_example_training.xes"
+    }
+  },
+  {
+    "model": "logs.log",
+    "pk": 4,
+    "fields": {
+      "name": "nonlocal.mxml.gz",
+      "path": "log_cache/nonlocal.mxml.gz"
+    }
+  }
+]

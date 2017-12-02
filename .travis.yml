@@ -1,5 +1,7 @@
 language: python
 cache: pip
+services:
+  - redis-server
 branches:
   only:
   - master

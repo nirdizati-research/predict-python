@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
@@ -22,8 +23,7 @@ class JobModelTest(TestCase):
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
         Job.objects.create(config=self.config, split=split, type='asdsd')
-        del self.config['method']
-        Job.objects.create(config=self.config, split=split, type=REGRESSION)
+        Job.objects.create(config={}, split=split, type=REGRESSION)
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -79,6 +79,9 @@ class CreateJobsTests(APITestCase):
     def setUp(self):
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         Split.objects.create(original_log=log)
+
+    def tearDown(self):
+        get_queue().empty()
 
     def job_obj(self):
         config = dict()

@@ -1,5 +1,6 @@
 import json
 
+import django_rq
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, GenericAPIView
@@ -7,6 +8,7 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
+from jobs import tasks
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split
@@ -65,6 +67,8 @@ def create_multiple(request):
     else:
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    for job in jobs:
+        django_rq.enqueue(tasks.prediction_task, job.id)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 

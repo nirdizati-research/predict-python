@@ -1,8 +1,10 @@
+from django_rq.decorators import job
+
 from core.core import calculate
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 
 
-# @job("high", timeout='1h')
+@job("default", timeout='1h')
 def prediction_task(job_id):
     print("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)

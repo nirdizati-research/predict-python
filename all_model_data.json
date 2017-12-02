@@ -30,5 +30,38 @@
       "name": "nonlocal.mxml.gz",
       "path": "log_cache/nonlocal.mxml.gz"
     }
+  },
+  {
+    "model": "logs.split",
+    "pk": 1,
+    "fields": {
+      "config": "{}",
+      "type": "single",
+      "original_log": 1,
+      "test_log": null,
+      "training_log": null
+    }
+  },
+  {
+    "model": "logs.split",
+    "pk": 2,
+    "fields": {
+      "config": "{}",
+      "type": "double",
+      "original_log": null,
+      "test_log": 2,
+      "training_log": 3
+    }
+  },
+  {
+    "model": "logs.split",
+    "pk": 3,
+    "fields": {
+      "config": "{}",
+      "type": "single",
+      "original_log": 4,
+      "test_log": null,
+      "training_log": null
+    }
   }
 ]

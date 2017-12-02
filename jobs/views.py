@@ -51,7 +51,7 @@ class JobDetail(RetrieveModelMixin, GenericAPIView):
 @api_view(['POST'])
 def create_multiple(request):
     """No request validation"""
-    payload = json.loads(request.body)
+    payload = json.loads(request.body.decode('utf-8'))
 
     try:
         split = Split.objects.get(pk=payload['split_id'])

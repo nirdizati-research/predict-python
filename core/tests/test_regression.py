@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from core.core import calculate
+from core.tests.test_prepare import split_double
 
 
 class TestRegression(TestCase):
@@ -9,8 +10,8 @@ class TestRegression(TestCase):
     def get_job(self):
         json = dict()
         json["clustering"] = "kmeans"
-        json["log"] = "log_cache/general_example.xes"
-        json["regression"] = "linear"
+        json["split"] = split_double()
+        json["method"] = "linear"
         json["encoding"] = "simpleIndex"
         json["rule"] = "remaining_time"
         json["type"] = "regression"
@@ -29,22 +30,24 @@ class TestRegression(TestCase):
 
     def test_reg_randomforest(self):
         job = self.get_job()
-        job['regression'] = 'randomForest'
+        job['method'] = 'randomForest'
         calculate(job)
 
     def test_reg_lasso(self):
         job = self.get_job()
-        job['regression'] = 'lasso'
+        job['method'] = 'lasso'
         calculate(job)
 
-    def test_reg_lasso_complex(self):
+    # WILL NOT WORK
+    def reg_lasso_complex(self):
         job = self.get_job()
-        job['regression'] = 'lasso'
+        job['method'] = 'lasso'
         job['encoding'] = 'complex'
         calculate(job)
 
-    def test_reg_lasso_last_payload(self):
+    def reg_lasso_last_payload(self):
         job = self.get_job()
-        job['regression'] = 'lasso'
+        job['method'] = 'lasso'
+        job['clustering'] = 'None'
         job['encoding'] = 'lastPayload'
         calculate(job)

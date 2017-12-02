@@ -16,7 +16,7 @@ pd.options.mode.chained_assignment = None
 
 
 def regression(training_df, test_df, job):
-    regressor = __choose_regressor(job['regression'])
+    regressor = __choose_regressor(job['method'])
 
     train_data, test_data, original_test_data = prep_data(training_df, test_df)
 

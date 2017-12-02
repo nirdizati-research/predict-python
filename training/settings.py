@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
+    "django_rq",
 ]
 
 LOGGING = {
@@ -143,3 +144,12 @@ USE_L10N = False
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': '0.0.0.0',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 7200,
+    }
+}

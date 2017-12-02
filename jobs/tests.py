@@ -1,17 +1,29 @@
 from django.test import TestCase
+from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
+from core.constants import CLASSIFICATION, REGRESSION
 from jobs.models import Job
+from jobs.tasks import prediction_task
 from logs.models import Log, Split
 
 
 class JobModelTest(TestCase):
     def setUp(self):
-        self.config = {'key': 123}
+        self.config = {'key': 123,
+                       'method': 'randomForest',
+                       'encoding': 'simpleIndex',
+                       'clustering': 'none',
+                       "rule": "remaining_time",
+                       "prefix_length": 1,
+                       "threshold": "default"
+                       }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=self.config, split=split)
+        Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
+        Job.objects.create(config=self.config, split=split, type='asdsd')
+        Job.objects.create(config={}, split=split, type=REGRESSION)
 
     def test_default(self):
         job = Job.objects.get(id=1)
@@ -28,11 +40,48 @@ class JobModelTest(TestCase):
 
         self.assertNotEquals(job.created_date, job.modified_date)
 
+    def test_to_dict(self):
+        job = Job.objects.get(id=1).to_dict()
+
+        self.assertEquals(CLASSIFICATION, job['type'])
+        self.assertDictEqual({'type': 'single',
+                              'original_log_path': "log_cache/general_example.xes",
+                              'config': {}},
+                             job['split'])
+        self.assertEquals(123, job['key'])
+
+    def test_prediction_task(self):
+        prediction_task(1)
+
+        job = Job.objects.get(id=1)
+
+        self.assertEqual('completed', job.status)
+        self.assertNotEqual({}, job.result)
+
+    def test_prediction_task_error(self):
+        self.assertRaises(ValueError, prediction_task, 2)
+        job = Job.objects.get(id=2)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual("ValueError('Type not supported', 'asdsd')", job.error)
+
+    def test_missing_attributes(self):
+        self.assertRaises(KeyError, prediction_task, 3)
+        job = Job.objects.get(id=3)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual("KeyError('method',)", job.error)
+
 
 class CreateJobsTests(APITestCase):
     def setUp(self):
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         Split.objects.create(original_log=log)
+
+    def tearDown(self):
+        get_queue().empty()
 
     def job_obj(self):
         config = dict()

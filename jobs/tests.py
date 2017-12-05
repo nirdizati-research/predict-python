@@ -86,7 +86,7 @@ class CreateJobsTests(APITestCase):
     def job_obj(self):
         config = dict()
         config['encodings'] = ['simpleIndex']
-        config['clusterings'] = ['none']
+        config['clusterings'] = ['noCluster']
         config['methods'] = ['kmeans']
         config['random'] = 123
         obj = dict()
@@ -103,10 +103,11 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')
         self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
-        self.assertEqual(response.data[0]['config']['clustering'], 'none')
+        self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'kmeans')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['status'], 'created')
+
 
     def job_obj2(self):
         config = dict()

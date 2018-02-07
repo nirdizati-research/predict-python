@@ -6,7 +6,7 @@ from logs.urls import split_url_patterns
 urlpatterns = [
     url(r'^jobs/', include('jobs.urls')),
     url(r'^logs/', include('logs.urls')),
-    url(r'^split/', include(split_url_patterns)),
+    url(r'^splits/', include(split_url_patterns)),
     url(r'^admin/', admin.site.urls),
     url(r'^django-rq/', include('django_rq.urls')),
 ]

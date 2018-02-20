@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from core.core import calculate
-from core.tests.test_prepare import split_double
+from core.tests.test_prepare import split_double, split_single
 
 
 class TestRegression(TestCase):
@@ -10,11 +10,12 @@ class TestRegression(TestCase):
     def get_job(self):
         json = dict()
         json["clustering"] = "kmeans"
-        json["split"] = split_double()
+        json["split"] = split_single()
         json["method"] = "linear"
         json["encoding"] = "simpleIndex"
         json["rule"] = "remaining_time"
         json["type"] = "regression"
+        json['prefix_length'] = 3
         return json
 
     def test_reg_linear(self):

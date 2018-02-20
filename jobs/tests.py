@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
 from jobs.models import Job
-from jobs.tasks import prediction_task
+from jobs.tasks import prediction_task, prediction
 from logs.models import Log, Split
 
 

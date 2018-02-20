@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="sqlite_jdbc-161706b0633-5b393aa0d59a5b61" provider="generic" driver="sqlite_jdbc" name="SQLite - db.sqlite3" save-password="true" show-system-objects="true" read-only="false">
+		<connection server="" database="C:\Users\stebr\mio_tirocinio_git\predict-python\db.sqlite3" url="jdbc:sqlite:C:\Users\stebr\mio_tirocinio_git\predict-python\db.sqlite3" type="dev"/>
+	</data-source>
+	<filters/>
+</data-sources>

@@ -7,6 +7,7 @@ TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_COLUMNS = ["trace_id", "event_nr", "remaining_time", "elapsed_time"]
 TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 HEADER_COLUMNS = ['trace_id', 'remaining_time', 'elapsed_time']
+HEADER_COLUMNS_RUN = ['trace_id',  'elapsed_time']
 
 
 def unique_events(log: list):

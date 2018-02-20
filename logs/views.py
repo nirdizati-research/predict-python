@@ -28,6 +28,20 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request):
+        name = self.request.FILES['single'].name
+        path = 'log_run_cache/' + name
+        save_file(self.request.FILES['single'], path)
+        log = Log.objects.create(name=name, path=path)
+        serializer = LogSerializer(log)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):

@@ -72,6 +72,31 @@ def create_multiple(request):
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
+@api_view(['POST'])
+def create_prediction(request):
+    """No request validation"""
+    payload = json.loads(request.body.decode('utf-8'))
+    
+    try:
+        log = Logs.objects.get(pk=payload['log_id'])
+        model = PredModel.objects.get(pk=payload['model_id'])
+    except Split.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+    
+    if payload['type'] == CLASSIFICATION:
+        job = create_job_run(log, payload)
+    elif payload['type'] == NEXT_ACTIVITY:
+        job = create_job_run(log, payload, NEXT_ACTIVITY)
+    elif payload['type'] == REGRESSION:
+        job = create_job_run(log, payload, REGRESSION)
+    else:
+        return Response({'error': 'type not supported'.format(payload['type'])},
+                        status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+    
+    prediction(job,model)
+    serializer = JobRunSerializer(job)
+    return Response(serializer.data, status=201)
+
 
 def generate(split, payload, type=CLASSIFICATION):
     jobs = []
@@ -88,6 +113,14 @@ def generate(split, payload, type=CLASSIFICATION):
 
     return jobs
 
+def create_job_run(log, payload, type=CLASSIFICATION):
+    job = JobRun.objects.create(
+        config=dict(),
+        log=log,
+        status=CREATED,
+        type=type,        
+        )
+    return job
 
 def create_config(payload, encoding, clustering, method):
     """Turn lists to single values"""

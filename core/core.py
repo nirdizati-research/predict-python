@@ -13,7 +13,6 @@ def calculate(job):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
     training_log, test_log = prepare_logs(job['split'])
-
     # Python dicts are bad
     if 'prefix_length' in job:
         prefix_length = job['prefix_length']
@@ -42,14 +41,17 @@ def prepare_logs(split: dict):
         training_log, test_log = split_log(log)
         print("Loaded single log from {}".format(split['original_log_path']))
     else:
-        training_log = get_logs(split['training_log_path'])[0]
-        test_log = get_logs(split['test_log_path'])[0]
+        #training_log = get_logs(split['training_log_path'])[0]
+        #test_log = get_logs(split['test_log_path'])[0]
+        training_log, _ = split_log(get_logs(split['training_log_path'])[0], test_size=0)
+        test_log, _ = split_log(get_logs(split['test_log_path'])[0], test_size=0)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
     return training_log, test_log
 
 
 def split_log(log: list, test_size=0.2, random_state=4):
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state)
+    #print(test_log[0][0])
     return training_log, test_log
 
 

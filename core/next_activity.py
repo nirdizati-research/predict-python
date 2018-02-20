@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.model_selection import train_test_split
+from sklearn.externals import joblib
 
 from core.common import choose_classifier, calculate_results
 from core.constants import KMEANS
@@ -22,6 +23,48 @@ def next_activity(training_df, test_df, job):
     results = prepare_results(results_df, auc)
     return results
 
+def next_activity_run(run_df, model, job):
+    split = model['split']
+    run_df = run_df.drop('label', 1)
+    if split['type'] == 'single':
+        clf = joblib.load(split['model_path'])
+        result = no_clustering_run(run_df,clf)
+    elif split[type] == 'double':
+        clf = joblib.load(split['model_path'])
+        estimator = joblib.load(split['kmean_path'])
+        result = kmeans_run(run_df, clf, estimator)
+    
+    results = clf.predict(run_df)
+    prob = clf.predict_proba(run_df)
+    result= "{} - prob {}".format(results, prob)
+    print(results)
+    return result
+
+def no_clustering_run(run_df, clf):
+    run_df = run_df.drop('trace_id',1)
+    results = clf.predict(run_df)
+    result = []
+    prob = clf.predict_proba(run_df)
+    for i in range(len(results)):   
+        if results[i]:
+            result.append("{} - prob: {}".format(results[i],prob[i]))
+        else:
+            result.append("{} - prob: {}".format(results[i],prob[i]))
+    return result
+
+def kmeans_run(run_df, clf, estimator):
+    test_cluster_lists = {
+        i: run_df.iloc[np.where(estimator.predict(run_df.drop('trace_id', 1)) == i)[0]]
+        for i in range(estimator.n_clusters)}
+    results = None
+    for i,cluster_list in test_cluster_lists.items():
+        clustered_test_data = test_cluster_lists[i]
+        if clustered_test_data.shape[0] == 0:
+            pass
+        else:
+            clustered_test_data['result']=clf[i].predict(clustered_test_data)
+            
+    return clustered_test_data['result']
 
 def kmeans_clustering(original_test_data, train_data, clf):
     auc = 0

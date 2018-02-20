@@ -9,8 +9,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.externals import joblib
 
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
+from django.contrib.admin.templatetags.admin_list import results
 
 pd.options.mode.chained_assignment = None
 
@@ -28,6 +30,39 @@ def regression(training_df, test_df, job):
     results = prepare_results(results_df)
     return results
 
+def regression_run(run_df, model, job):
+    split = model['split']
+    run_df = run_df.drop(columns = 'elapsed_time')
+    if split['type'] == 'single':
+        regressor = joblib.load(split['model_path'])
+        results = no_clustering_run(run_df, regressor)
+    elif split['type'] == 'double':
+        regressor = joblib.load(split['model_path'])
+        estimator = joblib.load(split['kmean_path']) 
+        results = kmeans_run(run_df, regressor, estimator)
+
+    return results
+
+def no_clustering_run(run_df, regressor):
+    run_df = run_df.drop('trace_id',1)
+    results = regressor.predict(run_df)
+    return results
+
+def kmeans_run(run_df, regressor, estimator):
+    test_cluster_lists = {
+        i: run_df.iloc[np.where(estimator.predict(run_df.drop('trace_id', 1)) == i)[0]]
+        for i in range(estimator.n_clusters)}
+    results = []
+    #print (test_cluster_lists)
+    for i, model in regressor.items():
+        clustered_test_data = test_cluster_lists[i]
+        if clustered_test_data.shape[0] == 0:
+            pass
+        else:
+            clustered_test_data['result']=model.predict(clustered_test_data.drop('trace_id',1))
+            print(clustered_test_data)
+            
+    return clustered_test_data['result']
 
 def kmeans_clustering(original_test_data, train_data, regressor):
     estimator = KMeans(n_clusters=3)
@@ -38,6 +73,7 @@ def kmeans_clustering(original_test_data, train_data, regressor):
         for i in range(estimator.n_clusters)}
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
     result_data = None
+    print(original_cluster_lists)
     for cluster_list in cluster_lists:
         original_test_clustered_data = original_cluster_lists[cluster_list]
         if original_test_clustered_data.shape[0] == 0:
@@ -46,7 +82,7 @@ def kmeans_clustering(original_test_data, train_data, regressor):
             clustered_train_data = cluster_lists[cluster_list]
             clustered_test_data = original_cluster_lists[cluster_list]
             clustered_test_data = clustered_test_data.drop(['trace_id', 'remaining_time'], 1)
-
+            
             y = clustered_train_data['remaining_time']
             clustered_train_data = clustered_train_data.drop('remaining_time', 1)
 
@@ -64,6 +100,7 @@ def no_clustering(original_test_data, train_data, test_data, regressor):
     train_data = train_data.drop('remaining_time', 1)
     regressor.fit(train_data, y)
     original_test_data['prediction'] = regressor.predict(test_data)
+    print (original_test_data['prediction'])
     return original_test_data
 
 

@@ -13,5 +13,7 @@
 	</buildSpec>
 	<natures>
 		<nature>org.python.pydev.pythonNature</nature>
+		<nature>org.jkiss.dbeaver.DBeaverNature</nature>
+		<nature>org.python.pydev.django.djangoNature</nature>
 	</natures>
 </projectDescription>

@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'corsheaders',
+    'training.apps.TrainingConfig',
     'logs.apps.LogsConfig',
     'jobs.apps.JobsConfig',
     'rest_framework',

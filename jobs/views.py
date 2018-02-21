@@ -8,11 +8,13 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
-from jobs import tasks
+from training.tr_core import calculate
+from jobs.tasks import prediction, prediction_task
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
-from logs.models import Split
-from .models import Job
+from logs.models import Split, Log
+from training.models import PredModels
+from .models import Job, JobRun
 
 
 class JobList(ListAPIView):
@@ -68,9 +70,47 @@ def create_multiple(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
-        django_rq.enqueue(tasks.prediction_task, job.id)
+        django_rq.enqueue(prediction, job)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
+
+@api_view(['GET'])
+def get_model(request, pk):
+    """Get log statistics
+
+    End URL with
+    * events for event_by_date
+    * resources for resources_by_date
+    * executions for event_executions
+    """
+    try:
+        job = Job.objects.get(pk=pk)
+    except Log.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+    calculate(job.to_dict())
+    
+    return Response({'OK'})
+
+@api_view(['GET'])
+def get_prediction(request, pk1, pk2):
+    """Get log statistics
+
+    End URL with
+    * events for event_by_date
+    * resources for resources_by_date
+    * executions for event_executions
+    """
+    try:
+        jobrun = JobRun.objects.get(pk=pk1)
+        model = PredModels.objects.get(pk=pk2)
+    except Log.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+    
+    django_rq.enqueue(prediction, jobrun)
+    serializer = JobSerializer(jobrun)
+    return Response(jobrun.result)
 
 @api_view(['POST'])
 def create_prediction(request):

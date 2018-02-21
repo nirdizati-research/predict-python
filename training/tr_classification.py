@@ -22,7 +22,7 @@ def tr_classifier(training_df, job):
         split['model']=model
         split['estimator']=estimator
     else:
-        model = no_clustering(train_data, clf)
+        model = no_clustering(train_data, job)
         split['type']='single'
         split['model']=model
 
@@ -49,7 +49,7 @@ def kmeans_clustering(train_data, job):
     return models, estimator
 
 
-def no_clustering(train_data, clf):
+def no_clustering(train_data, job):
     clf = choose_classifier(job['method'])
     y = train_data['actual']
 

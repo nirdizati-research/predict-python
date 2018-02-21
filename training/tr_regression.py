@@ -24,7 +24,7 @@ def tr_regression(training_df, job):
         split['model']=model
         split['estimator']=estimator
     else:
-        model = no_clustering(train_data, regressor)
+        model = no_clustering(train_data, job)
         split['type']='single'
         split['model']=model
     return split
@@ -49,7 +49,7 @@ def kmeans_clustering(train_data, job):
             models[i] = regressor
     return models, estimator
 
-def no_clustering(train_data, regressor):
+def no_clustering(train_data, job):
     regressor = __choose_regressor(job['method'])
     y = train_data['remaining_time']
     train_data = train_data.drop('remaining_time', 1)

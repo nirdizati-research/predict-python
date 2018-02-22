@@ -31,3 +31,22 @@ Start by running migrations and adding sample data
 python manage.py migrate
 python manage.py loaddata all_model_data.json
 ```
+
+Start jobs from command line
+```commandline
+curl --request POST \
+  --header 'Content-Type: application/json' \
+  --data-binary '{
+    "type": "classification",
+    "split_id": 1,
+    "config": {
+      "encodings": ["simpleIndex"],
+      "clusterings": ["noCluster"],
+      "methods": ["randomForest"],
+      "rule": "remaining_time",
+      "prefix_length": 1,
+      "threshold": "default"
+    }
+  }' \
+http://localhost:8000/jobs/multiple
+```

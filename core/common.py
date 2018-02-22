@@ -39,13 +39,14 @@ def calculate_results(prediction, actual):
 
 
 def choose_classifier(class_type: str):
-    clf = None
     if class_type == KNN:
         clf = KNeighborsClassifier()
     elif class_type == RANDOM_FOREST:
         clf = RandomForestClassifier()
     elif class_type == DECISION_TREE:
         clf = DecisionTreeClassifier()
+    else:
+        raise ValueError("Unexpected classification method {}".format(class_type))
     return clf
 
 

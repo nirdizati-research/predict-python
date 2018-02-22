@@ -8,3 +8,4 @@ scikit-learn==0.19.1
 scipy==1.0.0
 jsonfield==2.0.2
 django-rq==1.0.0
+django-cors-headers==1.2.0

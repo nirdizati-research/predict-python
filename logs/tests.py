@@ -98,7 +98,7 @@ class FileUploadTests(APITestCase):
         f2 = self._create_test_file('/tmp/file2')
 
         client = APIClient()
-        response = client.post('/split/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')
+        response = client.post('/splits/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')
         self.assertEqual(response.data['type'], 'double')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

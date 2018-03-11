@@ -35,7 +35,7 @@ def calculate_results(prediction, actual):
         f1score = 0
 
     acc = float(true_positive + true_negative) / (true_positive + true_negative + false_negative + false_positive)
-    return f1score, acc
+    return f1score, acc, true_positive, true_negative, false_negative, false_positive
 
 
 def choose_classifier(class_type: str):

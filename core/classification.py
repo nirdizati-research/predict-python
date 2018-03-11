@@ -103,10 +103,8 @@ def prepare_results(df, auc: int):
     predicted_[predicted_ == "Fast"] = True
     predicted_[predicted_ == "Slow"] = False
 
-    f1score, acc, true_positive, true_negative, false_negative, false_positive = calculate_results(actual_, predicted_)
-
-    row = {'f1score': f1score, 'acc': acc, 'auc': auc, 'true_positive': true_positive, 'true_negative': true_negative,
-           'false_negative': false_negative, 'false_positive': false_positive}
+    row = calculate_results(actual_, predicted_)
+    row['auc'] = auc
     return row
 
 

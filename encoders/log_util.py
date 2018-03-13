@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-
+import math
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from opyenxes.model.XLog import XLog
 
@@ -15,13 +15,23 @@ def unique_events(log: list):
 
     Adds all events into a list and removes duplicates while keeping order.
     """
+    
     classifier = XEventAttributeClassifier("Resource", ["concept:name"])
     event_list = []
+    length=[]
     for trace in log:
+        count=0
         for event in trace:
+            count += 1
             event_name = classifier.get_class_identity(event)
             event_list.append(event_name)
-    return sorted(set(event_list), key=lambda x: event_list.index(x))
+        length.append(count)
+    p_length=0
+    for i in range(len(length)):
+        p_length+=length[i]
+    divisor=math.ceil(len(length)*3/4)
+    p_length=math.ceil(p_length/divisor)
+    return sorted(set(event_list), key=lambda x: event_list.index(x)),p_length
 
 
 def unique_events2(training_log: list, test_log: list):

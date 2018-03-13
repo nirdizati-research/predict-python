@@ -11,7 +11,7 @@ class JobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Job
-        fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result', 'type', 'split')
+        fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result', 'type', 'split', 'error')
         
 class JobRunSerializer(serializers.ModelSerializer):
     config = serializers.JSONField()
@@ -20,4 +20,4 @@ class JobRunSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobRun
-        fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result', 'type', 'log')
+        fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result', 'type', 'log', 'error')

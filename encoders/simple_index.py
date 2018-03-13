@@ -11,7 +11,7 @@ def simple_index(log: list, event_names: list, prefix_length=1, next_activity=Fa
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if next_activity:
-        return encode_next_activity(log, event_names, prefix_length)
+        return encode_next_activity(log, event_names, prefix_length, run)
     return encode_simple_index(log, event_names, prefix_length, run)
 
 
@@ -35,8 +35,8 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, run):
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def encode_next_activity(log: list, event_names: list, prefix_length: int):
-    columns = __columns_next_activity(prefix_length)
+def encode_next_activity(log: list, event_names: list, prefix_length: int, run):
+    columns = __columns_next_activity(prefix_length, run)
     encoded_data = []
 
     for trace in log:
@@ -48,10 +48,10 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
 
         for _ in range(len(trace), prefix_length):
             trace_row.append(0)
-
-        trace_row.append(next_event_index(trace, event_names, prefix_length))
+        if not run:
+            trace_row.append(next_event_index(trace, event_names, prefix_length))
         encoded_data.append(trace_row)
-
+    print(pd.DataFrame(columns=columns, data=encoded_data))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -65,12 +65,13 @@ def __create_columns(prefix_length: int, run):
     return columns
 
 
-def __columns_next_activity(prefix_length):
+def __columns_next_activity(prefix_length, run):
     """Creates columns for next activity"""
     columns = ["trace_id"]
     for i in range(0, prefix_length):
         columns.append("prefix_" + str(i + 1))
-    columns.append("label")
+    if not run:
+        columns.append("label")
     return columns
 
 

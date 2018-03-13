@@ -1,4 +1,6 @@
 import json
+import os
+from subprocess import call
 
 import django_rq
 from rest_framework import status
@@ -9,7 +11,7 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from training.tr_core import calculate
-from jobs.tasks import prediction, prediction_task
+from jobs.tasks import prediction
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split, Log
@@ -83,8 +85,16 @@ def get_model(request, pk):
     * resources for resources_by_date
     * executions for event_executions
     """
+    config = {'key': 123,
+                       'method': 'randomForest',
+                       'encoding': 'simpleIndex',
+                       'clustering': 'noCluster',
+                       "rule": "remaining_time",
+                       'threshold': 'default',
+                       }
     try:
-        job = Job.objects.get(pk=pk)
+        #job = Job.objects.get(pk=pk)
+        job = Job.objects.create(config=config, split=Split.objects.get(pk=3), type=NEXT_ACTIVITY)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
@@ -102,13 +112,27 @@ def get_prediction(request, pk1, pk2):
     * resources for resources_by_date
     * executions for event_executions
     """
+    
+    config = {'key': 123,
+                       'method': 'randomForest',
+                       'encoding': 'simpleIndex',
+                       'clustering': 'noCluster',
+                       'prefix_length':1,
+                       "rule": "remaining_time",
+                       'threshold': 'default',
+                       }
+    log = Log.objects.get(pk=3)
+    jobrun=JobRun.objects.create(config=config, log=log, type=NEXT_ACTIVITY)
+    
     try:
-        jobrun = JobRun.objects.get(pk=pk1)
+        #jobrun = JobRun.objects.get(pk=pk1)
         model = PredModels.objects.get(pk=pk2)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
-    django_rq.enqueue(prediction, jobrun)
+    #django_rq.enqueue(prediction, jobrun, model)
+    prediction(jobrun,model)
+    #os.system('python3 manage.py rqworker --burst')
     serializer = JobSerializer(jobrun)
     return Response(jobrun.result)
 

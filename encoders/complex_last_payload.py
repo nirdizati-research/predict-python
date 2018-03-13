@@ -15,7 +15,7 @@ def complex(log, event_names, prefix_length=1, run=False):
 def last_payload(log, event_names, prefix_length=1, run=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, run)
+    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, run)
 
 
 def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, run):
@@ -35,7 +35,6 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
         trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
         encoded_data.append(trace_row)
-        print('complex:{}'.format(trace_row))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 

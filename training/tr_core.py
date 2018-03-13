@@ -6,7 +6,7 @@ from core.constants import NEXT_ACTIVITY, \
     CLASSIFICATION, REGRESSION
 from training.tr_next_activity import tr_next_activity
 from training.tr_regression import tr_regression
-from encoders.common import encode_training_logs, encode_logs
+from encoders.common import encode_training_logs, encode_logs, encode_one_training_logs
 from logs.models import Log
 from logs.file_service import get_logs
 from logs.views import save_file
@@ -14,56 +14,77 @@ from sklearn.externals import joblib
 from training.models import PredModels, Split
 
 
-def calculate(job):
+def calculate(job, redo=False):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
     training_log, path = prepare_logs(job['split'])
     log = Log.objects.get(path = path)
 
         # Python dicts are bad
-    if 'prefix_length' in job:
-        prefix_length = job['prefix_length']
+    
+    if redo:
+        train_df = encode_one_training_logs(training_log, job['encoding'], job['type'], job['prefix_length'])
+        models = work(log, job, job['prefix_length'], train_df)
     else:
-        prefix_length = 1
-    
-    training_log, _ =train_test_split(training_log, test_size=0)
-    
-    training_df = encode_training_logs(training_log, job['encoding'], job['type'],
-                                       prefix_length=prefix_length)
-    
+        training_df, prefix_length = encode_training_logs(training_log, job['encoding'], job['type'])
+        for i, train_df in training_df.items():
+            models = work(log, job, i, train_df)
+    return models.to_dict()
+
+
+def prepare_logs(split: dict):
+    """Returns training_log"""
+    if split['type'] == 'single':
+        path = split['original_log_path']
+        training_log = get_logs(path)[0]
+        training_log, _ =train_test_split(training_log, test_size=0)
+    else:
+        path = split['training_log_path']
+        training_log = get_logs(path)[0]
+        training_log, _ =train_test_split(training_log, test_size=0)
+    return training_log, path
+
+def work(log, job, i, train_df):
     if job['type'] == CLASSIFICATION:
-        split = tr_classifier(training_df, job)
+        split = tr_classifier(train_df, job)
     elif job['type'] == REGRESSION:
-        split = tr_regression(training_df, job)
+        split = tr_regression(train_df, job)
     elif job['type'] == NEXT_ACTIVITY:
-        split = tr_next_activity(training_df, job)
+        split = tr_next_activity(train_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {}".format(job['type'], get_run(job)))
 
     if split['type'] =='single':
-        filename_model = 'model_cache/{}-model.sav'.format(log.name)
+        filename_model = 'model_cache/{}-model-{}.sav'.format(log.name,i)
         joblib.dump(split['model'], filename_model)
-        split = Split.objects.create(type = split['type'], model_path = filename_model)
-        models = PredModels.objects.create(split = split, type=job['type'], log = log, prefix_length = prefix_length, encoding = job['encoding'],
+        try:
+            split=Split.objects.get(type=split['type'], model_path = filename_model)
+        except Split.DoesNotExist:
+            split = Split.objects.create(type = split['type'], model_path = filename_model)
+        try:
+            models = PredModels.objects.get(split=split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],
+                                       method = job['method'])
+        except:
+            models = PredModels.objects.create(split = split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],
                                        method = job['method'])
     elif split['type'] == 'double':
-        filename_model = 'model_cache/{}-model.sav'.format(log.name)
+        filename_model = 'model_cache/{}-model-{}.sav'.format(log.name, i)
         filename_estimator = 'model_cache/{}-estimator.sav'.format(log.name)
         joblib.dump(split['model'], filename_model)
         joblib.dump(split['estimator'], filename_estimator)
-        split = Split.objects.create(type = split['type'], model_path = filename_model, kmean_path = filename_estimator)
-        models = PredModels.objects.create(split = split, type=job['type'], log = log, prefix_length = prefix_length, encoding = job['encoding'],
+        try:
+            split=Split.objects.get(type=split['type'], model_path = filename_model, kmean_path=filename_estimator)
+        except Split.DoesNotExist:
+            split = Split.objects.create(type = split['type'], model_path = filename_model, kmean_path = filename_estimator)
+        
+    try:
+        models = PredModels.objects.get(split=split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],
+                                       method = job['method'])
+    except PredModels.DoesNotExist:
+        models = PredModels.objects.create(split = split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],
                                        method = job['method'])
     return models
-
-
-def prepare_logs(split: dict):
-    """Returns training_log and test_log"""
-    if split['type'] == 'single':
-        path = split['original_log_path']
-        training_log = get_logs(path)[0]
-    return training_log, path
 
 
 def get_run(job):

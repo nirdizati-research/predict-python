@@ -10,23 +10,28 @@ from django.contrib.admin.templatetags.admin_list import results
 pd.options.mode.chained_assignment = None
 
 
-def classifier(training_df, test_df, job):
-    clf = choose_classifier(job['method'])
+def classifier(test_df, job, model):
+    
+    if split['type'] == 'single':
+        clf = joblib.load(split['model_path'])
+    elif split['type'] =='double':
+        clf = joblib.load(split['model_path']) 
+        estimator = joblib.load(split['kmean_path'])
+        
+    test_df = fast_slow_encode(test_df, job['rule'], job['threshold'])
 
-    training_df, test_df = fast_slow_encode2(training_df, test_df, job['rule'], job['threshold'])
-
-    train_data, test_data, original_test_data = drop_columns(training_df, test_df)
+    test_data, original_test_data = drop_columns(test_df)
     if job['clustering'] == KMEANS:
-        results_df, auc = kmeans_clustering(original_test_data, train_data, clf)
+        results_df, auc = kmeans_clustering(original_test_data, clf, estimator)
     elif job['clustering'] == NO_CLUSTER:
-        results_df, auc = no_clustering(original_test_data, train_data, clf)
+        results_df, auc = no_clustering(original_test_data, clf)
     else:
         raise ValueError("Unexpected clustering {}".format(job['clustering']))
 
     results = prepare_results(results_df, auc)
     return results
 
-def classifier_run(run_df, model, job):
+def classifier_run(run_df, model):
     split=model['split']
 
     #run_df = fast_slow_encode(run_df, job['rule'], job['threshold'])
@@ -39,7 +44,7 @@ def classifier_run(run_df, model, job):
         clf = joblib.load(split['model_path']) 
         estimator = joblib.load(split['kmean_path'])
         result = kmeans_run(run_df, clf, estimator)
-    
+    print (result)
     return result
 
 def no_clustering_run(run_df, clf):
@@ -68,32 +73,25 @@ def kmeans_run(run_df, clf, estimator):
             
     return clustered_test_data['result']
 
-def kmeans_clustering(original_test_data, train_data, clf):
+def kmeans_clustering(original_test_data, clf, estimator):
     auc = 0
-    estimator = KMeans(n_clusters=3)
-    estimator.fit(train_data.drop('actual', 1))
     original_cluster_lists = {i: original_test_data.iloc[
         np.where(estimator.predict(original_test_data.drop(['trace_id', 'actual'], 1)) == i)[0]] for i in
                               range(estimator.n_clusters)}
-    cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
-
+    
     counter = 0
     result_data = None
-    for cluster_list in cluster_lists:
+    for i, cluster_list in original_cluster_lists.items():
 
-        # Train data
-        clustered_train_data = cluster_lists[cluster_list]
-        y = clustered_train_data['actual']
         # Test data
-        original_test_clustered_data = original_cluster_lists[cluster_list]
+        original_test_clustered_data = cluster_list
         actual = original_test_clustered_data['actual']
 
         if original_test_clustered_data.shape[0] == 0:
             pass
         else:
-            clf.fit(clustered_train_data.drop('actual', 1), y)
-            prediction = clf.predict(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
-            scores = clf.predict_proba(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
+            prediction = clf[i].predict(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
+            scores = clf[i].predict_proba(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
 
             original_test_clustered_data["predicted"] = prediction
             original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].map(
@@ -113,11 +111,7 @@ def kmeans_clustering(original_test_data, train_data, clf):
     return result_data, auc
 
 
-def no_clustering(original_test_data, train_data, clf):
-    y = train_data['actual']
-
-    clf.fit(train_data.drop('actual', 1), y)
-
+def no_clustering(original_test_data, clf):
     prediction = clf.predict(original_test_data.drop(['trace_id', 'actual'], 1))
     scores = clf.predict_proba(original_test_data.drop(['trace_id', 'actual'], 1))[:, 1]
     actual = original_test_data["actual"]
@@ -151,12 +145,12 @@ def prepare_results(df, auc: int):
     return row
 
 
-def drop_columns(training_df, test_df):
-    training_df = training_df.drop(['remaining_time', 'trace_id'], 1)
+def drop_columns(test_df):
+    
     # original_test_df = test_df
     original_test_df = test_df.drop('remaining_time', 1)
     test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
-    return training_df, test_df, original_test_df
+    return test_df, original_test_df
 
 
 def calculate_auc(actual, scores, auc: int, counter: int):

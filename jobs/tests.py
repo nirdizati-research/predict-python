@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
 from jobs.models import Job
-from jobs.tasks import prediction_task, prediction
+from jobs.tasks import prediction
 from logs.models import Log, Split
 
 
@@ -50,29 +50,7 @@ class JobModelTest(TestCase):
                              job['split'])
         self.assertEquals(123, job['key'])
 
-    def test_prediction_task(self):
-        prediction_task(1)
-
-        job = Job.objects.get(id=1)
-
-        self.assertEqual('completed', job.status)
-        self.assertNotEqual({}, job.result)
-
-    def test_prediction_task_error(self):
-        self.assertRaises(ValueError, prediction_task, 2)
-        job = Job.objects.get(id=2)
-
-        self.assertEqual('error', job.status)
-        self.assertEqual({}, job.result)
-        self.assertEqual("ValueError('Type not supported', 'asdsd')", job.error)
-
-    def test_missing_attributes(self):
-        self.assertRaises(KeyError, prediction_task, 3)
-        job = Job.objects.get(id=3)
-
-        self.assertEqual('error', job.status)
-        self.assertEqual({}, job.result)
-        self.assertEqual("KeyError('method',)", job.error)
+    
 
 
 class CreateJobsTests(APITestCase):
@@ -86,7 +64,7 @@ class CreateJobsTests(APITestCase):
     def job_obj(self):
         config = dict()
         config['encodings'] = ['simpleIndex']
-        config['clusterings'] = ['none']
+        config['clusterings'] = ['noCluster']
         config['methods'] = ['kmeans']
         config['random'] = 123
         obj = dict()
@@ -103,7 +81,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')
         self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
-        self.assertEqual(response.data[0]['config']['clustering'], 'none')
+        self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'kmeans')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['status'], 'created')

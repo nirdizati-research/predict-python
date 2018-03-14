@@ -21,3 +21,4 @@ class JobRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobRun
         fields = ('id', 'created_date', 'modified_date', 'config', 'status', 'result', 'type', 'log', 'error')
+

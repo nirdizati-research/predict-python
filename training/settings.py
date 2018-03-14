@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     "django_rq",
+    'corsheaders',
 ]
 
 LOGGING = {
@@ -77,9 +78,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'training.urls'
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

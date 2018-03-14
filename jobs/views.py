@@ -174,7 +174,6 @@ def generate(split, payload, type=CLASSIFICATION):
                     type=type,
                     config=create_config(payload, encoding, clustering, method))
                 jobs.append(item)
-
     return jobs
 
 def create_job_run(log, payload, type=CLASSIFICATION):

@@ -86,6 +86,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['status'], 'created')
 
+
     def job_obj2(self):
         config = dict()
         config['encodings'] = ['simpleIndex', 'boolean', 'complex']

@@ -27,11 +27,11 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
         training_df = frequency(training_log, event_names)
         test_df = frequency(test_log, event_names)
     elif encoding_type == COMPLEX:
-        training_df = complex(training_log, event_names)
-        test_df = complex(test_log, event_names)
+        training_df = complex(training_log, event_names, prefix_length=prefix_length, )
+        test_df = complex(test_log, event_names, prefix_length=prefix_length, )
     elif encoding_type == LAST_PAYLOAD:
-        training_df = last_payload(training_log, event_names)
-        test_df = last_payload(test_log, event_names)
+        training_df = last_payload(training_log, event_names, prefix_length=prefix_length, )
+        test_df = last_payload(test_log, event_names, prefix_length=prefix_length, )
     return training_df, test_df
 
 def encode_training_logs(training_log: list, encoding_type: str, job_type: str, prefix_length=0):

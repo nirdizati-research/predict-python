@@ -117,9 +117,8 @@ def prepare_results(df, auc):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 
-    f1score, acc = calculate_results(actual_, predicted_)
-
-    row = {'f1score': f1score, 'acc': acc, 'auc': auc}
+    row = calculate_results(actual_, predicted_)
+    row['auc'] = auc
     return row
 
 

@@ -49,7 +49,7 @@ def prepare(ev, tr, lg):
         event = Event.objects.create(config=event_config, trace=trace)
     
     
-    events = Event.objects.filter(trace=trace)
+    events = Event.objects.filter(trace=trace, pk<=event.id)
 
     run_log = run.create_log(parse(log.config))
     run_trace = run.create_trace(parse(trace.config))

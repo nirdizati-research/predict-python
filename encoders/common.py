@@ -34,39 +34,42 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
         test_df = last_payload(test_log, event_names)
     return training_df, test_df
 
-def encode_training_logs(training_log: list, encoding_type: str, job_type: str):
+def encode_training_logs(training_log: list, encoding_type: str, job_type: str, prefix_length=0):
     """Encodes test set and training set as data frames
 
     :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
     :returns training_df, test_df
     """
-    event_names, prefix_length = unique_events(training_log)
-    training_df = dict()
-    
-    if encoding_type == SIMPLE_INDEX:
-        next_activity = job_type == NEXT_ACTIVITY
-        for i in range(prefix_length):
-            if i < 1:
-                pass
-            else:          
-                training_df[i] = simple_index(training_log, event_names, prefix_length=i, next_activity=next_activity)
-    elif encoding_type == BOOLEAN:
-        training_df[1] = boolean(training_log, event_names)
-    elif encoding_type == FREQUENCY:
-        training_df[1] = frequency(training_log, event_names)
-    elif encoding_type == COMPLEX:
-        for i in range(prefix_length):
-            if i < 1:
-                pass
-            else: 
-                training_df[i] = complex(training_log, event_names, prefix_length=i)
-    elif encoding_type == LAST_PAYLOAD:
-        for i in range(prefix_length):
-            if i < 1:
-                pass
-            else: 
-                training_df[i] = last_payload(training_log, event_names, prefix_length=i)
-    return training_df, prefix_length
+    if not prefix_length == 0:
+        return encode_one_training_logs(training_log, encoding_type, job_type, prefix_length)
+    else:
+        event_names, prefix_length = unique_events(training_log)
+        training_df = dict()
+        
+        if encoding_type == SIMPLE_INDEX:
+            next_activity = job_type == NEXT_ACTIVITY
+            for i in range(prefix_length):
+                if i < 1:
+                    pass
+                else:          
+                    training_df[i] = simple_index(training_log, event_names, prefix_length=i, next_activity=next_activity)
+        elif encoding_type == BOOLEAN:
+            training_df[1] = boolean(training_log, event_names)
+        elif encoding_type == FREQUENCY:
+            training_df[1] = frequency(training_log, event_names)
+        elif encoding_type == COMPLEX:
+            for i in range(prefix_length):
+                if i < 1:
+                    pass
+                else: 
+                    training_df[i] = complex(training_log, event_names, prefix_length=i)
+        elif encoding_type == LAST_PAYLOAD:
+            for i in range(prefix_length):
+                if i < 1:
+                    pass
+                else: 
+                    training_df[i] = last_payload(training_log, event_names, prefix_length=i)
+        return training_df, prefix_length
 
 def encode_run_logs(run_log: list, encoding_type: str, job_type: str):
     """Encodes test set and training set as data frames

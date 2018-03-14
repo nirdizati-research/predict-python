@@ -34,7 +34,7 @@ class Replayer():
     def thread_fun(self, trace, log):
        for event in trace:
                 django_rq.enqueue(prepare, event, trace, log)
-                sleep(randint(0,1))  
+                sleep(randint(5,10))  
                        
     def events_list(self, logs):
         for log in logs:

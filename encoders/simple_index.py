@@ -51,7 +51,6 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int, run):
         if not run:
             trace_row.append(next_event_index(trace, event_names, prefix_length))
         encoded_data.append(trace_row)
-    print(pd.DataFrame(columns=columns, data=encoded_data))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 

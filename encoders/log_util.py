@@ -40,7 +40,9 @@ def unique_events2(training_log: list, test_log: list):
     Renamed to 2 because Python doesn't allow functions with same names.
     Python is objectively the worst language.
     """
-    event_list = unique_events(training_log) + unique_events(test_log)
+    tr_event_list, _ = unique_events(training_log) 
+    ts_event_list, _ = unique_events(test_log)
+    event_list=tr_event_list + ts_event_list
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 

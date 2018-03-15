@@ -11,7 +11,7 @@ pd.options.mode.chained_assignment = None
 
 
 def classifier(test_df, job, model):
-    
+    split=model['split']
     if split['type'] == 'single':
         clf = joblib.load(split['model_path'])
     elif split['type'] =='double':
@@ -44,7 +44,6 @@ def classifier_run(run_df, model):
         clf = joblib.load(split['model_path']) 
         estimator = joblib.load(split['kmean_path'])
         result = kmeans_run(run_df, clf, estimator)
-    print (result)
     return result
 
 def no_clustering_run(run_df, clf):
@@ -90,8 +89,9 @@ def kmeans_clustering(original_test_data, clf, estimator):
         if original_test_clustered_data.shape[0] == 0:
             pass
         else:
-            prediction = clf[i].predict(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
-            scores = clf[i].predict_proba(original_test_clustered_data.drop(['trace_id', 'actual'], 1))
+            test_data=original_test_clustered_data.drop(['trace_id', 'actual'], 1)
+            prediction = clf[i].predict(test_data)
+            scores = clf[i].predict_proba(test_data)
 
             original_test_clustered_data["predicted"] = prediction
             original_test_clustered_data["predicted"] = original_test_clustered_data["predicted"].map(
@@ -112,8 +112,9 @@ def kmeans_clustering(original_test_data, clf, estimator):
 
 
 def no_clustering(original_test_data, clf):
-    prediction = clf.predict(original_test_data.drop(['trace_id', 'actual'], 1))
-    scores = clf.predict_proba(original_test_data.drop(['trace_id', 'actual'], 1))[:, 1]
+    test_data=original_test_data.drop(['trace_id', 'actual'], 1)
+    prediction = clf.predict(test_data)
+    scores = clf.predict_proba(test_data)[:, 1]
     actual = original_test_data["actual"]
     original_test_data["actual"] = original_test_data["actual"].map(
         {True: 'Fast', False: 'Slow'})
@@ -149,6 +150,7 @@ def drop_columns(test_df):
     # original_test_df = test_df
     original_test_df = test_df.drop('remaining_time', 1)
     test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
+    print (original_test_df)
     return test_df, original_test_df
 
 

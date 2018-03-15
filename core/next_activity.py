@@ -11,9 +11,10 @@ pd.options.mode.chained_assignment = None
 
 
 def next_activity(test_df, job, model):
+    split=model['split']
     if split['type'] == 'single':
         clf = joblib.load(split['model_path'])
-    elif split[type] == 'double':
+    elif split['type'] == 'double':
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['kmean_path'])
 
@@ -40,7 +41,6 @@ def next_activity_run(run_df, model):
 
 def no_clustering_run(run_df, clf):
     run_df = run_df.drop('trace_id',1)
-    print(run_df)
     results = clf.predict(run_df)
     result = []
     prob = clf.predict_proba(run_df)

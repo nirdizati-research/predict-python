@@ -32,6 +32,7 @@ def calculate_results(prediction, actual):
         recall = float(true_positive) / (true_positive + false_negative)
         f1score = (2 * precision * recall) / (precision + recall)
     except ZeroDivisionError:
+        recall = 0
         f1score = 0
 
     acc = float(true_positive + true_negative) / (true_positive + true_negative + false_negative + false_positive)

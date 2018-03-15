@@ -1,6 +1,8 @@
 from django.test import TestCase
 
+from training.tr_core import calculate as train
 from core.core import calculate
+from training.models import PredModels
 from core.tests.test_prepare import split_single, split_double
 
 
@@ -30,7 +32,8 @@ class TestClassification(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        result = calculate(job)
+        model=train(job, redo=True)
+        result = calculate(job,model)
         self.assertDictEqual(result, self.results2())
 
     # KNN Fails due to small dataset
@@ -38,18 +41,21 @@ class TestClassification(TestCase):
     def class_KNN(self):
         job = self.get_job()
         job['method'] = 'KNN'
-        calculate(job)
+        model=train(job, redo=True)
+        calculate(job,model)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
-        result = calculate(job)
+        model = train(job, redo=True)
+        result = calculate(job,model)
         self.assertDictEqual(result, self.results())
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
-        result = calculate(job)
+        model=train(job, redo=True)
+        result = calculate(job,model)
         self.assertDictEqual(result, self.results())
 
     # KNN Fails due to small dataset
@@ -58,26 +64,30 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'KNN'
         job['type'] = 'nextActivity'
-        calculate(job)
+        model=train(job, redo=True)
+        calculate(job,model)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
         job['type'] = 'nextActivity'
         job['clustering'] = 'None'
-        result = calculate(job)
-        self.assertDictEqual(result, {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0})
+        model=train(job, redo=True)
+        result = calculate(job,model)
+        self.assertDictEqual(result, self.results())
 
     def test_class_complex(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
-        result = calculate(job)
+        model=train(job, redo=True)
+        result = calculate(job,model)
         self.assertDictEqual(result, self.results2())
 
     def test_class_last_payload(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
-        result = calculate(job)
+        model=train(job, redo=True)
+        result = calculate(job,model)
         self.assertDictEqual(result, self.results2())

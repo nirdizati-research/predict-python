@@ -46,6 +46,7 @@ class JobModelTest(TestCase):
         self.assertEquals(CLASSIFICATION, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': "log_cache/general_example.xes",
+                              'original_log_name': 'general_example.xes',
                               'config': {}},
                              job['split'])
         self.assertEquals(123, job['key'])

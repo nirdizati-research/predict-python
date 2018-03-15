@@ -29,7 +29,7 @@ def calculate(job, redo=False):
         training_df, prefix_length = encode_training_logs(training_log, job['encoding'], job['type'])
         for i, train_df in training_df.items():
             models = work(log, job, i, train_df)
-    return models.to_dict()
+    return models
 
 
 def prepare_logs(split: dict):

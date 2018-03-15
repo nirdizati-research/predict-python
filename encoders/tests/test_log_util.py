@@ -9,7 +9,7 @@ class TestSimpleGeneralExample(TestCase):
         self.log = get_logs("log_cache/general_example.xes")[0]
 
     def test_unique_events(self):
-        events = unique_events(self.log)
+        events, _ = unique_events(self.log)
         self.assertEqual(8, len(events))
 
     def test_calculate_remaining_time(self):
@@ -34,7 +34,7 @@ class TestSimpleGeneralExample(TestCase):
 
     def test_mxml_gz(self):
         log = get_logs("log_cache/nonlocal.mxml.gz")[0]
-        events = unique_events(log)
+        events, _ = unique_events(log)
         self.assertEqual(7, len(events))
 
     def test_multiple_unique_events(self):

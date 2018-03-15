@@ -69,6 +69,7 @@ rqworker.sh
 supervisord.conf.save
 .project
 .pydevproject
+src/
 
 .idea/
 # End of https://www.gitignore.io/api/python,django

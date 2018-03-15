@@ -17,6 +17,7 @@ media
 *$py.class
 
 
+
 # Distribution / packaging
 .Python
 build/
@@ -62,6 +63,14 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+.setting/
+.dbeaver-data-sources.xml
+rqworker.sh
+supervisord.conf.save
+.travis.yml
+.project
+.pydevproject
 
 .idea/
 # End of https://www.gitignore.io/api/python,django

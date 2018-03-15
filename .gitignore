@@ -9,12 +9,13 @@ __pycache__/
 local_settings.py
 db.sqlite3
 media
-	
+.project	
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
 *.py[cod]
 *$py.class
+pydevproject
 
 
 # Distribution / packaging
@@ -62,6 +63,12 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+.setting/
+.dbeaver-data-sources.xml
+rqworker.sh
+supervisord.conf.save
+.travis.yml
 
 .idea/
 # End of https://www.gitignore.io/api/python,django

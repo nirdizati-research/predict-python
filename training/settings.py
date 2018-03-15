@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'django_rq',
-    'channels',
+    #'channels',
 ]
 
 LOGGING = {
@@ -142,6 +142,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+"""ASGI_APPLICATION = 'training.routing.application'
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -150,7 +152,7 @@ CHANNEL_LAYERS = {
         },
         "ROUTING": "chat.routing.channel_routing",
     },
-}
+}"""
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/

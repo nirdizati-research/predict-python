@@ -8,7 +8,7 @@ from logs.file_service import get_logs
 class LastPayload(TestCase):
     def setUp(self):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
-        self.event_names = unique_events(self.log)
+        self.event_names, _ = unique_events(self.log)
 
     def test_shape(self):
         df = last_payload(self.log, self.event_names, prefix_length=2)

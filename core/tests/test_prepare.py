@@ -1,21 +1,21 @@
 from django.test import TestCase
 
 from core.core import prepare_logs
+from logs.models import Log
 
 
 class LogPrepare(TestCase):
     def test_split_single(self):
-        training_log, test_log = prepare_logs(split_single())
-        self.assertEqual(4, len(training_log))
-        self.assertEqual(2, len(test_log))
+        test_log = prepare_logs(split_single())
+        self.assertEqual(6, len(test_log))
 
     def test_split_double(self):
-        training_log, test_log = prepare_logs(split_double())
-        self.assertEqual(4, len(training_log))
+        test_log = prepare_logs(split_double())
         self.assertEqual(2, len(test_log))
 
 
 def split_single():
+    Log.objects.create(name='general-example', path='log_cache/general_example.xes')
     split = dict()
     split['type'] = 'single'
     split['original_log_path'] = 'log_cache/general_example.xes'
@@ -23,6 +23,8 @@ def split_single():
 
 
 def split_double():
+    Log.objects.create(name='general-example-test', path='log_cache/general_example_test.xes')
+    Log.objects.create(name='general-example-training', path='log_cache/general_example_training.xes')    
     split = dict()
     split['type'] = 'double'
     split['test_log_path'] = 'log_cache/general_example_test.xes'

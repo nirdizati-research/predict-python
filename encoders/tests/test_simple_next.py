@@ -10,7 +10,7 @@ from logs.file_service import get_logs
 class TestSimpleGeneralExample(TestCase):
     def setUp(self):
         self.log = get_logs("log_cache/general_example.xes")[0]
-        self.event_names = unique_events(self.log)
+        self.event_names, _ = unique_events(self.log)
 
     def test_encodes_next_activity(self):
         """Encodes for next activity"""
@@ -75,7 +75,7 @@ class TestNextActivity(TestCase):
 
     def setUp(self):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
-        self.event_names = unique_events(self.log)
+        self.event_names, _ = unique_events(self.log)
 
     def test_header(self):
         df = simple_index(self.log, self.event_names, prefix_length=3, next_activity=True)

@@ -40,7 +40,7 @@ def demo(request, pk):
     
     replay=Replayer(pk)
     replay.start()
-    #prediction(jobrun,model)
+    #training(jobrun,model)
     #os.system('python3 manage.py rqworker --burst')
     #serializer = JobSerializer(jobrun)
     return Response("Finito")

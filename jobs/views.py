@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from training.tr_core import calculate
-from jobs.tasks import prediction, training
+from jobs.tasks import training
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split, Log

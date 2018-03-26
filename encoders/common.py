@@ -29,9 +29,11 @@ def encode_training_logs(training_log: list, encoding_type: str, job_type: str, 
     else:
         event_names, prefix_length = unique_events(training_log)
         training_df = dict()
+        training_df['prefix_length']=prefix_length
         
-        if encoding_type == BOOLEAN or encoding_type == BOOLEAN:
-            return encode_log(training_log, encoding_type, job_type, prefix_length, event_names)
+        if encoding_type == BOOLEAN or encoding_type == FREQUENCY:
+            training_df[prefix_length]=encode_log(training_log, encoding_type, job_type, prefix_length, event_names)
+            return training_df
         
         for i in range(prefix_length):
             if i < 1:
@@ -39,7 +41,7 @@ def encode_training_logs(training_log: list, encoding_type: str, job_type: str, 
             else:
                 training_df[i]=encode_log(training_log, encoding_type, job_type, i, event_names)
         
-        return training_df, prefix_length
+        return training_df
 
 def encode_log(run_log: list, encoding_type: str, job_type: str, prefix_length=0, event_names=None):
     """Encodes test set and training set as data frames

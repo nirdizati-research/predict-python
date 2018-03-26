@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION, NEXT_ACTIVITY
 from jobs.models import Job
-from jobs.tasks import prediction
+from jobs.tasks import training
 from logs.models import Log, Split
 from training.models import PredModels
 from training.tr_core import calculate
@@ -53,4 +53,4 @@ class JobModelTest(TestCase):
         job = self.get_job()
         calculate(job)
         model=PredModels.objects.get(id=1)
-        prediction(jobrun,model)
+        training(jobrun,model)

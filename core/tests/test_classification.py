@@ -14,7 +14,7 @@ class TestClassification(TestCase):
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def results2(self):
-        return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
+        return {'f1score': 0.6666666666666666, 'auc': 0, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def get_job(self):

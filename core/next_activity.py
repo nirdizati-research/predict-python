@@ -9,25 +9,6 @@ from core.constants import KMEANS
 
 pd.options.mode.chained_assignment = None
 
-
-def next_activity(test_df, job, model):
-    split=model['split']
-    if split['type'] == 'single':
-        clf = joblib.load(split['model_path'])
-    elif split['type'] == 'double':
-        clf = joblib.load(split['model_path'])
-        estimator = joblib.load(split['kmean_path'])
-
-    test_data, original_test_data = drop_columns(test_df)
-
-    if job['clustering'] == KMEANS:
-        results_df, auc = kmeans_clustering(original_test_data, clf, estimator)
-    else:
-        results_df, auc = no_clustering(original_test_data, clf)
-
-    results = prepare_results(results_df, auc)
-    return results
-
 def next_activity_run(run_df, model):
     split = model['split']
     if split['type'] == 'single':
@@ -64,6 +45,24 @@ def kmeans_run(run_df, clf, estimator):
             clustered_test_data['result']=clf[i].predict(clustered_test_data)
             
     return clustered_test_data['result']
+
+def next_activity(test_df, job, model):
+    split=model['split']
+    if split['type'] == 'single':
+        clf = joblib.load(split['model_path'])
+    elif split['type'] == 'double':
+        clf = joblib.load(split['model_path'])
+        estimator = joblib.load(split['kmean_path'])
+
+    test_data, original_test_data = drop_columns(test_df)
+
+    if job['clustering'] == KMEANS:
+        results_df, auc = kmeans_clustering(original_test_data, clf, estimator)
+    else:
+        results_df, auc = no_clustering(original_test_data, clf)
+
+    results = prepare_results(results_df, auc)
+    return results
 
 def kmeans_clustering(original_test_data, clf, estimator):
     auc = 0

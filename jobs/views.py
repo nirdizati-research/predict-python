@@ -11,12 +11,12 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from training.tr_core import calculate
-from jobs.tasks import prediction
+from jobs.tasks import prediction, training
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split, Log
 from training.models import PredModels
-from .models import Job, JobRun
+from .models import Job
 
 
 class JobList(ListAPIView):
@@ -72,7 +72,7 @@ def create_multiple(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
-        django_rq.enqueue(prediction, job)
+        django_rq.enqueue(training, job)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
@@ -120,9 +120,9 @@ def get_prediction(request, pk1, pk2):
                        'prefix_length':1,
                        "rule": "remaining_time",
                        'threshold': 'default',
+                       'log_id':3,
                        }
-    log = Log.objects.get(pk=3)
-    jobrun=JobRun.objects.create(config=config, log=log, type=NEXT_ACTIVITY)
+    jobrun=Job.objects.create(config=config, run=True, type=NEXT_ACTIVITY)
     
     try:
         #jobrun = JobRun.objects.get(pk=pk1)
@@ -130,8 +130,8 @@ def get_prediction(request, pk1, pk2):
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
-    #django_rq.enqueue(prediction, jobrun, model)
-    prediction(jobrun,model)
+    #django_rq.enqueue(training, jobrun, model)
+    training(jobrun,model)
     #os.system('python3 manage.py rqworker --burst')
     serializer = JobSerializer(jobrun)
     return Response(jobrun.result)
@@ -157,8 +157,8 @@ def create_prediction(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     
-    prediction(job,model)
-    serializer = JobRunSerializer(job)
+    training(job,model)
+    serializer = JobSerializer(job)
     return Response(serializer.data, status=201)
 
 
@@ -177,15 +177,21 @@ def generate(split, payload, type=CLASSIFICATION):
     return jobs
 
 def create_job_run(log, payload, type=CLASSIFICATION):
-    job = JobRun.objects.create(
-        config=dict(),
-        log=log,
-        status=CREATED,
-        type=type,        
-        )
-    return job
+    jobs = []
 
-def create_config(payload, encoding, clustering, method):
+    for encoding in payload['config']['encodings']:
+        for clustering in payload['config']['clusterings']:
+            for method in payload['config']['methods']:
+                item = Job.objects.create(
+                    split=split,
+                    status=CREATED,
+                    type=type,
+                    run=True,
+                    config=create_config(payload, encoding, clustering, method, payload['config']['log_id']))
+                jobs.append(item)
+    return jobs
+
+def create_config(payload, encoding, clustering, method, log=''):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']
@@ -194,4 +200,5 @@ def create_config(payload, encoding, clustering, method):
     config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
+    config['log'] = log
     return config

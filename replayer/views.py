@@ -12,7 +12,7 @@ from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from jobs.serializers import JobSerializer
 from logs.models import Split, Log
 from training.models import PredModels
-from jobs.models import Job, JobRun, CREATED
+from jobs.models import Job, CREATED
 
 
 @api_view(['GET'])
@@ -32,9 +32,10 @@ def demo(request, pk):
                        'prefix_length':1,
                        "rule": "remaining_time",
                        'threshold': 'default',
+                       'log_id':1
                        }
     log = Log.objects.get(pk=3)
-    jobrun=JobRun.objects.create(config=config, log=log, type=CLASSIFICATION)
+    jobrun=Job.objects.create(config=config, run=True, type=CLASSIFICATION)
     """
     
     replay=Replayer(pk)

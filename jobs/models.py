@@ -36,25 +36,13 @@ class Job(BaseModel):
     status = models.CharField(choices=STATUSES, default=CREATED, max_length=20)
     result = JSONField(default={})
     type = models.CharField(choices=TYPES, max_length=20)
-    split = models.ForeignKey(Split, on_delete=models.DO_NOTHING)
+    split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
+    run = models.BooleanField(default=False)
 
     def to_dict(self):
         job = dict(self.config)
         job['type'] = self.type
-        job['split'] = self.split.to_dict()
-        return job
-    
-class JobRun(BaseModel):
-    config = JSONField()
-    error = models.CharField(default='', max_length=200)
-    status = models.CharField(choices=STATUSES, default=CREATED, max_length=20)
-    result = JSONField(default={})
-    type = models.CharField(choices=TYPES, max_length=20)
-    log = models.ForeignKey(Log, on_delete=models.DO_NOTHING)
-
-    def to_dict(self):
-        job = dict(self.config)
-        job['type'] = self.type
-        job['log_name'] = self.log.name
-        job['log_path'] = self.log.path
+        if self.split is not None:
+            job['split'] = self.split.to_dict()
+        job['run'] = self.run
         return job

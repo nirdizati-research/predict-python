@@ -28,11 +28,17 @@ def calculate_results(prediction, actual):
     # print 'TP: ' + str(true_positive) + ' FP: ' + str(false_positive) + ' FN: ' + str(false_negative)
     try:
         precision = float(true_positive) / (true_positive + false_positive)
-
+    except ZeroDivisionError:
+        precision = 0
+    
+    try:
         recall = float(true_positive) / (true_positive + false_negative)
-        f1score = (2 * precision * recall) / (precision + recall)
     except ZeroDivisionError:
         recall = 0
+        
+    try:
+        f1score = (2 * precision * recall) / (precision + recall)
+    except ZeroDivisionError:
         f1score = 0
 
     acc = float(true_positive + true_negative) / (true_positive + true_negative + false_negative + false_positive)

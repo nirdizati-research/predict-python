@@ -45,8 +45,7 @@ class TestSplitLogExample(TestCase):
 
     def test_encodes_next_activity(self):
         """Encodes for next activity with test set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY)
-
+        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY, prefix_length=1)
         self.assertEqual((2, 3), test_df.shape)
         self.assertNotIn("remaining_time", test_df.columns.values)
         self.assertNotIn("elapsed_time", test_df.columns.values)
@@ -59,8 +58,7 @@ class TestSplitLogExample(TestCase):
 
     def test_encodes_next_activity_prefix(self):
         """Encodes for next activity with prefix length with training set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY,
-                                           prefix_length=6)
+        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY, prefix_length=6)
 
         self.assertEqual((4, 8), training_df.shape)
         self.assertIn("prefix_1", training_df.columns.values)

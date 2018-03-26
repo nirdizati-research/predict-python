@@ -55,7 +55,7 @@ class TestFrequencySplit(TestCase):
     def setUp(self):
         test_log = get_logs("log_cache/general_example_test.xes")[0]
         training_log = get_logs("log_cache/general_example_training.xes")[0]
-        self.training_df, self.test_df = encode_logs(training_log, test_log, FREQUENCY, CLASSIFICATION)
+        self.training_df, self.test_df = encode_logs(training_log, test_log, FREQUENCY, CLASSIFICATION, prefix_length=1)
 
     def test_shape(self):
         self.assert_shape(self.training_df, (24, 12))

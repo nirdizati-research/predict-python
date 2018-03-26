@@ -10,7 +10,6 @@ from core.regression import regression, regression_run
 from encoders.common import encode_log
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
-from apport import log
 
 @job("default", timeout='1h')
 def training(job, model=None):

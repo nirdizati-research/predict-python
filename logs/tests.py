@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
 from .file_service import get_logs
-from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes
+from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace
 
 
 class LogTest(SimpleTestCase):
@@ -40,6 +40,12 @@ class LogTest(SimpleTestCase):
                              result[0])
         self.assertDictEqual({'name': 'REG_DATE', 'type': 'string', 'example': '2011-10-01 00:38:44.546000+02:00'},
                              result[1])
+
+    def test_events_in_trace(self):
+        logs = get_logs("log_cache/general_example.xes")
+        result = events_in_trace(logs)
+        self.assertEqual(6, len(result.keys()))
+        self.assertEqual(9, result['3'])
 
 
 class LogModelTest(TestCase):

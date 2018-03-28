@@ -86,3 +86,22 @@ def is_number(s):
         return 'number'
     except Exception :
         return 'string'
+
+
+def events_in_trace(logs):
+    """Creates dict of number of events in trace
+
+    :return {'4': 11, '3': 8}
+    :rtype: OrderedDict
+    """
+    classifier = XEventAttributeClassifier("Event", ["concept:name"])
+    stamp_dict = defaultdict(lambda: 0)
+    for log in logs:
+        for trace in log:
+            counter = 0
+            for event in trace:
+                counter += 1
+            name = classifier.get_class_identity(trace)
+            stamp_dict[name] = counter
+    return OrderedDict(sorted(stamp_dict.items()))
+

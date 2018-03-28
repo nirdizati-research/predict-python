@@ -4,7 +4,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes
+from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
@@ -28,6 +28,7 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
     queryset = Log.objects.all()
     serializer_class = LogSerializer
@@ -43,6 +44,7 @@ class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):
     """Get log statistics
@@ -52,6 +54,7 @@ def get_log_stats(request, pk, stat):
     * resources for resources_by_date
     * executions for event_executions
     * traceAttributes for trace_attributes
+    * events_in_trace for events_in_trace
     """
     try:
         log = Log.objects.get(pk=pk)
@@ -69,8 +72,11 @@ def get_log_stats(request, pk, stat):
         data = resources_by_date(log_file)
     elif stat == 'traceAttributes':
         data = trace_attributes(log_file)
-    else:
+    elif stat == 'events_in_trace':
+        data = events_in_trace(log_file)
+    elif stat == 'executions':
         data = event_executions(log_file)
+
     return Response(data)
 
 

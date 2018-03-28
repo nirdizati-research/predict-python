@@ -105,3 +105,21 @@ def events_in_trace(logs):
             stamp_dict[name] = counter
     return OrderedDict(sorted(stamp_dict.items()))
 
+
+def max_events_in_log(logs):
+    """Returns the maximum number of events in any trace
+
+    :return 3
+    :rtype: int
+    """
+    current_max = 0
+    for log in logs:
+        for trace in log:
+            counter = len(trace)
+
+            # for _ in trace:
+            #     counter += 1
+            if counter > current_max:
+                current_max = counter
+
+    return current_max

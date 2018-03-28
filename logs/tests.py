@@ -7,7 +7,8 @@ from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
 from .file_service import get_logs
-from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace
+from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
+    max_events_in_log
 
 
 class LogTest(SimpleTestCase):
@@ -46,6 +47,11 @@ class LogTest(SimpleTestCase):
         result = events_in_trace(logs)
         self.assertEqual(6, len(result.keys()))
         self.assertEqual(9, result['3'])
+
+    def max_events_in_log(self):
+        logs = get_logs("log_cache/general_example.xes")
+        result = max_events_in_log(logs)
+        self.assertEqual(13, result)
 
 
 class LogModelTest(TestCase):

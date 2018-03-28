@@ -54,7 +54,7 @@ def get_log_stats(request, pk, stat):
     * resources for resources_by_date
     * executions for event_executions
     * traceAttributes for trace_attributes
-    * events_in_trace for events_in_trace
+    * eventsInTrace for events_in_trace
     """
     try:
         log = Log.objects.get(pk=pk)
@@ -72,7 +72,7 @@ def get_log_stats(request, pk, stat):
         data = resources_by_date(log_file)
     elif stat == 'traceAttributes':
         data = trace_attributes(log_file)
-    elif stat == 'events_in_trace':
+    elif stat == 'eventsInTrace':
         data = events_in_trace(log_file)
     elif stat == 'executions':
         data = event_executions(log_file)

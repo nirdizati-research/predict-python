@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.LogList.as_view()),
-    url(r'^(?P<pk>[0-9]+)/(?P<stat>events|resources|executions|traceAttributes|events_in_trace)$', views.get_log_stats),
+    url(r'^(?P<pk>[0-9]+)/(?P<stat>events|resources|executions|traceAttributes|eventsInTrace)$', views.get_log_stats),
 ]
 
 split_url_patterns = [

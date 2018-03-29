@@ -10,7 +10,6 @@ pd.options.mode.chained_assignment = None
 
 
 def tr_next_activity(training_df, job):
-    
 
     train_data= drop_columns(training_df)
     split = dict()
@@ -25,7 +24,6 @@ def tr_next_activity(training_df, job):
         split['model']=model
 
     return split
-
 
 def kmeans_clustering(train_data, job):
     estimator = KMeans(n_clusters=3)

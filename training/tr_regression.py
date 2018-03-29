@@ -35,7 +35,6 @@ def kmeans_clustering(train_data, job):
     estimator.fit(train_data.drop('remaining_time',1))
     models = dict()
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
-    #print(cluster_lists)
     for i, cluster_list in cluster_lists.items():
         clustered_train_data = cluster_lists[i]
         if clustered_train_data.shape[0] == 0:
@@ -57,7 +56,7 @@ def no_clustering(train_data, job):
     return regressor
 
 def prep_data(training_df):
-    train_data = training_df.drop(['elapsed_time', 'trace_id'], 1)
+    train_data = training_df.drop(['trace_id'], 1)
     
 
     return train_data

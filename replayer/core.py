@@ -7,7 +7,7 @@ from opyenxes.factory.XFactory import XFactory
 from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 from encoders.log_util import elapsed_time
 from training.models import PredModels
-from encoders.common import encode_run_logs, encode_one_training_logs
+from encoders.common import encode_log
 from core.regression import regression_run
 from core.classification import classifier_run
 from core.next_activity import next_activity_run
@@ -76,10 +76,10 @@ def parse(xml):
 
 def runtime(run_log, model):
     """ Main entry method for calculations"""
-    #print("Start job {} with {}".format(job['type'], get_run(job)))
+    print("Start job {} with {}".format(job['type'], get_run(job)))
     tr_log = Log_Log.objects.get(name=model['log_name'],path=model['log_path'])
     # Python dicts are bad
-    run_df, prefix_length= encode_run_logs(run_log, model['encoding'], model['type'])
+    run_df, prefix_length= encode_log(run_log, model['encoding'], model['type'])
 
     try:
         right_model=PredModels.objects.get(encoding=model['encoding'],type=model['type'], method=model['method'],
@@ -103,7 +103,7 @@ def runtime(run_log, model):
         except Split.DoesNotExist:
             split = Split.objects.create(type = 'single', original_log = tr_log)
         j=Job.objects.create(config=config, split=split, type=model['type'])
-        right_model = tr_calculate(j.to_dict(), redo=True)
+        right_model, _ = tr_calculate(j.to_dict(), redo=True)
 
     if model['type'] == CLASSIFICATION:
         results = classifier_run(run_df, right_model.to_dict())
@@ -113,5 +113,5 @@ def runtime(run_log, model):
         results = next_activity_run(run_df, right_model.to_dict())
     else:
         raise ValueError("Type not supported", job['type'])
-    #print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
+    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results

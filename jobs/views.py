@@ -11,12 +11,12 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from training.tr_core import calculate
-from jobs.tasks import prediction
+from jobs.tasks import training
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from logs.models import Split, Log
 from training.models import PredModels
-from .models import Job, JobRun
+from .models import Job
 
 
 class JobList(ListAPIView):
@@ -72,7 +72,7 @@ def create_multiple(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
-        django_rq.enqueue(prediction, job)
+        django_rq.enqueue(training, job)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
@@ -85,23 +85,15 @@ def get_model(request, pk):
     * resources for resources_by_date
     * executions for event_executions
     """
-    config = {'key': 123,
-                       'method': 'randomForest',
-                       'encoding': 'simpleIndex',
-                       'clustering': 'noCluster',
-                       "rule": "remaining_time",
-                       'threshold': 'default',
-                       }
     try:
-        #job = Job.objects.get(pk=pk)
-        job = Job.objects.create(config=config, split=Split.objects.get(pk=3), type=NEXT_ACTIVITY)
+        job = Job.objects.get(pk=pk)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
     
-    calculate(job.to_dict())
+    training(job)
     
-    return Response({'OK'})
+    return Response({'All the models have been created'})
 
 @api_view(['GET'])
 def get_prediction(request, pk1, pk2):
@@ -113,28 +105,18 @@ def get_prediction(request, pk1, pk2):
     * executions for event_executions
     """
     
-    config = {'key': 123,
-                       'method': 'randomForest',
-                       'encoding': 'simpleIndex',
-                       'clustering': 'noCluster',
-                       'prefix_length':1,
-                       "rule": "remaining_time",
-                       'threshold': 'default',
-                       }
-    log = Log.objects.get(pk=3)
-    jobrun=JobRun.objects.create(config=config, log=log, type=NEXT_ACTIVITY)
-    
     try:
-        #jobrun = JobRun.objects.get(pk=pk1)
         model = PredModels.objects.get(pk=pk2)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+
+    job = generate_run(pk1, model, model.id)
     
-    #django_rq.enqueue(prediction, jobrun, model)
-    prediction(jobrun,model)
+    #django_rq.enqueue(training, jobrun, model)
+    training(job,model)
     #os.system('python3 manage.py rqworker --burst')
-    serializer = JobSerializer(jobrun)
-    return Response(jobrun.result)
+    serializer = JobSerializer(job)
+    return Response(job.result)
 
 @api_view(['POST'])
 def create_prediction(request):
@@ -147,18 +129,18 @@ def create_prediction(request):
     except Split.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
-    if payload['type'] == CLASSIFICATION:
-        job = create_job_run(log, payload)
-    elif payload['type'] == NEXT_ACTIVITY:
-        job = create_job_run(log, payload, NEXT_ACTIVITY)
-    elif payload['type'] == REGRESSION:
-        job = create_job_run(log, payload, REGRESSION)
+    if model.type == CLASSIFICATION:
+        job = generate_run(log, payload)
+    elif model.type == NEXT_ACTIVITY:
+        job = generate_run(log, payload, NEXT_ACTIVITY)
+    elif model.type == REGRESSION:
+        job = generate_run(log, payload, REGRESSION)
     else:
-        return Response({'error': 'type not supported'.format(payload['type'])},
+        return Response({'error': 'type not supported'.format(model['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     
-    prediction(job,model)
-    serializer = JobRunSerializer(job)
+    training(job,model)
+    serializer = JobSerializer(job)
     return Response(serializer.data, status=201)
 
 
@@ -176,14 +158,20 @@ def generate(split, payload, type=CLASSIFICATION):
                 jobs.append(item)
     return jobs
 
-def create_job_run(log, payload, type=CLASSIFICATION):
-    job = JobRun.objects.create(
-        config=dict(),
-        log=log,
+def generate_run(logid, model, modelid):
+    jobs = []
+    split=model.split
+    encoding= model.encoding
+    if split.type == 'single':
+        clustering = 'noCluster'
+    else:
+        clustering= 'kmeans'
+    method= model.method
+    item = Job.objects.create(
         status=CREATED,
-        type=type,        
-        )
-    return job
+        type=model.type,
+        config=create_config_run(encoding, clustering, method, log=logid, model=modelid))
+    return item
 
 def create_config(payload, encoding, clustering, method):
     """Turn lists to single values"""
@@ -194,4 +182,14 @@ def create_config(payload, encoding, clustering, method):
     config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
+    return config
+
+def create_config_run(encoding, clustering, method, log='', model=''):
+    """Turn lists to single values"""
+    config = dict()
+    config['encoding'] = encoding
+    config['clustering'] = clustering
+    config['method'] = method
+    config['log_id'] = log
+    config['model_id'] = model
     return config

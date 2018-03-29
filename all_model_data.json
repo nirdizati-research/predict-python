@@ -1,81 +1,81 @@
 [
-  {
-    "model": "logs.log",
-    "pk": 1,
-    "fields": {
-      "name": "general_example.xes",
-      "path": "log_cache/general_example.xes"
-    }
-  },
-  {
-    "model": "logs.log",
-    "pk": 2,
-    "fields": {
-      "name": "general_example_test.xes",
-      "path": "log_cache/general_example_test.xes"
-    }
-  },
-  {
-    "model": "logs.log",
-    "pk": 3,
-    "fields": {
-      "name": "general_example_training.xes",
-      "path": "log_cache/general_example_training.xes"
-    }
-  },
-  {
-    "model": "logs.log",
-    "pk": 4,
-    "fields": {
-      "name": "nonlocal.mxml.gz",
-      "path": "log_cache/nonlocal.mxml.gz"
-    }
-  },
-  {
-    "model": "logs.split",
-    "pk": 1,
-    "fields": {
-      "config": "{}",
-      "type": "single",
-      "original_log": 1,
-      "test_log": null,
-      "training_log": null
-    }
-  },
-  {
-    "model": "logs.split",
-    "pk": 2,
-    "fields": {
-      "config": "{}",
-      "type": "double",
-      "original_log": null,
-      "test_log": 2,
-      "training_log": 3
-    }
-  },
-  {
-    "model": "logs.split",
-    "pk": 3,
-    "fields": {
-      "config": "{}",
-      "type": "single",
-      "original_log": 4,
-      "test_log": null,
-      "training_log": null
-    }
-  },
-  {
-    "model": "jobs.job",
-    "pk": 1,
-    "fields": {
-      "created_date": "2017-11-14T20:52:36.469Z",
-      "modified_date": "2017-11-14T20:52:36.470Z",
-      "config": "{\"clustering\":\"noCluster\", \"method\":\"randomForest\", \"encoding\":\"simpleIndex\", \"rule\":\"remaining_time\", \"prefix_length\":1, \"threshold\":\"default\"}",
-      "error": "",
-      "status": "completed",
-      "result": "{\"f1score\": 0.6666666666666666, \"acc\": 0.5, \"auc\": 0.5}",
-      "type": "classification",
-      "split": 1
-    }
-  }
+	{
+		"model": "logs.log",
+		"pk": 1,
+		"fields": {
+			"name": "general_example.xes",
+			"path": "log_cache/general_example.xes"
+		}
+	},
+	{
+		"model": "logs.log",
+		"pk": 2,
+		"fields": {
+			"name": "general_example_test.xes",
+			"path": "log_cache/general_example_test.xes"
+		}
+	},
+	{
+		"model": "logs.log",
+		"pk": 3,
+		"fields": {
+			"name": "general_example_training.xes",
+			"path": "log_cache/general_example_training.xes"
+		}
+	},
+	{
+		"model": "logs.log",
+		"pk": 4,
+		"fields": {
+			"name": "nonlocal.mxml.gz",
+			"path": "log_cache/nonlocal.mxml.gz"
+		}
+	},
+	{
+		"model": "logs.split",
+		"pk": 1,
+		"fields": {
+			"config": "{}",
+			"type": "single",
+			"original_log": 1,
+			"test_log": null,
+			"training_log": null
+		}
+	},
+	{
+		"model": "logs.split",
+		"pk": 2,
+		"fields": {
+			"config": "{}",
+			"type": "double",
+			"original_log": null,
+			"test_log": 2,
+			"training_log": 3
+		}
+	},
+	{
+		"model": "logs.split",
+		"pk": 3,
+		"fields": {
+			"config": "{}",
+			"type": "single",
+			"original_log": 4,
+			"test_log": null,
+			"training_log": null
+		}
+	},
+	{
+		"model": "jobs.job",
+		"pk": 1,
+		"fields": {
+			"created_date": "2017-11-14T20:52:36.469Z",
+			"modified_date": "2017-11-14T20:52:36.470Z",
+			"config": "{\"clustering\":\"noCluster\", \"method\":\"randomForest\", \"encoding\":\"simpleIndex\", \"rule\":\"remaining_time\", \"prefix_length\":1, \"threshold\":\"default\"}",
+			"error": "",
+			"status": "completed",
+			"result": "{\"f1score\": 0.6666666666666666, \"acc\": 0.5, \"auc\": 0.5}",
+			"type": "classification",
+			"split": 1
+		}
+	}
 ]

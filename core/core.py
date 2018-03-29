@@ -5,7 +5,7 @@ from core.constants import NEXT_ACTIVITY, \
     CLASSIFICATION, REGRESSION
 from core.next_activity import next_activity
 from core.regression import regression
-from encoders.common import encode_logs, encode_run_logs, encode_one_training_logs
+from encoders.common import encode_log
 from logs.file_service import get_logs
 
 
@@ -15,7 +15,7 @@ def calculate(job, model):
     test_log = prepare_logs(job['split'])
     # Python dicts are bad
     
-    test_df= encode_one_training_logs(test_log, job['encoding'], job['type'], prefix_length=job['prefix_length'])
+    test_df= encode_log(test_log, job['encoding'], job['type'], prefix_length=job['prefix_length'])
 
     if job['type'] == CLASSIFICATION:
         results = classifier(test_df, job, model.to_dict())
@@ -44,7 +44,6 @@ def prepare_logs(split: dict):
 
 def split_log(log: list, test_size=0.2, random_state=4):
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state)
-    #print(test_log[0][0])
     return training_log, test_log
 
 

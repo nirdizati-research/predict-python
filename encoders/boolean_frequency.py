@@ -38,7 +38,6 @@ def encode_boolean_frequency(log: list, event_names: list, is_boolean=True):
             trace_row.append(remaining_time(trace, event))
             trace_row.append(elapsed_time(trace, event))
             encoded_data.append(trace_row)
-
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 

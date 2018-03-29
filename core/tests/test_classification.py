@@ -14,7 +14,7 @@ class TestClassification(TestCase):
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def results2(self):
-        return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
+        return {'f1score': 0.6666666666666666, 'auc': 0, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def get_job(self):
@@ -32,7 +32,7 @@ class TestClassification(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        model=train(job, redo=True)
+        model, _=train(job, redo=True)
         result = calculate(job,model)
         self.assertDictEqual(result, self.results2())
 
@@ -41,20 +41,20 @@ class TestClassification(TestCase):
     def class_KNN(self):
         job = self.get_job()
         job['method'] = 'KNN'
-        model=train(job, redo=True)
+        model, _=train(job, redo=True)
         calculate(job,model)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
-        model = train(job, redo=True)
+        model, _= train(job, redo=True)
         result = calculate(job,model)
         self.assertDictEqual(result, self.results())
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
-        model=train(job, redo=True)
+        model, _=train(job, redo=True)
         result = calculate(job,model)
         self.assertIsNotNone(result)
 
@@ -64,7 +64,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'KNN'
         job['type'] = 'nextActivity'
-        model=train(job, redo=True)
+        model, _=train(job, redo=True)
         calculate(job,model)
 
     def test_next_activity_DecisionTree(self):
@@ -72,7 +72,7 @@ class TestClassification(TestCase):
         job['method'] = 'decisionTree'
         job['type'] = 'nextActivity'
         job['clustering'] = 'None'
-        model=train(job, redo=True)
+        model,_=train(job, redo=True)
         result = calculate(job,model)
         self.assertIsNotNone(result)
 
@@ -80,7 +80,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
-        model=train(job, redo=True)
+        model,_=train(job, redo=True)
         result = calculate(job,model)
         self.assertDictEqual(result, self.results2())
 
@@ -88,6 +88,6 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
-        model=train(job, redo=True)
+        model,_=train(job, redo=True)
         result = calculate(job,model)
         self.assertDictEqual(result, self.results2())

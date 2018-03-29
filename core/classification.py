@@ -10,27 +10,6 @@ from django.contrib.admin.templatetags.admin_list import results
 pd.options.mode.chained_assignment = None
 
 
-def classifier(test_df, job, model):
-    split=model['split']
-    if split['type'] == 'single':
-        clf = joblib.load(split['model_path'])
-    elif split['type'] =='double':
-        clf = joblib.load(split['model_path']) 
-        estimator = joblib.load(split['kmean_path'])
-        
-    test_df = fast_slow_encode(test_df, job['rule'], job['threshold'])
-
-    test_data, original_test_data = drop_columns(test_df)
-    if job['clustering'] == KMEANS:
-        results_df, auc = kmeans_clustering(original_test_data, clf, estimator)
-    elif job['clustering'] == NO_CLUSTER:
-        results_df, auc = no_clustering(original_test_data, clf)
-    else:
-        raise ValueError("Unexpected clustering {}".format(job['clustering']))
-
-    results = prepare_results(results_df, auc)
-    return results
-
 def classifier_run(run_df, model):
     split=model['split']
 
@@ -71,6 +50,28 @@ def kmeans_run(run_df, clf, estimator):
             clustered_test_data['result']=clf[i].predict(clustered_test_data)
             
     return clustered_test_data['result']
+
+def classifier(test_df, job, model):
+    split=model['split']
+    if split['type'] == 'single':
+        clf = joblib.load(split['model_path'])
+    elif split['type'] =='double':
+        clf = joblib.load(split['model_path']) 
+        estimator = joblib.load(split['kmean_path'])
+        
+    test_df = fast_slow_encode(test_df, job['rule'], job['threshold'])
+
+    test_data, original_test_data = drop_columns(test_df)
+    if job['clustering'] == KMEANS:
+        results_df, auc = kmeans_clustering(original_test_data, clf, estimator)
+    elif job['clustering'] == NO_CLUSTER:
+        results_df, auc = no_clustering(original_test_data, clf)
+    else:
+        raise ValueError("Unexpected clustering {}".format(job['clustering']))
+
+    results = prepare_results(results_df, auc)
+    return results
+
 
 def kmeans_clustering(original_test_data, clf, estimator):
     auc = 0
@@ -114,7 +115,7 @@ def kmeans_clustering(original_test_data, clf, estimator):
 def no_clustering(original_test_data, clf):
     test_data=original_test_data.drop(['trace_id', 'actual'], 1)
     prediction = clf.predict(test_data)
-    scores = clf.predict_proba(test_data)[:, 1]
+    scores = clf.predict_proba(test_data)
     actual = original_test_data["actual"]
     original_test_data["actual"] = original_test_data["actual"].map(
         {True: 'Fast', False: 'Slow'})
@@ -150,7 +151,6 @@ def drop_columns(test_df):
     # original_test_df = test_df
     original_test_df = test_df.drop('remaining_time', 1)
     test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
-    print (original_test_df)
     return test_df, original_test_df
 
 

@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 
 from core.common import choose_classifier, calculate_results, fast_slow_encode
 from core.constants import KMEANS, NO_CLUSTER
+from core.classification import classifier
 
 pd.options.mode.chained_assignment = None
 

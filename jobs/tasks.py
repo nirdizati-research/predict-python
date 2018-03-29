@@ -10,6 +10,7 @@ from core.regression import regression, regression_run
 from encoders.common import encode_log
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
+from training.tr_core import get_run
 
 @job("default", timeout='1h')
 def training(job, model=None):
@@ -19,7 +20,7 @@ def training(job, model=None):
             job.status = RUNNING
             job.save()
             if model is not None:
-                result = calculate(job,model.to_dict())
+                result = calculate(job.to_dict(),model.to_dict())
             else:
                 _, result = tr_calculate(job.to_dict())
             job.result = result

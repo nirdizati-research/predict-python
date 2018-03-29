@@ -24,8 +24,6 @@ def calculate_results(prediction, actual):
                 true_negative += 1
             else:
                 false_negative += 1
-
-    # print 'TP: ' + str(true_positive) + ' FP: ' + str(false_positive) + ' FN: ' + str(false_negative)
     try:
         precision = float(true_positive) / (true_positive + false_positive)
     except ZeroDivisionError:

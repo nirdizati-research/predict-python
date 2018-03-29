@@ -18,20 +18,21 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
     test_df=encode_log(test_log, encoding_type, job_type, prefix_length,event_names)
     return training_df, test_df
 
-def encode_training_logs(training_log: list, encoding_type: str, job_type: str, prefix_length=0):
+def encode_training_logs(training_log: list, test_log:list, encoding_type: str, job_type: str, prefix_length=0):
     """Encodes test set and training set as data frames
 
     :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
     :returns training_df, test_df
     """
     if not prefix_length == 0:
-        return encode_log(training_log, encoding_type, job_type, prefix_length)
+        return encode_log(training_log, encoding_type, job_type, prefix_length), encode_log(test_log, encoding_type, job_type, prefix_length)
     else:
         event_names, prefix_length = unique_events(training_log)
         training_df = dict()
         training_df['prefix_length']=prefix_length
         
         if encoding_type == BOOLEAN or encoding_type == FREQUENCY:
+            event_names=unique_events2(training_log,test_log)
             training_df[prefix_length]=encode_log(training_log, encoding_type, job_type, prefix_length, event_names)
             return training_df
         
@@ -58,7 +59,6 @@ def encode_log(run_log: list, encoding_type: str, job_type: str, prefix_length=0
             event_names, _ = unique_events(run_log)
             run=False
     run_df =None
-    
     if encoding_type == SIMPLE_INDEX:
         next_activity = job_type == NEXT_ACTIVITY
         run_df = simple_index(run_log, event_names, prefix_length=prefix_length, next_activity=next_activity, run=run)

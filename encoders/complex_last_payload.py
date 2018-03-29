@@ -97,11 +97,9 @@ def data_last_payload(trace: list, event_names: list, prefix_length: int, additi
         event_name = CLASSIFIER.get_class_identity(event)
         event_id = event_names.index(event_name)
         data.append(event_id + 1)  # prefix
-        #print(event_name)
     # Attributes of last event
     for att in additional_columns:
         # Basically XEventAttributeClassifier
         value = trace[prefix_length - 1].get_attributes().get(att).get_value()
         data.append(value)
-        #print(value)
     return data

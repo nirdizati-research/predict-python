@@ -14,7 +14,7 @@ def next_activity_run(run_df, model):
     if split['type'] == 'single':
         clf = joblib.load(split['model_path'])
         result = no_clustering_run(run_df,clf)
-    elif split[type] == 'double':
+    elif split['type'] == 'double':
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['kmean_path'])
         result = kmeans_run(run_df, clf, estimator)

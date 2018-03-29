@@ -76,7 +76,7 @@ def parse(xml):
 
 def runtime(run_log, model):
     """ Main entry method for calculations"""
-    #print("Start job {} with {}".format(job['type'], get_run(job)))
+    print("Start job {} with {}".format(job['type'], get_run(job)))
     tr_log = Log_Log.objects.get(name=model['log_name'],path=model['log_path'])
     # Python dicts are bad
     run_df, prefix_length= encode_log(run_log, model['encoding'], model['type'])
@@ -113,5 +113,5 @@ def runtime(run_log, model):
         results = next_activity_run(run_df, right_model.to_dict())
     else:
         raise ValueError("Type not supported", job['type'])
-    #print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
+    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results

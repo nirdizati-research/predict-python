@@ -35,7 +35,7 @@ def demo(request, pk):
                        'log_id':1
                        }
     log = Log.objects.get(pk=3)
-    jobrun=Job.objects.create(config=config, run=True, type=CLASSIFICATION)
+    jobrun=Job.objects.create(config=config, type=CLASSIFICATION)
     """
     
     replay=Replayer(pk)

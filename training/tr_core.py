@@ -30,11 +30,11 @@ def calculate(job, redo=False):
         models, results = work(log, job, job['prefix_length'], train_df, test_df)
     else:
         training_df=dict()
-        training_df = encode_training_logs(training_log, job['encoding'], job['type'])
+        training_df = encode_training_logs(training_log, test_log, job['encoding'], job['type'])
         prefix_length = training_df['prefix_length']
         del(training_df['prefix_length'])
         for i, train_df in training_df.items():
-            test_df= encode_log(test_log, job['encoding'], job['type'], prefix_length = i)
+            _, test_df= encode_logs(training_log,test_log, job['encoding'], job['type'], prefix_length = i)
             models, results = work(log, job, i, train_df, test_df)
     return models, results
 
@@ -50,12 +50,12 @@ def work(log, job, i, train_df, test_df):
     print("End job {}, {}".format(job['type'], get_run(job)))
 
     if split['type'] =='single':
-        filename_model = 'model_cache/{}-model-{}.sav'.format(log.name,i)
+        filename_model = 'model_cache/{}-model-{}-.sav'.format(log.name,i,job['type'])
         joblib.dump(split['model'], filename_model)
         try:
-            split=Split.objects.get(type=split['type'], model_path = filename_model)
+            split=Split.objects.get(type=split['type'], model_path = filename_model, predtype = job['type'])
         except Split.DoesNotExist:
-            split = Split.objects.create(type = split['type'], model_path = filename_model)
+            split = Split.objects.create(type = split['type'], model_path = filename_model, predtype = job['type'])
         try:
             models = PredModels.objects.get(split=split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],
                                        method = job['method'])
@@ -68,9 +68,9 @@ def work(log, job, i, train_df, test_df):
         joblib.dump(split['model'], filename_model)
         joblib.dump(split['estimator'], filename_estimator)
         try:
-            split=Split.objects.get(type=split['type'], model_path = filename_model, kmean_path=filename_estimator)
+            split=Split.objects.get(type=split['type'], model_path = filename_model, kmean_path=filename_estimator, predtype = job['type'])
         except Split.DoesNotExist:
-            split = Split.objects.create(type = split['type'], model_path = filename_model, kmean_path = filename_estimator)
+            split = Split.objects.create(type = split['type'], model_path = filename_model, kmean_path = filename_estimator, predtype = job['type'])
         
     try:
         models = PredModels.objects.get(split=split, type=job['type'], log = log, prefix_length = i, encoding = job['encoding'],

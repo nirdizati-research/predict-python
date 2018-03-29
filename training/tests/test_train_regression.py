@@ -21,6 +21,7 @@ class TestTrainRegression(TestCase):
             json["clustering"] = KMEANS
             json["split"] = self.split_single()
             json["method"] = "linear"
+            json["prefix_length"] = 4
             json["encoding"] = "simpleIndex"
             json["rule"] = "remaining_time"
             json["type"] = "regression"
@@ -29,22 +30,22 @@ class TestTrainRegression(TestCase):
         def test_reg_linear(self):
             job = self.get_job()
             job['clustering'] = 'None'
-            calculate(job)
+            calculate(job, redo=True)
             
         def test_reg_linear_boolean(self):
             job = self.get_job()
             job['clustering'] = 'None'
             job['encoding'] = 'boolean'
-            calculate(job)
+            calculate(job, redo=True)
 
         def test_reg_randomforest(self):
             job = self.get_job()
             job['method'] = 'randomForest'
-            calculate(job)
+            calculate(job, redo=True)
 
         def test_reg_lasso(self):
             job = self.get_job()
             job['method'] = 'lasso'
-            calculate(job)
+            calculate(job, redo=True)
             
         

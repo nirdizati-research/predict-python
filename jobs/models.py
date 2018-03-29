@@ -37,12 +37,10 @@ class Job(BaseModel):
     result = JSONField(default={})
     type = models.CharField(choices=TYPES, max_length=20)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
-    run = models.BooleanField(default=False)
 
     def to_dict(self):
         job = dict(self.config)
         job['type'] = self.type
         if self.split is not None:
             job['split'] = self.split.to_dict()
-        job['run'] = self.run
         return job

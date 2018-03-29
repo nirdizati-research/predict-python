@@ -13,15 +13,15 @@ from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 
 @job("default", timeout='1h')
 def training(job, model=None):
-    #print("Start prediction task ID {}".format(job.pk))
+    print("Start prediction task ID {}".format(job.pk))
     try:
         if job.status == CREATED:
             job.status = RUNNING
             job.save()
             if model is not None:
-                result = calculate(job.to_dict(),model.to_dict())
+                result = calculate(job,model.to_dict())
             else:
-                _, result = tr_calculate(job.to_dict(), True)
+                _, result = tr_calculate(job.to_dict())
             job.result = result
             job.status = COMPLETED
     except Exception as e:
@@ -34,7 +34,7 @@ def training(job, model=None):
         
 def calculate(job,model):
     """ Main entry method for calculations"""
-    #print("Start job {} with {}".format(job['type'], get_run(job)))
+    print("Start job {} with {}".format(job['type'], get_run(job)))
     log = Log.objects.get(pk=job['log_id'])
     run_log = get_logs(log.path)[0]
     tr_log = Log.objects.get(name=model['log_name'],path=model['log_path'])
@@ -57,12 +57,14 @@ def calculate(job,model):
                        'prefix_length':prefix_length,
                        "rule": "remaining_time",
                        'threshold': 'default',
+                       'log_id':job['log_id'],
+                       'model_id':job['model_id']
                        }
         try:
-            split = Split.objects.get(type = 'single', original_log = tr_log)
+            split2 = Split.objects.get(type = 'single', original_log = tr_log)
         except Split.DoesNotExist:
-            split = Split.objects.create(type = 'single', original_log = tr_log)
-        j=Job.objects.create(config=config, split=split, type=model['type'])
+            split2 = Split.objects.create(type = 'single', original_log = tr_log)
+        j=Job.objects.create(config=config, split=split2, type=model['type'])
         right_model, _ = tr_calculate(j.to_dict(), redo=True)
 
     if job['type'] == CLASSIFICATION:
@@ -73,7 +75,7 @@ def calculate(job,model):
         results = next_activity_run(run_df, right_model.to_dict())
     else:
         raise ValueError("Type not supported", job['type'])
-    #print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
+    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results
 
 def getModelList(typed):

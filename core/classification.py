@@ -151,7 +151,6 @@ def drop_columns(test_df):
     # original_test_df = test_df
     original_test_df = test_df.drop('remaining_time', 1)
     test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
-    print (original_test_df)
     return test_df, original_test_df
 
 

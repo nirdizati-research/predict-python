@@ -44,7 +44,6 @@ def prepare_logs(split: dict):
 
 def split_log(log: list, test_size=0.2, random_state=4):
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state)
-    #print(test_log[0][0])
     return training_log, test_log
 
 

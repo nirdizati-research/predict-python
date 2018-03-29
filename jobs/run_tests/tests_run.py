@@ -38,15 +38,16 @@ class JobModelTest(TestCase):
                        "rule": "remaining_time",
                        'threshold': 'default',
                        'log_id':3,
+                       'model_id':7
                        }
         log = Log.objects.create(name="BPIC12_10", path="log_cache/BPIC12_10.xes")
         log1 = Log.objects.create(name="general_example_training", path="log_cache/general_example_training.xes")
         log2 = Log.objects.create(name="general_example", path="log_cache/general_example.xes")
         log3 = Log.objects.create(name="general_example_test", path="log_cache/general_example_test.xes")
         log70 = Log.objects.create(name="BPIC12_70", path="log_cache/BPIC12_70.xes")
-        Job.objects.create(config=self.config, run=True, type=CLASSIFICATION)
-        Job.objects.create(config=self.config, run=True, type='asdsd')
-        Job.objects.create(config={}, run=True, type=REGRESSION)
+        Job.objects.create(config=self.config, type=CLASSIFICATION)
+        Job.objects.create(config=self.config, type='asdsd')
+        Job.objects.create(config={}, type=REGRESSION)
     
     def test_prediction_linear(self):
         jobrun = Job.objects.get(id=1)

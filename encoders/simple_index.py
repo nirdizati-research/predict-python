@@ -29,9 +29,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, run):
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
         trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
-        #print(trace_row)
         encoded_data.append(trace_row)
-
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 

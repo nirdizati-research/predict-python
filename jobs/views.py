@@ -85,23 +85,15 @@ def get_model(request, pk):
     * resources for resources_by_date
     * executions for event_executions
     """
-    config = {'key': 123,
-                       'method': 'randomForest',
-                       'encoding': 'simpleIndex',
-                       'clustering': 'noCluster',
-                       "rule": "remaining_time",
-                       'threshold': 'default',
-                       }
     try:
-        #job = Job.objects.get(pk=pk)
-        job = Job.objects.create(config=config, split=Split.objects.get(pk=3), type=NEXT_ACTIVITY)
+        job = Job.objects.get(pk=pk)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
     
-    calculate(job.to_dict())
+    training(job)
     
-    return Response({'OK'})
+    return Response({'All the models have been created'})
 
 @api_view(['GET'])
 def get_prediction(request, pk1, pk2):
@@ -113,28 +105,18 @@ def get_prediction(request, pk1, pk2):
     * executions for event_executions
     """
     
-    config = {'key': 123,
-                       'method': 'randomForest',
-                       'encoding': 'simpleIndex',
-                       'clustering': 'noCluster',
-                       'prefix_length':1,
-                       "rule": "remaining_time",
-                       'threshold': 'default',
-                       'log_id':3,
-                       }
-    jobrun=Job.objects.create(config=config, run=True, type=NEXT_ACTIVITY)
-    
     try:
-        #jobrun = JobRun.objects.get(pk=pk1)
         model = PredModels.objects.get(pk=pk2)
     except Log.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+
+    job = generate_run(pk1, model, model.id)
     
     #django_rq.enqueue(training, jobrun, model)
-    training(jobrun,model)
+    training(job,model)
     #os.system('python3 manage.py rqworker --burst')
-    serializer = JobSerializer(jobrun)
-    return Response(jobrun.result)
+    serializer = JobSerializer(job)
+    return Response(job.result)
 
 @api_view(['POST'])
 def create_prediction(request):
@@ -147,14 +129,14 @@ def create_prediction(request):
     except Split.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
     
-    if payload['type'] == CLASSIFICATION:
-        job = create_job_run(log, payload)
-    elif payload['type'] == NEXT_ACTIVITY:
-        job = create_job_run(log, payload, NEXT_ACTIVITY)
-    elif payload['type'] == REGRESSION:
-        job = create_job_run(log, payload, REGRESSION)
+    if model.type == CLASSIFICATION:
+        job = generate_run(log, payload)
+    elif model.type == NEXT_ACTIVITY:
+        job = generate_run(log, payload, NEXT_ACTIVITY)
+    elif model.type == REGRESSION:
+        job = generate_run(log, payload, REGRESSION)
     else:
-        return Response({'error': 'type not supported'.format(payload['type'])},
+        return Response({'error': 'type not supported'.format(model['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     
     training(job,model)
@@ -176,22 +158,22 @@ def generate(split, payload, type=CLASSIFICATION):
                 jobs.append(item)
     return jobs
 
-def create_job_run(log, payload, type=CLASSIFICATION):
+def generate_run(logid, model, modelid):
     jobs = []
+    split=model.split
+    encoding= model.encoding
+    if split.type == 'single':
+        clustering = 'noCluster'
+    else:
+        clustering= 'kmeans'
+    method= model.method
+    item = Job.objects.create(
+        status=CREATED,
+        type=model.type,
+        config=create_config_run(encoding, clustering, method, log=logid, model=modelid))
+    return item
 
-    for encoding in payload['config']['encodings']:
-        for clustering in payload['config']['clusterings']:
-            for method in payload['config']['methods']:
-                item = Job.objects.create(
-                    split=split,
-                    status=CREATED,
-                    type=type,
-                    run=True,
-                    config=create_config(payload, encoding, clustering, method, payload['config']['log_id']))
-                jobs.append(item)
-    return jobs
-
-def create_config(payload, encoding, clustering, method, log=''):
+def create_config(payload, encoding, clustering, method):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']
@@ -200,5 +182,14 @@ def create_config(payload, encoding, clustering, method, log=''):
     config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
-    config['log'] = log
+    return config
+
+def create_config_run(encoding, clustering, method, log='', model=''):
+    """Turn lists to single values"""
+    config = dict()
+    config['encoding'] = encoding
+    config['clustering'] = clustering
+    config['method'] = method
+    config['log_id'] = log
+    config['model_id'] = model
     return config

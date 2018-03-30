@@ -59,3 +59,30 @@ def event_executions(logs):
                 event_name = classifier.get_class_identity(event)
                 executions[event_name] += 1
     return OrderedDict(sorted(executions.items()))
+
+
+def trace_attributes(logs):
+    """Creates an array of dicts that describe trace attributes.
+    Only looks at first trace. Filters out `concept:name`.
+
+    :return [{name: 'name', type: 'string', example: 34}]
+    :rtype list
+    """
+    values = []
+    for log in logs:
+        trace = log[0]
+        for attribute in trace.get_attributes().values():
+            if attribute.get_key() != "concept:name":
+                atr_type = is_number(attribute.get_value())
+                atr = {'name': attribute.get_key(), 'type': atr_type, 'example': str(attribute.get_value())}
+                values.append(atr)
+    values = sorted(values, key=lambda k: k['name'])
+    return values
+
+
+def is_number(s):
+    try:
+        float(s)
+        return 'number'
+    except Exception :
+        return 'string'

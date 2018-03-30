@@ -33,7 +33,7 @@
 	},
 		{
 		"model": "logs.log",
-		"pk": 4,
+		"pk": 5,
 		"fields": {
 			"name": "financial_log.xes.gz",
 			"path": "log_cache/financial_log.xes.gz"

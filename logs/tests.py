@@ -7,7 +7,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
 from .file_service import get_logs
-from .log_service import events_by_date, resources_by_date, event_executions
+from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes
 
 
 class LogTest(SimpleTestCase):
@@ -31,6 +31,15 @@ class LogTest(SimpleTestCase):
         self.assertEqual(8, len(result.keys()))
         self.assertEqual(9, result['decide'])
         self.assertEqual(3, result['reject request'])
+
+    def test_trace_attributes(self):
+        logs = get_logs("log_cache/financial_log.xes.gz")
+        result = trace_attributes(logs)
+        self.assertEqual(2, len(result))
+        self.assertDictEqual({'name': 'AMOUNT_REQ', 'type': 'number', 'example': '20000'},
+                             result[0])
+        self.assertDictEqual({'name': 'REG_DATE', 'type': 'string', 'example': '2011-10-01 00:38:44.546000+02:00'},
+                             result[1])
 
 
 class LogModelTest(TestCase):

@@ -4,7 +4,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from logs.log_service import events_by_date, resources_by_date, event_executions
+from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
@@ -51,6 +51,7 @@ def get_log_stats(request, pk, stat):
     * events for event_by_date
     * resources for resources_by_date
     * executions for event_executions
+    * traceAttributes for trace_attributes
     """
     try:
         log = Log.objects.get(pk=pk)
@@ -66,6 +67,8 @@ def get_log_stats(request, pk, stat):
         data = events_by_date(log_file)
     elif stat == 'resources':
         data = resources_by_date(log_file)
+    elif stat == 'traceAttributes':
+        data = trace_attributes(log_file)
     else:
         data = event_executions(log_file)
     return Response(data)

@@ -31,6 +31,14 @@
 			"path": "log_cache/nonlocal.mxml.gz"
 		}
 	},
+		{
+		"model": "logs.log",
+		"pk": 4,
+		"fields": {
+			"name": "financial_log.xes.gz",
+			"path": "log_cache/financial_log.xes.gz"
+		}
+	},
 	{
 		"model": "logs.split",
 		"pk": 1,
@@ -60,6 +68,17 @@
 			"config": "{}",
 			"type": "single",
 			"original_log": 4,
+			"test_log": null,
+			"training_log": null
+		}
+	},
+	{
+		"model": "logs.split",
+		"pk": 4,
+		"fields": {
+			"config": "{}",
+			"type": "single",
+			"original_log": 5,
 			"test_log": null,
 			"training_log": null
 		}

@@ -4,7 +4,8 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace
+from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
+    create_log
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
@@ -21,10 +22,7 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
     def post(self, request):
-        name = self.request.FILES['single'].name
-        path = 'log_cache/' + name
-        save_file(self.request.FILES['single'], path)
-        log = Log.objects.create(name=name, path=path)
+        log = create_log(self.request.FILES['single'], self.request.FILES['single'].name)
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -107,14 +105,8 @@ class SplitList(mixins.ListModelMixin, generics.GenericAPIView):
 
 @api_view(['POST'])
 def upload_multiple(request):
-    test_name = request.FILES['testSet'].name
-    training_name = request.FILES['trainingSet'].name
-    test_path = 'log_cache/' + test_name
-    training_path = 'log_cache/' + training_name
-    save_file(request.FILES['testSet'], test_path)
-    save_file(request.FILES['trainingSet'], training_path)
-    test_log = Log.objects.create(name=test_name, path=test_path)
-    training_log = Log.objects.create(name=training_name, path=training_path)
+    test_log = create_log(request.FILES['testSet'], request.FILES['testSet'].name)
+    training_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
 
     item = Split.objects.create(
         type='double',

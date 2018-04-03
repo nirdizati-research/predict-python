@@ -5,9 +5,11 @@ from .models import Log
 
 
 class LogSerializer(serializers.ModelSerializer):
+    properties = serializers.JSONField()
+
     class Meta:
         model = Log
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'properties')
 
 
 class CreateSplitSerializer(serializers.ModelSerializer):

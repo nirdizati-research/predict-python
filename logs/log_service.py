@@ -2,6 +2,16 @@ from collections import defaultdict, OrderedDict
 
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
+from logs.models import Log
+
+
+def create_log(file, name: str):
+    path = 'log_cache/' + name
+    from logs.file_service import save_file
+    save_file(file, path)
+    log = Log.objects.create(name=name, path=path)
+    return log
+
 
 def events_by_date(logs):
     """Creates dict of events by date ordered by date

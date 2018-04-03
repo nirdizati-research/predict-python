@@ -6,8 +6,8 @@ from logs.file_service import get_logs
 from logs.models import Log
 
 
-def create_log(file, name: str):
-    path = 'log_cache/' + name
+def create_log(file, name: str, folder='log_cache/'):
+    path = folder + name
     from logs.file_service import save_file
     save_file(file, path)
     properties = create_properties(path)
@@ -17,6 +17,7 @@ def create_log(file, name: str):
 
 def create_properties(path: str):
     """Create read-only dict with methods in this class"""
+    print("Creating properties for log {}".format(path))
     logs = get_logs(path)
     properties = dict()
     properties["events"] = events_by_date(logs)
@@ -24,6 +25,7 @@ def create_properties(path: str):
     properties["executions"] = event_executions(logs)
     properties["maxEventsInLog"] = max_events_in_log(logs)
     properties["traceAttributes"] = trace_attributes(logs)
+    print("Properties created")
     return properties
 
 

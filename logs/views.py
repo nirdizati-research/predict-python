@@ -35,10 +35,7 @@ class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
         return self.list(request, *args, **kwargs)
 
     def post(self, request):
-        name = self.request.FILES['single'].name
-        path = 'log_run_cache/' + name
-        save_file(self.request.FILES['single'], path)
-        log = Log.objects.create(name=name, path=path)
+        log = create_log(self.request.FILES['single'], self.request.FILES['single'].name, folder='log_run_cache/')
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -46,6 +43,8 @@ class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):
     """Get log statistics
+
+    DEPRECATED ENDPOINT. LOGS HAVE PROPERTIES.
 
     End URL with
     * events for event_by_date
@@ -76,13 +75,6 @@ def get_log_stats(request, pk, stat):
         data = event_executions(log_file)
 
     return Response(data)
-
-
-def save_file(file, path):
-    logger.info("Saving uploaded file to %s ", path)
-    with open(path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
 
 
 class SplitList(mixins.ListModelMixin, generics.GenericAPIView):

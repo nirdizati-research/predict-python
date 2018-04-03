@@ -12,7 +12,6 @@ from training.tr_regression import tr_regression
 from encoders.common import encode_training_logs, encode_logs, encode_log
 from logs.models import Log
 from logs.file_service import get_logs
-from logs.views import save_file
 from sklearn.externals import joblib
 from training.models import PredModels, Split
 

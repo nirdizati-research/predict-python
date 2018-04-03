@@ -2,6 +2,7 @@ from collections import defaultdict, OrderedDict
 
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
+from logs.file_service import get_logs
 from logs.models import Log
 
 
@@ -9,8 +10,21 @@ def create_log(file, name: str):
     path = 'log_cache/' + name
     from logs.file_service import save_file
     save_file(file, path)
-    log = Log.objects.create(name=name, path=path)
+    properties = create_properties(path)
+    log = Log.objects.create(name=name, path=path, properties=properties)
     return log
+
+
+def create_properties(path: str):
+    """Create read-only dict with methods in this class"""
+    logs = get_logs(path)
+    properties = dict()
+    properties["events"] = events_by_date(logs)
+    properties["resources"] = resources_by_date(logs)
+    properties["executions"] = event_executions(logs)
+    properties["maxEventsInLog"] = max_events_in_log(logs)
+    properties["traceAttributes"] = trace_attributes(logs)
+    return properties
 
 
 def events_by_date(logs):
@@ -94,7 +108,7 @@ def is_number(s):
     try:
         float(s)
         return 'number'
-    except Exception :
+    except Exception:
         return 'string'
 
 

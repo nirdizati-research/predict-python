@@ -2,9 +2,6 @@ language: python
 cache: pip
 services:
   - redis-server
-branches:
-  only:
-  - master
 python:
   - "3.4"
   - "3.5"

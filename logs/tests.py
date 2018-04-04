@@ -1,5 +1,6 @@
 import contextlib
 from os import remove
+from shutil import copyfile
 
 from django.test import SimpleTestCase, TestCase
 from rest_framework import status
@@ -7,7 +8,8 @@ from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
 from .file_service import get_logs
-from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes
+from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
+    max_events_in_log
 
 
 class LogTest(SimpleTestCase):
@@ -40,6 +42,17 @@ class LogTest(SimpleTestCase):
                              result[0])
         self.assertDictEqual({'name': 'REG_DATE', 'type': 'string', 'example': '2011-10-01 00:38:44.546000+02:00'},
                              result[1])
+
+    def test_events_in_trace(self):
+        logs = get_logs("log_cache/general_example.xes")
+        result = events_in_trace(logs)
+        self.assertEqual(6, len(result.keys()))
+        self.assertEqual(9, result['3'])
+
+    def max_events_in_log(self):
+        logs = get_logs("log_cache/general_example.xes")
+        result = max_events_in_log(logs)
+        self.assertEqual(13, result)
 
 
 class LogModelTest(TestCase):
@@ -81,37 +94,40 @@ class FileUploadTests(APITestCase):
         Log.objects.all().delete()
         # I hate that Python can't just delete
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/test_upload')
+            remove('log_cache/test_upload.xes')
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/file1')
+            remove('log_cache/file1.xes')
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/file2')
+            remove('log_cache/file2.xes')
 
     def _create_test_file(self, path):
-        f = open(path, 'w')
-        f.write('test123\n')
-        f.close()
+        copyfile('log_cache/general_example_test.xes', path)
         f = open(path, 'rb')
         return f
 
     def test_upload_file(self):
-        f = self._create_test_file('/tmp/test_upload')
+        f = self._create_test_file('/tmp/test_upload.xes')
 
         client = APIClient()
         response = client.post('/logs/', {'single': f}, format='multipart')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['name'], 'test_upload')
+        self.assertEqual(response.data['name'], 'test_upload.xes')
+        self.assertIsNotNone(response.data['properties']['events'])
+        self.assertIsNotNone(response.data['properties']['executions'])
+        self.assertIsNotNone(response.data['properties']['resources'])
+        self.assertIsNotNone(response.data['properties']['traceAttributes'])
+        self.assertIsNotNone(response.data['properties']['maxEventsInLog'])
 
     def test_upload_multiple_files(self):
-        f1 = self._create_test_file('/tmp/file1')
-        f2 = self._create_test_file('/tmp/file2')
+        f1 = self._create_test_file('/tmp/file1.xes')
+        f2 = self._create_test_file('/tmp/file2.xes')
 
         client = APIClient()
         response = client.post('/splits/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')
         self.assertEqual(response.data['type'], 'double')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['test_log']['name'], 'file1')
-        self.assertEqual(response.data['training_log']['name'], 'file2')
+        self.assertEqual(response.data['test_log']['name'], 'file1.xes')
+        self.assertEqual(response.data['training_log']['name'], 'file2.xes')
         self.assertEqual(response.data['original_log'], None)
         self.assertEqual(response.data['config'], {})

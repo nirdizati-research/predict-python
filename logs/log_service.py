@@ -2,6 +2,32 @@ from collections import defaultdict, OrderedDict
 
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
+from logs.file_service import get_logs
+from logs.models import Log
+
+
+def create_log(file, name: str, folder='log_cache/'):
+    path = folder + name
+    from logs.file_service import save_file
+    save_file(file, path)
+    properties = create_properties(path)
+    log = Log.objects.create(name=name, path=path, properties=properties)
+    return log
+
+
+def create_properties(path: str):
+    """Create read-only dict with methods in this class"""
+    print("Creating properties for log {}".format(path))
+    logs = get_logs(path)
+    properties = dict()
+    properties["events"] = events_by_date(logs)
+    properties["resources"] = resources_by_date(logs)
+    properties["executions"] = event_executions(logs)
+    properties["maxEventsInLog"] = max_events_in_log(logs)
+    properties["traceAttributes"] = trace_attributes(logs)
+    print("Properties created")
+    return properties
+
 
 def events_by_date(logs):
     """Creates dict of events by date ordered by date
@@ -84,5 +110,42 @@ def is_number(s):
     try:
         float(s)
         return 'number'
-    except Exception :
+    except Exception:
         return 'string'
+
+
+def events_in_trace(logs):
+    """Creates dict of number of events in trace
+
+    :return {'4': 11, '3': 8}
+    :rtype: OrderedDict
+    """
+    classifier = XEventAttributeClassifier("Event", ["concept:name"])
+    stamp_dict = defaultdict(lambda: 0)
+    for log in logs:
+        for trace in log:
+            counter = 0
+            for event in trace:
+                counter += 1
+            name = classifier.get_class_identity(trace)
+            stamp_dict[name] = counter
+    return OrderedDict(sorted(stamp_dict.items()))
+
+
+def max_events_in_log(logs):
+    """Returns the maximum number of events in any trace
+
+    :return 3
+    :rtype: int
+    """
+    current_max = 0
+    for log in logs:
+        for trace in log:
+            counter = len(trace)
+
+            # for _ in trace:
+            #     counter += 1
+            if counter > current_max:
+                current_max = counter
+
+    return current_max

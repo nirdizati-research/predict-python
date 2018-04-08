@@ -1,20 +1,3 @@
-from django.test import TestCase
-
-from core.core import prepare_logs
-
-
-class LogPrepare(TestCase):
-    def test_split_single(self):
-        training_log, test_log = prepare_logs(split_single())
-        self.assertEqual(4, len(training_log))
-        self.assertEqual(2, len(test_log))
-
-    def test_split_double(self):
-        training_log, test_log = prepare_logs(split_double())
-        self.assertEqual(4, len(training_log))
-        self.assertEqual(2, len(test_log))
-
-
 def split_single():
     split = dict()
     split['type'] = 'single'

@@ -36,7 +36,7 @@ def _split_single_log(split: dict, log: list):
         print("Using out of bound split test_size {}. Reverting to default 0.2.".format(test_size))
         test_size = 0.2
     split_type = split['config'].get('split_type', SPLIT_SEQUENTIAL)
-    print("Execute single split ID {}, split_type {}, test_size".format(split['id'], split_type, test_size))
+    print("Execute single split ID {}, split_type {}, test_size {}".format(split['id'], split_type, test_size))
     if split_type == SPLIT_TEMPORAL:
         return _temporal_split(log, test_size)
     elif split_type == SPLIT_STRICT_TEMPORAL:

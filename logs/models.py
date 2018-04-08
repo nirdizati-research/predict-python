@@ -32,6 +32,7 @@ class Split(models.Model):
 
     def to_dict(self):
         split = dict()
+        split['id'] = self.id
         split['type'] = self.type
         split['config'] = self.config
         if self.type == 'single':

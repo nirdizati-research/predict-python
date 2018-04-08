@@ -50,3 +50,21 @@ curl --request POST \
   }' \
 http://localhost:8000/jobs/multiple
 ```
+
+Creating a single split options.
+
+* $SPLIT_TYPE has to be one of `split_sequential`, `split_random`, `split_temporal`, `split_strict_temporal`. By default `split_sequential`.
+* `test_size` has to be from 0 to 1. By default 0.2
+```commandline
+curl --request POST \
+  --header 'Content-Type: application/json' \
+  --data-binary '{
+    "type": "single",
+    "original_log": 1, 
+    "config": {
+      "test_size": 0.2,
+      "split_type": $SPLIT_TYPE
+    }
+  }' \
+http://localhost:8000/splits/
+```

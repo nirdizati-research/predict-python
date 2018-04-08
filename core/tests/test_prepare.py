@@ -1,5 +1,6 @@
 def split_single():
     split = dict()
+    split['id'] = 1
     split['config'] = dict()
     split['type'] = 'single'
     split['original_log_path'] = 'log_cache/general_example.xes'
@@ -8,6 +9,7 @@ def split_single():
 
 def split_double():
     split = dict()
+    split['id'] = 1
     split['config'] = dict()
     split['type'] = 'double'
     split['test_log_path'] = 'log_cache/general_example_test.xes'

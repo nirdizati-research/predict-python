@@ -178,7 +178,7 @@
 		<event>
 			<string key="concept:name" value="reject request"/>
 			<string key="org:resource" value="Pete"/>
-			<date key="time:timestamp" value="2011-01-07T14:24:00.000+01:00"/>
+			<date key="time:timestamp" value="2011-01-06T14:24:00.000+01:00"/>
 			<string key="Activity" value="reject request"/>
 			<string key="Resource" value="Pete"/>
 			<string key="Costs" value="200"/>

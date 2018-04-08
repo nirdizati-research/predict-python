@@ -57,6 +57,18 @@ class SplitSingle(TestCase):
         self.assertListEqual(sorted(['1', '2', '3', '5']), sorted(training_names))
         self.assertListEqual(sorted(['6', '4']), sorted(test_names))
 
+    def test_strict_temporal(self):
+        split = split_single()
+        split['config'] = {'split_type': 'split_strict_temporal'}
+        training_log, test_log = prepare_logs(split)
+
+        training_names = trace_names(training_log)
+        test_names = trace_names(test_log)
+
+        # Modified log to have only one trace here
+        self.assertListEqual(['1'], sorted(training_names))
+        self.assertListEqual(sorted(['6', '4']), sorted(test_names))
+
 
 def trace_names(log):
     """Get trace names"""
@@ -69,6 +81,7 @@ def trace_names(log):
 
 def split_single():
     split = dict()
+    split['id'] = 1
     split['config'] = dict()
     split['type'] = 'single'
     split['original_log_path'] = 'log_cache/general_example.xes'
@@ -77,6 +90,7 @@ def split_single():
 
 def split_double():
     split = dict()
+    split['id'] = 1
     split['config'] = dict()
     split['type'] = 'double'
     split['test_log_path'] = 'log_cache/general_example_test.xes'

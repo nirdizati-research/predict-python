@@ -15,6 +15,15 @@ class Split(TestCase):
         self.assertEqual(2, len(test_log))
 
 
+class SplitSingle(TestCase):
+    def test_size(self):
+        split = split_single()
+        split['config'] = {'test_size': 0.5}
+        training_log, test_log = prepare_logs(split)
+        self.assertEqual(3, len(training_log))
+        self.assertEqual(3, len(test_log))
+
+
 def split_single():
     split = dict()
     split['type'] = 'single'

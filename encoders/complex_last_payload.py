@@ -1,26 +1,27 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import get_event_attributes, HEADER_COLUMNS, HEADER_COLUMNS_RUN
+from encoders.log_util import get_event_attributes, HEADER_COLUMNS
 from .log_util import remaining_time_id, elapsed_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def complex(log, event_names, prefix_length=1, run=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")    
-    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, run)
-
-def last_payload(log, event_names, prefix_length=1, run=False):
+def complex(log, event_names, prefix_length=1):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, run)
+    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex)
 
 
-def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, run):
+def last_payload(log, event_names, prefix_length=1):
+    if prefix_length < 1:
+        raise ValueError("Prefix length must be greater than 1")
+    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload)
+
+
+def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun):
     additional_columns = get_event_attributes(log)
-    columns = column_fun(prefix_length, additional_columns, run)
+    columns = column_fun(prefix_length, additional_columns)
     encoded_data = []
 
     for trace in log:
@@ -30,19 +31,16 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         # prefix_length - 1 == index
-        if run == False:
-            trace_row.append(remaining_time_id(trace, prefix_length - 1))
+        trace_row.append(remaining_time_id(trace, prefix_length - 1))
         trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
         encoded_data.append(trace_row)
+
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length, additional_columns, run):
-    if run:
-        columns = list(HEADER_COLUMNS_RUN)
-    else:
-        columns = list(HEADER_COLUMNS)
+def columns_complex(prefix_length, additional_columns):
+    columns = list(HEADER_COLUMNS)
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
         for additional_column in additional_columns:
@@ -50,11 +48,8 @@ def columns_complex(prefix_length, additional_columns, run):
     return columns
 
 
-def columns_last_payload(prefix_length, additional_columns, run):
-    if run:
-        columns = list(HEADER_COLUMNS_RUN)
-    else:
-        columns = list(HEADER_COLUMNS)
+def columns_last_payload(prefix_length, additional_columns):
+    columns = list(HEADER_COLUMNS)
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns:

@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
 from jobs.models import Job
+from jobs.tasks import prediction_task
 from logs.models import Log, Split
 
 
@@ -45,12 +46,33 @@ class JobModelTest(TestCase):
         self.assertEquals(CLASSIFICATION, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': "log_cache/general_example.xes",
-                              'original_log_name': 'general_example.xes',
                               'config': {}},
                              job['split'])
         self.assertEquals(123, job['key'])
 
-    
+    def test_prediction_task(self):
+        prediction_task(1)
+
+        job = Job.objects.get(id=1)
+
+        self.assertEqual('completed', job.status)
+        self.assertNotEqual({}, job.result)
+
+    def test_prediction_task_error(self):
+        self.assertRaises(ValueError, prediction_task, 2)
+        job = Job.objects.get(id=2)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual("ValueError('Type not supported', 'asdsd')", job.error)
+
+    def test_missing_attributes(self):
+        self.assertRaises(KeyError, prediction_task, 3)
+        job = Job.objects.get(id=3)
+
+        self.assertEqual('error', job.status)
+        self.assertEqual({}, job.result)
+        self.assertEqual("KeyError('method',)", job.error)
 
 
 class CreateJobsTests(APITestCase):

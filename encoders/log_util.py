@@ -1,5 +1,5 @@
 from datetime import datetime as dt
-import math
+
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from opyenxes.model.XLog import XLog
 
@@ -7,7 +7,6 @@ TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_COLUMNS = ["trace_id", "event_nr", "remaining_time", "elapsed_time"]
 TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 HEADER_COLUMNS = ['trace_id', 'remaining_time', 'elapsed_time']
-HEADER_COLUMNS_RUN = ['trace_id',  'elapsed_time']
 
 
 def unique_events(log: list):
@@ -15,23 +14,13 @@ def unique_events(log: list):
 
     Adds all events into a list and removes duplicates while keeping order.
     """
-    
     classifier = XEventAttributeClassifier("Resource", ["concept:name"])
     event_list = []
-    length=[]
     for trace in log:
-        count=0
         for event in trace:
-            count += 1
             event_name = classifier.get_class_identity(event)
             event_list.append(event_name)
-        length.append(count)
-    p_length=0
-    for i in range(len(length)):
-        p_length+=length[i]
-    divisor=math.ceil(len(length)*3/4)
-    p_length=math.ceil(p_length/divisor)
-    return sorted(set(event_list), key=lambda x: event_list.index(x)),p_length
+    return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 
 def unique_events2(training_log: list, test_log: list):
@@ -40,9 +29,7 @@ def unique_events2(training_log: list, test_log: list):
     Renamed to 2 because Python doesn't allow functions with same names.
     Python is objectively the worst language.
     """
-    tr_event_list, _ = unique_events(training_log) 
-    ts_event_list, _ = unique_events(test_log)
-    event_list=tr_event_list + ts_event_list
+    event_list = unique_events(training_log) + unique_events(test_log)
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 

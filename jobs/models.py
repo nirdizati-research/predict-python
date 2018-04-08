@@ -41,6 +41,5 @@ class Job(BaseModel):
     def to_dict(self):
         job = dict(self.config)
         job['type'] = self.type
-        if self.split is not None:
-            job['split'] = self.split.to_dict()
+        job['split'] = self.split.to_dict()
         return job

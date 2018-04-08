@@ -36,7 +36,6 @@ class Split(models.Model):
         split['config'] = self.config
         if self.type == 'single':
             split['original_log_path'] = self.original_log.path
-            split['original_log_name'] = self.original_log.name
         else:
             split['test_log_path'] = self.test_log.path
             split['training_log_path'] = self.training_log.path

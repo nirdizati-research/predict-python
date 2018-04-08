@@ -27,19 +27,6 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class LogListRun(mixins.ListModelMixin, generics.GenericAPIView):
-    queryset = Log.objects.all()
-    serializer_class = LogSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request):
-        log = create_log(self.request.FILES['single'], self.request.FILES['single'].name, folder='log_run_cache/')
-        serializer = LogSerializer(log)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):
     """Get log statistics

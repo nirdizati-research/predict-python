@@ -29,9 +29,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
-    'training.apps.TrainingConfig',
-    'replayer.apps.ReplayerConfig',
     'logs.apps.LogsConfig',
     'jobs.apps.JobsConfig',
     'rest_framework',
@@ -41,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
-    'django_rq',
-    #'channels',
+    "django_rq",
+    'corsheaders',
 ]
 
 LOGGING = {
@@ -69,8 +66,6 @@ LOGGING = {
 }
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,10 +86,6 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
-
-CORS_ORIGIN_WHITELIST = (
-    'localhost:3000',
-)
 
 TEMPLATES = [
     {
@@ -142,18 +133,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-"""ASGI_APPLICATION = 'training.routing.application'
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-        },
-        "ROUTING": "chat.routing.channel_routing",
-    },
-}"""
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -171,7 +150,7 @@ STATIC_URL = '/static/'
 
 RQ_QUEUES = {
     'default': {
-        'HOST': '127.0.0.1',
+        'HOST': '0.0.0.0',
         'PORT': 6379,
         'DB': 0,
         'DEFAULT_TIMEOUT': 7200,

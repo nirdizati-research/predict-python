@@ -5,24 +5,30 @@ from core.constants import NEXT_ACTIVITY, \
     CLASSIFICATION, REGRESSION
 from core.next_activity import next_activity
 from core.regression import regression
-from encoders.common import encode_log
+from encoders.common import encode_logs
 from logs.file_service import get_logs
 
 
-def calculate(job, model):
+def calculate(job):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
-    test_log = prepare_logs(job['split'])
+    training_log, test_log = prepare_logs(job['split'])
+
     # Python dicts are bad
-    
-    test_df= encode_log(test_log, job['encoding'], job['type'], prefix_length=job['prefix_length'])
+    if 'prefix_length' in job:
+        prefix_length = job['prefix_length']
+    else:
+        prefix_length = 1
+
+    training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
+                                       prefix_length=prefix_length)
 
     if job['type'] == CLASSIFICATION:
-        results = classifier(test_df, job, model.to_dict())
+        results = classifier(training_df, test_df, job)
     elif job['type'] == REGRESSION:
-        results = regression(test_df, job, model.to_dict())
+        results = regression(training_df, test_df, job)
     elif job['type'] == NEXT_ACTIVITY:
-        results = next_activity(test_df, job, model.to_dict())
+        results = next_activity(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
@@ -30,16 +36,17 @@ def calculate(job, model):
 
 
 def prepare_logs(split: dict):
-    """Returns test_log"""
+    """Returns training_log and test_log"""
     if split['type'] == 'single':
-        path = split['original_log_path']
-        test_log = get_logs(path)[0]
-        test_log, _ = train_test_split(test_log, test_size=0)
+        log = get_logs(split['original_log_path'])[0]
+        training_log, test_log = split_log(log)
+        print("Loaded single log from {}".format(split['original_log_path']))
     else:
-        path = split['test_log_path']
-        test_log = get_logs(path)[0]
-        test_log, _ = train_test_split(test_log, test_size=0)
-    return test_log
+        # Have to use sklearn to convert some internal data types
+        training_log, _ = train_test_split(get_logs(split['training_log_path'])[0], test_size=0)
+        test_log, _ = train_test_split(get_logs(split['test_log_path'])[0], test_size=0)
+        print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
+    return training_log, test_log
 
 
 def split_log(log: list, test_size=0.2, random_state=4):

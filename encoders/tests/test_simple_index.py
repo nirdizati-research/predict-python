@@ -53,7 +53,7 @@ class TestGeneralTest(TestCase):
 
     def setUp(self):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
-        self.event_names, _ = unique_events(self.log)
+        self.event_names = unique_events(self.log)
 
     def test_header(self):
         df = simple_index(self.log, self.event_names)

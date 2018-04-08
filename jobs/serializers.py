@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from logs.serializers import SplitSerializer, LogSerializer
+from logs.serializers import SplitSerializer
 from .models import Job
 
 

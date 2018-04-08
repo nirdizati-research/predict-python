@@ -1,9 +1,7 @@
 from django.test import TestCase
 
-from training.tr_core import calculate as train
 from core.core import calculate
-from training.models import PredModels
-from core.tests.test_prepare import split_single, split_double
+from core.tests.test_prepare import split_double
 
 
 class TestClassification(TestCase):
@@ -14,7 +12,7 @@ class TestClassification(TestCase):
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def results2(self):
-        return {'f1score': 0.6666666666666666, 'auc': 0, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
+        return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def get_job(self):
@@ -32,8 +30,7 @@ class TestClassification(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        model, _=train(job, redo=True)
-        result = calculate(job,model)
+        result = calculate(job)
         self.assertDictEqual(result, self.results2())
 
     # KNN Fails due to small dataset
@@ -41,22 +38,19 @@ class TestClassification(TestCase):
     def class_KNN(self):
         job = self.get_job()
         job['method'] = 'KNN'
-        model, _=train(job, redo=True)
-        calculate(job,model)
+        calculate(job)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
-        model, _= train(job, redo=True)
-        result = calculate(job,model)
+        result = calculate(job)
         self.assertDictEqual(result, self.results())
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
-        model, _=train(job, redo=True)
-        result = calculate(job,model)
-        self.assertIsNotNone(result)
+        result = calculate(job)
+        self.assertDictEqual(result, self.results())
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
@@ -64,30 +58,26 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'KNN'
         job['type'] = 'nextActivity'
-        model, _=train(job, redo=True)
-        calculate(job,model)
+        calculate(job)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
         job['type'] = 'nextActivity'
         job['clustering'] = 'None'
-        model,_=train(job, redo=True)
-        result = calculate(job,model)
-        self.assertIsNotNone(result)
+        result = calculate(job)
+        self.assertDictEqual(result, self.results())
 
     def test_class_complex(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
-        model,_=train(job, redo=True)
-        result = calculate(job,model)
+        result = calculate(job)
         self.assertDictEqual(result, self.results2())
 
     def test_class_last_payload(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
-        model,_=train(job, redo=True)
-        result = calculate(job,model)
+        result = calculate(job)
         self.assertDictEqual(result, self.results2())

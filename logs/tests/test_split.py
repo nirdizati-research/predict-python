@@ -46,7 +46,7 @@ class SplitSingle(TestCase):
 
         self.assertNotEqual(training_names1, training_names2)
 
-    def temporal(self):
+    def test_temporal(self):
         split = split_single()
         split['config'] = {'split_type': 'split_temporal'}
         training_log, test_log = prepare_logs(split)
@@ -54,8 +54,8 @@ class SplitSingle(TestCase):
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)
 
-        self.assertListEqual(['1', '2', '3', '5'], training_names)
-        self.assertListEqual(['6', '4'], test_names)
+        self.assertListEqual(sorted(['1', '2', '3', '5']), sorted(training_names))
+        self.assertListEqual(sorted(['6', '4']), sorted(test_names))
 
 
 def trace_names(log):

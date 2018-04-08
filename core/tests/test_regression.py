@@ -19,12 +19,19 @@ class TestRegression(TestCase):
 
     def test_reg_linear(self):
         job = self.get_job()
-        job['clustering'] = 'None'
+        job['clustering'] = 'noCluster'
+        calculate(job)
+
+    def test_reg_linear_split_strict_temporal(self):
+        job = self.get_job()
+        job['split'] = {'id': 1, 'type': 'single', 'original_log_path': 'log_cache/general_example.xes',
+                        'config': {"split_type": "split_strict_temporal", "test_size": 0.30000000000000004}}
+        job['clustering'] = 'noCluster'
         calculate(job)
 
     def test_reg_linear_boolean(self):
         job = self.get_job()
-        job['clustering'] = 'None'
+        job['clustering'] = 'noCluster'
         job['encoding'] = 'boolean'
         calculate(job)
 
@@ -48,6 +55,6 @@ class TestRegression(TestCase):
     def reg_lasso_last_payload(self):
         job = self.get_job()
         job['method'] = 'lasso'
-        job['clustering'] = 'None'
+        job['clustering'] = 'noCluster'
         job['encoding'] = 'lastPayload'
         calculate(job)

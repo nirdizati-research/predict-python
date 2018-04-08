@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
-from .file_service import get_logs
-from .log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
+from logs.file_service import get_logs
+from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
     max_events_in_log
 
 

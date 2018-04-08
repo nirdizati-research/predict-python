@@ -64,7 +64,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'decisionTree'
         job['type'] = 'nextActivity'
-        job['clustering'] = 'None'
+        job['clustering'] = 'noCluster'
         result = calculate(job)
         self.assertDictEqual(result, self.results())
 

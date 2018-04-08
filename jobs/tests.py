@@ -46,7 +46,8 @@ class JobModelTest(TestCase):
         self.assertEquals(CLASSIFICATION, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': "log_cache/general_example.xes",
-                              'config': {}},
+                              'config': {},
+                              'id': 1},
                              job['split'])
         self.assertEquals(123, job['key'])
 
@@ -112,7 +113,7 @@ class CreateJobsTests(APITestCase):
     def job_obj2(self):
         config = dict()
         config['encodings'] = ['simpleIndex', 'boolean', 'complex']
-        config['clusterings'] = ['none']
+        config['clusterings'] = ['noCluster']
         config['methods'] = ['linear', 'lasso']
         config['random'] = 123
         config['prefix_length'] = 1
@@ -130,7 +131,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(6, len(response.data), )
         self.assertEqual('regression', response.data[0]['type'])
         self.assertEqual('simpleIndex', response.data[0]['config']['encoding'])
-        self.assertEqual('none', response.data[0]['config']['clustering'])
+        self.assertEqual('noCluster', response.data[0]['config']['clustering'])
         self.assertEqual('linear', response.data[0]['config']['method'])
         self.assertEqual(123, response.data[0]['config']['random'])
         self.assertEqual('created', response.data[0]['status'])

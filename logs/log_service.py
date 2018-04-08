@@ -120,7 +120,7 @@ def events_in_trace(logs):
     :return {'4': 11, '3': 8}
     :rtype: OrderedDict
     """
-    classifier = XEventAttributeClassifier("Event", ["concept:name"])
+    classifier = XEventAttributeClassifier("Trace", ["concept:name"])
     stamp_dict = defaultdict(lambda: 0)
     for log in logs:
         for trace in log:

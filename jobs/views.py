@@ -9,7 +9,8 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from jobs import tasks
-from jobs.models import Job, CREATED
+from jobs.job_creator import generate
+from jobs.models import Job
 from jobs.serializers import JobSerializer
 from logs.models import Split
 
@@ -70,30 +71,3 @@ def create_multiple(request):
         django_rq.enqueue(tasks.prediction_task, job.id)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
-
-
-def generate(split, payload, type=CLASSIFICATION):
-    jobs = []
-
-    for encoding in payload['config']['encodings']:
-        for clustering in payload['config']['clusterings']:
-            for method in payload['config']['methods']:
-                item = Job.objects.create(
-                    split=split,
-                    status=CREATED,
-                    type=type,
-                    config=create_config(payload, encoding, clustering, method))
-                jobs.append(item)
-    return jobs
-
-
-def create_config(payload, encoding, clustering, method):
-    """Turn lists to single values"""
-    config = dict(payload['config'])
-    del config['encodings']
-    del config['clusterings']
-    del config['methods']
-    config['encoding'] = encoding
-    config['clustering'] = clustering
-    config['method'] = method
-    return config

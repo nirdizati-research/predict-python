@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
+from jobs.job_creator import create_config
 from jobs.models import Job
 from jobs.tasks import prediction_task
 from logs.models import Log, Split
@@ -88,7 +89,7 @@ class CreateJobsTests(APITestCase):
         config = dict()
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']
-        config['methods'] = ['kmeans']
+        config['methods'] = ['knn']
         config['random'] = 123
         obj = dict()
         obj['type'] = 'classification'
@@ -105,10 +106,9 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['type'], 'classification')
         self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
         self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
-        self.assertEqual(response.data[0]['config']['method'], 'kmeans')
+        self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['status'], 'created')
-
 
     def job_obj2(self):
         config = dict()
@@ -136,3 +136,46 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(123, response.data[0]['config']['random'])
         self.assertEqual('created', response.data[0]['status'])
         self.assertEqual(1, response.data[0]['split']['id'])
+
+
+class MethodConfiguration(TestCase):
+
+    def job_obj(self):
+        config = dict()
+        config['encodings'] = ['simpleIndex']
+        config['clusterings'] = ['noCluster']
+        config['methods'] = ['randomForest']
+        config['regression.randomForest'] = {'n_estimators': 15}
+        config['regression.lasso'] = {'n_estimators': 15}
+        obj = dict()
+        obj['type'] = 'regression'
+        obj['config'] = config
+        obj['split_id'] = 1
+        return obj
+
+    def test_regression_random_forest(self):
+        job = self.job_obj()
+
+        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest')
+
+        self.assertEquals(False, 'regression.lasso' in config)
+        self.assertDictEqual(config['regression.randomForest'], {
+            'n_estimators': 15,
+            'criterion': 'mse',
+            'max_depth': None,
+            'min_samples_split': 2
+        })
+
+    def test_adds_conf_if_missing(self):
+        job = self.job_obj()
+        del job['config']['regression.randomForest']
+
+        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest')
+
+        self.assertEquals(False, 'regression.lasso' in config)
+        self.assertDictEqual(config['regression.randomForest'], {
+            'n_estimators': 10,
+            'criterion': 'mse',
+            'max_depth': None,
+            'min_samples_split': 2
+        })

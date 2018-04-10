@@ -46,10 +46,7 @@ def calculate_results(prediction, actual):
 
 
 def choose_classifier(job: dict):
-    method = job['method']
-    method_conf_name = "{}.{}".format(job['type'], method)
-    config = job[method_conf_name]
-    print("Using method {} with config {}".format(method, config))
+    method, config = get_method_config(job)
     if method == KNN:
         clf = KNeighborsClassifier(**config)
     elif method == RANDOM_FOREST:
@@ -59,6 +56,14 @@ def choose_classifier(job: dict):
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf
+
+
+def get_method_config(job: dict):
+    method = job['method']
+    method_conf_name = "{}.{}".format(job['type'], method)
+    config = job[method_conf_name]
+    print("Using method {} with config {}".format(method, config))
+    return method, config
 
 
 # TODO deprecate

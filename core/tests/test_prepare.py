@@ -20,8 +20,11 @@ def split_double():
     return split
 
 
-def add_default_config(job: dict):
+def add_default_config(job: dict, type=""):
     """Map to job method default config"""
-    method_conf_name = "{}.{}".format(job['type'], job['method'])
+    if type == "":
+        type = job['type']
+    method_conf_name = "{}.{}".format(type, job['method'])
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
+    return job

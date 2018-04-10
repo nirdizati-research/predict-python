@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
+from core.tests.test_prepare import add_default_config
 from jobs.job_creator import create_config
 from jobs.models import Job
 from jobs.tasks import prediction_task
@@ -22,7 +23,7 @@ class JobModelTest(TestCase):
                        }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=self.config, split=split, type=CLASSIFICATION)
+        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split, type=CLASSIFICATION)
         Job.objects.create(config=self.config, split=split, type='asdsd')
         Job.objects.create(config={}, split=split, type=REGRESSION)
 

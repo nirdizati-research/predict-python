@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from core.core import calculate
-from core.tests.test_prepare import split_double
+from core.tests.test_prepare import split_double, add_default_config
 
 
 class TestClassification(TestCase):
@@ -30,6 +30,7 @@ class TestClassification(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results2())
 
@@ -37,18 +38,21 @@ class TestClassification(TestCase):
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
     def class_KNN(self):
         job = self.get_job()
-        job['method'] = 'KNN'
+        job['method'] = 'knn'
+        job['classification.knn'] = {}
         calculate(job)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results())
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results())
 
@@ -58,6 +62,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'KNN'
         job['type'] = 'nextActivity'
+        add_default_config(job)
         calculate(job)
 
     def test_next_activity_DecisionTree(self):
@@ -65,6 +70,7 @@ class TestClassification(TestCase):
         job['method'] = 'decisionTree'
         job['type'] = 'nextActivity'
         job['clustering'] = 'noCluster'
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results())
 
@@ -72,6 +78,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results2())
 
@@ -79,5 +86,6 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
+        add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results2())

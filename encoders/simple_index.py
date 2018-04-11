@@ -7,16 +7,16 @@ from .log_util import remaining_time_id, elapsed_time_id
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False):
+def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False, add_label=True):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if next_activity:
-        return encode_next_activity(log, event_names, prefix_length)
-    return encode_simple_index(log, event_names, prefix_length)
+        return encode_next_activity(log, event_names, prefix_length, add_label)
+    return encode_simple_index(log, event_names, prefix_length, add_label)
 
 
-def encode_simple_index(log: list, event_names: list, prefix_length: int):
-    columns = __create_columns(prefix_length)
+def encode_simple_index(log: list, event_names: list, prefix_length: int, add_label: bool):
+    columns = __create_columns(prefix_length, add_label)
     encoded_data = []
 
     for trace in log:
@@ -25,15 +25,16 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int):
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
-        trace_row.append(remaining_time_id(trace, prefix_length - 1))
-        trace_row.append(elapsed_time_id(trace, prefix_length - 1))
+        if add_label:
+            trace_row.append(remaining_time_id(trace, prefix_length - 1))
+            trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def encode_next_activity(log: list, event_names: list, prefix_length: int):
-    columns = __columns_next_activity(prefix_length)
+def encode_next_activity(log: list, event_names: list, prefix_length: int, add_label: bool):
+    columns = __columns_next_activity(prefix_length, add_label)
     encoded_data = []
 
     for trace in log:
@@ -46,25 +47,31 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int):
         for _ in range(len(trace), prefix_length):
             trace_row.append(0)
 
-        trace_row.append(next_event_index(trace, event_names, prefix_length))
+        if add_label:
+            trace_row.append(next_event_index(trace, event_names, prefix_length))
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def __create_columns(prefix_length: int):
-    columns = list(HEADER_COLUMNS)
+def __create_columns(prefix_length: int, add_label: bool):
+    if add_label:
+        columns = list(HEADER_COLUMNS)
+    else:
+        columns = ['trace_id']
+
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     return columns
 
 
-def __columns_next_activity(prefix_length):
+def __columns_next_activity(prefix_length: int, add_label: bool):
     """Creates columns for next activity"""
     columns = ["trace_id"]
     for i in range(0, prefix_length):
         columns.append("prefix_" + str(i + 1))
-    columns.append("label")
+    if add_label:
+        columns.append("label")
     return columns
 
 

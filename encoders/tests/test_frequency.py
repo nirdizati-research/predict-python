@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from core.constants import BOOLEAN, CLASSIFICATION, FREQUENCY
+from core.constants import CLASSIFICATION, FREQUENCY
 from encoders.boolean_frequency import frequency
 from encoders.common import encode_logs
 from encoders.log_util import unique_events
@@ -49,6 +49,13 @@ class TestFrequencyGeneral(TestCase):
         self.assertEqual(0, row['reject request'])
         self.assertEqual(687960.0, row.remaining_time)
         self.assertEqual(888480.0, row.elapsed_time)
+
+    def test_no_label(self):
+        log = get_logs("log_cache/general_example.xes")[0]
+        event_names = unique_events(log)
+        df = frequency(log, event_names, add_label=False)
+        self.assertEqual((42, 10), df.shape)
+        self.assertNotIn('remaining_time', df.columns.values.tolist())
 
 
 class TestFrequencySplit(TestCase):

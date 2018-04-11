@@ -5,6 +5,7 @@ from opyenxes.model.XLog import XLog
 
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S"
 DEFAULT_COLUMNS = ["trace_id", "event_nr", "remaining_time", "elapsed_time"]
+DEFAULT_COLUMNS_NO_LABEL = ["trace_id", "event_nr"]
 TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
 HEADER_COLUMNS = ['trace_id', 'remaining_time', 'elapsed_time']
 

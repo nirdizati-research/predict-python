@@ -91,9 +91,17 @@ class TestNextActivity(TestCase):
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 1, 3], row2.values.tolist())
 
+    def test_prefix1_no_label(self):
+        df = simple_index(self.log, self.event_names, prefix_length=1, next_activity=True, add_label=False)
+
+        self.assertEqual(df.shape, (2, 2))
+        row1 = df[df.trace_id == '5'].iloc[0]
+        self.assertListEqual(['5', 1], row1.values.tolist())
+        row2 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 1], row2.values.tolist())
+
     def test_prefix0(self):
         self.assertRaises(ValueError, simple_index, self.log, self.event_names, prefix_length=0, next_activity=True)
-
 
     def test_prefix2(self):
         df = simple_index(self.log, self.event_names, prefix_length=2, next_activity=True)

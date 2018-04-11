@@ -72,6 +72,15 @@ class TestGeneralTest(TestCase):
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 520920.0, 0.0, 1], row2.values.tolist())
 
+    def test_prefix1_no_label(self):
+        df = simple_index(self.log, self.event_names, prefix_length=1, add_label=False)
+
+        self.assertEqual(df.shape, (2, 2))
+        row1 = df[df.trace_id == '5'].iloc[0]
+        self.assertListEqual(['5', 1], row1.values.tolist())
+        row2 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 1], row2.values.tolist())
+
     def test_prefix0(self):
         self.assertRaises(ValueError,
                           simple_index, self.log, self.event_names, prefix_length=0)

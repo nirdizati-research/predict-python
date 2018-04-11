@@ -50,6 +50,13 @@ class TestBooleanGeneral(TestCase):
         self.assertEqual(779580.0, row.elapsed_time)
         self.assertEqual(0.0, row.remaining_time)
 
+    def test_no_label(self):
+        log = get_logs("log_cache/general_example.xes")[0]
+        event_names = unique_events(log)
+        df = boolean(log, event_names, add_label=False)
+        self.assertEqual((42, 10), df.shape)
+        self.assertNotIn('remaining_time', df.columns.values.tolist())
+
 
 class TestBooleanSplit(TestCase):
     def setUp(self):

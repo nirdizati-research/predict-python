@@ -18,22 +18,24 @@ def encode_logs(training_log: list, test_log: list, encoding_type: str, job_type
     return training_df, test_df
 
 
-def encode_log(run_log: list, encoding_type: str, job_type: str, prefix_length=0, event_names=None):
+def encode_log(run_log: list, encoding_type: str, job_type: str, prefix_length=1, event_names=None, add_label=True):
     """Encodes test set and training set as data frames
 
     :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
+    :param add_label True to add label to df, like remaining_time and elapsed_time
     :returns training_df, test_df
     """
     run_df = None
     if encoding_type == SIMPLE_INDEX:
         next_activity = job_type == NEXT_ACTIVITY
-        run_df = simple_index(run_log, event_names, prefix_length=prefix_length, next_activity=next_activity)
+        run_df = simple_index(run_log, event_names, prefix_length=prefix_length, next_activity=next_activity,
+                              add_label=add_label)
     elif encoding_type == BOOLEAN:
-        run_df = boolean(run_log, event_names)
+        run_df = boolean(run_log, event_names, add_label=add_label)
     elif encoding_type == FREQUENCY:
-        run_df = frequency(run_log, event_names)
+        run_df = frequency(run_log, event_names, add_label=add_label)
     elif encoding_type == COMPLEX:
-        run_df = complex(run_log, event_names, prefix_length=prefix_length)
+        run_df = complex(run_log, event_names, prefix_length=prefix_length, add_label=add_label)
     elif encoding_type == LAST_PAYLOAD:
-        run_df = last_payload(run_log, event_names, prefix_length=prefix_length)
+        run_df = last_payload(run_log, event_names, prefix_length=prefix_length, add_label=add_label)
     return run_df

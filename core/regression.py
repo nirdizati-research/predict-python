@@ -9,13 +9,14 @@ from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
+from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
 
 pd.options.mode.chained_assignment = None
 
 
 def regression(training_df, test_df, job):
-    regressor = __choose_regressor(job['method'])
+    regressor = __choose_regressor(job)
 
     train_data, test_data, original_test_data = prep_data(training_df, test_df)
 
@@ -89,12 +90,13 @@ def prep_data(training_df, test_df):
     return train_data, test_data, original_test_data
 
 
-def __choose_regressor(regression_type: str):
+def __choose_regressor(job: dict):
+    method, config = get_method_config(job)
     regressor = None
-    if regression_type == LINEAR:
-        regressor = LinearRegression(fit_intercept=True)
-    elif regression_type == RANDOM_FOREST:
-        regressor = RandomForestRegressor(n_estimators=50, n_jobs=8, verbose=1)
-    elif regression_type == LASSO:
-        regressor = Lasso(fit_intercept=True, warm_start=True)
+    if method == LINEAR:
+        regressor = LinearRegression(**config)
+    elif method == RANDOM_FOREST:
+        regressor = RandomForestRegressor(**config)
+    elif method == LASSO:
+        regressor = Lasso(**config)
     return regressor

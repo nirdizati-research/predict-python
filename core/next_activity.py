@@ -9,7 +9,7 @@ pd.options.mode.chained_assignment = None
 
 
 def next_activity(training_df, test_df, job: dict):
-    clf = choose_classifier(job['method'])
+    clf = choose_classifier(job)
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
 

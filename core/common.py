@@ -28,12 +28,12 @@ def calculate_results(prediction, actual):
         precision = float(true_positive) / (true_positive + false_positive)
     except ZeroDivisionError:
         precision = 0
-    
+
     try:
         recall = float(true_positive) / (true_positive + false_negative)
     except ZeroDivisionError:
         recall = 0
-        
+
     try:
         f1score = (2 * precision * recall) / (precision + recall)
     except ZeroDivisionError:
@@ -45,16 +45,25 @@ def calculate_results(prediction, actual):
     return row
 
 
-def choose_classifier(class_type: str):
-    if class_type == KNN:
-        clf = KNeighborsClassifier()
-    elif class_type == RANDOM_FOREST:
-        clf = RandomForestClassifier()
-    elif class_type == DECISION_TREE:
-        clf = DecisionTreeClassifier()
+def choose_classifier(job: dict):
+    method, config = get_method_config(job)
+    if method == KNN:
+        clf = KNeighborsClassifier(**config)
+    elif method == RANDOM_FOREST:
+        clf = RandomForestClassifier(**config)
+    elif method == DECISION_TREE:
+        clf = DecisionTreeClassifier(**config)
     else:
-        raise ValueError("Unexpected classification method {}".format(class_type))
+        raise ValueError("Unexpected classification method {}".format(method))
     return clf
+
+
+def get_method_config(job: dict):
+    method = job['method']
+    method_conf_name = "{}.{}".format(job['type'], method)
+    config = job[method_conf_name]
+    print("Using method {} with config {}".format(method, config))
+    return method, config
 
 
 # TODO deprecate

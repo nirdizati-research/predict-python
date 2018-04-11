@@ -1,3 +1,6 @@
+from jobs.job_creator import CONF_MAP
+
+
 def split_single():
     split = dict()
     split['id'] = 1
@@ -15,3 +18,13 @@ def split_double():
     split['test_log_path'] = 'log_cache/general_example_test.xes'
     split['training_log_path'] = 'log_cache/general_example_training.xes'
     return split
+
+
+def add_default_config(job: dict, type=""):
+    """Map to job method default config"""
+    if type == "":
+        type = job['type']
+    method_conf_name = "{}.{}".format(type, job['method'])
+    method_conf = CONF_MAP[method_conf_name]()
+    job[method_conf_name] = method_conf
+    return job

@@ -68,3 +68,34 @@ curl --request POST \
   }' \
 http://localhost:8000/splits/
 ```
+
+####Advanced configuration
+
+Prediction methods accept configuration for sklearn classification/regression methods. 
+The Job config must contain a dict with only the supported options for that method. 
+The dict name must take the format "type.method". For classification randomForest this would be `classification.randomForest`.
+Advanced configuration is optional. Look at `jobs/job_creator.py` for default values.
+
+For example, the configuration for classification KNN would have to be like:
+
+```commandline
+curl --request POST \
+  --header 'Content-Type: application/json' \
+  --data-binary '{
+    "type": "classification",
+    "split_id": 1,
+    "config": {
+      "encodings": ["simpleIndex"],
+      "clusterings": ["noCluster"],
+      "methods": ["knn"],
+      "classification.knn": {
+        "n_neighbors": 5,
+        "weights": "uniform"
+      },
+      "rule": "remaining_time",
+      "prefix_length": 1,
+      "threshold": "default"
+    }
+  }' \
+http://localhost:8000/jobs/multiple
+```

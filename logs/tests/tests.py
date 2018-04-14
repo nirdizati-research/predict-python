@@ -120,7 +120,6 @@ class FileUploadTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'test_upload.xes')
         self.assertIsNotNone(response.data['properties']['events'])
-        self.assertIsNotNone(response.data['properties']['executions'])
         self.assertIsNotNone(response.data['properties']['resources'])
         self.assertIsNotNone(response.data['properties']['traceAttributes'])
         self.assertIsNotNone(response.data['properties']['maxEventsInLog'])

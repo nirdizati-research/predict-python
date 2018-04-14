@@ -46,16 +46,6 @@
           "2011-01-23": 1,
           "2011-01-24": 1
         },
-        "executions": {
-          "check ticket": 9,
-          "decide": 9,
-          "examine casually": 6,
-          "examine thoroughly": 3,
-          "pay compensation": 3,
-          "register request": 6,
-          "reinitiate request": 3,
-          "reject request": 3
-        },
         "maxEventsInLog": 13,
         "traceAttributes": [
           {
@@ -106,15 +96,6 @@
           "2011-01-23": 1,
           "2011-01-24": 1
         },
-        "executions": {
-          "check ticket": 4,
-          "decide": 4,
-          "examine casually": 3,
-          "examine thoroughly": 1,
-          "register request": 2,
-          "reinitiate request": 2,
-          "reject request": 2
-        },
         "maxEventsInLog": 13,
         "traceAttributes": [
           {
@@ -155,16 +136,6 @@
           "2011-01-15": 1,
           "2011-01-16": 1
         },
-        "executions": {
-          "check ticket": 5,
-          "decide": 5,
-          "examine casually": 3,
-          "examine thoroughly": 2,
-          "pay compensation": 3,
-          "register request": 4,
-          "reinitiate request": 1,
-          "reject request": 1
-        },
         "maxEventsInLog": 9,
         "traceAttributes": [
           {
@@ -188,15 +159,6 @@
         },
         "resources": {
           "": 1
-        },
-        "executions": {
-          "A": 45,
-          "B": 42,
-          "C": 87,
-          "D": 45,
-          "E": 42,
-          "F": 87,
-          "H": 87
         },
         "maxEventsInLog": 5,
         "traceAttributes": [
@@ -551,32 +513,6 @@
           "2012-03-12": 1,
           "2012-03-13": 1,
           "2012-03-14": 1
-        },
-        "executions": {
-          "A_ACCEPTED": 5113,
-          "A_ACTIVATED": 2246,
-          "A_APPROVED": 2246,
-          "A_CANCELLED": 2807,
-          "A_DECLINED": 7635,
-          "A_FINALIZED": 5015,
-          "A_PARTLYSUBMITTED": 13087,
-          "A_PREACCEPTED": 7367,
-          "A_REGISTERED": 2246,
-          "A_SUBMITTED": 13087,
-          "O_ACCEPTED": 2243,
-          "O_CANCELLED": 3655,
-          "O_CREATED": 7030,
-          "O_DECLINED": 802,
-          "O_SELECTED": 7030,
-          "O_SENT": 7030,
-          "O_SENT_BACK": 3454,
-          "W_Afhandelen leads": 16566,
-          "W_Beoordelen fraude": 664,
-          "W_Completeren aanvraag": 54850,
-          "W_Nabellen incomplete dossiers": 25190,
-          "W_Nabellen offertes": 52016,
-          "W_Valideren aanvraag": 20809,
-          "W_Wijzigen contractgegevens": 12
         },
         "maxEventsInLog": 119,
         "traceAttributes": [

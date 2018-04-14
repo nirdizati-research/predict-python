@@ -25,7 +25,6 @@ def create_properties(path: str):
     properties = dict()
     properties["events"] = events_by_date(logs)
     properties["resources"] = resources_by_date(logs)
-    properties["executions"] = event_executions(logs)
     properties["maxEventsInLog"] = max_events_in_log(logs)
     properties["traceAttributes"] = trace_attributes(logs)
     properties["newTraces"] = new_trace_start(logs)

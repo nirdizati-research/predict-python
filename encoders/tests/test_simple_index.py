@@ -107,3 +107,10 @@ class TestGeneralTest(TestCase):
         self.assertEqual(df.shape, (1, 13))
         row1 = df[df.trace_id == '5'].iloc[0]
         self.assertListEqual(['5', 280200.0, 1296240.0, 1, 2, 3, 4, 5, 3, 2, 4, 5, 2], row1.values.tolist())
+
+    def test_prefix10_padding(self):
+        df = simple_index(self.log, self.event_names, prefix_length=10, next_activity=False, zero_padding=True)
+
+        self.assertEqual(df.shape, (2, 13))
+        row1 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 0, 520920.0, 1, 3, 7, 4, 6, 0, 0, 0, 0, 0], row1.values.tolist())

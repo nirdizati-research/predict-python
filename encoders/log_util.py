@@ -36,7 +36,13 @@ def unique_events2(training_log: list, test_log: list):
 
 def elapsed_time_id(trace, event_index: int):
     """Calculate elapsed time by event index in trace"""
-    return elapsed_time(trace, trace[event_index])
+    try:
+        event = trace[event_index]
+    except IndexError:
+        # catch for 0 padding.
+        # calculate using the last event in trace
+        event = trace[-1]
+    return elapsed_time(trace, event)
 
 
 def elapsed_time(trace, event):
@@ -54,7 +60,13 @@ def elapsed_time(trace, event):
 
 def remaining_time_id(trace, event_index: int):
     """Calculate remaining time by event index in trace"""
-    return remaining_time(trace, trace[event_index])
+    try:
+        event = trace[event_index]
+        return remaining_time(trace, event)
+    except IndexError:
+        # catch for 0 padding.
+        # cant calculate remaining time if there are no more events
+        return 0
 
 
 def remaining_time(trace, event):

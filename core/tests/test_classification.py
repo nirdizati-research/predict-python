@@ -25,6 +25,7 @@ class TestClassification(TestCase):
         json["prefix_length"] = 1
         json["threshold"] = "default"
         json["type"] = "classification"
+        json["padding"] = 'zero_padding'
         return json
 
     def test_class_randomForest(self):
@@ -81,6 +82,15 @@ class TestClassification(TestCase):
         add_default_config(job)
         result = calculate(job)
         self.assertDictEqual(result, self.results2())
+
+    def test_class_complex_zero_padding(self):
+        job = self.get_job()
+        job['clustering'] = 'noCluster'
+        job["encoding"] = "complex"
+        job["prefix_length"] = 8
+        add_default_config(job)
+        calculate(job)
+        # it works, but results are unreliable
 
     def test_class_last_payload(self):
         job = self.get_job()

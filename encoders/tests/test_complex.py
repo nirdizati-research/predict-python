@@ -59,3 +59,8 @@ class Complex(TestCase):
         df = complex(self.log, self.event_names, prefix_length=10)
 
         self.assertEqual(df.shape, (1, 53))
+
+    def test_prefix10_zero_padding(self):
+        df = complex(self.log, self.event_names, prefix_length=10, zero_padding=True)
+
+        self.assertEqual(df.shape, (2, 53))

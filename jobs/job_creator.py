@@ -10,21 +10,33 @@ def generate(split, payload, type=CLASSIFICATION):
     for encoding in payload['config']['encodings']:
         for clustering in payload['config']['clusterings']:
             for method in payload['config']['methods']:
-                item = Job.objects.create(
-                    split=split,
-                    status=CREATED,
-                    type=type,
-                    config=create_config(payload, encoding, clustering, method))
-                jobs.append(item)
+                prefix = payload['config']['prefix']
+                if prefix['type'] == 'up_to':
+                    for i in range(1, prefix['prefix_length'] + 1):
+                        item = Job.objects.create(
+                            split=split,
+                            status=CREATED,
+                            type=type,
+                            config=create_config(payload, encoding, clustering, method, i))
+                        jobs.append(item)
+                else:
+                    item = Job.objects.create(
+                        split=split,
+                        status=CREATED,
+                        type=type,
+                        config=create_config(payload, encoding, clustering, method, prefix['prefix_length']))
+                    jobs.append(item)
+
     return jobs
 
 
-def create_config(payload, encoding, clustering, method):
+def create_config(payload: dict, encoding: str, clustering: str, method: str, prefix_length: int):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']
     del config['clusterings']
     del config['methods']
+    del config['prefix']
 
     # Extract and merge configurations
     method_conf_name = "{}.{}".format(payload['type'], method)
@@ -39,6 +51,8 @@ def create_config(payload, encoding, clustering, method):
     config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
+    config['prefix_length'] = prefix_length
+    config['padding'] = payload['config']['prefix']['padding']
     return config
 
 

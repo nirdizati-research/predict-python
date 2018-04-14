@@ -7,20 +7,24 @@ from .log_util import remaining_time_id, elapsed_time_id
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False, add_label=True):
+def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False, add_label=True,
+                 zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if next_activity:
-        return encode_next_activity(log, event_names, prefix_length, add_label)
-    return encode_simple_index(log, event_names, prefix_length, add_label)
+        return encode_next_activity(log, event_names, prefix_length, add_label, zero_padding)
+    return encode_simple_index(log, event_names, prefix_length, add_label, zero_padding)
 
 
-def encode_simple_index(log: list, event_names: list, prefix_length: int, add_label: bool):
+def encode_simple_index(log: list, event_names: list, prefix_length: int, add_label: bool, zero_padding: bool):
     columns = __create_columns(prefix_length, add_label)
     encoded_data = []
 
     for trace in log:
-        if len(trace) <= prefix_length - 1:
+        if zero_padding:
+            zero_count = prefix_length - len(trace)
+        elif len(trace) <= prefix_length - 1:
+            # no padding, skip this trace
             continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
@@ -29,15 +33,20 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, add_la
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
             trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
+        if zero_padding:
+            trace_row += [0 for _ in range(0, zero_count)]
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def encode_next_activity(log: list, event_names: list, prefix_length: int, add_label: bool):
+def encode_next_activity(log: list, event_names: list, prefix_length: int, add_label: bool, zero_padding: bool):
     columns = __columns_next_activity(prefix_length, add_label)
     encoded_data = []
 
     for trace in log:
+        if not zero_padding and len(trace) <= prefix_length - 1:
+            # no padding, skip this trace
+            continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)

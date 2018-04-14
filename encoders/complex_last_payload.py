@@ -7,25 +7,31 @@ from .log_util import remaining_time_id, elapsed_time_id
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def complex(log, event_names, prefix_length=1, add_label=True):
+def complex(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, add_label)
+    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, add_label,
+                                 zero_padding)
 
 
-def last_payload(log, event_names, prefix_length=1, add_label=True):
+def last_payload(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, add_label)
+    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, add_label,
+                                 zero_padding)
 
 
-def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, add_label: bool):
+def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, add_label: bool,
+                          zero_padding: bool):
     additional_columns = get_event_attributes(log)
     columns = column_fun(prefix_length, additional_columns, add_label)
     encoded_data = []
 
     for trace in log:
-        if len(trace) <= prefix_length - 1:
+        if zero_padding:
+            zero_count = prefix_length - len(trace)
+        elif len(trace) <= prefix_length - 1:
+            # no padding, skip this trace
             continue
         trace_row = []
         trace_name = CLASSIFIER.get_class_identity(trace)
@@ -35,6 +41,8 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
             trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
+        if zero_padding:
+            trace_row += [0 for _ in range(0, zero_count)]
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)

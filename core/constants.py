@@ -25,6 +25,9 @@ CLASSIFICATION = 'classification'
 REGRESSION = 'regression'
 NEXT_ACTIVITY = 'nextActivity'
 
+# Encoding options
+ZERO_PADDING = 'zero_padding'
+
 # classification/regressor method confs
 CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(CLASSIFICATION, RANDOM_FOREST)
 CLASSIFICATION_KNN = '{}.{}'.format(CLASSIFICATION, KNN)

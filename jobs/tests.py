@@ -19,11 +19,13 @@ class JobModelTest(TestCase):
                        'clustering': 'noCluster',
                        "rule": "remaining_time",
                        "prefix_length": 1,
+                       "padding": 'no_padding',
                        "threshold": "default"
                        }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split, type=CLASSIFICATION)
+        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
+                           type=CLASSIFICATION)
         Job.objects.create(config=self.config, split=split, type='asdsd')
         Job.objects.create(config={}, split=split, type=REGRESSION)
 
@@ -92,6 +94,7 @@ class CreateJobsTests(APITestCase):
         config['clusterings'] = ['noCluster']
         config['methods'] = ['knn']
         config['random'] = 123
+        config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
         obj = dict()
         obj['type'] = 'classification'
         obj['config'] = config
@@ -109,6 +112,8 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
+        self.assertEqual(response.data[0]['config']['prefix_length'], 3)
+        self.assertEqual(response.data[0]['config']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')
 
     def job_obj2(self):
@@ -117,7 +122,7 @@ class CreateJobsTests(APITestCase):
         config['clusterings'] = ['noCluster']
         config['methods'] = ['linear', 'lasso']
         config['random'] = 123
-        config['prefix_length'] = 1
+        config['prefix'] = {'prefix_length': 3, 'type': 'up_to', 'padding': 'no_padding'}
         obj = dict()
         obj['type'] = 'regression'
         obj['config'] = config
@@ -129,14 +134,18 @@ class CreateJobsTests(APITestCase):
         response = client.post('/jobs/multiple', self.job_obj2(), format='json')
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertEqual(6, len(response.data), )
+        self.assertEqual(18, len(response.data))
         self.assertEqual('regression', response.data[0]['type'])
         self.assertEqual('simpleIndex', response.data[0]['config']['encoding'])
         self.assertEqual('noCluster', response.data[0]['config']['clustering'])
         self.assertEqual('linear', response.data[0]['config']['method'])
         self.assertEqual(123, response.data[0]['config']['random'])
+        self.assertEqual(1, response.data[0]['config']['prefix_length'])
+        self.assertEqual('no_padding', response.data[0]['config']['padding'])
         self.assertEqual('created', response.data[0]['status'])
         self.assertEqual(1, response.data[0]['split']['id'])
+
+        self.assertEqual(3, response.data[17]['config']['prefix_length'])
 
 
 class MethodConfiguration(TestCase):
@@ -148,6 +157,7 @@ class MethodConfiguration(TestCase):
         config['methods'] = ['randomForest']
         config['regression.randomForest'] = {'n_estimators': 15}
         config['regression.lasso'] = {'n_estimators': 15}
+        config['prefix'] = {'prefix_length': 3, 'type': 'up_to', 'padding': 'no_padding'}
         obj = dict()
         obj['type'] = 'regression'
         obj['config'] = config
@@ -157,7 +167,7 @@ class MethodConfiguration(TestCase):
     def test_regression_random_forest(self):
         job = self.job_obj()
 
-        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest')
+        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest', 3)
 
         self.assertEquals(False, 'regression.lasso' in config)
         self.assertDictEqual(config['regression.randomForest'], {
@@ -171,7 +181,7 @@ class MethodConfiguration(TestCase):
         job = self.job_obj()
         del job['config']['regression.randomForest']
 
-        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest')
+        config = create_config(job, 'simpleIndex', 'noCluster', 'randomForest', 3)
 
         self.assertEquals(False, 'regression.lasso' in config)
         self.assertDictEqual(config['regression.randomForest'], {

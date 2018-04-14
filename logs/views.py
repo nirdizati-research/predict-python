@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
-    create_log
+    create_log, new_trace_start
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
@@ -39,6 +39,7 @@ def get_log_stats(request, pk, stat):
     * executions for event_executions
     * traceAttributes for trace_attributes
     * eventsInTrace for events_in_trace
+    * newTraces for new_trace_start
     """
     try:
         log = Log.objects.get(pk=pk)
@@ -60,6 +61,8 @@ def get_log_stats(request, pk, stat):
         data = events_in_trace(log_file)
     elif stat == 'executions':
         data = event_executions(log_file)
+    elif stat == 'newTraces':
+        data = new_trace_start(log_file)
 
     return Response(data)
 

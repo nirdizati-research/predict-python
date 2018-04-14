@@ -46,7 +46,9 @@ def kmeans_clustering_train(original_test_data, train_data, regressor):
             models[i] = regressor
     return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
 
+
 def kmeans_clustering_test(test_data, regressor, estimator, testing=False):
+    drop_list = ['trace_id', 'remaining_time'] if testing else ['trace_id']
     test_cluster_lists = {
         i: test_data.iloc[np.where(estimator.predict(test_data.drop('trace_id', 1)) == i)[0]]
         for i in range(estimator.n_clusters)}
@@ -56,15 +58,12 @@ def kmeans_clustering_test(test_data, regressor, estimator, testing=False):
         if original_clustered_test_data.shape[0] == 0:
             pass
         else:
-            if testing:
-                clustered_test_data=original_clustered_test_data.drop(['trace_id', 'remaining_time'], 1)
-            else:
-                clustered_test_data=original_clustered_test_data.drop('trace_id', 1)
-            original_clustered_test_data['prediction']=regressor[i].predict(clustered_test_data)
+            clustered_test_data = original_clustered_test_data.drop(drop_list, 1)
+            original_clustered_test_data['prediction'] = regressor[i].predict(clustered_test_data)
         if result_data is None:
             result_data = original_clustered_test_data
         else:
-            result_data = result_data.append(original_clustered_test_data)       
+            result_data = result_data.append(original_clustered_test_data)
     return result_data
 
 

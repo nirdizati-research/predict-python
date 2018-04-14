@@ -8,11 +8,15 @@ class TestClassification(TestCase):
     """Proof of concept tests"""
 
     def results(self):
-        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0, 'false_negative': 0, 'false_positive': 1,
-                'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
+        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.16666666666666666, 'false_negative': 0,
+                'false_positive': 1, 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def results2(self):
         return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
+                'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
+
+    def results3(self):
+        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0, 'false_negative': 0, 'false_positive': 1,
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def get_job(self):
@@ -55,7 +59,7 @@ class TestClassification(TestCase):
         job['type'] = 'nextActivity'
         add_default_config(job)
         result = calculate(job)
-        self.assertDictEqual(result, self.results())
+        self.assertDictEqual(result, self.results3())
 
     # KNN Fails due to small dataset
     # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
@@ -73,7 +77,7 @@ class TestClassification(TestCase):
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result = calculate(job)
-        self.assertDictEqual(result, self.results())
+        self.assertDictEqual(result, self.results3())
 
     def test_class_complex(self):
         job = self.get_job()

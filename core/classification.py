@@ -53,6 +53,7 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
         for i in range(estimator.n_clusters)}
     result_data = None
     for i, cluster_list in test_cluster_lists.items():
+        counter += 1
         original_clustered_test_data = cluster_list
         if original_clustered_test_data.shape[0] == 0:
             pass
@@ -69,7 +70,7 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
                 actual = original_clustered_test_data['actual']
                 original_clustered_test_data["actual"] = original_clustered_test_data["actual"].map(
                     {True: 'Fast', False: 'Slow'})
-                auc = calculate_auc(actual, scores, auc, counter)
+                auc = calculate_auc(actual, scores, auc)
 
             if result_data is None:
                 result_data = original_clustered_test_data
@@ -132,13 +133,12 @@ def drop_columns(training_df, test_df):
     return training_df, test_df, original_test_df
 
 
-def calculate_auc(actual, scores, auc: int, counter: int):
+def calculate_auc(actual, scores, auc: int):
     if scores.shape[1] == 1:
         auc += 0
     else:
         try:
             auc += metrics.roc_auc_score(actual, scores[:, 1])
-            counter += 1
         except Exception:
             auc += 0
     return auc

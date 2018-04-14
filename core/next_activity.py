@@ -32,44 +32,38 @@ def kmeans_clustering_train(original_test_data, train_data, clf):
         if clustered_train_data.shape[0] == 0:
             pass
         else:
-            y = clustered_train_data['label']        
+            y = clustered_train_data['label']
             clf.fit(clustered_train_data.drop('label', 1), y)
-        
+
             models[i] = clf
     return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
 
+
 def kmeans_clustering_test(test_data, clf, estimator, testing=False):
-    auc=0
-    counter=0
-    if testing:
-        test_cluster_lists = {
-            i: test_data.iloc[np.where(estimator.predict(test_data.drop(['trace_id', 'label'], 1)) == i)[0]]
-            for i in range(estimator.n_clusters)}
-    else:
-        test_cluster_lists = {
-            i: test_data.iloc[np.where(estimator.predict(test_data.drop('trace_id', 1)) == i)[0]]
-            for i in range(estimator.n_clusters)}
+    drop_list = ['trace_id', 'label'] if testing else ['trace_id']
+    auc = 0
+    counter = 0
+    test_cluster_lists = {
+        i: test_data.iloc[np.where(estimator.predict(test_data.drop(drop_list, 1)) == i)[0]]
+        for i in range(estimator.n_clusters)}
     result_data = None
-    for i,cluster_list in test_cluster_lists.items():
+    for i, cluster_list in test_cluster_lists.items():
         original_clustered_test_data = cluster_list
         if original_clustered_test_data.shape[0] == 0:
             pass
         else:
-            if testing:
-                clustered_test_data=original_clustered_test_data.drop(['trace_id', 'label'], 1)
-            else:
-                clustered_test_data=original_clustered_test_data.drop('trace_id', 1)
-            
+            clustered_test_data = original_clustered_test_data.drop(drop_list, 1)
+
             prediction = clf[i].predict(clustered_test_data)
 
             original_clustered_test_data["predicted"] = prediction
             if testing:
                 original_clustered_test_data["actual"] = original_clustered_test_data['label']
-            
+
             if result_data is None:
                 result_data = original_clustered_test_data
             else:
-                result_data = result_data.append(original_clustered_test_data)   
+                result_data = result_data.append(original_clustered_test_data)
     if testing:
         try:
             auc = float(auc) / counter
@@ -88,6 +82,7 @@ def no_clustering_train(original_test_data, train_data, clf):
     # TODO calculate AUC
     auc = 0
     return original_test_data, auc
+
 
 def no_clustering_test(test_data, clf):
     prediction = clf.predict(test_data.drop('trace_id', 1))

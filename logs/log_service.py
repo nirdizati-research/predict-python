@@ -5,6 +5,9 @@ from opyenxes.classification.XEventAttributeClassifier import XEventAttributeCla
 from logs.file_service import get_logs
 from logs.models import Log
 
+TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Event", ["time:timestamp"])
+NAME_CLASSIFIER = XEventAttributeClassifier("Event", ["concept:name"])
+
 
 def create_log(file, name: str, folder='log_cache/'):
     path = folder + name
@@ -22,9 +25,9 @@ def create_properties(path: str):
     properties = dict()
     properties["events"] = events_by_date(logs)
     properties["resources"] = resources_by_date(logs)
-    properties["executions"] = event_executions(logs)
     properties["maxEventsInLog"] = max_events_in_log(logs)
     properties["traceAttributes"] = trace_attributes(logs)
+    properties["newTraces"] = new_trace_start(logs)
     print("Properties created")
     return properties
 
@@ -35,12 +38,12 @@ def events_by_date(logs):
     :return {'2010-12-30': 7, '2011-01-06': 8}
     :rtype: OrderedDict
     """
-    classifier = XEventAttributeClassifier("Event", ["time:timestamp"])
+
     stamp_dict = defaultdict(lambda: 0)
     for log in logs:
         for trace in log:
             for event in trace:
-                timestamp = classifier.get_class_identity(event)
+                timestamp = TIMESTAMP_CLASSIFIER.get_class_identity(event)
                 date = timestamp.split("T")[0]
                 stamp_dict[date] += 1
     return OrderedDict(sorted(stamp_dict.items()))
@@ -77,13 +80,27 @@ def event_executions(logs):
     :return {'Event A': 7, '2011-01-06': 8}
     :rtype: OrderedDict
     """
-    classifier = XEventAttributeClassifier("Event", ["concept:name"])
     executions = defaultdict(lambda: 0)
     for log in logs:
         for trace in log:
             for event in trace:
-                event_name = classifier.get_class_identity(event)
+                event_name = NAME_CLASSIFIER.get_class_identity(event)
                 executions[event_name] += 1
+    return OrderedDict(sorted(executions.items()))
+
+
+def new_trace_start(logs):
+    """Creates dict of new traces by date
+
+    :return {'2010-12-30': 1, '2011-01-06': 2}
+    :rtype: OrderedDict
+    """
+    executions = defaultdict(lambda: 0)
+    for log in logs:
+        for trace in log:
+            timestamp = TIMESTAMP_CLASSIFIER.get_class_identity(trace[0])
+            date = timestamp.split("T")[0]
+            executions[date] += 1
     return OrderedDict(sorted(executions.items()))
 
 
@@ -120,14 +137,13 @@ def events_in_trace(logs):
     :return {'4': 11, '3': 8}
     :rtype: OrderedDict
     """
-    classifier = XEventAttributeClassifier("Trace", ["concept:name"])
     stamp_dict = defaultdict(lambda: 0)
     for log in logs:
         for trace in log:
             counter = 0
             for event in trace:
                 counter += 1
-            name = classifier.get_class_identity(trace)
+            name = NAME_CLASSIFIER.get_class_identity(trace)
             stamp_dict[name] = counter
     return OrderedDict(sorted(stamp_dict.items()))
 
@@ -143,8 +159,6 @@ def max_events_in_log(logs):
         for trace in log:
             counter = len(trace)
 
-            # for _ in trace:
-            #     counter += 1
             if counter > current_max:
                 current_max = counter
 

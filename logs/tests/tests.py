@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase, APIClient
 from logs.models import Log, Split
 from logs.file_service import get_logs
 from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
-    max_events_in_log
+    max_events_in_log, new_trace_start
 
 
 class LogTest(SimpleTestCase):
@@ -33,6 +33,13 @@ class LogTest(SimpleTestCase):
         self.assertEqual(8, len(result.keys()))
         self.assertEqual(9, result['decide'])
         self.assertEqual(3, result['reject request'])
+
+    def test_new_trace_start(self):
+        logs = get_logs("log_cache/general_example.xes")
+        result = new_trace_start(logs)
+        self.assertEqual(2, len(result.keys()))
+        self.assertEqual(3, result['2010-12-30'])
+        self.assertEqual(3, result['2011-01-06'])
 
     def test_trace_attributes(self):
         logs = get_logs("log_cache/financial_log.xes.gz")
@@ -113,10 +120,10 @@ class FileUploadTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['name'], 'test_upload.xes')
         self.assertIsNotNone(response.data['properties']['events'])
-        self.assertIsNotNone(response.data['properties']['executions'])
         self.assertIsNotNone(response.data['properties']['resources'])
         self.assertIsNotNone(response.data['properties']['traceAttributes'])
         self.assertIsNotNone(response.data['properties']['maxEventsInLog'])
+        self.assertIsNotNone(response.data['properties']['newTraces'])
 
     def test_upload_multiple_files(self):
         f1 = self._create_test_file('/tmp/file1.xes')

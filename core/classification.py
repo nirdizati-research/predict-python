@@ -36,35 +36,29 @@ def kmeans_clustering_train(original_test_data, train_data, clf):
         if clustered_train_data.shape[0] == 0:
             pass
         else:
-            y = clustered_train_data['actual']        
+            y = clustered_train_data['actual']
             clf.fit(clustered_train_data.drop('actual', 1), y)
-        
+
             models[i] = clf
     return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
 
 
 def kmeans_clustering_test(test_data, clf, estimator, testing=False):
-    auc=0
-    counter=0
-    if testing:
-        test_cluster_lists = {
-            i: test_data.iloc[np.where(estimator.predict(test_data.drop(['trace_id', 'actual'], 1)) == i)[0]]
-            for i in range(estimator.n_clusters)}
-    else:
-        test_cluster_lists = {
-            i: test_data.iloc[np.where(estimator.predict(test_data.drop('trace_id', 1)) == i)[0]]
-            for i in range(estimator.n_clusters)}
+    drop_list = ['trace_id', 'actual'] if testing else ['trace_id']
+    auc = 0
+    counter = 0
+
+    test_cluster_lists = {
+        i: test_data.iloc[np.where(estimator.predict(test_data.drop(drop_list, 1)) == i)[0]]
+        for i in range(estimator.n_clusters)}
     result_data = None
-    for i,cluster_list in test_cluster_lists.items():
+    for i, cluster_list in test_cluster_lists.items():
         original_clustered_test_data = cluster_list
         if original_clustered_test_data.shape[0] == 0:
             pass
         else:
-            if testing:
-                clustered_test_data=original_clustered_test_data.drop(['trace_id', 'actual'], 1)
-            else:
-                clustered_test_data=original_clustered_test_data.drop('trace_id', 1)
-            
+            clustered_test_data = original_clustered_test_data.drop(drop_list, 1)
+
             prediction = clf[i].predict(clustered_test_data)
             scores = clf[i].predict_proba(clustered_test_data)
 
@@ -76,11 +70,11 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
                 original_clustered_test_data["actual"] = original_clustered_test_data["actual"].map(
                     {True: 'Fast', False: 'Slow'})
                 auc = calculate_auc(actual, scores, auc, counter)
-            
+
             if result_data is None:
                 result_data = original_clustered_test_data
             else:
-                result_data = result_data.append(original_clustered_test_data)   
+                result_data = result_data.append(original_clustered_test_data)
     if testing:
         try:
             auc = float(auc) / counter
@@ -88,13 +82,14 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
             auc = 0
     return result_data, auc
 
+
 def no_clustering_train(original_test_data, train_data, clf):
     y = train_data['actual']
 
     clf.fit(train_data.drop('actual', 1), y)
     actual = original_test_data["actual"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf)
-    original_test_data["actual"] = actual 
+    original_test_data["actual"] = actual
     original_test_data["actual"] = original_test_data["actual"].map(
         {True: 'Fast', False: 'Slow'})
     # FPR,TPR,thresholds_unsorted=
@@ -105,6 +100,7 @@ def no_clustering_train(original_test_data, train_data, clf):
         pass
     return original_test_data, auc
 
+
 def no_clustering_test(test_data, clf):
     prediction = clf.predict(test_data.drop('trace_id', 1))
     scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
@@ -112,6 +108,7 @@ def no_clustering_test(test_data, clf):
     test_data["predicted"] = test_data["predicted"].map(
         {True: 'Fast', False: 'Slow'})
     return test_data, scores
+
 
 def prepare_results(df, auc: int):
     actual_ = df['actual'].values

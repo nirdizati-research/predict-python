@@ -44,7 +44,7 @@ curl --request POST \
       "clusterings": ["noCluster"],
       "methods": ["randomForest"],
       "rule": "remaining_time",
-      "prefix_length": 1,
+      "prefix": {"prefix_length": 3, "type": "only", "padding': "zero_padding"},
       "threshold": "default"
     }
   }' \
@@ -93,7 +93,7 @@ curl --request POST \
         "weights": "uniform"
       },
       "rule": "remaining_time",
-      "prefix_length": 1,
+      "prefix": {"prefix_length": 3, "type": "up_to", "padding': "no_padding"},
       "threshold": "default"
     }
   }' \

@@ -25,6 +25,7 @@ class TestClassification(TestCase):
         json["prefix_length"] = 1
         json["threshold"] = "default"
         json["type"] = "classification"
+        json["padding"] = 'zero_padding'
         return json
 
     def test_class_randomForest(self):
@@ -86,7 +87,6 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
-        job["zero_padding"] = True
         job["prefix_length"] = 8
         add_default_config(job)
         calculate(job)

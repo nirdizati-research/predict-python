@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from core.constants import ZERO_PADDING
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
 
@@ -15,6 +16,7 @@ class TestRegression(TestCase):
         json["encoding"] = "simpleIndex"
         json["rule"] = "remaining_time"
         json["type"] = "regression"
+        json["padding"] = ZERO_PADDING
         return json
 
     def test_reg_linear(self):

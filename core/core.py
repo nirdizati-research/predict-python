@@ -1,6 +1,6 @@
 from core.classification import classifier
 from core.constants import NEXT_ACTIVITY, \
-    CLASSIFICATION, REGRESSION
+    CLASSIFICATION, REGRESSION, ZERO_PADDING
 from core.next_activity import next_activity
 from core.regression import regression
 from encoders.common import encode_logs
@@ -17,7 +17,7 @@ def calculate(job):
         prefix_length = job['prefix_length']
     else:
         prefix_length = 1
-    zero_padding = True if 'zero_padding' in job else False
+    zero_padding = True if job['padding'] is ZERO_PADDING else False
 
     training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
                                        prefix_length=prefix_length, zero_padding=zero_padding)

@@ -82,6 +82,16 @@ class TestClassification(TestCase):
         result = calculate(job)
         self.assertDictEqual(result, self.results2())
 
+    def test_class_complex_zero_padding(self):
+        job = self.get_job()
+        job['clustering'] = 'noCluster'
+        job["encoding"] = "complex"
+        job["zero_padding"] = True
+        job["prefix_length"] = 8
+        add_default_config(job)
+        calculate(job)
+        # it works, but results are unreliable
+
     def test_class_last_payload(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'

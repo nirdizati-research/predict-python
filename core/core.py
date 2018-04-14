@@ -17,9 +17,10 @@ def calculate(job):
         prefix_length = job['prefix_length']
     else:
         prefix_length = 1
+    zero_padding = True if 'zero_padding' in job else False
 
     training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
-                                       prefix_length=prefix_length)
+                                       prefix_length=prefix_length, zero_padding=zero_padding)
 
     if job['type'] == CLASSIFICATION:
         results = classifier(training_df, test_df, job)

@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 
 from core.common import choose_classifier, calculate_results
-from core.constants import KMEANS
+from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
 
@@ -14,12 +14,12 @@ def next_activity(training_df, test_df, job: dict):
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
 
     if job['clustering'] == KMEANS:
-        results_df, auc = kmeans_clustering_train(original_test_data, train_data, clf)
+        results_df, auc, model_split = kmeans_clustering_train(original_test_data, train_data, clf)
     else:
-        results_df, auc = no_clustering_train(original_test_data, train_data, clf)
+        results_df, auc, model_split = no_clustering_train(original_test_data, train_data, clf)
 
     results = prepare_results(results_df, auc)
-    return results
+    return results, model_split
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf):
@@ -36,7 +36,12 @@ def kmeans_clustering_train(original_test_data, train_data, clf):
             clf.fit(clustered_train_data.drop('label', 1), y)
 
             models[i] = clf
-    return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
+    model_split=dict()
+    model_split['type']=KMEANS
+    model_split['estimator']=estimator
+    model_split['model']=models
+    result, auc = kmeans_clustering_test(original_test_data, models, estimator, testing=True)
+    return result, auc, model_split
 
 
 def kmeans_clustering_test(test_data, clf, estimator, testing=False):
@@ -81,7 +86,10 @@ def no_clustering_train(original_test_data, train_data, clf):
     original_test_data["actual"] = actual
     # TODO calculate AUC
     auc = 0
-    return original_test_data, auc
+    model_split=dict()
+    model_split['type']=NO_CLUSTER
+    model_split['model']=clf
+    return original_test_data, auc, model_split
 
 
 def no_clustering_test(test_data, clf):

@@ -36,7 +36,7 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
     # KNN Fails due to small dataset
@@ -51,14 +51,14 @@ class TestClassification(TestCase):
         job = self.get_job()
         job['method'] = 'decisionTree'
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results())
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['type'] = 'nextActivity'
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results3())
 
     # KNN Fails due to small dataset
@@ -76,7 +76,7 @@ class TestClassification(TestCase):
         job['type'] = 'nextActivity'
         job['clustering'] = 'noCluster'
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results3())
 
     def test_class_complex(self):
@@ -84,7 +84,7 @@ class TestClassification(TestCase):
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
     def test_class_complex_zero_padding(self):
@@ -101,5 +101,5 @@ class TestClassification(TestCase):
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
         add_default_config(job)
-        result = calculate(job)
+        result,_ = calculate(job)
         self.assertDictEqual(result, self.results2())

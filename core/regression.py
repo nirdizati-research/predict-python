@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from core.common import get_method_config
-from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO
+from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
 
@@ -21,12 +21,12 @@ def regression(training_df, test_df, job):
     train_data, test_data, original_test_data = prep_data(training_df, test_df)
 
     if job['clustering'] == KMEANS:
-        results_df = kmeans_clustering_train(original_test_data, train_data, regressor)
+        results_df, model_split = kmeans_clustering_train(original_test_data, train_data, regressor)
     else:
-        results_df = no_clustering_train(original_test_data, train_data, test_data, regressor)
+        results_df, model_split = no_clustering_train(original_test_data, train_data, test_data, regressor)
 
     results = prepare_results(results_df)
-    return results
+    return results, model_split
 
 
 def kmeans_clustering_train(original_test_data, train_data, regressor):
@@ -44,7 +44,11 @@ def kmeans_clustering_train(original_test_data, train_data, regressor):
 
             regressor.fit(clustered_train_data, y)
             models[i] = regressor
-    return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
+    model_split=dict()
+    model_split['type']=KMEANS
+    model_split['estimator']=estimator
+    model_split['model']=models
+    return kmeans_clustering_test(original_test_data, models, estimator, testing=True), model_split
 
 
 def kmeans_clustering_test(test_data, regressor, estimator, testing=False):
@@ -71,7 +75,10 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
     y = train_data['remaining_time']
     train_data = train_data.drop('remaining_time', 1)
     regressor.fit(train_data, y)
-    return no_clustering_test(original_test_data, test_data, regressor)
+    model_split=dict()
+    model_split['type']=NO_CLUSTER
+    model_split['model']=regressor
+    return no_clustering_test(original_test_data, test_data, regressor), model_split
 
 
 def no_clustering_test(original_test_data, test_data, regressor):

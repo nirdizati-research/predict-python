@@ -4,28 +4,7 @@ from core.constants import *
 from jobs.models import Job
 from logs.models import Log
 from logs.file_service import get_logs
-
-TYPES = (
-    (CLASSIFICATION, 'Classification'),
-    (REGRESSION, 'Regression'),
-    (NEXT_ACTIVITY, 'Next activity'),
-)
-
-ENCODING = (
-    (SIMPLE_INDEX, 'simpleIndex'),
-    (BOOLEAN, 'boolean'),
-    (FREQUENCY, 'frequency'),
-    (COMPLEX, 'complex'),
-    (LAST_PAYLOAD, 'lastPayload'),
-)
-
-METHODS = (
-    (KNN, 'knn'),
-    (RANDOM_FOREST, 'randomForest'),
-    (DECISION_TREE, 'decisionTree'),
-    (LINEAR, 'linear'),
-    (LASSO, 'lasso'),   
-)
+from jobs.models import TYPES
 
 class ModelSplit(models.Model):
     type = models.CharField(choices=TYPES, default='single', max_length=20)

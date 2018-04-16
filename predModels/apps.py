@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class pModelsConfig(AppConfig):
+class PredictionModelsConfig(AppConfig):
     name = 'predModels'

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'logs.apps.LogsConfig',
     'jobs.apps.JobsConfig',
+    'predModels.apps.pModelsConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

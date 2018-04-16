@@ -20,7 +20,8 @@ class JobModelTest(TestCase):
                        "rule": "remaining_time",
                        "prefix_length": 1,
                        "padding": 'no_padding',
-                       "threshold": "default"
+                       "threshold": "default",
+                       "create_models" : False,
                        }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)

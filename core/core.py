@@ -23,15 +23,15 @@ def calculate(job):
                                        prefix_length=prefix_length, zero_padding=zero_padding)
 
     if job['type'] == CLASSIFICATION:
-        results = classifier(training_df, test_df, job)
+        results, split = classifier(training_df, test_df, job)
     elif job['type'] == REGRESSION:
-        results = regression(training_df, test_df, job)
+        results, split = regression(training_df, test_df, job)
     elif job['type'] == NEXT_ACTIVITY:
-        results = next_activity(training_df, test_df, job)
+        results, split = next_activity(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
-    return results
+    return results, split
 
 
 def get_run(job):

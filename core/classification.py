@@ -16,14 +16,14 @@ def classifier(training_df, test_df, job):
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
     if job['clustering'] == KMEANS:
-        results_df, auc = kmeans_clustering_train(original_test_data, train_data, clf)
+        results_df, auc, split = kmeans_clustering_train(original_test_data, train_data, clf)
     elif job['clustering'] == NO_CLUSTER:
-        results_df, auc = no_clustering_train(original_test_data, train_data, clf)
+        results_df, auc, split = no_clustering_train(original_test_data, train_data, clf)
     else:
         raise ValueError("Unexpected clustering {}".format(job['clustering']))
 
     results = prepare_results(results_df, auc)
-    return results
+    return results, split
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf):
@@ -40,7 +40,12 @@ def kmeans_clustering_train(original_test_data, train_data, clf):
             clf.fit(clustered_train_data.drop('actual', 1), y)
 
             models[i] = clf
-    return kmeans_clustering_test(original_test_data, models, estimator, testing=True)
+    split=dict()
+    split['type']='double'
+    split['estimator']=estimator
+    split['model']=models
+    result, auc = kmeans_clustering_test(original_test_data, models, estimator, testing=True)
+    return result, auc, split
 
 
 def kmeans_clustering_test(test_data, clf, estimator, testing=False):
@@ -99,7 +104,10 @@ def no_clustering_train(original_test_data, train_data, clf):
         auc = metrics.roc_auc_score(actual, scores)
     except ValueError:
         pass
-    return original_test_data, auc
+    split=dict()
+    split['type']='single'
+    split['model']=clf
+    return original_test_data, auc, split
 
 
 def no_clustering_test(test_data, clf):

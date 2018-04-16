@@ -28,6 +28,7 @@ def prediction_task(job_id):
         job.save()
 
 def save_models(tosplit,job):
+    print("Start saving models of JOB {}".format(job.id))
     jobsplit = job.split
     if jobsplit.type == 'single':
         log = jobsplit.original_log

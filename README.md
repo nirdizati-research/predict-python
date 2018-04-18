@@ -69,7 +69,7 @@ curl --request POST \
 http://localhost:8000/splits/
 ```
 
-####Advanced configuration
+#### Advanced configuration
 
 Prediction methods accept configuration for sklearn classification/regression methods. 
 The Job config must contain a dict with only the supported options for that method. 
@@ -99,3 +99,7 @@ curl --request POST \
   }' \
 http://localhost:8000/jobs/multiple
 ```
+
+## Contributors
+- [@TKasekamp](https://github.com/TKasekamo) Tõnis Kasekamp 
+- [@stebranchi](https://github.com/stebranchi) Stefano Branchi

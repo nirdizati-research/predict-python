@@ -21,7 +21,7 @@ class JobModelTest(TestCase):
                        "prefix_length": 1,
                        "padding": 'no_padding',
                        "threshold": "default",
-                       "create_models" : False,
+                       "create_models": False,
                        }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
@@ -60,6 +60,18 @@ class JobModelTest(TestCase):
         prediction_task(1)
 
         job = Job.objects.get(id=1)
+
+        self.assertEqual('completed', job.status)
+        self.assertNotEqual({}, job.result)
+
+    def test_create_models_config_missing(self):
+        job = Job.objects.get(id=1)
+        del job.config["create_models"]
+        job.save()
+        prediction_task(1)
+
+        job = Job.objects.get(id=1)
+        print(job.config)
 
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.result)

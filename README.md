@@ -101,5 +101,5 @@ http://localhost:8000/jobs/multiple
 ```
 
 ## Contributors
-- [@TKasekamp](https://github.com/TKasekamo) Tõnis Kasekamp 
+- [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi

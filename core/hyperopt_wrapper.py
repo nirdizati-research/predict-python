@@ -1,8 +1,7 @@
-import numpy as np
-from hyperopt import Trials, STATUS_OK, tpe, fmin, hp
-from hyperopt.pyll.base import scope
+from hyperopt import Trials, STATUS_OK, tpe, fmin
 
 from core.core import get_run, get_encoded_logs, run_by_type
+from core.hyperopt_spaces import get_space
 
 trial_nr = 0
 
@@ -30,9 +29,7 @@ def calculate_hyperopt(job):
     global_job = job
     training_df, test_df = get_encoded_logs(job)
 
-    space = {'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
-             'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
-             'max_features': hp.uniform('max_features', 0, 1)}
+    space = get_space(job)
 
     max_evals = job['hyperopt']['max_evals']
     trials = Trials()

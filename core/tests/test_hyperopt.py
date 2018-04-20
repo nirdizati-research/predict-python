@@ -9,7 +9,6 @@ class TestHyperopt(TestCase):
 
     def get_job(self):
         json = dict()
-        json["clustering"] = "kmeans"
         json["split"] = repair_example()
         json["method"] = "randomForest"
         json["encoding"] = "simpleIndex"
@@ -19,12 +18,18 @@ class TestHyperopt(TestCase):
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
         json['clustering'] = 'noCluster'
-        json['hyperopt'] = {'use_hyperopt': True, 'max_evals': 5, 'performance_metric': 'acc'}
+        json['hyperopt'] = {'use_hyperopt': True, 'max_evals': 2, 'performance_metric': 'acc'}
         return json
 
     def test_class_randomForest(self):
         job = self.get_job()
         add_default_config(job)
         results, config = calculate_hyperopt(job)
-        print("Best hyperopt config")
-        print(config)
+        print("Best hyperopt config", config)
+
+    def test_class_knn(self):
+        job = self.get_job()
+        job["method"] = "knn"
+        add_default_config(job)
+        results, config = calculate_hyperopt(job)
+        print("Best hyperopt config", config)

@@ -99,8 +99,13 @@ def prepare_results(df):
 
 
 def prep_data(training_df, test_df):
-    train_data = training_df.drop('elapsed_time', 1)
-    test_data = test_df.drop('elapsed_time', 1)
+    # This check as elapsed time can not be present in df
+    if 'elapsed_time' in training_df.columns:
+        train_data = training_df.drop('elapsed_time', 1)
+        test_data = test_df.drop('elapsed_time', 1)
+    else:
+        train_data = training_df
+        test_data = test_df
 
     original_test_data = test_data
 

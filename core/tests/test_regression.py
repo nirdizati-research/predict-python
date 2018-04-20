@@ -52,6 +52,13 @@ class TestRegression(TestCase):
         add_default_config(job)
         calculate(job)
 
+    def test_reg_lasso_no_elapsed_time(self):
+        job = self.get_job()
+        job['method'] = 'lasso'
+        job['add_elapsed_time'] = False
+        add_default_config(job)
+        calculate(job)
+
     # WILL NOT WORK
     def reg_lasso_complex(self):
         job = self.get_job()

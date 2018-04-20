@@ -57,6 +57,13 @@ class TestBooleanGeneral(TestCase):
         self.assertEqual((42, 10), df.shape)
         self.assertNotIn('remaining_time', df.columns.values.tolist())
 
+    def test_no_elapsed_time(self):
+        log = get_logs("log_cache/general_example.xes")[0]
+        event_names = unique_events(log)
+        df = boolean(log, event_names, add_elapsed_time=False)
+        self.assertEqual((42, 11), df.shape)
+        self.assertNotIn('elapsed_time', df.columns.values.tolist())
+
 
 class TestBooleanSplit(TestCase):
     def setUp(self):

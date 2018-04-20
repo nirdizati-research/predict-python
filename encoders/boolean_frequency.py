@@ -7,22 +7,26 @@ from encoders.log_util import DEFAULT_COLUMNS, remaining_time, elapsed_time, DEF
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def boolean(log: list, event_names: list, add_label=True):
-    return encode_boolean_frequency(log, event_names, is_boolean=True, add_label=add_label)
+def boolean(log: list, event_names: list, add_label=True, add_elapsed_time=True):
+    return encode_boolean_frequency(log, event_names, is_boolean=True, add_label=add_label,
+                                    add_elapsed_time=add_elapsed_time)
 
 
-def frequency(log: list, event_names: list, add_label=True):
-    return encode_boolean_frequency(log, event_names, is_boolean=False, add_label=add_label)
+def frequency(log: list, event_names: list, add_label=True, add_elapsed_time=True):
+    return encode_boolean_frequency(log, event_names, is_boolean=False, add_label=add_label,
+                                    add_elapsed_time=add_elapsed_time)
 
 
-def encode_boolean_frequency(log: list, event_names: list, add_label: bool, is_boolean=True):
+def encode_boolean_frequency(log: list, event_names: list, add_label: bool, add_elapsed_time: bool, is_boolean=True):
     """Encodes the log by boolean or frequency
 
     :param add_label If to add remaining_time and elapsed_time columns
     :return pandas dataframe
     """
-    if add_label:
+    if add_label and add_elapsed_time:
         columns = np.append(event_names, list(DEFAULT_COLUMNS))
+    elif add_label:
+        columns = np.append(event_names, ["trace_id", "event_nr", "remaining_time"])
     else:
         columns = np.append(event_names, list(DEFAULT_COLUMNS_NO_LABEL))
     encoded_data = []
@@ -41,7 +45,8 @@ def encode_boolean_frequency(log: list, event_names: list, add_label: bool, is_b
             trace_row.append(event_index + 1)
             if add_label:
                 trace_row.append(remaining_time(trace, event))
-                trace_row.append(elapsed_time(trace, event))
+                if add_elapsed_time:
+                    trace_row.append(elapsed_time(trace, event))
             encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 

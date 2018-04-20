@@ -18,9 +18,11 @@ def calculate(job):
     else:
         prefix_length = 1
     zero_padding = True if job['padding'] is ZERO_PADDING else False
+    add_elapsed_time = job.get('add_elapsed_time', True)
 
     training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
-                                       prefix_length=prefix_length, zero_padding=zero_padding)
+                                       prefix_length=prefix_length, zero_padding=zero_padding,
+                                       add_elapsed_time=add_elapsed_time)
 
     if job['type'] == CLASSIFICATION:
         results, model_split = classifier(training_df, test_df, job)

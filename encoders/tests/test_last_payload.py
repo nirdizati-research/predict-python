@@ -38,6 +38,16 @@ class LastPayload(TestCase):
         self.assertListEqual(row2,
                              ["4", 1, "register request", "50", 'Pete', "Pete"])
 
+    def test_prefix1_no_elapsed_time(self):
+        df = last_payload(self.log, self.event_names, prefix_length=1, add_elapsed_time=False)
+
+        row1 = df[(df.trace_id == '5')].iloc[0].tolist()
+        self.assertListEqual(row1,
+                             ["5", 1576440.0, 1, "register request", "50", 'Ellen', "Ellen"])
+        row2 = df[(df.trace_id == '4')].iloc[0].tolist()
+        self.assertListEqual(row2,
+                             ["4", 520920.0, 1, "register request", "50", 'Pete', "Pete"])
+
     def test_prefix2(self):
         df = last_payload(self.log, self.event_names, prefix_length=2)
 

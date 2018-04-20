@@ -7,24 +7,24 @@ from .log_util import remaining_time_id, elapsed_time_id
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
-def complex(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
+def complex(log, event_names, prefix_length=1, add_label=True, zero_padding=False, add_elapsed_time=True):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, add_label,
-                                 zero_padding)
+                                 zero_padding, add_elapsed_time)
 
 
-def last_payload(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
+def last_payload(log, event_names, prefix_length=1, add_label=True, zero_padding=False, add_elapsed_time=True):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, add_label,
-                                 zero_padding)
+                                 zero_padding, add_elapsed_time)
 
 
 def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, add_label: bool,
-                          zero_padding: bool):
+                          zero_padding: bool, add_elapsed_time: bool):
     additional_columns = get_event_attributes(log)
-    columns = column_fun(prefix_length, additional_columns, add_label)
+    columns = column_fun(prefix_length, additional_columns, add_label, add_elapsed_time)
     encoded_data = []
 
     for trace in log:
@@ -39,7 +39,8 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
         # prefix_length - 1 == index
         if add_label:
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
-            trace_row.append(elapsed_time_id(trace, prefix_length - 1))
+            if add_elapsed_time:
+                trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
@@ -48,9 +49,11 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: list, add_label: bool):
-    if add_label:
+def columns_complex(prefix_length: int, additional_columns: list, add_label: bool, add_elapsed_time: bool):
+    if add_label and add_elapsed_time:
         columns = list(HEADER_COLUMNS)
+    elif add_label:
+        columns = ['trace_id', 'remaining_time']
     else:
         columns = ['trace_id']
     for i in range(1, prefix_length + 1):
@@ -60,9 +63,11 @@ def columns_complex(prefix_length: int, additional_columns: list, add_label: boo
     return columns
 
 
-def columns_last_payload(prefix_length: int, additional_columns: list, add_label: bool):
-    if add_label:
+def columns_last_payload(prefix_length: int, additional_columns: list, add_label: bool, add_elapsed_time: bool):
+    if add_label and add_elapsed_time:
         columns = list(HEADER_COLUMNS)
+    elif add_label:
+        columns = ['trace_id', 'remaining_time']
     else:
         columns = ['trace_id']
     for i in range(1, prefix_length + 1):

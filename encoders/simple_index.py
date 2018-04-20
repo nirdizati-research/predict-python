@@ -1,23 +1,23 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import HEADER_COLUMNS
 from .log_util import remaining_time_id, elapsed_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 
 
 def simple_index(log: list, event_names: list, prefix_length=1, next_activity=False, add_label=True,
-                 zero_padding=False):
+                 zero_padding=False, add_elapsed_time=True):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if next_activity:
         return encode_next_activity(log, event_names, prefix_length, add_label, zero_padding)
-    return encode_simple_index(log, event_names, prefix_length, add_label, zero_padding)
+    return encode_simple_index(log, event_names, prefix_length, add_label, zero_padding, add_elapsed_time)
 
 
-def encode_simple_index(log: list, event_names: list, prefix_length: int, add_label: bool, zero_padding: bool):
-    columns = __create_columns(prefix_length, add_label)
+def encode_simple_index(log: list, event_names: list, prefix_length: int, add_label: bool, zero_padding: bool,
+                        add_elapsed_time: bool):
+    columns = __create_columns(prefix_length, add_label, add_elapsed_time)
     encoded_data = []
 
     for trace in log:
@@ -31,7 +31,8 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, add_la
         trace_row.append(trace_name)
         if add_label:
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
-            trace_row.append(elapsed_time_id(trace, prefix_length - 1))
+            if add_elapsed_time:
+                trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
@@ -63,11 +64,12 @@ def encode_next_activity(log: list, event_names: list, prefix_length: int, add_l
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def __create_columns(prefix_length: int, add_label: bool):
+def __create_columns(prefix_length: int, add_label: bool, add_elapsed_time: bool):
+    columns = ['trace_id']
     if add_label:
-        columns = list(HEADER_COLUMNS)
-    else:
-        columns = ['trace_id']
+        columns.append('remaining_time')
+        if add_elapsed_time:
+            columns.append('elapsed_time')
 
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))

@@ -81,6 +81,15 @@ class TestGeneralTest(TestCase):
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 1], row2.values.tolist())
 
+    def test_prefix1_no_elapsed_time(self):
+        df = simple_index(self.log, self.event_names, prefix_length=1, add_elapsed_time=False)
+
+        self.assertEqual(df.shape, (2, 3))
+        row1 = df[df.trace_id == '5'].iloc[0]
+        self.assertListEqual(['5', 1576440.0, 1], row1.values.tolist())
+        row2 = df[df.trace_id == '4'].iloc[0]
+        self.assertListEqual(['4', 520920.0, 1], row2.values.tolist())
+
     def test_prefix0(self):
         self.assertRaises(ValueError,
                           simple_index, self.log, self.event_names, prefix_length=0)

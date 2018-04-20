@@ -26,12 +26,47 @@ def _classification_knn():
     }
 
 
+def _classification_decision_tree():
+    return {
+        'criterion': hp.choice('criterion', ['gini', 'entropy']),
+        'splitter': hp.choice('splitter', ['gini', 'random']),
+        'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
+        'min_samples_split': hp.choice('min_samples_split', np.arange(2, 10, dtype=int)),
+        'min_samples_leaf': hp.choice('min_samples_leaf', np.arange(1, 10, dtype=int)),
+    }
+
+
+def _regression_random_forest():
+    return {
+        'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
+        'criterion': hp.choice('criterion', ['mse', 'mae']),
+        'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
+        'min_samples_split': hp.choice('min_samples_split', np.arange(2, 10, dtype=int)),
+    }
+
+
+def _regression_lasso():
+    return {
+        'alpha': hp.uniform('alpha', 0.01, 2.0),
+        'fit_intercept': hp.choice('fit_intercept', [True, False]),
+        'normalize': hp.choice('normalize', [True, False]),
+        'copy_X': hp.choice('copy_X', [True, False]),
+    }
+
+
+def _regression_linear():
+    return {
+        'fit_intercept': hp.choice('fit_intercept', [True, False]),
+        'normalize': hp.choice('normalize', [True, False]),
+        'copy_X': hp.choice('copy_X', [True, False]),
+    }
+
+
 HYPEROPT_SPACE_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
                       CLASSIFICATION_KNN: _classification_knn,
-                      # CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
-                      # REGRESSION_RANDOM_FOREST: _regression_random_forest,
-                      # REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear,
-                      # NEXT_ACTIVITY_RANDOM_FOREST: _classification_random_forest,
-                      # NEXT_ACTIVITY_KNN: _classification_knn,
-                      # NEXT_ACTIVITY_DECISION_TREE: _classification_decision_tree}
-                      }
+                      CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
+                      REGRESSION_RANDOM_FOREST: _regression_random_forest,
+                      REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear,
+                      NEXT_ACTIVITY_RANDOM_FOREST: _classification_random_forest,
+                      NEXT_ACTIVITY_KNN: _classification_knn,
+                      NEXT_ACTIVITY_DECISION_TREE: _classification_decision_tree}

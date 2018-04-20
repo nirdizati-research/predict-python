@@ -33,3 +33,35 @@ class TestHyperopt(TestCase):
         add_default_config(job)
         results, config = calculate_hyperopt(job)
         print("Best hyperopt config", config)
+
+    def test_class_decision_tree(self):
+        job = self.get_job()
+        job["method"] = "decisionTree"
+        add_default_config(job)
+        results, config = calculate_hyperopt(job)
+        print("Best hyperopt config", config)
+
+    def test_regression_random_forest(self):
+        job = self.get_job()
+        job["type"] = "regression"
+        job['hyperopt']['performance_metric'] = 'rmse'
+        add_default_config(job)
+        results, config = calculate_hyperopt(job)
+        print("Best hyperopt config", config)
+
+    def test_regression_random_forest(self):
+        job = self.get_job()
+        job["type"] = "regression"
+        job['hyperopt']['performance_metric'] = 'rmse'
+        add_default_config(job)
+        results, config = calculate_hyperopt(job)
+        print("Best hyperopt config", config)
+
+    def test_regression_lasso(self):
+        job = self.get_job()
+        job["type"] = "regression"
+        job["method"] = "lasso"
+        job['hyperopt']['performance_metric'] = 'rmse'
+        add_default_config(job)
+        results, config = calculate_hyperopt(job)
+        print("Best hyperopt config", config)

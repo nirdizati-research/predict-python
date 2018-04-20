@@ -1,4 +1,4 @@
-from hyperopt import Trials, STATUS_OK, tpe, fmin
+from hyperopt import Trials, STATUS_OK, tpe, fmin, STATUS_FAIL
 
 from core.core import get_run, get_encoded_logs, run_by_type
 from core.hyperopt_spaces import get_space
@@ -15,10 +15,13 @@ def calculate_and_evaluate(args):
     performance_metric = local_job['hyperopt']['performance_metric']
     method_conf_name = "{}.{}".format(local_job['type'], local_job['method'])
     local_job[method_conf_name] = {**local_job[method_conf_name], **args}
-    results, _ = run_by_type(training_df, test_df, local_job)
-
-    return {'loss': -results[performance_metric], 'status': STATUS_OK, 'results': results,
-            'config': local_job[method_conf_name]}
+    try:
+        results, _ = run_by_type(training_df, test_df, local_job)
+        return {'loss': -results[performance_metric], 'status': STATUS_OK, 'results': results,
+                'config': local_job[method_conf_name]}
+    except Exception:
+        return {'loss': 100, 'status': STATUS_FAIL, 'results': {},
+                'config': local_job[method_conf_name]}
 
 
 def calculate_hyperopt(job):
@@ -33,7 +36,10 @@ def calculate_hyperopt(job):
 
     max_evals = job['hyperopt']['max_evals']
     trials = Trials()
-    fmin(calculate_and_evaluate, space, algo=tpe.suggest, max_evals=max_evals, trials=trials)
+    try:
+        fmin(calculate_and_evaluate, space, algo=tpe.suggest, max_evals=max_evals, trials=trials)
+    except ValueError:
+        raise ValueError("All jobs failed, cannot find best configuration")
     current_best = {'loss': 100}
     for t in trials:
         a = t['result']

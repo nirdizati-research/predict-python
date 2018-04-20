@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
 from core.tests.test_prepare import add_default_config
-from jobs.job_creator import create_config
+from jobs.job_creator import create_config, _classification_random_forest
 from jobs.models import Job
 from jobs.tasks import prediction_task
 from logs.models import Log, Split
@@ -91,6 +91,30 @@ class JobModelTest(TestCase):
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)
         self.assertEqual("KeyError('method',)", job.error)
+
+
+class Hyperopt(TestCase):
+    def setUp(self):
+        self.config = {
+            'method': 'randomForest',
+            'encoding': 'simpleIndex',
+            'clustering': 'noCluster',
+            "rule": "remaining_time",
+            "prefix_length": 3,
+            "padding": 'no_padding',
+            "threshold": "default",
+            "create_models": False,
+            "hyperopt": {"use_hyperopt": True, "max_evals": 2, "performance_metric": "acc"}
+        }
+        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        split = Split.objects.create(original_log=log)
+        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
+                           type=CLASSIFICATION)
+
+    def test_hyperopt(self):
+        prediction_task(1)
+        job = Job.objects.get(id=1)
+        self.assertFalse(_classification_random_forest() == job.config['classification.randomForest'])
 
 
 class CreateJobsTests(APITestCase):

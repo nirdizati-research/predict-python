@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
 from jobs import tasks
 from jobs.job_creator import generate
-from jobs.models import Job
+from jobs.models import Job, RUNNING
 from jobs.serializers import JobSerializer
 from logs.models import Split
 
@@ -46,6 +46,13 @@ class JobDetail(RetrieveModelMixin, GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        job = self.queryset.get(pk=kwargs['pk'])
+        if job.status == RUNNING:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        job.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['POST'])

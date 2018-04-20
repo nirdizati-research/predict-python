@@ -56,10 +56,10 @@ def kmeans_clustering_train(original_test_data, train_data, regressor):
 
             regressor.fit(clustered_train_data, y)
             models[i] = regressor
-    model_split=dict()
-    model_split['type']=KMEANS
-    model_split['estimator']=estimator
-    model_split['model']=models
+    model_split = dict()
+    model_split['type'] = KMEANS
+    model_split['estimator'] = estimator
+    model_split['model'] = models
     return kmeans_clustering_test(original_test_data, models, estimator, testing=True), model_split
 
 
@@ -87,9 +87,9 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
     y = train_data['remaining_time']
     train_data = train_data.drop('remaining_time', 1)
     regressor.fit(train_data, y)
-    model_split=dict()
-    model_split['type']=NO_CLUSTER
-    model_split['model']=regressor
+    model_split = dict()
+    model_split['type'] = NO_CLUSTER
+    model_split['model'] = regressor
     return no_clustering_test(original_test_data, test_data, regressor), model_split
 
 

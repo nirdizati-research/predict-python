@@ -55,10 +55,10 @@ def kmeans_clustering_train(original_test_data, train_data, clf):
             clf.fit(clustered_train_data.drop('actual', 1), y)
 
             models[i] = clf
-    model_split=dict()
-    model_split['type']=KMEANS
-    model_split['estimator']=estimator
-    model_split['model']=models
+    model_split = dict()
+    model_split['type'] = KMEANS
+    model_split['estimator'] = estimator
+    model_split['model'] = models
     result, auc = kmeans_clustering_test(original_test_data, models, estimator, testing=True)
     return result, auc, model_split
 
@@ -119,9 +119,9 @@ def no_clustering_train(original_test_data, train_data, clf):
         auc = metrics.roc_auc_score(actual, scores)
     except ValueError:
         pass
-    model_split=dict()
-    model_split['type']=NO_CLUSTER
-    model_split['model']=clf
+    model_split = dict()
+    model_split['type'] = NO_CLUSTER
+    model_split['model'] = clf
     return original_test_data, auc, model_split
 
 

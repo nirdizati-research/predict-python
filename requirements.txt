@@ -10,3 +10,5 @@ jsonfield==2.0.2
 django-rq==1.0.0
 django-cors-headers==2.0.0
 python-dateutil==2.7.2
+hyperopt
+networkx==1.11

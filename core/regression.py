@@ -116,6 +116,7 @@ def prep_data(training_df, test_df):
 
 def __choose_regressor(job: dict):
     method, config = get_method_config(job)
+    print("Using method {} with config {}".format(method, config))
     regressor = None
     if method == LINEAR:
         regressor = LinearRegression(**config)

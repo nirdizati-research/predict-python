@@ -10,6 +10,14 @@ from logs.splitting import prepare_logs
 def calculate(job):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
+
+    training_df, test_df = get_encoded_logs(job)
+    results, model_split = run_by_type(training_df, test_df, job)
+    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
+    return results, model_split
+
+
+def get_encoded_logs(job: dict):
     training_log, test_log = prepare_logs(job['split'])
 
     # Python dicts are bad
@@ -23,7 +31,10 @@ def calculate(job):
     training_df, test_df = encode_logs(training_log, test_log, job['encoding'], job['type'],
                                        prefix_length=prefix_length, zero_padding=zero_padding,
                                        add_elapsed_time=add_elapsed_time)
+    return training_df, test_df
 
+
+def run_by_type(training_df, test_df, job):
     if job['type'] == CLASSIFICATION:
         results, model_split = classifier(training_df, test_df, job)
     elif job['type'] == REGRESSION:
@@ -38,13 +49,4 @@ def calculate(job):
 
 def get_run(job):
     """Defines job identity"""
-    if job['type'] == CLASSIFICATION:
-        return run_identity(job['method'], job['encoding'], job['clustering'])
-    elif job['type'] == NEXT_ACTIVITY:
-        return run_identity(job['method'], job['encoding'], job['clustering'])
-    elif job['type'] == REGRESSION:
-        return run_identity(job['method'], job['encoding'], job['clustering'])
-
-
-def run_identity(method, encoding, clustering):
-    return method + '_' + encoding + '_' + clustering
+    return job['method'] + '_' + job['encoding'] + '_' + job['clustering']

@@ -20,6 +20,15 @@ def split_double():
     return split
 
 
+def repair_example():
+    split = dict()
+    split['id'] = 1
+    split['config'] = dict()
+    split['type'] = 'single'
+    split['original_log_path'] = 'log_cache/repairExample.xes'
+    return split
+
+
 def add_default_config(job: dict, type=""):
     """Map to job method default config"""
     if type == "":

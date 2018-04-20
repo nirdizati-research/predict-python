@@ -24,38 +24,44 @@ class TestHyperopt(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
 
     def test_class_knn(self):
         job = self.get_job()
         job["method"] = "knn"
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
 
     def test_class_decision_tree(self):
         job = self.get_job()
         job["method"] = "decisionTree"
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
 
     def test_regression_random_forest(self):
         job = self.get_job()
         job["type"] = "regression"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
 
-    def test_regression_random_forest(self):
+    def test_regression_linear(self):
         job = self.get_job()
         job["type"] = "regression"
+        job["method"] = "linear"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
 
     def test_regression_lasso(self):
         job = self.get_job()
@@ -63,5 +69,6 @@ class TestHyperopt(TestCase):
         job["method"] = "lasso"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config = calculate_hyperopt(job)
-        print("Best hyperopt config", config)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)

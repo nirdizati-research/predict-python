@@ -18,12 +18,13 @@ class TestHyperopt(TestCase):
         json["threshold"] = "default"
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
+        json['clustering'] = 'noCluster'
+        json['hyperopt'] = {'use_hyperopt': True, 'max_evals': 5, 'performance_metric': 'acc'}
         return json
 
     def test_class_randomForest(self):
         job = self.get_job()
-        job['clustering'] = 'noCluster'
         add_default_config(job)
-        results, config = calculate_hyperopt(job, max_evals=5)
+        results, config = calculate_hyperopt(job)
         print("Best hyperopt config")
         print(config)

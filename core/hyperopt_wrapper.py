@@ -13,16 +13,19 @@ def calculate_and_evaluate(args):
         print("Trial {}".format(trial_nr))
     trial_nr += 1
     local_job = global_job
+    performance_metric = local_job['hyperopt']['performance_metric']
     method_conf_name = "{}.{}".format(local_job['type'], local_job['method'])
     local_job[method_conf_name] = {**local_job[method_conf_name], **args}
     results, _ = run_by_type(training_df, test_df, local_job)
 
-    return {'loss': -results['acc'], 'status': STATUS_OK, 'results': results, 'config': local_job[method_conf_name]}
+    return {'loss': -results[performance_metric], 'status': STATUS_OK, 'results': results,
+            'config': local_job[method_conf_name]}
 
 
-def calculate_hyperopt(job, max_evals=10):
+def calculate_hyperopt(job):
     """ Main entry method for hyperopt calculations"""
-    print("Start hyperopt job {} with {}".format(job['type'], get_run(job)))
+    print("Start hyperopt job {} with {}, performance_metric {}".format(job['type'], get_run(job),
+                                                                        job['hyperopt']['performance_metric']))
     global training_df, test_df, global_job
     global_job = job
     training_df, test_df = get_encoded_logs(job)
@@ -31,6 +34,7 @@ def calculate_hyperopt(job, max_evals=10):
              'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
              'max_features': hp.uniform('max_features', 0, 1)}
 
+    max_evals = job['hyperopt']['max_evals']
     trials = Trials()
     fmin(calculate_and_evaluate, space, algo=tpe.suggest, max_evals=max_evals, trials=trials)
     current_best = {'loss': 100}

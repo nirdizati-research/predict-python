@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^logs/', include('logs.urls')),
     url(r'^splits/', include(split_url_patterns)),
     url(r'^admin/', admin.site.urls),
+    url(r'^runtime/', include('runtime.urls')),
     url(r'^django-rq/', include('django_rq.urls')),
 ]

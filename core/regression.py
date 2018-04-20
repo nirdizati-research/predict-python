@@ -29,6 +29,18 @@ def regression(training_df, test_df, job):
     return results, model_split
 
 
+def regression_single_log(run_df, model):
+    split = model['split']
+    if split['type'] == NO_CLUSTER:
+        regressor = joblib.load(split['model_path'])
+        results = no_clustering_run(run_df, run_df, regressor)
+    elif split['type'] == KMEANS:
+        regressor = joblib.load(split['model_path'])
+        estimator = joblib.load(split['estimator_path']) 
+        results = kmeans_test(run_df, regressor, estimator)
+    return results
+
+
 def kmeans_clustering_train(original_test_data, train_data, regressor):
     estimator = KMeans(n_clusters=3)
     estimator.fit(train_data)

@@ -22,6 +22,18 @@ def next_activity(training_df, test_df, job: dict):
     return results, model_split
 
 
+def next_activity_single_log(run_df, model):
+    split = model['split']
+    if split['type'] == NO_CLUSTER:
+        clf = joblib.load(split['model_path'])
+        result, _ = no_clustering_test(run_df,clf)
+    elif split['type'] == KMEANS:
+        clf = joblib.load(split['model_path'])
+        estimator = joblib.load(split['estimator_path'])
+        result, _ = kmeans_test(run_df, clf, estimator)
+    return result
+
+
 def kmeans_clustering_train(original_test_data, train_data, clf):
     estimator = KMeans(n_clusters=3)
     models = dict()

@@ -6,8 +6,13 @@ from logs.models import Log
 from logs.file_service import get_logs
 from jobs.models import TYPES
 
+ENC_TYPES = (
+    (KMEANS, 'kmeans'),
+    (NO_CLUSTER, 'noCluster'),
+)
+
 class ModelSplit(models.Model):
-    type = models.CharField(choices=TYPES, default='single', max_length=20)
+    type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     estimator_path = models.CharField(blank=True, null=True, max_length=200)
     predtype = models.CharField(choices=TYPES, max_length=20, default='Classification')

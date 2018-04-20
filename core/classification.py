@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 
-from core.common import choose_classifier, calculate_results, fast_slow_encode2
+from core.common import choose_classifier, calculate_results, fast_slow_encode2, fast_slow_encode
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -24,6 +24,21 @@ def classifier(training_df, test_df, job):
 
     results = prepare_results(results_df, auc)
     return results, model_split
+
+
+def classifier_single_log(run_df, model):
+    split=model['split']
+
+    run_df = fast_slow_encode(run_df, model['rule'], model['threshold'])
+    
+    if split['type'] == NO_CLUSTER:
+        clf = joblib.load(split['model_path'])
+        result, _ = no_clustering_test(run_df, clf)
+    elif split['type'] ==KMEANS:
+        clf = joblib.load(split['model_path']) 
+        estimator = joblib.load(split['estimator_path'])
+        result, _ = kmeans_test(run_df, clf, estimator)
+    return result
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf):

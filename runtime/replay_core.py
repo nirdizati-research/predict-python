@@ -7,7 +7,6 @@ from .tasks import calculate
 import xml.etree.ElementTree as Et
 from xml.dom import minidom
 from core.constants import CLASSIFICATION
-from asn1crypto._ffi import null
 
 def prepare(ev, tr, lg):
     run = XFactory()

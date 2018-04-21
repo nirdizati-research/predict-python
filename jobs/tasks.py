@@ -3,6 +3,7 @@ from sklearn.externals import joblib
 
 from core.constants import KMEANS
 from core.core import calculate
+from core.hyperopt_wrapper import calculate_hyperopt
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 from predModels.models import ModelSplit, PredModels
 
@@ -15,7 +16,10 @@ def prediction_task(job_id):
         if job.status == CREATED:
             job.status = RUNNING
             job.save()
-            result, model_split = calculate(job.to_dict())
+            if job.config.get('hyperopt', {}).get('use_hyperopt', False):
+                result, model_split = hyperopt_task(job)
+            else:
+                result, model_split = calculate(job.to_dict())
             if job.config.get('create_models', False):
                 save_models(model_split, job)
             job.result = result
@@ -47,3 +51,11 @@ def save_models(to_model_split, job):
         model_split.save()
     models = PredModels.objects.create(split=model_split, type=job.type, log=log, config=job.config)
     return 1
+
+
+def hyperopt_task(job):
+    job_dict = job.to_dict()
+    results, config, model_split = calculate_hyperopt(job_dict)
+    method_conf_name = "{}.{}".format(job_dict['type'], job_dict['method'])
+    job.config[method_conf_name] = config
+    return results, model_split

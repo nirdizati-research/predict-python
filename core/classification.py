@@ -122,7 +122,6 @@ def prepare_results(df, auc: int):
 
 def drop_columns(training_df, test_df):
     training_df = training_df.drop(['remaining_time', 'trace_id'], 1)
-    # original_test_df = test_df
     original_test_df = test_df.drop('remaining_time', 1)
     test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
     return training_df, test_df, original_test_df

@@ -43,22 +43,27 @@ class RefactorProof(TestCase):
         self.maxDiff = None
         job = self.get_job()
         job["type"] = "nextActivity"
+        job['prefix_length'] = 8
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertDictEqual(result, {'f1score': 0.4914675767918089, 'acc': 0.3257918552036199, 'true_positive': 72,
-                                      'true_negative': 0, 'false_negative': 0, 'false_positive': 149,
-                                      'precision': 0.3257918552036199, 'recall': 1.0, 'auc': 0})
+        self.assertDictEqual(result, {'f1score': 0.33116531165311652, 'acc': 0.47058823529411764,
+                                      'precision': 0.47058823529411764, 'recall': 0.37344300822561693, 'auc': 0})
 
     def test_next_activity_no_cluster(self):
         self.maxDiff = None
         job = self.get_job()
         job["type"] = "nextActivity"
         job['clustering'] = 'noCluster'
+        job['prefix_length'] = 8
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertDictEqual(result,
-                             {'f1score': 1.0, 'acc': 1.0, 'true_positive': 221, 'true_negative': 0, 'false_negative': 0,
-                              'false_positive': 0, 'precision': 1.0, 'recall': 1.0, 'auc': 0})
+
+        self.assertDictEqual(result, {'f1score': 0.54239884582595577, 'acc': 0.80995475113122173,
+                                      'precision': 0.80995475113122173, 'recall': 0.5224945442336747, 'auc': 0})
+        # old result
+        # self.assertDictEqual(result,
+        #                      {'f1score': 0.895, 'acc': 0.8099547511312217, 'true_positive': 179, 'true_negative': 0, 'false_negative': 0,
+        #                       'false_positive': 42, 'precision': 0.8099547511312217, 'recall': 1.0, 'auc': 0})
 
     def test_regression_kmeans(self):
         self.maxDiff = None

@@ -1,8 +1,9 @@
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, confusion_matrix
 
-from core.common import choose_classifier, calculate_results
+from core.common import choose_classifier
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -79,7 +80,6 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
 
 def no_clustering_train(original_test_data, train_data, clf):
     y = train_data['label']
-
     clf.fit(train_data.drop('label', 1), y)
     actual = original_test_data["label"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('label', 1), clf)
@@ -103,7 +103,7 @@ def prepare_results(df, auc):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 
-    row = calculate_results(actual_, predicted_)
+    row = results_multi_label(actual_, predicted_)
     row['auc'] = auc
     return row
 
@@ -114,3 +114,15 @@ def drop_columns(training_df, test_df):
     test_df = test_df.drop('trace_id', 1)
 
     return train_df, test_df, original_test_df
+
+
+def results_multi_label(actual: list, predicted: list):
+    # average is needed as these are multi-label lists
+    # print(classification_report(actual, predicted))
+    acc = accuracy_score(actual, predicted)
+    f1score = f1_score(actual, predicted, average='macro')
+    precision = precision_score(actual, predicted, average='micro')
+    recall = recall_score(actual, predicted, average='macro')
+    # confusion matrix is not binary for easy representation, so removing
+    row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
+    return row

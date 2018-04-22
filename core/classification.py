@@ -69,12 +69,8 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
             scores = clf[i].predict_proba(clustered_test_data)
 
             original_clustered_test_data["predicted"] = prediction
-            original_clustered_test_data["predicted"] = original_clustered_test_data["predicted"].map(
-                {True: 'Fast', False: 'Slow'})
             if testing:
                 actual = original_clustered_test_data['actual']
-                original_clustered_test_data["actual"] = original_clustered_test_data["actual"].map(
-                    {True: 'Fast', False: 'Slow'})
                 auc = calculate_auc(actual, scores, auc)
 
             if result_data is None:
@@ -96,9 +92,7 @@ def no_clustering_train(original_test_data, train_data, clf):
     actual = original_test_data["actual"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf)
     original_test_data["actual"] = actual
-    original_test_data["actual"] = original_test_data["actual"].map(
-        {True: 'Fast', False: 'Slow'})
-    # FPR,TPR,thresholds_unsorted=
+
     auc = 0
     try:
         auc = metrics.roc_auc_score(actual, scores)
@@ -114,19 +108,12 @@ def no_clustering_test(test_data, clf):
     prediction = clf.predict(test_data.drop('trace_id', 1))
     scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
     test_data["predicted"] = prediction
-    test_data["predicted"] = test_data["predicted"].map(
-        {True: 'Fast', False: 'Slow'})
     return test_data, scores
 
 
 def prepare_results(df, auc: int):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
-
-    actual_[actual_ == "Fast"] = True
-    actual_[actual_ == "Slow"] = False
-    predicted_[predicted_ == "Fast"] = True
-    predicted_[predicted_ == "Slow"] = False
 
     row = calculate_results(actual_, predicted_)
     row['auc'] = auc
@@ -148,5 +135,5 @@ def calculate_auc(actual, scores, auc: int):
         try:
             auc += metrics.roc_auc_score(actual, scores[:, 1])
         except Exception:
-            auc += 0
+            pass
     return auc

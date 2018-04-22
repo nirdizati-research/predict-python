@@ -30,7 +30,7 @@ def regression(training_df, test_df, job):
 
 
 def kmeans_clustering_train(original_test_data, train_data, regressor):
-    estimator = KMeans(n_clusters=3)
+    estimator = KMeans(n_clusters=3, random_state=21)
     estimator.fit(train_data)
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
     models = dict()

@@ -59,7 +59,8 @@ def _classification_random_forest():
     return {
         'n_estimators': 10,
         'max_depth': None,
-        'max_features': 'auto'
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -74,7 +75,8 @@ def _classification_decision_tree():
     return {
         'max_depth': None,
         'min_samples_split': 2,
-        'min_samples_leaf': 1
+        'min_samples_leaf': 1,
+        'random_state': 21
     }
 
 
@@ -82,7 +84,8 @@ def _regression_random_forest():
     return {
         'n_estimators': 10,
         'max_depth': None,
-        'max_features': 'auto'
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -90,7 +93,8 @@ def _regression_lasso():
     return {
         'alpha': 1.0,
         'fit_intercept': True,
-        'normalize': False
+        'normalize': False,
+        'random_state': 21
     }
 
 

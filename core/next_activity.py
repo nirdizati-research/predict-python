@@ -23,7 +23,7 @@ def next_activity(training_df, test_df, job: dict):
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf):
-    estimator = KMeans(n_clusters=3)
+    estimator = KMeans(n_clusters=3, random_state=21)
     models = dict()
     estimator.fit(train_data.drop('label', 1))
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}

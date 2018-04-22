@@ -210,7 +210,8 @@ class MethodConfiguration(TestCase):
         self.assertDictEqual(config['regression.randomForest'], {
             'n_estimators': 15,
             'max_features': 'auto',
-            'max_depth': None
+            'max_depth': None,
+            'random_state': 21
         })
 
     def test_adds_conf_if_missing(self):
@@ -223,5 +224,6 @@ class MethodConfiguration(TestCase):
         self.assertDictEqual(config['regression.randomForest'], {
             'n_estimators': 10,
             'max_features': 'auto',
-            'max_depth': None
+            'max_depth': None,
+            'random_state': 21
         })

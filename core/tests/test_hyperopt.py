@@ -39,7 +39,7 @@ class TestHyperopt(TestCase):
     def test_class_decision_tree(self):
         job = self.get_job()
         job["method"] = "decisionTree"
-        add_default_config(job)
+        job['classification.decisionTree'] = {}
         results, config, model_split = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)

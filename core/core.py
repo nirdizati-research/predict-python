@@ -13,7 +13,6 @@ def calculate(job):
 
     training_df, test_df = get_encoded_logs(job)
     results, model_split = run_by_type(training_df, test_df, job)
-    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results, model_split
 
 

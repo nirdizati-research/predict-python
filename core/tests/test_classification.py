@@ -39,13 +39,13 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
-    # KNN Fails due to small dataset
-    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
-    def class_KNN(self):
+    def test_class_KNN(self):
         job = self.get_job()
         job['method'] = 'knn'
-        job['classification.knn'] = {}
-        calculate(job)
+        job['clustering'] = 'noCluster'
+        job['classification.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
@@ -59,16 +59,15 @@ class TestClassification(TestCase):
         job['type'] = 'nextActivity'
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertDictEqual(result, self.results3())
+        self.assertIsNotNone(result)
 
-    # KNN Fails due to small dataset
-    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
-    def next_activity_KNN(self):
+    def test_next_activity_KNN(self):
         job = self.get_job()
-        job['method'] = 'KNN'
+        job['method'] = 'knn'
         job['type'] = 'nextActivity'
-        add_default_config(job)
-        calculate(job)
+        job['nextActivity.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()

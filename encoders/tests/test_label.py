@@ -93,3 +93,27 @@ class TestLabelSimpleIndex(TestCase):
         self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 1296240.0, 3])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 520920.0, 0])
+
+    def test_attribute_string(self):
+        label = LabelContainer(type=ATTRIBUTE_STRING, attribute_name='creator')
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 4))
+        self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
+        trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
+        self.assertListEqual(trace_5, ['5', 1, 2, "Fluxicon Nitro"])
+        trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
+        self.assertListEqual(trace_4, ['4', 1, 3, "Fluxicon Nitro"])
+
+    def test_attribute_number(self):
+        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 4))
+        self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
+        trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
+        self.assertListEqual(trace_5, ['5', 1, 2, "300"])
+        trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
+        self.assertListEqual(trace_4, ['4', 1, 3, "100"])

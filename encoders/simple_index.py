@@ -5,6 +5,7 @@ from encoders.label_container import *
 from .log_util import remaining_time_id, elapsed_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
+ATTRIBUTE_CLASSIFIER = None
 
 
 def simple_index(log: list, event_names: list, label: LabelContainer, prefix_length=1, zero_padding=False):
@@ -17,6 +18,10 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
     columns = __columns(prefix_length, label)
     encoded_data = []
 
+    # Create classifier only once
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        global ATTRIBUTE_CLASSIFIER
+        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
     for trace in log:
         if zero_padding:
             zero_count = prefix_length - len(trace)
@@ -89,4 +94,7 @@ def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: li
         labels.append(remaining_time_id(trace, prefix_length - 1))
     elif label.type == NEXT_ACTIVITY:
         labels.append(next_event_index(trace, event_names, prefix_length))
+    elif label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        atr = ATTRIBUTE_CLASSIFIER.get_class_identity(trace)
+        labels.append(atr)
     return labels

@@ -11,10 +11,15 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
                      prefix_length=1, zero_padding=False):
     encoded_log = encode_log(run_log, encoding_type, label, prefix_length, event_names, zero_padding)
 
-    # if job_type == CLASSIFICATION:
-    #     # Post processing
-    #     if label.type == ELAPSED_TIME:
-    #         return label_boolean(encoded_log, label)
+    # Convert strings to number
+    if label.type == ATTRIBUTE_NUMBER:
+        encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+
+    # Regression only has remaining_time as label
+    if job_type == CLASSIFICATION:
+        # Post processing
+        if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
+            return label_boolean(encoded_log, label)
 
     return encoded_log
 
@@ -61,6 +66,7 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
 def label_boolean(df, label: LabelContainer):
     """Label a numeric attribute as True or False based on threshold
     By default use mean of label value
+    True if under threshold value
     """
     if label.threshold_type == THRESHOLD_MEAN:
         threshold_ = df['label'].mean()

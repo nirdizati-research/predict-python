@@ -69,9 +69,8 @@ class TestBooleanSplit(TestCase):
     def setUp(self):
         test_log = get_logs("log_cache/general_example_test.xes")[0]
         training_log = get_logs("log_cache/general_example_training.xes")[0]
-        self.training_df, self.test_df = encode_label_logs(training_log, test_log,
-                                                           LabelContainer(add_elapsed_time=True), BOOLEAN,
-                                                           CLASSIFICATION)
+        self.training_df, self.test_df = encode_label_logs(training_log, test_log, BOOLEAN, CLASSIFICATION,
+                                                           LabelContainer(add_elapsed_time=True))
 
     def test_shape(self):
         self.assert_shape(self.training_df, (24, 12))

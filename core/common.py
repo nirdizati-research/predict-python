@@ -76,6 +76,7 @@ def fast_slow_encode(df, label, threshold):
     return df
 
 
+# TODO deprecate
 def fast_slow_encode2(training_df, test_df, label: str, threshold: float):
     if threshold == "default":
         threshold_ = training_df[label].mean()
@@ -83,4 +84,10 @@ def fast_slow_encode2(training_df, test_df, label: str, threshold: float):
         threshold_ = float(threshold)
     training_df['actual'] = training_df[label] < threshold_
     test_df['actual'] = test_df[label] < threshold_
+    return training_df, test_df
+
+
+def add_actual(training_df, test_df):
+    training_df['actual'] = training_df['label']
+    test_df['actual'] = test_df['label']
     return training_df, test_df

@@ -14,8 +14,8 @@ class TestSplitLogExample(TestCase):
         self.label = LabelContainer(add_elapsed_time=True)
 
     def test_shape_training(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.label, SIMPLE_INDEX,
-                                                 CLASSIFICATION, prefix_length=1)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=1)
         self.assert_shape(training_df, (4, 4))
         self.assert_shape(test_df, (2, 4))
 
@@ -27,8 +27,8 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(shape, dataframe.shape)
 
     def test_prefix_length_training(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.label, SIMPLE_INDEX,
-                                                 CLASSIFICATION, prefix_length=3)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=3)
         self.assertIn("prefix_1", training_df.columns.values)
         self.assertIn("prefix_2", training_df.columns.values)
         self.assertIn("prefix_3", training_df.columns.values)
@@ -43,8 +43,8 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(7320.0, row.elapsed_time)
 
     def test_row_test(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.label, SIMPLE_INDEX,
-                                                 CLASSIFICATION, prefix_length=1)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=1)
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(1.0, row.prefix_1)

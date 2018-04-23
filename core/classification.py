@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 
-from core.common import choose_classifier, calculate_results, fast_slow_encode2
+from core.common import choose_classifier, calculate_results, add_actual
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -12,7 +12,7 @@ pd.options.mode.chained_assignment = None
 def classifier(training_df, test_df, job):
     clf = choose_classifier(job)
 
-    training_df, test_df = fast_slow_encode2(training_df, test_df, job['rule'], job['threshold'])
+    training_df, test_df = add_actual(training_df, test_df)
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
     if job['clustering'] == KMEANS:
@@ -121,9 +121,9 @@ def prepare_results(df, auc: int):
 
 
 def drop_columns(training_df, test_df):
-    training_df = training_df.drop(['remaining_time', 'trace_id'], 1)
-    original_test_df = test_df.drop('remaining_time', 1)
-    test_df = test_df.drop(['remaining_time', 'trace_id'], 1)
+    training_df = training_df.drop(['label', 'trace_id'], 1)
+    original_test_df = test_df.drop('label', 1)
+    test_df = test_df.drop(['label', 'trace_id'], 1)
     return training_df, test_df, original_test_df
 
 

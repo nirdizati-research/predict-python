@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
+from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM
 
 
 class TestClassification(TestCase):
@@ -24,11 +25,10 @@ class TestClassification(TestCase):
         json["split"] = split_double()
         json["method"] = "randomForest"
         json["encoding"] = "simpleIndex"
-        json["rule"] = "remaining_time"
         json["prefix_length"] = 1
-        json["threshold"] = "default"
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
+        json['label'] = LabelContainer(add_elapsed_time=True)
         return json
 
     def test_class_randomForest(self):
@@ -55,7 +55,7 @@ class TestClassification(TestCase):
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
-        job['type'] = 'nextActivity'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
@@ -63,15 +63,23 @@ class TestClassification(TestCase):
     def test_next_activity_KNN(self):
         job = self.get_job()
         job['method'] = 'knn'
-        job['type'] = 'nextActivity'
-        job['nextActivity.knn'] = {'n_neighbors': 3}
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['classification.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_attribute_string_knn(self):
+        job = self.get_job()
+        job['method'] = 'knn'
+        job['label'] = LabelContainer(ATTRIBUTE_STRING)
+        job['classification.knn'] = {'n_neighbors': 3}
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
-        job['type'] = 'nextActivity'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
@@ -102,11 +110,12 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
-    def test_class_last_payload_no_elapsed_time(self):
+    def test_class_last_payload_custom_threshold(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
-        job["add_elapsed_time"] = False
+        job['prefix_length'] = 5
+        job['label'] = LabelContainer(threshold_type=THRESHOLD_CUSTOM, threshold=50)
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertDictEqual(result, self.results2())
+        # it works, but results are unreliable

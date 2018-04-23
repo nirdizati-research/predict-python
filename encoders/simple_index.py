@@ -34,7 +34,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
-        trace_row += add_labels(label, prefix_length, trace, event_names)
+        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER)
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -69,6 +69,10 @@ def __columns(prefix_length: int, label: LabelContainer):
     columns = ["trace_id"]
     for i in range(0, prefix_length):
         columns.append("prefix_" + str(i + 1))
+    return add_label_columns(columns, label)
+
+
+def add_label_columns(columns: list, label: LabelContainer):
     if label.type == NO_LABEL:
         return columns
     if label.add_elapsed_time:
@@ -79,7 +83,8 @@ def __columns(prefix_length: int, label: LabelContainer):
     return columns
 
 
-def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: list):
+def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: list,
+               ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER):
     """Adds any number of label cells with last as label"""
     labels = []
     if label.type == NO_LABEL:

@@ -15,7 +15,8 @@ def encode_label_logs(training_log: list, test_log: list, label: LabelContainer,
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
-    training_df = encode_label_log(training_log, encoding_type, job_type, label, event_names, prefix_length=prefix_length,
+    training_df = encode_label_log(training_log, encoding_type, job_type, label, event_names,
+                                   prefix_length=prefix_length,
                                    zero_padding=zero_padding)
     test_df = encode_label_log(test_log, encoding_type, job_type, label, event_names, prefix_length=prefix_length,
                                zero_padding=zero_padding)
@@ -68,10 +69,10 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
     elif encoding_type == FREQUENCY:
         run_df = frequency(run_log, event_names)
     elif encoding_type == COMPLEX:
-        run_df = complex(run_log, event_names, prefix_length=prefix_length,
+        run_df = complex(run_log, event_names, label, prefix_length=prefix_length,
                          zero_padding=zero_padding)
     elif encoding_type == LAST_PAYLOAD:
-        run_df = last_payload(run_log, event_names, prefix_length=prefix_length,
+        run_df = last_payload(run_log, event_names, label, prefix_length=prefix_length,
                               zero_padding=zero_padding)
     return run_df
 

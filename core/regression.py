@@ -90,8 +90,8 @@ def prepare_results(df):
     # TODO are remaining time in seconds or hours?
     df['remaining_time'] = df['remaining_time'] / 3600
     df['prediction'] = df['prediction'] / 3600
-    rmse = sqrt(mean_squared_error(df['remaining_time'], df['prediction']))
     mae = mean_absolute_error(df['remaining_time'], df['prediction'])
+    rmse = sqrt(mae)
     rscore = metrics.r2_score(df['remaining_time'], df['prediction'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore}

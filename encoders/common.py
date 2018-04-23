@@ -36,7 +36,6 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
         # Post processing
         if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
             return label_boolean(encoded_log, label)
-
     return encoded_log
 
 
@@ -65,9 +64,9 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
     if encoding_type == SIMPLE_INDEX:
         run_df = simple_index(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == BOOLEAN:
-        run_df = boolean(run_log, event_names)
+        run_df = boolean(run_log, event_names, label)
     elif encoding_type == FREQUENCY:
-        run_df = frequency(run_log, event_names)
+        run_df = frequency(run_log, event_names, label)
     elif encoding_type == COMPLEX:
         run_df = complex(run_log, event_names, label, prefix_length=prefix_length,
                          zero_padding=zero_padding)

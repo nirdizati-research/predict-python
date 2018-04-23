@@ -58,10 +58,8 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
 def _classification_random_forest():
     return {
         'n_estimators': 10,
-        'criterion': 'gini',
         'max_depth': None,
-        'min_samples_split': 2,
-        'min_samples_leaf': 1
+        'max_features': 'auto'
     }
 
 
@@ -74,8 +72,6 @@ def _classification_knn():
 
 def _classification_decision_tree():
     return {
-        'criterion': 'gini',
-        'splitter': 'best',
         'max_depth': None,
         'min_samples_split': 2,
         'min_samples_leaf': 1
@@ -85,9 +81,8 @@ def _classification_decision_tree():
 def _regression_random_forest():
     return {
         'n_estimators': 10,
-        'criterion': 'mse',
         'max_depth': None,
-        'min_samples_split': 2
+        'max_features': 'auto'
     }
 
 
@@ -95,16 +90,14 @@ def _regression_lasso():
     return {
         'alpha': 1.0,
         'fit_intercept': True,
-        'normalize': False,
-        'copy_X': True
+        'normalize': False
     }
 
 
 def _regression_linear():
     return {
         'fit_intercept': True,
-        'normalize': False,
-        'copy_X': True
+        'normalize': False
     }
 
 

@@ -209,9 +209,8 @@ class MethodConfiguration(TestCase):
         self.assertEquals(False, 'regression.lasso' in config)
         self.assertDictEqual(config['regression.randomForest'], {
             'n_estimators': 15,
-            'criterion': 'mse',
-            'max_depth': None,
-            'min_samples_split': 2
+            'max_features': 'auto',
+            'max_depth': None
         })
 
     def test_adds_conf_if_missing(self):
@@ -223,7 +222,6 @@ class MethodConfiguration(TestCase):
         self.assertEquals(False, 'regression.lasso' in config)
         self.assertDictEqual(config['regression.randomForest'], {
             'n_estimators': 10,
-            'criterion': 'mse',
-            'max_depth': None,
-            'min_samples_split': 2
+            'max_features': 'auto',
+            'max_depth': None
         })

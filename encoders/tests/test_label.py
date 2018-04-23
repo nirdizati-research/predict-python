@@ -64,10 +64,32 @@ class TestLabelSimpleIndex(TestCase):
 
         df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=10, zero_padding=True)
-        self.assertEqual(df.shape, (2, 12))
+        self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 280200.0])
+        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 1296240.0, 280200.0])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 0.0])
+        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 520920.0, 0.0])
 
+    def test_next_activity(self):
+        label = LabelContainer(type=NEXT_ACTIVITY)
 
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 4))
+        self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
+        trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
+        self.assertListEqual(trace_5, ['5', 1, 2, 3])
+        trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
+        self.assertListEqual(trace_4, ['4', 1, 3, 7])
+
+    def test_next_activity_zero_padding_elapsed_time(self):
+        label = LabelContainer(type=NEXT_ACTIVITY, add_elapsed_time=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=10, zero_padding=True)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('elapsed_time' in df.columns.values.tolist())
+        trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
+        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 1296240.0, 3])
+        trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
+        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 520920.0, 0])

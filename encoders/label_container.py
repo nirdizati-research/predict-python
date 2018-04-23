@@ -36,5 +36,5 @@ class LabelContainer(namedtuple('LabelContainer', ["type", "attribute_name", "th
     def __new__(cls, type=REMAINING_TIME, attribute_name=None, threshold_type=THRESHOLD_MEAN, threshold=0,
                 add_remaining_time=False, add_elapsed_time=False):
         return super(LabelContainer, cls).__new__(cls, type, attribute_name, threshold_type, threshold,
-                                                  add_elapsed_time, add_remaining_time)
+                                                  add_remaining_time, add_elapsed_time)
 

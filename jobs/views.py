@@ -7,7 +7,7 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from core.constants import CLASSIFICATION, NEXT_ACTIVITY, REGRESSION
+from core.constants import CLASSIFICATION, REGRESSION
 from jobs import tasks
 from jobs.job_creator import generate
 from jobs.models import Job, RUNNING
@@ -67,8 +67,6 @@ def create_multiple(request):
 
     if payload['type'] == CLASSIFICATION:
         jobs = generate(split, payload)
-    elif payload['type'] == NEXT_ACTIVITY:
-        jobs = generate(split, payload, NEXT_ACTIVITY)
     elif payload['type'] == REGRESSION:
         jobs = generate(split, payload, REGRESSION)
     else:

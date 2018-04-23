@@ -1,7 +1,7 @@
 from django.db import models
 from jsonfield import JSONField
 
-from core.constants import REGRESSION, CLASSIFICATION, NEXT_ACTIVITY
+from core.constants import REGRESSION, CLASSIFICATION
 from encoders.label_container import LabelContainer
 from logs.models import Log, Split
 
@@ -12,8 +12,7 @@ RUNNING = 'running'
 
 TYPES = (
     (CLASSIFICATION, 'Classification'),
-    (REGRESSION, 'Regression'),
-    (NEXT_ACTIVITY, 'Next activity'),
+    (REGRESSION, 'Regression')
 )
 STATUSES = (
     (CREATED, 'Created'),

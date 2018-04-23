@@ -122,7 +122,7 @@ def results_multi_label(actual: list, predicted: list):
     # print(classification_report(actual, predicted))
     acc = accuracy_score(actual, predicted)
     f1score = f1_score(actual, predicted, average='macro')
-    precision = precision_score(actual, predicted, average='micro')
+    precision = precision_score(actual, predicted, average='macro')
     recall = recall_score(actual, predicted, average='macro')
     # confusion matrix is not binary for easy representation, so removing
     row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}

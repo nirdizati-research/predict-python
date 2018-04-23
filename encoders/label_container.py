@@ -21,7 +21,7 @@ def labelling
 """
 from collections import namedtuple
 
-NEXT_ACTIVITY = 'label_next_activity'
+NEXT_ACTIVITY = 'next_activity'
 REMAINING_TIME = 'remaining_time'
 ATTRIBUTE_NUMBER = 'attribute_number'
 ATTRIBUTE_STRING = 'attribute_string'

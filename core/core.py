@@ -1,7 +1,7 @@
-from core.classification import classifier
+from core.binary_classification import binary_classifier
 from core.constants import \
     CLASSIFICATION, REGRESSION, ZERO_PADDING
-from core.next_activity import next_activity
+from core.multi_classification import multi_classifier
 from core.regression import regression
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY
 from logs.splitting import prepare_logs
@@ -36,9 +36,9 @@ def run_by_type(training_df, test_df, job):
         label_type = job['label'].type
         # Binary classification
         if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
-            results, model_split = classifier(training_df, test_df, job)
+            results, model_split = binary_classifier(training_df, test_df, job)
         elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
-            results, model_split = next_activity(training_df, test_df, job)
+            results, model_split = multi_classifier(training_df, test_df, job)
         else:
             raise ValueError("Label type not supported", label_type)
     elif job['type'] == REGRESSION:

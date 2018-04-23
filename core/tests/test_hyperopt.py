@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.hyperopt_wrapper import calculate_hyperopt
 from core.tests.test_prepare import add_default_config, repair_example
+from encoders.label_container import LabelContainer
 
 
 class TestHyperopt(TestCase):
@@ -12,12 +13,11 @@ class TestHyperopt(TestCase):
         json["split"] = repair_example()
         json["method"] = "randomForest"
         json["encoding"] = "simpleIndex"
-        json["rule"] = "remaining_time"
         json["prefix_length"] = 8
-        json["threshold"] = "default"
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
         json['clustering'] = 'noCluster'
+        json['label'] = LabelContainer(add_elapsed_time=True)
         json['hyperopt'] = {'use_hyperopt': True, 'max_evals': 2, 'performance_metric': 'acc'}
         return json
 

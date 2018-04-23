@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import repair_example, add_default_config
+from encoders.label_container import LabelContainer, NEXT_ACTIVITY
 
 
 class RefactorProof(TestCase):
@@ -11,11 +12,10 @@ class RefactorProof(TestCase):
         json["split"] = repair_example()
         json["method"] = "randomForest"
         json["encoding"] = "simpleIndex"
-        json["rule"] = "remaining_time"
         json["prefix_length"] = 5
-        json["threshold"] = "default"
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
+        json['label'] = LabelContainer(add_elapsed_time=True)
         return json
 
     def test_class_kmeans(self):
@@ -26,7 +26,7 @@ class RefactorProof(TestCase):
         self.assertDictEqual(result, {'f1score': 0.6757679180887372, 'acc': 0.5701357466063348, 'true_positive': 99,
                                       'true_negative': 27,
                                       'false_negative': 28, 'false_positive': 67, 'precision': 0.5963855421686747,
-                                      'recall': 0.7795275590551181, 'auc': 0.6113391741461917})
+                                      'recall': 0.7795275590551181, 'auc': 0.6105894365543488})
 
     def test_class_no_cluster(self):
         self.maxDiff = None
@@ -37,12 +37,12 @@ class RefactorProof(TestCase):
         self.assertDictEqual(result, {'f1score': 0.7200000000000001, 'acc': 0.6515837104072398, 'true_positive': 99,
                                       'true_negative': 45,
                                       'false_negative': 28, 'false_positive': 49, 'precision': 0.668918918918919,
-                                      'recall': 0.7795275590551181, 'auc': 0.69484000670128987})
+                                      'recall': 0.7795275590551181, 'auc': 0.69680851063829774})
 
     def test_next_activity_kmeans(self):
         self.maxDiff = None
         job = self.get_job()
-        job["type"] = "nextActivity"
+        job["label"] = LabelContainer(NEXT_ACTIVITY)
         job['prefix_length'] = 8
         add_default_config(job)
         result, _ = calculate(job)
@@ -52,7 +52,7 @@ class RefactorProof(TestCase):
     def test_next_activity_no_cluster(self):
         self.maxDiff = None
         job = self.get_job()
-        job["type"] = "nextActivity"
+        job["label"] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
         job['prefix_length'] = 8
         add_default_config(job)

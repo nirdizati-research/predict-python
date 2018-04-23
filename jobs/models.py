@@ -1,8 +1,9 @@
 from django.db import models
+from jsonfield import JSONField
 
 from core.constants import REGRESSION, CLASSIFICATION, NEXT_ACTIVITY
+from encoders.label_container import LabelContainer
 from logs.models import Log, Split
-from jsonfield import JSONField
 
 CREATED = 'created'
 COMPLETED = 'completed'
@@ -42,4 +43,5 @@ class Job(BaseModel):
         job = dict(self.config)
         job['type'] = self.type
         job['split'] = self.split.to_dict()
+        job['label'] = LabelContainer(**self.config['label'])
         return job

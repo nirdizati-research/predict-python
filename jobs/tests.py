@@ -5,6 +5,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
 from core.tests.test_prepare import add_default_config
+from encoders.label_container import LabelContainer, THRESHOLD_MEAN
 from jobs.job_creator import create_config, _classification_random_forest
 from jobs.models import Job
 from jobs.tasks import prediction_task
@@ -17,11 +18,10 @@ class JobModelTest(TestCase):
                        'method': 'randomForest',
                        'encoding': 'simpleIndex',
                        'clustering': 'noCluster',
-                       "rule": "remaining_time",
                        "prefix_length": 1,
                        "padding": 'no_padding',
-                       "threshold": "default",
                        "create_models": False,
+                       "label": {'type': 'remaining_time'}
                        }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
         split = Split.objects.create(original_log=log)
@@ -55,6 +55,7 @@ class JobModelTest(TestCase):
                               'id': 1},
                              job['split'])
         self.assertEquals(123, job['key'])
+        self.assertEquals(job['label'], LabelContainer())
 
     def test_prediction_task(self):
         prediction_task(1)
@@ -71,7 +72,6 @@ class JobModelTest(TestCase):
         prediction_task(1)
 
         job = Job.objects.get(id=1)
-        print(job.config)
 
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.result)
@@ -90,7 +90,7 @@ class JobModelTest(TestCase):
 
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)
-        self.assertEqual("KeyError('method',)", job.error)
+        self.assertEqual("KeyError('label',)", job.error)
 
 
 class Hyperopt(TestCase):
@@ -99,11 +99,10 @@ class Hyperopt(TestCase):
             'method': 'randomForest',
             'encoding': 'simpleIndex',
             'clustering': 'noCluster',
-            "rule": "remaining_time",
             "prefix_length": 3,
             "padding": 'no_padding',
-            "threshold": "default",
             "create_models": False,
+            "label": {"type": "remaining_time"},
             "hyperopt": {"use_hyperopt": True, "max_evals": 2, "performance_metric": "acc"}
         }
         log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
@@ -130,6 +129,8 @@ class CreateJobsTests(APITestCase):
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']
         config['methods'] = ['knn']
+        config['label'] = {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
+                           "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
         config['random'] = 123
         config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
         obj = dict()
@@ -150,6 +151,9 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertEqual(response.data[0]['config']['prefix_length'], 3)
+        self.assertEqual(response.data[0]['config']['label'],
+                         {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
+                          "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False})
         self.assertEqual(response.data[0]['config']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')
 

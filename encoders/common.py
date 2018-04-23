@@ -9,7 +9,7 @@ from .simple_index import simple_index
 
 def encode_label_logs(training_log: list, test_log: list, encoding_type: str, job_type: str, label: LabelContainer,
                       prefix_length=1, zero_padding=False):
-    """Encodes and labelstest set and training set as data frames
+    """Encodes and labels test set and training set as data frames
 
     :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
     :returns training_df, test_df
@@ -36,19 +36,6 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
         if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
             return label_boolean(encoded_log, label)
     return encoded_log
-
-
-# def encode_logs(training_log: list, test_log: list, label: LabelContainer, encoding_type: str, job_type: str,
-#                 prefix_length=1, zero_padding=False):
-#     """Encodes test set and training set as data frames
-#
-#     :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
-#     :returns training_df, test_df
-#     """
-#     event_names = unique_events2(training_log, test_log)
-#     training_df = encode_log(training_log, encoding_type, label, prefix_length, event_names, zero_padding=zero_padding)
-#     test_df = encode_log(test_log, encoding_type, label, prefix_length, event_names, zero_padding=zero_padding)
-#     return training_df, test_df
 
 
 def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_length=1, event_names=None,

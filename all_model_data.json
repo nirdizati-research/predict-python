@@ -845,5 +845,89 @@
       "type": "regression",
       "split": 4
     }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 7,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.303Z",
+      "modified_date": "2018-04-24T09:08:20.620Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":511,\"false\":372}",
+      "type": "labelling",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 8,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.307Z",
+      "modified_date": "2018-04-24T09:08:22.924Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":511,\"false\":372}",
+      "type": "labelling",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 9,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.309Z",
+      "modified_date": "2018-04-24T09:08:26.011Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":517,\"false\":366}",
+      "type": "labelling",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 10,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.311Z",
+      "modified_date": "2018-04-24T09:08:31.294Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":5194,\"false\":4277}",
+      "type": "labelling",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 11,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.313Z",
+      "modified_date": "2018-04-24T09:08:34.670Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":5194,\"false\":4277}",
+      "type": "labelling",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 12,
+    "fields": {
+      "created_date": "2018-04-24T09:08:18.314Z",
+      "modified_date": "2018-04-24T09:08:37.687Z",
+      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"true\":5194,\"false\":4277}",
+      "type": "labelling",
+      "split": 5
+    }
   }
 ]

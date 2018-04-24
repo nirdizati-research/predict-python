@@ -98,6 +98,25 @@ curl --request POST \
 http://localhost:8000/jobs/multiple
 ```
 
+## Labelling job
+Log encoding and labelling can be tested before prediction. It supports all the same values as classification and 
+regression jobs but the method and clustering.
+
+```commandline
+curl --request POST \
+  --header 'Content-Type: application/json' \
+  --data-binary '{
+    "type": "labelling",
+    "split_id": 5,
+    "config": {
+      "encodings": ["simpleIndex", "boolean"],
+      "label": {"type": "remaining_time"},
+      "prefix": {"prefix_length": 3, "type": "up_to", "padding": "no_padding"}
+    }
+  }' \
+http://localhost:8000/jobs/multiple
+```
+
 ## Contributors
 - [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi

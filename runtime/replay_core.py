@@ -1,9 +1,9 @@
 import json
-from .models import XTrace, XEvent, XLog
+from runtime.models import XTrace, XEvent, XLog
 from opyenxes.factory.XFactory import XFactory
 from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 from predModels.models import PredModels
-from .tasks import calculate
+from core.core import runtime_calculate
 import xml.etree.ElementTree as Et
 from xml.dom import minidom
 from core.constants import CLASSIFICATION
@@ -33,22 +33,21 @@ def prepare(ev, tr, lg):
     run_log = run.create_log(logtmp)
     run_trace = run.create_trace(trtmp)
     run_log.append(run_trace)
+    c=0
     for event in events:
+        c=c+1
         evt = run.create_event(evtmp)
         run_trace.append(evt)
     if trace.model is not None:
-        model_set = PredModels.objects.filter(type=CLASSIFICATION)
-        print("length\n\n")
-        print (len(model_set))
-        if len(model_set) == 0:
+        try:
+            modeldb = PredModels.objects.filter(type=CLASSIFICATION, config__contains={'prefix_length':c})[:1]
+        except PredModels.DoesNotExist:
             return print("error")
-        else:
-            modeldb=model_set[0]
-            trace.model=modeldb
+        trace.model=modeldb
     right_model=trace.model
     
     
-    trace.results = calculate(run_log, right_model)
+    trace.results = runtime_calculate(run_log, right_model.to_dict())
     trace.save()
     return 
 

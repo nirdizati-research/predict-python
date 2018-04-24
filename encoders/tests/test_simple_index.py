@@ -75,7 +75,7 @@ class TestGeneralTest(TestCase):
     def test_prefix1_no_label(self):
         df = simple_index(self.log, self.event_names, prefix_length=1, add_label=False)
 
-        self.assertEqual(df.shape, (2, 2))
+        self.assertEqual(df.shape, (2, 3))
         row1 = df[df.trace_id == '5'].iloc[0]
         self.assertListEqual(['5', 1], row1.values.tolist())
         row2 = df[df.trace_id == '4'].iloc[0]

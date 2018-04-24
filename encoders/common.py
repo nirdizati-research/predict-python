@@ -2,7 +2,7 @@ from core.constants import SIMPLE_INDEX, NEXT_ACTIVITY, BOOLEAN, FREQUENCY, COMP
 from encoders.boolean_frequency import frequency
 from encoders.complex_last_payload import complex, last_payload
 from .boolean_frequency import boolean
-from .log_util import unique_events2
+from .log_util import unique_events2, unique_events
 from .simple_index import simple_index
 
 
@@ -27,6 +27,8 @@ def encode_log(run_log: list, encoding_type: str, job_type: str, prefix_length=1
     :param add_label True to add label to df, like remaining_time and elapsed_time
     :returns training_df, test_df
     """
+    if event_names is None:
+        event_names = unique_events(run_log)
     run_df = None
     if encoding_type == SIMPLE_INDEX:
         next_activity = job_type == NEXT_ACTIVITY

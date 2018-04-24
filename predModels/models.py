@@ -35,8 +35,7 @@ class PredModels(models.Model):
     config = JSONField(default={})
 
     def to_dict(self):
-        model = dict()
-        model['config'] = self.config
+        model = dict(self.config)
         model['type'] = self.type
         model['log_path'] = self.log.path
         model['log_name'] = self.log.name

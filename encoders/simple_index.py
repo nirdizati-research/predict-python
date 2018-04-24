@@ -31,7 +31,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, add_la
         trace_row.append(trace_name)
         if add_label:
             trace_row.append(remaining_time_id(trace, prefix_length - 1))
-            trace_row.append(elapsed_time_id(trace, prefix_length - 1))
+        trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
@@ -67,7 +67,7 @@ def __create_columns(prefix_length: int, add_label: bool):
     if add_label:
         columns = list(HEADER_COLUMNS)
     else:
-        columns = ['trace_id']
+        columns = ['trace_id', 'elapsed_time']
 
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))

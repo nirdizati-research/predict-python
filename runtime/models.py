@@ -7,8 +7,7 @@ class XLog(models.Model):
     config = models.CharField(default="", null=True, max_length=500)
 
     def to_dict(self):
-        log = dict()
-        log['config'] = self.config
+        log = dict(self.config)
         return log
     
 

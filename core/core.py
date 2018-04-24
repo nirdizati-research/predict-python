@@ -1,9 +1,9 @@
-from core.classification import classifier
+from core.classification import classifier, classifier_single_log
 from core.constants import NEXT_ACTIVITY, \
     CLASSIFICATION, REGRESSION, ZERO_PADDING
-from core.next_activity import next_activity
-from core.regression import regression
-from encoders.common import encode_logs
+from core.next_activity import next_activity, next_activity_single_log
+from core.regression import regression, regression_single_log
+from encoders.common import encode_logs, encode_log
 from logs.splitting import prepare_logs
 
 
@@ -33,6 +33,28 @@ def calculate(job):
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results, model_split
 
+def runtime_calculate(run_log,model):
+    """ Main entry method for calculations"""
+    # Python dicts are bad
+    if 'prefix_length' in model:
+        prefix_length = model['prefix_length']
+    else:
+        prefix_length = 1
+    zero_padding = True if model['padding'] is ZERO_PADDING else False
+    
+    run_df= encode_log(run_log, model['encoding'], model['type'], prefix_length,
+                       add_label=False, zero_padding=zero_padding)
+
+    if model['type'] == CLASSIFICATION:
+        results = classifier_single_log(run_df, model)
+    elif model['type'] == REGRESSION:
+        results= regression_single_log(run_df, model)
+    elif model['type'] == NEXT_ACTIVITY:
+        results = next_activity_single_log(run_df, model)
+    else:
+        raise ValueError("Type not supported", model['type'])
+    print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
+    return results
 
 def get_run(job):
     """Defines job identity"""

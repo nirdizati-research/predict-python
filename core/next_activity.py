@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.externals import joblib
 
 from core.common import choose_classifier, calculate_results
 from core.constants import KMEANS, NO_CLUSTER
@@ -31,7 +32,7 @@ def next_activity_single_log(run_df, model):
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    return result
+    return result['predicted']
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf):

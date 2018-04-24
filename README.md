@@ -43,9 +43,8 @@ curl --request POST \
       "encodings": ["simpleIndex"],
       "clusterings": ["noCluster"],
       "methods": ["randomForest"],
-      "rule": "remaining_time",
-      "prefix": {"prefix_length": 3, "type": "only", "padding': "zero_padding"},
-      "threshold": "default"
+      "label": {"type": "remaining_time"},
+      "prefix": {"prefix_length": 3, "type": "only", "padding": "zero_padding"}
     }
   }' \
 http://localhost:8000/jobs/multiple
@@ -92,9 +91,8 @@ curl --request POST \
         "n_neighbors": 5,
         "weights": "uniform"
       },
-      "rule": "remaining_time",
-      "prefix": {"prefix_length": 3, "type": "up_to", "padding': "no_padding"},
-      "threshold": "default"
+      "label": {"type": "remaining_time"},
+      "prefix": {"prefix_length": 3, "type": "up_to", "padding": "no_padding"}
     }
   }' \
 http://localhost:8000/jobs/multiple

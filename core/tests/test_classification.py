@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
+from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM
 
 
 class TestClassification(TestCase):
@@ -16,8 +17,7 @@ class TestClassification(TestCase):
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
     def results3(self):
-        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0, 'false_negative': 0, 'false_positive': 1,
-                'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
+        return {'f1score': 0.3333333333333333, 'acc': 0.5, 'auc': 0, 'precision': 0.25, 'recall': 0.5}
 
     def get_job(self):
         json = dict()
@@ -25,58 +25,64 @@ class TestClassification(TestCase):
         json["split"] = split_double()
         json["method"] = "randomForest"
         json["encoding"] = "simpleIndex"
-        json["rule"] = "remaining_time"
         json["prefix_length"] = 1
-        json["threshold"] = "default"
         json["type"] = "classification"
         json["padding"] = 'zero_padding'
+        json['label'] = LabelContainer(add_elapsed_time=True)
         return json
 
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         add_default_config(job)
-        result,_ = calculate(job)
+        result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
-    # KNN Fails due to small dataset
-    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
-    def class_KNN(self):
+    def test_class_KNN(self):
         job = self.get_job()
         job['method'] = 'knn'
-        job['classification.knn'] = {}
-        calculate(job)
+        job['clustering'] = 'noCluster'
+        job['classification.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
     def test_class_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
         add_default_config(job)
-        result,_ = calculate(job)
-        self.assertDictEqual(result, self.results())
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
-        job['type'] = 'nextActivity'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)
-        result,_ = calculate(job)
-        self.assertDictEqual(result, self.results3())
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
-    # KNN Fails due to small dataset
-    # Expected n_neighbors <= n_samples,  but n_samples = 4, n_neighbors = 5
-    def next_activity_KNN(self):
+    def test_next_activity_KNN(self):
         job = self.get_job()
-        job['method'] = 'KNN'
-        job['type'] = 'nextActivity'
-        add_default_config(job)
-        calculate(job)
+        job['method'] = 'knn'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['classification.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_attribute_string_knn(self):
+        job = self.get_job()
+        job['method'] = 'knn'
+        job['label'] = LabelContainer(ATTRIBUTE_STRING)
+        job['classification.knn'] = {'n_neighbors': 3}
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
         job['method'] = 'decisionTree'
-        job['type'] = 'nextActivity'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
         add_default_config(job)
-        result,_ = calculate(job)
+        result, _ = calculate(job)
         self.assertDictEqual(result, self.results3())
 
     def test_class_complex(self):
@@ -84,7 +90,7 @@ class TestClassification(TestCase):
         job['clustering'] = 'noCluster'
         job["encoding"] = "complex"
         add_default_config(job)
-        result,_ = calculate(job)
+        result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
 
     def test_class_complex_zero_padding(self):
@@ -101,5 +107,15 @@ class TestClassification(TestCase):
         job['clustering'] = 'noCluster'
         job["encoding"] = "lastPayload"
         add_default_config(job)
-        result,_ = calculate(job)
+        result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
+
+    def test_class_last_payload_custom_threshold(self):
+        job = self.get_job()
+        job['clustering'] = 'noCluster'
+        job["encoding"] = "lastPayload"
+        job['prefix_length'] = 5
+        job['label'] = LabelContainer(threshold_type=THRESHOLD_CUSTOM, threshold=50)
+        add_default_config(job)
+        result, _ = calculate(job)
+        # it works, but results are unreliable

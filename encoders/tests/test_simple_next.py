@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from core.constants import SIMPLE_INDEX, NEXT_ACTIVITY
-from encoders.common import encode_logs
+from core.constants import SIMPLE_INDEX, CLASSIFICATION
+from encoders.common import LabelContainer, NEXT_ACTIVITY, encode_label_logs, NO_LABEL
 from encoders.log_util import unique_events
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
@@ -11,10 +11,11 @@ class TestSimpleGeneralExample(TestCase):
     def setUp(self):
         self.log = get_logs("log_cache/general_example.xes")[0]
         self.event_names = unique_events(self.log)
+        self.label = LabelContainer(type=NEXT_ACTIVITY)
 
     def test_encodes_next_activity(self):
         """Encodes for next activity"""
-        df = simple_index(self.log, self.event_names, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label)
 
         self.assertEqual((6, 3), df.shape)
         self.assertNotIn("remaining_time", df.columns.values)
@@ -28,7 +29,7 @@ class TestSimpleGeneralExample(TestCase):
 
     def test_encodes_next_activity_prefix_zero_padding(self):
         """Encodes for next activity with prefix length"""
-        df = simple_index(self.log, self.event_names, prefix_length=6, next_activity=True, zero_padding=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=6, zero_padding=True)
 
         self.assertEqual((6, 8), df.shape)
         self.assertIn("prefix_1", df.columns.values)
@@ -39,7 +40,7 @@ class TestSimpleGeneralExample(TestCase):
 
     def test_encodes_next_activity_prefix(self):
         """Encodes for next activity with prefix length"""
-        df = simple_index(self.log, self.event_names, prefix_length=6, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=6)
 
         self.assertEqual((2, 8), df.shape)
         self.assertIn("prefix_1", df.columns.values)
@@ -53,11 +54,12 @@ class TestSplitLogExample(TestCase):
     def setUp(self):
         self.test_log = get_logs("log_cache/general_example_test.xes")[0]
         self.training_log = get_logs("log_cache/general_example_training.xes")[0]
+        self.label = LabelContainer(type=NEXT_ACTIVITY)
 
     def test_encodes_next_activity(self):
         """Encodes for next activity with test set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY,
-                                           prefix_length=1)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=1)
         self.assertEqual((2, 3), test_df.shape)
         self.assertNotIn("remaining_time", test_df.columns.values)
         self.assertNotIn("elapsed_time", test_df.columns.values)
@@ -70,8 +72,8 @@ class TestSplitLogExample(TestCase):
 
     def test_encodes_next_activity_prefix(self):
         """Encodes for next activity with prefix length with training set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY,
-                                           prefix_length=6)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=6)
 
         self.assertEqual((1, 8), training_df.shape)
         self.assertIn("prefix_1", training_df.columns.values)
@@ -82,8 +84,8 @@ class TestSplitLogExample(TestCase):
 
     def test_encodes_next_activity_prefix_zero_padding(self):
         """Encodes for next activity with prefix length with training set"""
-        training_df, test_df = encode_logs(self.training_log, self.test_log, SIMPLE_INDEX, NEXT_ACTIVITY,
-                                           prefix_length=6, zero_padding=True)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
+                                                 CLASSIFICATION, self.label, prefix_length=6, zero_padding=True)
 
         self.assertEqual((4, 8), training_df.shape)
         self.assertIn("prefix_1", training_df.columns.values)
@@ -99,16 +101,17 @@ class TestNextActivity(TestCase):
     def setUp(self):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
         self.event_names = unique_events(self.log)
+        self.label = LabelContainer(type=NEXT_ACTIVITY)
 
     def test_header(self):
-        df = simple_index(self.log, self.event_names, prefix_length=3, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=3)
 
         self.assertEqual(df.shape, (2, 5))
         header = ['trace_id', 'prefix_1', 'prefix_2', 'prefix_3', 'label']
         self.assertListEqual(header, df.columns.values.tolist())
 
     def test_prefix1(self):
-        df = simple_index(self.log, self.event_names, prefix_length=1, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=1)
 
         self.assertEqual(df.shape, (2, 3))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -117,7 +120,8 @@ class TestNextActivity(TestCase):
         self.assertListEqual(['4', 1, 3], row2.values.tolist())
 
     def test_prefix1_no_label(self):
-        df = simple_index(self.log, self.event_names, prefix_length=1, next_activity=True, add_label=False)
+        label = LabelContainer(NO_LABEL)
+        df = simple_index(self.log, self.event_names, label, prefix_length=1)
 
         self.assertEqual(df.shape, (2, 2))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -125,11 +129,8 @@ class TestNextActivity(TestCase):
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 1], row2.values.tolist())
 
-    def test_prefix0(self):
-        self.assertRaises(ValueError, simple_index, self.log, self.event_names, prefix_length=0, next_activity=True)
-
     def test_prefix2(self):
-        df = simple_index(self.log, self.event_names, prefix_length=2, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=2)
 
         self.assertEqual(df.shape, (2, 4))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -138,7 +139,7 @@ class TestNextActivity(TestCase):
         self.assertListEqual(['4', 1, 3, 7], row2.values.tolist())
 
     def test_prefix5(self):
-        df = simple_index(self.log, self.event_names, prefix_length=5, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=5)
 
         self.assertEqual(df.shape, (2, 7))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -147,14 +148,14 @@ class TestNextActivity(TestCase):
         self.assertListEqual(['4', 1, 3, 7, 4, 6, 0], row2.values.tolist())
 
     def test_prefix10(self):
-        df = simple_index(self.log, self.event_names, prefix_length=10, next_activity=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=10)
 
         self.assertEqual(df.shape, (1, 12))
         row1 = df[df.trace_id == '5'].iloc[0]
         self.assertListEqual(['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 3], row1.values.tolist())
 
     def test_prefix10_zero_padding(self):
-        df = simple_index(self.log, self.event_names, prefix_length=10, next_activity=True, zero_padding=True)
+        df = simple_index(self.log, self.event_names, self.label, prefix_length=10, zero_padding=True)
 
         self.assertEqual(df.shape, (2, 12))
         row1 = df[df.trace_id == '5'].iloc[0]

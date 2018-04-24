@@ -47,6 +47,7 @@ def calculate_results(prediction, actual):
 
 def choose_classifier(job: dict):
     method, config = get_method_config(job)
+    print("Using method {} with config {}".format(method, config))
     if method == KNN:
         clf = KNeighborsClassifier(**config)
     elif method == RANDOM_FOREST:
@@ -62,26 +63,10 @@ def get_method_config(job: dict):
     method = job['method']
     method_conf_name = "{}.{}".format(job['type'], method)
     config = job[method_conf_name]
-    print("Using method {} with config {}".format(method, config))
     return method, config
 
 
-# TODO deprecate
-def fast_slow_encode(df, label, threshold):
-    if threshold == "default":
-        threshold_ = df[label].mean()
-    else:
-        threshold_ = float(threshold)
-    df['actual'] = df[label] < threshold_
-    return df
-
-
-def fast_slow_encode2(training_df, test_df, label: str, threshold: float):
-    if threshold == "default":
-        complete_df = training_df.append(test_df)
-        threshold_ = complete_df[label].mean()
-    else:
-        threshold_ = float(threshold)
-    training_df['actual'] = training_df[label] < threshold_
-    test_df['actual'] = test_df[label] < threshold_
+def add_actual(training_df, test_df):
+    training_df['actual'] = training_df['label']
+    test_df['actual'] = test_df['label']
     return training_df, test_df

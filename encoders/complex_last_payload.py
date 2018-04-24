@@ -1,32 +1,38 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import get_event_attributes, HEADER_COLUMNS
-from .log_util import remaining_time_id, elapsed_time_id
+from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER
+from encoders.log_util import get_event_attributes
+from encoders.simple_index import add_label_columns, add_labels
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
+ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
+def complex(log, event_names, label: LabelContainer, prefix_length=1, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_complex, data_complex, add_label,
+    return encode_complex_latest(log, event_names, label, prefix_length, columns_complex, data_complex,
                                  zero_padding)
 
 
-def last_payload(log, event_names, prefix_length=1, add_label=True, zero_padding=False):
+def last_payload(log, event_names, label: LabelContainer, prefix_length=1, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, prefix_length, columns_last_payload, data_last_payload, add_label,
+    return encode_complex_latest(log, event_names, label, prefix_length, columns_last_payload, data_last_payload,
                                  zero_padding)
 
 
-def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun, data_fun, add_label: bool,
+def encode_complex_latest(log, event_names: list, label: LabelContainer, prefix_length: int, column_fun, data_fun,
                           zero_padding: bool):
     additional_columns = get_event_attributes(log)
-    columns = column_fun(prefix_length, additional_columns, add_label)
+    columns = column_fun(prefix_length, additional_columns, label)
     encoded_data = []
 
+    # Create classifier only once
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        global ATTRIBUTE_CLASSIFIER
+        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
     for trace in log:
         if zero_padding:
             zero_count = prefix_length - len(trace)
@@ -37,39 +43,31 @@ def encode_complex_latest(log, event_names: list, prefix_length: int, column_fun
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         # prefix_length - 1 == index
-        if add_label:
-            trace_row.append(remaining_time_id(trace, prefix_length - 1))
-            trace_row.append(elapsed_time_id(trace, prefix_length - 1))
         trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
+        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER)
         encoded_data.append(trace_row)
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: list, add_label: bool):
-    if add_label:
-        columns = list(HEADER_COLUMNS)
-    else:
-        columns = ['trace_id']
+def columns_complex(prefix_length: int, additional_columns: list, label: LabelContainer):
+    columns = ['trace_id']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
         for additional_column in additional_columns:
             columns.append(additional_column + "_" + str(i))
-    return columns
+    return add_label_columns(columns, label)
 
 
-def columns_last_payload(prefix_length: int, additional_columns: list, add_label: bool):
-    if add_label:
-        columns = list(HEADER_COLUMNS)
-    else:
-        columns = ['trace_id']
+def columns_last_payload(prefix_length: int, additional_columns: list, label: LabelContainer):
+    columns = ['trace_id']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns:
         columns.append(additional_column + "_" + str(i))
-    return columns
+    return add_label_columns(columns, label)
 
 
 def data_complex(trace: list, event_names: list, prefix_length: int, additional_columns: list):

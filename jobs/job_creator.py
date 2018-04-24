@@ -1,6 +1,4 @@
-from core.constants import CLASSIFICATION, all_configs, CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN, \
-    CLASSIFICATION_DECISION_TREE, REGRESSION_RANDOM_FOREST, REGRESSION_LASSO, REGRESSION_LINEAR, \
-    NEXT_ACTIVITY_RANDOM_FOREST, NEXT_ACTIVITY_KNN, NEXT_ACTIVITY_DECISION_TREE
+from core.constants import *
 from jobs.models import Job, CREATED
 
 
@@ -60,10 +58,9 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
 def _classification_random_forest():
     return {
         'n_estimators': 10,
-        'criterion': 'gini',
         'max_depth': None,
-        'min_samples_split': 2,
-        'min_samples_leaf': 1
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -76,20 +73,19 @@ def _classification_knn():
 
 def _classification_decision_tree():
     return {
-        'criterion': 'gini',
-        'splitter': 'best',
         'max_depth': None,
         'min_samples_split': 2,
-        'min_samples_leaf': 1
+        'min_samples_leaf': 1,
+        'random_state': 21
     }
 
 
 def _regression_random_forest():
     return {
         'n_estimators': 10,
-        'criterion': 'mse',
         'max_depth': None,
-        'min_samples_split': 2
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -98,15 +94,14 @@ def _regression_lasso():
         'alpha': 1.0,
         'fit_intercept': True,
         'normalize': False,
-        'copy_X': True
+        'random_state': 21
     }
 
 
 def _regression_linear():
     return {
         'fit_intercept': True,
-        'normalize': False,
-        'copy_X': True
+        'normalize': False
     }
 
 
@@ -114,6 +109,4 @@ def _regression_linear():
 CONF_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest, CLASSIFICATION_KNN: _classification_knn,
             CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
             REGRESSION_RANDOM_FOREST: _regression_random_forest,
-            REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear,
-            NEXT_ACTIVITY_RANDOM_FOREST: _classification_random_forest, NEXT_ACTIVITY_KNN: _classification_knn,
-            NEXT_ACTIVITY_DECISION_TREE: _classification_decision_tree}
+            REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}

@@ -1,8 +1,9 @@
 from django.db import models
-
-from core.constants import REGRESSION, CLASSIFICATION, NEXT_ACTIVITY
-from logs.models import Log, Split
 from jsonfield import JSONField
+
+from core.constants import REGRESSION, CLASSIFICATION
+from encoders.label_container import LabelContainer
+from logs.models import Log, Split
 
 CREATED = 'created'
 COMPLETED = 'completed'
@@ -11,8 +12,7 @@ RUNNING = 'running'
 
 TYPES = (
     (CLASSIFICATION, 'Classification'),
-    (REGRESSION, 'Regression'),
-    (NEXT_ACTIVITY, 'Next activity'),
+    (REGRESSION, 'Regression')
 )
 STATUSES = (
     (CREATED, 'Created'),
@@ -42,4 +42,5 @@ class Job(BaseModel):
         job = dict(self.config)
         job['type'] = self.type
         job['split'] = self.split.to_dict()
+        job['label'] = LabelContainer(**self.config['label'])
         return job

@@ -2,46 +2,48 @@ import numpy as np
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
-from encoders.log_util import DEFAULT_COLUMNS, remaining_time, elapsed_time, DEFAULT_COLUMNS_NO_LABEL
+from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER
+from encoders.simple_index import add_label_columns, add_labels
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
+ATTRIBUTE_CLASSIFIER = None
 
 
-def boolean(log: list, event_names: list, add_label=True):
-    return encode_boolean_frequency(log, event_names, is_boolean=True, add_label=add_label)
+def boolean(log: list, event_names: list, label: LabelContainer):
+    return encode_boolean_frequency(log, event_names, label, is_boolean=True)
 
 
-def frequency(log: list, event_names: list, add_label=True):
-    return encode_boolean_frequency(log, event_names, is_boolean=False, add_label=add_label)
+def frequency(log: list, event_names: list, label: LabelContainer):
+    return encode_boolean_frequency(log, event_names, label, is_boolean=False)
 
 
-def encode_boolean_frequency(log: list, event_names: list, add_label: bool, is_boolean=True):
+def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer, is_boolean=True):
     """Encodes the log by boolean or frequency
 
-    :param add_label If to add remaining_time and elapsed_time columns
+    trace_id, event_nr, event_names, label stuff
     :return pandas dataframe
     """
-    if add_label:
-        columns = np.append(event_names, list(DEFAULT_COLUMNS))
-    else:
-        columns = np.append(event_names, list(DEFAULT_COLUMNS_NO_LABEL))
+    columns = create_columns(event_names, label)
     encoded_data = []
 
+    # Create classifier only once
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        global ATTRIBUTE_CLASSIFIER
+        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
     for trace in log:
         trace_name = CLASSIFIER.get_class_identity(trace)
         # starts with all False, changes to event
         event_happened = create_event_happened(event_names, is_boolean)
         for event_index, event in enumerate(trace):
             trace_row = []
-            update_event_happened(event, event_names, event_happened, is_boolean)
-            trace_row += event_happened
-
             trace_row.append(trace_name)
             # Start counting at 1
             trace_row.append(event_index + 1)
-            if add_label:
-                trace_row.append(remaining_time(trace, event))
-                trace_row.append(elapsed_time(trace, event))
+            update_event_happened(event, event_names, event_happened, is_boolean)
+            trace_row += event_happened
+
+            trace_row += add_labels(label, event_index + 1, trace, event_names,
+                                    ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER)
             encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -65,3 +67,9 @@ def update_event_happened(event, event_names: list, event_happened: list, is_boo
         event_happened[event_index] = True
     else:
         event_happened[event_index] += 1
+
+
+def create_columns(event_names: list, label: LabelContainer):
+    columns = ["trace_id", "event_nr"]
+    columns = np.append(columns, event_names).tolist()
+    return add_label_columns(columns, label)

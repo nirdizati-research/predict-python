@@ -242,6 +242,7 @@ class MethodConfiguration(TestCase):
             'n_estimators': 15,
             'max_features': 'auto',
             'max_depth': None,
+            'n_jobs': -1,
             'random_state': 21
         })
 
@@ -256,5 +257,6 @@ class MethodConfiguration(TestCase):
             'n_estimators': 10,
             'max_features': 'auto',
             'max_depth': None,
+            'n_jobs': -1,
             'random_state': 21
         })

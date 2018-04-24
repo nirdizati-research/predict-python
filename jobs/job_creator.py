@@ -96,6 +96,7 @@ def _classification_random_forest():
         'n_estimators': 10,
         'max_depth': None,
         'max_features': 'auto',
+        'n_jobs': -1,
         'random_state': 21
     }
 
@@ -103,6 +104,7 @@ def _classification_random_forest():
 def _classification_knn():
     return {
         'n_neighbors': 5,
+        'n_jobs': -1,
         'weights': 'uniform'
     }
 
@@ -121,6 +123,7 @@ def _regression_random_forest():
         'n_estimators': 10,
         'max_depth': None,
         'max_features': 'auto',
+        'n_jobs': -1,
         'random_state': 21
     }
 
@@ -137,6 +140,7 @@ def _regression_lasso():
 def _regression_linear():
     return {
         'fit_intercept': True,
+        'n_jobs': -1,
         'normalize': False
     }
 

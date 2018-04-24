@@ -23,6 +23,7 @@ NO_CLUSTER = 'noCluster'
 # Job types
 CLASSIFICATION = 'classification'
 REGRESSION = 'regression'
+LABELLING = 'labelling'
 
 # Encoding options
 ZERO_PADDING = 'zero_padding'

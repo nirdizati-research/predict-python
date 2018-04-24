@@ -1,6 +1,7 @@
 from core.binary_classification import binary_classifier
 from core.constants import \
-    CLASSIFICATION, REGRESSION, ZERO_PADDING
+    CLASSIFICATION, REGRESSION, ZERO_PADDING, LABELLING
+from core.label_validation import label_task
 from core.multi_classification import multi_classifier
 from core.regression import regression
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY
@@ -19,11 +20,7 @@ def calculate(job):
 def get_encoded_logs(job: dict):
     training_log, test_log = prepare_logs(job['split'])
 
-    # Python dicts are bad
-    if 'prefix_length' in job:
-        prefix_length = job['prefix_length']
-    else:
-        prefix_length = 1
+    prefix_length = job.get('prefix_length', 1)
     zero_padding = True if job['padding'] is ZERO_PADDING else False
 
     training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
@@ -32,6 +29,7 @@ def get_encoded_logs(job: dict):
 
 
 def run_by_type(training_df, test_df, job):
+    model_split = None
     if job['type'] == CLASSIFICATION:
         label_type = job['label'].type
         # Binary classification
@@ -43,6 +41,8 @@ def run_by_type(training_df, test_df, job):
             raise ValueError("Label type not supported", label_type)
     elif job['type'] == REGRESSION:
         results, model_split = regression(training_df, test_df, job)
+    elif job['type'] == LABELLING:
+        results = label_task(training_df)
     else:
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
@@ -51,4 +51,6 @@ def run_by_type(training_df, test_df, job):
 
 def get_run(job):
     """Defines job identity"""
+    if job['type'] == LABELLING:
+        return job['encoding'] + '_' + job['label'].type
     return job['method'] + '_' + job['encoding'] + '_' + job['clustering'] + '_' + job['label'].type

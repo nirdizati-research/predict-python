@@ -768,7 +768,7 @@
     "fields": {
       "created_date": "2018-04-13T13:42:31.652Z",
       "modified_date": "2018-04-13T13:43:02.579Z",
-      "config": "{\"prefix_length\":1,\"rule\":\"remaining_time\",\"threshold\":\"default\",\"classification.knn\":{\"n_neighbors\":2,\"weights\":\"distance\"},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"knn\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.knn\":{\"n_neighbors\":2,\"weights\":\"distance\"},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"knn\"}",
       "error": "",
       "status": "completed",
       "result": "{\"f1score\":0,\"acc\":0.5,\"true_positive\":0,\"true_negative\":1,\"false_negative\":1,\"false_positive\":0,\"precision\":0,\"recall\":0.0,\"auc\":0.5}",
@@ -782,7 +782,7 @@
     "fields": {
       "created_date": "2018-04-13T13:42:31.656Z",
       "modified_date": "2018-04-13T13:43:02.728Z",
-      "config": "{\"prefix_length\":1,\"rule\":\"remaining_time\",\"threshold\":\"default\",\"classification.decisionTree\":{\"criterion\":\"gini\",\"splitter\":\"random\",\"max_depth\":null,\"min_samples_split\":2,\"min_samples_leaf\":3},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"decisionTree\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.decisionTree\":{\"criterion\":\"gini\",\"splitter\":\"random\",\"max_depth\":null,\"min_samples_split\":2,\"min_samples_leaf\":3},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"decisionTree\"}",
       "error": "",
       "status": "completed",
       "result": "{\"f1score\":0.6666666666666666,\"acc\":0.5,\"true_positive\":1,\"true_negative\":0,\"false_negative\":0,\"false_positive\":1,\"precision\":0.5,\"recall\":1.0,\"auc\":0.5}",
@@ -796,7 +796,7 @@
     "fields": {
       "created_date": "2018-04-14T06:19:46.659Z",
       "modified_date": "2018-04-14T06:21:41.890Z",
-      "config": "{\"prefix_length\":1,\"regression.lasso\":{\"alpha\":1.0,\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"lasso\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"regression.lasso\":{\"alpha\":1.0,\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"lasso\"}",
       "error": "",
       "status": "completed",
       "result": "{\"rmse\":221.72427510287096,\"mae\":193.11309325742732,\"rscore\":-0.06000850485685394}",
@@ -810,7 +810,7 @@
     "fields": {
       "created_date": "2018-04-14T06:19:46.660Z",
       "modified_date": "2018-04-14T06:22:03.597Z",
-      "config": "{\"prefix_length\":1,\"regression.linear\":{\"fit_intercept\":false,\"normalize\":false,\"copy_X\":true},\"encoding\":\"complex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"regression.linear\":{\"fit_intercept\":false,\"normalize\":false,\"copy_X\":true},\"encoding\":\"complex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
       "result": "{\"rmse\":221.72427510287082,\"mae\":193.11309325742712,\"rscore\":-0.060008504856852385}",
@@ -824,7 +824,7 @@
     "fields": {
       "created_date": "2018-04-14T06:29:21.355Z",
       "modified_date": "2018-04-14T06:30:24.760Z",
-      "config": "{\"prefix_length\":3,\"regression.linear\":{\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":3,\"regression.linear\":{\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
       "result": "{\"rmse\":201.76464727647456,\"mae\":165.3624707580213,\"rscore\":0.12224386445773794}",
@@ -838,7 +838,7 @@
     "fields": {
       "created_date": "2018-04-14T06:29:21.360Z",
       "modified_date": "2018-04-14T06:30:24.406Z",
-      "config": "{\"prefix_length\":3,\"regression.randomForest\":{\"n_estimators\":10,\"criterion\":\"mse\",\"max_depth\":null,\"min_samples_split\":2},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"randomForest\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":3,\"regression.randomForest\":{\"n_estimators\":10,\"criterion\":\"mse\",\"max_depth\":null,\"min_samples_split\":2},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"randomForest\"}",
       "error": "",
       "status": "completed",
       "result": "{\"rmse\":191.19102930552305,\"mae\":138.26345747696183,\"rscore\":0.21183208508900764}",

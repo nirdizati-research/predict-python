@@ -66,22 +66,7 @@ def get_method_config(job: dict):
     return method, config
 
 
-# TODO deprecate
-def fast_slow_encode(df, label, threshold):
-    if threshold == "default":
-        threshold_ = df[label].mean()
-    else:
-        threshold_ = float(threshold)
-    df['actual'] = df[label] < threshold_
-    return df
-
-
-def fast_slow_encode2(training_df, test_df, label: str, threshold: float):
-    if threshold == "default":
-        complete_df = training_df.append(test_df)
-        threshold_ = complete_df[label].mean()
-    else:
-        threshold_ = float(threshold)
-    training_df['actual'] = training_df[label] < threshold_
-    test_df['actual'] = test_df[label] < threshold_
+def add_actual(training_df, test_df):
+    training_df['actual'] = training_df['label']
+    test_df['actual'] = test_df['label']
     return training_df, test_df

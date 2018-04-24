@@ -3,6 +3,7 @@ from django.test import TestCase
 from core.constants import ZERO_PADDING
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
+from encoders.label_container import LabelContainer
 
 
 class TestRegression(TestCase):
@@ -14,7 +15,7 @@ class TestRegression(TestCase):
         json["split"] = split_double()
         json["method"] = "linear"
         json["encoding"] = "simpleIndex"
-        json["rule"] = "remaining_time"
+        json["label"] = LabelContainer()
         json["type"] = "regression"
         json["padding"] = ZERO_PADDING
         return json

@@ -20,9 +20,11 @@
 	<classifier name="Activity" keys="Activity"/>
 	<classifier name="activity classifier" keys="Activity"/>
 	<string key="creator" value="Fluxicon Nitro"/>
+	<string key="number_value" value="300"/>
 	<trace>
 		<string key="concept:name" value="5"/>
 		<string key="creator" value="Fluxicon Nitro"/>
+	    <string key="number_value" value="300"/>
 		<event>
 			<string key="concept:name" value="register request"/>
 			<string key="org:resource" value="Ellen"/>
@@ -131,6 +133,7 @@
 	<trace>
 		<string key="concept:name" value="4"/>
 		<string key="creator" value="Fluxicon Nitro"/>
+		<string key="number_value" value="100"/>
 		<event>
 			<string key="concept:name" value="register request"/>
 			<string key="org:resource" value="Pete"/>

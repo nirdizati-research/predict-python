@@ -59,7 +59,8 @@ def _classification_random_forest():
     return {
         'n_estimators': 10,
         'max_depth': None,
-        'max_features': 'auto'
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -74,7 +75,8 @@ def _classification_decision_tree():
     return {
         'max_depth': None,
         'min_samples_split': 2,
-        'min_samples_leaf': 1
+        'min_samples_leaf': 1,
+        'random_state': 21
     }
 
 
@@ -82,7 +84,8 @@ def _regression_random_forest():
     return {
         'n_estimators': 10,
         'max_depth': None,
-        'max_features': 'auto'
+        'max_features': 'auto',
+        'random_state': 21
     }
 
 
@@ -90,7 +93,8 @@ def _regression_lasso():
     return {
         'alpha': 1.0,
         'fit_intercept': True,
-        'normalize': False
+        'normalize': False,
+        'random_state': 21
     }
 
 
@@ -105,6 +109,4 @@ def _regression_linear():
 CONF_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest, CLASSIFICATION_KNN: _classification_knn,
             CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
             REGRESSION_RANDOM_FOREST: _regression_random_forest,
-            REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear,
-            NEXT_ACTIVITY_RANDOM_FOREST: _classification_random_forest, NEXT_ACTIVITY_KNN: _classification_knn,
-            NEXT_ACTIVITY_DECISION_TREE: _classification_decision_tree}
+            REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}

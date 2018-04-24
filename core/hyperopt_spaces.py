@@ -60,7 +60,4 @@ HYPEROPT_SPACE_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_fores
                       CLASSIFICATION_KNN: _classification_knn,
                       CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
                       REGRESSION_RANDOM_FOREST: _regression_random_forest,
-                      REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear,
-                      NEXT_ACTIVITY_RANDOM_FOREST: _classification_random_forest,
-                      NEXT_ACTIVITY_KNN: _classification_knn,
-                      NEXT_ACTIVITY_DECISION_TREE: _classification_decision_tree}
+                      REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}

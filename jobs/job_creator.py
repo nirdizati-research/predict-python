@@ -5,9 +5,9 @@ from jobs.models import Job, CREATED
 def generate(split, payload, type=CLASSIFICATION):
     jobs = []
 
-    for encoding in payload['config']['encodings']:
+    for method in payload['config']['methods']:
         for clustering in payload['config']['clusterings']:
-            for method in payload['config']['methods']:
+            for encoding in payload['config']['encodings']:
                 prefix = payload['config']['prefix']
                 if prefix['type'] == 'up_to':
                     for i in range(1, prefix['prefix_length'] + 1):
@@ -24,6 +24,30 @@ def generate(split, payload, type=CLASSIFICATION):
                         type=type,
                         config=create_config(payload, encoding, clustering, method, prefix['prefix_length']))
                     jobs.append(item)
+
+    return jobs
+
+
+def generate_labelling(split, payload):
+    jobs = []
+
+    for encoding in payload['config']['encodings']:
+        prefix = payload['config']['prefix']
+        if prefix['type'] == 'up_to':
+            for i in range(1, prefix['prefix_length'] + 1):
+                item = Job.objects.create(
+                    split=split,
+                    status=CREATED,
+                    type=LABELLING,
+                    config=create_config_labelling(payload, encoding, i))
+                jobs.append(item)
+        else:
+            item = Job.objects.create(
+                split=split,
+                status=CREATED,
+                type=LABELLING,
+                config=create_config_labelling(payload, encoding, prefix['prefix_length']))
+            jobs.append(item)
 
     return jobs
 
@@ -49,6 +73,18 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
     config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
+    config['prefix_length'] = prefix_length
+    config['padding'] = payload['config']['prefix']['padding']
+    return config
+
+
+def create_config_labelling(payload: dict, encoding: str, prefix_length: int):
+    """For labelling job"""
+    config = dict(payload['config'])
+    del config['encodings']
+    del config['prefix']
+
+    config['encoding'] = encoding
     config['prefix_length'] = prefix_length
     config['padding'] = payload['config']['prefix']['padding']
     return config

@@ -30,11 +30,12 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
     if label.type == ATTRIBUTE_NUMBER:
         encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
 
-    # Regression only has remaining_time as label
-    if job_type == CLASSIFICATION:
-        # Post processing
-        if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
-            return label_boolean(encoded_log, label)
+    # Regression only has remaining_time or number atr as label
+    if job_type == REGRESSION:
+        return encoded_log
+    # Post processing
+    if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
+        return label_boolean(encoded_log, label)
     return encoded_log
 
 

@@ -38,6 +38,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
+
 def trace_prefixes(trace: list, event_names: list, prefix_length: int):
     """List of indexes of the position they are in event_names"""
     prefixes = list()

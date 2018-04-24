@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
-from core.common import choose_classifier, calculate_results, add_actual, fast_slow_encode2, fast_slow_encode
+from core.common import choose_classifier, calculate_results, add_actual
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None

@@ -1,9 +1,9 @@
-from core.binary_classification import binary_classifier
+from core.binary_classification import binary_classifier, classifier_single_log
 from core.constants import \
     CLASSIFICATION, REGRESSION, ZERO_PADDING
-from core.multi_classification import multi_classifier
+from core.multi_classification import multi_classifier, next_activity_single_log
 from core.regression import regression, regression_single_log
-from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY
+from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, encode_log
 from logs.splitting import prepare_logs
 
 
@@ -57,9 +57,17 @@ def runtime_calculate(run_log,model):
         prefix_length = 1
     zero_padding = True if model['padding'] is ZERO_PADDING else False
     
-    run_df= encode_log(run_log, model['encoding'], model['type'], prefix_length,
+    run_df= encode_log(run_log, model['encoding'], model['type'], model['label'], prefix_length,
                        add_label=False, zero_padding=zero_padding)
 
+    label_type = model['label'].type
+        # Binary classification
+    if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
+        results, model_split = classifier_single_log(run_df, model)
+    elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
+        results, model_split = next_activity_single_log(run_df, job)
+    else:
+        raise ValueError("Label type not supported", label_type)
     if model['type'] == CLASSIFICATION:
         results = classifier_single_log(run_df, model)
     elif model['type'] == REGRESSION:

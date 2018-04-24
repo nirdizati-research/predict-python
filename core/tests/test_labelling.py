@@ -46,8 +46,8 @@ class RefactorProof(TestCase):
         job['prefix_length'] = 8
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertDictEqual(result, {'f1score': 0.33116531165311652, 'acc': 0.47058823529411764,
-                                      'precision': 0.47058823529411764, 'recall': 0.37344300822561693, 'auc': 0})
+        self.assertDictEqual(result, {'f1score': 0.3311653116531165, 'acc': 0.47058823529411764,
+                                      'precision': 0.34027443503266341, 'recall': 0.37344300822561693, 'auc': 0})
 
     def test_next_activity_no_cluster(self):
         self.maxDiff = None
@@ -58,8 +58,8 @@ class RefactorProof(TestCase):
         add_default_config(job)
         result, _ = calculate(job)
 
-        self.assertDictEqual(result, {'f1score': 0.54239884582595577, 'acc': 0.80995475113122173,
-                                      'precision': 0.80995475113122173, 'recall': 0.5224945442336747, 'auc': 0})
+        self.assertDictEqual(result, {'f1score': 0.5423988458259558, 'acc': 0.8099547511312217,
+                                      'precision': 0.62344720496894401, 'recall': 0.5224945442336747, 'auc': 0})
         # old result
         # self.assertDictEqual(result,
         #                      {'f1score': 0.895, 'acc': 0.8099547511312217, 'true_positive': 179, 'true_negative': 0, 'false_negative': 0,

@@ -5,6 +5,7 @@ REMAINING_TIME = 'remaining_time'
 ATTRIBUTE_NUMBER = 'attribute_number'
 ATTRIBUTE_STRING = 'attribute_string'
 NO_LABEL = 'no_label'
+DURATION = 'duration'
 
 THRESHOLD_MEAN = 'threshold_mean'
 THRESHOLD_CUSTOM = 'threshold_custom'

@@ -34,7 +34,7 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
     if job_type == REGRESSION:
         return encoded_log
     # Post processing
-    if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER:
+    if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER or label.type == DURATION:
         return label_boolean(encoded_log, label)
     return encoded_log
 

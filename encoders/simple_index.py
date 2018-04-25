@@ -2,7 +2,7 @@ import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 from encoders.label_container import *
-from .log_util import remaining_time_id, elapsed_time_id
+from .log_util import remaining_time_id, elapsed_time_id, duration
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
@@ -102,4 +102,6 @@ def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: li
     elif label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
         atr = ATTRIBUTE_CLASSIFIER.get_class_identity(trace)
         labels.append(atr)
+    elif label.type == DURATION:
+        labels.append(duration(trace))
     return labels

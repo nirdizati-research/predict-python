@@ -119,6 +119,18 @@ class TestLabelSimpleIndex(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', 1, 3, True])
 
+    def test_duration(self):
+        label = LabelContainer(type=DURATION)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 4))
+        self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
+        trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
+        self.assertListEqual(trace_5, ['5', 1, 2, False])
+        trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
+        self.assertListEqual(trace_4, ['4', 1, 3, True])
+
 
 class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""

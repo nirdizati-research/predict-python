@@ -30,24 +30,22 @@ def generate(split, payload, type=CLASSIFICATION):
 
 def generate_labelling(split, payload):
     jobs = []
-
-    for encoding in payload['config']['encodings']:
-        prefix = payload['config']['prefix']
-        if prefix['type'] == 'up_to':
-            for i in range(1, prefix['prefix_length'] + 1):
-                item = Job.objects.create(
-                    split=split,
-                    status=CREATED,
-                    type=LABELLING,
-                    config=create_config_labelling(payload, encoding, i))
-                jobs.append(item)
-        else:
+    prefix = payload['config']['prefix']
+    if prefix['type'] == 'up_to':
+        for i in range(1, prefix['prefix_length'] + 1):
             item = Job.objects.create(
                 split=split,
                 status=CREATED,
                 type=LABELLING,
-                config=create_config_labelling(payload, encoding, prefix['prefix_length']))
+                config=create_config_labelling(payload, i))
             jobs.append(item)
+    else:
+        item = Job.objects.create(
+            split=split,
+            status=CREATED,
+            type=LABELLING,
+            config=create_config_labelling(payload, prefix['prefix_length']))
+        jobs.append(item)
 
     return jobs
 
@@ -78,13 +76,14 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
     return config
 
 
-def create_config_labelling(payload: dict, encoding: str, prefix_length: int):
+def create_config_labelling(payload: dict, prefix_length: int):
     """For labelling job"""
     config = dict(payload['config'])
-    del config['encodings']
     del config['prefix']
 
-    config['encoding'] = encoding
+    # All methods are the same, so defaulting to SIMPLE_INDEX
+    # Remove when encoding and labelling are separated
+    config['encoding'] = SIMPLE_INDEX
     config['prefix_length'] = prefix_length
     config['padding'] = payload['config']['prefix']['padding']
     return config

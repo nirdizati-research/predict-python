@@ -11,7 +11,7 @@ def encode_label_logs(training_log: list, test_log: list, encoding_type: str, jo
                       prefix_length=1, zero_padding=False):
     """Encodes and labels test set and training set as data frames
 
-    :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
+    :param prefix_length Applies to all
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
@@ -43,16 +43,17 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
                zero_padding=False):
     """Encodes test set and training set as data frames
 
-    :param prefix_length only for SIMPLE_INDEX, COMPLEX, LAST_PAYLOAD
+    :param prefix_length consider up to this event in log
+    :param zero_padding If log shorter than prefix_length, weather to skip or pad with 0 up to prefix_length
     :returns training_df, test_df
     """
     run_df = None
     if encoding_type == SIMPLE_INDEX:
         run_df = simple_index(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == BOOLEAN:
-        run_df = boolean(run_log, event_names, label)
+        run_df = boolean(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == FREQUENCY:
-        run_df = frequency(run_log, event_names, label)
+        run_df = frequency(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == COMPLEX:
         run_df = complex(run_log, event_names, label, prefix_length=prefix_length,
                          zero_padding=zero_padding)
@@ -64,6 +65,7 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
 
 def label_boolean(df, label: LabelContainer):
     """Label a numeric attribute as True or False based on threshold
+    This is essentially a Fast/Slow classification without string labels
     By default use mean of label value
     True if under threshold value
     """

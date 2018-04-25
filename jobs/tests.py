@@ -190,7 +190,6 @@ class CreateJobsTests(APITestCase):
 
     def job_label(self):
         config = dict()
-        config['encodings'] = ['simpleIndex', 'boolean']
         config['label'] = {"type": 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                            "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
         config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
@@ -205,7 +204,7 @@ class CreateJobsTests(APITestCase):
         response = client.post('/jobs/multiple', self.job_label(), format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'labelling')
         self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
         self.assertEqual(response.data[0]['config']['prefix_length'], 3)

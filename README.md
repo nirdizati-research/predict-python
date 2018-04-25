@@ -109,7 +109,6 @@ curl --request POST \
     "type": "labelling",
     "split_id": 5,
     "config": {
-      "encodings": ["simpleIndex", "boolean"],
       "label": {"type": "remaining_time"},
       "prefix": {"prefix_length": 3, "type": "up_to", "padding": "no_padding"}
     }

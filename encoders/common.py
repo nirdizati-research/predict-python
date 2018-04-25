@@ -64,6 +64,7 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
 
 def label_boolean(df, label: LabelContainer):
     """Label a numeric attribute as True or False based on threshold
+    This is essentially a Fast/Slow classification without string labels
     By default use mean of label value
     True if under threshold value
     """

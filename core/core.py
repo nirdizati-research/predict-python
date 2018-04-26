@@ -4,7 +4,8 @@ from core.constants import \
 from core.label_validation import label_task
 from core.multi_classification import multi_classifier
 from core.regression import regression
-from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY
+from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
+    DURATION
 from logs.splitting import prepare_logs
 
 
@@ -33,7 +34,7 @@ def run_by_type(training_df, test_df, job):
     if job['type'] == CLASSIFICATION:
         label_type = job['label'].type
         # Binary classification
-        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
+        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
             results, model_split = binary_classifier(training_df, test_df, job)
         elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
             results, model_split = multi_classifier(training_df, test_df, job)

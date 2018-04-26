@@ -34,6 +34,11 @@ def unique_events2(training_log: list, test_log: list):
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 
+def duration(trace):
+    """Calculate the duration of a trace"""
+    return remaining_time_id(trace, 0)
+
+
 def elapsed_time_id(trace, event_index: int):
     """Calculate elapsed time by event index in trace"""
     try:

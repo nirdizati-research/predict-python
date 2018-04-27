@@ -2,8 +2,8 @@ import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER
-from encoders.log_util import get_event_attributes
 from encoders.simple_index import add_label_columns, add_labels
+from log_util.event_attributes import get_event_attributes
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None

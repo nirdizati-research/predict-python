@@ -3,7 +3,7 @@ from unittest import TestCase
 from core.constants import SIMPLE_INDEX, CLASSIFICATION, COMPLEX
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.label_container import *
-from encoders.log_util import unique_events
+from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
 

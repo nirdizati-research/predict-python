@@ -3,7 +3,7 @@ from unittest import TestCase
 from core.constants import CLASSIFICATION, FREQUENCY
 from encoders.boolean_frequency import frequency
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
-from encoders.log_util import unique_events
+from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
 

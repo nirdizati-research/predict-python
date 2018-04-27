@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from core.constants import SIMPLE_INDEX, CLASSIFICATION
 from encoders.common import LabelContainer, NEXT_ACTIVITY, encode_label_logs, NO_LABEL
-from encoders.log_util import unique_events
 from encoders.simple_index import simple_index
+from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
 

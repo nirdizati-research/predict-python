@@ -2,7 +2,7 @@ import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 from encoders.label_container import *
-from .log_util import remaining_time_id, elapsed_time_id, duration
+from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
@@ -22,6 +22,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
     if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
         global ATTRIBUTE_CLASSIFIER
         ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
+
     for trace in log:
         if zero_padding:
             zero_count = prefix_length - len(trace)

@@ -4,7 +4,7 @@ from opyenxes.classification.XEventAttributeClassifier import XEventAttributeCla
 
 from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER
 from encoders.simple_index import add_label_columns, add_labels
-from log_util.log_metrics import events_by_date
+from log_util.log_metrics import events_by_date, resources_by_date
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
@@ -38,6 +38,7 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
         ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
     # Expensive operations
     executed_events = events_by_date([log]) if label.add_executed_events else None
+    resources_used = resources_by_date([log]) if label.add_resources_used else None
     for trace in log:
         if zero_padding:
             # zero padding happens by default
@@ -57,7 +58,7 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
                 update_event_happened(event, event_names, event_happened, is_boolean)
         trace_row += event_happened
         trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
-                                executed_events=executed_events)
+                                executed_events=executed_events, resources_used=resources_used)
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 

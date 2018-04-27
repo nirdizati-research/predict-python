@@ -3,7 +3,7 @@ from unittest import TestCase
 from core.constants import SIMPLE_INDEX, CLASSIFICATION, COMPLEX
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.label_container import *
-from encoders.log_util import unique_events
+from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
 
@@ -131,6 +131,33 @@ class TestLabelSimpleIndex(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', 1, 3, True])
 
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 5))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])
+
+    def test_add_resources_used(self):
+        label = LabelContainer(add_resources_used=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 5))
+        self.assertTrue('resources_used' in df.columns.values.tolist())
+        self.assertListEqual(df['resources_used'].tolist(), [1, 1])
+
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 5))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])
+
 
 class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
@@ -175,6 +202,32 @@ class TestLabelComplex(TestCase):
         df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=10, zero_padding=True)
         self.assertEqual(df.shape, (2, 53))
+
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2, zero_padding=True)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])
+
+    def test_add_resources_used(self):
+        label = LabelContainer(add_resources_used=True)
+
+        df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2, zero_padding=True)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('resources_used' in df.columns.values.tolist())
+        self.assertListEqual(df['resources_used'].tolist(), [1, 1])
+
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names, prefix_length=2)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])
 
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
@@ -275,3 +328,27 @@ class TestLabelBoolean(TestCase):
         self.assertListEqual(trace_5, ['5', True, True, False, False, False, False, False, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, False, True])
+
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=3)
+        self.assertEqual(df.shape, (2, 10))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])
+
+    def test_add_resources_used(self):
+        label = LabelContainer(add_resources_used=True)
+
+        df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=3)
+        self.assertEqual(df.shape, (2, 10))
+        self.assertTrue('resources_used' in df.columns.values.tolist())
+        self.assertListEqual(df['resources_used'].tolist(), [2, 2])
+
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=2)
+        self.assertEqual(df.shape, (2, 10))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])

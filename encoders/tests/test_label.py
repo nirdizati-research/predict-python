@@ -149,6 +149,15 @@ class TestLabelSimpleIndex(TestCase):
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [1, 1])
 
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 5))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])
+
 
 class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
@@ -211,6 +220,14 @@ class TestLabelComplex(TestCase):
         self.assertEqual(df.shape, (2, 13))
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [1, 1])
+
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names, prefix_length=2)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])
 
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
@@ -327,3 +344,11 @@ class TestLabelBoolean(TestCase):
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [2, 2])
+
+    def test_add_new_traces(self):
+        label = LabelContainer(add_new_traces=True)
+
+        df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=2)
+        self.assertEqual(df.shape, (2, 10))
+        self.assertTrue('new_traces' in df.columns.values.tolist())
+        self.assertListEqual(df['new_traces'].tolist(), [0, 0])

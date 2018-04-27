@@ -768,7 +768,7 @@
     "fields": {
       "created_date": "2018-04-13T13:42:31.652Z",
       "modified_date": "2018-04-13T13:43:02.579Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.knn\":{\"n_neighbors\":2,\"weights\":\"distance\"},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"knn\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.knn\":{\"n_neighbors\":2,\"weights\":\"distance\"},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"knn\"}",
       "error": "",
       "status": "completed",
       "result": "{\"f1score\":0,\"acc\":0.5,\"true_positive\":0,\"true_negative\":1,\"false_negative\":1,\"false_positive\":0,\"precision\":0,\"recall\":0.0,\"auc\":0.5}",
@@ -782,7 +782,7 @@
     "fields": {
       "created_date": "2018-04-13T13:42:31.656Z",
       "modified_date": "2018-04-13T13:43:02.728Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.decisionTree\":{\"criterion\":\"gini\",\"splitter\":\"random\",\"max_depth\":null,\"min_samples_split\":2,\"min_samples_leaf\":3},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"decisionTree\"}",
+      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.decisionTree\":{\"criterion\":\"gini\",\"splitter\":\"random\",\"max_depth\":null,\"min_samples_split\":2,\"min_samples_leaf\":3},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"decisionTree\"}",
       "error": "",
       "status": "completed",
       "result": "{\"f1score\":0.6666666666666666,\"acc\":0.5,\"true_positive\":1,\"true_negative\":0,\"false_negative\":0,\"false_positive\":1,\"precision\":0.5,\"recall\":1.0,\"auc\":0.5}",
@@ -850,9 +850,9 @@
     "model": "jobs.job",
     "pk": 7,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.303Z",
-      "modified_date": "2018-04-24T09:08:20.620Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.227Z",
+      "modified_date": "2018-04-27T07:03:18.699Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
       "result": "{\"true\":511,\"false\":372}",
@@ -864,9 +864,9 @@
     "model": "jobs.job",
     "pk": 8,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.307Z",
-      "modified_date": "2018-04-24T09:08:22.924Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.231Z",
+      "modified_date": "2018-04-27T07:03:20.677Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
       "result": "{\"true\":511,\"false\":372}",
@@ -878,12 +878,12 @@
     "model": "jobs.job",
     "pk": 9,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.309Z",
-      "modified_date": "2018-04-24T09:08:26.011Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.233Z",
+      "modified_date": "2018-04-27T07:03:22.689Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":517,\"false\":366}",
+      "result": "{\"true\":511,\"false\":372}",
       "type": "labelling",
       "split": 5
     }
@@ -892,12 +892,12 @@
     "model": "jobs.job",
     "pk": 10,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.311Z",
-      "modified_date": "2018-04-24T09:08:31.294Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.235Z",
+      "modified_date": "2018-04-27T07:03:24.678Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":4,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":5194,\"false\":4277}",
+      "result": "{\"true\":511,\"false\":372}",
       "type": "labelling",
       "split": 5
     }
@@ -906,12 +906,12 @@
     "model": "jobs.job",
     "pk": 11,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.313Z",
-      "modified_date": "2018-04-24T09:08:34.670Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.238Z",
+      "modified_date": "2018-04-27T07:03:26.855Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":5,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":5194,\"false\":4277}",
+      "result": "{\"true\":510,\"false\":372}",
       "type": "labelling",
       "split": 5
     }
@@ -920,12 +920,12 @@
     "model": "jobs.job",
     "pk": 12,
     "fields": {
-      "created_date": "2018-04-24T09:08:18.314Z",
-      "modified_date": "2018-04-24T09:08:37.687Z",
-      "config": "{\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"boolean\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
+      "created_date": "2018-04-27T07:03:16.241Z",
+      "modified_date": "2018-04-27T07:03:29.241Z",
+      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":6,\"padding\":\"no_padding\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":5194,\"false\":4277}",
+      "result": "{\"true\":509,\"false\":372}",
       "type": "labelling",
       "split": 5
     }

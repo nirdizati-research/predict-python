@@ -57,3 +57,18 @@ def remaining_time(trace, event):
         # Log has no timestamps
         return 0
     return delta.total_seconds()
+
+
+def count_on_event_day(trace, date_dict: dict, event_id):
+    """Finds the date of event and returns the value from date_dict
+    :param date_dict one of the dicts from log_metrics.py
+    :param event_id Event id
+    :param trace Log trace
+    """
+    try:
+        event = trace[event_id]
+        timestamp = TIMESTAMP_CLASSIFIER.get_class_identity(event)[:19]
+        date = timestamp.split("T")[0]
+        return date_dict.get(date, 0)
+    except IndexError:
+        return 0

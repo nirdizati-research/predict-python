@@ -2,7 +2,8 @@ import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 
 from encoders.label_container import *
-from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id
+from log_util.log_metrics import events_by_date
+from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
@@ -17,12 +18,12 @@ def simple_index(log: list, event_names: list, label: LabelContainer, prefix_len
 def encode_simple_index(log: list, event_names: list, prefix_length: int, label: LabelContainer, zero_padding: bool):
     columns = __columns(prefix_length, label)
     encoded_data = []
-
     # Create classifier only once
     if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
         global ATTRIBUTE_CLASSIFIER
         ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
-
+    # Expensive operations
+    executed_events = events_by_date([log]) if label.add_executed_events else None
     for trace in log:
         if zero_padding:
             zero_count = prefix_length - len(trace)
@@ -35,7 +36,8 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         if zero_padding:
             trace_row += [0 for _ in range(0, zero_count)]
-        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER)
+        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
+                                executed_events=executed_events)
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -80,12 +82,14 @@ def add_label_columns(columns: list, label: LabelContainer):
         columns.append('elapsed_time')
     if label.add_remaining_time and label.type != REMAINING_TIME:
         columns.append('remaining_time')
+    if label.add_executed_events:
+        columns.append('executed_events')
     columns.append('label')
     return columns
 
 
 def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: list,
-               ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER):
+               ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER, executed_events=None):
     """Adds any number of label cells with last as label"""
     labels = []
     if label.type == NO_LABEL:
@@ -95,6 +99,8 @@ def add_labels(label: LabelContainer, prefix_length: int, trace, event_names: li
         labels.append(elapsed_time_id(trace, prefix_length - 1))
     if label.add_remaining_time and label.type != REMAINING_TIME:
         labels.append(remaining_time_id(trace, prefix_length - 1))
+    if label.add_executed_events:
+        labels.append(count_on_event_day(trace, executed_events, prefix_length - 1))
     # Label
     if label.type == REMAINING_TIME:
         labels.append(remaining_time_id(trace, prefix_length - 1))

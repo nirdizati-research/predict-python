@@ -1,6 +1,7 @@
 from unittest import TestCase
 
-from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id
+from log_util import log_metrics
+from log_util.time_metrics import *
 from logs.file_service import get_logs
 
 
@@ -31,4 +32,16 @@ class TimeMetrics(TestCase):
         seconds = duration(self.log[1])
         self.assertEqual(779580.0, seconds)
 
+    def test_count_on_event_day(self):
+        event_dict = log_metrics.events_by_date([self.log])
+        count = count_on_event_day(self.log[0], event_dict, 0)
+        self.assertEqual(7, count)
 
+    def test_count_on_event_day_no_such_date(self):
+        count = count_on_event_day(self.log[0], dict(), 0)
+        self.assertEqual(0, count)
+
+    def test_count_on_event_day_event_out_of_range(self):
+        event_dict = log_metrics.events_by_date([self.log])
+        count = count_on_event_day(self.log[0], event_dict, 100)
+        self.assertEqual(0, count)

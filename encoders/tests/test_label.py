@@ -131,6 +131,15 @@ class TestLabelSimpleIndex(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', 1, 3, True])
 
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2)
+        self.assertEqual(df.shape, (2, 5))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])
+
 
 class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
@@ -175,6 +184,15 @@ class TestLabelComplex(TestCase):
         df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=10, zero_padding=True)
         self.assertEqual(df.shape, (2, 53))
+
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
+                              prefix_length=2, zero_padding=True)
+        self.assertEqual(df.shape, (2, 13))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])
 
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
@@ -275,3 +293,11 @@ class TestLabelBoolean(TestCase):
         self.assertListEqual(trace_5, ['5', True, True, False, False, False, False, False, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, False, True])
+
+    def test_add_executed_events(self):
+        label = LabelContainer(add_executed_events=True)
+
+        df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=3)
+        self.assertEqual(df.shape, (2, 10))
+        self.assertTrue('executed_events' in df.columns.values.tolist())
+        self.assertListEqual(df['executed_events'].tolist(), [2, 2])

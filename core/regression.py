@@ -11,6 +11,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER
+from encoders.label_container import LabelContainer, REMAINING_TIME
 
 pd.options.mode.chained_assignment = None
 
@@ -25,7 +26,7 @@ def regression(training_df, test_df, job):
     else:
         results_df, model_split = no_clustering_train(original_test_data, train_data, test_data, regressor)
 
-    results = prepare_results(results_df)
+    results = prepare_results(results_df, job['label'])
     return results, model_split
 
 
@@ -86,10 +87,11 @@ def no_clustering_test(original_test_data, test_data, regressor):
     return original_test_data
 
 
-def prepare_results(df):
-    # TODO are remaining time in seconds or hours?
-    df['label'] = df['label'] / 3600
-    df['prediction'] = df['prediction'] / 3600
+def prepare_results(df, label: LabelContainer):
+    if label.type == REMAINING_TIME:
+        # TODO are remaining time in seconds or hours?
+        df['label'] = df['label'] / 3600
+        df['prediction'] = df['prediction'] / 3600
     rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
     mae = mean_absolute_error(df['label'], df['prediction'])
     rscore = metrics.r2_score(df['label'], df['prediction'])

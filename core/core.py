@@ -22,7 +22,7 @@ def get_encoded_logs(job: dict):
     training_log, test_log = prepare_logs(job['split'])
 
     prefix_length = job.get('prefix_length', 1)
-    zero_padding = True if job['padding'] is ZERO_PADDING else False
+    zero_padding = True if job['padding'] == ZERO_PADDING else False
 
     training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
                                              prefix_length=prefix_length, zero_padding=zero_padding)

@@ -1,4 +1,4 @@
-from jobs.job_creator import CONF_MAP
+from jobs.job_creator import CONF_MAP, _kmeans
 
 
 def split_single():
@@ -36,4 +36,5 @@ def add_default_config(job: dict, type=""):
     method_conf_name = "{}.{}".format(type, job['method'])
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
+    job['kmeans'] = _kmeans()
     return job

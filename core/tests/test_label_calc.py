@@ -25,7 +25,8 @@ class Labelling(TestCase):
         job = self.get_job()
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         result, _ = calculate(job)
-        self.assertEqual(result, {'0': 2, '3': 306, '4': 432, '5': 5, '7': 138})
+        self.assertEqual(result, {'0': 2, 'Repair (Complex)': 306, 'Test Repair': 432, 'Inform User': 5,
+                                  'Repair (Simple)': 138})
 
     def test_remaining_custom_threshold(self):
         job = self.get_job()

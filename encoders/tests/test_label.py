@@ -19,9 +19,9 @@ class TestLabelSimpleIndex(TestCase):
                               prefix_length=2)
         self.assertEqual(df.shape, (2, 3))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, ])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502])
 
     def test_no_label_zero_padding(self):
         # add things have no effect
@@ -31,9 +31,13 @@ class TestLabelSimpleIndex(TestCase):
                               prefix_length=10, zero_padding=True)
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2])
+        self.assertListEqual(trace_5,
+                             ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381, 1149821,
+                              70355923, 34856381])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0])
+        self.assertListEqual(trace_4,
+                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
+                              2595305])
 
     def test_remaining_time(self):
         label = LabelContainer()
@@ -43,9 +47,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, False])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, True])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, True])
 
     def test_label_remaining_time_with_elapsed_time_custom_threshold(self):
         label = LabelContainer(add_elapsed_time=True, add_remaining_time=True, threshold_type=THRESHOLD_CUSTOM,
@@ -56,9 +60,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 5))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'elapsed_time', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 90840.0, False])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, 90840.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 75840.0, False])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, 75840.0, False])
 
     def test_remaining_time_zero_padding(self):
         label = LabelContainer(type=REMAINING_TIME, add_elapsed_time=True)
@@ -67,9 +71,13 @@ class TestLabelSimpleIndex(TestCase):
                               prefix_length=10, zero_padding=True)
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 1296240.0, False])
+        self.assertListEqual(trace_5,
+                             ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381, 1149821,
+                              70355923, 34856381, 1296240.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 520920.0, True])
+        self.assertListEqual(trace_4,
+                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
+                              2595305, 520920.0, True])
 
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
@@ -79,9 +87,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 3])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, 32171502])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 7])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, 17803069])
 
     def test_next_activity_zero_padding_elapsed_time(self):
         label = LabelContainer(type=NEXT_ACTIVITY, add_elapsed_time=True)
@@ -91,9 +99,13 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 13))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 3, 4, 5, 3, 2, 4, 5, 2, 1296240.0, 3])
+        self.assertListEqual(trace_5,
+                             ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381, 1149821,
+                              70355923, 34856381, 1296240.0, 32171502])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, 7, 4, 6, 0, 0, 0, 0, 0, 520920.0, 0])
+        self.assertListEqual(trace_4,
+                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
+                              2595305, 520920.0, 2595305])
 
     def test_attribute_string(self):
         label = LabelContainer(type=ATTRIBUTE_STRING, attribute_name='creator')
@@ -103,9 +115,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, "Fluxicon Nitro"])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, 73510641])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, "Fluxicon Nitro"])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, 73510641])
 
     def test_attribute_number(self):
         label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')
@@ -115,9 +127,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, False])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, True])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, True])
 
     def test_duration(self):
         label = LabelContainer(type=DURATION)
@@ -127,9 +139,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, False])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 3, True])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, True])
 
     def test_add_executed_events(self):
         label = LabelContainer(add_executed_events=True)
@@ -293,9 +305,9 @@ class TestLabelBoolean(TestCase):
         df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names)
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, False, False, False, False, False, False, 2])
+        self.assertListEqual(trace_5, ['5', True, False, False, False, False, False, False, 34856381])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, False, False, False, False, False, 3])
+        self.assertListEqual(trace_4, ['4', True, False, False, False, False, False, False, 32171502])
 
     def test_next_activity_zero_padding_elapsed_time(self):
         label = LabelContainer(type=NEXT_ACTIVITY, add_elapsed_time=True)
@@ -304,9 +316,9 @@ class TestLabelBoolean(TestCase):
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 4])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 1149821])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 4])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 1149821])
 
     def test_attribute_string(self):
         label = LabelContainer(type=ATTRIBUTE_STRING, attribute_name='creator')
@@ -314,9 +326,9 @@ class TestLabelBoolean(TestCase):
         df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names, prefix_length=3)
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 'Fluxicon Nitro'])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 73510641])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 'Fluxicon Nitro'])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 73510641])
 
     def test_attribute_number(self):
         label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')

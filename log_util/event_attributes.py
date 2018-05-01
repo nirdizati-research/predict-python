@@ -1,5 +1,4 @@
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-from opyenxes.model.XLog import XLog
 
 
 def unique_events(log: list):
@@ -29,12 +28,10 @@ def unique_events2(training_log: list, test_log: list):
 def get_event_attributes(log: list):
     """Get log event attributes that are not name or time
 
-    Log can be XLog or list of events (meaning it was split). Cast to XLog.
+    As log file is a list, it has no global event attributes. Getting from first event of first trace. This may be bad.
     """
-    if type(log) is list:
-        log = XLog(log)
     event_attributes = []
-    for attribute in log.get_global_event_attributes():
-        if attribute.get_key() not in ["concept:name", "time:timestamp"]:
-            event_attributes.append(attribute.get_key())
+    for attribute in log[0][0].get_attributes().keys():
+        if attribute not in ["concept:name", "time:timestamp"]:
+            event_attributes.append(attribute)
     return sorted(event_attributes)

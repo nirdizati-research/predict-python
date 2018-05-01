@@ -55,16 +55,16 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
     """
     run_df = None
     if encoding_type == SIMPLE_INDEX:
-        run_df = simple_index(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
+        run_df = simple_index(run_log, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == BOOLEAN:
         run_df = boolean(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == FREQUENCY:
         run_df = frequency(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == COMPLEX:
-        run_df = complex(run_log, event_names, label, prefix_length=prefix_length,
+        run_df = complex(run_log, label, prefix_length=prefix_length,
                          zero_padding=zero_padding)
     elif encoding_type == LAST_PAYLOAD:
-        run_df = last_payload(run_log, event_names, label, prefix_length=prefix_length,
+        run_df = last_payload(run_log, label, prefix_length=prefix_length,
                               zero_padding=zero_padding)
     return run_df
 

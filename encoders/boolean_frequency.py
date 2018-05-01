@@ -58,7 +58,7 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
             else:
                 update_event_happened(event, event_names, event_happened, is_boolean)
         trace_row += event_happened
-        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
+        trace_row += add_labels(label, prefix_length, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
                                 executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
         encoded_data.append(trace_row)
     return pd.DataFrame(columns=columns, data=encoded_data)

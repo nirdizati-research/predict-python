@@ -13,7 +13,7 @@ class LastPayload(TestCase):
         self.label = LabelContainer(add_elapsed_time=True)
 
     def test_shape(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=2)
+        df = last_payload(self.log, self.label, prefix_length=2)
 
         self.assertEqual((2, 9), df.shape)
         headers = ['trace_id', 'prefix_1', 'prefix_2', 'Activity_2', 'Costs_2',
@@ -21,7 +21,7 @@ class LastPayload(TestCase):
         self.assertListEqual(headers, df.columns.values.tolist())
 
     def test_prefix1(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=1)
+        df = last_payload(self.log, self.label, prefix_length=1)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -31,7 +31,7 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete", 0.0, 520920.0])
 
     def test_prefix1_no_label(self):
-        df = last_payload(self.log, self.event_names, LabelContainer(NO_LABEL), prefix_length=1)
+        df = last_payload(self.log, LabelContainer(NO_LABEL), prefix_length=1)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -41,7 +41,7 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete"])
 
     def test_prefix1_no_elapsed_time(self):
-        df = last_payload(self.log, self.event_names, LabelContainer(add_elapsed_time=False), prefix_length=1)
+        df = last_payload(self.log, LabelContainer(add_elapsed_time=False), prefix_length=1)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -51,7 +51,7 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete", 520920.0])
 
     def test_prefix2(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=2)
+        df = last_payload(self.log, self.label, prefix_length=2)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -63,16 +63,16 @@ class LastPayload(TestCase):
                               445080.0])
 
     def test_prefix5(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=5)
+        df = last_payload(self.log, self.label, prefix_length=5)
 
         self.assertEqual(df.shape, (2, 12))
 
     def test_prefix10(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=10)
+        df = last_payload(self.log, self.label, prefix_length=10)
 
         self.assertEqual(df.shape, (1, 17))
 
     def test_prefix10_zero_padding(self):
-        df = last_payload(self.log, self.event_names, self.label, prefix_length=10, zero_padding=True)
+        df = last_payload(self.log, self.label, prefix_length=10, zero_padding=True)
 
         self.assertEqual(df.shape, (2, 17))

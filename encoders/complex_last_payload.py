@@ -10,21 +10,21 @@ CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log, event_names, label: LabelContainer, prefix_length=1, zero_padding=False):
+def complex(log, label: LabelContainer, prefix_length=1, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, label, prefix_length, columns_complex, data_complex,
+    return encode_complex_latest(log, label, prefix_length, columns_complex, data_complex,
                                  zero_padding, is_complex=True)
 
 
-def last_payload(log, event_names, label: LabelContainer, prefix_length=1, zero_padding=False):
+def last_payload(log, label: LabelContainer, prefix_length=1, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, event_names, label, prefix_length, columns_last_payload, data_last_payload,
+    return encode_complex_latest(log, label, prefix_length, columns_last_payload, data_last_payload,
                                  zero_padding)
 
 
-def encode_complex_latest(log, event_names: list, label: LabelContainer, prefix_length: int, column_fun, data_fun,
+def encode_complex_latest(log, label: LabelContainer, prefix_length: int, column_fun, data_fun,
                           zero_padding: bool, is_complex=False):
     additional_columns = get_event_attributes(log)
     columns = column_fun(prefix_length, additional_columns, label)
@@ -52,10 +52,10 @@ def encode_complex_latest(log, event_names: list, label: LabelContainer, prefix_
         trace_name = CLASSIFIER.get_class_identity(trace)
         trace_row.append(trace_name)
         # prefix_length - 1 == index
-        trace_row += data_fun(trace, event_names, prefix_length, additional_columns)
+        trace_row += data_fun(trace, prefix_length, additional_columns)
         if zero_padding:
             trace_row += ['0' for _ in range(0, zero_count)]
-        trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
+        trace_row += add_labels(label, prefix_length, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
                                 executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
         encoded_data.append(trace_row)
 
@@ -80,10 +80,9 @@ def columns_last_payload(prefix_length: int, additional_columns: list, label: La
     return add_label_columns(columns, label)
 
 
-def data_complex(trace: list, event_names: list, prefix_length: int, additional_columns: list):
+def data_complex(trace: list, prefix_length: int, additional_columns: list):
     """Creates list in form [1, value1, value2, 2, ...]
 
-    Event name index of the position they are in event_names
     Appends values in additional_columns
     """
     data = list()
@@ -101,7 +100,7 @@ def data_complex(trace: list, event_names: list, prefix_length: int, additional_
     return data
 
 
-def data_last_payload(trace: list, event_names: list, prefix_length: int, additional_columns: list):
+def data_last_payload(trace: list, prefix_length: int, additional_columns: list):
     """Creates list in form [1, 2, value1, value2,]
 
     Event name index of the position they are in event_names

@@ -3,7 +3,6 @@ from unittest import TestCase
 from core.constants import SIMPLE_INDEX, CLASSIFICATION
 from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
 from encoders.simple_index import simple_index
-from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
 
@@ -57,11 +56,10 @@ class TestGeneralTest(TestCase):
 
     def setUp(self):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
-        self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
 
     def test_header(self):
-        df = simple_index(self.log, self.event_names, self.label)
+        df = simple_index(self.log, self.label)
 
         self.assertIn("trace_id", df.columns.values)
         self.assertIn("label", df.columns.values)
@@ -69,7 +67,7 @@ class TestGeneralTest(TestCase):
         self.assertIn("prefix_1", df.columns.values)
 
     def test_prefix1(self):
-        df = simple_index(self.log, self.event_names, self.label, prefix_length=1)
+        df = simple_index(self.log, self.label, prefix_length=1)
 
         self.assertEqual(df.shape, (2, 4))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -78,7 +76,7 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(['4', 'register request', 0.0, 520920.0], row2.values.tolist())
 
     def test_prefix1_no_label(self):
-        df = simple_index(self.log, self.event_names, LabelContainer(NO_LABEL), prefix_length=1)
+        df = simple_index(self.log, LabelContainer(NO_LABEL), prefix_length=1)
 
         self.assertEqual(df.shape, (2, 2))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -88,7 +86,7 @@ class TestGeneralTest(TestCase):
 
     def test_prefix1_no_elapsed_time(self):
         label = LabelContainer()
-        df = simple_index(self.log, self.event_names, label, prefix_length=1)
+        df = simple_index(self.log, label, prefix_length=1)
 
         self.assertEqual(df.shape, (2, 3))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -98,10 +96,10 @@ class TestGeneralTest(TestCase):
 
     def test_prefix0(self):
         self.assertRaises(ValueError,
-                          simple_index, self.log, self.event_names, self.label, prefix_length=0)
+                          simple_index, self.log, self.label, prefix_length=0)
 
     def test_prefix2(self):
-        df = simple_index(self.log, self.event_names, self.label, prefix_length=2)
+        df = simple_index(self.log, self.label, prefix_length=2)
 
         self.assertEqual(df.shape, (2, 5))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -110,7 +108,7 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(['4', 'register request', 'check ticket', 75840.0, 445080.0], row2.values.tolist())
 
     def test_prefix5(self):
-        df = simple_index(self.log, self.event_names, self.label, prefix_length=5)
+        df = simple_index(self.log, self.label, prefix_length=5)
 
         self.assertEqual(df.shape, (2, 8))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -119,7 +117,7 @@ class TestGeneralTest(TestCase):
              1118280.0], row1.values.tolist())
 
     def test_prefix10(self):
-        df = simple_index(self.log, self.event_names, self.label, prefix_length=10)
+        df = simple_index(self.log, self.label, prefix_length=10)
 
         self.assertEqual(df.shape, (1, 13))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -129,7 +127,7 @@ class TestGeneralTest(TestCase):
              280200.0], row1.values.tolist())
 
     def test_prefix10_padding(self):
-        df = simple_index(self.log, self.event_names, self.label, prefix_length=10, zero_padding=True)
+        df = simple_index(self.log, self.label, prefix_length=10, zero_padding=True)
 
         self.assertEqual(df.shape, (2, 13))
         row1 = df[df.trace_id == '4'].iloc[0]

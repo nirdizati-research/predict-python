@@ -26,10 +26,10 @@ class Complex(TestCase):
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
-                             ["5", 1, "register request", "50", 'Ellen', "Ellen", 0.0, 1576440.0])
+                             ["5", 'register request', "register request", "50", 'Ellen', "Ellen", 0.0, 1576440.0])
         row2 = df[(df.trace_id == '4')].iloc[0].tolist()
         self.assertListEqual(row2,
-                             ["4", 1, "register request", "50", 'Pete', "Pete", 0.0, 520920.0])
+                             ["4", 'register request', "register request", "50", 'Pete', "Pete", 0.0, 520920.0])
 
     def test_prefix1_no_label(self):
         label = LabelContainer(NO_LABEL)
@@ -37,32 +37,33 @@ class Complex(TestCase):
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
-                             ["5", 1, "register request", "50", 'Ellen', "Ellen"])
+                             ["5", 'register request', "register request", "50", 'Ellen', "Ellen"])
         row2 = df[(df.trace_id == '4')].iloc[0].tolist()
         self.assertListEqual(row2,
-                             ["4", 1, "register request", "50", 'Pete', "Pete"])
+                             ["4", 'register request', "register request", "50", 'Pete', "Pete"])
 
     def test_prefix1_no_elapsed_time(self):
         df = complex(self.log, self.event_names, LabelContainer(), prefix_length=1)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
-                             ["5", 1, "register request", "50", 'Ellen', "Ellen", 1576440.0])
+                             ["5", 'register request', "register request", "50", 'Ellen', "Ellen", 1576440.0])
         row2 = df[(df.trace_id == '4')].iloc[0].tolist()
         self.assertListEqual(row2,
-                             ["4", 1, "register request", "50", 'Pete', "Pete", 520920.0])
+                             ["4", 'register request', "register request", "50", 'Pete', "Pete", 520920.0])
 
     def test_prefix2(self):
         df = complex(self.log, self.event_names, self.label, prefix_length=2)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
-                             ["5", 1, "register request", "50", 'Ellen',
-                              "Ellen", 2, "examine casually", "400", "Mike", "Mike", 90840.0, 1485600.0])
+                             ["5", 'register request', "register request", "50", 'Ellen',
+                              "Ellen", 'examine casually', "examine casually", "400", "Mike", "Mike", 90840.0,
+                              1485600.0])
         row2 = df[(df.trace_id == '4')].iloc[0].tolist()
         self.assertListEqual(row2,
-                             ["4", 1, "register request", "50", 'Pete',
-                              "Pete", 3, "check ticket", "100", "Mike", "Mike", 75840.0, 445080.0])
+                             ["4", 'register request', "register request", "50", 'Pete',
+                              "Pete", 'check ticket', "check ticket", "100", "Mike", "Mike", 75840.0, 445080.0])
 
     def test_prefix5(self):
         df = complex(self.log, self.event_names, self.label, prefix_length=5)

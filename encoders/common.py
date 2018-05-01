@@ -1,3 +1,5 @@
+import hashlib
+
 from core.constants import *
 from encoders.boolean_frequency import frequency
 from encoders.complex_last_payload import complex, last_payload
@@ -30,6 +32,10 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
     if label.type == ATTRIBUTE_NUMBER:
         encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
 
+    # converts string values to in
+    if job_type != LABELLING:
+        # Labelling has no need for this encoding
+        categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
     if job_type == REGRESSION:
         return encoded_log
@@ -75,3 +81,25 @@ def label_boolean(df, label: LabelContainer):
         threshold_ = float(label.threshold)
     df['label'] = df['label'] < threshold_
     return df
+
+
+def categorical_encode(df):
+    """Encodes every column except trace_id and label as int
+
+    Encoders module puts event name in cell, which can't be used by machine learning methods directly.
+    """
+    for column in df.columns:
+        if column == 'trace_id':
+            continue
+        elif df[column].dtype == type(str):
+            df[column] = df[column].map(lambda s: convert(s))
+    return df
+
+
+def convert(s):
+    if isinstance(s, float) or isinstance(s, int):
+        return s
+    if s is None:
+        # Next activity resources
+        s = '0'
+    return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8

@@ -37,7 +37,7 @@ def encode_simple_index(log: list, event_names: list, prefix_length: int, label:
         trace_row.append(trace_name)
         trace_row += trace_prefixes(trace, event_names, prefix_length)
         if zero_padding:
-            trace_row += [0 for _ in range(0, zero_count)]
+            trace_row += ['0' for _ in range(0, zero_count)]
         trace_row += add_labels(label, prefix_length, trace, event_names, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
                                 executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
         encoded_data.append(trace_row)
@@ -52,21 +52,22 @@ def trace_prefixes(trace: list, event_names: list, prefix_length: int):
             break
         event_name = CLASSIFIER.get_class_identity(event)
         event_id = event_names.index(event_name)
-        prefixes.append(event_id + 1)
+        prefixes.append(event_name)
+        # prefixes.append(event_id + 1)
     return prefixes
 
 
 def next_event_index(trace: list, event_names: list, prefix_length: int):
     """Return the event_name index of the one after at prefix_length.
     Offset by +1.
-    Or 0 if out of range.
+    Or '0' if out of range.
     """
     if prefix_length < len(trace):
         next_event = trace[prefix_length]
-        next_event_name = CLASSIFIER.get_class_identity(next_event)
-        return event_names.index(next_event_name) + 1
+        name = CLASSIFIER.get_class_identity(next_event)
+        return name
     else:
-        return 0
+        return '0'
 
 
 def __columns(prefix_length: int, label: LabelContainer):

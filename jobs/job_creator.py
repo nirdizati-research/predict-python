@@ -67,6 +67,10 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
             del config[any_conf_name]
         except KeyError:
             pass
+    if clustering == KMEANS:
+        config['kmeans'] = {**_kmeans(), **payload['config'].get('kmeans', dict())}
+    elif 'kmeans' in config:
+        del config['kmeans']
     config[method_conf_name] = method_conf
     config['encoding'] = encoding
     config['clustering'] = clustering
@@ -141,6 +145,16 @@ def _regression_linear():
         'fit_intercept': True,
         'n_jobs': -1,
         'normalize': False
+    }
+
+
+def _kmeans():
+    return {
+        'n_clusters': 3,
+        'max_iter': 300,
+        'n_jobs': -1,
+        'algorithm': 'auto',
+        'random_state': 21
     }
 
 

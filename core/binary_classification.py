@@ -17,7 +17,7 @@ def binary_classifier(training_df, test_df, job):
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
     if job['clustering'] == KMEANS:
-        results_df, auc, model_split = kmeans_clustering_train(original_test_data, train_data, clf)
+        results_df, auc, model_split = kmeans_clustering_train(original_test_data, train_data, clf, job['kmeans'])
     elif job['clustering'] == NO_CLUSTER:
         results_df, auc, model_split = no_clustering_train(original_test_data, train_data, clf)
     else:
@@ -27,8 +27,8 @@ def binary_classifier(training_df, test_df, job):
     return results, model_split
 
 
-def kmeans_clustering_train(original_test_data, train_data, clf):
-    estimator = KMeans(n_clusters=3, random_state=21)
+def kmeans_clustering_train(original_test_data, train_data, clf, kmeans_config: dict):
+    estimator = KMeans(**kmeans_config)
     models = dict()
     estimator.fit(train_data.drop('actual', 1))
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}

@@ -3,6 +3,7 @@ from django.test import TestCase
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM
+from jobs.job_creator import _kmeans
 
 
 class TestClassification(TestCase):
@@ -73,6 +74,7 @@ class TestClassification(TestCase):
         job['method'] = 'knn'
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['classification.knn'] = {'n_neighbors': 3}
+        job['kmeans'] = _kmeans()
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 
@@ -81,6 +83,7 @@ class TestClassification(TestCase):
         job['method'] = 'knn'
         job['label'] = LabelContainer(ATTRIBUTE_STRING, attribute_name='creator')
         job['classification.knn'] = {'n_neighbors': 3}
+        job['kmeans'] = _kmeans()
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 

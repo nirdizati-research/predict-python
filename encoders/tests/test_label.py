@@ -120,7 +120,7 @@ class TestLabelSimpleIndex(TestCase):
         self.assertListEqual(trace_4, ['4', 52903968, 32171502, 73510641])
 
     def test_attribute_number(self):
-        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')
+        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='AMOUNT')
 
         df = encode_label_log(self.log, SIMPLE_INDEX, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=2)
@@ -264,7 +264,7 @@ class TestLabelComplex(TestCase):
         self.assertEqual(df.shape, (2, 12))
 
     def test_attribute_number(self):
-        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')
+        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='AMOUNT')
 
         df = encode_label_log(self.log, COMPLEX, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=2)
@@ -331,7 +331,7 @@ class TestLabelBoolean(TestCase):
         self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 73510641])
 
     def test_attribute_number(self):
-        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='number_value')
+        label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='AMOUNT')
 
         df = encode_label_log(self.log, BOOLEAN, CLASSIFICATION, label, event_names=self.event_names,
                               prefix_length=2)

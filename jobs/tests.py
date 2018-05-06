@@ -188,7 +188,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual('no_padding', response.data[0]['config']['padding'])
         self.assertEqual(100, response.data[0]['config']['kmeans']['max_iter'])
         self.assertEqual('created', response.data[0]['status'])
-        self.assertEqual(1, response.data[0]['split']['id'])
+        self.assertEqual(1, response.data[0]['split_id'])
 
         self.assertEqual(3, response.data[17]['config']['prefix_length'])
 

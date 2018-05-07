@@ -24,7 +24,7 @@ def multi_classifier(training_df, test_df, job: dict):
     return results, model_split
 
 
-def next_activity_single_log(run_df, model):
+def multi_classifier_single_log(run_df, model):
     split = model['split']
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])

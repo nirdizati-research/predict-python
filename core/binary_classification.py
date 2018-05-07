@@ -27,7 +27,7 @@ def binary_classifier(training_df, test_df, job):
     return results, model_split
 
 
-def classifier_single_log(run_df, model):
+def binary_classifier_single_log(run_df, model):
     split=model['split']
     
     if split['type'] == NO_CLUSTER:

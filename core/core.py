@@ -1,9 +1,9 @@
-from core.binary_classification import binary_classifier, classifier_single_log
+from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
     CLASSIFICATION, REGRESSION, ZERO_PADDING
-from core.multi_classification import multi_classifier, next_activity_single_log
+from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
-from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, encode_log
+from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, encode_label_log
 from logs.splitting import prepare_logs
 
 
@@ -57,23 +57,18 @@ def runtime_calculate(run_log,model):
         prefix_length = 1
     zero_padding = True if model['padding'] is ZERO_PADDING else False
     
-    run_df= encode_log(run_log, model['encoding'], model['type'], model['label'], prefix_length,
-                       add_label=False, zero_padding=zero_padding)
-
-    label_type = model['label'].type
-        # Binary classification
-    if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
-        results, model_split = classifier_single_log(run_df, model)
-    elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
-        results, model_split = next_activity_single_log(run_df, job)
-    else:
-        raise ValueError("Label type not supported", label_type)
+    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'], prefix_length, zero_padding=zero_padding)
+    
     if model['type'] == CLASSIFICATION:
-        results = classifier_single_log(run_df, model)
+        label_type = model['label'].type
+        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
+            results, model_split = binary_classifier_single_log(run_df, model)
+        elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
+            results, model_split = multi_classifier_single_log(run_df, job)
+        else:
+            raise ValueError("Label type not supported", label_type)
     elif model['type'] == REGRESSION:
         results= regression_single_log(run_df, model)
-    elif model['type'] == NEXT_ACTIVITY:
-        results = next_activity_single_log(run_df, model)
     else:
         raise ValueError("Type not supported", model['type'])
     print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))

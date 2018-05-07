@@ -2,6 +2,8 @@ from django.db import models
 from jsonfield.fields import JSONField
 from predModels.models import PredModels
 
+class DemoReplayer(models.Model):
+    running = models.BooleanField(default=False)
 
 class XLog(models.Model):
     config = models.CharField(default="", null=True, max_length=500)

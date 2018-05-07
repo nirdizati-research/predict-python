@@ -12,6 +12,7 @@ from sklearn.externals import joblib
 
 from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER
+from encoders.label_container import LabelContainer, REMAINING_TIME
 
 pd.options.mode.chained_assignment = None
 
@@ -22,11 +23,11 @@ def regression(training_df, test_df, job):
     train_data, test_data, original_test_data = prep_data(training_df, test_df)
 
     if job['clustering'] == KMEANS:
-        results_df, model_split = kmeans_clustering_train(original_test_data, train_data, regressor)
+        results_df, model_split = kmeans_clustering_train(original_test_data, train_data, regressor, job['kmeans'])
     else:
         results_df, model_split = no_clustering_train(original_test_data, train_data, test_data, regressor)
 
-    results = prepare_results(results_df)
+    results = prepare_results(results_df, job['label'])
     return results, model_split
 
 
@@ -43,8 +44,8 @@ def regression_single_log(run_df, model):
     return results_data['prediction']
 
 
-def kmeans_clustering_train(original_test_data, train_data, regressor):
-    estimator = KMeans(n_clusters=3, random_state=21)
+def kmeans_clustering_train(original_test_data, train_data, regressor, kmeans_dict: dict):
+    estimator = KMeans(**kmeans_dict)
     estimator.fit(train_data)
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
     models = dict()
@@ -100,10 +101,11 @@ def no_clustering_test(original_test_data, test_data, regressor):
     return original_test_data
 
 
-def prepare_results(df):
-    # TODO are remaining time in seconds or hours?
-    df['label'] = df['label'] / 3600
-    df['prediction'] = df['prediction'] / 3600
+def prepare_results(df, label: LabelContainer):
+    if label.type == REMAINING_TIME:
+        # TODO are remaining time in seconds or hours?
+        df['label'] = df['label'] / 3600
+        df['prediction'] = df['prediction'] / 3600
     rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
     mae = mean_absolute_error(df['label'], df['prediction'])
     rscore = metrics.r2_score(df['label'], df['prediction'])

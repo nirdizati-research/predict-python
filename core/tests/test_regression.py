@@ -61,14 +61,14 @@ class TestRegression(TestCase):
         calculate(job)
 
     # WILL NOT WORK
-    def reg_lasso_complex(self):
+    def test_reg_lasso_complex(self):
         job = self.get_job()
         job['method'] = 'lasso'
         job['encoding'] = 'complex'
         add_default_config(job)
         calculate(job)
 
-    def reg_lasso_last_payload(self):
+    def test_reg_lasso_last_payload(self):
         job = self.get_job()
         job['method'] = 'lasso'
         job['clustering'] = 'noCluster'

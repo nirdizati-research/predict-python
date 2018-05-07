@@ -4,8 +4,9 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from logs.log_service import events_by_date, resources_by_date, event_executions, trace_attributes, events_in_trace, \
-    create_log, new_trace_start
+from log_util.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, trace_attributes, \
+    events_in_trace
+from logs.log_service import create_log
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
 from .models import Log
@@ -26,6 +27,13 @@ class LogList(mixins.ListModelMixin, generics.GenericAPIView):
         serializer = LogSerializer(log)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
+class LogDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):

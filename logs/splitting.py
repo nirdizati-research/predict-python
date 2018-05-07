@@ -25,7 +25,7 @@ def prepare_logs(split: dict):
         training_log, _ = train_test_split(get_logs(split['training_log_path'])[0], test_size=0)
         test_log, _ = train_test_split(get_logs(split['test_log_path'])[0], test_size=0)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
-    if len(training_log) is 0:
+    if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")
     return training_log, test_log
 

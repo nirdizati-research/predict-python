@@ -7,10 +7,10 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from core.constants import CLASSIFICATION, REGRESSION
+from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from jobs import tasks
-from jobs.job_creator import generate
-from jobs.models import Job, RUNNING
+from jobs.job_creator import generate, generate_labelling
+from jobs.models import Job
 from jobs.serializers import JobSerializer
 from logs.models import Split
 
@@ -49,8 +49,6 @@ class JobDetail(RetrieveModelMixin, GenericAPIView):
 
     def delete(self, request, *args, **kwargs):
         job = self.queryset.get(pk=kwargs['pk'])
-        if job.status == RUNNING:
-            return Response(status=status.HTTP_403_FORBIDDEN)
         job.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -69,6 +67,8 @@ def create_multiple(request):
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:
         jobs = generate(split, payload, REGRESSION)
+    elif payload['type'] == LABELLING:
+        jobs = generate_labelling(split, payload)
     else:
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)

@@ -132,6 +132,7 @@ class CreateJobsTests(APITestCase):
         config['label'] = {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                            "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
         config['random'] = 123
+        config['kmeans'] = {}
         config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
         obj = dict()
         obj['type'] = 'classification'
@@ -150,6 +151,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
+        self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertEqual(response.data[0]['config']['prefix_length'], 3)
         self.assertEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
@@ -160,9 +162,10 @@ class CreateJobsTests(APITestCase):
     def job_obj2(self):
         config = dict()
         config['encodings'] = ['simpleIndex', 'boolean', 'complex']
-        config['clusterings'] = ['noCluster']
+        config['clusterings'] = ['kmeans']
         config['methods'] = ['linear', 'lasso']
         config['random'] = 123
+        config['kmeans'] = {'max_iter': 100}
         config['prefix'] = {'prefix_length': 3, 'type': 'up_to', 'padding': 'no_padding'}
         obj = dict()
         obj['type'] = 'regression'
@@ -178,15 +181,42 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(18, len(response.data))
         self.assertEqual('regression', response.data[0]['type'])
         self.assertEqual('simpleIndex', response.data[0]['config']['encoding'])
-        self.assertEqual('noCluster', response.data[0]['config']['clustering'])
+        self.assertEqual('kmeans', response.data[0]['config']['clustering'])
         self.assertEqual('linear', response.data[0]['config']['method'])
         self.assertEqual(123, response.data[0]['config']['random'])
         self.assertEqual(1, response.data[0]['config']['prefix_length'])
         self.assertEqual('no_padding', response.data[0]['config']['padding'])
+        self.assertEqual(100, response.data[0]['config']['kmeans']['max_iter'])
         self.assertEqual('created', response.data[0]['status'])
-        self.assertEqual(1, response.data[0]['split']['id'])
+        self.assertEqual(1, response.data[0]['split_id'])
 
         self.assertEqual(3, response.data[17]['config']['prefix_length'])
+
+    def job_label(self):
+        config = dict()
+        config['label'] = {"type": 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
+                           "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
+        config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
+        obj = dict()
+        obj['type'] = 'labelling'
+        obj['config'] = config
+        obj['split_id'] = 1
+        return obj
+
+    def test_labelling_job_creation(self):
+        client = APIClient()
+        response = client.post('/jobs/multiple', self.job_label(), format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['type'], 'labelling')
+        self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
+        self.assertEqual(response.data[0]['config']['prefix_length'], 3)
+        self.assertEqual(response.data[0]['config']['label'],
+                         {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
+                          "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False})
+        self.assertEqual(response.data[0]['config']['padding'], 'zero_padding')
+        self.assertEqual(response.data[0]['status'], 'created')
 
 
 class MethodConfiguration(TestCase):
@@ -215,6 +245,7 @@ class MethodConfiguration(TestCase):
             'n_estimators': 15,
             'max_features': 'auto',
             'max_depth': None,
+            'n_jobs': -1,
             'random_state': 21
         })
 
@@ -229,5 +260,6 @@ class MethodConfiguration(TestCase):
             'n_estimators': 10,
             'max_features': 'auto',
             'max_depth': None,
+            'n_jobs': -1,
             'random_state': 21
         })

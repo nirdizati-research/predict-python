@@ -4,9 +4,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from core.constants import CLASSIFICATION, REGRESSION
+from core.default_configuration import _classification_random_forest
 from core.tests.test_prepare import add_default_config
 from encoders.label_container import LabelContainer, THRESHOLD_MEAN
-from jobs.job_creator import create_config, _classification_random_forest
+from jobs.job_creator import create_config
 from jobs.models import Job
 from jobs.tasks import prediction_task
 from logs.models import Log, Split

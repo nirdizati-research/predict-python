@@ -3,30 +3,28 @@ from opyenxes.classification.XEventAttributeClassifier import XEventAttributeCla
 
 from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER
 from encoders.simple_index import add_label_columns, add_labels
-from log_util.event_attributes import get_event_attributes
 from log_util.log_metrics import events_by_date, resources_by_date, new_trace_start
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log, label: LabelContainer, prefix_length=1, zero_padding=False):
+def complex(log, label: LabelContainer, additional_columns: list, prefix_length=1, zero_padding=False, ):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, label, prefix_length, columns_complex, data_complex,
+    return encode_complex_latest(log, label, prefix_length, additional_columns, columns_complex, data_complex,
                                  zero_padding, is_complex=True)
 
 
-def last_payload(log, label: LabelContainer, prefix_length=1, zero_padding=False):
+def last_payload(log, label: LabelContainer, additional_columns: list, prefix_length=1, zero_padding=False):
     if prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    return encode_complex_latest(log, label, prefix_length, columns_last_payload, data_last_payload,
+    return encode_complex_latest(log, label, prefix_length, additional_columns, columns_last_payload, data_last_payload,
                                  zero_padding)
 
 
-def encode_complex_latest(log, label: LabelContainer, prefix_length: int, column_fun, data_fun,
-                          zero_padding: bool, is_complex=False):
-    additional_columns = get_event_attributes(log)
+def encode_complex_latest(log, label: LabelContainer, prefix_length: int, additional_columns: list, column_fun,
+                          data_fun, zero_padding: bool, is_complex=False):
     columns = column_fun(prefix_length, additional_columns, label)
     encoded_data = []
 

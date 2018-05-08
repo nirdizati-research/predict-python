@@ -1,4 +1,5 @@
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
+from opyenxes.model import XLog
 
 
 def unique_events(log: list):
@@ -34,4 +35,15 @@ def get_event_attributes(log: list):
     for attribute in log[0][0].get_attributes().keys():
         if attribute not in ["concept:name", "time:timestamp"]:
             event_attributes.append(attribute)
+    return sorted(event_attributes)
+
+
+def get_global_event_attributes(log: XLog):
+    """Get log event attributes that are not name or time
+    """
+
+    event_attributes = []
+    for attribute in log.get_global_event_attributes():
+        if attribute.get_key() not in ["concept:name", "time:timestamp"]:
+            event_attributes.append(attribute.get_key())
     return sorted(event_attributes)

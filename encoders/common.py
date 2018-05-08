@@ -10,23 +10,26 @@ from .simple_index import simple_index
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding_type: str, job_type: str, label: LabelContainer,
-                      prefix_length=1, zero_padding=False):
+                      prefix_length=1, zero_padding=False, additional_columns=None):
     """Encodes and labels test set and training set as data frames
 
     :param prefix_length Applies to all
+    :param additional_columns Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
     training_df = encode_label_log(training_log, encoding_type, job_type, label, event_names,
-                                   prefix_length=prefix_length, zero_padding=zero_padding)
+                                   prefix_length=prefix_length, zero_padding=zero_padding,
+                                   additional_columns=additional_columns)
     test_df = encode_label_log(test_log, encoding_type, job_type, label, event_names, prefix_length=prefix_length,
-                               zero_padding=zero_padding)
+                               zero_padding=zero_padding, additional_columns=additional_columns)
     return training_df, test_df
 
 
 def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: LabelContainer, event_names=None,
-                     prefix_length=1, zero_padding=False):
-    encoded_log = encode_log(run_log, encoding_type, label, prefix_length, event_names, zero_padding)
+                     prefix_length=1, zero_padding=False, additional_columns=None):
+    encoded_log = encode_log(run_log, encoding_type, label, prefix_length, event_names, zero_padding,
+                             additional_columns)
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
@@ -46,10 +49,11 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
 
 
 def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_length=1, event_names=None,
-               zero_padding=False):
+               zero_padding=False, additional_columns=None):
     """Encodes test set and training set as data frames
 
     :param prefix_length consider up to this event in log
+    :param additional_columns Global trace attributes for complex and last payload encoding
     :param zero_padding If log shorter than prefix_length, weather to skip or pad with 0 up to prefix_length
     :returns training_df, test_df
     """
@@ -61,10 +65,10 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
     elif encoding_type == FREQUENCY:
         run_df = frequency(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == COMPLEX:
-        run_df = complex(run_log, label, prefix_length=prefix_length,
+        run_df = complex(run_log, label, additional_columns, prefix_length=prefix_length,
                          zero_padding=zero_padding)
     elif encoding_type == LAST_PAYLOAD:
-        run_df = last_payload(run_log, label, prefix_length=prefix_length,
+        run_df = last_payload(run_log, label, additional_columns, prefix_length=prefix_length,
                               zero_padding=zero_padding)
     return run_df
 

@@ -52,17 +52,14 @@ def run_by_type(training_df, test_df, job):
 def runtime_calculate(run_log,model):
     """ Main entry method for calculations"""
     # Python dicts are bad
-    if 'prefix_length' in model:
-        prefix_length = model['prefix_length']
-    else:
-        prefix_length = 1
+    prefix_length = model.get('prefix_length', 1)
     zero_padding = True if model['padding'] is ZERO_PADDING else False
     
-    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'], prefix_length, zero_padding=zero_padding)
+    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'], prefix_length=prefix_length, zero_padding=zero_padding)
     
     if model['type'] == CLASSIFICATION:
         label_type = model['label'].type
-        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER:
+        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
             results, model_split = binary_classifier_single_log(run_df, model)
         elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
             results, model_split = multi_classifier_single_log(run_df, job)

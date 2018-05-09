@@ -5,6 +5,7 @@ from core.constants import *
 from jobs.models import Job
 from jobs.models import TYPES
 from logs.models import Log
+from encoders.label_container import LabelContainer
 
 
 ENC_TYPES = (
@@ -40,4 +41,5 @@ class PredModels(models.Model):
         model['log_path'] = self.log.path
         model['log_name'] = self.log.name
         model['split'] = self.split.to_dict()
+        model['label'] = LabelContainer(**self.config['label'])
         return model

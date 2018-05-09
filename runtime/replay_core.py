@@ -50,7 +50,7 @@ def prepare(ev, tr, lg, replayer_id):
         trace.results = runtime_calculate(run_log, right_model.to_dict())
         trace.save()
     except Exception as e:
-        DemoReplayer.objects.get(pk=replayer_id).update(running=False)
+        DemoReplayer.objects.filter(pk=replayer_id).update(running=False)
         print("I can't predict this trace because I don't have a suitable model")
         print("Error:" + str(e))
     return 

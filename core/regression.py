@@ -33,7 +33,9 @@ def regression(training_df, test_df, job):
 
 def regression_single_log(run_df, model):
     split = model['split']
-    run_df = run_df.drop(['trace_id','elapsed_time'],1)
+    if 'elapsed_time' in run_df.columns:
+        run_df = run_df.drop(['elapsed_time', 'label'],1)
+    run_df = run_df.drop('trace_id',1)
     if split['type'] == NO_CLUSTER:
         regressor = joblib.load(split['model_path'])
         results_data = no_clustering_test(run_df, run_df, regressor)
@@ -97,6 +99,7 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
 
 
 def no_clustering_test(original_test_data, test_data, regressor):
+    print(test_data)
     original_test_data['prediction'] = regressor.predict(test_data)
     return original_test_data
 

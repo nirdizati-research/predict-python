@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from log_util.event_attributes import unique_events, unique_events2, get_event_attributes
+from log_util.event_attributes import unique_events, unique_events2, get_event_attributes, get_global_event_attributes
 from logs.file_service import get_logs
 
 
@@ -26,4 +26,9 @@ class EventAttributes(TestCase):
     def test_event_attributes(self):
         log = get_logs("log_cache/general_example_test.xes")[0]
         attributes = get_event_attributes(log)
+        self.assertListEqual(attributes, ['Activity', 'Costs', 'Resource', 'org:resource'])
+
+    def test_global_event_attributes(self):
+        log = get_logs("log_cache/general_example_test.xes")[0]
+        attributes = get_global_event_attributes(log)
         self.assertListEqual(attributes, ['Activity', 'Costs', 'Resource', 'org:resource'])

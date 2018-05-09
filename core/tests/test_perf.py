@@ -1,5 +1,7 @@
 # Test performance for thesis
 import time
+import unittest
+from unittest import TestCase
 
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
@@ -7,8 +9,8 @@ from core.tests.test_prepare import split_single, add_default_config
 from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, NEXT_ACTIVITY
 
 
-# Replace None with TestCase to use
-class TestClassPerf(None):
+@unittest.skip("performance test not needed normally")
+class TestClassPerf(TestCase):
     def get_job(self):
         json = dict()
         json["clustering"] = "noCluster"
@@ -63,8 +65,8 @@ class TestClassPerf(None):
         self.calculate_helper_hyperopt(job)
 
 
-# Replace None with TestCase to use
-class RegPerf(None):
+@unittest.skip("performance test not needed normally")
+class RegPerf(TestCase):
     def get_job(self):
         json = dict()
         json["clustering"] = "noCluster"

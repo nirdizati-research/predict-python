@@ -8,12 +8,12 @@ classifier = XEventAttributeClassifier("Trace", ["concept:name"])
 
 class Split(TestCase):
     def test_split_single(self):
-        training_log, test_log = prepare_logs(split_single())
+        training_log, test_log, _ = prepare_logs(split_single())
         self.assertEqual(4, len(training_log))
         self.assertEqual(2, len(test_log))
 
     def test_split_double(self):
-        training_log, test_log = prepare_logs(split_double())
+        training_log, test_log, _ = prepare_logs(split_double())
         self.assertEqual(4, len(training_log))
         self.assertEqual(2, len(test_log))
 
@@ -22,14 +22,14 @@ class SplitSingle(TestCase):
     def test_size(self):
         split = split_single()
         split['config'] = {'test_size': 0.5}
-        training_log, test_log = prepare_logs(split)
+        training_log, test_log, _ = prepare_logs(split)
         self.assertEqual(3, len(training_log))
         self.assertEqual(3, len(test_log))
 
     def test_sequential(self):
         split = split_single()
         split['config'] = {'split_type': 'split_sequential'}
-        training_log, test_log = prepare_logs(split)
+        training_log, test_log, _ = prepare_logs(split)
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)
 
@@ -39,8 +39,8 @@ class SplitSingle(TestCase):
     def test_random(self):
         split = split_single()
         split['config'] = {'split_type': 'split_random'}
-        training_log1, _ = prepare_logs(split)
-        training_log2, _ = prepare_logs(split)
+        training_log1, _, _ = prepare_logs(split)
+        training_log2, _, _ = prepare_logs(split)
         training_names1 = trace_names(training_log1)
         training_names2 = trace_names(training_log2)
 
@@ -49,7 +49,7 @@ class SplitSingle(TestCase):
     def test_temporal(self):
         split = split_single()
         split['config'] = {'split_type': 'split_temporal'}
-        training_log, test_log = prepare_logs(split)
+        training_log, test_log, _ = prepare_logs(split)
 
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)
@@ -60,7 +60,7 @@ class SplitSingle(TestCase):
     def test_strict_temporal(self):
         split = split_single()
         split['config'] = {'split_type': 'split_strict_temporal'}
-        training_log, test_log = prepare_logs(split)
+        training_log, test_log, _ = prepare_logs(split)
 
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)

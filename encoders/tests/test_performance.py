@@ -23,7 +23,8 @@ class TestEncoding(TestCase):
                          prefix_length=180, zero_padding=True, additional_columns=self.add_col)
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
-    def test_performance(self):
+    # This is test
+    def performance(self):
         encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
 
         # self.method_self(COMPLEX)

@@ -43,7 +43,7 @@ def calculate_hyperopt(job):
         fmin(calculate_and_evaluate, space, algo=tpe.suggest, max_evals=max_evals, trials=trials)
     except ValueError:
         raise ValueError("All jobs failed, cannot find best configuration")
-    current_best = {'loss': 100}
+    current_best = {'loss': 100, 'results': {}, 'config': {}}
     for t in trials:
         a = t['result']
         if current_best['loss'] > a['loss']:

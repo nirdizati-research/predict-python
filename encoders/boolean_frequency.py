@@ -11,14 +11,10 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def boolean(log: list, event_names: list, label: LabelContainer, prefix_length=1, zero_padding=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
     return encode_boolean_frequency(log, event_names, label, prefix_length, zero_padding, is_boolean=True)
 
 
 def frequency(log: list, event_names: list, label: LabelContainer, prefix_length=1, zero_padding=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
     return encode_boolean_frequency(log, event_names, label, prefix_length, zero_padding, is_boolean=False)
 
 

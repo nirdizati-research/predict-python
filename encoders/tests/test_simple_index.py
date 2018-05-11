@@ -50,6 +50,11 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(0.0, row.elapsed_time)
         self.assertEqual(True, row.label)
 
+    def test_prefix0(self):
+        self.assertRaises(ValueError,
+                          encode_label_logs, self.training_log, self.test_log, SIMPLE_INDEX,
+                          CLASSIFICATION, self.label, prefix_length=0)
+
 
 class TestGeneralTest(TestCase):
     """Making sure it actually works"""
@@ -93,10 +98,6 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(['5', 'register request', 1576440.0], row1.values.tolist())
         row2 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', 'register request', 520920.0], row2.values.tolist())
-
-    def test_prefix0(self):
-        self.assertRaises(ValueError,
-                          simple_index, self.log, self.label, prefix_length=0)
 
     def test_prefix2(self):
         df = simple_index(self.log, self.label, prefix_length=2)

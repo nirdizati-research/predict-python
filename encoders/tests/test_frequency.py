@@ -69,10 +69,6 @@ class TestGeneralTest(TestCase):
         self.assertEqual(df.shape, (2, 9))
         self.assertNotIn('elapsed_time', df.columns.values.tolist())
 
-    def test_prefix0(self):
-        self.assertRaises(ValueError,
-                          frequency, self.log, self.event_names, self.label, prefix_length=0)
-
     def test_prefix2(self):
         df = frequency(self.log, self.event_names, self.label, prefix_length=2)
 

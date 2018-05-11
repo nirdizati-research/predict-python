@@ -10,12 +10,6 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
-    return encode_simple_index(log, prefix_length, label, zero_padding)
-
-
-def encode_simple_index(log: list, prefix_length: int, label: LabelContainer, zero_padding: bool):
     columns = __columns(prefix_length, label)
     encoded_data = []
     # Create classifier only once

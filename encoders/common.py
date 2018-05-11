@@ -57,6 +57,8 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
     :param zero_padding If log shorter than prefix_length, weather to skip or pad with 0 up to prefix_length
     :returns training_df, test_df
     """
+    if prefix_length < 1:
+        raise ValueError("Prefix length must be greater than 1")
     run_df = None
     if encoding_type == SIMPLE_INDEX:
         run_df = simple_index(run_log, label, prefix_length=prefix_length, zero_padding=zero_padding)

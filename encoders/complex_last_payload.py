@@ -10,15 +10,11 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def complex(log, label: LabelContainer, additional_columns: list, prefix_length=1, zero_padding=False, ):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
     return encode_complex_latest(log, label, prefix_length, additional_columns, columns_complex, data_complex,
                                  zero_padding, is_complex=True)
 
 
 def last_payload(log, label: LabelContainer, additional_columns: list, prefix_length=1, zero_padding=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
     return encode_complex_latest(log, label, prefix_length, additional_columns, columns_last_payload, data_last_payload,
                                  zero_padding)
 

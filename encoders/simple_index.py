@@ -21,23 +21,25 @@ def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding
     executed_events = events_by_date([log]) if label.add_executed_events else None
     resources_used = resources_by_date([log]) if label.add_resources_used else None
     new_traces = new_trace_start([log]) if label.add_new_traces else None
-    add_features = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces}
+    kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
+              'label': label}
     for trace in log:
         if len(trace) <= prefix_length - 1 and not zero_padding:
             continue
         if all_in_one:
             for i in range(1, prefix_length + 1):
                 encoded_data.append(
-                    add_trace_row(trace, label, zero_padding, prefix_length, all_in_one, i, **add_features))
+                    add_trace_row(trace, zero_padding, prefix_length, all_in_one, i, **kwargs))
         else:
-            encoded_data.append(add_trace_row(trace, label, zero_padding, prefix_length, all_in_one, prefix_length,
-                                              **add_features))
+            encoded_data.append(add_trace_row(trace, zero_padding, prefix_length, all_in_one, prefix_length,
+                                              **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace: XTrace, label: LabelContainer, zero_padding: bool, prefix_length: int,
-                  all_in_one: bool, event_index: int, executed_events=None, resources_used=None, new_traces=None):
+def add_trace_row(trace: XTrace, zero_padding: bool, prefix_length: int,
+                  all_in_one: bool, event_index: int, label=None, executed_events=None, resources_used=None,
+                  new_traces=None):
     """Row in data frame"""
     if zero_padding:
         zero_count = event_index - len(trace)

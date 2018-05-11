@@ -27,15 +27,16 @@ def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding
             continue
         if all_in_one:
             for i in range(1, prefix_length + 1):
-                add_trace_row(encoded_data, trace, label, zero_padding, prefix_length, all_in_one, i, **add_features)
+                encoded_data.append(
+                    add_trace_row(trace, label, zero_padding, prefix_length, all_in_one, i, **add_features))
         else:
-            add_trace_row(encoded_data, trace, label, zero_padding, prefix_length, all_in_one, prefix_length,
-                          **add_features)
+            encoded_data.append(add_trace_row(trace, label, zero_padding, prefix_length, all_in_one, prefix_length,
+                                              **add_features))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(encoded_data: list, trace: XTrace, label: LabelContainer, zero_padding: bool, prefix_length: int,
+def add_trace_row(trace: XTrace, label: LabelContainer, zero_padding: bool, prefix_length: int,
                   all_in_one: bool, event_index: int, executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
     if zero_padding:
@@ -49,7 +50,7 @@ def add_trace_row(encoded_data: list, trace: XTrace, label: LabelContainer, zero
         trace_row += ['0' for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
-    encoded_data.append(trace_row)
+    return trace_row
 
 
 def trace_prefixes(trace: list, prefix_length: int):

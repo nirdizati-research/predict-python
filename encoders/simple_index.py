@@ -2,6 +2,7 @@ import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from opyenxes.model import XTrace
 
+from encoders.encoding_container import EncodingContainer
 from encoders.label_container import *
 from log_util.log_metrics import events_by_date, resources_by_date, new_trace_start
 from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
@@ -10,8 +11,8 @@ CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
 
 
-def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding=False, all_in_one=False):
-    columns = __columns(prefix_length, label)
+def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
+    columns = __columns(encoding.prefix_length, label)
     encoded_data = []
     # Create classifier only once
     if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
@@ -24,31 +25,31 @@ def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding
     kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
               'label': label}
     for trace in log:
-        if len(trace) <= prefix_length - 1 and not zero_padding:
+        if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
             continue
-        if all_in_one:
-            for i in range(1, prefix_length + 1):
+        if encoding.is_all_in_one():
+            for i in range(1, encoding.prefix_length + 1):
                 encoded_data.append(
-                    add_trace_row(trace, zero_padding, prefix_length, all_in_one, i, **kwargs))
+                    add_trace_row(trace, encoding, i, **kwargs))
         else:
-            encoded_data.append(add_trace_row(trace, zero_padding, prefix_length, all_in_one, prefix_length,
+            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length,
                                               **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace: XTrace, zero_padding: bool, prefix_length: int,
-                  all_in_one: bool, event_index: int, label=None, executed_events=None, resources_used=None,
+def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
+                  resources_used=None,
                   new_traces=None):
     """Row in data frame"""
-    if zero_padding:
+    if encoding.is_zero_padding():
         zero_count = event_index - len(trace)
-    elif all_in_one:
-        zero_count = prefix_length - event_index
+    elif encoding.is_all_in_one():
+        zero_count = encoding.prefix_length - event_index
     trace_row = list()
     trace_row.append(CLASSIFIER.get_class_identity(trace))
     trace_row += trace_prefixes(trace, event_index)
-    if zero_padding or all_in_one:
+    if encoding.is_zero_padding() or encoding.is_all_in_one():
         trace_row += ['0' for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)

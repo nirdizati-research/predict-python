@@ -135,3 +135,22 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(
             ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
              '0', '0', 520920.0, 0.0], row1.values.tolist())
+
+    def test_prefix10_all_in_one(self):
+        df = simple_index(self.log, self.label, prefix_length=10, all_in_one=True)
+
+        self.assertEqual(df.shape, (10, 13))
+        row1 = df[df.trace_id == '5'].iloc[9]
+        self.assertListEqual(
+            ['5', 'register request', 'examine casually', 'check ticket', 'decide', 'reinitiate request',
+             'check ticket', 'examine casually', 'decide', 'reinitiate request', 'examine casually', 1296240.0,
+             280200.0], row1.values.tolist())
+
+    def test_prefix10_padding_all_in_one(self):
+        df = simple_index(self.log, self.label, prefix_length=10, zero_padding=True, all_in_one=True)
+
+        self.assertEqual(df.shape, (20, 13))
+        row1 = df[df.trace_id == '4'].iloc[9]
+        self.assertListEqual(
+            ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
+             '0', '0', 520920.0, 0.0], row1.values.tolist())

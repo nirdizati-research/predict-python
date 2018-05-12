@@ -1,8 +1,11 @@
 import time
+import unittest
 from unittest import TestCase
 
 from core.constants import REGRESSION
-from encoders.common import encode_label_log, BOOLEAN
+from encoders.common import encode_label_log
+from encoders.encoding_container import SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD, EncodingContainer, \
+    ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import *
 from log_util.event_attributes import unique_events, get_global_event_attributes
 from logs.file_service import get_logs
@@ -30,3 +33,25 @@ class TestEncoding(TestCase):
         # self.method_self(COMPLEX)
         for e in encs:
             self.method_self(e)
+
+
+@unittest.skip("performance test not needed normally")
+class TestAgainstNirdizatiTraining(TestCase):
+    def do_test(self, encoding):
+        start_time = time.time()
+        # log = get_logs("log_cache/general_example.xes")[0]
+        log = get_logs("log_cache/Sepsis Cases - Event Log.xes")[0]
+        label = LabelContainer(REMAINING_TIME, add_elapsed_time=True)
+        encoding = EncodingContainer(encoding, prefix_length=185, generation_type=ALL_IN_ONE,
+                                     padding=ZERO_PADDING)
+        event_names = unique_events(log)
+        log = encode_label_log(log, encoding, REGRESSION, label, event_names=event_names)
+        print(log.shape)
+        print("Total for %s %s seconds" % (encoding, time.time() - start_time))
+
+    def test_performance(self):
+        encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY]
+
+        # self.method_self(COMPLEX)
+        for e in encs:
+            self.do_test(e)

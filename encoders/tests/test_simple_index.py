@@ -3,6 +3,7 @@ from unittest import TestCase
 from core.constants import CLASSIFICATION
 from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
+from encoders.label_container import REMAINING_TIME
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
@@ -165,4 +166,17 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(
             ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
              '0', '0', 520920.0, 0.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())
+
+    def test_eval(self):
+        encoding = EncodingContainer(prefix_length=12, generation_type=ALL_IN_ONE,
+                                     padding=ZERO_PADDING)
+        df = simple_index(get_logs("log_cache/general_example.xes")[0],
+                          LabelContainer(REMAINING_TIME, add_elapsed_time=True), encoding)
+
+        self.assertEqual(df.shape, (41, 15))
+        row1 = df[df.trace_id == '4'].iloc[4]
+        self.assertListEqual(
+            ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
+             '0', '0', '0', '0', 520920.0, 0.0], row1.values.tolist())
         self.assertFalse(df.isnull().values.any())

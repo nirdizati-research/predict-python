@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
+from encoders.encoding_container import EncodingContainer, COMPLEX, LAST_PAYLOAD, ZERO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM
 from jobs.job_creator import _kmeans
 
@@ -25,10 +26,8 @@ class TestClassification(TestCase):
         json["clustering"] = "kmeans"
         json["split"] = split_double()
         json["method"] = "randomForest"
-        json["encoding"] = "simpleIndex"
-        json["prefix_length"] = 1
+        json["encoding"] = EncodingContainer()
         json["type"] = "classification"
-        json["padding"] = 'zero_padding'
         json['label'] = LabelContainer(add_elapsed_time=True)
         return json
 
@@ -99,7 +98,7 @@ class TestClassification(TestCase):
     def test_class_complex(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        job["encoding"] = "complex"
+        job["encoding"] = EncodingContainer(COMPLEX)
         add_default_config(job)
         result, _ = calculate(job)
         # it works, but results are unreliable
@@ -107,8 +106,7 @@ class TestClassification(TestCase):
     def test_class_complex_zero_padding(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        job["encoding"] = "complex"
-        job["prefix_length"] = 8
+        job["encoding"] = EncodingContainer(COMPLEX, prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
@@ -117,7 +115,7 @@ class TestClassification(TestCase):
     def test_class_last_payload(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        job["encoding"] = "lastPayload"
+        job["encoding"] = EncodingContainer(LAST_PAYLOAD)
         add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
@@ -126,8 +124,7 @@ class TestClassification(TestCase):
     def test_class_last_payload_custom_threshold(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        job["encoding"] = "lastPayload"
-        job['prefix_length'] = 5
+        job["encoding"] = EncodingContainer(LAST_PAYLOAD, prefix_length=5)
         job['label'] = LabelContainer(threshold_type=THRESHOLD_CUSTOM, threshold=50)
         add_default_config(job)
         result, _ = calculate(job)

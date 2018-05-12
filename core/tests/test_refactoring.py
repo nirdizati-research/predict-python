@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import repair_example, add_default_config
+from encoders.encoding_container import EncodingContainer, ZERO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY
 
 
@@ -11,10 +12,8 @@ class RefactorProof(TestCase):
         json["clustering"] = "kmeans"
         json["split"] = repair_example()
         json["method"] = "randomForest"
-        json["encoding"] = "simpleIndex"
-        json["prefix_length"] = 5
+        json["encoding"] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
         json["type"] = "classification"
-        json["padding"] = 'zero_padding'
         json['label'] = LabelContainer(add_elapsed_time=True)
         return json
 
@@ -43,7 +42,7 @@ class RefactorProof(TestCase):
         self.maxDiff = None
         job = self.get_job()
         job["label"] = LabelContainer(NEXT_ACTIVITY)
-        job['prefix_length'] = 8
+        job["encoding"] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
         self.assertDictEqual(result, {'f1score': 0.23864644588878572, 'acc': 0.74660633484162897,
@@ -54,7 +53,7 @@ class RefactorProof(TestCase):
         job = self.get_job()
         job["label"] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
-        job['prefix_length'] = 8
+        job["encoding"] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
 

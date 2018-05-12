@@ -6,6 +6,7 @@ from unittest import TestCase
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
 from core.tests.test_prepare import split_single, add_default_config
+from encoders.encoding_container import EncodingContainer, BOOLEAN
 from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, NEXT_ACTIVITY
 
 
@@ -17,10 +18,8 @@ class TestClassPerf(TestCase):
         json["split"] = split_single()
         json["split"]["original_log_path"] = "log_cache/BPI Challenge 2017.xes.gz"
         json["method"] = "randomForest"
-        json["encoding"] = "boolean"
-        json["prefix_length"] = 20
+        json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
         json["type"] = "classification"
-        json["padding"] = 'no_padding'
         json['label'] = LabelContainer(DURATION)
         return json
 

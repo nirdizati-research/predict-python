@@ -3,6 +3,7 @@ from unittest import TestCase
 from core.constants import CLASSIFICATION, FREQUENCY
 from encoders.boolean_frequency import frequency
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
+from encoders.encoding_container import EncodingContainer, Encoding, Padding
 from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
@@ -34,9 +35,10 @@ class TestGeneralTest(TestCase):
         self.log = get_logs("log_cache/general_example_test.xes")[0]
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
+        self.encoding = EncodingContainer(Encoding.FREQUENCY)
 
     def test_header(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=1)
+        df = frequency(self.log, self.event_names, self.label, self.encoding)
         names = ['register request', 'examine casually', 'check ticket', 'decide',
                  'reinitiate request', 'examine thoroughly',
                  'reject request', 'trace_id', 'label', 'elapsed_time']
@@ -44,7 +46,7 @@ class TestGeneralTest(TestCase):
             self.assertIn(name, df.columns.values.tolist())
 
     def test_prefix1(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=1)
+        df = frequency(self.log, self.event_names, self.label, self.encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -57,20 +59,21 @@ class TestGeneralTest(TestCase):
         self.assertEqual(520920.0, row2.label)
 
     def test_prefix1_no_label(self):
-        df = frequency(self.log, self.event_names, LabelContainer(NO_LABEL), prefix_length=1)
+        df = frequency(self.log, self.event_names, LabelContainer(NO_LABEL), self.encoding)
 
         self.assertEqual(df.shape, (2, 8))
         self.assertNotIn('label', df.columns.values.tolist())
 
     def test_prefix1_no_elapsed_time(self):
         label = LabelContainer()
-        df = frequency(self.log, self.event_names, label, prefix_length=1)
+        df = frequency(self.log, self.event_names, label, self.encoding)
 
         self.assertEqual(df.shape, (2, 9))
         self.assertNotIn('elapsed_time', df.columns.values.tolist())
 
     def test_prefix2(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=2)
+        encoding = EncodingContainer(Encoding.FREQUENCY, prefix_length=2)
+        df = frequency(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -84,7 +87,8 @@ class TestGeneralTest(TestCase):
         self.assertEqual(445080.0, row2.label)
 
     def test_prefix5(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=5)
+        encoding = EncodingContainer(Encoding.FREQUENCY, prefix_length=5)
+        df = frequency(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -93,7 +97,8 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=10)
+        encoding = EncodingContainer(Encoding.FREQUENCY, prefix_length=10)
+        df = frequency(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (1, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -101,7 +106,8 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10_padding(self):
-        df = frequency(self.log, self.event_names, self.label, prefix_length=10, zero_padding=True)
+        encoding = EncodingContainer(Encoding.FREQUENCY, prefix_length=10, padding=Padding.ZERO_PADDING)
+        df = frequency(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '4'].iloc[0]

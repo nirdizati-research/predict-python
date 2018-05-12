@@ -30,8 +30,7 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
 
 
 def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
-                  resources_used=None,
-                  new_traces=None):
+                  resources_used=None, new_traces=None):
     """Row in data frame"""
     if encoding.is_zero_padding():
         zero_count = event_index - len(trace)

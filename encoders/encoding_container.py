@@ -34,3 +34,9 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
 
     def is_all_in_one(self):
         return self.generation_type == GenerationType.ALL_IN_ONE
+
+    def is_boolean(self):
+        return self.method == Encoding.BOOLEAN
+
+    def is_complex(self):
+        return self.method == Encoding.COMPLEX

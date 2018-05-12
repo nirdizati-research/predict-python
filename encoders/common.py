@@ -49,7 +49,7 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
 
 
 def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_length=1, event_names=None,
-               zero_padding=False, additional_columns=None):
+               zero_padding=False, additional_columns=None, encoding=None):
     """Encodes test set and training set as data frames
 
     :param prefix_length consider up to this event in log
@@ -61,7 +61,7 @@ def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_
         raise ValueError("Prefix length must be greater than 1")
     run_df = None
     if encoding_type == SIMPLE_INDEX:
-        run_df = simple_index(run_log, label, prefix_length=prefix_length, zero_padding=zero_padding)
+        run_df = simple_index(run_log, label, encoding)
     elif encoding_type == BOOLEAN:
         run_df = boolean(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
     elif encoding_type == FREQUENCY:

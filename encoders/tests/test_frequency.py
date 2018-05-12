@@ -105,6 +105,7 @@ class TestGeneralTest(TestCase):
         row1 = df[df.trace_id == '5'].iloc[0]
         self.assertListEqual(['5', 1, 3, 2, 2, 2, 0, 0, 1296240.0, 280200.0],
                              row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_padding(self):
         encoding = EncodingContainer(FREQUENCY, prefix_length=10, padding=ZERO_PADDING)
@@ -113,3 +114,4 @@ class TestGeneralTest(TestCase):
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', True, False, True, True, False, True, True, 520920.0, 0.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())

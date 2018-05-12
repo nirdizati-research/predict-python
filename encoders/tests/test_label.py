@@ -366,3 +366,4 @@ class TestLabelBoolean(TestCase):
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('new_traces' in df.columns.values.tolist())
         self.assertListEqual(df['new_traces'].tolist(), [0, 0])
+        self.assertFalse(df.isnull().values.any())

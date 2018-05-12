@@ -32,10 +32,13 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
 def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, atr_classifier=None, label=None,
                   executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
-    if encoding.is_zero_padding():
-        zero_count = event_index - len(trace)
-    elif encoding.is_all_in_one():
-        zero_count = encoding.prefix_length - event_index
+    # a and b are magic values
+    b = encoding.prefix_length - len(trace)
+    if encoding.is_all_in_one():
+        a = encoding.prefix_length - event_index
+        zero_count = a if a > b else b
+    elif encoding.is_zero_padding():
+        zero_count = b
     trace_row = list()
     trace_row.append(CLASSIFIER.get_class_identity(trace))
     trace_row += trace_prefixes(trace, event_index)

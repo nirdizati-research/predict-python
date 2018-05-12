@@ -121,6 +121,7 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(
             ['5', 'register request', 'examine casually', 'check ticket', 'decide', 'reinitiate request', 458160.0,
              1118280.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10(self):
         df = simple_index(self.log, self.label, EncodingContainer(prefix_length=10))
@@ -140,6 +141,7 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(
             ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
              '0', '0', 520920.0, 0.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_all_in_one(self):
         encoding = EncodingContainer(prefix_length=10, generation_type=ALL_IN_ONE)
@@ -151,6 +153,7 @@ class TestGeneralTest(TestCase):
             ['5', 'register request', 'examine casually', 'check ticket', 'decide', 'reinitiate request',
              'check ticket', 'examine casually', 'decide', 'reinitiate request', 'examine casually', 1296240.0,
              280200.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_padding_all_in_one(self):
         encoding = EncodingContainer(prefix_length=10, generation_type=ALL_IN_ONE,
@@ -162,3 +165,4 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(
             ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
              '0', '0', 520920.0, 0.0], row1.values.tolist())
+        self.assertFalse(df.isnull().values.any())

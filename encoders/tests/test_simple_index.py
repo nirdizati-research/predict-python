@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from core.constants import CLASSIFICATION
 from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
-from encoders.encoding_container import EncodingContainer, Padding, GenerationType
+from encoders.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from encoders.simple_index import simple_index
 from logs.file_service import get_logs
 
@@ -133,7 +133,7 @@ class TestGeneralTest(TestCase):
              280200.0], row1.values.tolist())
 
     def test_prefix10_padding(self):
-        df = simple_index(self.log, self.label, EncodingContainer(prefix_length=10, padding=Padding.ZERO_PADDING))
+        df = simple_index(self.log, self.label, EncodingContainer(prefix_length=10, padding=ZERO_PADDING))
 
         self.assertEqual(df.shape, (2, 13))
         row1 = df[df.trace_id == '4'].iloc[0]
@@ -142,7 +142,7 @@ class TestGeneralTest(TestCase):
              '0', '0', 520920.0, 0.0], row1.values.tolist())
 
     def test_prefix10_all_in_one(self):
-        encoding = EncodingContainer(prefix_length=10, generation_type=GenerationType.ALL_IN_ONE)
+        encoding = EncodingContainer(prefix_length=10, generation_type=ALL_IN_ONE)
         df = simple_index(self.log, self.label, encoding)
 
         self.assertEqual(df.shape, (10, 13))
@@ -153,8 +153,8 @@ class TestGeneralTest(TestCase):
              280200.0], row1.values.tolist())
 
     def test_prefix10_padding_all_in_one(self):
-        encoding = EncodingContainer(prefix_length=10, generation_type=GenerationType.ALL_IN_ONE,
-                                     padding=Padding.ZERO_PADDING)
+        encoding = EncodingContainer(prefix_length=10, generation_type=ALL_IN_ONE,
+                                     padding=ZERO_PADDING)
         df = simple_index(self.log, self.label, encoding)
 
         self.assertEqual(df.shape, (20, 13))

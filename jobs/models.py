@@ -2,6 +2,7 @@ from django.db import models
 from jsonfield import JSONField
 
 from core.constants import REGRESSION, CLASSIFICATION, LABELLING
+from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
 from logs.models import Log, Split
 
@@ -44,4 +45,5 @@ class Job(BaseModel):
         job['type'] = self.type
         job['split'] = self.split.to_dict()
         job['label'] = LabelContainer(**self.config['label'])
+        job['encoding'] = EncodingContainer(**self.config['encoding'])
         return job

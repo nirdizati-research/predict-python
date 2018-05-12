@@ -50,5 +50,5 @@ def run_by_type(training_df, test_df, job):
 def get_run(job):
     """Defines job identity"""
     if job['type'] == LABELLING:
-        return job['encoding'].method.value + '_' + job['label'].type
-    return job['method'] + '_' + job['encoding'].method.value + '_' + job['clustering'] + '_' + job['label'].type
+        return job['encoding'].method + '_' + job['label'].type
+    return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type

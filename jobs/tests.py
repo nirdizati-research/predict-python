@@ -17,10 +17,9 @@ class JobModelTest(TestCase):
     def setUp(self):
         self.config = {'key': 123,
                        'method': 'randomForest',
-                       'encoding': 'simpleIndex',
+                       'encoding': {'method': 'simpleIndex', "prefix_length": 1,
+                                    "padding": 'no_padding', 'generation_type': 'only'},
                        'clustering': 'noCluster',
-                       "prefix_length": 1,
-                       "padding": 'no_padding',
                        "create_models": False,
                        "label": {'type': 'remaining_time'}
                        }

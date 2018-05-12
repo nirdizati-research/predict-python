@@ -97,10 +97,8 @@ class Hyperopt(TestCase):
     def setUp(self):
         self.config = {
             'method': 'randomForest',
-            'encoding': 'simpleIndex',
+            'encoding': {'method': 'simpleIndex', "prefix_length": 3, "padding": 'no_padding'},
             'clustering': 'noCluster',
-            "prefix_length": 3,
-            "padding": 'no_padding',
             "create_models": False,
             "label": {"type": "remaining_time"},
             "hyperopt": {"use_hyperopt": True, "max_evals": 2, "performance_metric": "acc"}
@@ -228,7 +226,7 @@ class MethodConfiguration(TestCase):
         config['methods'] = ['randomForest']
         config['regression.randomForest'] = {'n_estimators': 15}
         config['regression.lasso'] = {'n_estimators': 15}
-        config['prefix'] = {'prefix_length': 3, 'type': 'up_to', 'padding': 'no_padding'}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'}
         obj = dict()
         obj['type'] = 'regression'
         obj['config'] = config

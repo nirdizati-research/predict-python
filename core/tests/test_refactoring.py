@@ -74,9 +74,9 @@ class RefactorProof(TestCase):
         job["type"] = "regression"
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.294350181)
-        self.assertAlmostEqual(result['mae'], 0.2264389460)
-        self.assertAlmostEqual(result['rscore'], 0.059686980)
+        self.assertAlmostEqual(result['rmse'], 0.30439548)
+        self.assertAlmostEqual(result['mae'], 0.26033653)
+        self.assertAlmostEqual(result['rscore'], -0.00558834)
 
     def test_regression_no_cluster(self):
         self.maxDiff = None
@@ -85,6 +85,6 @@ class RefactorProof(TestCase):
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.291235180)
-        self.assertAlmostEqual(result['mae'], 0.225940423)
-        self.assertAlmostEqual(result['rscore'], 0.07948365)
+        self.assertAlmostEqual(result['rmse'], 0.29010989)
+        self.assertAlmostEqual(result['mae'], 0.22528624)
+        self.assertAlmostEqual(result['rscore'], 0.086583348)

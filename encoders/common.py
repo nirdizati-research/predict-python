@@ -39,6 +39,9 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
         categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
     if job_type == REGRESSION:
+        # Remove last events as worse for prediction
+        if label.type == REMAINING_TIME:
+            encoded_log = encoded_log.loc[encoded_log['label'] != 0.0]
         return encoded_log
     # Post processing
     if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER or label.type == DURATION:

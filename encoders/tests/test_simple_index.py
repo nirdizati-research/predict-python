@@ -160,8 +160,8 @@ class TestGeneralTest(TestCase):
                                      padding=ZERO_PADDING)
         df = simple_index(self.log, self.label, encoding)
 
-        self.assertEqual(df.shape, (20, 13))
-        row1 = df[df.trace_id == '4'].iloc[9]
+        self.assertEqual(df.shape, (15, 13))
+        row1 = df[df.trace_id == '4'].iloc[4]
         self.assertListEqual(
             ['4', 'register request', 'check ticket', 'examine thoroughly', 'decide', 'reject request', '0', '0', '0',
              '0', '0', 520920.0, 0.0], row1.values.tolist())

@@ -100,5 +100,5 @@ class LastPayload(TestCase):
                                      generation_type=ALL_IN_ONE)
         df = last_payload(self.log, self.label, encoding, self.add_col)
 
-        self.assertEqual(df.shape, (20, 17))
+        self.assertEqual(df.shape, (15, 17))
         self.assertFalse(df.isnull().values.any())

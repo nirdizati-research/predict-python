@@ -127,7 +127,7 @@ class TestGeneralTest(TestCase):
                                      generation_type=ALL_IN_ONE)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
-        self.assertEqual(df.shape, (20, 10))
-        row1 = df[df.trace_id == '4'].iloc[9]
+        self.assertEqual(df.shape, (15, 10))
+        row1 = df[df.trace_id == '4'].iloc[4]
         self.assertListEqual(['4', True, False, True, True, False, True, True, 520920.0, 0.0], row1.values.tolist())
         self.assertFalse(df.isnull().values.any())

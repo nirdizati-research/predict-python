@@ -21,7 +21,7 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
             # trace too short and no zero padding
             continue
         if encoding.is_all_in_one():
-            for i in range(1, encoding.prefix_length + 1):
+            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(add_trace_row(trace, encoding, i, atr_classifier, **kwargs))
         else:
             encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, atr_classifier, **kwargs))

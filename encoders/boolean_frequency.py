@@ -34,7 +34,7 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
             # trace too short and no zero padding
             continue
         if encoding.is_all_in_one():
-            for i in range(1, encoding.prefix_length + 1):
+            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
                     trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=atr_classifier, **kwargs))
         else:

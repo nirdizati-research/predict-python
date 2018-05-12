@@ -103,5 +103,5 @@ class Complex(TestCase):
                                      generation_type=ALL_IN_ONE)
         df = complex(self.log, self.label, encoding, self.add_col)
 
-        self.assertEqual(df.shape, (20, 53))
+        self.assertEqual(df.shape, (15, 53))
         self.assertFalse(df.isnull().values.any())

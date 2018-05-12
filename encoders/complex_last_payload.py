@@ -30,7 +30,7 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
             # trace too short and no zero padding
             continue
         if encoding.is_all_in_one():
-            for i in range(1, encoding.prefix_length + 1):
+            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
                     trace_to_row(trace, encoding, i, data_fun, additional_columns=additional_columns,
                                  atr_classifier=atr_classifier, **kwargs))

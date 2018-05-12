@@ -128,7 +128,7 @@ def get_zero_count(encoding: EncodingContainer, event_index: int, trace_len: int
             a = b
         zero_count = a * (1 + add_columns_len)
     elif encoding.is_all_in_one():
-        zero_count = a
+        zero_count = a if a > b else b
         if zero_count > 0:
             zero_count + add_columns_len
     elif encoding.is_zero_padding() and encoding.is_complex():

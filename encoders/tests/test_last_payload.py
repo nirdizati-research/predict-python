@@ -1,6 +1,7 @@
 from unittest import TestCase
 
 from encoders.complex_last_payload import last_payload
+from encoders.encoding_container import EncodingContainer, Encoding, Padding, GenerationType
 from encoders.label_container import LabelContainer, NO_LABEL
 from log_util.event_attributes import unique_events, get_global_event_attributes
 from logs.file_service import get_logs
@@ -12,9 +13,11 @@ class LastPayload(TestCase):
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.add_col = get_global_event_attributes(self.log)
+        self.encoding = EncodingContainer(Encoding.LAST_PAYLOAD)
 
     def test_shape(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=2)
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=2)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
 
         self.assertEqual((2, 9), df.shape)
         headers = ['trace_id', 'prefix_1', 'prefix_2', 'Activity_2', 'Costs_2',
@@ -22,7 +25,7 @@ class LastPayload(TestCase):
         self.assertListEqual(headers, df.columns.values.tolist())
 
     def test_prefix1(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=1)
+        df = last_payload(self.log, self.label, self.encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -32,7 +35,7 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete", 0.0, 520920.0])
 
     def test_prefix1_no_label(self):
-        df = last_payload(self.log, LabelContainer(NO_LABEL), self.add_col, prefix_length=1)
+        df = last_payload(self.log, LabelContainer(NO_LABEL), self.encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -42,7 +45,7 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete"])
 
     def test_prefix1_no_elapsed_time(self):
-        df = last_payload(self.log, LabelContainer(add_elapsed_time=False), self.add_col, prefix_length=1)
+        df = last_payload(self.log, LabelContainer(add_elapsed_time=False), self.encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -52,7 +55,8 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete", 520920.0])
 
     def test_prefix2(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=2)
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=2)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -64,16 +68,37 @@ class LastPayload(TestCase):
                               445080.0])
 
     def test_prefix5(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=5)
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=5)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
 
         self.assertEqual(df.shape, (2, 12))
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=10)
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=10)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
 
         self.assertEqual(df.shape, (1, 17))
+        self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_zero_padding(self):
-        df = last_payload(self.log, self.label, self.add_col, prefix_length=10, zero_padding=True)
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=10, padding=Padding.ZERO_PADDING)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
 
         self.assertEqual(df.shape, (2, 17))
+        self.assertFalse(df.isnull().values.any())
+
+    def test_prefix10_all_in_one(self):
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=10, generation_type=GenerationType.ALL_IN_ONE)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
+
+        self.assertEqual(df.shape, (10, 17))
+        self.assertFalse(df.isnull().values.any())
+
+    def test_prefix10_zero_padding_all_in_one(self):
+        encoding = EncodingContainer(Encoding.LAST_PAYLOAD, prefix_length=10, padding=Padding.ZERO_PADDING,
+                                     generation_type=GenerationType.ALL_IN_ONE)
+        df = last_payload(self.log, self.label, encoding, self.add_col)
+
+        self.assertEqual(df.shape, (20, 17))
+        self.assertFalse(df.isnull().values.any())

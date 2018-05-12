@@ -14,26 +14,17 @@ ATTRIBUTE_CLASSIFIER = None
 def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
     columns = __columns(encoding.prefix_length, label)
     encoded_data = []
-    # Create classifier only once
-    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        global ATTRIBUTE_CLASSIFIER
-        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
-    # Expensive operations
-    executed_events = events_by_date([log]) if label.add_executed_events else None
-    resources_used = resources_by_date([log]) if label.add_resources_used else None
-    new_traces = new_trace_start([log]) if label.add_new_traces else None
-    kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
-              'label': label}
+    setup_attribute_classifier(label)
+    kwargs = get_intercase_attributes(log, label)
     for trace in log:
         if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
+            # trace too short and no zero padding
             continue
         if encoding.is_all_in_one():
             for i in range(1, encoding.prefix_length + 1):
-                encoded_data.append(
-                    add_trace_row(trace, encoding, i, **kwargs))
+                encoded_data.append(add_trace_row(trace, encoding, i, **kwargs))
         else:
-            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length,
-                                              **kwargs))
+            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -85,6 +76,26 @@ def __columns(prefix_length: int, label: LabelContainer):
     for i in range(0, prefix_length):
         columns.append("prefix_" + str(i + 1))
     return add_label_columns(columns, label)
+
+
+def get_intercase_attributes(log: list, label: LabelContainer):
+    """Dict of kwargs
+    These intercae attributes are expensive operations!!!
+    """
+    # Expensive operations
+    executed_events = events_by_date([log]) if label.add_executed_events else None
+    resources_used = resources_by_date([log]) if label.add_resources_used else None
+    new_traces = new_trace_start([log]) if label.add_new_traces else None
+    kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
+              'label': label}
+    return kwargs
+
+
+def setup_attribute_classifier(label: LabelContainer):
+    # Create classifier only once
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        global ATTRIBUTE_CLASSIFIER
+        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
 
 
 def add_label_columns(columns: list, label: LabelContainer):

@@ -10,6 +10,14 @@ class Encoding(Enum):
     LAST_PAYLOAD = 'lastPayload'
 
 
+# Encoding values for direct import
+SIMPLE_INDEX = Encoding.SIMPLE_INDEX
+BOOLEAN = Encoding.BOOLEAN
+FREQUENCY = Encoding.FREQUENCY
+COMPLEX = Encoding.COMPLEX
+LAST_PAYLOAD = Encoding.LAST_PAYLOAD
+
+
 class GenerationType(Enum):
     UP_TO = 'up_to'
     ONLY_THIS = 'only'
@@ -21,6 +29,11 @@ class Padding(Enum):
     NO_PADDING = 'no_padding'
 
 
+# Encoding options
+ZERO_PADDING = Padding.ZERO_PADDING
+NO_PADDING = Padding.NO_PADDING
+
+
 class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_length", "padding", "generation_type"])):
     """Inner object describing encoding configuration.
     """
@@ -30,13 +43,13 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
         return super(EncodingContainer, cls).__new__(cls, method, prefix_length, padding, generation_type)
 
     def is_zero_padding(self):
-        return self.padding == Padding.ZERO_PADDING
+        return self.padding == ZERO_PADDING
 
     def is_all_in_one(self):
         return self.generation_type == GenerationType.ALL_IN_ONE
 
     def is_boolean(self):
-        return self.method == Encoding.BOOLEAN
+        return self.method == BOOLEAN
 
     def is_complex(self):
-        return self.method == Encoding.COMPLEX
+        return self.method == COMPLEX

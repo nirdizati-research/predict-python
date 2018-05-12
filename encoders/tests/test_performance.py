@@ -1,7 +1,7 @@
 import time
 from unittest import TestCase
 
-from core.constants import SIMPLE_INDEX, COMPLEX, REGRESSION, FREQUENCY, LAST_PAYLOAD
+from core.constants import REGRESSION
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.label_container import *
 from log_util.event_attributes import unique_events, get_global_event_attributes

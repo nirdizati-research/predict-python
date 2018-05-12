@@ -23,7 +23,7 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
     columns = column_fun(encoding.prefix_length, additional_columns, label)
     encoded_data = []
 
-    setup_attribute_classifier(label)
+    atr_classifier = setup_attribute_classifier(label)
     kwargs = get_intercase_attributes(log, label)
     for trace in log:
         if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
@@ -32,11 +32,12 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
         if encoding.is_all_in_one():
             for i in range(1, encoding.prefix_length + 1):
                 encoded_data.append(
-                    trace_to_row(trace, encoding, i, data_fun, additional_columns=additional_columns, **kwargs))
+                    trace_to_row(trace, encoding, i, data_fun, additional_columns=additional_columns,
+                                 atr_classifier=atr_classifier, **kwargs))
         else:
             encoded_data.append(
                 trace_to_row(trace, encoding, encoding.prefix_length, data_fun, additional_columns=additional_columns,
-                             **kwargs))
+                             atr_classifier=atr_classifier, **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -104,7 +105,8 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
     return data
 
 
-def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, data_fun, label=None,
+def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, data_fun, atr_classifier=None,
+                 label=None,
                  executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
     zero_count = get_zero_count(encoding, event_index, len(trace), len(additional_columns))
     trace_row = []
@@ -114,7 +116,7 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, d
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
         trace_row += ['0' for _ in range(0, zero_count)]
-    trace_row += add_labels(label, event_index, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
+    trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
 

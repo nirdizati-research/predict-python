@@ -1,6 +1,6 @@
 from core.binary_classification import binary_classifier
 from core.constants import \
-    CLASSIFICATION, REGRESSION, ZERO_PADDING, LABELLING
+    CLASSIFICATION, REGRESSION, LABELLING
 from core.label_validation import label_task
 from core.multi_classification import multi_classifier
 from core.regression import regression

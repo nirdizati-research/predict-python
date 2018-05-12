@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from core.constants import BOOLEAN, CLASSIFICATION
+from core.constants import CLASSIFICATION
 from encoders.boolean_frequency import boolean
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
-from encoders.encoding_container import EncodingContainer, Encoding, GenerationType, Padding
+from encoders.encoding_container import EncodingContainer, Encoding, GenerationType, BOOLEAN, ZERO_PADDING
 from log_util.event_attributes import unique_events
 from logs.file_service import get_logs
 
@@ -12,8 +12,8 @@ class TestBooleanSplit(TestCase):
     def setUp(self):
         test_log = get_logs("log_cache/general_example_test.xes")[0]
         training_log = get_logs("log_cache/general_example_training.xes")[0]
-        self.training_df, self.test_df = encode_label_logs(training_log, test_log, BOOLEAN, CLASSIFICATION,
-                                                           LabelContainer(add_elapsed_time=True), prefix_length=1)
+        self.training_df, self.test_df = encode_label_logs(training_log, test_log, EncodingContainer(BOOLEAN),
+                                                           CLASSIFICATION, LabelContainer(add_elapsed_time=True))
 
     def test_shape(self):
         self.assert_shape(self.training_df, (4, 11))
@@ -105,7 +105,7 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10_padding(self):
-        encoding = EncodingContainer(Encoding.BOOLEAN, prefix_length=10, padding=Padding.ZERO_PADDING)
+        encoding = EncodingContainer(Encoding.BOOLEAN, prefix_length=10, padding=ZERO_PADDING)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
@@ -122,7 +122,7 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10_padding_all_in_one(self):
-        encoding = EncodingContainer(Encoding.BOOLEAN, prefix_length=10, padding=Padding.ZERO_PADDING,
+        encoding = EncodingContainer(Encoding.BOOLEAN, prefix_length=10, padding=ZERO_PADDING,
                                      generation_type=GenerationType.ALL_IN_ONE)
         df = boolean(self.log, self.event_names, self.label, encoding)
 

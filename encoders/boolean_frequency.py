@@ -8,7 +8,6 @@ from encoders.label_container import LabelContainer
 from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes, setup_attribute_classifier
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
-ATTRIBUTE_CLASSIFIER = None
 
 
 def boolean(log: list, event_names: list, label: LabelContainer, encoding: EncodingContainer):
@@ -28,7 +27,7 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
     columns = create_columns(event_names, label)
     encoded_data = []
 
-    setup_attribute_classifier(label)
+    atr_classifier = setup_attribute_classifier(label)
     kwargs = get_intercase_attributes(log, label)
     for trace in log:
         if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
@@ -36,10 +35,12 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
             continue
         if encoding.is_all_in_one():
             for i in range(1, encoding.prefix_length + 1):
-                encoded_data.append(trace_to_row(trace, encoding, i, event_names=event_names, **kwargs))
+                encoded_data.append(
+                    trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=atr_classifier, **kwargs))
         else:
             encoded_data.append(
-                trace_to_row(trace, encoding, encoding.prefix_length, event_names=event_names, **kwargs))
+                trace_to_row(trace, encoding, encoding.prefix_length, event_names=event_names,
+                             atr_classifier=atr_classifier, **kwargs))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -71,7 +72,7 @@ def create_columns(event_names: list, label: LabelContainer):
 
 
 def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
-                 resources_used=None, new_traces=None, event_names=None):
+                 resources_used=None, new_traces=None, event_names=None, atr_classifier=None):
     # starts with all False, changes to event
     event_happened = create_event_happened(event_names, encoding)
     trace_row = []
@@ -83,6 +84,6 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, l
         else:
             update_event_happened(event, event_names, event_happened, encoding)
     trace_row += event_happened
-    trace_row += add_labels(label, event_index, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
+    trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

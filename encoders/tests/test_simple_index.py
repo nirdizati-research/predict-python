@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from core.constants import SIMPLE_INDEX, CLASSIFICATION
+from core.constants import CLASSIFICATION
 from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
 from encoders.encoding_container import EncodingContainer, Padding, GenerationType
 from encoders.simple_index import simple_index
@@ -12,10 +12,11 @@ class TestSplitLogExample(TestCase):
         self.test_log = get_logs("log_cache/general_example_test.xes")[0]
         self.training_log = get_logs("log_cache/general_example_training.xes")[0]
         self.label = LabelContainer(add_elapsed_time=True)
+        self.encoding = EncodingContainer()
 
     def test_shape_training(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
-                                                 CLASSIFICATION, self.label, prefix_length=1)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.encoding,
+                                                 CLASSIFICATION, self.label)
         self.assert_shape(training_df, (4, 4))
         self.assert_shape(test_df, (2, 4))
 
@@ -27,8 +28,9 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(shape, dataframe.shape)
 
     def test_prefix_length_training(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
-                                                 CLASSIFICATION, self.label, prefix_length=3)
+        encoding = EncodingContainer(prefix_length=3)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, encoding,
+                                                 CLASSIFICATION, self.label)
         self.assertIn("prefix_1", training_df.columns.values)
         self.assertIn("prefix_2", training_df.columns.values)
         self.assertIn("prefix_3", training_df.columns.values)
@@ -43,8 +45,8 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(7320.0, row.elapsed_time)
 
     def test_row_test(self):
-        training_df, test_df = encode_label_logs(self.training_log, self.test_log, SIMPLE_INDEX,
-                                                 CLASSIFICATION, self.label, prefix_length=1)
+        training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.encoding,
+                                                 CLASSIFICATION, self.label)
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(52903968, row.prefix_1)
@@ -52,9 +54,10 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(True, row.label)
 
     def test_prefix0(self):
+        encoding = EncodingContainer(prefix_length=0)
         self.assertRaises(ValueError,
-                          encode_label_logs, self.training_log, self.test_log, SIMPLE_INDEX,
-                          CLASSIFICATION, self.label, prefix_length=0)
+                          encode_label_logs, self.training_log, self.test_log, encoding,
+                          CLASSIFICATION, self.label)
 
 
 class TestGeneralTest(TestCase):

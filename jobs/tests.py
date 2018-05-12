@@ -134,7 +134,7 @@ class CreateJobsTests(APITestCase):
                            "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
         config['random'] = 123
         config['kmeans'] = {}
-        config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
         obj['type'] = 'classification'
         obj['config'] = config
@@ -148,16 +148,16 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')
-        self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
+        self.assertEqual(response.data[0]['config']['encoding'],
+                         {'method': 'simpleIndex', 'padding': 'zero_padding', 'prefix_length': 3,
+                          'generation_type': 'only'})
         self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertFalse('kmeans' in response.data[0]['config'])
-        self.assertEqual(response.data[0]['config']['prefix_length'], 3)
         self.assertEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                           "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False})
-        self.assertEqual(response.data[0]['config']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')
 
     def job_obj2(self):
@@ -167,7 +167,7 @@ class CreateJobsTests(APITestCase):
         config['methods'] = ['linear', 'lasso']
         config['random'] = 123
         config['kmeans'] = {'max_iter': 100}
-        config['prefix'] = {'prefix_length': 3, 'type': 'up_to', 'padding': 'no_padding'}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'}
         obj = dict()
         obj['type'] = 'regression'
         obj['config'] = config
@@ -181,23 +181,23 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(18, len(response.data))
         self.assertEqual('regression', response.data[0]['type'])
-        self.assertEqual('simpleIndex', response.data[0]['config']['encoding'])
+        self.assertEqual('simpleIndex', response.data[0]['config']['encoding']['method'])
         self.assertEqual('kmeans', response.data[0]['config']['clustering'])
         self.assertEqual('linear', response.data[0]['config']['method'])
         self.assertEqual(123, response.data[0]['config']['random'])
-        self.assertEqual(1, response.data[0]['config']['prefix_length'])
-        self.assertEqual('no_padding', response.data[0]['config']['padding'])
+        self.assertEqual(1, response.data[0]['config']['encoding']['prefix_length'])
+        self.assertEqual('no_padding', response.data[0]['config']['encoding']['padding'])
         self.assertEqual(100, response.data[0]['config']['kmeans']['max_iter'])
         self.assertEqual('created', response.data[0]['status'])
         self.assertEqual(1, response.data[0]['split_id'])
 
-        self.assertEqual(3, response.data[17]['config']['prefix_length'])
+        self.assertEqual(3, response.data[17]['config']['encoding']['prefix_length'])
 
     def job_label(self):
         config = dict()
         config['label'] = {"type": 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                            "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
-        config['prefix'] = {'prefix_length': 3, 'type': 'only', 'padding': 'zero_padding'}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
         obj['type'] = 'labelling'
         obj['config'] = config
@@ -211,12 +211,12 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'labelling')
-        self.assertEqual(response.data[0]['config']['encoding'], 'simpleIndex')
-        self.assertEqual(response.data[0]['config']['prefix_length'], 3)
+        self.assertEqual(response.data[0]['config']['encoding']['method'], 'simpleIndex')
+        self.assertEqual(response.data[0]['config']['encoding']['prefix_length'], 3)
         self.assertEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                           "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False})
-        self.assertEqual(response.data[0]['config']['padding'], 'zero_padding')
+        self.assertEqual(response.data[0]['config']['encoding']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')
 
 

@@ -1,5 +1,8 @@
+from copy import deepcopy
+
 from core.constants import *
 from core.default_configuration import CONF_MAP, _kmeans
+from encoders.encoding_container import UP_TO, SIMPLE_INDEX
 from jobs.models import Job, CREATED
 
 
@@ -8,22 +11,22 @@ def generate(split, payload, type=CLASSIFICATION):
 
     for method in payload['config']['methods']:
         for clustering in payload['config']['clusterings']:
-            for encoding in payload['config']['encodings']:
-                prefix = payload['config']['prefix']
-                if prefix['type'] == 'up_to':
-                    for i in range(1, prefix['prefix_length'] + 1):
+            for encMethod in payload['config']['encodings']:
+                encoding = payload['config']['encoding']
+                if encoding['generation_type'] == UP_TO:
+                    for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
                             split=split,
                             status=CREATED,
                             type=type,
-                            config=create_config(payload, encoding, clustering, method, i))
+                            config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
                         split=split,
                         status=CREATED,
                         type=type,
-                        config=create_config(payload, encoding, clustering, method, prefix['prefix_length']))
+                        config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
 
     return jobs
@@ -31,33 +34,32 @@ def generate(split, payload, type=CLASSIFICATION):
 
 def generate_labelling(split, payload):
     jobs = []
-    prefix = payload['config']['prefix']
-    if prefix['type'] == 'up_to':
-        for i in range(1, prefix['prefix_length'] + 1):
+    encoding = payload['config']['encoding']
+    if encoding['generation_type'] == UP_TO:
+        for i in range(1, encoding['prefix_length'] + 1):
             item = Job.objects.create(
                 split=split,
                 status=CREATED,
                 type=LABELLING,
-                config=create_config_labelling(payload, i))
+                config=deepcopy(create_config_labelling(payload, i)))
             jobs.append(item)
     else:
         item = Job.objects.create(
             split=split,
             status=CREATED,
             type=LABELLING,
-            config=create_config_labelling(payload, prefix['prefix_length']))
+            config=create_config_labelling(payload, encoding['prefix_length']))
         jobs.append(item)
 
     return jobs
 
 
-def create_config(payload: dict, encoding: str, clustering: str, method: str, prefix_length: int):
+def create_config(payload: dict, encMethod: str, clustering: str, method: str, prefix_length: int):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']
     del config['clusterings']
     del config['methods']
-    del config['prefix']
 
     # Extract and merge configurations
     method_conf_name = "{}.{}".format(payload['type'], method)
@@ -73,22 +75,20 @@ def create_config(payload: dict, encoding: str, clustering: str, method: str, pr
     elif 'kmeans' in config:
         del config['kmeans']
     config[method_conf_name] = method_conf
-    config['encoding'] = encoding
     config['clustering'] = clustering
     config['method'] = method
-    config['prefix_length'] = prefix_length
-    config['padding'] = payload['config']['prefix']['padding']
+    # Encoding stuff rewrite
+    config['encoding']['method'] = encMethod
+    config['encoding']['prefix_length'] = prefix_length
     return config
 
 
 def create_config_labelling(payload: dict, prefix_length: int):
     """For labelling job"""
     config = dict(payload['config'])
-    del config['prefix']
 
     # All methods are the same, so defaulting to SIMPLE_INDEX
     # Remove when encoding and labelling are separated
-    config['encoding'] = SIMPLE_INDEX
-    config['prefix_length'] = prefix_length
-    config['padding'] = payload['config']['prefix']['padding']
+    config['encoding']['method'] = SIMPLE_INDEX
+    config['encoding']['prefix_length'] = prefix_length
     return config

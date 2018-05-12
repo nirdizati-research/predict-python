@@ -766,96 +766,96 @@
     "model": "jobs.job",
     "pk": 1,
     "fields": {
-      "created_date": "2018-04-13T13:42:31.652Z",
-      "modified_date": "2018-04-13T13:43:02.579Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.knn\":{\"n_neighbors\":2,\"weights\":\"distance\"},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"knn\"}",
+      "created_date": "2018-05-12T13:49:18.987Z",
+      "modified_date": "2018-05-12T13:49:21.317Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":1,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"f1score\":0,\"acc\":0.5,\"true_positive\":0,\"true_negative\":1,\"false_negative\":1,\"false_positive\":0,\"precision\":0,\"recall\":0.0,\"auc\":0.5}",
-      "type": "classification",
-      "split": 1
+      "result": "{\"Analyze Defect\":883}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 2,
     "fields": {
-      "created_date": "2018-04-13T13:42:31.656Z",
-      "modified_date": "2018-04-13T13:43:02.728Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"classification.decisionTree\":{\"criterion\":\"gini\",\"splitter\":\"random\",\"max_depth\":null,\"min_samples_split\":2,\"min_samples_leaf\":3},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"decisionTree\"}",
+      "created_date": "2018-05-12T13:49:18.993Z",
+      "modified_date": "2018-05-12T13:49:23.512Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":2,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"f1score\":0.6666666666666666,\"acc\":0.5,\"true_positive\":1,\"true_negative\":0,\"false_negative\":0,\"false_positive\":1,\"precision\":0.5,\"recall\":1.0,\"auc\":0.5}",
-      "type": "classification",
-      "split": 1
+      "result": "{\"Analyze Defect\":883}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 3,
     "fields": {
-      "created_date": "2018-04-14T06:19:46.659Z",
-      "modified_date": "2018-04-14T06:21:41.890Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"regression.lasso\":{\"alpha\":1.0,\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"lasso\"}",
+      "created_date": "2018-05-12T13:49:18.996Z",
+      "modified_date": "2018-05-12T13:49:25.798Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":3,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":221.72427510287096,\"mae\":193.11309325742732,\"rscore\":-0.06000850485685394}",
-      "type": "regression",
-      "split": 4
+      "result": "{\"Repair (Complex)\":424,\"Repair (Simple)\":333,\"Inform User\":126}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 4,
     "fields": {
-      "created_date": "2018-04-14T06:19:46.660Z",
-      "modified_date": "2018-04-14T06:22:03.597Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":1,\"regression.linear\":{\"fit_intercept\":false,\"normalize\":false,\"copy_X\":true},\"encoding\":\"complex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "created_date": "2018-05-12T13:49:18.998Z",
+      "modified_date": "2018-05-12T13:49:28.125Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":4,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":221.72427510287082,\"mae\":193.11309325742712,\"rscore\":-0.060008504856852385}",
-      "type": "regression",
-      "split": 4
+      "result": "{\"Inform User\":318,\"Repair (Simple)\":293,\"Repair (Complex)\":271,\"0\":1}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 5,
     "fields": {
-      "created_date": "2018-04-14T06:29:21.355Z",
-      "modified_date": "2018-04-14T06:30:24.760Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":3,\"regression.linear\":{\"fit_intercept\":true,\"normalize\":false,\"copy_X\":true},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "created_date": "2018-05-12T13:49:19.000Z",
+      "modified_date": "2018-05-12T13:49:30.772Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":5,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":201.76464727647456,\"mae\":165.3624707580213,\"rscore\":0.12224386445773794}",
-      "type": "regression",
-      "split": 4
+      "result": "{\"Test Repair\":432,\"Repair (Complex)\":306,\"Repair (Simple)\":138,\"Inform User\":5,\"0\":1}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 6,
     "fields": {
-      "created_date": "2018-04-14T06:29:21.360Z",
-      "modified_date": "2018-04-14T06:30:24.406Z",
-      "config": "{\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"prefix_length\":3,\"regression.randomForest\":{\"n_estimators\":10,\"criterion\":\"mse\",\"max_depth\":null,\"min_samples_split\":2},\"encoding\":\"simpleIndex\",\"clustering\":\"noCluster\",\"method\":\"randomForest\"}",
+      "created_date": "2018-05-12T13:49:19.002Z",
+      "modified_date": "2018-05-12T13:49:32.797Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":6,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":191.19102930552305,\"mae\":138.26345747696183,\"rscore\":0.21183208508900764}",
-      "type": "regression",
-      "split": 4
+      "result": "{\"Test Repair\":763,\"Inform User\":118}",
+      "type": "labelling",
+      "split": 5
     }
   },
   {
     "model": "jobs.job",
     "pk": 7,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.227Z",
-      "modified_date": "2018-04-27T07:03:18.699Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":1,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:49:19.004Z",
+      "modified_date": "2018-05-12T13:49:35.168Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":7,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":511,\"false\":372}",
+      "result": "{\"Test Repair\":567,\"Inform User\":220,\"Restart Repair\":94}",
       "type": "labelling",
       "split": 5
     }
@@ -864,12 +864,12 @@
     "model": "jobs.job",
     "pk": 8,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.231Z",
-      "modified_date": "2018-04-27T07:03:20.677Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":2,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:49:19.006Z",
+      "modified_date": "2018-05-12T13:49:37.790Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":8,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":511,\"false\":372}",
+      "result": "{\"Archive Repair\":574,\"Restart Repair\":139,\"0\":74,\"Repair (Simple)\":68,\"Repair (Complex)\":26}",
       "type": "labelling",
       "split": 5
     }
@@ -878,12 +878,12 @@
     "model": "jobs.job",
     "pk": 9,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.233Z",
-      "modified_date": "2018-04-27T07:03:22.689Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":3,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:49:19.009Z",
+      "modified_date": "2018-05-12T13:49:40.317Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":9,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":511,\"false\":372}",
+      "result": "{\"0\":574,\"Repair (Simple)\":130,\"Inform User\":58,\"Repair (Complex)\":45}",
       "type": "labelling",
       "split": 5
     }
@@ -892,12 +892,12 @@
     "model": "jobs.job",
     "pk": 10,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.235Z",
-      "modified_date": "2018-04-27T07:03:24.678Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":4,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:49:19.012Z",
+      "modified_date": "2018-05-12T13:49:42.466Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":10,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"next_activity\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false}}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":511,\"false\":372}",
+      "result": "{\"Repair (Simple)\":136,\"Repair (Complex)\":61,\"Test Repair\":36}",
       "type": "labelling",
       "split": 5
     }
@@ -906,13 +906,13 @@
     "model": "jobs.job",
     "pk": 11,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.238Z",
-      "modified_date": "2018-04-27T07:03:26.855Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":5,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:50:05.305Z",
+      "modified_date": "2018-05-12T13:50:08.557Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":1,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":510,\"false\":372}",
-      "type": "labelling",
+      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"rscore\":-2.5284077580955966e-05}",
+      "type": "regression",
       "split": 5
     }
   },
@@ -920,13 +920,69 @@
     "model": "jobs.job",
     "pk": 12,
     "fields": {
-      "created_date": "2018-04-27T07:03:16.241Z",
-      "modified_date": "2018-04-27T07:03:29.241Z",
-      "config": "{\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false},\"encoding\":\"simpleIndex\",\"prefix_length\":6,\"padding\":\"no_padding\"}",
+      "created_date": "2018-05-12T13:50:05.308Z",
+      "modified_date": "2018-05-12T13:50:10.754Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":2,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"true\":509,\"false\":372}",
-      "type": "labelling",
+      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"rscore\":-2.5284077580955966e-05}",
+      "type": "regression",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 13,
+    "fields": {
+      "created_date": "2018-05-12T13:50:05.310Z",
+      "modified_date": "2018-05-12T13:50:12.896Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":3,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"rmse\":0.314842800537777,\"mae\":0.2549261310936083,\"rscore\":-1.3469183021141973e-05}",
+      "type": "regression",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 14,
+    "fields": {
+      "created_date": "2018-05-12T13:50:05.312Z",
+      "modified_date": "2018-05-12T13:50:15.246Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":4,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"rmse\":0.2835397535162193,\"mae\":0.23806470481896685,\"rscore\":0.009779785090687665}",
+      "type": "regression",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 15,
+    "fields": {
+      "created_date": "2018-05-12T13:50:05.315Z",
+      "modified_date": "2018-05-12T13:50:17.788Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":5,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"rmse\":0.2925741116002737,\"mae\":0.2361627155678883,\"rscore\":0.07100019652112155}",
+      "type": "regression",
+      "split": 5
+    }
+  },
+  {
+    "model": "jobs.job",
+    "pk": 16,
+    "fields": {
+      "created_date": "2018-05-12T13:50:19.038Z",
+      "modified_date": "2018-05-12T13:50:21.699Z",
+      "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"only\",\"prefix_length\":5,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"classification.knn\":{\"n_neighbors\":5,\"n_jobs\":-1,\"weights\":\"uniform\"},\"clustering\":\"noCluster\",\"method\":\"knn\"}",
+      "error": "",
+      "status": "completed",
+      "result": "{\"f1score\":0.5471698113207548,\"acc\":0.5656108597285068,\"true_positive\":58,\"true_negative\":67,\"false_negative\":72,\"false_positive\":24,\"precision\":0.7073170731707317,\"recall\":0.4461538461538462,\"auc\":0.6120456466610313}",
+      "type": "classification",
       "split": 5
     }
   }

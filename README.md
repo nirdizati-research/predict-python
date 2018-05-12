@@ -44,7 +44,7 @@ curl --request POST \
       "clusterings": ["noCluster"],
       "methods": ["randomForest"],
       "label": {"type": "remaining_time"},
-      "prefix": {"prefix_length": 3, "type": "only", "padding": "zero_padding"}
+      "encoding": {"prefix_length": 3, "generation_type": "only", "padding": "zero_padding"}
     }
   }' \
 http://localhost:8000/jobs/multiple
@@ -92,7 +92,7 @@ curl --request POST \
         "weights": "uniform"
       },
       "label": {"type": "remaining_time"},
-      "prefix": {"prefix_length": 3, "type": "up_to", "padding": "no_padding"}
+      "encoding": {"prefix_length": 3, "generation_type": "up_to", "padding": "no_padding"}
     }
   }' \
 http://localhost:8000/jobs/multiple
@@ -110,7 +110,7 @@ curl --request POST \
     "split_id": 5,
     "config": {
       "label": {"type": "remaining_time"},
-      "prefix": {"prefix_length": 3, "type": "up_to", "padding": "no_padding"}
+      "encoding": {"prefix_length": 3, "generation_type": "up_to", "padding": "no_padding"}
     }
   }' \
 http://localhost:8000/jobs/multiple

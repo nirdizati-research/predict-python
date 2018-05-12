@@ -1,6 +1,8 @@
 import pandas as pd
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
+from opyenxes.model import XTrace
 
+from encoders.encoding_container import EncodingContainer
 from encoders.label_container import *
 from log_util.log_metrics import events_by_date, resources_by_date, new_trace_start
 from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
@@ -9,39 +11,42 @@ CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
 
 
-def simple_index(log: list, label: LabelContainer, prefix_length=1, zero_padding=False):
-    if prefix_length < 1:
-        raise ValueError("Prefix length must be greater than 1")
-    return encode_simple_index(log, prefix_length, label, zero_padding)
-
-
-def encode_simple_index(log: list, prefix_length: int, label: LabelContainer, zero_padding: bool):
-    columns = __columns(prefix_length, label)
+def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
+    columns = __columns(encoding.prefix_length, label)
     encoded_data = []
-    # Create classifier only once
-    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        global ATTRIBUTE_CLASSIFIER
-        ATTRIBUTE_CLASSIFIER = XEventAttributeClassifier("Attr class", [label.attribute_name])
-    # Expensive operations
-    executed_events = events_by_date([log]) if label.add_executed_events else None
-    resources_used = resources_by_date([log]) if label.add_resources_used else None
-    new_traces = new_trace_start([log]) if label.add_new_traces else None
+    atr_classifier = setup_attribute_classifier(label)
+    kwargs = get_intercase_attributes(log, label)
     for trace in log:
-        if zero_padding:
-            zero_count = prefix_length - len(trace)
-        elif len(trace) <= prefix_length - 1:
-            # no padding, skip this trace
+        if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
+            # trace too short and no zero padding
             continue
-        trace_row = []
-        trace_name = CLASSIFIER.get_class_identity(trace)
-        trace_row.append(trace_name)
-        trace_row += trace_prefixes(trace, prefix_length)
-        if zero_padding:
-            trace_row += ['0' for _ in range(0, zero_count)]
-        trace_row += add_labels(label, prefix_length, trace, ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER,
-                                executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
-        encoded_data.append(trace_row)
+        if encoding.is_all_in_one():
+            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
+                encoded_data.append(add_trace_row(trace, encoding, i, atr_classifier, **kwargs))
+        else:
+            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, atr_classifier, **kwargs))
+
     return pd.DataFrame(columns=columns, data=encoded_data)
+
+
+def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, atr_classifier=None, label=None,
+                  executed_events=None, resources_used=None, new_traces=None):
+    """Row in data frame"""
+    # a and b are magic values
+    b = encoding.prefix_length - len(trace)
+    if encoding.is_all_in_one():
+        a = encoding.prefix_length - event_index
+        zero_count = a if a > b else b
+    elif encoding.is_zero_padding():
+        zero_count = b
+    trace_row = list()
+    trace_row.append(CLASSIFIER.get_class_identity(trace))
+    trace_row += trace_prefixes(trace, event_index)
+    if encoding.is_zero_padding() or encoding.is_all_in_one():
+        trace_row += ['0' for _ in range(0, zero_count)]
+    trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
+                            executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
+    return trace_row
 
 
 def trace_prefixes(trace: list, prefix_length: int):
@@ -75,6 +80,27 @@ def __columns(prefix_length: int, label: LabelContainer):
     return add_label_columns(columns, label)
 
 
+def get_intercase_attributes(log: list, label: LabelContainer):
+    """Dict of kwargs
+    These intercae attributes are expensive operations!!!
+    """
+    # Expensive operations
+    executed_events = events_by_date([log]) if label.add_executed_events else None
+    resources_used = resources_by_date([log]) if label.add_resources_used else None
+    new_traces = new_trace_start([log]) if label.add_new_traces else None
+    kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
+              'label': label}
+    return kwargs
+
+
+def setup_attribute_classifier(label: LabelContainer):
+    # Create classifier only once
+    atr_classifier = None
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+        atr_classifier = XEventAttributeClassifier("Attr class", [label.attribute_name])
+    return atr_classifier
+
+
 def add_label_columns(columns: list, label: LabelContainer):
     if label.type == NO_LABEL:
         return columns
@@ -93,7 +119,7 @@ def add_label_columns(columns: list, label: LabelContainer):
 
 
 def add_labels(label: LabelContainer, prefix_length: int, trace,
-               ATTRIBUTE_CLASSIFIER=ATTRIBUTE_CLASSIFIER, executed_events=None, resources_used=None, new_traces=None):
+               atr_classifier=None, executed_events=None, resources_used=None, new_traces=None):
     """Adds any number of label cells with last as label"""
     labels = []
     if label.type == NO_LABEL:
@@ -115,7 +141,7 @@ def add_labels(label: LabelContainer, prefix_length: int, trace,
     elif label.type == NEXT_ACTIVITY:
         labels.append(next_event_name(trace, prefix_length))
     elif label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        atr = ATTRIBUTE_CLASSIFIER.get_class_identity(trace)
+        atr = atr_classifier.get_class_identity(trace)
         labels.append(atr)
     elif label.type == DURATION:
         labels.append(duration(trace))

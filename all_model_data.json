@@ -711,7 +711,7 @@
     "model": "logs.split",
     "pk": 1,
     "fields": {
-      "config": "{}",
+      "config": "{\"split_type\":\"split_random\",\"test_size\":0.2}",
       "type": "single",
       "original_log": 1,
       "test_log": null,
@@ -733,7 +733,7 @@
     "model": "logs.split",
     "pk": 3,
     "fields": {
-      "config": "{}",
+      "config": "{\"split_type\":\"split_sequential\",\"test_size\":0.2}",
       "type": "single",
       "original_log": 4,
       "test_log": null,
@@ -744,7 +744,7 @@
     "model": "logs.split",
     "pk": 4,
     "fields": {
-      "config": "{}",
+      "config": "{\"split_type\":\"split_temporal\",\"test_size\":0.2}",
       "type": "single",
       "original_log": 5,
       "test_log": null,

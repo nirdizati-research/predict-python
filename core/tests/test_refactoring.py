@@ -72,6 +72,7 @@ class RefactorProof(TestCase):
         self.maxDiff = None
         job = self.get_job()
         job["type"] = "regression"
+        job['label'] = LabelContainer()
         add_default_config(job)
         result, _ = calculate(job)
         self.assertAlmostEqual(result['rmse'], 0.30439548)
@@ -83,6 +84,7 @@ class RefactorProof(TestCase):
         job = self.get_job()
         job["type"] = "regression"
         job['clustering'] = 'noCluster'
+        job['label'] = LabelContainer()
         add_default_config(job)
         result, _ = calculate(job)
         self.assertAlmostEqual(result['rmse'], 0.29010989)

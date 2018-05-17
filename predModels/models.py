@@ -6,7 +6,7 @@ from jobs.models import Job
 from jobs.models import TYPES
 from logs.models import Log
 from encoders.label_container import LabelContainer
-
+from encoders.encoding_container import EncodingContainer
 
 ENC_TYPES = (
     (KMEANS, 'kmeans'),
@@ -42,4 +42,5 @@ class PredModels(models.Model):
         model['log_name'] = self.log.name
         model['split'] = self.split.to_dict()
         model['label'] = LabelContainer(**self.config['label'])
+        model['encoding'] = EncodingContainer(**self.config['encoding'])
         return model

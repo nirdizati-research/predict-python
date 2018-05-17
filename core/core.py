@@ -1,6 +1,6 @@
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
-    CLASSIFICATION, REGRESSION, ZERO_PADDING, LABELLING
+    CLASSIFICATION, REGRESSION, LABELLING
 from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
 from core.label_validation import label_task
@@ -19,13 +19,10 @@ def calculate(job):
 
 
 def get_encoded_logs(job: dict):
-    training_log, test_log = prepare_logs(job['split'])
-
-    prefix_length = job.get('prefix_length', 1)
-    zero_padding = True if job['padding'] == ZERO_PADDING else False
+    training_log, test_log, additional_columns = prepare_logs(job['split'])
 
     training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                             prefix_length=prefix_length, zero_padding=zero_padding)
+                                             additional_columns=additional_columns)
     return training_df, test_df
 
 
@@ -53,9 +50,8 @@ def runtime_calculate(run_log,model):
     """ Main entry method for calculations"""
     # Python dicts are bad
     prefix_length = model.get('prefix_length', 1)
-    zero_padding = True if model['padding'] is ZERO_PADDING else False
     
-    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'], prefix_length=prefix_length, zero_padding=zero_padding)
+    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'], prefix_length=prefix_length)
     
     if model['type'] == CLASSIFICATION:
         label_type = model['label'].type
@@ -75,5 +71,5 @@ def runtime_calculate(run_log,model):
 def get_run(job):
     """Defines job identity"""
     if job['type'] == LABELLING:
-        return job['encoding'] + '_' + job['label'].type
-    return job['method'] + '_' + job['encoding'] + '_' + job['clustering'] + '_' + job['label'].type
+        return job['encoding'].method + '_' + job['label'].type
+    return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type

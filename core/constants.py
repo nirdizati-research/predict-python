@@ -1,12 +1,5 @@
 """Python has no real constants, will still try my best"""
 
-# Encoding methods
-SIMPLE_INDEX = 'simpleIndex'
-BOOLEAN = 'boolean'
-FREQUENCY = 'frequency'
-COMPLEX = 'complex'
-LAST_PAYLOAD = 'lastPayload'
-
 # Classification methods
 KNN = 'knn'
 RANDOM_FOREST = 'randomForest'
@@ -24,9 +17,6 @@ NO_CLUSTER = 'noCluster'
 CLASSIFICATION = 'classification'
 REGRESSION = 'regression'
 LABELLING = 'labelling'
-
-# Encoding options
-ZERO_PADDING = 'zero_padding'
 
 # classification/regressor method confs
 CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(CLASSIFICATION, RANDOM_FOREST)

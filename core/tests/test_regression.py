@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from core.constants import ZERO_PADDING
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
+from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, ZERO_PADDING, BOOLEAN, COMPLEX, LAST_PAYLOAD
 from encoders.label_container import LabelContainer
 
 
@@ -14,10 +14,9 @@ class TestRegression(TestCase):
         json["clustering"] = "kmeans"
         json["split"] = split_double()
         json["method"] = "linear"
-        json["encoding"] = "simpleIndex"
+        json["encoding"] = EncodingContainer(SIMPLE_INDEX, padding=ZERO_PADDING)
         json["label"] = LabelContainer()
         json["type"] = "regression"
-        json["padding"] = ZERO_PADDING
         return json
 
     def test_reg_linear(self):
@@ -37,7 +36,7 @@ class TestRegression(TestCase):
     def test_reg_linear_boolean(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
-        job['encoding'] = 'boolean'
+        job['encoding'] = EncodingContainer(BOOLEAN, padding=ZERO_PADDING)
         add_default_config(job)
         calculate(job)
 
@@ -64,7 +63,7 @@ class TestRegression(TestCase):
     def test_reg_lasso_complex(self):
         job = self.get_job()
         job['method'] = 'lasso'
-        job['encoding'] = 'complex'
+        job['encoding'] = EncodingContainer(COMPLEX, padding=ZERO_PADDING)
         add_default_config(job)
         calculate(job)
 
@@ -72,6 +71,6 @@ class TestRegression(TestCase):
         job = self.get_job()
         job['method'] = 'lasso'
         job['clustering'] = 'noCluster'
-        job['encoding'] = 'lastPayload'
+        job['encoding'] = EncodingContainer(LAST_PAYLOAD, padding=ZERO_PADDING)
         add_default_config(job)
         calculate(job)

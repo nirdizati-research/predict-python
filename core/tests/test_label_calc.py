@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.tests.test_prepare import repair_example
+from encoders.encoding_container import EncodingContainer, ZERO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, THRESHOLD_CUSTOM, ATTRIBUTE_STRING, DURATION
 
 
@@ -9,10 +10,8 @@ class Labelling(TestCase):
     def get_job(self):
         json = dict()
         json["split"] = repair_example()
-        json["encoding"] = "simpleIndex"
-        json["prefix_length"] = 5
+        json["encoding"] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
         json["type"] = "labelling"
-        json["padding"] = 'zero_padding'
         json['label'] = LabelContainer()
         return json
 
@@ -45,6 +44,6 @@ class Labelling(TestCase):
         job = self.get_job()
         job['label'] = LabelContainer(DURATION)
         result1, _ = calculate(job)
-        job['prefix_length'] = 22
+        job['encoding'] = EncodingContainer(prefix_length=22, padding=ZERO_PADDING)
         result2, _ = calculate(job)
         self.assertEqual(result1, result2)

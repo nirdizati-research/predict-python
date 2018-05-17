@@ -1,32 +1,33 @@
 import hashlib
 
-from core.constants import *
+from core.constants import LABELLING, REGRESSION
 from encoders.boolean_frequency import frequency
 from encoders.complex_last_payload import complex, last_payload
+from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD
 from encoders.label_container import *
 from log_util.event_attributes import unique_events2, unique_events
 from .boolean_frequency import boolean
 from .simple_index import simple_index
 
 
-def encode_label_logs(training_log: list, test_log: list, encoding_type: str, job_type: str, label: LabelContainer,
-                      prefix_length=1, zero_padding=False):
+def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
+                      label: LabelContainer, additional_columns=None):
     """Encodes and labels test set and training set as data frames
 
-    :param prefix_length Applies to all
+    :param additional_columns Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
-    training_df = encode_label_log(training_log, encoding_type, job_type, label, event_names,
-                                   prefix_length=prefix_length, zero_padding=zero_padding)
-    test_df = encode_label_log(test_log, encoding_type, job_type, label, event_names, prefix_length=prefix_length,
-                               zero_padding=zero_padding)
+    training_df = encode_label_log(training_log, encoding, job_type, label, event_names=event_names,
+                                   additional_columns=additional_columns)
+    test_df = encode_label_log(test_log, encoding, job_type, label, event_names=event_names,
+                               additional_columns=additional_columns)
     return training_df, test_df
 
 
-def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: LabelContainer, event_names=None,
-                     prefix_length=1, zero_padding=False):
-    encoded_log = encode_log(run_log, encoding_type, label, prefix_length, event_names, zero_padding)
+def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
+                     additional_columns=None):
+    encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
@@ -38,6 +39,9 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
         categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
     if job_type == REGRESSION:
+        # Remove last events as worse for prediction
+        if label.type == REMAINING_TIME:
+            encoded_log = encoded_log.loc[encoded_log['label'] != 0.0]
         return encoded_log
     # Post processing
     if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER or label.type == DURATION:
@@ -45,29 +49,31 @@ def encode_label_log(run_log: list, encoding_type: str, job_type: str, label: La
     return encoded_log
 
 
-def encode_log(run_log: list, encoding_type: str, label: LabelContainer, prefix_length=1, event_names=None,
-               zero_padding=False):
+def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer, event_names=None,
+               additional_columns=None):
     """Encodes test set and training set as data frames
 
-    :param prefix_length consider up to this event in log
-    :param zero_padding If log shorter than prefix_length, weather to skip or pad with 0 up to prefix_length
+    :param additional_columns Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """
+
     if event_names is None:
         event_names = unique_events(run_log)
+    if encoding.prefix_length < 1:
+        raise ValueError("Prefix length must be greater than 1")
     run_df = None
-    if encoding_type == SIMPLE_INDEX:
-        run_df = simple_index(run_log, label, prefix_length=prefix_length, zero_padding=zero_padding)
-    elif encoding_type == BOOLEAN:
-        run_df = boolean(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
-    elif encoding_type == FREQUENCY:
-        run_df = frequency(run_log, event_names, label, prefix_length=prefix_length, zero_padding=zero_padding)
-    elif encoding_type == COMPLEX:
-        run_df = complex(run_log, label, prefix_length=prefix_length,
-                         zero_padding=zero_padding)
-    elif encoding_type == LAST_PAYLOAD:
-        run_df = last_payload(run_log, label, prefix_length=prefix_length,
-                              zero_padding=zero_padding)
+    if encoding.method == SIMPLE_INDEX:
+        run_df = simple_index(run_log, label, encoding)
+    elif encoding.method == BOOLEAN:
+        run_df = boolean(run_log, event_names, label, encoding)
+    elif encoding.method == FREQUENCY:
+        run_df = frequency(run_log, event_names, label, encoding)
+    elif encoding.method == COMPLEX:
+        run_df = complex(run_log, label, encoding, additional_columns)
+    elif encoding.method == LAST_PAYLOAD:
+        run_df = last_payload(run_log, label, encoding, additional_columns)
+    else:
+        raise ValueError("Unknown encoding method {}".format(encoding.method))
     return run_df
 
 

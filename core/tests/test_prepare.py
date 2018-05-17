@@ -1,4 +1,4 @@
-from jobs.job_creator import CONF_MAP, _kmeans
+from core.default_configuration import CONF_MAP, _kmeans
 
 
 def split_single():

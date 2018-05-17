@@ -43,7 +43,7 @@ def calculate_hyperopt(job):
         fmin(calculate_and_evaluate, space, algo=tpe.suggest, max_evals=max_evals, trials=trials)
     except ValueError:
         raise ValueError("All jobs failed, cannot find best configuration")
-    current_best = {'loss': 100}
+    current_best = {'loss': 100, 'results': {}, 'config': {}}
     for t in trials:
         a = t['result']
         if current_best['loss'] > a['loss']:
@@ -55,6 +55,6 @@ def calculate_hyperopt(job):
 
 def get_metric_multiplier(performance_metric):
     """Class methods have to be as good as possible. Some reg methods as bad as possible"""
-    metric_map = {'rmse': -1, 'mae': -1, 'rscore': 1, 'acc': 1, 'f1score': 1, 'auc': 1, 'precsision': 1, 'recall': 1,
+    metric_map = {'rmse': -1, 'mae': -1, 'rscore': 1, 'acc': 1, 'f1score': 1, 'auc': 1, 'precision': 1, 'recall': 1,
                   'true_positive': 1, 'true_negative': 1, 'false_positive': 1, 'false_negative': 1}
     return metric_map[performance_metric]

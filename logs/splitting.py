@@ -4,6 +4,7 @@ from dateutil.parser import *
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from sklearn.model_selection import train_test_split
 
+from log_util.event_attributes import get_global_event_attributes
 from logs.file_service import get_logs
 
 SPLIT_SEQUENTIAL = 'split_sequential'
@@ -18,16 +19,19 @@ def prepare_logs(split: dict):
     """Returns training_log and test_log"""
     if split['type'] == 'single':
         log = get_logs(split['original_log_path'])[0]
+        additional_columns = get_global_event_attributes(log)
         training_log, test_log = _split_single_log(split, log)
         print("Loaded single log from {}".format(split['original_log_path']))
     else:
         # Have to use sklearn to convert some internal data types
-        training_log, _ = train_test_split(get_logs(split['training_log_path'])[0], test_size=0)
+        training_log = get_logs(split['training_log_path'])[0]
+        additional_columns = get_global_event_attributes(training_log)
+        training_log, _ = train_test_split(training_log, test_size=0)
         test_log, _ = train_test_split(get_logs(split['test_log_path'])[0], test_size=0)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")
-    return training_log, test_log
+    return training_log, test_log, additional_columns
 
 
 def _split_single_log(split: dict, log: list):

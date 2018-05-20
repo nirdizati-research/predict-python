@@ -1,9 +1,11 @@
+import unittest
+
 from django.test import TestCase
 
 from core.core import calculate
-from core.tests.test_prepare import split_double, add_default_config
+from core.tests.test_prepare import split_double, add_default_config, split_single
 from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, ZERO_PADDING, BOOLEAN, COMPLEX, LAST_PAYLOAD
-from encoders.label_container import LabelContainer
+from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
 class TestRegression(TestCase):
@@ -72,5 +74,33 @@ class TestRegression(TestCase):
         job['method'] = 'lasso'
         job['clustering'] = 'noCluster'
         job['encoding'] = EncodingContainer(LAST_PAYLOAD, padding=ZERO_PADDING)
+        add_default_config(job)
+        calculate(job)
+
+
+@unittest.skip("evaluation test not needed normally")
+class TestEvaluation(TestCase):
+    @property
+    def get_job(self):
+        json = dict()
+        json["clustering"] = "noCluster"
+        json["split"] = split_single()
+        json['split']['original_log_path'] = 'log_cache/Sepsis Cases - Event Log.xes'
+        json["method"] = "lasso"
+        json["encoding"] = EncodingContainer(COMPLEX, padding=ZERO_PADDING, prefix_length=16)
+        json["label"] = LabelContainer(REMAINING_TIME)
+        json["type"] = "regression"
+        return json
+
+    def test_reg_lasso(self):
+        job = self.get_job
+        add_default_config(job)
+        calculate(job)
+
+    def test_reg_intercase(self):
+        print('interace')
+        job = self.get_job
+        job["label"] = LabelContainer(REMAINING_TIME, add_resources_used=True, add_new_traces=True,
+                                      add_executed_events=True)
         add_default_config(job)
         calculate(job)

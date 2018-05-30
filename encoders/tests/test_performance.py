@@ -55,3 +55,36 @@ class TestAgainstNirdizatiTraining(TestCase):
         # self.method_self(COMPLEX)
         for e in encs:
             self.do_test(e)
+
+
+@unittest.skip("performance test not needed normally")
+class TestTraceLengthTime(TestCase):
+    def setUp(self):
+        self.label = LabelContainer(NO_LABEL)
+        start_time = time.time()
+        self.log1 = get_logs("log_cache/Sepsis Cases - Event Log.xes.gz")[0]
+        print("Total for %s %s seconds" % ("sepsis", time.time() - start_time))
+        start_time = time.time()
+        self.log2 = get_logs("log_cache/financial_log.xes.gz")[0]
+        print("Total for %s %s seconds" % ("financial", time.time() - start_time))
+        start_time = time.time()
+        self.log3 = get_logs("log_cache/BPI Challenge 2017.xes.gz")[0]
+        print("Total for %s %s seconds" % ("2017", time.time() - start_time))
+
+    def do_test(self, encoding, log):
+        start_time = time.time()
+        # log = get_logs(log_path)[0]
+        add_col = get_global_event_attributes(log)
+        event_names = unique_events(log)
+        encoding = EncodingContainer(encoding, prefix_length=20, padding=ZERO_PADDING)
+        log = encode_label_log(log, encoding, REGRESSION, self.label, event_names=event_names,
+                               additional_columns=add_col)
+        print(log.shape)
+        print("Total for %s %s seconds" % (encoding.method, time.time() - start_time))
+
+    def test_performance(self):
+        encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
+        logs = [self.log3]
+        for l in logs:
+            for e in encs:
+                self.do_test(e, l)

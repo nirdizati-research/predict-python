@@ -35,12 +35,12 @@ class TestClassPerf(TestCase):
 
     def test_class_randomForest(self):
         job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)
         self.calculate_helper(job)
 
-    def test_ne_randomForest(self):
+    def ne_randomForest(self):
         job = self.get_job()
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)
         self.calculate_helper(job)
 
@@ -56,7 +56,7 @@ class TestClassPerf(TestCase):
         add_default_config(job)
         self.calculate_helper(job)
 
-    def test_reg_hyperopt(self):
+    def test_class_hyperopt(self):
         job = self.get_job()
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['hyperopt'] = {'use_hyperopt': True, 'max_evals': 10, 'performance_metric': 'f1score'}
@@ -72,7 +72,7 @@ class RegPerf(TestCase):
         json["split"] = split_single()
         json["split"]["original_log_path"] = "log_cache/BPI Challenge 2017.xes.gz"
         json["method"] = "randomForest"
-        json["encoding"] = "boolean"
+        json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
         json["prefix_length"] = 20
         json["type"] = "regression"
         json["padding"] = 'no_padding'
@@ -89,18 +89,18 @@ class RegPerf(TestCase):
         calculate_hyperopt(job)
         print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
 
-    def test_class_randomForest(self):
+    def test_reg_randomForest(self):
         job = self.get_job()
         add_default_config(job)
         self.calculate_helper(job)
 
-    def test_class_linear(self):
+    def test_reg_linear(self):
         job = self.get_job()
         job['method'] = 'linear'
         add_default_config(job)
         self.calculate_helper(job)
 
-    def test_class_lasso(self):
+    def test_reg_lasso(self):
         job = self.get_job()
         job['method'] = 'lasso'
         add_default_config(job)

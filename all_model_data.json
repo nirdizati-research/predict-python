@@ -911,7 +911,7 @@
       "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":1,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"rscore\":-2.5284077580955966e-05}",
+      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"mape\":12.3442453,\"rscore\":-2.5284077580955966e-05}",
       "type": "regression",
       "split": 5
     }
@@ -925,7 +925,7 @@
       "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":2,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"rscore\":-2.5284077580955966e-05}",
+      "result": "{\"rmse\":0.31562410305202615,\"mae\":0.256343126151933,\"mape\":12.3442453,\"rscore\":-2.5284077580955966e-05}",
       "type": "regression",
       "split": 5
     }
@@ -939,7 +939,7 @@
       "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":3,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":0.314842800537777,\"mae\":0.2549261310936083,\"rscore\":-1.3469183021141973e-05}",
+      "result": "{\"rmse\":0.314842800537777,\"mae\":0.2549261310936083,\"mape\":12.3442453,\"rscore\":-1.3469183021141973e-05}",
       "type": "regression",
       "split": 5
     }
@@ -953,7 +953,7 @@
       "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":4,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":0.2835397535162193,\"mae\":0.23806470481896685,\"rscore\":0.009779785090687665}",
+      "result": "{\"rmse\":0.2835397535162193,\"mae\":0.23806470481896685,\"mape\":12.3442453,\"rscore\":0.009779785090687665}",
       "type": "regression",
       "split": 5
     }
@@ -967,7 +967,7 @@
       "config": "{\"encoding\":{\"padding\":\"no_padding\",\"generation_type\":\"up_to\",\"prefix_length\":5,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":false,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
       "error": "",
       "status": "completed",
-      "result": "{\"rmse\":0.2925741116002737,\"mae\":0.2361627155678883,\"rscore\":0.07100019652112155}",
+      "result": "{\"rmse\":0.2925741116002737,\"mae\":0.2361627155678883,\"mape\":12.3442453,\"rscore\":0.07100019652112155}",
       "type": "regression",
       "split": 5
     }

@@ -78,6 +78,7 @@ class RefactorProof(TestCase):
         self.assertAlmostEqual(result['rmse'], 0.30439548)
         self.assertAlmostEqual(result['mae'], 0.26033653)
         self.assertAlmostEqual(result['rscore'], -0.00558834)
+        self.assertAlmostEqual(result['mape'], 62.6850596)
 
     def test_regression_no_cluster(self):
         self.maxDiff = None
@@ -90,3 +91,4 @@ class RefactorProof(TestCase):
         self.assertAlmostEqual(result['rmse'], 0.29010989)
         self.assertAlmostEqual(result['mae'], 0.22528624)
         self.assertAlmostEqual(result['rscore'], 0.086583348)
+        self.assertAlmostEqual(result['mape'], 50.363624743)

@@ -95,8 +95,9 @@ def prepare_results(df, label: LabelContainer):
     rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
     mae = mean_absolute_error(df['label'], df['prediction'])
     rscore = metrics.r2_score(df['label'], df['prediction'])
+    mape = mean_absolute_percentage_error(df['label'], df['prediction'])
 
-    row = {'rmse': rmse, 'mae': mae, 'rscore': rscore}
+    row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row
 
 
@@ -122,3 +123,9 @@ def __choose_regressor(job: dict):
     elif method == LASSO:
         regressor = Lasso(**config)
     return regressor
+
+
+# https://stats.stackexchange.com/q/294069
+def mean_absolute_percentage_error(y_true, y_pred):
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100

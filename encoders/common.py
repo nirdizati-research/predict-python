@@ -27,6 +27,9 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
                      additional_columns=None):
+    if event_names is None:
+        event_names = unique_events(run_log)
+        
     encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
 
     # Convert strings to number
@@ -57,8 +60,6 @@ def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer
     :returns training_df, test_df
     """
 
-    if event_names is None:
-        event_names = unique_events(run_log)
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     run_df = None

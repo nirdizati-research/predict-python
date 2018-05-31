@@ -8,8 +8,10 @@ from .replay_core import prepare
 import django_rq
 
 class Replayer():
-    def __init__(self,id):
+    def __init__(self,id, reg_id, class_id):
         self.log_id=id
+        self.class_id=class_id
+        self.reg_id=reg_id
         self.log=None
     
     def start(self):
@@ -34,7 +36,7 @@ class Replayer():
        for event in trace:
             replayer = DemoReplayer.objects.get(pk=id)
             if replayer.running:
-                django_rq.enqueue(prepare, event, trace, log, id)
+                django_rq.enqueue(prepare, event, trace, log, id, self.reg_id, self.class_id, self.log)
                 sleep(randint(5,10)) 
             else:
                 return 

@@ -12,5 +12,5 @@ class DemoTest(TestCase):
     
     def test_demo_executions(self):
         Log.objects.get_or_create(name='general_example_test.xes', path='log_cache/general_example_test.xes')
-        replayer = Replayer(1)
+        replayer = Replayer(1, 13, 10)
         replayer.start()

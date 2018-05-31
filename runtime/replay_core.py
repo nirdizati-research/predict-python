@@ -8,7 +8,17 @@ import xml.etree.ElementTree as Et
 from xml.dom import minidom
 from core.constants import CLASSIFICATION
 
-def prepare(ev, tr, lg, replayer_id):
+ZERO_PADDING = 'zero_padding'
+
+def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log):
+    if int(reg_id) > 0:
+        reg_model=PredModels.objects.get(pk=reg_id)
+    else:
+        reg_model=None
+    if int(class_id) > 0:
+        class_model=PredModels.objects.get(pk=class_id)
+    else:
+        class_model=None
     run = XFactory()
     serializer=XesXmlSerializer()
     logtmp=Et.Element("log")
@@ -23,8 +33,11 @@ def prepare(ev, tr, lg, replayer_id):
     trace_config = Et.tostring(trtmp)
     event_config = Et.tostring(evtmp)
 
-    log,created = XLog.objects.get_or_create(config=log_config)
-    trace, created = XTrace.objects.get_or_create(config=trace_config, log=log)
+    log,created = XLog.objects.get_or_create(config=log_config, real_log = real_log)
+    try:
+        trace= XTrace.objects.get(config=trace_config, xlog=log)
+    except XTrace.DoesNotExist:
+        trace= XTrace.objects.create(config=trace_config, xlog=log, reg_model=reg_model, class_model=class_model, real_log = real_log.id)
         
     event,created = XEvent.objects.get_or_create(config=event_config, trace=trace)    
     
@@ -39,20 +52,26 @@ def prepare(ev, tr, lg, replayer_id):
         evt = run.create_event(evtmp)
         run_trace.append(evt)
     try:
-        models = PredModels.objects.filter(type='regression')
-        modeldb=models[0]
+        if trace.reg_model is not None:
+            reg_config=trace.reg_model.config
+            reg_config['encoding']['prefix_length']=c
+            if reg_config['encoding']['padding'] != ZERO_PADDING:
+                right_reg_model = PredModels.objects.get(config=reg_config)
+                trace.reg_model=right_reg_model
+            trace.reg_results = runtime_calculate(run_log, trace.reg_model.to_dict())
+            trace.save()
+        if trace.class_model is not None:
+            class_config=trace.class_model.config        
+            class_config['encoding']['prefix_length']=c
+            if class_config['encoding']['padding'] != ZERO_PADDING:
+                right_class_model = PredModels.objects.get(config=class_config)
+                trace.class_model=right_class_model
+            trace.class_results = runtime_calculate(run_log, trace.class_model.to_dict())
+            trace.save()
     except PredModels.DoesNotExist:
-        return print("error")
-    trace.model=modeldb
-    right_model=trace.model
-    
-    try:
-        trace.results = runtime_calculate(run_log, right_model.to_dict())
-        trace.save()
-    except Exception as e:
         DemoReplayer.objects.filter(pk=replayer_id).update(running=False)
-        print("I can't predict this trace because I don't have a suitable model")
-        print("Error:" + str(e))
+        return print("Can't find a suitable model for this trace")
+    trace.save()
     return 
 
 def parse(xml):

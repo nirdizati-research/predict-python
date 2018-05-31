@@ -6,12 +6,21 @@ from rest_framework.response import Response
 from jobs.models import CREATED
 from jobs.serializers import JobSerializer
 from predModels.serializers import ModelSerializer
+from .serializers import TraceSerializer
 from predModels.models import PredModels
 from jobs.models import Job
 from logs.models import Log, Split
 from core.constants import NO_CLUSTER
 from .replayer import Replayer
 from .tasks import runtime_task
+from .models import XTrace
+
+@api_view(['GET'])
+def tracesList(self):
+    traces = XTrace.objects.all()
+    serializer = TraceSerializer(traces, many=True)
+    return Response(serializer.data, status=201)
+
 
 @api_view(['GET'])
 def modelList(request):
@@ -21,21 +30,20 @@ def modelList(request):
     return Response(serializer.data, status=201)
 
 @api_view(['GET'])
-def get_demo(request, pk):
+def get_demo(request, pk, pk1, pk2):
     
-    replay=Replayer(pk)
+    replay=Replayer(pk, pk1, pk2)
     replay.start()
     
     return Response("Finito")
 
 @api_view(['GET'])
-def get_prediction(request, pk1, pk2, pk3, pk4):
+def get_prediction(request, pk1, pk2, pk3):
     models=[]
     jobs=[]
     pk1=int(pk1)
     pk2=int(pk2)
     pk3=int(pk3)
-    pk4=int(pk4)
     
     log = Log.objects.get(pk=pk1)
     split, created = Split.objects.get_or_create(type='single', original_log=log)
@@ -46,9 +54,6 @@ def get_prediction(request, pk1, pk2, pk3, pk4):
             models.append(model)
         if pk3 > 0:
             model = PredModels.objects.get(pk=pk3)
-            models.append(model)
-        if pk4 > 0:
-            model = PredModels.objects.get(pk=pk4)
             models.append(model)
     except PredModels.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)

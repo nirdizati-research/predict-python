@@ -58,8 +58,8 @@ def _regression_linear():
 
 def _regression_xgboost():
     return {
-        'n_estimators': 10,
-        'max_depth': 6
+        'n_estimators': 100,
+        'max_depth': 3
     }
 
 

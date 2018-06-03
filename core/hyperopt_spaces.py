@@ -65,7 +65,7 @@ def _regression_linear():
 
 def _regression_xgboost():
     return {
-        'max_depth': scope.int(hp.quniform('max_depth', 0, 100, 1)),
+        'max_depth': scope.int(hp.quniform('max_depth', 3, 100, 1)),
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
     }
 

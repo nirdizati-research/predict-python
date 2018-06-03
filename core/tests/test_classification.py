@@ -61,6 +61,13 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 
+    def test_class_xgboost(self):
+        job = self.get_job()
+        job['method'] = 'xgboost'
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
     def test_next_activity_randomForest(self):
         job = self.get_job()
         job['label'] = LabelContainer(NEXT_ACTIVITY)
@@ -74,6 +81,14 @@ class TestClassification(TestCase):
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['classification.knn'] = {'n_neighbors': 3}
         job['kmeans'] = _kmeans()
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_next_activity_xgboost(self):
+        job = self.get_job()
+        job['method'] = 'xgboost'
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 

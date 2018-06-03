@@ -35,6 +35,14 @@ class TestHyperopt(TestCase):
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
+    def test_class_xgboost(self):
+        job = self.get_job()
+        job["method"] = "xgboost"
+        add_default_config(job)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
+
     def test_class_decision_tree(self):
         job = self.get_job()
         job["method"] = "decisionTree"
@@ -66,6 +74,16 @@ class TestHyperopt(TestCase):
         job = self.get_job()
         job["type"] = "regression"
         job["method"] = "lasso"
+        job['hyperopt']['performance_metric'] = 'rmse'
+        add_default_config(job)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)
+
+    def test_regression_xgboost(self):
+        job = self.get_job()
+        job["type"] = "regression"
+        job["method"] = "xgboost"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
         results, config, model_split = calculate_hyperopt(job)

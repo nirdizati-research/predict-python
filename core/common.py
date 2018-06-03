@@ -1,10 +1,11 @@
 """Common methods for all training methods"""
 
+import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
-from core.constants import KNN, RANDOM_FOREST, DECISION_TREE
+from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
 
 
 def calculate_results(prediction, actual):
@@ -54,6 +55,8 @@ def choose_classifier(job: dict):
         clf = RandomForestClassifier(**config)
     elif method == DECISION_TREE:
         clf = DecisionTreeClassifier(**config)
+    elif method == XGBOOST:
+        clf = xgb.XGBClassifier(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf

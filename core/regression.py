@@ -2,6 +2,7 @@ from math import sqrt
 
 import numpy as np
 import pandas as pd
+import xgboost as xgb
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestRegressor
@@ -10,7 +11,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from core.common import get_method_config
-from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER
+from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST
 from encoders.label_container import LabelContainer, REMAINING_TIME
 
 pd.options.mode.chained_assignment = None
@@ -122,6 +123,8 @@ def __choose_regressor(job: dict):
         regressor = RandomForestRegressor(**config)
     elif method == LASSO:
         regressor = Lasso(**config)
+    elif method == XGBOOST:
+        regressor = xgb.XGBRegressor(**config)
     return regressor
 
 

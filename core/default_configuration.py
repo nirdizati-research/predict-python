@@ -56,6 +56,13 @@ def _regression_linear():
     }
 
 
+def _regression_xgboost():
+    return {
+        'n_estimators': 10,
+        'max_depth': 6
+    }
+
+
 def _kmeans():
     return {
         'n_clusters': 3,
@@ -69,5 +76,5 @@ def _kmeans():
 # Map method config to a dict
 CONF_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest, CLASSIFICATION_KNN: _classification_knn,
             CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
-            REGRESSION_RANDOM_FOREST: _regression_random_forest,
+            REGRESSION_RANDOM_FOREST: _regression_random_forest, REGRESSION_XGBOOST: _regression_xgboost,
             REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}

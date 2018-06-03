@@ -54,6 +54,12 @@ class TestRegression(TestCase):
         add_default_config(job)
         calculate(job)
 
+    def test_reg_xgboost(self):
+        job = self.get_job()
+        job['method'] = 'xgboost'
+        add_default_config(job)
+        calculate(job)
+
     def test_reg_lasso_no_elapsed_time(self):
         job = self.get_job()
         job['method'] = 'lasso'

@@ -71,3 +71,13 @@ class TestHyperopt(TestCase):
         results, config, model_split = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
+
+    def test_regression_xgboost(self):
+        job = self.get_job()
+        job["type"] = "regression"
+        job["method"] = "xgboost"
+        job['hyperopt']['performance_metric'] = 'rmse'
+        add_default_config(job)
+        results, config, model_split = calculate_hyperopt(job)
+        self.assertIsNotNone(results)
+        self.assertIsNotNone(config)

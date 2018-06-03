@@ -12,3 +12,4 @@ django-cors-headers==2.0.0
 python-dateutil==2.7.2
 hyperopt
 networkx==1.11
+xgboost==0.72

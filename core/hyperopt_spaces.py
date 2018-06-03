@@ -33,6 +33,13 @@ def _classification_decision_tree():
     }
 
 
+def _classification_xgboost():
+    return {
+        'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
+        'max_depth': scope.int(hp.quniform('max_depth', 3, 30, 1)),
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
@@ -64,7 +71,7 @@ def _regression_xgboost():
 
 
 HYPEROPT_SPACE_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
-                      CLASSIFICATION_KNN: _classification_knn,
+                      CLASSIFICATION_KNN: _classification_knn, CLASSIFICATION_XGBOOST: _classification_xgboost,
                       CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
                       REGRESSION_RANDOM_FOREST: _regression_random_forest, REGRESSION_XGBOOST: _regression_xgboost,
                       REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}

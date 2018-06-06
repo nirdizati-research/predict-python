@@ -56,5 +56,5 @@ def calculate_hyperopt(job):
 def get_metric_multiplier(performance_metric):
     """Class methods have to be as good as possible. Some reg methods as bad as possible"""
     metric_map = {'rmse': -1, 'mae': -1, 'rscore': 1, 'acc': 1, 'f1score': 1, 'auc': 1, 'precision': 1, 'recall': 1,
-                  'true_positive': 1, 'true_negative': 1, 'false_positive': 1, 'false_negative': 1}
+                  'true_positive': 1, 'true_negative': 1, 'false_positive': 1, 'false_negative': 1, 'mape': -1}
     return metric_map[performance_metric]

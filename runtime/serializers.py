@@ -14,6 +14,9 @@ class TraceSerializer(serializers.ModelSerializer):
     xlog = XLogSerializer(many=False, read_only=True)
     config = serializers.JSONField()
     real_log = serializers.IntegerField()
+    first_event = serializers.DateTimeField()
+    last_event = serializers.DateTimeField()
+    n_events = serializers.IntegerField()
     reg_model = ModelSerializer(many=False, read_only=True)
     class_model = ModelSerializer(many=False, read_only=True)
     reg_results = serializers.JSONField()
@@ -21,4 +24,4 @@ class TraceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = XTrace
-        fields = ('id',  'xlog', 'real_log', 'config', 'reg_model', 'class_model', 'reg_results', 'class_results')
+        fields = ('id',  'xlog', 'real_log', 'config', 'first_event', 'last_event', 'n_events', 'reg_model', 'class_model', 'reg_results', 'class_results')

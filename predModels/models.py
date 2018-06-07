@@ -13,6 +13,7 @@ ENC_TYPES = (
     (NO_CLUSTER, 'noCluster'),
 )
 
+
 class ModelSplit(models.Model):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)

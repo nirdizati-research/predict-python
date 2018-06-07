@@ -6,18 +6,18 @@ from core.core import runtime_calculate
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 from core.core import get_run
 
+
 @job("default", timeout='1h')
 def runtime_task(job, model):
     print("Start runtime task ID {}".format(job.pk))
     try:
-        if job.status == CREATED:
-            job.status = RUNNING
-            job.save()
-            log = Log.objects.get(pk=job.config['log_id'])
-            run_log = get_logs(log.path)[0]
-            result = runtime_calculate(run_log,model.to_dict())
-            job.result = result
-            job.status = COMPLETED
+        job.status = RUNNING
+        job.save()
+        log = Log.objects.get(pk=job.config['log_id'])
+        run_log = get_logs(log.path)[0]
+        result = runtime_calculate(run_log, model.to_dict())
+        job.result = result
+        job.status = COMPLETED
     except Exception as e:
         print("error " + str(e.__repr__()))
         job.status = ERROR

@@ -33,9 +33,6 @@ def multi_classifier_single_log(run_df, model):
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    print("\n\n")
-    print(result['predicted'])
-    print("\n\n")
     return result['predicted']
 
 

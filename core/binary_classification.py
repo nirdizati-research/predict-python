@@ -37,9 +37,6 @@ def binary_classifier_single_log(run_df, model):
         clf = joblib.load(split['model_path']) 
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    print("\n\n")
-    print(result['predicted'])
-    print("\n\n")
     return result['predicted']
 
 
@@ -55,7 +52,6 @@ def kmeans_clustering_train(original_test_data, train_data, clf, kmeans_config: 
         else:
             y = clustered_train_data['actual']
             clf.fit(clustered_train_data.drop('actual', 1), y)
-
             models[i] = clf
     model_split = dict()
     model_split['type'] = KMEANS

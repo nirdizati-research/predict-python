@@ -15,6 +15,7 @@ from .replayer import Replayer
 from .tasks import runtime_task
 from .models import XTrace
 
+
 @api_view(['GET'])
 def tracesList(self):
     traces = XTrace.objects.all()
@@ -25,25 +26,27 @@ def tracesList(self):
 @api_view(['GET'])
 def modelList(request):
     
-    models=PredModels.objects.all()
+    models = PredModels.objects.all()
     serializer = ModelSerializer(models, many=True)
     return Response(serializer.data, status=201)
+
 
 @api_view(['GET'])
 def get_demo(request, pk, pk1, pk2):
     
-    replay=Replayer(pk, pk1, pk2)
+    replay = Replayer(pk, pk1, pk2)
     replay.start()
     
     return Response("Finito")
 
+
 @api_view(['GET'])
 def get_prediction(request, pk1, pk2, pk3):
-    models=[]
-    jobs=[]
-    pk1=int(pk1)
-    pk2=int(pk2)
-    pk3=int(pk3)
+    models = []
+    jobs = []
+    pk1 = int(pk1)
+    pk2 = int(pk2)
+    pk3 = int(pk3)
     
     log = Log.objects.get(pk=pk1)
     split, created = Split.objects.get_or_create(type='single', original_log=log)
@@ -61,11 +64,12 @@ def get_prediction(request, pk1, pk2, pk3):
     for model in models:
         job = generate_run(pk1, model, model.id, split)
     
-    #django_rq.enqueue(training, jobrun, model)
+    # django_rq.enqueue(training, jobrun, model)
         django_rq.enqueue(runtime_task, job, model)
-    #os.system('python3 manage.py rqworker --burst')
+    # os.system('python3 manage.py rqworker --burst')
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
+
 
 def generate_run(logid, model, modelid, split):
     jobs = []
@@ -79,6 +83,7 @@ def generate_run(logid, model, modelid, split):
             config=config,
             split=split)
     return item
+
 
 def create_config_run(config, log='', model=''):
     """Turn lists to single values"""

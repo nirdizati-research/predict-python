@@ -46,15 +46,15 @@ def run_by_type(training_df, test_df, job):
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results, model_split
 
-def runtime_calculate(run_log,model):
-    run_df= encode_label_log(run_log, model['encoding'], model['type'], model['label'])
-    print(run_df)
+
+def runtime_calculate(run_log, model):
+    run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
     if model['type'] == CLASSIFICATION:
         label_type = model['label'].type
         if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
             results = binary_classifier_single_log(run_df, model)
         elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
-            results = multi_classifier_single_log(run_df, job)
+            results = multi_classifier_single_log(run_df, model)
         else:
             raise ValueError("Label type not supported", label_type)
     elif model['type'] == REGRESSION:
@@ -63,6 +63,7 @@ def runtime_calculate(run_log,model):
         raise ValueError("Type not supported", model['type'])
     print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
     return results
+
 
 def get_run(job):
     """Defines job identity"""

@@ -9,6 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.externals import joblib
 
 from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST
@@ -29,6 +30,21 @@ def regression(training_df, test_df, job):
 
     results = prepare_results(results_df, job['label'])
     return results, model_split
+
+
+def regression_single_log(run_df, model):
+    split = model['split']
+    if 'elapsed_time' in run_df.columns:
+        run_df = run_df.drop(['elapsed_time', 'label'],1)
+    run_df = run_df.drop('trace_id',1)
+    if split['type'] == NO_CLUSTER:
+        regressor = joblib.load(split['model_path'])
+        results_data = no_clustering_test(run_df, run_df, regressor)
+    elif split['type'] == KMEANS:
+        regressor = joblib.load(split['model_path'])
+        estimator = joblib.load(split['estimator_path']) 
+        results_data = kmeans_test(run_df, regressor, estimator)
+    return results_data['prediction']
 
 
 def kmeans_clustering_train(original_test_data, train_data, regressor, kmeans_dict: dict):
@@ -84,6 +100,7 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
 
 
 def no_clustering_test(original_test_data, test_data, regressor):
+    print(test_data)
     original_test_data['prediction'] = regressor.predict(test_data)
     return original_test_data
 

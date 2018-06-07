@@ -1,11 +1,11 @@
-from core.binary_classification import binary_classifier
+from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
     CLASSIFICATION, REGRESSION, LABELLING
+from core.multi_classification import multi_classifier, multi_classifier_single_log
+from core.regression import regression, regression_single_log
 from core.label_validation import label_task
-from core.multi_classification import multi_classifier
-from core.regression import regression
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
-    DURATION
+    encode_label_log, DURATION 
 from logs.splitting import prepare_logs
 
 
@@ -45,6 +45,24 @@ def run_by_type(training_df, test_df, job):
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
     return results, model_split
+
+
+def runtime_calculate(run_log, model):
+    run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
+    if model['type'] == CLASSIFICATION:
+        label_type = model['label'].type
+        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
+            results = binary_classifier_single_log(run_df, model)
+        elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
+            results = multi_classifier_single_log(run_df, model)
+        else:
+            raise ValueError("Label type not supported", label_type)
+    elif model['type'] == REGRESSION:
+        results = regression_single_log(run_df, model)
+    else:
+        raise ValueError("Type not supported", model['type'])
+    print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
+    return results
 
 
 def get_run(job):

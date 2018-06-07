@@ -5,10 +5,17 @@ from core.constants import *
 from jobs.models import Job
 from jobs.models import TYPES
 from logs.models import Log
+from encoders.label_container import LabelContainer
+from encoders.encoding_container import EncodingContainer
+
+ENC_TYPES = (
+    (KMEANS, 'kmeans'),
+    (NO_CLUSTER, 'noCluster'),
+)
 
 
 class ModelSplit(models.Model):
-    type = models.CharField(choices=TYPES, default='single', max_length=20)
+    type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     estimator_path = models.CharField(blank=True, null=True, max_length=200)
     predtype = models.CharField(choices=TYPES, max_length=20, default='Classification')
@@ -30,10 +37,11 @@ class PredModels(models.Model):
     config = JSONField(default={})
 
     def to_dict(self):
-        model = dict()
-        model['config'] = self.config
+        model = dict(self.config)
         model['type'] = self.type
         model['log_path'] = self.log.path
         model['log_name'] = self.log.name
         model['split'] = self.split.to_dict()
+        model['label'] = LabelContainer(**self.config['label'])
+        model['encoding'] = EncodingContainer(**self.config['encoding'])
         return model

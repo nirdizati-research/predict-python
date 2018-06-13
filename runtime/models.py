@@ -1,6 +1,6 @@
 from django.db import models
-from logs.models import Log
 from jsonfield.fields import JSONField
+from logs.models import Log
 from predModels.models import PredModels
 
 
@@ -22,8 +22,8 @@ class XTrace(models.Model):
     config = models.CharField(default="", null=True, max_length=500)
     xlog = models.ForeignKey('XLog', on_delete=models.DO_NOTHING, related_name='xlog')
     completed = models.BooleanField(default=False)
-    first_event = models.DateTimeField(auto_now=True)
-    last_event = models.DateTimeField(auto_now=True)
+    first_event = models.DateTimeField(null=True)
+    last_event = models.DateTimeField(null=True)
     n_events = models.IntegerField(default=0)
     real_log = models.IntegerField()
     reg_results = JSONField(default={})

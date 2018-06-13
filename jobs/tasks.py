@@ -49,8 +49,7 @@ def save_models(to_model_split, job):
         joblib.dump(to_model_split['estimator'], filename_estimator)
         model_split.estimator_path = filename_estimator
         model_split.save()
-    models = PredModels.objects.create(split=model_split, type=job.type, log=log, config=job.config)
-    return 1
+    PredModels.objects.create(pk=job.id, split=model_split, type=job.type, log=log, config=job.config)
 
 
 def hyperopt_task(job):

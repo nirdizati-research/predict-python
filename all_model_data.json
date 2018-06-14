@@ -998,32 +998,32 @@
   },
   {
     "model": "predModels.modelsplit",
-    "pk" : 2,
-    "fields": {
-      "model_path" : "model_cache\/split_5-model-regression.sav",
-      "estimator_path" : null,
-      "predtype" : "regression",
-      "type" : "noCluster"
-    }
-  },
-  {	
-    "model": "predModels.predmodels",
-    "pk" : 24,
-    "fields":{
-      "config" : "{\"encoding\":{\"padding\":\"zero_padding\",\"generation_type\":\"only\",\"prefix_length\":16,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":true,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
-      "log_id" : 6,
-      "split_id" : 2,
-      "type" : "regression"
+    "id" : 2,
+    "fields": {		
+	"model_path" : "model_cache\/split_5-model-regression.sav",
+	"estimator_path" : null,
+	"predtype" : "regression",
+	"type" : "noCluster"
     }
   },
   {
     "model": "predModels.predmodels",
-    "pk" : 25,
+    "pk" : 1,
     "fields":{
       "config" : "{\"encoding\":{\"padding\":\"zero_padding\",\"generation_type\":\"only\",\"prefix_length\":13,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"duration\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":true,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"acc\"},\"classification.randomForest\":{\"n_estimators\":10,\"max_depth\":null,\"max_features\":\"auto\",\"n_jobs\":-1,\"random_state\":21},\"clustering\":\"noCluster\",\"method\":\"randomForest\"}",
       "log_id" : 1,
       "split_id" : 1,
       "type" : "classification"
     }
+  },
+  {
+    "model": "predModels.predmodels",
+    "id" : 18,
+    "fields":{
+	"config" : "{\"encoding\":{\"padding\":\"zero_padding\",\"generation_type\":\"only\",\"prefix_length\":15,\"method\":\"simpleIndex\"},\"label\":{\"type\":\"remaining_time\",\"attribute_name\":\"\",\"threshold_type\":\"threshold_mean\",\"threshold\":0,\"add_remaining_time\":false,\"add_elapsed_time\":false,\"add_executed_events\":false,\"add_resources_used\":false,\"add_new_traces\":false},\"create_models\":true,\"hyperopt\":{\"use_hyperopt\":false,\"max_evals\":10,\"performance_metric\":\"rmse\"},\"regression.linear\":{\"fit_intercept\":true,\"n_jobs\":-1,\"normalize\":false},\"clustering\":\"noCluster\",\"method\":\"linear\"}",
+	"log_id" : 6,
+	"split_id" : 2,
+	"type" : "regression"
+	}
   }
 ]

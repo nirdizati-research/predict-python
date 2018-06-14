@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "django_rq",
     'corsheaders',
+    'ws4redis',
 ]
 
 LOGGING = {
@@ -100,12 +101,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ws4redis.context_processors.default'
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'training.wsgi.application'
+WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -158,3 +160,6 @@ RQ_QUEUES = {
         'DEFAULT_TIMEOUT': 7200,
     }
 }
+
+WEBSOCKET_URL = '/ws/'
+WS4REDIS_PREFIX = 'ws'

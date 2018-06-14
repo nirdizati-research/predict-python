@@ -1,5 +1,3 @@
-import json
-
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
@@ -7,6 +5,7 @@ from jobs.serializers import JobSerializer
 from logs.serializers import LogSerializer
 
 redis_publisher = RedisPublisher(facility='default', broadcast=True)
+from rest_framework.renderers import JSONRenderer
 
 
 def publish(object):
@@ -28,4 +27,4 @@ def _serializer(object):
         data = JobSerializer(object).data
     else:
         raise NotImplementedError("Websocket not implemented for class ".format(name))
-    return json.dumps({'type': name, 'data': data})
+    return JSONRenderer().render({'type': name, 'data': data})

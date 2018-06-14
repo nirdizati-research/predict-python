@@ -75,10 +75,10 @@ class RefactorProof(TestCase):
         job['label'] = LabelContainer()
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.30439548)
-        self.assertAlmostEqual(result['mae'], 0.26033653)
-        self.assertAlmostEqual(result['rscore'], -0.00558834)
-        self.assertAlmostEqual(result['mape'], 62.6850596)
+        self.assertAlmostEqual(result['rmse'], 0.29435018)
+        self.assertAlmostEqual(result['mae'], 0.2264389)
+        self.assertAlmostEqual(result['rscore'], 0.059686980)
+        self.assertAlmostEqual(result['mape'], 50.73148628)
 
     def test_regression_no_cluster(self):
         self.maxDiff = None
@@ -88,7 +88,7 @@ class RefactorProof(TestCase):
         job['label'] = LabelContainer()
         add_default_config(job)
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.29010989)
-        self.assertAlmostEqual(result['mae'], 0.22528624)
-        self.assertAlmostEqual(result['rscore'], 0.086583348)
-        self.assertAlmostEqual(result['mape'], 50.363624743)
+        self.assertAlmostEqual(result['rmse'], 0.29123518)
+        self.assertAlmostEqual(result['mae'], 0.22594042)
+        self.assertAlmostEqual(result['rscore'], 0.079483654)
+        self.assertAlmostEqual(result['mape'], 50.64461029)

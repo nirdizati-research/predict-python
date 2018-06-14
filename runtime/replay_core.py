@@ -12,10 +12,6 @@ from runtime.models import XTrace, XEvent, XLog, DemoReplayer
 
 
 def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
-    if end:
-        trace.completed = True
-        trace.save()
-        return
     if int(reg_id) > 0:
         reg_model = PredModels.objects.get(pk=reg_id)
     else:
@@ -33,7 +29,7 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
     serializer.add_attributes(logtmp, lg.get_attributes().values())
     serializer.add_attributes(trtmp, tr.get_attributes().values())
     serializer.add_attributes(evtmp, ev.get_attributes().values())
-    
+
     log_config = Et.tostring(logtmp)
     trace_config = Et.tostring(trtmp)
     event_config = Et.tostring(evtmp)
@@ -47,8 +43,15 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
     log, created = XLog.objects.get_or_create(config=log_map, real_log=real_log)
     try:
         trace = XTrace.objects.get(config=trace_map, xlog=log)
+        trace.reg_model = reg_model
+        trace.class_model = class_model
     except XTrace.DoesNotExist:
         trace = XTrace.objects.create(config=trace_map, xlog=log, reg_model=reg_model, class_model=class_model, real_log=real_log.id)
+
+    if end:
+        trace.completed = True
+        trace.save()
+        return
 
     try:
         event = XEvent.objects.get(config=event_map, trace=trace)

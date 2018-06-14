@@ -23,6 +23,7 @@ class TestRegression(TestCase):
 
     def test_reg_linear(self):
         job = self.get_job()
+        job["encoding"] = EncodingContainer(SIMPLE_INDEX, padding=ZERO_PADDING, prefix_length=13)
         job['clustering'] = 'noCluster'
         add_default_config(job)
         calculate(job)

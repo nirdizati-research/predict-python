@@ -6,10 +6,10 @@ import xgboost as xgb
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.externals import joblib
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-from sklearn.externals import joblib
 
 from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST
@@ -100,7 +100,6 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
 
 
 def no_clustering_test(original_test_data, test_data, regressor):
-    print(test_data)
     original_test_data['prediction'] = regressor.predict(test_data)
     return original_test_data
 

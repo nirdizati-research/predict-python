@@ -20,23 +20,23 @@ from .models import XTrace
 def tracesList(self):
     traces = XTrace.objects.all()
     serializer = TraceSerializer(traces, many=True)
-    return Response(serializer.data, status=201)
+    return Response(serializer.data, status=200)
 
 
 @api_view(['GET'])
 def modelList(request):
-    
+
     models = PredModels.objects.all()
     serializer = ModelSerializer(models, many=True)
-    return Response(serializer.data, status=201)
+    return Response(serializer.data, status=200)
 
 
 @api_view(['GET'])
 def get_demo(request, pk, pk1, pk2):
-    
+
     replay = Replayer(pk, pk1, pk2)
     replay.start()
-    
+
     return Response("Finito")
 
 
@@ -47,10 +47,10 @@ def get_prediction(request, pk1, pk2, pk3):
     pk1 = int(pk1)
     pk2 = int(pk2)
     pk3 = int(pk3)
-    
+
     log = Log.objects.get(pk=pk1)
     split, created = Split.objects.get_or_create(type='single', original_log=log)
-    
+
     try:
         if pk2 > 0:
             model = PredModels.objects.get(pk=pk2)
@@ -63,7 +63,7 @@ def get_prediction(request, pk1, pk2, pk3):
 
     for model in models:
         job = generate_run(pk1, model, model.id, split)
-    
+
     # django_rq.enqueue(training, jobrun, model)
         django_rq.enqueue(runtime_task, job, model)
     # os.system('python3 manage.py rqworker --burst')

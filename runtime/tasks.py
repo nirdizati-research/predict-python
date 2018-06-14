@@ -18,6 +18,7 @@ def runtime_task(job, model):
         result = runtime_calculate(run_log, model.to_dict())
         job.result = result
         job.status = COMPLETED
+        job.error = ''
     except Exception as e:
         print("error " + str(e.__repr__()))
         job.status = ERROR

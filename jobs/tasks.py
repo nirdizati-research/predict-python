@@ -5,6 +5,7 @@ from core.constants import KMEANS
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
+from jobs.ws_publisher import publish
 from predModels.models import ModelSplit, PredModels
 
 
@@ -31,6 +32,7 @@ def prediction_task(job_id):
         raise e
     finally:
         job.save()
+        publish(job)
 
 
 def save_models(to_model_split, job):

@@ -29,6 +29,8 @@ def binary_classifier(training_df, test_df, job):
 
 def binary_classifier_single_log(run_df, model):
     split=model['split']
+    results = dict()
+    results['label'] = run_df['label']
     run_df = run_df.drop('label', 1)
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
@@ -37,7 +39,8 @@ def binary_classifier_single_log(run_df, model):
         clf = joblib.load(split['model_path']) 
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    return result['predicted']
+    results['prediction'] = result['predicted']
+    return results
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf, kmeans_config: dict):

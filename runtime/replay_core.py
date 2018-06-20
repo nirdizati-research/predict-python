@@ -9,6 +9,7 @@ from core.core import runtime_calculate
 from encoders.encoding_container import ZERO_PADDING
 from predModels.models import PredModels
 from runtime.models import XTrace, XEvent, XLog, DemoReplayer
+from jobs.ws_publisher import publish
 
 
 def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
@@ -81,7 +82,9 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
                 reg_config['encoding']['prefix_length'] = c
                 right_reg_model = PredModels.objects.get(config=reg_config)
                 trace.reg_model = right_reg_model
-            trace.reg_results = runtime_calculate(run_log, trace.reg_model.to_dict())
+            result_data = runtime_calculate(run_log, trace.reg_model.to_dict())
+            trace.reg_results = result_data['prediction']
+            trace.reg_actual = result_data['label']
             trace.save()
         if trace.class_model is not None:
             if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and trace.class_model.config['encoding'][
@@ -90,12 +93,15 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
                 class_config['encoding']['prefix_length'] = c
                 right_class_model = PredModels.objects.get(config=class_config)
                 trace.class_model = right_class_model
-            trace.class_results = runtime_calculate(run_log, trace.class_model.to_dict())
+            result_data = runtime_calculate(run_log, trace.class_model.to_dict())
+            trace.class_results = result_data['prediction']
+            trace.class_actual = result_data['label']
             trace.save()
     except PredModels.DoesNotExist:
         DemoReplayer.objects.filter(pk=replayer_id).update(running=False)
         return print("Can't find a suitable model for this trace")
     trace.save()
+    publish(trace)
 
 
 def parse(xml):

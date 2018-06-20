@@ -26,6 +26,8 @@ def multi_classifier(training_df, test_df, job: dict):
 
 def multi_classifier_single_log(run_df, model):
     split = model['split']
+    results = dict()
+    results['label'] = run_df['label']
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
         result, _ = no_clustering_test(run_df,clf)
@@ -33,7 +35,8 @@ def multi_classifier_single_log(run_df, model):
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    return result['predicted']
+    results['prediction'] = result['predicted']
+    return results
 
 
 

@@ -9,9 +9,11 @@ class TraceSerializer(serializers.ModelSerializer):
     n_events = serializers.IntegerField()
     reg_results = serializers.JSONField()
     class_results = serializers.JSONField()
+    reg_actual = serializers.JSONField()
+    class_actual = serializers.JSONField()
 
 
     class Meta:
         model = XTrace
         fields = (
-            'id', 'completed', 'real_log', 'first_event', 'last_event', 'n_events', 'reg_results', 'class_results')
+            'id', 'completed', 'real_log', 'first_event', 'last_event', 'n_events', 'reg_results', 'class_results', 'reg_actual', 'class_actual')

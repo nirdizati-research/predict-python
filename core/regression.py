@@ -34,6 +34,8 @@ def regression(training_df, test_df, job):
 
 def regression_single_log(run_df, model):
     split = model['split']
+    results = dict()
+    results['label'] = run_df['label']
     if 'elapsed_time' in run_df.columns:
         run_df = run_df.drop(['elapsed_time', 'label'],1)
     run_df = run_df.drop('trace_id',1)
@@ -44,7 +46,8 @@ def regression_single_log(run_df, model):
         regressor = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path']) 
         results_data = kmeans_test(run_df, regressor, estimator)
-    return results_data['prediction']
+    results['prediction'] = results_data['prediction']
+    return results
 
 
 def kmeans_clustering_train(original_test_data, train_data, regressor, kmeans_dict: dict):

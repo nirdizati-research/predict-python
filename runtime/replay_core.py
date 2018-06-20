@@ -52,7 +52,11 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
     if end:
         trace.completed = True
         trace.save()
+        publish(trace)
         return
+    elif trace.completed:
+        trace.completed = False
+        trace.save()
 
     try:
         event = XEvent.objects.get(config=event_map, trace=trace)

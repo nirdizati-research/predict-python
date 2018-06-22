@@ -29,6 +29,7 @@ class XTrace(models.Model):
     reg_results = JSONField(default={})
     class_results = JSONField(default={})
     reg_actual = JSONField(default={})
+    duration = models.IntegerField(default=0)
     class_actual = JSONField(default={})
     reg_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='reg_trace_model', blank=True, null=True, default=None)
     class_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='class_trace_model', blank=True, null=True, default=None)

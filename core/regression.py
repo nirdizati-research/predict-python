@@ -36,8 +36,9 @@ def regression_single_log(run_df, model):
     split = model['split']
     results = dict()
     results['label'] = run_df['label']
+    run_df = run_df.drop(['label'],1)
     if 'elapsed_time' in run_df.columns:
-        run_df = run_df.drop(['elapsed_time', 'label'],1)
+        run_df = run_df.drop(['elapsed_time'],1)
     run_df = run_df.drop('trace_id',1)
     if split['type'] == NO_CLUSTER:
         regressor = joblib.load(split['model_path'])

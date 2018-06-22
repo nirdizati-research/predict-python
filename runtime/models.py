@@ -20,6 +20,7 @@ class XLog(models.Model):
 
 class XTrace(models.Model):
     config = models.CharField(default="", null=True, max_length=500)
+    name = models.CharField(default="", null=True, max_length=30)
     xlog = models.ForeignKey('XLog', on_delete=models.DO_NOTHING, related_name='xlog')
     completed = models.BooleanField(default=False)
     first_event = models.DateTimeField(null=True)
@@ -37,6 +38,7 @@ class XTrace(models.Model):
     def to_dict(self):
         trace = dict()
         trace['xlog'] = self.xlog
+        trace['name'] = self.name
         trace['config'] = self.config
         trace['completed'] = self.completed
         trace['first_event'] = self.first_event

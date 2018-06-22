@@ -39,17 +39,20 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
     event_xid = ev.get_id()
 
     log_map = json.dumps(xMap_to_dict(lg.get_attributes()))
-    trace_map = json.dumps(xMap_to_dict(tr.get_attributes()))
+    tmap = xMap_to_dict(tr.get_attributes())
+    tname = str(tmap.get('concept:name'))
+    trace_map = json.dumps(tmap)
     xmap = ev.get_attributes()
     event_map = json.dumps(xMap_to_dict(xmap))
+    
 
     log, created = XLog.objects.get_or_create(config=log_map, real_log=real_log)
     try:
-        trace = XTrace.objects.get(config=trace_map, xlog=log)
+        trace = XTrace.objects.get(name = tname, config=trace_map, xlog=log)
         trace.reg_model = reg_model
         trace.class_model = class_model
     except XTrace.DoesNotExist:
-        trace = XTrace.objects.create(config=trace_map, xlog=log, reg_model=reg_model, class_model=class_model, real_log=real_log.id)
+        trace = XTrace.objects.create(name = tname, config=trace_map, xlog=log, reg_model=reg_model, class_model=class_model, real_log=real_log.id)
 
     if end:
         trace.completed = True

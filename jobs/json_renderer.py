@@ -37,7 +37,7 @@ class CustomJSONEncoder(JSONEncoder):
             # internals.
 
             if o != o:
-                text = 'NaN'
+                text = '0'
             elif o == _inf:
                 text = '1000000'  # infinity is 1000000
             elif o == _neginf:

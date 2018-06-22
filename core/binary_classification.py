@@ -29,6 +29,8 @@ def binary_classifier(training_df, test_df, job):
 
 def binary_classifier_single_log(run_df, model):
     split=model['split']
+    results = dict()
+    results['label'] = run_df['label']
     run_df = run_df.drop('label', 1)
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
@@ -37,7 +39,8 @@ def binary_classifier_single_log(run_df, model):
         clf = joblib.load(split['model_path']) 
         estimator = joblib.load(split['estimator_path'])
         result, _ = kmeans_test(run_df, clf, estimator)
-    return result['predicted']
+    results['prediction'] = result['predicted']
+    return results
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf, kmeans_config: dict):
@@ -103,7 +106,7 @@ def no_clustering_train(original_test_data, train_data, clf):
 
     clf.fit(train_data.drop('actual', 1), y)
     actual = original_test_data["actual"]
-    original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf)
+    original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
     original_test_data["actual"] = actual
 
     auc = 0
@@ -117,9 +120,11 @@ def no_clustering_train(original_test_data, train_data, clf):
     return original_test_data, auc, model_split
 
 
-def no_clustering_test(test_data, clf):
+def no_clustering_test(test_data, clf, testing=False):
     prediction = clf.predict(test_data.drop('trace_id', 1))
-    scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
+    scores = 0
+    if testing:
+        scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
     test_data["predicted"] = prediction
     return test_data, scores
 

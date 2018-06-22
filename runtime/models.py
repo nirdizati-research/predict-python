@@ -28,6 +28,9 @@ class XTrace(models.Model):
     real_log = models.IntegerField()
     reg_results = JSONField(default={})
     class_results = JSONField(default={})
+    reg_actual = JSONField(default={})
+    duration = models.IntegerField(default=0)
+    class_actual = JSONField(default={})
     reg_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='reg_trace_model', blank=True, null=True, default=None)
     class_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='class_trace_model', blank=True, null=True, default=None)
 
@@ -41,6 +44,8 @@ class XTrace(models.Model):
         trace['n_events'] = self.n_events
         trace['reg_results'] = self.reg_results
         trace['class_results'] = self.class_results
+        trace['reg_actual'] = self.reg_results
+        trace['class_actual'] = self.class_results
         trace['reg_model'] = self.reg_model
         trace['class_model'] = self.class_model
         return trace

@@ -76,42 +76,42 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
         evt = run.create_event(XAttributeMap(json.loads(event.config)))
         run_trace.append(evt)
     run_log.append(run_trace)
-    try:
-        if c == 1:
-            trace.first_event = str(xmap.get('time:timestamp'))
-        trace.last_event = str(xmap.get('time:timestamp'))
-        
-        trace.duration = datetime.timedelta.total_seconds(dateparser(str(trace.last_event)) - dateparser(str(trace.first_event)))
+    if c == 1:
+        trace.first_event = str(xmap.get('time:timestamp'))
+    trace.last_event = str(xmap.get('time:timestamp'))
+    
+    trace.duration = datetime.timedelta.total_seconds(dateparser(str(trace.last_event)) - dateparser(str(trace.first_event)))
+    trace.n_events = c
+    trace.save()
+    #try:
+    if trace.reg_model is not None:
+        if trace.reg_model.config['encoding']['padding'] != ZERO_PADDING and trace.reg_model.config['encoding'][
+            'generation_type'] != ALL_IN_ONE:
+            reg_config = trace.reg_model.config
+            reg_config['encoding']['prefix_length'] = c
+            right_reg_model = PredModels.objects.filter(config=reg_config)
+            trace.reg_model = right_reg_model[0]
+        result_data = runtime_calculate(run_log, trace.reg_model.to_dict())
+        trace.reg_results = result_data['prediction']
+        trace.reg_actual = result_data['label']
         trace.save()
-        trace.n_events = c
-        if trace.reg_model is not None:
-            if trace.reg_model.config['encoding']['padding'] != ZERO_PADDING and trace.reg_model.config['encoding'][
-                'generation_type'] != ALL_IN_ONE:
-                reg_config = trace.reg_model.config
-                reg_config['encoding']['prefix_length'] = c
-                right_reg_model = PredModels.objects.filter(config=reg_config)
-                trace.reg_model = right_reg_model[0]
-            result_data = runtime_calculate(run_log, trace.reg_model.to_dict())
-            trace.reg_results = result_data['prediction']
-            trace.reg_actual = result_data['label']
-            trace.save()
-    except:
-        return print("Can't find a suitable regression model for this trace")
-    try:
-        if trace.class_model is not None:
-            if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and trace.class_model.config['encoding'][
-                'generation_type'] != ALL_IN_ONE:
-                class_config = trace.class_model.config
-                class_config['encoding']['prefix_length'] = c
-                right_class_model = PredModels.objects.filter(config=class_config)
-                trace.class_model = right_class_model[0]
-            result_data = runtime_calculate(run_log, trace.class_model.to_dict())
-            trace.class_results = result_data['prediction']
-            trace.class_actual = result_data['label']
-            trace.save()
-    except:
+    #except:
+       # return print("Can't find a suitable regression model for this trace")
+    #try:
+    if trace.class_model is not None:
+        if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and trace.class_model.config['encoding'][
+            'generation_type'] != ALL_IN_ONE:
+            class_config = trace.class_model.config
+            class_config['encoding']['prefix_length'] = c
+            right_class_model = PredModels.objects.filter(config=class_config)
+            trace.class_model = right_class_model[0]
+        result_data = runtime_calculate(run_log, trace.class_model.to_dict())
+        trace.class_results = result_data['prediction']
+        trace.class_actual = result_data['label']
+        trace.save()
+    #except:
         #DemoReplayer.objects.filter(pk=replayer_id).update(running=False)
-        return print("Can't find a suitable classification model for this trace")
+       #return print("Can't find a suitable classification model for this trace")
     trace.save()
     publish(trace)
 

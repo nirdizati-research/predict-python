@@ -63,6 +63,8 @@ venv.bak/
 
 .settings/
 model_cache/
+log_cache/BPI2011_20.xes
+log_cache/BPI2011_80.xes
 .dbeaver-data-sources.xml
 rqworker.sh
 supervisord.conf.save

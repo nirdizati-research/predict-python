@@ -26,6 +26,7 @@ class XTrace(models.Model):
     first_event = models.DateTimeField(null=True)
     last_event = models.DateTimeField(null=True)
     n_events = models.IntegerField(default=0)
+    error = models.CharField(default="", null=True, max_length=500)
     real_log = models.IntegerField()
     reg_results = JSONField(default={})
     class_results = JSONField(default={})
@@ -45,6 +46,7 @@ class XTrace(models.Model):
         trace['last_event'] = self.last_event
         trace['n_events'] = self.n_events
         trace['reg_results'] = self.reg_results
+        trace['error'] = self.reg_results
         trace['class_results'] = self.class_results
         trace['reg_actual'] = self.reg_results
         trace['class_actual'] = self.class_results

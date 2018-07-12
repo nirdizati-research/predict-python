@@ -14,3 +14,4 @@ python-dateutil==2.7.2
 hyperopt
 networkx==1.11
 xgboost==0.72
+rq-scheduler

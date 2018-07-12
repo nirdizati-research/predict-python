@@ -66,7 +66,10 @@ def next_event_name(trace: list, prefix_length: int):
     """
     if prefix_length < len(trace):
         next_event = trace[prefix_length]
-        name = CLASSIFIER.get_class_identity(next_event)
+        try:
+            name = CLASSIFIER.get_class_identity(next_event)
+        except:
+            name = '0'        
         return name
     else:
         return '0'

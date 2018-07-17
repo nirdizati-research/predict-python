@@ -57,15 +57,13 @@ def update_event_happened(event, event_names: list, event_happened: list, encodi
     For boolean set happened to True.
     For frequency updates happened count.
     """
-    try:
-        event_name = CLASSIFIER.get_class_identity(event)
-        event_index = event_names.index(event_name)
-        if encoding.is_boolean():
-            event_happened[event_index] = True
-        else:
-            event_happened[event_index] += 1
-    except:
-        return
+    event_name = CLASSIFIER.get_class_identity(event)
+    event_index = event_names.index(event_name)
+    if encoding.is_boolean():
+        event_happened[event_index] = True
+    else:
+        event_happened[event_index] += 1
+
 
 def create_columns(event_names: list, label: LabelContainer):
     columns = ["trace_id"]

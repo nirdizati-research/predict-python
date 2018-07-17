@@ -86,6 +86,7 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
     trace.duration = datetime.timedelta.total_seconds(dateparser(str(trace.last_event)) - dateparser(str(trace.first_event)))
     trace.n_events = c
     trace.save()
+    error = True
     
     try:
         if trace.reg_model is not None:
@@ -100,7 +101,11 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
             trace.reg_actual = result_data['label']
             trace.save()
     except Exception as e:
-       return print("An exception has occurred in regression, error:" + str(e.__repr__()))
+        error = False
+        print("An exception has occurred in regression, error:" + str(e.__repr__()))
+        trace.error = str(e.__repr__())
+        trace.save()
+        raise e
     try:
         if trace.class_model is not None:
             if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and trace.class_model.config['encoding'][
@@ -114,13 +119,16 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, end=False):
             trace.class_actual = result_data['label']
             trace.save()
     except Exception as e:
-        DemoReplayer.objects.filter(pk=replayer_id).update(running=False)
         trace.error = str(e.__repr__())
+        error = False
         trace.save()
-        return print("An exception has occurred in classification, error:" + str(e.__repr__()))
-    trace.error = ""
-    trace.save()
-    publish(trace)
+        print("An exception has occurred in classification, error:" + str(e.__repr__()))
+        raise e
+    finally:
+        if error:
+            trace.error = ""
+        trace.save()
+        publish(trace)
 
 
 def parse(xml):

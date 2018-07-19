@@ -6,6 +6,11 @@ from logs.file_service import get_logs
 from logs.models import Log
 from runtime.models import DemoReplayer
 from .replay_core import prepare
+from rq_scheduler import Scheduler
+from training.settings import RQ_QUEUES
+from datetime import timedelta
+
+scheduler = Scheduler(connection=django_rq.get_connection('default'), interval=5)
 
 
 class Replayer():
@@ -34,14 +39,15 @@ class Replayer():
         # t=threading.Thread(target=self.events_list, args=(xlog, id))
         events = self.events_list(xlog, id)
 
-    def thread_fun(self, trace, log, replayer):
+    def send_events(self, trace, log, replayer):
+        c = 0
         for event in trace:
             if replayer.running:
-                django_rq.enqueue(prepare, event, trace, log, replayer.id, self.reg_id, self.class_id, self.log)
-                sleep(randint(5, 20))
+                c = c + (randint(1, 3)*5)
+                scheduler.enqueue_in(timedelta(seconds=c), prepare, event, trace, log, replayer.id, self.reg_id, self.class_id, self.log)
             else:
                 return
-        django_rq.enqueue(prepare, event, trace, log, replayer.id, self.reg_id, self.class_id, self.log, end=True)
+        scheduler.enqueue_in(timedelta(seconds=c), prepare, event, trace, log, replayer.id, self.reg_id, self.class_id, self.log, end=True)
         return
 
     def events_list(self, logs, id):
@@ -49,10 +55,13 @@ class Replayer():
             for trace in log:
                 replayer = DemoReplayer.objects.get(pk=id)
                 if replayer.running:
-                    t=threading.Thread(target=self.thread_fun, args=(trace,log, replayer))
+                    t=threading.Thread(target=self.send_events, args=(trace, log, replayer))
                     t.daemon = True
                     t.start()
                 else:
                     replayer.delete()
                     return
+        print("Finito")
+        q = django_rq.get_failed_queue()
+        q.empty()
         return

@@ -13,4 +13,5 @@ django-websocket-redis==0.5.2
 python-dateutil==2.7.2
 hyperopt
 networkx==1.11
-xgboost==0.72
+xgboost==0.72.1
+rq-scheduler

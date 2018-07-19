@@ -1,12 +1,11 @@
 import hashlib
 
 from core.constants import LABELLING, REGRESSION
-from encoders.boolean_frequency import frequency
+from encoders.boolean_frequency import frequency, boolean
 from encoders.complex_last_payload import complex, last_payload
 from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD
 from encoders.label_container import *
 from log_util.event_attributes import unique_events2, unique_events
-from .boolean_frequency import boolean
 from .simple_index import simple_index
 
 

@@ -10,6 +10,7 @@ from rq_scheduler import Scheduler
 from training.settings import RQ_QUEUES
 from datetime import timedelta
 
+
 scheduler = Scheduler(connection=django_rq.get_connection('default'), interval=5)
 
 

@@ -1,13 +1,11 @@
 import threading
 from random import randint
-from time import sleep
 import django_rq
 from logs.file_service import get_logs
 from logs.models import Log
 from runtime.models import DemoReplayer
 from .replay_core import prepare
 from rq_scheduler import Scheduler
-from training.settings import RQ_QUEUES
 from datetime import timedelta
 
 scheduler = Scheduler(connection=django_rq.get_connection('default'), interval=5)
@@ -62,6 +60,4 @@ class Replayer():
                     replayer.delete()
                     return
         print("Finito")
-        q = django_rq.get_failed_queue()
-        q.empty()
         return

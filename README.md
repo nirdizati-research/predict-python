@@ -25,6 +25,8 @@ python manage.py test
 ./manage.py test
 ```
 
+NB: always run a redis-server in background if you want your server to accept any incoming post requests!
+
 ## Useful database operations
 Start by running migrations and adding sample data
 ```commandline

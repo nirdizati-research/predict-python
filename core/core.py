@@ -1,9 +1,10 @@
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
-    CLASSIFICATION, REGRESSION, LABELLING
+    CLASSIFICATION, REGRESSION, LABELLING, UPDATE
 from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
 from core.label_validation import label_task
+from core.update_model import update_model
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
     encode_label_log, DURATION 
 from logs.splitting import prepare_logs
@@ -41,6 +42,8 @@ def run_by_type(training_df, test_df, job):
         results, model_split = regression(training_df, test_df, job)
     elif job['type'] == LABELLING:
         results = label_task(training_df)
+    elif job['type'] == UPDATE:
+        results, model_split = update_model(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
     print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))

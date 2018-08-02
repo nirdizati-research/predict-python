@@ -29,6 +29,14 @@ def _classification_decision_tree():
     }
 
 
+def _classification_incremental_naive_bayes():
+    return {
+        'alpha' : 1.0,
+        'fit_prior' : True,
+        'class_prior' : None
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': 10,
@@ -81,9 +89,24 @@ def _kmeans():
     }
 
 
+def _update_incremental_naive_bayes():
+    return {
+        'alpha' : 1.0,
+        'fit_prior' : True,
+        'class_prior' : None
+    }
+
+
 # Map method config to a dict
-CONF_MAP = {CLASSIFICATION_RANDOM_FOREST: _classification_random_forest, CLASSIFICATION_KNN: _classification_knn,
-            CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
-            CLASSIFICATION_XGBOOST: _classification_xgboost,
-            REGRESSION_RANDOM_FOREST: _regression_random_forest, REGRESSION_XGBOOST: _regression_xgboost,
-            REGRESSION_LASSO: _regression_lasso, REGRESSION_LINEAR: _regression_linear}
+CONF_MAP = {
+    CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
+    CLASSIFICATION_KNN: _classification_knn,
+    CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
+    CLASSIFICATION_XGBOOST: _classification_xgboost,
+    CLASSIFICATION_INCREMENTAL_NAIVE_BAYES : _classification_incremental_naive_bayes,
+    REGRESSION_RANDOM_FOREST: _regression_random_forest,
+    REGRESSION_XGBOOST: _regression_xgboost,
+    REGRESSION_LASSO: _regression_lasso,
+    REGRESSION_LINEAR: _regression_linear,
+    UPDATE_INCREMENTAL_NAIVE_BAYES : _update_incremental_naive_bayes
+}

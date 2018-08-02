@@ -4,8 +4,9 @@ import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from incremental.skmultiflow.bayes import NaiveBayes
 
-from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
+from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, INCREMENTAL_NAIVE_BAYES
 
 
 def calculate_results(prediction, actual):
@@ -57,6 +58,8 @@ def choose_classifier(job: dict):
         clf = DecisionTreeClassifier(**config)
     elif method == XGBOOST:
         clf = xgb.XGBClassifier(**config)
+    elif method == INCREMENTAL_NAIVE_BAYES:
+        clf = NaiveBayes(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf

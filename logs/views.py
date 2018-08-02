@@ -35,6 +35,7 @@ class LogDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):
     """Get log statistics

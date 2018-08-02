@@ -120,6 +120,25 @@ def no_clustering_train(original_test_data, train_data, clf):
     return original_test_data, auc, model_split
 
 
+def no_clustering_update(original_test_data, train_data, clf):
+    y = train_data['actual']
+
+    clf.partial_fit(train_data.drop('actual', 1), y)
+    actual = original_test_data["actual"]
+    original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
+    original_test_data["actual"] = actual
+
+    auc = 0
+    try:
+        auc = metrics.roc_auc_score(actual, scores)
+    except ValueError:
+        pass
+    model_split = dict()
+    model_split[ 'type' ] = NO_CLUSTER
+    model_split[ 'model' ] = clf
+    return original_test_data, auc, model_split, clf
+
+
 def no_clustering_test(test_data, clf, testing=False):
     prediction = clf.predict(test_data.drop('trace_id', 1))
     scores = 0

@@ -4,7 +4,8 @@ from sklearn.externals import joblib
 
 from core.binary_classification import no_clustering_update
 from core.common import calculate_results
-from core.constants import INCREMENTAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION
+from core.constants import INCREMENTAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, INCREMENTAL_ADAPTIVE_TREE, \
+    INCREMENTAL_HOEFFDING_TREE
 from predModels.models import PredModels
 
 
@@ -23,6 +24,10 @@ def retrieve_model_from_cache(job : dict):
 def choose_clf_model(job : dict):
     method = job['method']
     if method == INCREMENTAL_NAIVE_BAYES:
+        clf, model = retrieve_model_from_cache(job)
+    elif method == INCREMENTAL_ADAPTIVE_TREE:
+        clf, model = retrieve_model_from_cache(job)
+    elif method == INCREMENTAL_HOEFFDING_TREE:
         clf, model = retrieve_model_from_cache(job)
     else:
         raise ValueError('Unexpected Incremental method %s' % method)

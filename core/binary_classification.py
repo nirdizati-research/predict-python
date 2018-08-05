@@ -4,7 +4,7 @@ from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 from core.common import choose_classifier, calculate_results, add_actual
-from core.constants import KMEANS, NO_CLUSTER
+from core.constants import KMEANS, NO_CLUSTER, HOEFFDING_TREE, ADAPTIVE_TREE
 
 pd.options.mode.chained_assignment = None
 
@@ -103,8 +103,10 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
 
 def no_clustering_train(original_test_data, train_data, clf):
     y = train_data['actual']
-
-    clf.fit(train_data.drop('actual', 1), y)
+    try:
+        clf.fit(train_data.drop('actual', 1), y)
+    except:
+        clf.partial_fit(train_data.drop('actual', 1).as_matrix(), y)
     actual = original_test_data["actual"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
     original_test_data["actual"] = actual
@@ -123,9 +125,17 @@ def no_clustering_train(original_test_data, train_data, clf):
 def no_clustering_update(original_test_data, train_data, clf):
     y = train_data['actual']
 
-    clf.partial_fit(train_data.drop('actual', 1), y)
+    if clf.__class__.__name__ == HOEFFDING_TREE or clf.__class__.__name__ == ADAPTIVE_TREE:
+        _train_data = train_data.drop('actual', 1).as_matrix()
+    else:
+        _train_data = train_data.drop('actual', 1)
+
+    clf.partial_fit(_train_data, y)
+
     actual = original_test_data["actual"]
+
     original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
+
     original_test_data["actual"] = actual
 
     auc = 0
@@ -140,10 +150,14 @@ def no_clustering_update(original_test_data, train_data, clf):
 
 
 def no_clustering_test(test_data, clf, testing=False):
-    prediction = clf.predict(test_data.drop('trace_id', 1))
+    if clf.__class__.__name__ == HOEFFDING_TREE or clf.__class__.__name__ == ADAPTIVE_TREE:
+        _test_data = test_data.drop('trace_id', 1).as_matrix()
+    else:
+        _test_data = test_data.drop('trace_id', 1)
+    prediction = clf.predict(_test_data)
     scores = 0
     if testing:
-        scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
+        scores = clf.predict_proba(_test_data)[:, 1]
     test_data["predicted"] = prediction
     return test_data, scores
 

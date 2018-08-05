@@ -37,6 +37,43 @@ def _classification_incremental_naive_bayes():
     }
 
 
+def _classification_incremental_adaptive_tree():
+    return {
+        'max_byte_size' : 33554432,
+        'memory_estimate_period' : 1000000,
+        'grace_period' : 200,
+        'split_criterion' : 'info_gain',
+        'split_confidence' : .0000001,
+        'tie_threshold' : .05,
+        'binary_split' : False,
+        'stop_mem_management' : False,
+        'remove_poor_atts' : False,
+        'no_preprune' : False,
+        'leaf_prediction' : 'nba',
+        'nb_threshold' : 0,
+        'nominal_attributes' : [] # <-- if this is empty assume all attributes are numerical
+
+    }
+
+
+def _classification_incremental_hoeffding_tree():
+    return {
+        'max_byte_size' : 33554432,
+        'memory_estimate_period' : 1000000,
+        'grace_period' : 200,
+        'split_criterion' : 'info_gain',
+        'split_confidence' : .0000001,
+        'tie_threshold' : .05,
+        'binary_split' : False,
+        'stop_mem_management' : False,
+        'remove_poor_atts' : False,
+        'no_preprune' : False,
+        'leaf_prediction' : 'nba',
+        'nb_threshold' : 0,
+        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': 10,
@@ -97,6 +134,42 @@ def _update_incremental_naive_bayes():
     }
 
 
+def _update_incremental_adaptive_tree():
+    return {
+        'max_byte_size': 33554432,
+        'memory_estimate_period': 1000000,
+        'grace_period': 200,
+        'split_criterion': 'info_gain',
+        'split_confidence': .0000001,
+        'tie_threshold': .05,
+        'binary_split': False,
+        'stop_mem_management': False,
+        'remove_poor_atts': False,
+        'no_preprune': False,
+        'leaf_prediction': 'nba',
+        'nb_threshold': 0,
+        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+    }
+
+
+def _update_incremental_hoeffding_tree():
+    return {
+        'max_byte_size': 33554432,
+        'memory_estimate_period': 1000000,
+        'grace_period': 200,
+        'split_criterion': 'info_gain',
+        'split_confidence': .0000001,
+        'tie_threshold': .05,
+        'binary_split': False,
+        'stop_mem_management': False,
+        'remove_poor_atts': False,
+        'no_preprune': False,
+        'leaf_prediction': 'nba',
+        'nb_threshold': 0,
+        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+    }
+
+
 # Map method config to a dict
 CONF_MAP = {
     CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
@@ -104,9 +177,13 @@ CONF_MAP = {
     CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
     CLASSIFICATION_XGBOOST: _classification_xgboost,
     CLASSIFICATION_INCREMENTAL_NAIVE_BAYES : _classification_incremental_naive_bayes,
+    CLASSIFICATION_INCREMENTAL_ADAPTIVE_TREE : _classification_incremental_adaptive_tree,
+    CLASSIFICATION_INCREMENTAL_HOEFFDING_TREE : _classification_incremental_hoeffding_tree,
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,
     REGRESSION_LINEAR: _regression_linear,
-    UPDATE_INCREMENTAL_NAIVE_BAYES : _update_incremental_naive_bayes
+    UPDATE_INCREMENTAL_NAIVE_BAYES : _update_incremental_naive_bayes,
+    UPDATE_INCREMENTAL_ADAPTIVE_TREE : _update_incremental_adaptive_tree,
+    UPDATE_INCREMENTAL_HOEFFDING_TREE : _update_incremental_hoeffding_tree
 }

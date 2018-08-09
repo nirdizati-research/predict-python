@@ -2,6 +2,7 @@
 
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from skmultiflow.bayes import NaiveBayes
@@ -61,7 +62,7 @@ def choose_classifier(job: dict):
     elif method == XGBOOST:
         clf = xgb.XGBClassifier(**config)
     elif method == INCREMENTAL_NAIVE_BAYES:
-        clf = NaiveBayes(**config)
+        clf = MultinomialNB(**config)
     elif method == INCREMENTAL_ADAPTIVE_TREE:
         clf = HAT(**config)
     elif method == INCREMENTAL_HOEFFDING_TREE:

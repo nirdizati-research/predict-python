@@ -2,7 +2,7 @@ Django==1.11.7
 djangorestframework==3.7.1
 pytz==2017.3
 git+git://github.com/TKasekamp/OpyenXes@master#egg=opyenxes
-pandas==0.21.0
+pandas
 numpy==1.13.3
 scikit-learn==0.19.1
 scipy==1.0.0
@@ -15,3 +15,4 @@ hyperopt
 networkx==1.11
 xgboost==0.72.1
 rq-scheduler
+git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow

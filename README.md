@@ -133,6 +133,7 @@ sudo apt-get install -y nodejs
 # https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
 sudo apt install redis-server
 sudo nano /etc/redis/redis.conf
+# Follow instructions and change supervised setting
 sudo systemctl restart redis.service
 
 # Frontend

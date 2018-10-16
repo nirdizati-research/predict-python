@@ -1,4 +1,4 @@
-Django==1.11.7
+Django==1.11.15
 djangorestframework==3.7.1
 pytz==2017.3
 git+git://github.com/TKasekamp/OpyenXes@master#egg=opyenxes

@@ -169,3 +169,4 @@ npm start
 ## Contributors
 - [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi
+- [@fmmaggi](https://github.com/fmmaggi) Fabrizio Maggi

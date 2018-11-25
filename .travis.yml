@@ -1,12 +1,36 @@
-language: python
-cache: pip
-services:
-  - redis-server
-python:
-  - "3.5"
-  - "3.6"
-  - "3.6-dev" # 3.6 development branch
-install:
-  - pip install -r requirements.txt
-script:
-  - python manage.py test
+git:
+  depth: 1
+jobs:
+  include:
+  - language: python
+    python: '3.5'
+    cache: pip
+    services: redis-server
+    install: pip install -r requirements.txt
+    script: python manage.py test
+  - language: python
+    python: '3.6'
+    cache: pip
+    services: redis-server
+    install: pip install -r requirements.txt
+    script: python manage.py test
+  - stage: before_deploy
+    language: minimal
+    name: Build Docker image and push to Docker Hub registry
+    services: docker
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t nirdizatiresearch/predict-python:$TRAVIS_COMMIT .
+    - docker build -t nirdizatiresearch/predict-python .
+    - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
+    - docker push nirdizatiresearch/predict-python
+  - stage: deploy
+    name: Server deployment
+    language: minimal
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script: bash deploy.sh
+before_install:
+- openssl aes-256-cbc -K $encrypted_63f10e360d0e_key -iv $encrypted_63f10e360d0e_iv
+  -in cloud.key.enc -out ./cloud.key -d

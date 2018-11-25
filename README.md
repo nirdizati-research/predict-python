@@ -1,11 +1,13 @@
 # Predict python
 
-[![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=master)](https://travis-ci.org/TKasekamp/predict-python)
+[![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=master)](https://travis-ci.org/nirdizati-research/predict-python)
 
 Django backend server for machine learning on event logs.
 
 ## Requirements
 Click the CI badge to see the supported Python versions.
+
+### Docker build available @ https://hub.docker.com/r/nirdizatiresearch/predict-python/
 
 ## Setup
 

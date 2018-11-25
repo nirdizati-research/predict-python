@@ -1,11 +1,11 @@
-Django==1.11.7
+Django==1.11.15
 djangorestframework==3.7.1
+NumPy==1.15
 pytz==2017.3
 git+git://github.com/TKasekamp/OpyenXes@master#egg=opyenxes
-pandas==0.21.0
-numpy==1.13.3
-scikit-learn==0.19.1
-scipy==1.0.0
+pandas
+scikit-learn==0.20
+scipy==1.1.0
 jsonfield==2.0.2
 django-rq==1.0.0
 django-cors-headers==2.0.0
@@ -13,5 +13,6 @@ django-websocket-redis==0.5.2
 python-dateutil==2.7.2
 hyperopt
 networkx==1.11
-xgboost==0.72.1
+xgboost
 rq-scheduler
+dill

@@ -4,15 +4,37 @@ services:
   redis:
     image: redis:alpine
 
-  predict-python-server:
+  server:
     image: nirdizatiresearch/predict-python
-    command: python3 manage.py runserver localhost:8000
+    command: python3 manage.py runserver 0.0.0.0:8000
+    restart: unless-stopped
+    tty: true
+    stop_signal: SIGINT
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - 8000:8000
+    volumes:
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/db/
+        target: /predict-python/db/
 
-  predict-python-scheduler:
+  scheduler:
     image: nirdizatiresearch/predict-python
-    command: python3 manage.py rqscheduler localhost:8000
+    build:
+      context: .
+    command: python3 manage.py rqscheduler
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 
-  predict-python-worker:
+  worker:
     image: nirdizatiresearch/predict-python
     command: python3 manage.py rqworker default
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
 

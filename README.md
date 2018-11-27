@@ -168,6 +168,10 @@ npm start
 # Backend visible at localhost:8000
 ```
 
+## Docker Compose
+
+docker-compose run server python manage.py migrate
+
 ## Contributors
 - [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi

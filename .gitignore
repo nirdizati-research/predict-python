@@ -74,3 +74,6 @@ src/
 
 .idea/
 # End of https://www.gitignore.io/api/python,django
+
+dump.rdb
+db/*.sqlite3

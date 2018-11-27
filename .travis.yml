@@ -28,6 +28,7 @@ jobs:
     - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
     - docker push nirdizatiresearch/predict-python
   - stage: deploy
+    dist: xenial
     name: Server deployment
     language: minimal
     deploy:

@@ -170,7 +170,12 @@ npm start
 
 ## Docker Compose
 
+To setup the database, execute only the first time the project is setup
 docker-compose run server python manage.py migrate
+
+To access the remote Django server on localhost:8000
+
+ssh -L 8000:127.0.0.1:8000 predict-python
 
 ## Contributors
 - [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 

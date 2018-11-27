@@ -15,8 +15,4 @@ RUN pip3 install -r requirements.txt && \
 # Add all the project files
 ADD . /predict-python
 
-# RUN python3 manage.py migrate
-
-#CMD [ "python", "manage.py", "runserver", "localhost:80" ]
-#CMD [ "python", "manage.py", "rqscheduler", "localhost:80" ]
-#CMD [ "python", "manage.py", "rqworker", "default" ]
+EXPOSE 8000

@@ -29,6 +29,8 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+    ports:
+      - 80:80
 
   worker:
     image: nirdizatiresearch/predict-python

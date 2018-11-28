@@ -11,4 +11,4 @@ RUN pip3 install --no-cache-dir -r requirements.txt && \
 # Add all the project files
 ADD . /predict-python
 
-EXPOSE 8000
+EXPOSE 80

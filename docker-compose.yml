@@ -14,7 +14,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
-      - 80:80
+      - 8000:8000
     volumes:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/db/
@@ -30,7 +30,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
-      - 80:80
+      - 8000:8000
 
   worker:
     image: nirdizatiresearch/predict-python

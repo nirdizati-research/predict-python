@@ -14,7 +14,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     ports:
-      - 8000:8000
+      - 80:80
     volumes:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/db/

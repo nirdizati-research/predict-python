@@ -29,6 +29,10 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
+    volumes:
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/db/
+        target: /predict-python/db/
 
   worker:
     image: nirdizatiresearch/predict-python
@@ -37,4 +41,7 @@ services:
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
-
+    volumes:
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/db/
+        target: /predict-python/db/

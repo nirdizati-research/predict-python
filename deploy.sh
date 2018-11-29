@@ -17,7 +17,9 @@ export DOCKER_HOST=unix:///tmp/docker.sock
 docker-compose pull
 
 # Start up the new containers
-docker-compose up --detach --force-recreate server scheduler worker
+docker-compose up --detach --force-recreate server
+docker-compose up --detach --force-recreate scheduler 
+docker-compose up --detach --force-recreate worker
 
 # Close the SSH connection using the control socket opened previously
 ssh -S my-ctrl-socket -O exit ${SERVER_USER}@${SERVER_IP}

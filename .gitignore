@@ -72,7 +72,10 @@ supervisord.conf.save
 .pydevproject
 src/
 
-.idea/
+!.idea
+!.idea/runConfigurations/
+.idea/*
+
 # End of https://www.gitignore.io/api/python,django
 
 dump.rdb

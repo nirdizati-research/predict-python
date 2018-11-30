@@ -2,6 +2,10 @@
 set -o nounset
 set -o errexit
 
+# Unlock SSH private key using TRAVIS automatic encryption
+# See https://docs.travis-ci.com/user/encrypting-files/#automated-encryption
+openssl aes-256-cbc -K $encrypted_6a567f0c75d9_key -iv $encrypted_6a567f0c75d9_iv -in cloud.key.enc -out ./cloud.key -d
+
 eval "$(ssh-agent -s)"
 chmod 600 ./cloud.key
 echo -e "Host ${SERVER_IP}\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
@@ -11,7 +15,7 @@ ssh-add ./cloud.key
 # SSH is put in control-socket mode, to close the connection when we have finished
 ssh -M -S my-ctrl-socket -fnNT -o ExitOnForwardFailure=yes -L /tmp/docker.sock:/var/run/docker.sock ${SERVER_USER}@${SERVER_IP}
 
-# Tell docker-compose to use the remote socket to talk to the DOcker daemon on the server
+# Tell docker-compose to use the remote socket to talk to the Docker daemon on the server
 export DOCKER_HOST=unix:///tmp/docker.sock
 
 docker-compose pull

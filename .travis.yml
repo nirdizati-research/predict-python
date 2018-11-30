@@ -17,7 +17,9 @@ jobs:
     services: redis-server
     install: pip install -r requirements.txt
     script: python manage.py test
+
   - stage: before_deploy
+    if: branch = master AND type = push
     language: minimal
     name: Build Docker image and push to Docker Hub registry
     services: docker
@@ -27,7 +29,9 @@ jobs:
     - docker build -t nirdizatiresearch/predict-python .
     - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
     - docker push nirdizatiresearch/predict-python
+
   - stage: deploy
+    if: branch = master AND type = push
     dist: xenial
     name: Server deployment
     language: minimal
@@ -35,6 +39,3 @@ jobs:
       provider: script
       skip_cleanup: true
       script: bash deploy.sh
-before_install:
-- openssl aes-256-cbc -K $encrypted_63f10e360d0e_key -iv $encrypted_63f10e360d0e_iv
-  -in cloud.key.enc -out ./cloud.key -d

@@ -165,5 +165,12 @@ RQ_QUEUES = {
     }
 }
 
+WS4REDIS_CONNECTION = {
+    'host': os.environ["REDIS_HOST"],
+    'port': os.environ["REDIS_PORT"],
+    'db': 0,
+    'password': None,
+}
+
 WEBSOCKET_URL = '/ws/'
 WS4REDIS_PREFIX = 'ws'

@@ -4,17 +4,30 @@
 
 Django backend server for machine learning on event logs.
 
-## Requirements
-Click the CI badge to see the supported Python versions.
+## Running in a new environment
+The docker build is available @ https://hub.docker.com/r/nirdizatiresearch/predict-python/ in any case if you prefer to setup your environment on your own you can refer the [Dockerfile](Dockerfile).
 
-### Docker build available @ https://hub.docker.com/r/nirdizatiresearch/predict-python/
+## Docker Compose
 
-## Setup
-
-Install with
+On first run to setup the database, you can run:
 ```commandline
-pip install -r requirements.txt
+docker-compose run server python manage.py migrate
 ```
+
+To run the project:
+```commandline
+docker-compose up server scheduler worker
+```
+
+##### [USEFUL TIP] To access a generic remote Django server you can use the ssh tunneling functionality as shown in the following sample:
+```commandline
+ssh -L 8000:127.0.0.1:8000 <user>@<host>
+```
+
+## Run an instance of the project
+If you are familiar with docker-compose the [docker-compose](docker-compose.yml) file is available, otherwise if you use pycharm as IDE is available the run configuration in the [runConfiguration](.idea/runConfigurations) settings.
+
+Finally, from the command line you can use the following sample commands to interact with our software.
 
 Start server with
 ```commandline
@@ -27,7 +40,6 @@ python manage.py test
 ./manage.py test
 ```
 
-## Useful database operations
 Start by running migrations and adding sample data
 ```commandline
 python manage.py migrate
@@ -118,66 +130,10 @@ curl --request POST \
 http://localhost:8000/jobs/multiple
 ```
 
-# Running in a new environment
-The following is all the commands needed to set up the backend and [predict-react](https://github.com/nirdizati-research/predict-react) in a new environment. The guide was created for Ubuntu 18.04, but it should work on any linux or mac system. 
-
-```bash
-sudo apt install git
-sudo apt install curl
-sudo apt install make
-sudo apt-get install build-essential # maybe not everything is needed, but at least g++
-
-# for npm
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Redis for job queues
-# https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
-sudo apt install redis-server
-sudo nano /etc/redis/redis.conf
-# Follow instructions and change supervised setting
-sudo systemctl restart redis.service
-
-# Frontend
-git clone https://github.com/nirdizati-research/predict-react.git
-npm install
-npm start # test that is available in localhost:3000
-
-# Python 3 needed
-cd .. # back to home folder
-sudo apt install python3-pip
-git clone https://github.com/nirdizati-research/predict-python.git
-pip3 install -r requirements.txt
-
-# DB setup
-python3 manage.py migrate
-python3 manage.py loaddata all_model_data.json
-# deployment
-chmod +x deployment.sh killall.sh
-# Change .deployment.sh to run at port 8000. Change 
-# sudo nohup python3 manage.py runserver 0.0.0.0:80 &
-# to
-# sudo nohup python3 manage.py runserver 0.0.0.0:8000 & 
-
-
-# Frontend start. run this in predict-react. server runs until command exited
-npm start
-# Frontend visible at localhost:3000
-# Backend start. Run in predict-python. Runs as a background process until ./killall.sh is run
-./deployment.sh
-# Backend visible at localhost:8000
-```
-
-## Docker Compose
-
-To setup the database, execute only the first time the project is setup
-docker-compose run server python manage.py migrate
-
-To access the remote Django server on localhost:8000
-
-ssh -L 8000:127.0.0.1:8000 predict-python
-
 ## Contributors
 - [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi
 - [@fmmaggi](https://github.com/fmmaggi) Fabrizio Maggi
+- [@dfmchiara](https://github.com/dfmchiara) Chiara Di Francescomarino 
+- [@williamsrizzi](https://github.com/WilliamsRizzi) Williams Rizzi
+- [@mrsonuk](https://github.com/mrsonuk) Santosh Kumar

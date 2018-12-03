@@ -16,7 +16,7 @@ docker-compose run server python manage.py migrate
 
 To run the project:
 ```commandline
-docker-compose up server scheduler worker
+docker-compose up redis server scheduler worker
 ```
 
 ##### [USEFUL TIP] To access a generic remote Django server you can use the ssh tunneling functionality as shown in the following sample:

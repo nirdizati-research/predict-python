@@ -119,7 +119,7 @@ WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db/db.sqlite3'),
     }
 }
 
@@ -158,11 +158,18 @@ STATIC_URL = '/static/'
 
 RQ_QUEUES = {
     'default': {
-        'HOST': '0.0.0.0',
-        'PORT': 6379,
+        'HOST': os.environ["REDIS_HOST"],
+        'PORT': os.environ["REDIS_PORT"],
         'DB': 0,
         'DEFAULT_TIMEOUT': 7200,
     }
+}
+
+WS4REDIS_CONNECTION = {
+    'host': os.environ["REDIS_HOST"],
+    'port': os.environ["REDIS_PORT"],
+    'db': 0,
+    'password': None,
 }
 
 WEBSOCKET_URL = '/ws/'

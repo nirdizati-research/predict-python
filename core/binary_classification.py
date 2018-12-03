@@ -3,6 +3,9 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
+from sklearn.naive_bayes import MultinomialNB
+from skmultiflow.trees import HoeffdingTree, HAT
+
 from core.common import choose_classifier, calculate_results, add_actual
 from core.constants import KMEANS, NO_CLUSTER, HOEFFDING_TREE, ADAPTIVE_TREE
 
@@ -103,18 +106,33 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
 
 def no_clustering_train(original_test_data, train_data, clf):
     y = train_data['actual']
+    # if isinstance(clf, MultinomialNB):
+    #     clf.__init__(alpha=clf.get_params()[ 'alpha' ], class_prior=list( y.value_counts(normalize=True) ),
+    #                  fit_prior=True)
     try:
         clf.fit(train_data.drop('actual', 1), y)
     except:
-        clf.partial_fit(train_data.drop('actual', 1).as_matrix(), y)
+        clf.partial_fit(train_data.drop('actual', 1).values, y)
     actual = original_test_data["actual"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
     original_test_data["actual"] = actual
+
+    if isinstance(clf, HoeffdingTree) or isinstance(clf, HAT):
+        print()
+        print('\tRESULTING TREE:')
+        print(clf.get_model_description())
+        print()
+    elif isinstance(clf, MultinomialNB):
+        print()
+        print('\tRESULTING PRIOR:')
+        print(np.exp(clf.class_log_prior_))
+        print()
 
     auc = 0
     try:
         auc = metrics.roc_auc_score(actual, scores)
     except ValueError:
+        print('ValueError in AUC_ROC')
         pass
     model_split = dict()
     model_split['type'] = NO_CLUSTER
@@ -126,7 +144,7 @@ def no_clustering_update(original_test_data, train_data, clf):
     y = train_data['actual']
 
     if clf.__class__.__name__ == HOEFFDING_TREE or clf.__class__.__name__ == ADAPTIVE_TREE:
-        _train_data = train_data.drop('actual', 1).as_matrix()
+        _train_data = train_data.drop('actual', 1).values
     else:
         _train_data = train_data.drop('actual', 1)
 
@@ -151,13 +169,16 @@ def no_clustering_update(original_test_data, train_data, clf):
 
 def no_clustering_test(test_data, clf, testing=False):
     if clf.__class__.__name__ == HOEFFDING_TREE or clf.__class__.__name__ == ADAPTIVE_TREE:
-        _test_data = test_data.drop('trace_id', 1).as_matrix()
+        _test_data = test_data.drop('trace_id', 1).values
     else:
         _test_data = test_data.drop('trace_id', 1)
     prediction = clf.predict(_test_data)
     scores = 0
     if testing:
-        scores = clf.predict_proba(_test_data)[:, 1]
+        try:
+            scores = clf.predict_proba(_test_data)[:, 1]
+        except:
+            scores = clf.predict_proba(_test_data).T#his is bad
     test_data["predicted"] = prediction
     return test_data, scores
 

@@ -72,5 +72,20 @@ supervisord.conf.save
 .pydevproject
 src/
 
-.idea/
+!.idea
+!.idea/runConfigurations/
+.idea/*
+
 # End of https://www.gitignore.io/api/python,django
+
+dump.rdb
+db/*.sqlite3
+
+*.icloud
+*.sav
+*.DS_Store
+*.ipynb_checkpoints/
+
+*/migrations/*
+
+model_cache/*

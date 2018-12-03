@@ -13,6 +13,8 @@ django-websocket-redis==0.5.2
 python-dateutil==2.7.2
 hyperopt
 networkx==1.11
-xgboost==0.72.1
+xgboost
 rq-scheduler
-git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
+dill
+rq==0.12.0
+redis==2.10.6

@@ -4,6 +4,7 @@ from logs.models import Log
 
 
 def create_log(file, name: str, folder='log_cache/'):
+    # TODO change the naming procedure of the files in order to avoid shadowing between uploads
     path = folder + name
     from logs.file_service import save_file
     save_file(file, path)

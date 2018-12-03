@@ -46,7 +46,9 @@ def run_by_type(training_df, test_df, job):
         results, model_split = update_model(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
-    print("End job {}, {} . Results {}".format(job['type'], get_run(job), results))
+
+    print("End job {}, {} .".format(job['type'], get_run(job)))
+    print("\tResults {} .".format(results))
     return results, model_split
 
 

@@ -1,3 +1,4 @@
+import time
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
@@ -17,10 +18,13 @@ def prediction_task(job_id):
         if job.status == CREATED:
             job.status = RUNNING
             job.save()
+            start_time = time.time()
             if job.config.get('hyperopt', {}).get('use_hyperopt', False):
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job.to_dict())
+            elapsed_time = time.time() - start_time
+            print('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
             if job.config.get('create_models', False):
                 save_models(model_split, job)
             job.result = result

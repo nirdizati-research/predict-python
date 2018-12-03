@@ -1,3 +1,5 @@
+from sklearn import metrics
+
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
@@ -103,6 +105,11 @@ def no_clustering_train(original_test_data, train_data, clf):
     original_test_data["actual"] = actual
     # TODO calculate AUC
     auc = 0
+    try:
+        auc = metrics.roc_auc_score(actual, scores)
+    except ValueError:
+        print('ValueError in AUC_ROC')
+        pass
     model_split = dict()
     model_split['type'] = NO_CLUSTER
     model_split['model'] = clf

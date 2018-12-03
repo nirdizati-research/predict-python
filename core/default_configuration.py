@@ -52,7 +52,6 @@ def _classification_incremental_adaptive_tree():
         'leaf_prediction' : 'nba',
         'nb_threshold' : 0,
         'nominal_attributes' : [] # <-- if this is empty assume all attributes are numerical
-
     }
 
 
@@ -138,16 +137,16 @@ def _update_incremental_adaptive_tree():
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
-        'grace_period': 200,
+        'grace_period': 3,
         'split_criterion': 'info_gain',
-        'split_confidence': .0000001,
-        'tie_threshold': .05,
+        'split_confidence': .0000007,
+        'tie_threshold': .35,
         'binary_split': False,
         'stop_mem_management': False,
         'remove_poor_atts': False,
         'no_preprune': False,
         'leaf_prediction': 'nba',
-        'nb_threshold': 0,
+        'nb_threshold': 0.4,
         'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
     }
 
@@ -156,16 +155,16 @@ def _update_incremental_hoeffding_tree():
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
-        'grace_period': 200,
-        'split_criterion': 'info_gain',
-        'split_confidence': .0000001,
-        'tie_threshold': .05,
+        'grace_period': 6,
+        'split_criterion': 'gini',
+        'split_confidence': .0000008,
+        'tie_threshold': .6,
         'binary_split': False,
         'stop_mem_management': False,
-        'remove_poor_atts': False,
+        'remove_poor_atts': True,
         'no_preprune': False,
-        'leaf_prediction': 'nba',
-        'nb_threshold': 0,
+        'leaf_prediction': 'mc',
+        'nb_threshold': 0.3,
         'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
     }
 

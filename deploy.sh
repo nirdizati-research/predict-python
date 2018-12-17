@@ -22,6 +22,7 @@ docker-compose pull
 
 # Start up the new containers
 docker-compose up --detach --force-recreate redis server scheduler --scale worker=4
+docker-compose up --detach --force-recreate --scale worker=4
 
 # Close the SSH connection using the control socket opened previously
 ssh -S my-ctrl-socket -O exit ${SERVER_USER}@${SERVER_IP}

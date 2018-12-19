@@ -4,7 +4,7 @@ set -o errexit
 
 # Unlock SSH private key using TRAVIS automatic encryption
 # See https://docs.travis-ci.com/user/encrypting-files/#automated-encryption
-openssl aes-256-cbc -K $encrypted_63f10e360d0e_key -iv $encrypted_63f10e360d0e_iv -in cloud.key.enc -out ./cloud.key -d
+openssl aes-256-cbc -K ${encrypted_63f10e360d0e_key} -iv ${encrypted_63f10e360d0e_iv} -in cloud.key.enc -out ./cloud.key -d
 
 eval "$(ssh-agent -s)"
 chmod 600 ./cloud.key

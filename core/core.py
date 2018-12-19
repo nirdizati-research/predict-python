@@ -1,11 +1,11 @@
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
     CLASSIFICATION, REGRESSION, LABELLING
+from core.label_validation import label_task
 from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
-from core.label_validation import label_task
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
-    encode_label_log, DURATION 
+    encode_label_log, DURATION
 from logs.splitting import prepare_logs
 
 

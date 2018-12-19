@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-import json
 import csv
-import xml.etree.ElementTree as Et
 import datetime
+import json
 import subprocess
+import xml.etree.ElementTree as Et
 
 from dateutil.parser import parse as dateparser
 from opyenxes.factory.XFactory import XFactory
@@ -12,11 +12,9 @@ from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 
 from core.core import runtime_calculate
 from encoders.encoding_container import ZERO_PADDING, ALL_IN_ONE
-from predModels.models import PredModels
-from runtime.models import XTrace, XEvent, XLog, DemoReplayer
 from jobs.ws_publisher import publish
-
-
+from predModels.models import PredModels
+from runtime.models import XTrace, XEvent, XLog
 
 
 def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=False):
@@ -38,9 +36,10 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
     serializer.add_attributes(trtmp, tr.get_attributes().values())
     serializer.add_attributes(evtmp, ev.get_attributes().values())
 
-    log_config = Et.tostring(logtmp)
-    trace_config = Et.tostring(trtmp)
-    event_config = Et.tostring(evtmp)
+    # TODO: check if still needed
+    # log_config = Et.tostring(logtmp)
+    # trace_config = Et.tostring(trtmp)
+    # event_config = Et.tostring(evtmp)
     event_xid = ev.get_id()
 
     log_map = json.dumps(xMap_to_dict(lg.get_attributes()))
@@ -49,15 +48,15 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
     trace_map = json.dumps(tmap)
     xmap = ev.get_attributes()
     event_map = json.dumps(xMap_to_dict(xmap))
-    
 
     log, created = XLog.objects.get_or_create(config=log_map, real_log=real_log)
     try:
-        trace = XTrace.objects.get(name = tname, config=trace_map, xlog=log)
+        trace = XTrace.objects.get(name=tname, config=trace_map, xlog=log)
         trace.reg_model = reg_model
         trace.class_model = class_model
     except XTrace.DoesNotExist:
-        trace = XTrace.objects.create(name = tname, config=trace_map, xlog=log, reg_model=reg_model, class_model=class_model, real_log=real_log.id)
+        trace = XTrace.objects.create(name=tname, config=trace_map, xlog=log, reg_model=reg_model,
+                                      class_model=class_model, real_log=real_log.id)
 
     if end:
         trace.completed = True
@@ -74,14 +73,14 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
         event = XEvent.objects.create(config=event_map, trace=trace, xid=event_xid.__str__())
 
     events = XEvent.objects.filter(trace=trace, pk__lte=event.id)
-    
+
     if nn:
         next_activities(events, trace)
-    else:    
+    else:
         run_log = run.create_log(XAttributeMap(json.loads(log.config)))
         run_trace = run.create_trace(XAttributeMap(json.loads(trace.config)))
         c = 0
-    
+
         for event in events:
             c = c + 1
             evt = run.create_event(XAttributeMap(json.loads(event.config)))
@@ -90,12 +89,13 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
         if c == 1:
             trace.first_event = str(xmap.get('time:timestamp'))
         trace.last_event = str(xmap.get('time:timestamp'))
-        
-        trace.duration = datetime.timedelta.total_seconds(dateparser(str(trace.last_event)) - dateparser(str(trace.first_event)))
+
+        trace.duration = datetime.timedelta.total_seconds(
+            dateparser(str(trace.last_event)) - dateparser(str(trace.first_event)))
         trace.n_events = c
         trace.save()
         error = True
-        
+
         try:
             if trace.reg_model is not None:
                 if trace.reg_model.config['encoding']['padding'] != ZERO_PADDING and trace.reg_model.config['encoding'][
@@ -109,15 +109,15 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
                 trace.reg_actual = result_data['label']
                 trace.save()
         except Exception as e:
-            error = False
             print("An exception has occurred in regression, error:" + str(e.__repr__()))
             trace.error = str(e.__repr__())
             trace.save()
             raise e
         try:
             if trace.class_model is not None:
-                if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and trace.class_model.config['encoding'][
-                    'generation_type'] != ALL_IN_ONE:
+                if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and \
+                    trace.class_model.config['encoding'][
+                        'generation_type'] != ALL_IN_ONE:
                     class_config = trace.class_model.config
                     class_config['encoding']['prefix_length'] = c
                     right_class_model = PredModels.objects.filter(config=class_config)
@@ -137,7 +137,7 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
                 trace.error = ""
             trace.save()
             publish(trace)
-        
+
 
 def parse(xml):
     element = Et.fromstring(xml.encode("utf-8"))
@@ -149,6 +149,7 @@ def xMap_to_dict(xmap):
     for key in xmap.keys():
         d[key] = str(xmap.get(key))
     return d
+
 
 def next_activities(events, trace):
     event_log = open('../Process-Sequence-Prediction-with-A-priori-knowledge/data/Sepsis_test.csv', 'w')
@@ -165,14 +166,13 @@ def next_activities(events, trace):
         event_row.append(tstamp[:-6])
         csvwriter.writerow(event_row)
     event_log.close()
-    py2command = "/home/stefano/Scrivania/Tirocinio/right/Process-Sequence-Prediction-with-A-priori-knowledge/src/support_scripts/csv_converter.py"
+    py2command = "/home/stefano/Scrivania/Tirocinio/right/Process-Sequence-Prediction-with-A-priori-knowledge/src" \
+                 "/support_scripts/csv_converter.py "
     process = subprocess.Popen(py2command.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     exitcode = process.wait()
-    py2commandrun = "/home/stefano/Scrivania/Tirocinio/right/Process-Sequence-Prediction-with-A-priori-knowledge/src/evaluate_next_activity_and_time.py"
+    py2commandrun = "/home/stefano/Scrivania/Tirocinio/right/Process-Sequence-Prediction-with-A-priori-knowledge/src" \
+                    "/evaluate_next_activity_and_time.py "
     process = subprocess.Popen(py2commandrun.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     exitcode = process.wait()
-    
-        
-    

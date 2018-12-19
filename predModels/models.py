@@ -2,11 +2,11 @@ from django.db import models
 from jsonfield.fields import JSONField
 
 from core.constants import *
+from encoders.encoding_container import EncodingContainer
+from encoders.label_container import LabelContainer
 from jobs.models import Job
 from jobs.models import TYPES
 from logs.models import Log
-from encoders.label_container import LabelContainer
-from encoders.encoding_container import EncodingContainer
 
 ENC_TYPES = (
     (KMEANS, 'kmeans'),

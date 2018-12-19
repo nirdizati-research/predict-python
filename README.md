@@ -25,7 +25,7 @@ ssh -L 8000:127.0.0.1:8000 <user>@<host>
 ```
 
 ## Run an instance of the project
-If you are familiar with docker-compose the [docker-compose](docker-compose.yml) file is available, otherwise if you use pycharm as IDE is available the run configuration in the [runConfiguration](.idea/runConfigurations) settings.
+If you are familiar with docker-compose the [docker-compose](docker-compose.yml) file is available, otherwise if you use PyCharm as IDE run the provided configurations.
 
 Finally, from the command line you can use the following sample commands to interact with our software.
 

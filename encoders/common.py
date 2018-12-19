@@ -13,9 +13,9 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
                       label: LabelContainer, additional_columns=None):
     """Encodes and labels test set and training set as data frames
 
-    :param additional_columns Global trace attributes for complex and last payload encoding
+    :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
-    """
+    """  # TODO: complete documentation
     event_names = unique_events2(training_log, test_log)
     training_df = encode_label_log(training_log, encoding, job_type, label, event_names=event_names,
                                    additional_columns=additional_columns)
@@ -28,7 +28,7 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
                      additional_columns=None):
     if event_names is None:
         event_names = unique_events(run_log)
-        
+
     encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
 
     # Convert strings to number
@@ -56,13 +56,12 @@ def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer
                additional_columns=None):
     """Encodes test set and training set as data frames
 
-    :param additional_columns Global trace attributes for complex and last payload encoding
+    :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
-    """
+    """  # TODO: complete documentation
 
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    run_df = None
     if encoding.method == SIMPLE_INDEX:
         run_df = simple_index(run_log, label, encoding)
     elif encoding.method == BOOLEAN:

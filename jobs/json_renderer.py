@@ -4,6 +4,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.utils.encoders import JSONEncoder
 
 
+# TODO: fix this unprofessional comments
 # THIS IS SHIT. FIX IF POSSIBLE
 # Somehow set allow_nan to true in JSONEncoder
 # default renderer cannot handle JSON inf values
@@ -52,11 +53,11 @@ class CustomJSONEncoder(JSONEncoder):
 
             return text
 
-        if (_one_shot and c_make_encoder is not None and self.indent is None):
+        if _one_shot and c_make_encoder is not None and self.indent is None:
             _iterencode = c_make_encoder(
                 markers, self.default, _encoder, self.indent,
                 self.key_separator, self.item_separator, self.sort_keys,
-                self.skipkeys, self.allow_nan)
+                self.skipkeys, self.allow_nan)  # TODO: fix call to non-callable object
         else:
             _iterencode = _make_iterencode(
                 markers, self.default, _encoder, self.indent, floatstr,

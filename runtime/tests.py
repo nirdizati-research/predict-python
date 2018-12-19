@@ -1,16 +1,13 @@
-import contextlib
-from os import remove
+from django.test import TestCase
 
-from django.test import SimpleTestCase, TestCase
-from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
-
-from .replayer import Replayer
 from logs.models import Log
+from .replayer import Replayer
+
 
 class DemoTest(TestCase):
-    
-    def test_demo_executions(self):
+
+    @staticmethod
+    def test_demo_executions():
         Log.objects.get_or_create(name='general_example_test.xes', path='log_cache/general_example_test.xes')
         replayer = Replayer(1, 13, 10)
         replayer.start()

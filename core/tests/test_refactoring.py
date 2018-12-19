@@ -7,7 +7,8 @@ from encoders.label_container import LabelContainer, NEXT_ACTIVITY
 
 
 class RefactorProof(TestCase):
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["clustering"] = "kmeans"
         json["split"] = repair_example()
@@ -65,8 +66,8 @@ class RefactorProof(TestCase):
 
         # old result
         # self.assertDictEqual(result,
-        #                      {'f1score': 0.895, 'acc': 0.8099547511312217, 'true_positive': 179, 'true_negative': 0, 'false_negative': 0,
-        #                       'false_positive': 42, 'precision': 0.8099547511312217, 'recall': 1.0, 'auc': 0})
+        #  {'f1score': 0.895, 'acc': 0.8099547511312217, 'true_positive': 179, 'true_negative': 0, 'false_negative': 0,
+        #  'false_positive': 42, 'precision': 0.8099547511312217, 'recall': 1.0, 'auc': 0})
 
     def test_regression_kmeans(self):
         self.maxDiff = None

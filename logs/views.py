@@ -4,8 +4,8 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from log_util.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, trace_attributes, \
-    events_in_trace
+from log_util.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
+    trace_attributes, events_in_trace
 from logs.log_service import create_log
 from logs.models import Split
 from logs.serializers import SplitSerializer, CreateSplitSerializer
@@ -34,6 +34,7 @@ class LogDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
 
 @api_view(['GET'])
 def get_log_stats(request, pk, stat):
@@ -71,7 +72,9 @@ def get_log_stats(request, pk, stat):
         data = event_executions(log_file)
     elif stat == 'newTraces':
         data = new_trace_start(log_file)
-
+    else:
+        print('stats error in get_log_stats, setting data to None')
+        data = None
     return Response(data)
 
 
@@ -82,12 +85,13 @@ class SplitList(mixins.ListModelMixin, generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
-    def post(self, request):
+    @staticmethod
+    def post(request):
         serializer = CreateSplitSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
 
-        # Other serlializer for data
+        # Other serializer for data
         item = serializer.save()
         result = SplitSerializer(item)
         return Response(result.data, status=status.HTTP_201_CREATED)

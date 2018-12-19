@@ -54,7 +54,8 @@ class FileUploadTests(APITestCase):
         with contextlib.suppress(FileNotFoundError):
             remove('log_cache/file2.xes')
 
-    def _create_test_file(self, path):
+    @staticmethod
+    def _create_test_file(path):
         copyfile('log_cache/general_example_test.xes', path)
         f = open(path, 'rb')
         return f

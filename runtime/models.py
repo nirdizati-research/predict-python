@@ -1,5 +1,6 @@
 from django.db import models
 from jsonfield.fields import JSONField
+
 from logs.models import Log
 from predModels.models import PredModels
 
@@ -16,7 +17,7 @@ class XLog(models.Model):
         xlog = dict(self.config)
         xlog['real_log'] = self.real_log
         return xlog
-    
+
 
 class XTrace(models.Model):
     config = models.CharField(default="", null=True, max_length=500)
@@ -33,8 +34,10 @@ class XTrace(models.Model):
     reg_actual = JSONField(default={})
     duration = models.IntegerField(default=0)
     class_actual = JSONField(default={})
-    reg_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='reg_trace_model', blank=True, null=True, default=None)
-    class_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='class_trace_model', blank=True, null=True, default=None)
+    reg_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='reg_trace_model', blank=True,
+                                  null=True, default=None)
+    class_model = models.ForeignKey(PredModels, on_delete=models.DO_NOTHING, related_name='class_trace_model',
+                                    blank=True, null=True, default=None)
 
     def to_dict(self):
         trace = dict()
@@ -53,8 +56,8 @@ class XTrace(models.Model):
         trace['reg_model'] = self.reg_model
         trace['class_model'] = self.class_model
         return trace
-    
-    
+
+
 class XEvent(models.Model):
     config = models.CharField(default="", null=True, max_length=500)
     xid = models.CharField(default="", max_length=200)

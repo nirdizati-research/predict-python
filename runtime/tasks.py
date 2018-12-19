@@ -1,11 +1,10 @@
 from django_rq.decorators import job
 
-from logs.models import Log
-from logs.file_service import get_logs
 from core.core import runtime_calculate
-from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
-from core.core import get_run
+from jobs.models import RUNNING, COMPLETED, ERROR
 from jobs.ws_publisher import publish
+from logs.file_service import get_logs
+from logs.models import Log
 
 
 @job("default", timeout='1h')

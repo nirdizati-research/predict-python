@@ -7,7 +7,8 @@ from encoders.label_container import LabelContainer, NEXT_ACTIVITY, THRESHOLD_CU
 
 
 class Labelling(TestCase):
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["split"] = repair_example()
         json["encoding"] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)

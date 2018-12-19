@@ -42,12 +42,12 @@ def save_models(to_model_split, job):
         log = jobsplit.original_log
     else:
         log = jobsplit.training_log
-    filename_model = 'model_cache/job_{}-split_{}-model-{}.sav'.format(job.id,job.split.id, job.type)
+    filename_model = 'model_cache/job_{}-split_{}-model-{}.sav'.format(job.id, job.split.id, job.type)
     joblib.dump(to_model_split['model'], filename_model)
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)
     if to_model_split['type'] == KMEANS:
-        filename_estimator = 'model_cache/job_{}-split_{}-estimator-{}.sav'.format(job.id,job.split.id, job.type)
+        filename_estimator = 'model_cache/job_{}-split_{}-estimator-{}.sav'.format(job.id, job.split.id, job.type)
         joblib.dump(to_model_split['estimator'], filename_estimator)
         model_split.estimator_path = filename_estimator
         model_split.save()

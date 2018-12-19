@@ -9,7 +9,8 @@ from encoders.label_container import LabelContainer
 class TestHyperopt(TestCase):
     """Proof of concept tests"""
 
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["split"] = repair_example()
         json["method"] = "randomForest"

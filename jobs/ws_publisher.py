@@ -6,7 +6,7 @@ from logs.serializers import LogSerializer
 from runtime.serializers import TraceSerializer
 
 redis_publisher = RedisPublisher(facility='default', broadcast=True)
-from rest_framework.renderers import JSONRenderer
+from rest_framework.renderers import JSONRenderer  # TODO: check module import not at top level
 
 
 def publish(object):

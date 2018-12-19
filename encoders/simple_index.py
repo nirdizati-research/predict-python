@@ -39,6 +39,9 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
         zero_count = a if a > b else b
     elif encoding.is_zero_padding():
         zero_count = b
+    else:
+        print('encoding neither all_in_one nor zero_padding, setting zero count to 0!')
+        zero_count = 0
     trace_row = list()
     trace_row.append(CLASSIFIER.get_class_identity(trace))
     trace_row += trace_prefixes(trace, event_index)

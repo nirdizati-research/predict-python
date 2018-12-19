@@ -12,7 +12,8 @@ from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, N
 
 @unittest.skip("performance test not needed normally")
 class TestClassPerf(TestCase):
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["clustering"] = "noCluster"
         json["split"] = split_single()
@@ -23,12 +24,14 @@ class TestClassPerf(TestCase):
         json['label'] = LabelContainer(DURATION)
         return json
 
-    def calculate_helper(self, job):
+    @staticmethod
+    def calculate_helper(job):
         start_time = time.time()
         calculate(job)
         print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
 
-    def calculate_helper_hyperopt(self, job):
+    @staticmethod
+    def calculate_helper_hyperopt(job):
         start_time = time.time()
         calculate_hyperopt(job)
         print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
@@ -66,7 +69,8 @@ class TestClassPerf(TestCase):
 
 @unittest.skip("performance test not needed normally")
 class RegPerf(TestCase):
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["clustering"] = "noCluster"
         json["split"] = split_single()
@@ -79,12 +83,14 @@ class RegPerf(TestCase):
         json['label'] = LabelContainer(REMAINING_TIME)
         return json
 
-    def calculate_helper(self, job):
+    @staticmethod
+    def calculate_helper(job):
         start_time = time.time()
         calculate(job)
         print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
 
-    def calculate_helper_hyperopt(self, job):
+    @staticmethod
+    def calculate_helper_hyperopt(job):
         start_time = time.time()
         calculate_hyperopt(job)
         print("Total for %s %s seconds" % (job['method'], time.time() - start_time))

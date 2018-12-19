@@ -32,7 +32,8 @@ class JobList(ListAPIView):
         return jobs
 
     # TODO remove?
-    def post(self, request):
+    @staticmethod
+    def post(request):
         serializer = JobSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

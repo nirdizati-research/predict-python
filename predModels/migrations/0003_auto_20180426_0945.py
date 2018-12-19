@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('predModels', '0002_auto_20180423_2126'),
     ]
@@ -15,6 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='modelsplit',
             name='type',
-            field=models.CharField(choices=[('kmeans', 'kmeans'), ('noCluster', 'noCluster')], default='noCluster', max_length=20),
+            field=models.CharField(choices=[('kmeans', 'kmeans'), ('noCluster', 'noCluster')], default='noCluster',
+                                   max_length=20),
         ),
     ]

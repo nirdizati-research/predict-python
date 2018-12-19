@@ -24,6 +24,7 @@ class TestEncoding(TestCase):
         event_names = unique_events(self.log)
         encode_label_log(self.log, encoding, REGRESSION, self.label, event_names=event_names,
                          prefix_length=180, zero_padding=True, additional_columns=self.add_col)
+        # TODO: fix unexpected parameters
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
     # This is test
@@ -37,7 +38,8 @@ class TestEncoding(TestCase):
 
 @unittest.skip("performance test not needed normally")
 class TestAgainstNirdizatiTraining(TestCase):
-    def do_test(self, encoding):
+    @staticmethod
+    def do_test(encoding):
         start_time = time.time()
         # log = get_logs("log_cache/general_example.xes")[0]
         log = get_logs("log_cache/Sepsis Cases - Event Log.xes")[0]

@@ -2,40 +2,40 @@ git:
   depth: 1
 env:
   global:
-  - REDIS_HOST=localhost REDIS_PORT=6379
+    - REDIS_HOST=localhost REDIS_PORT=6379
 jobs:
   include:
-  - language: python
-    python: '3.5'
-    cache: pip
-    services: redis-server
-    install: pip install -r requirements.txt
-    script: python manage.py test
-  - language: python
-    python: '3.6'
-    cache: pip
-    services: redis-server
-    install: pip install -r requirements.txt
-    script: python manage.py test
+    - language: python
+      python: '3.5'
+      cache: pip
+      services: redis-server
+      install: pip install -r requirements.txt
+      script: python manage.py test
+    - language: python
+      python: '3.6'
+      cache: pip
+      services: redis-server
+      install: pip install -r requirements.txt
+      script: python manage.py test
 
-  - stage: before_deploy
-    if: branch = master AND type = push
-    language: minimal
-    name: Build Docker image and push to Docker Hub registry
-    services: docker
-    script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t nirdizatiresearch/predict-python:$TRAVIS_COMMIT .
-    - docker build -t nirdizatiresearch/predict-python .
-    - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
-    - docker push nirdizatiresearch/predict-python
+    - stage: before_deploy
+      if: branch = master AND type = push
+      language: minimal
+      name: Build Docker image and push to Docker Hub registry
+      services: docker
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t nirdizatiresearch/predict-python:$TRAVIS_COMMIT .
+        - docker build -t nirdizatiresearch/predict-python .
+        - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
+        - docker push nirdizatiresearch/predict-python
 
-  - stage: deploy
-    if: branch = master AND type = push
-    dist: xenial
-    name: Server deployment
-    language: minimal
-    deploy:
-      provider: script
-      skip_cleanup: true
-      script: bash deploy.sh
+    - stage: deploy
+      if: branch = master AND type = push
+      dist: xenial
+      name: Server deployment
+      language: minimal
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: bash deploy.sh

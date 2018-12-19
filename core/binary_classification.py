@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
+
 from core.common import choose_classifier, calculate_results, add_actual
 from core.constants import KMEANS, NO_CLUSTER
 
@@ -28,17 +29,19 @@ def binary_classifier(training_df, test_df, job):
 
 
 def binary_classifier_single_log(run_df, model):
-    split=model['split']
+    result = None
+
+    split = model['split']
     results = dict()
     results['label'] = run_df['label']
     run_df = run_df.drop('label', 1)
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
         result, _ = no_clustering_test(run_df, clf)
-    elif split['type'] ==KMEANS:
-        clf = joblib.load(split['model_path']) 
+    elif split['type'] == KMEANS:
+        clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        result, _ = kmeans_test(run_df, clf, estimator)
+        result, _ = kmeans_test(run_df, clf, estimator)  # TODO: fix unresolved reference
     results['prediction'] = result['predicted']
     return results
 

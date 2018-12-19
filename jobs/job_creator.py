@@ -54,7 +54,7 @@ def generate_labelling(split, payload):
     return jobs
 
 
-def create_config(payload: dict, encMethod: str, clustering: str, method: str, prefix_length: int):
+def create_config(payload: dict, enc_method: str, clustering: str, method: str, prefix_length: int):
     """Turn lists to single values"""
     config = dict(payload['config'])
     del config['encodings']
@@ -78,7 +78,7 @@ def create_config(payload: dict, encMethod: str, clustering: str, method: str, p
     config['clustering'] = clustering
     config['method'] = method
     # Encoding stuff rewrite
-    config['encoding']['method'] = encMethod
+    config['encoding']['method'] = enc_method
     config['encoding']['prefix_length'] = prefix_length
     return config
 

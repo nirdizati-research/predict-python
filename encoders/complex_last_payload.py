@@ -56,7 +56,7 @@ def columns_last_payload(prefix_length: int, additional_columns: list, label: La
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns:
-        columns.append(additional_column + "_" + str(i))
+        columns.append(additional_column + "_" + str(i))  # TODO: fix i maybe referenced before assignment
     return add_label_columns(columns, label)
 
 

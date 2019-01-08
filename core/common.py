@@ -2,10 +2,9 @@
 
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from skmultiflow.bayes import NaiveBayes
 
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, INCREMENTAL_NAIVE_BAYES, \
     INCREMENTAL_ADAPTIVE_TREE, INCREMENTAL_HOEFFDING_TREE

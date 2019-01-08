@@ -176,9 +176,9 @@ def no_clustering_test(test_data, clf, testing=False):
     scores = 0
     if testing:
         try:
-            scores = clf.predict_proba(_test_data)[:, 1]
+            scores = clf.decision_function(_test_data)
         except:
-            scores = clf.predict_proba(_test_data).T#his is bad
+            scores = clf.predict_proba(_test_data)[:, 1]
     test_data["predicted"] = prediction
     return test_data, scores
 

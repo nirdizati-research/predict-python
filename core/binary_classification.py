@@ -130,7 +130,8 @@ def no_clustering_train(original_test_data, train_data, clf):
 
     auc = 0
     try:
-        auc = metrics.roc_auc_score(actual, scores)
+        actul_4_auc, scores_4_auc = zip(*[ (a, b) for a, b in zip(actual, scores) if b != None ])
+        auc = metrics.roc_auc_score(actul_4_auc, scores_4_auc)
     except ValueError:
         print('ValueError in AUC_ROC')
         pass
@@ -175,10 +176,14 @@ def no_clustering_test(test_data, clf, testing=False):
     prediction = clf.predict(_test_data)
     scores = 0
     if testing:
-        try:
+        if hasattr(clf, "decision_function"):
             scores = clf.decision_function(_test_data)
-        except:
-            scores = clf.predict_proba(_test_data)[:, 1]
+        else:
+            scores = clf.predict_proba(_test_data)
+            if scores.dtype == object : #TODO check when returned scores are zeroes
+                scores = [ el[1] if len(el) == 2 else None for el in scores ]
+            else:
+                scores = scores[:, 1]
     test_data["predicted"] = prediction
     return test_data, scores
 

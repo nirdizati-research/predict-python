@@ -63,14 +63,15 @@ def create_multiple(request):
     except Split.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
 
-    if payload['type'] == CLASSIFICATION:
+    # detect either or not a model to update has been specified otherwise train a new one.
+    if payload['config']['incremental_train']['base_model'] != None:
+        jobs = update(split, payload)
+    elif payload['type'] == CLASSIFICATION:
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:
         jobs = generate(split, payload, REGRESSION)
     elif payload['type'] == LABELLING:
         jobs = generate_labelling(split, payload)
-    elif payload['type'] == UPDATE:
-        jobs = update(split, payload)
     else:
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)

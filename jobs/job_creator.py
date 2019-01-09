@@ -54,7 +54,7 @@ def generate_labelling(split, payload):
     return jobs
 
 
-def update(split, payload):
+def update(split, payload): #TODO adapt to allow selecting the model to update
     jobs = []
     for method in payload[ 'config' ][ 'methods' ]:
         for clustering in payload[ 'config' ][ 'clusterings' ]:

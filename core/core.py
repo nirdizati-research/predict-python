@@ -1,3 +1,6 @@
+import os
+import pickle
+
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
     CLASSIFICATION, REGRESSION, LABELLING, UPDATE
@@ -20,10 +23,37 @@ def calculate(job):
 
 
 def get_encoded_logs(job: dict):
-    training_log, test_log, additional_columns = prepare_logs(job['split'])
 
-    training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                             additional_columns=additional_columns)
+    train_set_fn = ('train_split-%d_pref-%d_encoding-%s_padding-%s_generation-%s.pickle' %
+                         (job['split']['id'],
+                          job['encoding'].prefix_length,
+                          job['encoding'].method,
+                          job['encoding'].padding,
+                          job['encoding'].generation_type)
+                         )
+    test_set_fn = train_set_fn.replace('train', 'test')
+
+    if os.path.isfile("labeled_log_cache/" + train_set_fn) and os.path.isfile("labeled_log_cache/" + test_set_fn):
+        pickle_in = open("labeled_log_cache/" + train_set_fn, 'rb')
+        training_df = pickle.load(pickle_in)
+
+        pickle_in = open("labeled_log_cache/" + test_set_fn, 'rb')
+        test_df = pickle.load(pickle_in)
+
+    else:
+        training_log, test_log, additional_columns = prepare_logs(job['split'])
+
+        training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+                                                 additional_columns=additional_columns)
+
+        pickle_out = open("labeled_log_cache/" + train_set_fn, "wb")
+        pickle.dump(training_df, pickle_out)
+        pickle_out.close()
+
+        pickle_out = open("labeled_log_cache/" + test_set_fn, "wb")
+        pickle.dump(test_df, pickle_out)
+        pickle_out.close()
+
     return training_df, test_df
 
 

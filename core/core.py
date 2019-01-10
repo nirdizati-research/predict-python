@@ -1,3 +1,4 @@
+import csv
 import os
 import pickle
 
@@ -34,11 +35,13 @@ def get_encoded_logs(job: dict):
     test_set_fn = train_set_fn.replace('train', 'test')
 
     if os.path.isfile("labeled_log_cache/" + train_set_fn) and os.path.isfile("labeled_log_cache/" + test_set_fn):
+        print('Found Dataset in cache, loading..')
         pickle_in = open("labeled_log_cache/" + train_set_fn, 'rb')
         training_df = pickle.load(pickle_in)
 
         pickle_in = open("labeled_log_cache/" + test_set_fn, 'rb')
         test_df = pickle.load(pickle_in)
+        print('Dataset loaded.')
 
     else:
         training_log, test_log, additional_columns = prepare_logs(job['split'])
@@ -76,6 +79,51 @@ def run_by_type(training_df, test_df, job):
         results, model_split = update_model(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
+
+    #TODO log results on csv
+
+    result = [
+        results['f1score'],
+        results['acc'],
+        results['true_positive'],
+        results['true_negative'],
+        results['false_negative'],
+        results['false_positive'],
+        results['precision'],
+        results['recall'],
+        results['auc']
+    ]
+    result += [job['encoding'][index] for index in range(len(job['encoding']))]
+    result += [job['label'][index] for index in range(len(job['label']))]
+    result += [job['incremental_train'][index] for index in job['incremental_train'].keys()]
+    result += [job['hyperopt'][index] for index in job['hyperopt'].keys()]
+    result += [job['clustering']]
+    result += [job['split'][index] for index in job['split'].keys()]
+    result += [job['type']]
+    result += [job[job['type'] + '.' + job['method']][index] for index in job[job['type'] + '.' + job['method']].keys()]
+
+    with open('results/' + job['type'] + '-' + job['method'] + '_result.csv', 'a+') as log_result_file:
+        writer = csv.writer(log_result_file)
+        if sum(1 for line in open('results/' + job['type'] + '-' + job['method'] + '_result.csv')) == 0:
+            writer.writerow(['f1score',
+                             'acc',
+                             'true_positive',
+                             'true_negative',
+                             'false_negative',
+                             'false_positive',
+                             'precision',
+                             'recall',
+                             'auc'] +
+                            list(job['encoding']._fields) +
+                            list(job['label']._fields) +
+                            list(job['incremental_train'].keys()) +
+                            list(job['hyperopt'].keys()) +
+                            ['clustering'] +
+                            list(job['split'].keys()) +
+                            ['type'] +
+                            list(job[job['type'] + '.' + job['method']].keys())
+                            )
+        writer.writerow(result)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))
     print("\tResults {} .".format(results))

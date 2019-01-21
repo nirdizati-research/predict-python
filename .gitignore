@@ -89,3 +89,6 @@ db/*.sqlite3
 */migrations/*
 
 model_cache/*
+results/*
+labeled_log_cache/*
+log_cache/*

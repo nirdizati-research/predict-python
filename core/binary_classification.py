@@ -141,16 +141,28 @@ def balanced_subsample(x, y, subsample_size=1.0):
 
 
 def no_clustering_train(original_test_data, train_data, clf):
+
+    #TODO: SUBSAMPLE manually balance data
+    # train_x, train_y = balanced_subsample(train_data.drop('actual', 1), train_data[['actual']], subsample_size=min(len(train_data), len(original_test_data)))
+    # original_test_x, original_test_y = balanced_subsample(original_test_data.drop('actual', 1), original_test_data[['actual']], subsample_size=min(len(train_data), len(original_test_data)))
+    #
+    # train_data = train_x
+    # train_data['actual'] = train_y
+    #
+    # original_test_data = original_test_x
+    # original_test_data['actual'] = original_test_y
+
     y = train_data['actual']
     # if isinstance(clf, MultinomialNB):
     #     clf.__init__(alpha=clf.get_params()[ 'alpha' ], class_prior=list( y.value_counts(normalize=True) ),
     #                  fit_prior=True)
+
     try:
         clf.fit(train_data.drop('actual', 1), y)
     except:
         clf.partial_fit(train_data.drop('actual', 1).values, y)
     actual = original_test_data["actual"]
-    original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
+    original_test_data, scores_0, scores_1 = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
     original_test_data["actual"] = actual
 
     if isinstance(clf, HoeffdingTree) or isinstance(clf, HAT):
@@ -166,8 +178,53 @@ def no_clustering_train(original_test_data, train_data, clf):
 
     auc = 0
     try:
-        actul_4_auc, scores_4_auc = zip(*[ (a, b) for a, b in zip(actual, scores) if b != None ])
-        auc = metrics.roc_auc_score(actul_4_auc, scores_4_auc)
+        actul_4_auc, scores_4_auc = zip(*[ (a, b) for a, b in zip(actual, scores_0) if b != None ])
+        auc_0 = metrics.roc_auc_score(actul_4_auc, scores_4_auc)
+
+        actul_4_auc, scores_4_auc = zip(*[ (a, b) for a, b in zip(actual, scores_1) if b != None ])
+        auc_1 = metrics.roc_auc_score(actul_4_auc, scores_4_auc)
+
+        auc = max(auc_0, auc_1)
+
+        #AUC
+        # import matplotlib.pyplot as plt
+        # auc = metrics.roc_auc_score(actual, scores)
+        # fpr, tpr, thresholds = metrics.roc_curve(actul_4_auc, scores_4_auc)
+        # plt.plot(fpr, tpr, label='ROC curve: AUC={0:0.2f}'.format(auc))
+        # plt.xlabel('1-Specificity')
+        # plt.ylabel('Sensitivity')
+        # plt.ylim([0.0, 1.05])
+        # plt.xlim([0.0, 1.0])
+        # plt.grid(True)
+        # plt.title('ROC')
+        # plt.legend(loc="lower left")
+        # plt.show()
+
+        #PR
+        # from collections import Counter
+        # counted = Counter(actul_4_auc)
+        # thresh = counted[True] / (counted[True] + counted[False])
+        # p, r, thresholds = metrics.precision_recall_curve(actul_4_auc, scores_4_auc)
+        # plt.plot(r, p, label='p/r')
+        # plt.plot([0, 1], [thresh, thresh], label='threshold')
+        # plt.xlabel('Recall')
+        # plt.ylabel('Precision')
+        # plt.ylim([0.0, 1.05])
+        # plt.xlim([0.0, 1.0])
+        # plt.grid(True)
+        # plt.title('Precision/Recall curve')
+        # plt.legend(loc="lower left")
+        # plt.show()
+
+        #
+        # print('')
+        # print('==========================================================================================')
+        # print('')
+        # print('\t\t---ROC_AUC debug')
+        # print('auc with actual and scores', metrics.roc_auc_score(actual, scores))
+        # print('')
+        # print('==========================================================================================')
+        # print('')
     except ValueError:
         print('ValueError in AUC_ROC')
         pass
@@ -189,7 +246,7 @@ def no_clustering_update(original_test_data, train_data, clf):
 
     actual = original_test_data["actual"]
 
-    original_test_data, scores = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
+    original_test_data, scores, scores_01 = no_clustering_test(original_test_data.drop('actual', 1), clf, True)
 
     original_test_data["actual"] = actual
 
@@ -210,18 +267,21 @@ def no_clustering_test(test_data, clf, testing=False):
     else:
         _test_data = test_data.drop('trace_id', 1)
     prediction = clf.predict(_test_data)
-    scores = 0
+    scores_0 = []
+    scores_1 = 0
     if testing:
         if hasattr(clf, "decision_function"):
-            scores = clf.decision_function(_test_data)
+            scores_1 = clf.decision_function(_test_data)
         else:
-            scores = clf.predict_proba(_test_data)
-            if scores.dtype == object : #TODO check when returned scores are zeroes
-                scores = [ el[1] if len(el) == 2 else None for el in scores ]
+            scores_01 = clf.predict_proba(_test_data)
+            if scores_01.dtype == object :
+                scores_0 = [ el[0] if len(el) == 2 else None for el in scores_01 ]
+                scores_1 = [ el[1] if len(el) == 2 else None for el in scores_01 ]
             else:
-                scores = scores[:, 1]
+                scores_0 = scores_01[:, 0]
+                scores_1 = scores_01[:, 1]
     test_data["predicted"] = prediction
-    return test_data, scores
+    return test_data, scores_1, scores_0
 
 
 def prepare_results(df, auc: int):

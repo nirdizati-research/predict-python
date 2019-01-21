@@ -21,7 +21,7 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
             # trace too short and no zero padding
             continue
         if encoding.is_all_in_one():
-            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
+            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):#, max(int(len(trace)/10), 1)):
                 encoded_data.append(add_trace_row(trace, encoding, i, atr_classifier, **kwargs))
         else:
             encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, atr_classifier, **kwargs))
@@ -36,7 +36,7 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
     b = encoding.prefix_length - len(trace)
     if encoding.is_all_in_one():
         a = encoding.prefix_length - event_index
-        zero_count = a if a > b else b
+        zero_count = max(a, b)
     elif encoding.is_zero_padding():
         zero_count = b
     trace_row = list()
@@ -82,7 +82,7 @@ def __columns(prefix_length: int, label: LabelContainer):
 
 def get_intercase_attributes(log: list, label: LabelContainer):
     """Dict of kwargs
-    These intercae attributes are expensive operations!!!
+    These intercase attributes are expensive operations!!!
     """
     # Expensive operations
     executed_events = events_by_date([log]) if label.add_executed_events else None

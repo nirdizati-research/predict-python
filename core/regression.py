@@ -148,7 +148,7 @@ def __choose_regressor(job: dict):
     return regressor
 
 
-# https://stats.stackexchange.com/q/294069
+# removes the zero values to calculate mape, see (http://www.scmfocus.com/demandplanning/2010/07/zero-demand-periods-and-forecast-error-measurement/)
 def mean_absolute_percentage_error(y_true, y_pred):
     y_true, y_pred = np.array(y_true), np.array(y_pred)
-    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+    return np.mean(np.abs((y_true[np.where(y_true != 0)] - y_pred[np.where(y_true != 0)]) / y_true[np.where(y_true != 0)])) * 100

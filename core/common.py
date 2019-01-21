@@ -60,7 +60,7 @@ def choose_classifier(job: dict):
         clf = DecisionTreeClassifier(**config)
     elif method == XGBOOST:
         clf = xgb.XGBClassifier(**config)
-    elif method == INCREMENTAL_NAIVE_BAYES:
+    elif method == INCREMENTAL_NAIVE_BAYES: #TODO check which is better as model (MultinomialNB, BernoulliNB, GaussianNB)
         clf = MultinomialNB(**config)
     elif method == INCREMENTAL_ADAPTIVE_TREE:
         clf = HAT(**config)

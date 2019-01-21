@@ -22,6 +22,9 @@ services:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
         target: /predict-python/log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/model_cache/
+        target: /predict-python/model_cache/
 
   scheduler:
     image: nirdizatiresearch/predict-python
@@ -39,6 +42,9 @@ services:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
         target: /predict-python/log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/model_cache/
+        target: /predict-python/model_cache/
 
   worker:
     image: nirdizatiresearch/predict-python
@@ -54,3 +60,6 @@ services:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
         target: /predict-python/log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/model_cache/
+        target: /predict-python/model_cache/

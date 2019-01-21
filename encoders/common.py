@@ -111,4 +111,51 @@ def convert(s):
     if s is None:
         # Next activity resources
         s = '0'
-    return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8
+    return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8# This potentially generates collisions
+
+
+# RANDOM TESTS
+# training_log, test_log
+# encoding=job['encoding']
+# job_type=job['type']
+# label=job['label']
+# additional_columns=additional_columns
+#
+# from encoders.common import *
+# from encoders.label_container import *
+#
+# event_names = unique_events2(training_log, test_log)
+#
+# m_label = LabelContainer()
+# # threshold = compute_threshold(training_log+test_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
+# run_log = training_log+test_log
+# encodings = encoding
+# job_type
+#
+# if event_names is None:
+#     event_names = unique_events(run_log)
+#
+# encoded_log = encode_log(run_log, encoding, m_label, event_names, additional_columns)
+#
+# # Convert strings to number
+# if label.type == ATTRIBUTE_NUMBER:
+#     encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+#
+# if job_type != LABELLING:
+#     categorical_encode(encoded_log)
+# if m_label.threshold_type == THRESHOLD_MEAN:
+#     threshold_mean = encoded_log['label'].mean()
+#     print('Computing proper threshold to split the two sets equally')
+#     threshold_median = encoded_log['label'].median()
+#     threshold__sortpivot = encoded_log['label'].sort_values().iloc[int(len(encoded_log['label']) / 2)]
+#     threshold = threshold_median
+#
+#
+# m_label = LabelContainer(type=label.type, attribute_name=label.attribute_name, threshold_type=label.threshold_type, threshold=threshold)
+#
+# training_df = encode_label_log(training_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
+# test_df = encode_label_log(test_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
+#
+#
+# training_df.to_csv('/Users/Brisingr/Desktop/TEMP/dataset/T+T'+train_set_fn+'.csv')
+# test_df.to_csv('/Users/Brisingr/Desktop/TEMP/dataset/T+T'+test_set_fn+'.csv')

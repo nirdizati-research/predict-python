@@ -34,21 +34,6 @@ def prepare_logs(split: dict):
     return training_log, test_log, additional_columns
 
 
-# WORKAROUND to perform INCREMENTAL SPLITS
-def _incremental_temporal_split(log: list, throw_away_from: float, test_size: float, update: bool):
-    log = sorted(log, key=functools.cmp_to_key(_compare_trace_starts))
-    training_update_log, test_log = train_test_split(log, test_size=test_size, shuffle=False)
-    training_log, update_log = train_test_split(training_update_log, test_size=throw_away_from/(1-test_size), shuffle=False)
-
-    # WORKAROUND to perform INCREMENTAL UPDATES
-    if update:
-        training_log = update_log
-
-    test_first_time = _trace_event_time(test_log[ 0 ])
-    training_log = filter(lambda x: _trace_event_time(x, event_index=-1) < test_first_time, training_log)
-    return list(training_log), test_log
-
-
 def _split_single_log(split: dict, log: list):
     test_size = split['config'].get('test_size', 0.2)
     if test_size <= 0 or test_size >= 1:
@@ -59,8 +44,6 @@ def _split_single_log(split: dict, log: list):
     if split_type == SPLIT_TEMPORAL:
         return _temporal_split(log, test_size)
     elif split_type == SPLIT_STRICT_TEMPORAL:
-        if split['config'].get('throw_away_from') is not None:
-            return _incremental_temporal_split(log, split['config'].get('throw_away_from'), test_size, split['config'].get('update', False))
         return _temporal_split_strict(log, test_size)
     elif split_type == SPLIT_SEQUENTIAL:
         return _split_log(log, test_size=test_size, shuffle=False)

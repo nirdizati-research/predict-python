@@ -9,8 +9,45 @@ from log_util.event_attributes import unique_events2, unique_events
 from .simple_index import simple_index
 
 
+def encode_label_logs_new(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
+                      label: LabelContainer, additional_columns=None, balance=False):
+    event_names = unique_events2(training_log, test_log)
+
+    training_log = encode_log(training_log, encoding, label, event_names, additional_columns)
+
+    if label.type == ATTRIBUTE_NUMBER:
+        try:
+            training_log['label'] = training_log['label'].apply(lambda x: float(x))
+        except : #TODO Extremely bad workaround to use previously labeled logs
+            training_log['label'] = training_log['label'].apply(lambda x: x == 'true')
+
+    # TODO Extremely bad workaround to label dataset in a more balanced way
+    if balance and label.threshold_type == THRESHOLD_MEAN:
+        print('Computing proper threshold to split the two sets equally')
+        threshold = training_log['label'].median()
+        label = LabelContainer(type=label.type, attribute_name=label.attribute_name,
+                               threshold_type=label.threshold_type, threshold=threshold)
+
+    test_log = encode_log(test_log, encoding, label, event_names, additional_columns)
+
+    if label.type == ATTRIBUTE_NUMBER:
+        try:
+            test_log['label'] = test_log['label'].apply(lambda x: float(x))
+        except : #TODO Extremely bad workaround to use previously labeled logs
+            test_log['label'] = test_log['label'].apply(lambda x: x == 'true')
+
+    if job_type != LABELLING:
+        #init nominal encode
+        encoding.init_label_encoder(training_log)
+        #encode data
+        encoding.encode(training_log)
+        encoding.encode(test_log)
+
+    return training_log, test_log
+
+
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None, balance=False, fit_encoder=False):
+                      label: LabelContainer, additional_columns=None, balance=False):
     """Encodes and labels test set and training set as data frames
 
     :param additional_columns Global trace attributes for complex and last payload encoding
@@ -29,9 +66,9 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
         m_label = label
 
     training_df = encode_label_log(training_log, encoding, job_type, m_label, event_names=event_names,
-                                   additional_columns=additional_columns)
+                                   additional_columns=additional_columns, fit_encoder=True )
     test_df = encode_label_log(test_log, encoding, job_type, m_label, event_names=event_names,
-                               additional_columns=additional_columns)
+                               additional_columns=additional_columns, fit_encoder=False)
     return training_df, test_df
 
 
@@ -61,10 +98,10 @@ def compute_threshold(run_log: list, encoding: EncodingContainer, job_type: str,
 
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
-                     additional_columns=None):
+                     additional_columns=None, fit_encoder=False):
     if event_names is None:
         event_names = unique_events(run_log)
-        
+
     encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
 
     # Convert strings to number

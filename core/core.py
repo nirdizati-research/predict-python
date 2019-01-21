@@ -11,7 +11,7 @@ from core.regression import regression, regression_single_log
 from core.label_validation import label_task
 from core.update_model import update_model
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
-    encode_label_log, DURATION 
+    encode_label_log, DURATION, encode_label_logs_new
 from logs.splitting import prepare_logs
 
 
@@ -62,7 +62,9 @@ def get_encoded_logs(job: dict):
         pickle.dump(additional_columns, pickle_out)
         pickle_out.close()
 
-    training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+    # training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+    #                                          additional_columns=additional_columns, balance=BALANCED)
+    training_df, test_df = encode_label_logs_new(training_log, test_log, job['encoding'], job['type'], job['label'],
                                              additional_columns=additional_columns, balance=BALANCED)
 
     return training_df, test_df

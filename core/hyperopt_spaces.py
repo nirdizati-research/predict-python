@@ -43,8 +43,8 @@ def _classification_xgboost():
 
 def _classification_incremental_naive_bayes():
     return {
-        'alpha': hp.uniform('alpha', 0, 150),
-        'fit_prior': False
+        'alpha': hp.uniform('alpha', 0, 10),
+        'fit_prior': True
     }
 
 

@@ -1,6 +1,7 @@
 import csv
 import os
 import pickle
+import time
 
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
@@ -25,43 +26,53 @@ def calculate(job):
 
 def get_encoded_logs(job: dict):
 
-    train_set_fn = ('train_split-%d_pref-%d_encoding-%s_padding-%s_generation-%s.pickle' %
-                         (job['split']['id'],
-                          job['encoding'].prefix_length,
-                          job['encoding'].method,
-                          job['encoding'].padding,
-                          job['encoding'].generation_type)
-                         )
-    test_set_fn = train_set_fn.replace('train', 'test')
+    BALANCED = False
 
-    if os.path.isfile("labeled_log_cache/" + train_set_fn) and os.path.isfile("labeled_log_cache/" + test_set_fn):
+    train_set_fn = 'train_split-' + str(job['split']['id']) + '.pickle'
+    test_set_fn = train_set_fn.replace('train', 'test')
+    additional_columns_fn = test_set_fn.replace('test', 'additional_columns')
+
+    if os.path.isfile("labeled_log_cache/" + train_set_fn) and \
+        os.path.isfile("labeled_log_cache/" + test_set_fn) and \
+        os.path.isfile("labeled_log_cache/" + additional_columns_fn):
+
         print('Found Dataset in cache, loading..')
         pickle_in = open("labeled_log_cache/" + train_set_fn, 'rb')
-        training_df = pickle.load(pickle_in)
+        training_log = pickle.load(pickle_in)
 
         pickle_in = open("labeled_log_cache/" + test_set_fn, 'rb')
-        test_df = pickle.load(pickle_in)
+        test_log = pickle.load(pickle_in)
+
+        pickle_in = open("labeled_log_cache/" + additional_columns_fn, 'rb')
+        additional_columns = pickle.load(pickle_in)
         print('Dataset loaded.')
 
     else:
         training_log, test_log, additional_columns = prepare_logs(job['split'])
 
-        training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                                 additional_columns=additional_columns)
-
         pickle_out = open("labeled_log_cache/" + train_set_fn, "wb")
-        pickle.dump(training_df, pickle_out)
+        pickle.dump(training_log, pickle_out)
         pickle_out.close()
 
         pickle_out = open("labeled_log_cache/" + test_set_fn, "wb")
-        pickle.dump(test_df, pickle_out)
+        pickle.dump(test_log, pickle_out)
         pickle_out.close()
+
+        pickle_out = open("labeled_log_cache/" + additional_columns_fn, "wb")
+        pickle.dump(additional_columns, pickle_out)
+        pickle_out.close()
+
+    training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+                                             additional_columns=additional_columns, balance=BALANCED)
 
     return training_df, test_df
 
 
 def run_by_type(training_df, test_df, job):
     model_split = None
+
+    start_time = time.time()
+
     if job['type'] == CLASSIFICATION:
         label_type = job['label'].type
         # Binary classification
@@ -79,8 +90,6 @@ def run_by_type(training_df, test_df, job):
         results, model_split = update_model(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
-
-    #TODO log results on csv
 
     result = [
         results['f1score'],
@@ -101,6 +110,7 @@ def run_by_type(training_df, test_df, job):
     result += [job['split'][index] for index in job['split'].keys()]
     result += [job['type']]
     result += [job[job['type'] + '.' + job['method']][index] for index in job[job['type'] + '.' + job['method']].keys()]
+    result += [str(time.time() - start_time)]
 
     with open('results/' + job['type'] + '-' + job['method'] + '_result.csv', 'a+') as log_result_file:
         writer = csv.writer(log_result_file)
@@ -121,7 +131,8 @@ def run_by_type(training_df, test_df, job):
                             ['clustering'] +
                             list(job['split'].keys()) +
                             ['type'] +
-                            list(job[job['type'] + '.' + job['method']].keys())
+                            list(job[job['type'] + '.' + job['method']].keys()) +
+                            ['time_elapsed(s)']
                             )
         writer.writerow(result)
 

@@ -10,18 +10,54 @@ from .simple_index import simple_index
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None):
+                      label: LabelContainer, additional_columns=None, balance=False, fit_encoder=False):
     """Encodes and labels test set and training set as data frames
 
     :param additional_columns Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """
     event_names = unique_events2(training_log, test_log)
-    training_df = encode_label_log(training_log, encoding, job_type, label, event_names=event_names,
+
+    #TODO change labeling type if balanced selected
+    if balance:
+        m_label = LabelContainer()
+        threshold = compute_threshold(training_log, encoding, job_type, m_label, event_names=event_names,
+                                           additional_columns=additional_columns)
+        m_label = LabelContainer(type=label.type, attribute_name=label.attribute_name,
+                               threshold_type=label.threshold_type, threshold=threshold)
+    else:
+        m_label = label
+
+    training_df = encode_label_log(training_log, encoding, job_type, m_label, event_names=event_names,
                                    additional_columns=additional_columns)
-    test_df = encode_label_log(test_log, encoding, job_type, label, event_names=event_names,
+    test_df = encode_label_log(test_log, encoding, job_type, m_label, event_names=event_names,
                                additional_columns=additional_columns)
     return training_df, test_df
+
+
+def compute_threshold(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
+                     additional_columns=None):
+    if event_names is None:
+        event_names = unique_events(run_log)
+
+    encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
+
+    # Convert strings to number
+    if label.type == ATTRIBUTE_NUMBER:
+        try:
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+        except :
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
+
+
+    if job_type != LABELLING:
+        categorical_encode(encoded_log)
+    if label.threshold_type == THRESHOLD_MEAN:
+        threshold_0 = encoded_log['label'].mean()
+        print('Computing proper threshold to split the two sets equally')
+        threshold_ = encoded_log['label'].median()
+        threshold_1 = encoded_log['label'].sort_values().iloc[int(len(encoded_log['label'])/2)]
+        return threshold_
 
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
@@ -33,7 +69,10 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
-        encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+        try:
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+        except :
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
 
     # converts string values to in
     if job_type != LABELLING:
@@ -84,6 +123,8 @@ def label_boolean(df, label: LabelContainer):
     By default use mean of label value
     True if under threshold value
     """
+    if df['label'].dtype == bool:
+        return df
     if label.threshold_type == THRESHOLD_MEAN:
         threshold_ = df['label'].mean()
     else:

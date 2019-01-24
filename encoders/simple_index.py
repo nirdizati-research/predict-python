@@ -29,7 +29,7 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, atr_classifier=None, label=None,
+def add_trace_row(trace, encoding: EncodingContainer, event_index: int, atr_classifier=None, label=None,
                   executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
     # a and b are magic values
@@ -40,10 +40,10 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
     elif encoding.is_zero_padding():
         zero_count = b
     trace_row = list()
-    trace_row.append(CLASSIFIER.get_class_identity(trace))
+    trace_row.append(trace._get_attributes()["concept:name"])
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += [-1 for _ in range(0, zero_count)]
+        trace_row += ['0' for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
@@ -55,7 +55,7 @@ def trace_prefixes(trace: list, prefix_length: int):
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
-        event_name = CLASSIFIER.get_class_identity(event)
+        event_name = event["concept:name"]
         prefixes.append(event_name)
     return prefixes
 
@@ -69,7 +69,7 @@ def next_event_name(trace: list, prefix_length: int):
         name = CLASSIFIER.get_class_identity(next_event)
         return name
     else:
-        return -1
+        return '0'
 
 
 def __columns(prefix_length: int, label: LabelContainer):
@@ -141,7 +141,7 @@ def add_labels(label: LabelContainer, prefix_length: int, trace,
     elif label.type == NEXT_ACTIVITY:
         labels.append(next_event_name(trace, prefix_length))
     elif label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        atr = atr_classifier.get_class_identity(trace)
+        atr = trace._get_attributes()[label.attribute_name]
         labels.append(atr)
     elif label.type == DURATION:
         labels.append(duration(trace))

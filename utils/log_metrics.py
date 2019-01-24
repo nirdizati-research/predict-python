@@ -128,6 +128,7 @@ def max_events_in_log(logs):
     :return 3
     :rtype: int
     """
+    #TODO rewrite as return max(len(trace) for log in logs for trace in log)
     current_max = 0
     for log in logs:
         for trace in log:

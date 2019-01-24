@@ -38,7 +38,7 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
             encoded_data.append(
                 trace_to_row(trace, encoding, encoding.prefix_length, data_fun, additional_columns=additional_columns,
                              atr_classifier=atr_classifier, **kwargs))
-
+    #TODO ADD trace attributes
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -69,13 +69,11 @@ def data_complex(trace: list, prefix_length: int, additional_columns: list):
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
-        event_name = CLASSIFIER.get_class_identity(event)
+        event_name = event["concept:name"]
         data.append(event_name)
 
         for att in additional_columns:
-            # Basically XEventAttributeClassifier
-            value = event.get_attributes().get(att).get_value()
-            data.append(value)
+            data.append(event[att])
 
     return data
 
@@ -97,7 +95,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
     for att in additional_columns:
         # Basically XEventAttributeClassifier
         if prefix_length - 1 >= len(trace):
-            value = -1
+            value = '0'
         else:
             event_attrs = trace[prefix_length - 1].get_attributes()
             value = event_attrs.get(att).get_value()
@@ -110,12 +108,12 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, d
                  executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
     zero_count = get_zero_count(encoding, event_index, len(trace), len(additional_columns))
     trace_row = []
-    trace_name = CLASSIFIER.get_class_identity(trace)
+    trace_name = trace._get_attributes()["concept:name"]
     trace_row.append(trace_name)
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += [-1 for _ in range(0, zero_count)]
+        trace_row += ['0' for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

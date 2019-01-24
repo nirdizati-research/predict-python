@@ -5,7 +5,7 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from core.common import choose_classifier
+from core.common import choose_classifier, calculate_results
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -106,7 +106,10 @@ def no_clustering_train(original_test_data, train_data, clf):
     # TODO calculate AUC
     auc = 0
     try:
-        auc = metrics.roc_auc_score(actual, scores)
+        if len(set(actual)) == 2:
+            auc = metrics.roc_auc_score([el == 'true' for el in actual], scores)
+        else:
+            auc = metrics.roc_auc_score(actual, scores)
     except ValueError:
         print('ValueError in AUC_ROC')
         pass
@@ -149,6 +152,9 @@ def results_multi_label(actual: list, predicted: list):
     f1score = f1_score(actual, predicted, average='macro')
     precision = precision_score(actual, predicted, average='macro')
     recall = recall_score(actual, predicted, average='macro')
-    # confusion matrix is not binary for easy representation, so removing
-    row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
+
+    if len(set(actual)) == 2:
+        row = calculate_results([ el == 'true' for el in predicted ], [ el == 'true' for el in actual ])
+    else:
+        row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
     return row

@@ -2,6 +2,7 @@
 
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -28,22 +29,29 @@ def calculate_results(prediction, actual):
                 true_negative += 1
             else:
                 false_negative += 1
+
+
+
     try:
         precision = float(true_positive) / (true_positive + false_positive)
+        precision = precision_score(actual, prediction)
     except ZeroDivisionError:
         precision = 0
 
     try:
         recall = float(true_positive) / (true_positive + false_negative)
+        recall = recall_score(actual, prediction)
     except ZeroDivisionError:
         recall = 0
 
     try:
         f1score = (2 * precision * recall) / (precision + recall)
+        f1score = f1_score(actual, prediction)
     except ZeroDivisionError:
         f1score = 0
 
     acc = float(true_positive + true_negative) / (true_positive + true_negative + false_negative + false_positive)
+    acc = accuracy_score(actual, prediction)
     row = {'f1score': f1score, 'acc': acc, 'true_positive': true_positive, 'true_negative': true_negative,
            'false_negative': false_negative, 'false_positive': false_positive, 'precision': precision, 'recall': recall}
     return row

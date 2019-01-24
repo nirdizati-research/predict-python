@@ -11,15 +11,9 @@ from .simple_index import simple_index
 
 def encode_label_logs_new(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
                       label: LabelContainer, additional_columns=None, balance=False):
-    event_names = unique_events2(training_log, test_log)
+    training_log = encode_log(training_log, encoding, label, additional_columns)
 
-    training_log = encode_log(training_log, encoding, label, event_names, additional_columns)
-
-    if label.type == ATTRIBUTE_NUMBER:
-        try:
-            training_log['label'] = training_log['label'].apply(lambda x: float(x))
-        except : #TODO Extremely bad workaround to use previously labeled logs
-            training_log['label'] = training_log['label'].apply(lambda x: x == 'true')
+    # TODO ATTRIBUTE_NUMBER not anymore supported
 
     # TODO Extremely bad workaround to label dataset in a more balanced way
     if balance and label.threshold_type == THRESHOLD_MEAN:
@@ -28,13 +22,7 @@ def encode_label_logs_new(training_log: list, test_log: list, encoding: Encoding
         label = LabelContainer(type=label.type, attribute_name=label.attribute_name,
                                threshold_type=label.threshold_type, threshold=threshold)
 
-    test_log = encode_log(test_log, encoding, label, event_names, additional_columns)
-
-    if label.type == ATTRIBUTE_NUMBER:
-        try:
-            test_log['label'] = test_log['label'].apply(lambda x: float(x))
-        except : #TODO Extremely bad workaround to use previously labeled logs
-            test_log['label'] = test_log['label'].apply(lambda x: x == 'true')
+    test_log = encode_log(test_log, encoding, label, additional_columns)
 
     if job_type != LABELLING:
         #init nominal encode
@@ -128,7 +116,7 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     return encoded_log
 
 
-def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer, event_names=None,
+def encode_log(log: list, encoding: EncodingContainer, label: LabelContainer,
                additional_columns=None):
     """Encodes test set and training set as data frames
 
@@ -140,15 +128,17 @@ def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer
         raise ValueError("Prefix length must be greater than 1")
     run_df = None
     if encoding.method == SIMPLE_INDEX:
-        run_df = simple_index(run_log, label, encoding)
+        run_df = simple_index(log, label, encoding)
     elif encoding.method == BOOLEAN:
-        run_df = boolean(run_log, event_names, label, encoding)
+        event_names = unique_events(log)
+        run_df = boolean(log, event_names, label, encoding)
     elif encoding.method == FREQUENCY:
-        run_df = frequency(run_log, event_names, label, encoding)
+        event_names = unique_events(log)
+        run_df = frequency(log, event_names, label, encoding)
     elif encoding.method == COMPLEX:
-        run_df = complex(run_log, label, encoding, additional_columns)
+        run_df = complex(log, label, encoding, additional_columns)
     elif encoding.method == LAST_PAYLOAD:
-        run_df = last_payload(run_log, label, encoding, additional_columns)
+        run_df = last_payload(log, label, encoding, additional_columns)
     else:
         raise ValueError("Unknown encoding method {}".format(encoding.method))
     return run_df

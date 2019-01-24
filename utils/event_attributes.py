@@ -9,13 +9,14 @@ def unique_events(log: list):
 
     Adds all events into a list and removes duplicates while keeping order.
     """
-    classifier = XEventAttributeClassifier("Resource", ["concept:name"])
-    event_list = []
-    for trace in log:
-        for event in trace:
-            event_name = classifier.get_class_identity(event)
-            event_list.append(event_name)
-    return sorted(set(event_list), key=lambda x: event_list.index(x))
+    # classifier = XEventAttributeClassifier("Resource", ["concept:name"])
+    # event_list = []
+    # for trace in log:
+    #     for event in trace:
+    #         event_name = classifier.get_class_identity(event)
+    #         event_list.append(event_name)
+    # return sorted(set(event_list), key=lambda x: event_list.index(x))
+    return set([event._dict["concept:name"] for trace in log for event in trace ] )
 
 
 def unique_events2(training_log: list, test_log: list):
@@ -40,7 +41,7 @@ def get_event_attributes(log: list):
     return sorted(event_attributes)
 
 
-def get_global_event_attributes(log: XLog):
+def get_global_event_attributes(log):
     """Get log event attributes that are not name or time
     """
     # retrieves all events in the log and returns their intersection

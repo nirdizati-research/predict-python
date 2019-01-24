@@ -27,7 +27,7 @@ def prepare_logs(split: dict):
         training_log = get_logs(split['training_log_path'])
         additional_columns = get_global_event_attributes(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
-        test_log, _ = train_test_split(get_logs(split['test_log_path'])[0], test_size=0, shuffle=False)
+        test_log, _ = train_test_split(get_logs(split['test_log_path']), test_size=0, shuffle=False)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")

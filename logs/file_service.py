@@ -1,7 +1,7 @@
 from opyenxes.data_in.XUniversalParser import XUniversalParser
 from pm4py.objects.log.importer.xes import factory as xes_importer
 
-
+#TODO substitute all occurrences of this with thew new one
 def get_logs_old(file_path: str):
     """Read in event log from disk
 

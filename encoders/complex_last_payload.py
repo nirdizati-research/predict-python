@@ -97,7 +97,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
     for att in additional_columns:
         # Basically XEventAttributeClassifier
         if prefix_length - 1 >= len(trace):
-            value = '0'
+            value = -1
         else:
             event_attrs = trace[prefix_length - 1].get_attributes()
             value = event_attrs.get(att).get_value()
@@ -115,7 +115,7 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, d
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(0, zero_count)]
+        trace_row += [-1 for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
@@ -126,11 +126,10 @@ def get_zero_count(encoding: EncodingContainer, event_index: int, trace_len: int
     a = encoding.prefix_length - event_index
     b = encoding.prefix_length - trace_len
     if encoding.is_all_in_one() and encoding.is_complex():
-        if a < b:
-            a = b
+        a = max(a, b)
         zero_count = a * (1 + add_columns_len)
     elif encoding.is_all_in_one():
-        zero_count = a if a > b else b
+        zero_count = max(a, b)
         if zero_count > 0:
             zero_count + add_columns_len
     elif encoding.is_zero_padding() and encoding.is_complex():

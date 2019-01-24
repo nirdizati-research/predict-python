@@ -43,7 +43,7 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
     trace_row.append(CLASSIFIER.get_class_identity(trace))
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(0, zero_count)]
+        trace_row += [-1 for _ in range(0, zero_count)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
@@ -69,7 +69,7 @@ def next_event_name(trace: list, prefix_length: int):
         name = CLASSIFIER.get_class_identity(next_event)
         return name
     else:
-        return '0'
+        return -1
 
 
 def __columns(prefix_length: int, label: LabelContainer):
@@ -96,7 +96,7 @@ def get_intercase_attributes(log: list, label: LabelContainer):
 def setup_attribute_classifier(label: LabelContainer):
     # Create classifier only once
     atr_classifier = None
-    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
+    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER: #TODO why there is this control?
         atr_classifier = XEventAttributeClassifier("Attr class", [label.attribute_name])
     return atr_classifier
 

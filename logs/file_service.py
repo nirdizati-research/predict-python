@@ -1,7 +1,8 @@
 from opyenxes.data_in.XUniversalParser import XUniversalParser
+from pm4py.objects.log.importer.xes import factory as xes_importer
 
 
-def get_logs(file_path: str):
+def get_logs_old(file_path: str):
     """Read in event log from disk
 
     Uses XUniversalParser to parse log.
@@ -12,6 +13,15 @@ def get_logs(file_path: str):
     with open(file_path) as file:
         logs = XUniversalParser().parse(file)
     return logs
+
+
+def get_logs(file_path: str):
+    """Read in event log from disk
+
+    Uses xes_importer to parse log.
+    """
+    print("Reading in log from {}".format(file_path))
+    return xes_importer.import_log(file_path)
 
 
 def save_file(file, path):

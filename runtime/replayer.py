@@ -4,7 +4,7 @@ import django_rq
 from rest_framework import status
 from rest_framework.response import Response
 
-from logs.file_service import get_logs
+from logs.file_service import get_logs_old
 from logs.models import Log
 from runtime.models import DemoReplayer
 from .replay_core import prepare
@@ -36,7 +36,7 @@ class Replayer():
             self.execute(replayer.id)
 
     def execute(self, id):
-        xlog = get_logs(self.log.path)
+        xlog = get_logs_old(self.log.path)
         # t=threading.Thread(target=self.events_list, args=(xlog, id))
         events = self.events_list(xlog, id)
 

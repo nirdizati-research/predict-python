@@ -1,7 +1,7 @@
 from django.db import models
 from jsonfield.fields import JSONField
 
-from logs.file_service import get_logs
+from logs.file_service import get_logs_old
 
 TYPES = (
     ('single', 'Single'),
@@ -17,7 +17,7 @@ class Log(models.Model):
 
     def get_file(self):
         """Read and parse log from filesystem"""
-        return get_logs(self.path)
+        return get_logs_old(self.path)
 
 
 class Split(models.Model):

@@ -18,13 +18,13 @@ TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"]
 def prepare_logs(split: dict):
     """Returns training_log and test_log"""
     if split['type'] == 'single':
-        log = get_logs(split['original_log_path'])[0]
+        log = get_logs(split['original_log_path'])
         additional_columns = get_global_event_attributes(log)
         training_log, test_log = _split_single_log(split, log)
         print("Loaded single log from {}".format(split['original_log_path']))
     else:
         # Have to use sklearn to convert some internal data types
-        training_log = get_logs(split['training_log_path'])[0]
+        training_log = get_logs(split['training_log_path'])
         additional_columns = get_global_event_attributes(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
         test_log, _ = train_test_split(get_logs(split['test_log_path'])[0], test_size=0, shuffle=False)

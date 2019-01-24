@@ -10,9 +10,10 @@ from core.multi_classification import multi_classifier, multi_classifier_single_
 from core.regression import regression, regression_single_log
 from core.label_validation import label_task
 from core.update_model import update_model
-from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
+from encoders.common import REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
     encode_label_log, DURATION, encode_label_logs_new
 from logs.splitting import prepare_logs
+from utils.cache import load_from_cache, dump_to_cache
 
 
 def calculate(job):

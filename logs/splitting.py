@@ -4,7 +4,7 @@ from dateutil.parser import *
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from sklearn.model_selection import train_test_split
 
-from log_util.event_attributes import get_global_event_attributes
+from utils.event_attributes import get_global_event_attributes
 from logs.file_service import get_logs
 
 SPLIT_SEQUENTIAL = 'split_sequential'

@@ -4,7 +4,7 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from log_util.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, trace_attributes, \
+from utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, trace_attributes, \
     events_in_trace
 from logs.log_service import create_log
 from logs.models import Split

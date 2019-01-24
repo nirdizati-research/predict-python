@@ -4,7 +4,7 @@ from core.constants import CLASSIFICATION
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, COMPLEX
 from encoders.label_container import *
-from log_util.event_attributes import unique_events, get_global_event_attributes
+from utils import unique_events, get_global_event_attributes
 from logs.file_service import get_logs
 
 

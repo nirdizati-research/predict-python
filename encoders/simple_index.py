@@ -4,8 +4,8 @@ from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import *
-from log_util.log_metrics import events_by_date, resources_by_date, new_trace_start
-from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
+from utils.log_metrics import events_by_date, resources_by_date, new_trace_start
+from utils.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
 
 CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None

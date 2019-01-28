@@ -41,6 +41,15 @@ def get_event_attributes(log: list):
     return sorted(event_attributes)
 
 
+def get_additional_columns(log):
+    return {'trace_attributes' : get_global_trace_attributes(log),
+            'event_attributes' : get_global_event_attributes(log)}
+
+def get_global_trace_attributes(log):
+    attributes = list(reduce(set.intersection, [set(trace._get_attributes().keys()) for trace in log]))
+    trace_attributes = [attr for attr in attributes if attr not in ["concept:name", "time:timestamp", "label"]]
+    return sorted(trace_attributes)
+
 def get_global_event_attributes(log):
     """Get log event attributes that are not name or time
     """

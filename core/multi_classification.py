@@ -99,7 +99,10 @@ def kmeans_clustering_test(test_data, clf, estimator, testing=False):
 
 def no_clustering_train(original_test_data, train_data, clf):
     y = train_data['label']
-    clf.fit(train_data.drop('label', 1), y)
+    try:
+        clf.fit(train_data.drop('label', 1), y)
+    except:
+        clf.partial_fit(train_data.drop('label', 1).values, y)
     actual = original_test_data["label"]
     original_test_data, scores = no_clustering_test(original_test_data.drop('label', 1), clf, True)
     original_test_data["actual"] = actual

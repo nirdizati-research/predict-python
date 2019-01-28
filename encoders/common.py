@@ -21,7 +21,7 @@ def encode_label_logs_new(training_log: list, test_log: list, encoding: Encoding
         threshold = training_log['label'].median()
         label = LabelContainer(type=label.type, attribute_name=label.attribute_name,
                                threshold_type=label.threshold_type, threshold=threshold)
-
+    #TODO pass the columns of the training log
     test_log = encode_log(test_log, encoding, label, additional_columns)
 
     if job_type != LABELLING:

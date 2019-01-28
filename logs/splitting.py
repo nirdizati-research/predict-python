@@ -4,7 +4,7 @@ from dateutil.parser import *
 from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from sklearn.model_selection import train_test_split
 
-from utils.event_attributes import get_global_event_attributes
+from utils.event_attributes import get_global_event_attributes, get_additional_columns
 from logs.file_service import get_logs
 
 SPLIT_SEQUENTIAL = 'split_sequential'
@@ -25,7 +25,7 @@ def prepare_logs(split: dict):
     else:
         # Have to use sklearn to convert some internal data types
         training_log = get_logs(split['training_log_path'])
-        additional_columns = get_global_event_attributes(training_log)
+        additional_columns = get_additional_columns(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
         test_log, _ = train_test_split(get_logs(split['test_log_path']), test_size=0, shuffle=False)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))

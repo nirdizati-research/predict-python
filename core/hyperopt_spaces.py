@@ -78,6 +78,42 @@ def _classification_incremental_hoeffding_tree():
     }
 
 
+def _classification_incremental_sgd_classifier():
+    return {
+        'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss',
+                                   'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive']),
+        'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
+        'alpha': hp.uniform('alpha', 0.0001, 0.5),
+        'l1_ratio': hp.uniform('l1_ratio', 0.15, 1.0),
+        'fit_intercept': hp.choice('fit_intercept', [True, False]),
+        'max_iter': scope.int(hp.quniform('max_iter', 4, 30, 1)),
+        'tol': hp.uniform('tol', 1e-3, 0.5),
+        'epsilon': hp.uniform('epsilon', 1e-3, 0.5),
+        'learning_rate': hp.choice('learning_rate', ['constant', 'optimal', 'invscaling', 'adaptive']),
+        'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
+        'power_t': hp.uniform('power_t', 0.5, 0.1),
+        'early_stopping': hp.choice('early_stopping', [True, False]),
+        'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5)),
+        'validation_fraction': 0.1,
+        'average': hp.choice('average', [True, False])
+    }
+
+
+def _classification_incremental_perceptron():
+    return {
+        'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
+        'alpha': hp.uniform('alpha', 0.0001, 0.5),
+        'fit_intercept': hp.choice('fit_intercept', [True, False]),
+        'max_iter': scope.int(hp.quniform('max_iter', 4, 30, 1)),
+        'tol': hp.uniform('tol', 1e-3, 0.5),
+        'shuffle': hp.choice('shuffle', [True, False]),
+        'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
+        'early_stopping': hp.choice('early_stopping', [True, False]),
+        'validation_fraction': 0.1,
+        'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5))
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
@@ -116,6 +152,8 @@ HYPEROPT_SPACE_MAP = {
     CLASSIFICATION_INCREMENTAL_NAIVE_BAYES: _classification_incremental_naive_bayes,
     CLASSIFICATION_INCREMENTAL_ADAPTIVE_TREE: _classification_incremental_adaptive_tree,
     CLASSIFICATION_INCREMENTAL_HOEFFDING_TREE: _classification_incremental_hoeffding_tree,
+    CLASSIFICATION_INCREMENTAL_SGDC: _classification_incremental_sgd_classifier,
+    CLASSIFICATION_INCREMENTAL_PERCEPTRON: _classification_incremental_perceptron,
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,

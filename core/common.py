@@ -2,13 +2,14 @@
 
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import SGDClassifier, Perceptron
 from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, confusion_matrix
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, INCREMENTAL_NAIVE_BAYES, \
-    INCREMENTAL_ADAPTIVE_TREE, INCREMENTAL_HOEFFDING_TREE
+    INCREMENTAL_ADAPTIVE_TREE, INCREMENTAL_HOEFFDING_TREE, INCREMENTAL_PERCEPTRON, INCREMENTAL_SGDC
 from skmultiflow.trees import HAT, HoeffdingTree
 
 
@@ -54,6 +55,10 @@ def choose_classifier(job: dict):
         clf = HAT(**config)
     elif method == INCREMENTAL_HOEFFDING_TREE:
         clf = HoeffdingTree(**config)
+    elif method == INCREMENTAL_SGDC:
+        clf = SGDClassifier(**config)
+    elif method == INCREMENTAL_PERCEPTRON:
+        clf = Perceptron(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf

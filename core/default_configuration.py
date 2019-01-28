@@ -73,6 +73,38 @@ def _classification_incremental_hoeffding_tree():
     }
 
 
+def _classification_incremental_sgd_classifier():
+    return {
+        'loss': 'hinge',
+        'penalty': 'l2',
+        'alpha': 0.0001,
+        'l1_ratio': 0.15,
+        'fit_intercept': True,
+        'max_iter': 5,
+        'tol': 1e-3,
+        'eta0': 0.0,
+        'power_t': 0.5,
+        'early_stopping': False,
+        'n_iter_no_change': 5,
+        'validation_fraction' : 0.1,
+    }
+
+
+def _classification_incremental_perceptron():
+    return {
+        'penalty': None,
+        'alpha': 0.0001,
+        'fit_intercept': True,
+        'max_iter': None,
+        'tol': 1e-3,
+        'shuffle': True,
+        'eta0': 1,
+        'early_stopping': False,
+        'validation_fraction': 0.1,
+        'n_iter_no_change': 5
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': 10,
@@ -178,6 +210,8 @@ CONF_MAP = {
     CLASSIFICATION_INCREMENTAL_NAIVE_BAYES : _classification_incremental_naive_bayes,
     CLASSIFICATION_INCREMENTAL_ADAPTIVE_TREE : _classification_incremental_adaptive_tree,
     CLASSIFICATION_INCREMENTAL_HOEFFDING_TREE : _classification_incremental_hoeffding_tree,
+    CLASSIFICATION_INCREMENTAL_SGDC : _classification_incremental_sgd_classifier,
+    CLASSIFICATION_INCREMENTAL_PERCEPTRON : _classification_incremental_perceptron,
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,

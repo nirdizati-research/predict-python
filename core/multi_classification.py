@@ -126,7 +126,10 @@ def no_clustering_test(test_data, clf, testing = False):
     prediction = clf.predict(test_data.drop('trace_id', 1))
     scores = 0
     if testing:
-        scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
+        if hasattr(clf, 'decision_function'):
+            scores = clf.decision_function(test_data.drop('trace_id', 1))
+        else:
+            scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
     test_data["predicted"] = prediction
     return test_data, scores
 

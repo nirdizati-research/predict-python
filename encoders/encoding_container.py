@@ -69,7 +69,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
 
     def init_label_encoder(self, df):
         for column in df:
-            if column != 'trace_id':# and column != 'label':
+            if column != 'trace_id' and column != 'label':
                 if df[column].dtype != int:
                     if ENCODING == LABEL_ENCODER:
                         #TODO if date order it before encoding

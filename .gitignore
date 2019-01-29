@@ -80,3 +80,15 @@ src/
 
 dump.rdb
 db/*.sqlite3
+
+*.icloud
+*.sav
+*.DS_Store
+*.ipynb_checkpoints/
+
+*/migrations/*
+
+model_cache/*
+results/*
+labeled_log_cache/*
+log_cache/*

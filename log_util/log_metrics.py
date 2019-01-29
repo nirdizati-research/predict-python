@@ -85,10 +85,9 @@ def trace_attributes(log):
 
 
 def is_number(s):
-    try:
-        float(s)
+    if isinstance(s, float) or isinstance(s, int):
         return 'number'
-    except Exception:
+    else:
         return 'string'
 
 

@@ -2,47 +2,35 @@
 
 import xgboost as xgb
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
 
 
-def calculate_results(prediction, actual):
-    true_positive = 0
-    false_positive = 0
-    false_negative = 0
-    true_negative = 0
+def calculate_results(actual, predicted):
+    conf_matrix = confusion_matrix(actual, predicted, labels=[False, True])
 
-    for i in range(0, len(actual)):
-        if actual[i]:
-            if actual[i] == prediction[i]:
-                true_positive += 1
-            else:
-                false_positive += 1
-        else:
-            if actual[i] == prediction[i]:
-                true_negative += 1
-            else:
-                false_negative += 1
     try:
-        precision = float(true_positive) / (true_positive + false_positive)
+        precision = precision_score(actual, predicted)
     except ZeroDivisionError:
         precision = 0
 
     try:
-        recall = float(true_positive) / (true_positive + false_negative)
+        recall = recall_score(actual, predicted)
     except ZeroDivisionError:
         recall = 0
 
     try:
-        f1score = (2 * precision * recall) / (precision + recall)
+        f1score = f1_score(actual, predicted)
     except ZeroDivisionError:
         f1score = 0
 
-    acc = float(true_positive + true_negative) / (true_positive + true_negative + false_negative + false_positive)
-    row = {'f1score': f1score, 'acc': acc, 'true_positive': true_positive, 'true_negative': true_negative,
-           'false_negative': false_negative, 'false_positive': false_positive, 'precision': precision, 'recall': recall}
+    acc = accuracy_score(actual, predicted)
+    row = {'f1score': f1score, 'acc': acc, 'true_positive': conf_matrix[1][1], 'true_negative': conf_matrix[0][0],
+           'false_negative': conf_matrix[0][1], 'false_positive': conf_matrix[1][0], 'precision': precision,
+           'recall': recall}
     return row
 
 
@@ -67,9 +55,3 @@ def get_method_config(job: dict):
     method_conf_name = "{}.{}".format(job['type'], method)
     config = job[method_conf_name]
     return method, config
-
-
-def add_actual(training_df, test_df):
-    training_df['actual'] = training_df['label']
-    test_df['actual'] = test_df['label']
-    return training_df, test_df

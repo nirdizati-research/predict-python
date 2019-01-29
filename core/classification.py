@@ -5,18 +5,16 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
-from core.common import choose_classifier, calculate_results, add_actual
+from core.common import choose_classifier, calculate_results
 from core.constants import KMEANS, NO_CLUSTER
+
 pd.options.mode.chained_assignment = None
 
 
 def classification(training_df, test_df, job, is_binary_classifier):
     classifier = choose_classifier(job)
 
-    if is_binary_classifier:
-        training_df, test_df = add_actual(training_df, test_df)
-
-    train_data, test_data, original_test_data = drop_columns(training_df, test_df, is_binary_classifier)
+    train_data, test_data, original_test_data = drop_columns(training_df, test_df)
 
     if job['clustering'] == KMEANS:
         results_df, auc, model_split = kmeans_clustering_train(original_test_data, train_data, classifier,
@@ -54,20 +52,16 @@ def classification_single_log(run_df, model, is_binary_classifier):
 def kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_config: dict, is_binary_classifier):
     estimator = KMeans(**kmeans_config)
     models = dict()
-    if is_binary_classifier:
-        label_to_use = 'actual'
-    else:
-        label_to_use = 'label'
 
-    estimator.fit(train_data.drop(label_to_use, 1))
+    estimator.fit(train_data.drop('label', 1))
     cluster_lists = {i: train_data.iloc[np.where(estimator.labels_ == i)[0]] for i in range(estimator.n_clusters)}
     for i, cluster_list in cluster_lists.items():
         clustered_train_data = cluster_list
         if clustered_train_data.shape[0] == 0:
             pass
         else:
-            y = clustered_train_data[label_to_use]
-            classifier.fit(clustered_train_data.drop(label_to_use, 1), y)
+            y = clustered_train_data['label']
+            classifier.fit(clustered_train_data.drop('label', 1), y)
             models[i] = classifier
     model_split = dict()
     model_split['type'] = KMEANS
@@ -78,12 +72,7 @@ def kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_c
 
 
 def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifier, testing=False):
-    if is_binary_classifier:
-        label_to_use = 'actual'
-    else:
-        label_to_use = 'label'
-
-    drop_list = ['trace_id', label_to_use] if testing else ['trace_id']
+    drop_list = ['trace_id', 'label'] if testing else ['trace_id']
     auc = 0
     counter = 0
 
@@ -105,7 +94,7 @@ def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifie
             if is_binary_classifier:
                 scores = classifier[i].predict_proba(clustered_test_data)
                 if testing:
-                    actual = original_clustered_test_data['actual']
+                    actual = original_clustered_test_data['label']
                     auc = calculate_auc(actual, scores, auc)
             else:
                 if testing:
@@ -124,20 +113,14 @@ def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifie
 
 
 def no_clustering_train(original_test_data, train_data, classifier, is_binary_classifier):
-    if is_binary_classifier:
-        label_to_use = 'actual'
-    else:
-        label_to_use = 'label'
-
-    y = train_data[label_to_use]
+    y = train_data['label']
     try:
-        classifier.fit(train_data.drop(label_to_use, 1), y)
+        classifier.fit(train_data.drop('label', 1), y)
     except:
-        classifier.partial_fit(train_data.drop(label_to_use, 1).values, y)
+        classifier.partial_fit(train_data.drop('label', 1).values, y)
 
-    actual = original_test_data[label_to_use]
-    original_test_data, scores = no_clustering_test(original_test_data.drop(label_to_use, 1), classifier, True)
-    original_test_data['actual'] = actual
+    actual = original_test_data['label']
+    original_test_data, scores = no_clustering_test(original_test_data, classifier, True)
 
     auc = 0
     if is_binary_classifier:
@@ -154,19 +137,20 @@ def no_clustering_train(original_test_data, train_data, classifier, is_binary_cl
 
 
 def no_clustering_test(test_data, classifier, testing=False):
-    prediction = classifier.predict(test_data.drop('trace_id', 1))
+    prediction = classifier.predict(test_data.drop(['trace_id', 'label'], 1))
     scores = 0
     if testing:
         if hasattr(classifier, 'decision_function'):
-            scores = classifier.decision_function(test_data.drop('trace_id', 1))
+            scores = classifier.decision_function(test_data.drop(['trace_id', 'label'], 1))
         else:
-            scores = classifier.predict_proba(test_data.drop('trace_id', 1))[:, 1]
-    test_data["predicted"] = prediction
+            scores = classifier.predict_proba(test_data.drop(['trace_id', 'label'], 1))[:, 1]
+
+    test_data['predicted'] = prediction
     return test_data, scores
 
 
 def prepare_results(df, auc: int, is_binary_classifier):
-    actual = df['actual'].values
+    actual = df['label'].values
     predicted = df['predicted'].values
 
     if is_binary_classifier:
@@ -177,16 +161,10 @@ def prepare_results(df, auc: int, is_binary_classifier):
     return row
 
 
-def drop_columns(train_df, test_df, is_binary_classifier):
-    if is_binary_classifier:
-        train_df = train_df.drop(['label', 'trace_id'], 1)
-        original_test_df = test_df.drop('label', 1)
-        test_df = test_df.drop(['label', 'trace_id'], 1)
-    else:
-        original_test_df = test_df
-        train_df = train_df.drop('trace_id', 1)
-        test_df = test_df.drop('trace_id', 1)
-
+def drop_columns(train_df, test_df):
+    original_test_df = test_df
+    train_df = train_df.drop('trace_id', 1)
+    test_df = test_df.drop('trace_id', 1)
     return train_df, test_df, original_test_df
 
 
@@ -208,6 +186,9 @@ def results_multiclass_label(actual: list, predicted: list):
     f1score = f1_score(actual, predicted, average='macro')
     precision = precision_score(actual, predicted, average='macro')
     recall = recall_score(actual, predicted, average='macro')
-    # confusion matrix is not binary for easy representation, so removing
-    row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
+
+    if len(set(actual + predicted)) == 2:
+        row = calculate_results([el == 'true' for el in actual], [el == 'true' for el in predicted])
+    else:
+        row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
     return row

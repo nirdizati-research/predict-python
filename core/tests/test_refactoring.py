@@ -23,10 +23,11 @@ class RefactorProof(TestCase):
         job = self.get_job()
         add_default_config(job)
         result, _ = calculate(job)
+        print(result)
         self.assertDictEqual(result, {'f1score': 0.7317073170731708, 'acc': 0.6515837104072398, 'true_positive': 105,
-                                      'true_negative': 39,
-                                      'false_negative': 22, 'false_positive': 55, 'precision': 0.65625,
-                                      'recall': 0.8267716535433071, 'auc': 0.5943654099132211})
+                                      'true_negative': 39, 'false_negative': 55, 'false_positive': 22,
+                                      'precision': 0.65625, 'recall': 0.8267716535433071, 'auc': 0.5943654099132211}
+                             )
 
     def test_class_no_cluster(self):
         self.maxDiff = None
@@ -34,10 +35,12 @@ class RefactorProof(TestCase):
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
+        print(result)
         self.assertDictEqual(result, {'f1score': 0.7200000000000001, 'acc': 0.6515837104072398, 'true_positive': 99,
-                                      'true_negative': 45,
-                                      'false_negative': 28, 'false_positive': 49, 'precision': 0.668918918918919,
-                                      'recall': 0.7795275590551181, 'auc': 0.69680851063829774})
+                                      'true_negative': 45, 'false_negative': 49, 'false_positive': 28,
+                                      'precision': 0.668918918918919, 'recall': 0.7795275590551181,
+                                      'auc': 0.6968085106382977}
+                             )
 
     def test_next_activity_kmeans(self):
         self.maxDiff = None

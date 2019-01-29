@@ -2,12 +2,12 @@ from unittest import TestCase
 
 from log_util import log_metrics
 from log_util.time_metrics import *
-from logs.file_service import get_logs
+from logs.file_service import get_log
 
 
 class TimeMetrics(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example.xes")[0]
+        self.log = get_log("log_cache/general_example.xes")
 
     def test_calculate_remaining_time(self):
         trace = self.log[0]

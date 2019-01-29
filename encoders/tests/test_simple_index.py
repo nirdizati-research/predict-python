@@ -5,13 +5,13 @@ from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import REMAINING_TIME
 from encoders.simple_index import simple_index
-from logs.file_service import get_logs
+from logs.file_service import get_log
 
 
 class TestSplitLogExample(TestCase):
     def setUp(self):
-        self.test_log = get_logs("log_cache/general_example_test.xes")[0]
-        self.training_log = get_logs("log_cache/general_example_training.xes")[0]
+        self.test_log = get_log("log_cache/general_example_test.xes")
+        self.training_log = get_log("log_cache/general_example_training.xes")
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer()
 
@@ -65,7 +65,7 @@ class TestGeneralTest(TestCase):
     """Making sure it actually works"""
 
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer()
 
@@ -171,7 +171,7 @@ class TestGeneralTest(TestCase):
     def test_eval(self):
         encoding = EncodingContainer(prefix_length=12, generation_type=ALL_IN_ONE,
                                      padding=ZERO_PADDING)
-        df = simple_index(get_logs("log_cache/general_example.xes")[0],
+        df = simple_index(get_log("log_cache/general_example.xes"),
                           LabelContainer(REMAINING_TIME, add_elapsed_time=True), encoding)
 
         self.assertEqual(df.shape, (41, 15))

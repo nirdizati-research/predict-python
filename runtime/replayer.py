@@ -5,7 +5,7 @@ from random import randint
 import django_rq
 from rq_scheduler import Scheduler
 
-from logs.file_service import get_logs
+from logs.file_service import get_log
 from logs.models import Log
 from runtime.models import DemoReplayer
 from .replay_core import prepare
@@ -35,7 +35,7 @@ class Replayer:
             self.execute(replayer.id)
 
     def execute(self, id):
-        xlog = get_logs(self.log.path)
+        xlog = get_log(self.log.path)
         # t=threading.Thread(target=self.events_list, args=(xlog, id))
         events = self.events_list(xlog, id)  # TODO: fix function call that doesn't return anything
         # TODO: fix events not being returned

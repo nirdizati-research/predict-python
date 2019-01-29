@@ -40,7 +40,7 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
         print('encoding neither all_in_one nor zero_padding, setting zero count to 0!')
         zero_count = 0
     trace_row = list()
-    trace_row.append(trace['concept:name'])
+    trace_row.append(trace.attributes['concept:name'])
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
         trace_row += ['0' for _ in range(0, zero_count)]
@@ -93,14 +93,6 @@ def get_intercase_attributes(log: list, label: LabelContainer):
     return kwargs
 
 
-def setup_attribute_classifier(label: LabelContainer):
-    # Create classifier only once
-    atr_classifier = None
-    if label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        atr_classifier = XEventAttributeClassifier("Attr class", [label.attribute_name])
-    return atr_classifier
-
-
 def add_label_columns(columns: list, label: LabelContainer):
     if label.type == NO_LABEL:
         return columns
@@ -141,8 +133,7 @@ def add_labels(label: LabelContainer, prefix_length: int, trace,
     elif label.type == NEXT_ACTIVITY:
         labels.append(next_event_name(trace, prefix_length))
     elif label.type == ATTRIBUTE_STRING or label.type == ATTRIBUTE_NUMBER:
-        atr = atr_classifier.get_class_identity(trace)
-        labels.append(atr)
+        labels.append(trace.attributes[atr_classifier])
     elif label.type == DURATION:
         labels.append(duration(trace))
     return labels

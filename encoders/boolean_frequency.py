@@ -4,7 +4,7 @@ from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes, setup_attribute_classifier
+from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes
 
 
 def boolean(log: list, event_names: list, label: LabelContainer, encoding: EncodingContainer):
@@ -72,7 +72,7 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, l
     # starts with all False, changes to event
     event_happened = create_event_happened(event_names, encoding)
     trace_row = []
-    trace_name = trace['concept:name']
+    trace_name = trace.attributes['concept:name']
     trace_row.append(trace_name)
     for index, event in enumerate(trace):
         if index >= event_index:

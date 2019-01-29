@@ -3,7 +3,7 @@ from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from encoders.simple_index import add_label_columns, add_labels, setup_attribute_classifier, get_intercase_attributes
+from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes
 
 ATTRIBUTE_CLASSIFIER = None
 
@@ -89,13 +89,12 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
         data.append(event_name)
 
     # Attributes of last event
+    #TODO: this is very strange
     for att in additional_columns['event_attributes']:
-        # Basically XEventAttributeClassifier
         if prefix_length - 1 >= len(trace):
             value = '0'
         else:
-            event_attrs = trace[prefix_length - 1].get_attributes()
-            value = event_attrs.get(att).get_value()
+            value = trace[prefix_length - 1][att]
         data.append(value)
     return data
 
@@ -107,7 +106,7 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, d
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(0, len(columns) - len(trace_row) - 1)]
+        trace_row += ['0' for _ in range(len(trace_row), len(columns) - 1)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

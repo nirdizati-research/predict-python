@@ -4,13 +4,13 @@ from core.constants import CLASSIFICATION
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, COMPLEX
 from encoders.label_container import *
-from log_util.event_attributes import unique_events, get_global_event_attributes
-from logs.file_service import get_logs
+from log_util.event_attributes import unique_events, get_additional_columns
+from logs.file_service import get_log
 
 
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(prefix_length=2)
 
@@ -166,9 +166,9 @@ class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
 
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
-        self.add_col = get_global_event_attributes(self.log)
+        self.add_col = get_additional_columns(self.log)
         self.encoding = EncodingContainer(COMPLEX, prefix_length=2)
         self.encodingPadding = EncodingContainer(COMPLEX, prefix_length=10, padding=ZERO_PADDING)
 
@@ -270,7 +270,7 @@ class TestLabelComplex(TestCase):
 
 class TestLabelBoolean(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(BOOLEAN, prefix_length=2)
 

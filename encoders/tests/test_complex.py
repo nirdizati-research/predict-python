@@ -3,16 +3,16 @@ from unittest import TestCase
 from encoders.complex_last_payload import complex
 from encoders.encoding_container import EncodingContainer, COMPLEX, ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import LabelContainer, NO_LABEL
-from log_util.event_attributes import unique_events, get_global_event_attributes
-from logs.file_service import get_logs
+from log_util.event_attributes import unique_events, get_additional_columns
+from logs.file_service import get_log
 
 
 class Complex(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
-        self.add_col = get_global_event_attributes(self.log)
+        self.add_col = get_additional_columns(self.log)
         self.encoding = EncodingContainer(COMPLEX)
 
     def test_shape(self):

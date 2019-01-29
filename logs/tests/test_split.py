@@ -67,11 +67,7 @@ class SplitSingle(TestCase):
 
 def trace_names(log):
     """Get trace names"""
-    names = []
-    for trace in log:
-        name = trace['concept:name']
-        names.append(name)
-    return names
+    return [ trace.attributes['concept:name'] for trace in log ]
 
 
 def split_single():

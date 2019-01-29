@@ -31,7 +31,7 @@ def resources_by_date(log):
     for trace in log:
         for event in trace:
             resource = event.get("Resource", "")
-            timestamp = event["time:timestamp"]
+            timestamp = event[TIMESTAMP_CLASSIFIER]
             stamp_dict[str(timestamp.date())].append(resource)
 
     for key, value in stamp_dict.items():

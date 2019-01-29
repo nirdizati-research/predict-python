@@ -1,7 +1,7 @@
 from pm4py.objects.log.importer.xes import factory as xes_importer
 
 
-def get_logs(file_path: str):
+def get_log(file_path: str):
     """Read in event log from disk
 
     Uses xes_importer to parse log.

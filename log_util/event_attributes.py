@@ -6,11 +6,9 @@ def unique_events(log: list):
 
     Adds all events into a list and removes duplicates while keeping order.
     """
-    event_list = []
-    for trace in log:
-        for event in trace:
-            event_name = event['concept:name']
-            event_list.append(event_name)
+
+    event_list = [ event['concept:name'] for trace in log for event in trace ]
+    #TODO: this is very strange
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
 
@@ -30,7 +28,7 @@ def get_event_attributes(log: list):
     As log file is a list, it has no global event attributes. Getting from first event of first trace. This may be bad.
     """
     event_attributes = []
-    for attribute in log[0][0].get_attributes().keys():
+    for attribute in log[0][0].attributes.keys():
         if attribute not in ["concept:name", "time:timestamp"]:
             event_attributes.append(attribute)
     return sorted(event_attributes)

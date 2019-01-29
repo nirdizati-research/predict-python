@@ -14,7 +14,7 @@ def runtime_task(job, model):
         job.status = RUNNING
         job.save()
         log = Log.objects.get(pk=job.config['log_id'])
-        run_log = get_logs(log.path)[0]
+        run_log = get_logs(log.path)
         result_data = runtime_calculate(run_log, model.to_dict())
         result = result_data['prediction']
         job.result = result

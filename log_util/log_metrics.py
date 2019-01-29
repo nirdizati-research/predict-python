@@ -1,9 +1,7 @@
 from collections import defaultdict, OrderedDict
 
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-
-TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Event", ["time:timestamp"])
-NAME_CLASSIFIER = XEventAttributeClassifier("Event", ["concept:name"])
+TIMESTAMP_CLASSIFIER = "time:timestamp"
+NAME_CLASSIFIER = "concept:name"
 
 
 def events_by_date(logs):
@@ -17,7 +15,7 @@ def events_by_date(logs):
     for log in logs:
         for trace in log:
             for event in trace:
-                timestamp = TIMESTAMP_CLASSIFIER.get_class_identity(event)
+                timestamp = event[TIMESTAMP_CLASSIFIER]
                 date = timestamp.split("T")[0]
                 stamp_dict[date] += 1
     return OrderedDict(sorted(stamp_dict.items()))
@@ -31,14 +29,12 @@ def resources_by_date(logs):
     :return {'2010-12-30': 7, '2011-01-06': 8}
     :rtype: OrderedDict
     """
-    classifier = XEventAttributeClassifier("Resource", ["Resource", "time:timestamp"])
     stamp_dict = defaultdict(lambda: [])
     for log in logs:
         for trace in log:
             for event in trace:
-                resource_and_timestamp = classifier.get_class_identity(event)
-                resource = resource_and_timestamp.split("&&")[0]
-                timestamp = resource_and_timestamp.split("&&")[1]
+                resource = event["Resource"]
+                timestamp = event["time:timestamp"]
                 date = timestamp.split("T")[0]
                 stamp_dict[date].append(resource)
 
@@ -58,7 +54,7 @@ def event_executions(logs):
     for log in logs:
         for trace in log:
             for event in trace:
-                event_name = NAME_CLASSIFIER.get_class_identity(event)
+                event_name = event[NAME_CLASSIFIER]
                 executions[event_name] += 1
     return OrderedDict(sorted(executions.items()))
 
@@ -72,7 +68,7 @@ def new_trace_start(logs):
     executions = defaultdict(lambda: 0)
     for log in logs:
         for trace in log:
-            timestamp = TIMESTAMP_CLASSIFIER.get_class_identity(trace[0])
+            timestamp = trace[0][TIMESTAMP_CLASSIFIER]
             date = timestamp.split("T")[0]
             executions[date] += 1
     return OrderedDict(sorted(executions.items()))
@@ -88,7 +84,7 @@ def trace_attributes(logs):
     values = []
     for log in logs:
         trace = log[0]
-        for attribute in trace.get_attributes().values():
+        for attribute in trace._get_attributes().values():
             if attribute.get_key() != "concept:name":
                 atr_type = is_number(attribute.get_value())
                 atr = {'name': attribute.get_key(), 'type': atr_type, 'example': str(attribute.get_value())}
@@ -117,7 +113,7 @@ def events_in_trace(logs):
             counter = 0
             for event in trace:
                 counter += 1
-            name = NAME_CLASSIFIER.get_class_identity(trace)
+            name = trace[NAME_CLASSIFIER]
             stamp_dict[name] = counter
     return OrderedDict(sorted(stamp_dict.items()))
 

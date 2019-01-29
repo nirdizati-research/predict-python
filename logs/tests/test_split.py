@@ -1,10 +1,5 @@
 from django.test import TestCase
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-
 from logs.splitting import prepare_logs
-
-classifier = XEventAttributeClassifier("Trace", ["concept:name"])
-
 
 class Split(TestCase):
     def test_split_single(self):
@@ -74,7 +69,7 @@ def trace_names(log):
     """Get trace names"""
     names = []
     for trace in log:
-        name = classifier.get_class_identity(trace)
+        name = trace['concept:name']
         names.append(name)
     return names
 

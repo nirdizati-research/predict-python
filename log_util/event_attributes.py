@@ -1,5 +1,4 @@
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-from opyenxes.model import XLog
+from functools import reduce
 
 
 def unique_events(log: list):
@@ -7,11 +6,10 @@ def unique_events(log: list):
 
     Adds all events into a list and removes duplicates while keeping order.
     """
-    classifier = XEventAttributeClassifier("Resource", ["concept:name"])
     event_list = []
     for trace in log:
         for event in trace:
-            event_name = classifier.get_class_identity(event)
+            event_name = event['concept:name']
             event_list.append(event_name)
     return sorted(set(event_list), key=lambda x: event_list.index(x))
 
@@ -38,12 +36,20 @@ def get_event_attributes(log: list):
     return sorted(event_attributes)
 
 
-def get_global_event_attributes(log: XLog):
+def get_additional_columns(log):
+    return {'trace_attributes' : get_global_trace_attributes(log),
+            'event_attributes' : get_global_event_attributes(log)}
+
+def get_global_trace_attributes(log):
+    # retrieves all traces in the log and returns their intersection
+    attributes = list(reduce(set.intersection, [set(trace._get_attributes().keys()) for trace in log]))
+    trace_attributes = [attr for attr in attributes if attr not in ["concept:name", "time:timestamp", "label"]]
+    return sorted(trace_attributes)
+
+def get_global_event_attributes(log):
     """Get log event attributes that are not name or time
     """
-
-    event_attributes = []
-    for attribute in log.get_global_event_attributes():
-        if attribute.get_key() not in ["concept:name", "time:timestamp"]:
-            event_attributes.append(attribute.get_key())
+    # retrieves all events in the log and returns their intersection
+    attributes = list(reduce(set.intersection, [ set(event._dict.keys()) for trace in log for event in trace ]))
+    event_attributes = [attr for attr in attributes if attr not in ["concept:name", "time:timestamp"]]
     return sorted(event_attributes)

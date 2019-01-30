@@ -39,19 +39,19 @@ class TestSplitLogExample(TestCase):
         self.assertEqual((2, 6), test_df.shape)
 
         row = training_df[(training_df.trace_id == '3')].iloc[0]
-        self.assertEqual(52903968, row.prefix_1)
-        self.assertEqual(34856381, row.prefix_2)
-        self.assertEqual(32171502, row.prefix_3)
+        self.assertEqual(1, row.prefix_1)
+        self.assertEqual(2, row.prefix_2)
+        self.assertEqual(1, row.prefix_3)
         self.assertEqual(False, row.label)
-        self.assertEqual(7320.0, row.elapsed_time)
+        self.assertEqual(0, row.elapsed_time)
 
     def test_row_test(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.encoding,
                                                  CLASSIFICATION, self.label)
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
-        self.assertEqual(52903968, row.prefix_1)
-        self.assertEqual(0.0, row.elapsed_time)
+        self.assertEqual(1, row.prefix_1)
+        self.assertEqual(0, row.elapsed_time)
         self.assertEqual(True, row.label)
 
     def test_prefix0(self):

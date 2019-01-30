@@ -10,18 +10,39 @@ from .simple_index import simple_index
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None):
+                      label: LabelContainer, additional_columns=None, event_names=None):
     """Encodes and labels test set and training set as data frames
 
     :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """  # TODO: complete documentation
-    event_names = unique_events2(training_log, test_log)
-    training_df = encode_label_log(training_log, encoding, job_type, label, event_names=event_names,
-                                   additional_columns=additional_columns)
-    test_df = encode_label_log(test_log, encoding, job_type, label, event_names=event_names,
-                               additional_columns=additional_columns)
-    return training_df, test_df
+    if encoding.method == BOOLEAN or encoding.method == FREQUENCY:
+        if event_names is None:
+            event_names = unique_events(training_log)
+    training_log = encode_log(training_log, encoding, label, additional_columns=additional_columns, event_names=event_names)
+
+    # TODO pass the columns of the training log
+    test_log = encode_log(test_log, encoding, label, additional_columns=additional_columns, event_names=event_names)
+
+    if (label.threshold_type == THRESHOLD_MEAN or
+        label.threshold_type == THRESHOLD_CUSTOM) and (label.type == REMAINING_TIME or
+                                                       label.type == ATTRIBUTE_NUMBER or
+                                                       label.type == DURATION):
+        if label.threshold_type == THRESHOLD_MEAN:
+            threshold = training_log['label'].mean()
+        elif label.threshold_type == THRESHOLD_CUSTOM:
+            threshold = label.threshold
+        training_log['label'] = training_log['label'] < threshold
+        test_log['label'] = test_log['label'] < threshold
+
+    if job_type != LABELLING:
+        # init nominal encode
+        encoding.init_label_encoder(training_log)
+        # encode data
+        encoding.encode(training_log)
+        encoding.encode(test_log)
+
+    return training_log, test_log
 
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,

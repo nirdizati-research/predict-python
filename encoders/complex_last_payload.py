@@ -1,5 +1,4 @@
 import pandas as pd
-from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
@@ -101,7 +100,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
     return data
 
 
-def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, data_fun, columns_len, atr_classifier=None,
+def trace_to_row(trace, encoding: EncodingContainer, event_index: int, data_fun, columns_len, atr_classifier=None,
                  label=None,
                  executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
     trace_row = [trace.attributes["concept:name"]]

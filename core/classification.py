@@ -80,6 +80,7 @@ def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifie
     test_cluster_lists = {
         i: test_data.iloc[np.where(estimator.predict(test_data.drop(drop_list, 1)) == i)[0]]
         for i in range(estimator.n_clusters)}
+
     result_data = None
     for i, cluster_list in test_cluster_lists.items():
         counter += 1

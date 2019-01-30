@@ -29,11 +29,11 @@ class TestEncoding(TestCase):
 
     # This is test
     def performance(self):
-        encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
+        encodings = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
 
         # self.method_self(COMPLEX)
-        for e in encs:
-            self.method_self(e)
+        for encoding in encodings:
+            self.method_self(encoding)
 
 
 @unittest.skip("performance test not needed normally")
@@ -52,10 +52,10 @@ class TestAgainstNirdizatiTraining(TestCase):
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
     def test_performance(self):
-        encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY]
+        encodings = [SIMPLE_INDEX, BOOLEAN, FREQUENCY]
 
         # self.method_self(COMPLEX)
-        for e in encs:
+        for e in encodings:
             self.do_test(e)
 
 
@@ -85,8 +85,8 @@ class TestTraceLengthTime(TestCase):
         print("Total for %s %s seconds" % (encoding.method, time.time() - start_time))
 
     def test_performance(self):
-        encs = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
+        encodings = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
         logs = [self.log3]
         for l in logs:
-            for e in encs:
-                self.do_test(e, l)
+            for encoding in encodings:
+                self.do_test(encoding, l)

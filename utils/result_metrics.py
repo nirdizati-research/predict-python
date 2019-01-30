@@ -1,13 +1,13 @@
 from math import sqrt
 
-from sklearn import metrics
+from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
-    mean_squared_error, mean_absolute_error
+    mean_squared_error, mean_absolute_error, r2_score, roc_auc_score
 import numpy as np
 from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
-def calculate_results_binary_classification(actual, predicted):
+def calculate_results_binary_classification(actual: list, predicted: list):
     conf_matrix = confusion_matrix(actual, predicted, labels=[False, True])
 
     try:
@@ -52,20 +52,20 @@ def calculate_auc(actual, scores, auc: int):
         auc += 0
     else:
         try:
-            auc += metrics.roc_auc_score(actual, scores[:, 1])
+            auc += roc_auc_score(actual, scores[:, 1])
         except Exception:
             pass
     return auc
 
 
-def calculate_results_regression(df, label: LabelContainer):
+def calculate_results_regression(df: DataFrame, label: LabelContainer):
     if label.type == REMAINING_TIME:
         # TODO are remaining time in seconds or hours?
         df['label'] = df['label'] / 3600
         df['prediction'] = df['prediction'] / 3600
     rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
     mae = mean_absolute_error(df['label'], df['prediction'])
-    rscore = metrics.r2_score(df['label'], df['prediction'])
+    rscore = r2_score(df['label'], df['prediction'])
     mape = mean_absolute_percentage_error(df['label'], df['prediction'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}

@@ -28,13 +28,13 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
         class_model = None
     run = XFactory()
     serializer = XesXmlSerializer()
-    logtmp = Et.Element("log")
-    trtmp = Et.Element("trace")
-    evtmp = Et.Element("event")
+    temp_log = Et.Element("log")
+    temp_trace = Et.Element("trace")
+    temp_event = Et.Element("event")
 
-    serializer.add_attributes(logtmp, lg.get_attributes().values())
-    serializer.add_attributes(trtmp, tr.get_attributes().values())
-    serializer.add_attributes(evtmp, ev.get_attributes().values())
+    serializer.add_attributes(temp_log, lg.get_attributes().values())
+    serializer.add_attributes(temp_trace, tr.get_attributes().values())
+    serializer.add_attributes(temp_event, ev.get_attributes().values())
 
     # TODO: check if still needed
     # log_config = Et.tostring(logtmp)

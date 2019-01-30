@@ -83,4 +83,4 @@ def _compare_trace_starts(item1, item2):
 
 def _trace_event_time(trace, event_index=0):
     """Event time as Date. By default first event."""
-    return trace[event_index]['time:timestamp'].time()
+    return trace[event_index]['time:timestamp']

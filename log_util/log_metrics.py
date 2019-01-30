@@ -30,7 +30,7 @@ def resources_by_date(log):
     stamp_dict = defaultdict(lambda: [])
     for trace in log:
         for event in trace:
-            resource = event.get("Resource", "")
+            resource = event.get("Resource", event.get("org:resource", ""))
             timestamp = event[TIMESTAMP_CLASSIFIER]
             stamp_dict[str(timestamp.date())].append(resource)
 
@@ -85,7 +85,7 @@ def trace_attributes(log):
 
 
 def is_number(s):
-    if isinstance(s, float) or isinstance(s, int):
+    if isinstance(s, float) or isinstance(s, int) or (s.isdigit() if hasattr(s, 'isdigit') else False):
         return 'number'
     else:
         return 'string'

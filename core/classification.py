@@ -5,7 +5,8 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
 from core.common import choose_classifier
-from utils.result_metrics import calculate_results_binary_classification, calculate_results_multiclass_classification, calculate_auc
+from utils.result_metrics import calculate_results_binary_classification, calculate_results_multiclass_classification, \
+    calculate_auc
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None

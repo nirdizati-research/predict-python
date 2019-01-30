@@ -22,8 +22,8 @@ def elapsed_time_id(trace, event_index: int):
 def elapsed_time(trace, event):
     """Calculate elapsed time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = event['time:timestamp'].strftime("%Y-%m-%d %H:%M:%S")
-    first_time = trace[0]['time:timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+    event_time = event['time:timestamp'].strftime("%Y-%m-%dT%H:%M:%S")
+    first_time = trace[0]['time:timestamp'].strftime("%Y-%m-%dT%H:%M:%S")
     try:
         delta = dt.strptime(event_time, TIME_FORMAT) - dt.strptime(first_time, TIME_FORMAT)
     except ValueError:
@@ -46,8 +46,8 @@ def remaining_time_id(trace, event_index: int):
 def remaining_time(trace, event):
     """Calculate remaining time by event in trace"""
     # FIXME using no timezone info for calculation
-    event_time = event['time:timestamp'].strftime("%Y-%m-%d %H:%M:%S")
-    last_time = trace[-1]['time:timestamp'].strftime("%Y-%m-%d %H:%M:%S")
+    event_time = event['time:timestamp'].strftime("%Y-%m-%dT%H:%M:%S")
+    last_time = trace[-1]['time:timestamp'].strftime("%Y-%m-%dT%H:%M:%S")
     try:
         delta = dt.strptime(last_time, TIME_FORMAT) - dt.strptime(event_time, TIME_FORMAT)
     except ValueError:
@@ -64,7 +64,7 @@ def count_on_event_day(trace, date_dict: dict, event_id):
     """
     try:
         event = trace[event_id]
-        date = event['time:timestamp'].date()
+        date = str(event['time:timestamp'].date())
         return date_dict.get(date, 0)
     except IndexError:
         return 0

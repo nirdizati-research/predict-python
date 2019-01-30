@@ -1,16 +1,17 @@
 import pandas as pd
-from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import *
-from log_util.log_metrics import events_by_date, resources_by_date, new_trace_start
-from log_util.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
+from utils.log_metrics import events_by_date, resources_by_date, new_trace_start
+from utils.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
 
 ATTRIBUTE_CLASSIFIER = None
 
 
 def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
-    columns = __columns(encoding.prefix_length, label)
+    columns = compute_columns(encoding.prefix_length)
+    normal_columns_number = len(columns)
+    columns = compute_label_columns(columns, label)
     encoded_data = []
     kwargs = get_intercase_attributes(log, label)
     for trace in log:
@@ -19,31 +20,23 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
             continue
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
-                encoded_data.append(add_trace_row(trace, encoding, i, label.attribute_name, **kwargs))
+                encoded_data.append(add_trace_row(trace, encoding, i, normal_columns_number, label.attribute_name,
+                                                  **kwargs))
         else:
-            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, label.attribute_name, **kwargs))
+            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, normal_columns_number,
+                                              label.attribute_name, **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, atr_classifier=None, label=None,
+def add_trace_row(trace, encoding: EncodingContainer, event_index: int, column_len, atr_classifier=None, label=None,
                   executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
-    # a and b are magic values
-    b = encoding.prefix_length - len(trace)
-    if encoding.is_all_in_one():
-        a = encoding.prefix_length - event_index
-        zero_count = a if a > b else b
-    elif encoding.is_zero_padding():
-        zero_count = b
-    else:
-        # print('encoding neither all_in_one nor zero_padding, setting zero count to 0!')
-        zero_count = 0
     trace_row = list()
     trace_row.append(trace.attributes['concept:name'])
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(0, zero_count)]
+        trace_row += ['0' for _ in range(len(trace_row), column_len)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
@@ -72,12 +65,9 @@ def next_event_name(trace: list, prefix_length: int):
         return '0'
 
 
-def __columns(prefix_length: int, label: LabelContainer):
+def compute_columns(prefix_length: int):
     """trace_id, prefixes, any other columns, label"""
-    columns = ["trace_id"]
-    for i in range(0, prefix_length):
-        columns.append("prefix_" + str(i + 1))
-    return add_label_columns(columns, label)
+    return ["trace_id"] + ["prefix_" + str(i + 1) for i in range(0, prefix_length)]
 
 
 def get_intercase_attributes(log: list, label: LabelContainer):
@@ -93,7 +83,7 @@ def get_intercase_attributes(log: list, label: LabelContainer):
     return kwargs
 
 
-def add_label_columns(columns: list, label: LabelContainer):
+def compute_label_columns(columns: list, label: LabelContainer):
     if label.type == NO_LABEL:
         return columns
     if label.add_elapsed_time:

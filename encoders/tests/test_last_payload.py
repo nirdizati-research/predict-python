@@ -3,7 +3,7 @@ from unittest import TestCase
 from encoders.complex_last_payload import last_payload
 from encoders.encoding_container import EncodingContainer, LAST_PAYLOAD, ALL_IN_ONE, ZERO_PADDING
 from encoders.label_container import LabelContainer, NO_LABEL
-from log_util.event_attributes import unique_events, get_additional_columns
+from utils.event_attributes import unique_events, get_additional_columns
 from logs.file_service import get_log
 
 

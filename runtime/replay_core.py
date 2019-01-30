@@ -6,9 +6,9 @@ import subprocess
 import xml.etree.ElementTree as Et
 
 from dateutil.parser import parse as dateparser
-from opyenxes.factory.XFactory import XFactory
-from opyenxes.model.XAttributeMap import XAttributeMap
-from opyenxes.out.XesXmlSerializer import XesXmlSerializer
+# from opyenxes.factory.XFactory import XFactory  # TODO: fix library change
+# from opyenxes.model.XAttributeMap import XAttributeMap
+# from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 
 from core.core import runtime_calculate
 from encoders.encoding_container import ZERO_PADDING, ALL_IN_ONE

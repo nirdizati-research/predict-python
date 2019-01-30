@@ -3,7 +3,7 @@ import functools
 from dateutil.parser import *
 from sklearn.model_selection import train_test_split
 
-from log_util.event_attributes import get_additional_columns
+from utils.event_attributes import get_additional_columns
 from logs.file_service import get_log
 
 SPLIT_SEQUENTIAL = 'split_sequential'
@@ -83,4 +83,4 @@ def _compare_trace_starts(item1, item2):
 
 def _trace_event_time(trace, event_index=0):
     """Event time as Date. By default first event."""
-    return trace[event_index]['time:timestamp'].time()
+    return trace[event_index]['time:timestamp']

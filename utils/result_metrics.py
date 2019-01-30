@@ -3,8 +3,7 @@ from math import sqrt
 from sklearn import metrics
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
     mean_squared_error, mean_absolute_error
-
-from core.regression import mean_absolute_percentage_error
+import numpy as np
 from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
@@ -71,3 +70,8 @@ def calculate_results_regression(df, label: LabelContainer):
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row
+
+
+def mean_absolute_percentage_error(y_true, y_pred):
+    y_true, y_pred = np.array(y_true), np.array(y_pred)
+    return np.mean(np.abs((y_true - y_pred) / y_true)) * 100

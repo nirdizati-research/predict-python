@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
-from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes
+from encoders.simple_index import compute_label_columns, add_labels, get_intercase_attributes
 
 
 def boolean(log: list, event_names: list, label: LabelContainer, encoding: EncodingContainer):
@@ -64,10 +63,10 @@ def update_event_happened(event, event_names: list, event_happened: list, encodi
 def create_columns(event_names: list, label: LabelContainer):
     columns = ["trace_id"]
     columns = np.append(columns, event_names).tolist()
-    return add_label_columns(columns, label)
+    return compute_label_columns(columns, label)
 
 
-def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
+def trace_to_row(trace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
                  resources_used=None, new_traces=None, event_names=None, atr_classifier=None):
     # starts with all False, changes to event
     event_happened = create_event_happened(event_names, encoding)

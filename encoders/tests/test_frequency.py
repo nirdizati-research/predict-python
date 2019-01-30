@@ -4,7 +4,7 @@ from core.constants import CLASSIFICATION
 from encoders.boolean_frequency import frequency
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
 from encoders.encoding_container import EncodingContainer, FREQUENCY, ZERO_PADDING
-from log_util.event_attributes import unique_events
+from utils.event_attributes import unique_events
 from logs.file_service import get_log
 
 

@@ -137,15 +137,15 @@ def no_clustering_train(original_test_data, train_data, classifier, is_binary_cl
 
 
 def no_clustering_test(test_data, classifier, testing=False):
-    prediction = classifier.predict(test_data.drop(['trace_id', 'label'], 1))
     scores = 0
     if testing:
         if hasattr(classifier, 'decision_function'):
             scores = classifier.decision_function(test_data.drop(['trace_id', 'label'], 1))
         else:
-            scores = classifier.predict_proba(test_data.drop(['trace_id', 'label'], 1))[:, 1]
-
-    test_data['predicted'] = prediction
+            scores = classifier.predict_proba(test_data.drop(['trace_id', 'label'], 1))
+            if np.size(scores, 1) >= 2: # checks number of columns
+                scores = scores[:, 1]
+    test_data['predicted'] = classifier.predict(test_data.drop(['trace_id', 'label'], 1))
     return test_data, scores
 
 

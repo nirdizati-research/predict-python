@@ -1,0 +1,10 @@
+# Created by .ignore support plugin (hsz.mobi)
+*
+
+!.gitignore
+!financial_log.xes.gz
+!general_example.xes
+!general_example_test.xes
+!general_example_training.xes
+!nonlocal.mxml.gz
+!repairExample.xes

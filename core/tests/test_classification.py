@@ -17,12 +17,13 @@ class TestClassification(TestCase):
 
     @staticmethod
     def results2():
-        return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
-                'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
+        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'true_positive': 1, 'true_negative': 0, 'false_negative': 1,
+                'false_positive': 0, 'precision': 0.5, 'recall': 1.0, 'auc': 0.5}
 
     @staticmethod
     def results3():
-        return {'f1score': 0.3333333333333333, 'acc': 0.5, 'auc': 0, 'precision': 0.25, 'recall': 0.5}
+        return {'f1score': 0.0, 'acc': 1.0, 'true_positive': 0, 'true_negative': 2, 'false_negative': 0,
+                'false_positive': 0, 'precision': 0.0, 'recall': 0.0, 'auc': 0}
 
     @staticmethod
     def get_job():

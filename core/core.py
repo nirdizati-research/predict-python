@@ -1,8 +1,6 @@
-from core.binary_classification import binary_classifier, binary_classifier_single_log
-from core.constants import \
-    CLASSIFICATION, REGRESSION, LABELLING
+from core.classification import classification, classification_single_log
+from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from core.label_validation import label_task
-from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
     encode_label_log, DURATION
@@ -28,15 +26,11 @@ def get_encoded_logs(job: dict):
 
 def run_by_type(training_df, test_df, job):
     model_split = None
+    label_type = job['label'].type
+
     if job['type'] == CLASSIFICATION:
-        label_type = job['label'].type
-        # Binary classification
-        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
-            results, model_split = binary_classifier(training_df, test_df, job)
-        elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
-            results, model_split = multi_classifier(training_df, test_df, job)
-        else:
-            raise ValueError("Label type not supported", label_type)
+        is_binary_classifier = check_is_binary_classifier(label_type)
+        results, model_split = classification(training_df, test_df, job, is_binary_classifier)
     elif job['type'] == REGRESSION:
         results, model_split = regression(training_df, test_df, job)
     elif job['type'] == LABELLING:
@@ -51,18 +45,23 @@ def runtime_calculate(run_log, model):
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
     if model['type'] == CLASSIFICATION:
         label_type = model['label'].type
-        if label_type == REMAINING_TIME or label_type == ATTRIBUTE_NUMBER or label_type == DURATION:
-            results = binary_classifier_single_log(run_df, model)
-        elif label_type == NEXT_ACTIVITY or label_type == ATTRIBUTE_STRING:
-            results = multi_classifier_single_log(run_df, model)
-        else:
-            raise ValueError("Label type not supported", label_type)
+        is_binary_classifier = check_is_binary_classifier(label_type)
+        results = classification_single_log(run_df, model, is_binary_classifier)
     elif model['type'] == REGRESSION:
         results = regression_single_log(run_df, model)
     else:
         raise ValueError("Type not supported", model['type'])
     print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
     return results
+
+
+def check_is_binary_classifier(label_type):
+    if label_type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]:
+        return True
+    elif label_type in [NEXT_ACTIVITY, ATTRIBUTE_STRING]:
+        return False
+    else:
+        raise ValueError("Label type not supported", label_type)
 
 
 def get_run(job):

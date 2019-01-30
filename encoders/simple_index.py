@@ -37,7 +37,7 @@ def add_trace_row(trace: XTrace, encoding: EncodingContainer, event_index: int, 
     elif encoding.is_zero_padding():
         zero_count = b
     else:
-        print('encoding neither all_in_one nor zero_padding, setting zero count to 0!')
+        # print('encoding neither all_in_one nor zero_padding, setting zero count to 0!')
         zero_count = 0
     trace_row = list()
     trace_row.append(trace.attributes['concept:name'])

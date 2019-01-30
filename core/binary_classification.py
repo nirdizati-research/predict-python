@@ -124,13 +124,15 @@ def no_clustering_train(original_test_data, train_data, clf):
 
 
 def no_clustering_test(test_data, clf, testing=False):
-    test_data["predicted"] = clf.predict(test_data.drop('trace_id', 1))
     scores = 0
     if testing:
         if hasattr(clf, 'decision_function'):
             scores = clf.decision_function(test_data.drop('trace_id', 1))
         else:
-            scores = clf.predict_proba(test_data.drop('trace_id', 1))[:, 1]
+            scores = clf.predict_proba(test_data.drop('trace_id', 1))
+            if np.size(scores, 1) >= 2: # checks number of columns
+                scores = scores[:, 1]
+    test_data["predicted"] = clf.predict(test_data.drop('trace_id', 1))
     return test_data, scores
 
 

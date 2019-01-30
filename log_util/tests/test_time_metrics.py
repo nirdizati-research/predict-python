@@ -33,7 +33,7 @@ class TimeMetrics(TestCase):
         self.assertEqual(779580.0, seconds)
 
     def test_count_on_event_day(self):
-        event_dict = log_metrics.events_by_date([self.log])
+        event_dict = log_metrics.events_by_date(self.log)
         count = count_on_event_day(self.log[0], event_dict, 0)
         self.assertEqual(7, count)
 
@@ -42,6 +42,6 @@ class TimeMetrics(TestCase):
         self.assertEqual(0, count)
 
     def test_count_on_event_day_event_out_of_range(self):
-        event_dict = log_metrics.events_by_date([self.log])
+        event_dict = log_metrics.events_by_date(self.log)
         count = count_on_event_day(self.log[0], event_dict, 100)
         self.assertEqual(0, count)

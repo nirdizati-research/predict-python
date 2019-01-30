@@ -85,9 +85,9 @@ def get_intercase_attributes(log: list, label: LabelContainer):
     These intercae attributes are expensive operations!!!
     """
     # Expensive operations
-    executed_events = events_by_date([log]) if label.add_executed_events else None
-    resources_used = resources_by_date([log]) if label.add_resources_used else None
-    new_traces = new_trace_start([log]) if label.add_new_traces else None
+    executed_events = events_by_date(log) if label.add_executed_events else None
+    resources_used = resources_by_date(log) if label.add_resources_used else None
+    new_traces = new_trace_start(log) if label.add_new_traces else None
     kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
               'label': label}
     return kwargs

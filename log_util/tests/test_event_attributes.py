@@ -32,4 +32,4 @@ class EventAttributes(TestCase):
     def test_global_event_attributes(self):
         log = get_log("log_cache/general_example_test.xes")
         attributes = get_additional_columns(log)
-        self.assertListEqual(attributes, ['Activity', 'Costs', 'Resource', 'org:resource'])
+        self.assertListEqual(attributes['event_attributes'], ['Activity', 'Costs', 'Resource', 'org:resource'])

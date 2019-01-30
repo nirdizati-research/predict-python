@@ -99,7 +99,7 @@ def events_in_trace(log):
     """
     stamp_dict = defaultdict(lambda: 0)
     for trace in log:
-        stamp_dict[trace[NAME_CLASSIFIER]] = len(trace)
+        stamp_dict[trace.attributes[NAME_CLASSIFIER]] = len(trace)
     return OrderedDict(sorted(stamp_dict.items()))
 
 

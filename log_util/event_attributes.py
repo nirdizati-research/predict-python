@@ -28,7 +28,7 @@ def get_event_attributes(log: list):
     As log file is a list, it has no global event attributes. Getting from first event of first trace. This may be bad.
     """
     event_attributes = []
-    for attribute in log[0][0].attributes.keys():
+    for attribute in log[0][0]._dict.keys():
         if attribute not in ["concept:name", "time:timestamp"]:
             event_attributes.append(attribute)
     return sorted(event_attributes)

@@ -106,7 +106,7 @@ def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, d
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(len(trace_row), len(columns) - 1)]
+        trace_row += ['0' for _ in range(len(trace_row) + 1, len(columns) - 1)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

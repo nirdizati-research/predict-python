@@ -1,5 +1,7 @@
 import hashlib
 
+from pandas import DataFrame
+
 from core.constants import LABELLING, REGRESSION
 from encoders.boolean_frequency import frequency, boolean
 from encoders.complex_last_payload import complex, last_payload
@@ -11,11 +13,6 @@ from .simple_index import simple_index
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
                       label: LabelContainer, additional_columns=None):
-    """Encodes and labels test set and training set as data frames
-
-    :param additional_columns: Global trace attributes for complex and last payload encoding
-    :returns training_df, test_df
-    """  # TODO: complete documentation
     event_names = unique_events2(training_log, test_log)
     training_df = encode_label_log(training_log, encoding, job_type, label, event_names=event_names,
                                    additional_columns=additional_columns)
@@ -29,7 +26,7 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     if event_names is None:
         event_names = unique_events(run_log)
 
-    encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
+    encoded_log = _encode_log(run_log, encoding, label, event_names, additional_columns)
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
@@ -38,7 +35,7 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     # converts string values to in
     if job_type != LABELLING:
         # Labelling has no need for this encoding
-        categorical_encode(encoded_log)
+        _categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
     if job_type == REGRESSION:
         # Remove last events as worse for prediction
@@ -48,18 +45,12 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
         return encoded_log
     # Post processing
     if label.type == REMAINING_TIME or label.type == ATTRIBUTE_NUMBER or label.type == DURATION:
-        return label_boolean(encoded_log, label)
+        return _label_boolean(encoded_log, label)
     return encoded_log
 
 
-def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer, event_names=None,
-               additional_columns=None):
-    """Encodes test set and training set as data frames
-
-    :param additional_columns: Global trace attributes for complex and last payload encoding
-    :returns training_df, test_df
-    """  # TODO: complete documentation
-
+def _encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer, event_names=None,
+                additional_columns=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if encoding.method == SIMPLE_INDEX:
@@ -77,21 +68,21 @@ def encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer
     return run_df
 
 
-def label_boolean(df, label: LabelContainer):
+def _label_boolean(df: DataFrame, label: LabelContainer):
     """Label a numeric attribute as True or False based on threshold
     This is essentially a Fast/Slow classification without string labels
     By default use mean of label value
     True if under threshold value
     """
     if label.threshold_type == THRESHOLD_MEAN:
-        threshold_ = df['label'].mean()
+        threshold = df['label'].mean()
     else:
-        threshold_ = float(label.threshold)
-    df['label'] = df['label'] < threshold_
+        threshold = float(label.threshold)
+    df['label'] = df['label'] < threshold
     return df
 
 
-def categorical_encode(df):
+def _categorical_encode(df):
     """Encodes every column except trace_id and label as int
 
     Encoders module puts event name in cell, which can't be used by machine learning methods directly.
@@ -100,11 +91,11 @@ def categorical_encode(df):
         if column == 'trace_id':
             continue
         elif df[column].dtype == type(str):
-            df[column] = df[column].map(lambda s: convert(s))
+            df[column] = df[column].map(lambda s: _convert(s))
     return df
 
 
-def convert(s):
+def _convert(s):
     if isinstance(s, float) or isinstance(s, int):
         return s
     if s is None:

@@ -60,18 +60,18 @@ def calculate_auc(actual, scores, auc: int):
 
 def calculate_results_regression(df: DataFrame, label: LabelContainer):
     if label.type == REMAINING_TIME:
-        # TODO are remaining time in seconds or hours?
+        # TODO is the remaining time in seconds or hours?
         df['label'] = df['label'] / 3600
         df['prediction'] = df['prediction'] / 3600
     rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
     mae = mean_absolute_error(df['label'], df['prediction'])
     rscore = r2_score(df['label'], df['prediction'])
-    mape = mean_absolute_percentage_error(df['label'], df['prediction'])
+    mape = _mean_absolute_percentage_error(df['label'], df['prediction'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row
 
 
-def mean_absolute_percentage_error(y_true, y_pred):
+def _mean_absolute_percentage_error(y_true, y_pred):
     y_true, y_pred = np.array(y_true), np.array(y_pred)
     return np.mean(np.abs((y_true - y_pred) / y_true)) * 100

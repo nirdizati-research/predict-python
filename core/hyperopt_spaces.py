@@ -5,7 +5,7 @@ from hyperopt.pyll.base import scope
 from core.constants import *
 
 
-def get_space(job: dict):
+def _get_space(job: dict):
     method_conf_name = "{}.{}".format(job['type'], job['method'])
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
@@ -17,7 +17,6 @@ def _classification_random_forest():
             }
 
 
-# test case dynamic max feature
 def _classification_knn():
     return {
         'n_neighbors': hp.choice('n_neighbors', np.arange(1, 20, dtype=int)),

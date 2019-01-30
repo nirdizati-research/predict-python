@@ -1,10 +1,16 @@
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
-from core.common import choose_classifier
+from core.common import get_method_config
+from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
 from utils.result_metrics import calculate_results_binary_classification, calculate_results_multiclass_classification, \
     calculate_auc
 from core.constants import KMEANS, NO_CLUSTER
@@ -12,25 +18,25 @@ from core.constants import KMEANS, NO_CLUSTER
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df, test_df, job, is_binary_classifier):
-    classifier = choose_classifier(job)
+def classification(training_df: DataFrame, test_df: DataFrame, job: dict, is_binary_classifier: bool):
+    classifier = _choose_classifier(job)
 
-    train_data, test_data, original_test_data = drop_columns(training_df, test_df)
+    train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
 
     if job['clustering'] == KMEANS:
-        results_df, auc, model_split = kmeans_clustering_train(original_test_data, train_data, classifier,
-                                                               job['kmeans'], is_binary_classifier)
+        results_df, auc, model_split = _kmeans_clustering_train(original_test_data, train_data, classifier,
+                                                                job['kmeans'], is_binary_classifier)
     elif job['clustering'] == NO_CLUSTER:
-        results_df, auc, model_split = no_clustering_train(original_test_data, train_data, classifier,
-                                                           is_binary_classifier)
+        results_df, auc, model_split = _no_clustering_train(original_test_data, train_data, classifier,
+                                                            is_binary_classifier)
     else:
         raise ValueError("Unexpected clustering {}".format(job['clustering']))
 
-    results = prepare_results(results_df, auc, is_binary_classifier)
+    results = _prepare_results(results_df, auc, is_binary_classifier)
     return results, model_split
 
 
-def classification_single_log(run_df, model, is_binary_classifier):
+def classification_single_log(run_df: DataFrame, model, is_binary_classifier: bool):
     result = None
 
     split = model['split']
@@ -41,16 +47,16 @@ def classification_single_log(run_df, model, is_binary_classifier):
 
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
-        result, _ = no_clustering_test(run_df, clf)
+        result, _ = _no_clustering_test(run_df, clf)
     elif split['type'] == KMEANS:
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        result, _ = kmeans_clustering_test(run_df, clf, estimator, is_binary_classifier)
+        result, _ = _kmeans_clustering_test(run_df, clf, estimator, is_binary_classifier)
     results['prediction'] = result['predicted']
     return results
 
 
-def kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_config: dict, is_binary_classifier):
+def _kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_config: dict, is_binary_classifier: bool):
     estimator = KMeans(**kmeans_config)
     models = dict()
 
@@ -68,11 +74,11 @@ def kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_c
     model_split['type'] = KMEANS
     model_split['estimator'] = estimator
     model_split['model'] = models
-    result, auc = kmeans_clustering_test(original_test_data, models, estimator, is_binary_classifier, testing=True)
+    result, auc = _kmeans_clustering_test(original_test_data, models, estimator, is_binary_classifier, testing=True)
     return result, auc, model_split
 
 
-def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifier, testing=False):
+def _kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifier: bool, testing: bool = False):
     drop_list = ['trace_id', 'label'] if testing else ['trace_id']
     auc = 0
     counter = 0
@@ -114,7 +120,7 @@ def kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifie
     return result_data, auc
 
 
-def no_clustering_train(original_test_data, train_data, classifier, is_binary_classifier):
+def _no_clustering_train(original_test_data, train_data, classifier, is_binary_classifier: bool):
     y = train_data['label']
     try:
         classifier.fit(train_data.drop('label', 1), y)
@@ -122,7 +128,7 @@ def no_clustering_train(original_test_data, train_data, classifier, is_binary_cl
         classifier.partial_fit(train_data.drop('label', 1).values, y)
 
     actual = original_test_data['label']
-    original_test_data, scores = no_clustering_test(original_test_data, classifier, True)
+    original_test_data, scores = _no_clustering_test(original_test_data, classifier, True)
 
     auc = 0
     if is_binary_classifier:
@@ -138,7 +144,7 @@ def no_clustering_train(original_test_data, train_data, classifier, is_binary_cl
     return original_test_data, auc, model_split
 
 
-def no_clustering_test(test_data, classifier, testing=False):
+def _no_clustering_test(test_data, classifier, testing=False):
     scores = 0
     if testing:
         if hasattr(classifier, 'decision_function'):
@@ -151,7 +157,7 @@ def no_clustering_test(test_data, classifier, testing=False):
     return test_data, scores
 
 
-def prepare_results(df, auc: int, is_binary_classifier):
+def _prepare_results(df: DataFrame, auc: int, is_binary_classifier: bool):
     actual = df['label'].values
     predicted = df['predicted'].values
 
@@ -163,8 +169,24 @@ def prepare_results(df, auc: int, is_binary_classifier):
     return row
 
 
-def drop_columns(train_df, test_df):
+def _drop_columns(train_df: DataFrame, test_df: DataFrame):
     original_test_df = test_df
     train_df = train_df.drop('trace_id', 1)
     test_df = test_df.drop('trace_id', 1)
     return train_df, test_df, original_test_df
+
+
+def _choose_classifier(job: dict):
+    method, config = get_method_config(job)
+    print("Using method {} with config {}".format(method, config))
+    if method == KNN:
+        clf = KNeighborsClassifier(**config)
+    elif method == RANDOM_FOREST:
+        clf = RandomForestClassifier(**config)
+    elif method == DECISION_TREE:
+        clf = DecisionTreeClassifier(**config)
+    elif method == XGBOOST:
+        clf = XGBClassifier(**config)
+    else:
+        raise ValueError("Unexpected classification method {}".format(method))
+    return clf

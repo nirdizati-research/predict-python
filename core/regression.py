@@ -1,19 +1,15 @@
-from math import sqrt
-
 import numpy as np
 import pandas as pd
 import xgboost as xgb
-from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.externals import joblib
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 from core.common import get_method_config
 from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST
-from encoders.label_container import LabelContainer, REMAINING_TIME
+from utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
 
@@ -28,7 +24,7 @@ def regression(training_df, test_df, job):
     else:
         results_df, model_split = no_clustering_train(original_test_data, train_data, test_data, regressor)
 
-    results = prepare_results(results_df, job['label'])
+    results = calculate_results_regression(results_df, job['label'])
     return results, model_split
 
 
@@ -40,13 +36,16 @@ def regression_single_log(run_df, model):
     if 'elapsed_time' in run_df.columns:
         run_df = run_df.drop(['elapsed_time'], 1)
     run_df = run_df.drop('trace_id', 1)
+
     if split['type'] == NO_CLUSTER:
         regressor = joblib.load(split['model_path'])
         results_data = no_clustering_test(run_df, run_df, regressor)
     elif split['type'] == KMEANS:
         regressor = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        results_data = kmeans_test(run_df, regressor, estimator)
+        results_data = kmeans_clustering_test(run_df, regressor, estimator)
+    else:
+        raise ValueError('Unexpected split type {}'.format(split['type']))
     results['prediction'] = results_data['prediction']
     return results
 
@@ -106,20 +105,6 @@ def no_clustering_train(original_test_data, train_data, test_data, regressor):
 def no_clustering_test(original_test_data, test_data, regressor):
     original_test_data['prediction'] = regressor.predict(test_data)
     return original_test_data
-
-
-def prepare_results(df, label: LabelContainer):
-    if label.type == REMAINING_TIME:
-        # TODO are remaining time in seconds or hours?
-        df['label'] = df['label'] / 3600
-        df['prediction'] = df['prediction'] / 3600
-    rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
-    mae = mean_absolute_error(df['label'], df['prediction'])
-    rscore = metrics.r2_score(df['label'], df['prediction'])
-    mape = mean_absolute_percentage_error(df['label'], df['prediction'])
-
-    row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
-    return row
 
 
 def prep_data(training_df, test_df):

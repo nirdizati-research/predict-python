@@ -3,9 +3,9 @@ import pandas as pd
 from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
-from core.common import choose_classifier, calculate_results
+from core.common import choose_classifier
+from utils.result_metrics import calculate_results_binary_classification, calculate_results_multiclass_classification, calculate_auc
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -154,9 +154,9 @@ def prepare_results(df, auc: int, is_binary_classifier):
     predicted = df['predicted'].values
 
     if is_binary_classifier:
-        row = calculate_results(actual, predicted)
+        row = calculate_results_binary_classification(actual, predicted)
     else:
-        row = results_multiclass_label(actual, predicted)
+        row = calculate_results_multiclass_classification(actual, predicted)
     row['auc'] = auc
     return row
 
@@ -166,29 +166,3 @@ def drop_columns(train_df, test_df):
     train_df = train_df.drop('trace_id', 1)
     test_df = test_df.drop('trace_id', 1)
     return train_df, test_df, original_test_df
-
-
-def calculate_auc(actual, scores, auc: int):
-    if scores.shape[1] == 1:
-        auc += 0
-    else:
-        try:
-            auc += metrics.roc_auc_score(actual, scores[:, 1])
-        except Exception:
-            pass
-    return auc
-
-
-def results_multiclass_label(actual: list, predicted: list):
-    # average is needed as these are multi-label lists
-    # print(classification_report(actual, predicted))
-    acc = accuracy_score(actual, predicted)
-    f1score = f1_score(actual, predicted, average='macro')
-    precision = precision_score(actual, predicted, average='macro')
-    recall = recall_score(actual, predicted, average='macro')
-
-    if len(set(actual + predicted)) == 2:
-        row = calculate_results([el == 'true' for el in actual], [el == 'true' for el in predicted])
-    else:
-        row = {'f1score': f1score, 'acc': acc, 'precision': precision, 'recall': recall}
-    return row

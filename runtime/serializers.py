@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from .models import XTrace, XLog
+
+from .models import XTrace
+
 
 class TraceSerializer(serializers.ModelSerializer):
     real_log = serializers.IntegerField()
@@ -15,8 +17,8 @@ class TraceSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
     error = serializers.CharField()
 
-
     class Meta:
         model = XTrace
         fields = (
-            'id', 'name', 'completed', 'real_log', 'first_event', 'last_event', 'n_events', 'reg_results', 'class_results', 'reg_actual', 'class_actual', 'duration', 'error')
+            'id', 'name', 'completed', 'real_log', 'first_event', 'last_event', 'n_events', 'reg_results',
+            'class_results', 'reg_actual', 'class_actual', 'duration', 'error')

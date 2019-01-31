@@ -31,17 +31,19 @@ def binary_classifier(training_df, test_df, job):
 
 
 def binary_classifier_single_log(run_df, model):
-    split=model['split']
+    result = None
+
+    split = model['split']
     results = dict()
     results['label'] = run_df['label']
     run_df = run_df.drop('label', 1)
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
         result, _ = no_clustering_test(run_df, clf)
-    elif split['type'] ==KMEANS:
-        clf = joblib.load(split['model_path']) 
+    elif split['type'] == KMEANS:
+        clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        result, _ = kmeans_test(run_df, clf, estimator)
+        result, _ = kmeans_test(run_df, clf, estimator)  # TODO: fix unresolved reference
     results['prediction'] = result['predicted']
     return results
 
@@ -266,7 +268,6 @@ def no_clustering_test(test_data, clf, testing=False):
         _test_data = test_data.drop('trace_id', 1).values
     else:
         _test_data = test_data.drop('trace_id', 1)
-    prediction = clf.predict(_test_data)
     scores_0 = []
     scores_1 = 0
     if testing:
@@ -274,13 +275,14 @@ def no_clustering_test(test_data, clf, testing=False):
             scores_1 = clf.decision_function(_test_data)
         else:
             scores_01 = clf.predict_proba(_test_data)
-            if scores_01.dtype == object :
-                scores_0 = [ el[0] if len(el) == 2 else None for el in scores_01 ]
-                scores_1 = [ el[1] if len(el) == 2 else None for el in scores_01 ]
-            else:
-                scores_0 = scores_01[:, 0]
-                scores_1 = scores_01[:, 1]
-    test_data["predicted"] = prediction
+            if np.size(scores_01, 1) >= 2:
+                if scores_01.dtype == object :
+                    scores_0 = [ el[0] if len(el) == 2 else None for el in scores_01 ]
+                    scores_1 = [ el[1] if len(el) == 2 else None for el in scores_01 ]
+                else:
+                    scores_0 = scores_01[:, 0]
+                    scores_1 = scores_01[:, 1]
+    test_data["predicted"] = clf.predict(_test_data)
     return test_data, scores_1, scores_0
 
 

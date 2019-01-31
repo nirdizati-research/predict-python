@@ -1,12 +1,13 @@
 from unittest import TestCase
 
-from utils import log_metrics
-from logs.file_service import get_logs
+from log_util import log_metrics
+from log_util.time_metrics import *
+from logs.file_service import get_log
 
 
 class TimeMetrics(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example.xes")[0]
+        self.log = get_log("log_cache/general_example.xes")
 
     def test_calculate_remaining_time(self):
         trace = self.log[0]
@@ -32,7 +33,7 @@ class TimeMetrics(TestCase):
         self.assertEqual(779580.0, seconds)
 
     def test_count_on_event_day(self):
-        event_dict = log_metrics.events_by_date([self.log])
+        event_dict = log_metrics.events_by_date(self.log)
         count = count_on_event_day(self.log[0], event_dict, 0)
         self.assertEqual(7, count)
 
@@ -41,6 +42,6 @@ class TimeMetrics(TestCase):
         self.assertEqual(0, count)
 
     def test_count_on_event_day_event_out_of_range(self):
-        event_dict = log_metrics.events_by_date([self.log])
+        event_dict = log_metrics.events_by_date(self.log)
         count = count_on_event_day(self.log[0], event_dict, 100)
         self.assertEqual(0, count)

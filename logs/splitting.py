@@ -1,33 +1,28 @@
 import functools
 
-from dateutil.parser import *
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
 from sklearn.model_selection import train_test_split
-
-from utils.event_attributes import get_global_event_attributes, get_additional_columns
-from logs.file_service import get_logs
+from utils.event_attributes import get_additional_columns
+from logs.file_service import get_log
 
 SPLIT_SEQUENTIAL = 'split_sequential'
 SPLIT_TEMPORAL = 'split_temporal'
 SPLIT_RANDOM = 'split_random'
 SPLIT_STRICT_TEMPORAL = 'split_strict_temporal'
 
-TIMESTAMP_CLASSIFIER = XEventAttributeClassifier("Timestamp", ["time:timestamp"])
-
 
 def prepare_logs(split: dict):
     """Returns training_log and test_log"""
     if split['type'] == 'single':
-        log = get_logs(split['original_log_path'])
-        additional_columns = get_global_event_attributes(log)
+        log = get_log(split['original_log_path'])
+        additional_columns = get_additional_columns(log)
         training_log, test_log = _split_single_log(split, log)
         print("Loaded single log from {}".format(split['original_log_path']))
     else:
         # Have to use sklearn to convert some internal data types
-        training_log = get_logs(split['training_log_path'])
+        training_log = get_log(split['training_log_path'])
         additional_columns = get_additional_columns(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
-        test_log, _ = train_test_split(get_logs(split['test_log_path']), test_size=0, shuffle=False)
+        test_log, _ = train_test_split(get_log(split['test_log_path']), test_size=0, shuffle=False)
         print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")
@@ -86,5 +81,4 @@ def _compare_trace_starts(item1, item2):
 
 def _trace_event_time(trace, event_index=0):
     """Event time as Date. By default first event."""
-    time = TIMESTAMP_CLASSIFIER.get_class_identity(trace[event_index])
-    return parse(time)
+    return trace[event_index]['time:timestamp']

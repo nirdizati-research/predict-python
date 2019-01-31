@@ -27,19 +27,20 @@ def multi_classifier(training_df, test_df, job: dict):
 
 
 def multi_classifier_single_log(run_df, model):
+    result = None
+
     split = model['split']
     results = dict()
     results['label'] = run_df['label']
     if split['type'] == NO_CLUSTER:
         clf = joblib.load(split['model_path'])
-        result, _ = no_clustering_test(run_df,clf)
+        result, _ = no_clustering_test(run_df, clf)
     elif split['type'] == KMEANS:
         clf = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        result, _ = kmeans_test(run_df, clf, estimator)
+        result, _ = kmeans_test(run_df, clf, estimator)  # TODO: fix unresolved reference
     results['prediction'] = result['predicted']
     return results
-
 
 
 def kmeans_clustering_train(original_test_data, train_data, clf, kmeans_dict: dict):
@@ -122,7 +123,7 @@ def no_clustering_train(original_test_data, train_data, clf):
     return original_test_data, auc, model_split
 
 
-def no_clustering_test(test_data, clf, testing = False):
+def no_clustering_test(test_data, clf, testing=False):
     prediction = clf.predict(test_data.drop('trace_id', 1))
     scores = 0
     if testing:

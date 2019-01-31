@@ -1,12 +1,9 @@
 import pandas as pd
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from encoders.simple_index import add_label_columns, add_labels, setup_attribute_classifier, get_intercase_attributes
+from encoders.simple_index import compute_label_columns, add_labels, get_intercase_attributes
 
-CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
 ATTRIBUTE_CLASSIFIER = None
 
 
@@ -20,10 +17,11 @@ def last_payload(log, label: LabelContainer, encoding: EncodingContainer, additi
 
 def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list,
                           column_fun, data_fun):
-    columns = column_fun(encoding.prefix_length, additional_columns, label)
+    columns = column_fun(encoding.prefix_length, additional_columns)
+    normal_columns_number = len(columns)
+    columns = compute_label_columns(columns, label)
     encoded_data = []
 
-    atr_classifier = setup_attribute_classifier(label)
     kwargs = get_intercase_attributes(log, label)
     for trace in log:
         if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
@@ -32,32 +30,32 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    trace_to_row(trace, encoding, i, data_fun, columns, additional_columns=additional_columns,
-                                 atr_classifier=atr_classifier, **kwargs))
+                    trace_to_row(trace, encoding, i, data_fun, normal_columns_number, additional_columns=additional_columns,
+                                 atr_classifier=label.attribute_name, **kwargs))
         else:
             encoded_data.append(
-                trace_to_row(trace, encoding, encoding.prefix_length, data_fun, columns, additional_columns=additional_columns,
-                             atr_classifier=atr_classifier, **kwargs))
+                trace_to_row(trace, encoding, encoding.prefix_length, data_fun, normal_columns_number, additional_columns=additional_columns,
+                             atr_classifier=label.attribute_name, **kwargs))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: list, label: LabelContainer):
+def columns_complex(prefix_length: int, additional_columns: list):
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
         for additional_column in additional_columns['event_attributes']:
             columns.append(additional_column + "_" + str(i))
-    return add_label_columns(columns, label)
+    return columns
 
 
-def columns_last_payload(prefix_length: int, additional_columns: list, label: LabelContainer):
+def columns_last_payload(prefix_length: int, additional_columns: list):
     columns = ['trace_id']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns['event_attributes']:
         columns.append(additional_column + "_" + str(i))
-    return add_label_columns(columns, label)
+    return columns
 
 
 def data_complex(trace: list, prefix_length: int, additional_columns: list):
@@ -88,29 +86,27 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
-        event_name = CLASSIFIER.get_class_identity(event)
+        event_name = event['concept:name']
         data.append(event_name)
 
     # Attributes of last event
     for att in additional_columns['event_attributes']:
-        # Basically XEventAttributeClassifier
         if prefix_length - 1 >= len(trace):
             value = '0'
         else:
-            event_attrs = trace[prefix_length - 1].get_attributes()
-            value = event_attrs.get(att).get_value()
+            value = trace[prefix_length - 1][att]
         data.append(value)
     return data
 
 
-def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, data_fun, columns, atr_classifier=None,
-                 label=None,
-                 executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
+
+def trace_to_row(trace, encoding: EncodingContainer, event_index: int, data_fun, columns_len, atr_classifier=None,
+                 label=None, executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(0, len(columns) - len(trace_row) - 1)]
+        trace_row += ['0' for _ in range(len(trace_row), columns_len)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

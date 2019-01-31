@@ -1,13 +1,9 @@
 import numpy as np
 import pandas as pd
-from opyenxes.classification.XEventAttributeClassifier import XEventAttributeClassifier
-from opyenxes.model import XTrace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from encoders.simple_index import add_label_columns, add_labels, get_intercase_attributes, setup_attribute_classifier
-
-CLASSIFIER = XEventAttributeClassifier("Trace name", ["concept:name"])
+from encoders.simple_index import compute_label_columns, add_labels, get_intercase_attributes
 
 
 def boolean(log: list, event_names: list, label: LabelContainer, encoding: EncodingContainer):
@@ -27,7 +23,6 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
     columns = create_columns(event_names, label)
     encoded_data = []
 
-    atr_classifier = setup_attribute_classifier(label)
     kwargs = get_intercase_attributes(log, label)
     for trace in log:
         if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
@@ -36,11 +31,11 @@ def encode_boolean_frequency(log: list, event_names: list, label: LabelContainer
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=atr_classifier, **kwargs))
+                    trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=label.attribute_name, **kwargs))
         else:
             encoded_data.append(
                 trace_to_row(trace, encoding, encoding.prefix_length, event_names=event_names,
-                             atr_classifier=atr_classifier, **kwargs))
+                             atr_classifier=label.attribute_name, **kwargs))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -57,7 +52,7 @@ def update_event_happened(event, event_names: list, event_happened: list, encodi
     For boolean set happened to True.
     For frequency updates happened count.
     """
-    event_name = CLASSIFIER.get_class_identity(event)
+    event_name = event['concept:name']
     event_index = event_names.index(event_name)
     if encoding.is_boolean():
         event_happened[event_index] = True
@@ -68,15 +63,15 @@ def update_event_happened(event, event_names: list, event_happened: list, encodi
 def create_columns(event_names: list, label: LabelContainer):
     columns = ["trace_id"]
     columns = np.append(columns, event_names).tolist()
-    return add_label_columns(columns, label)
+    return compute_label_columns(columns, label)
 
 
-def trace_to_row(trace: XTrace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
+def trace_to_row(trace, encoding: EncodingContainer, event_index: int, label=None, executed_events=None,
                  resources_used=None, new_traces=None, event_names=None, atr_classifier=None):
     # starts with all False, changes to event
     event_happened = create_event_happened(event_names, encoding)
     trace_row = []
-    trace_name = CLASSIFIER.get_class_identity(trace)
+    trace_name = trace.attributes['concept:name']
     trace_row.append(trace_name)
     for index, event in enumerate(trace):
         if index >= event_index:

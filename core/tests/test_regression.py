@@ -11,7 +11,8 @@ from encoders.label_container import LabelContainer, REMAINING_TIME
 class TestRegression(TestCase):
     """Proof of concept tests"""
 
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["clustering"] = "kmeans"
         json["split"] = split_double()
@@ -105,7 +106,7 @@ class TestEvaluation(TestCase):
         calculate(job)
 
     def test_reg_intercase(self):
-        print('interace')
+        print('interase')
         job = self.get_job
         job["label"] = LabelContainer(REMAINING_TIME, add_resources_used=True, add_new_traces=True,
                                       add_executed_events=True)

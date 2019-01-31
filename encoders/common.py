@@ -35,54 +35,36 @@ def encode_label_logs_new(training_log: list, test_log: list, encoding: Encoding
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None, balance=False):
+                      label: LabelContainer, additional_columns=None):
     """Encodes and labels test set and training set as data frames
 
-    :param additional_columns Global trace attributes for complex and last payload encoding
+    :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
-    """
-    event_names = unique_events2(training_log, test_log)
+    """  # TODO: complete documentation
+    training_log = encode_log(training_log, encoding, label, additional_columns=additional_columns)
 
-    #TODO change labeling type if balanced selected
-    if balance:
-        m_label = LabelContainer()
-        threshold = compute_threshold(training_log, encoding, job_type, m_label, event_names=event_names,
-                                           additional_columns=additional_columns)
-        m_label = LabelContainer(type=label.type, attribute_name=label.attribute_name,
-                               threshold_type=label.threshold_type, threshold=threshold)
-    else:
-        m_label = label
+    # TODO pass the columns of the training log
+    test_log = encode_log(test_log, encoding, label, additional_columns=additional_columns)
 
-    training_df = encode_label_log(training_log, encoding, job_type, m_label, event_names=event_names,
-                                   additional_columns=additional_columns, fit_encoder=True )
-    test_df = encode_label_log(test_log, encoding, job_type, m_label, event_names=event_names,
-                               additional_columns=additional_columns, fit_encoder=False)
-    return training_df, test_df
-
-
-def compute_threshold(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
-                     additional_columns=None):
-    if event_names is None:
-        event_names = unique_events(run_log)
-
-    encoded_log = encode_log(run_log, encoding, label, event_names, additional_columns)
-
-    # Convert strings to number
-    if label.type == ATTRIBUTE_NUMBER:
-        try:
-            encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
-        except :
-            encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
-
+    if (label.threshold_type == THRESHOLD_MEAN or
+        label.threshold_type == THRESHOLD_CUSTOM) and (label.type == REMAINING_TIME or
+                                                       label.type == ATTRIBUTE_NUMBER or
+                                                       label.type == DURATION):
+        if label.threshold_type == THRESHOLD_MEAN:
+            threshold = training_log['label'].mean()
+        elif label.threshold_type == THRESHOLD_CUSTOM:
+            threshold = label.threshold
+        training_log['label'] = training_log['label'] < threshold
+        test_log['label'] = test_log['label'] < threshold
 
     if job_type != LABELLING:
-        categorical_encode(encoded_log)
-    if label.threshold_type == THRESHOLD_MEAN:
-        threshold_0 = encoded_log['label'].mean()
-        print('Computing proper threshold to split the two sets equally')
-        threshold_ = encoded_log['label'].median()
-        threshold_1 = encoded_log['label'].sort_values().iloc[int(len(encoded_log['label'])/2)]
-        return threshold_
+        # init nominal encode
+        encoding.init_label_encoder(training_log)
+        # encode data
+        encoding.encode(training_log)
+        encoding.encode(test_log)
+
+    return training_log, test_log
 
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
@@ -120,13 +102,12 @@ def encode_log(log: list, encoding: EncodingContainer, label: LabelContainer,
                additional_columns=None):
     """Encodes test set and training set as data frames
 
-    :param additional_columns Global trace attributes for complex and last payload encoding
+    :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
-    """
+    """  # TODO: complete documentation
 
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    run_df = None
     if encoding.method == SIMPLE_INDEX:
         run_df = simple_index(log, label, encoding)
     elif encoding.method == BOOLEAN:
@@ -182,50 +163,3 @@ def convert(s):
     #TODO this potentially generates collisions and in general is a clever solution for another problem
     # see https://stackoverflow.com/questions/16008670/how-to-hash-a-string-into-8-digits
     return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8
-
-
-# RANDOM TESTS
-# training_log, test_log
-# encoding=job['encoding']
-# job_type=job['type']
-# label=job['label']
-# additional_columns=additional_columns
-#
-# from encoders.common import *
-# from encoders.label_container import *
-#
-# event_names = unique_events2(training_log, test_log)
-#
-# m_label = LabelContainer()
-# # threshold = compute_threshold(training_log+test_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
-# run_log = training_log+test_log
-# encodings = encoding
-# job_type
-#
-# if event_names is None:
-#     event_names = unique_events(run_log)
-#
-# encoded_log = encode_log(run_log, encoding, m_label, event_names, additional_columns)
-#
-# # Convert strings to number
-# if label.type == ATTRIBUTE_NUMBER:
-#     encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
-#
-# if job_type != LABELLING:
-#     categorical_encode(encoded_log)
-# if m_label.threshold_type == THRESHOLD_MEAN:
-#     threshold_mean = encoded_log['label'].mean()
-#     print('Computing proper threshold to split the two sets equally')
-#     threshold_median = encoded_log['label'].median()
-#     threshold__sortpivot = encoded_log['label'].sort_values().iloc[int(len(encoded_log['label']) / 2)]
-#     threshold = threshold_median
-#
-#
-# m_label = LabelContainer(type=label.type, attribute_name=label.attribute_name, threshold_type=label.threshold_type, threshold=threshold)
-#
-# training_df = encode_label_log(training_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
-# test_df = encode_label_log(test_log, encoding, job_type, m_label, event_names=event_names, additional_columns=additional_columns)
-#
-#
-# training_df.to_csv('/Users/Brisingr/Desktop/TEMP/dataset/T+T'+train_set_fn+'.csv')
-# test_df.to_csv('/Users/Brisingr/Desktop/TEMP/dataset/T+T'+test_set_fn+'.csv')

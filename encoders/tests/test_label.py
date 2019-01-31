@@ -4,13 +4,13 @@ from core.constants import CLASSIFICATION
 from encoders.common import encode_label_log, BOOLEAN
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, COMPLEX
 from encoders.label_container import *
-from utils import unique_events, get_global_event_attributes
-from logs.file_service import get_logs
+from utils.event_attributes import unique_events, get_additional_columns
+from logs.file_service import get_log
 
 
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(prefix_length=2)
 
@@ -166,9 +166,9 @@ class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
 
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
-        self.add_col = get_global_event_attributes(self.log)
+        self.add_col = get_additional_columns(self.log)
         self.encoding = EncodingContainer(COMPLEX, prefix_length=2)
         self.encodingPadding = EncodingContainer(COMPLEX, prefix_length=10, padding=ZERO_PADDING)
 
@@ -177,7 +177,7 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual((2, 11), df.shape)
+        self.assertEqual((2, 13), df.shape)
 
     def test_no_label_zero_padding(self):
         # add things have no effect
@@ -185,14 +185,14 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encodingPadding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 51))
+        self.assertEqual(df.shape, (2, 53))
 
     def test_remaining_time(self):
         label = LabelContainer()
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 12))
+        self.assertEqual(df.shape, (2, 14))
 
     def test_label_remaining_time_with_elapsed_time_custom_threshold(self):
         label = LabelContainer(add_elapsed_time=True, add_remaining_time=True, threshold_type=THRESHOLD_CUSTOM,
@@ -200,14 +200,14 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 13))
+        self.assertEqual(df.shape, (2, 15))
 
     def test_remaining_time_zero_padding(self):
         label = LabelContainer(type=REMAINING_TIME, add_elapsed_time=True)
 
         df = encode_label_log(self.log, self.encodingPadding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 53))
+        self.assertEqual(df.shape, (2, 55))
 
     def test_add_executed_events(self):
         label = LabelContainer(add_executed_events=True)
@@ -215,7 +215,7 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 13))
+        self.assertEqual(df.shape, (2, 15))
         self.assertTrue('executed_events' in df.columns.values.tolist())
         self.assertListEqual(df['executed_events'].tolist(), [2, 2])
 
@@ -225,7 +225,7 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 13))
+        self.assertEqual(df.shape, (2, 15))
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [1, 1])
 
@@ -234,7 +234,7 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 13))
+        self.assertEqual(df.shape, (2, 15))
         self.assertTrue('new_traces' in df.columns.values.tolist())
         self.assertListEqual(df['new_traces'].tolist(), [0, 0])
 
@@ -243,14 +243,14 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 12))
+        self.assertEqual(df.shape, (2, 14))
 
     def test_next_activity_zero_padding_elapsed_time(self):
         label = LabelContainer(type=NEXT_ACTIVITY, add_elapsed_time=True)
 
         df = encode_label_log(self.log, self.encodingPadding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 53))
+        self.assertEqual(df.shape, (2, 55))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
 
     def test_attribute_string(self):
@@ -258,19 +258,19 @@ class TestLabelComplex(TestCase):
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 12))
+        self.assertEqual(df.shape, (2, 14))
 
     def test_attribute_number(self):
         label = LabelContainer(type=ATTRIBUTE_NUMBER, attribute_name='AMOUNT')
 
         df = encode_label_log(self.log, self.encoding, CLASSIFICATION, label, event_names=self.event_names,
                               additional_columns=self.add_col)
-        self.assertEqual(df.shape, (2, 12))
+        self.assertEqual(df.shape, (2, 14))
 
 
 class TestLabelBoolean(TestCase):
     def setUp(self):
-        self.log = get_logs("log_cache/general_example_test.xes")[0]
+        self.log = get_log("log_cache/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(BOOLEAN, prefix_length=2)
 

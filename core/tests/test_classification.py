@@ -10,18 +10,22 @@ from jobs.job_creator import _kmeans
 class TestClassification(TestCase):
     """Proof of concept tests"""
 
-    def results(self):
+    @staticmethod
+    def results():
         return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.16666666666666666, 'false_negative': 0,
                 'false_positive': 1, 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
-    def results2(self):
+    @staticmethod
+    def results2():
         return {'f1score': 0.6666666666666666, 'auc': 0.5, 'acc': 0.5, 'false_negative': 0, 'false_positive': 1,
                 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
 
-    def results3(self):
+    @staticmethod
+    def results3():
         return {'f1score': 0.3333333333333333, 'acc': 0.5, 'auc': 0, 'precision': 0.25, 'recall': 0.5}
 
-    def get_job(self):
+    @staticmethod
+    def get_job():
         json = dict()
         json["clustering"] = "kmeans"
         json["split"] = split_double()

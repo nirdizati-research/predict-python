@@ -1,13 +1,9 @@
-import datetime
 import pandas as pd
-
-import numpy as np
 from collections import namedtuple
 
-from pandas.core.dtypes.common import is_datetime64tz_dtype
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+# Encoding methods
+from sklearn.preprocessing import LabelEncoder
 
-# Labeling methods
 SIMPLE_INDEX = 'simpleIndex'
 BOOLEAN = 'boolean'
 FREQUENCY = 'frequency'
@@ -40,7 +36,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
     """
 
     def __new__(cls, method=SIMPLE_INDEX, prefix_length=1, padding=NO_PADDING,
-                generation_type=ONLY_THIS):
+                generation_type=ONLY_THIS):  # TODO: fix incompatible signatures of __new__ and __init__
         return super(EncodingContainer, cls).__new__(cls, method, prefix_length, padding, generation_type)
 
     def is_zero_padding(self):

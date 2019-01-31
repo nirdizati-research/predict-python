@@ -18,8 +18,7 @@ class LogModelTest(TestCase):
         log = Log.objects.get(id=1)
         log_file = log.get_file()
 
-        self.assertEqual(1, len(log_file))
-        self.assertEqual(6, len(log_file[0]))
+        self.assertEqual(6, len(log_file))
 
 
 class SplitModelTest(TestCase):
@@ -32,8 +31,7 @@ class SplitModelTest(TestCase):
         split = Split.objects.get(id=1)
         log_file = split.original_log.get_file()
 
-        self.assertEqual(1, len(log_file))
-        self.assertEqual(6, len(log_file[0]))
+        self.assertEqual(6, len(log_file))
         self.assertEqual({}, split.config)
 
     def test_to_dict(self):
@@ -54,7 +52,8 @@ class FileUploadTests(APITestCase):
         with contextlib.suppress(FileNotFoundError):
             remove('log_cache/file2.xes')
 
-    def _create_test_file(self, path):
+    @staticmethod
+    def _create_test_file(path):
         copyfile('log_cache/general_example_test.xes', path)
         f = open(path, 'rb')
         return f

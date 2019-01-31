@@ -122,7 +122,8 @@ class CreateJobsTests(APITestCase):
     def tearDown(self):
         get_queue().empty()
 
-    def job_obj(self):
+    @staticmethod
+    def job_obj():
         config = dict()
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']
@@ -157,7 +158,8 @@ class CreateJobsTests(APITestCase):
                           "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False})
         self.assertEqual(response.data[0]['status'], 'created')
 
-    def job_obj2(self):
+    @staticmethod
+    def job_obj2():
         config = dict()
         config['encodings'] = ['simpleIndex', 'boolean', 'complex']
         config['clusterings'] = ['kmeans']
@@ -190,7 +192,8 @@ class CreateJobsTests(APITestCase):
 
         self.assertEqual(3, response.data[17]['config']['encoding']['prefix_length'])
 
-    def job_label(self):
+    @staticmethod
+    def job_label():
         config = dict()
         config['label'] = {"type": 'remaining_time', "attribute_name": None, "threshold_type": THRESHOLD_MEAN,
                            "threshold": 0, "add_remaining_time": False, "add_elapsed_time": False}
@@ -219,7 +222,8 @@ class CreateJobsTests(APITestCase):
 
 class MethodConfiguration(TestCase):
 
-    def job_obj(self):
+    @staticmethod
+    def job_obj():
         config = dict()
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']

@@ -1,17 +1,15 @@
-import csv
+import json
 import os
-import pickle
-import time
 
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
-    CLASSIFICATION, REGRESSION, LABELLING, UPDATE
+    CLASSIFICATION, REGRESSION, LABELLING
+from core.label_validation import label_task
 from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
-from core.label_validation import label_task
-from core.update_model import update_model
-from encoders.common import REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
-    encode_label_log, DURATION, encode_label_logs_new
+from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
+    encode_label_log, DURATION
+from utils.cache import get_digested
 from logs.splitting import prepare_logs
 from utils.cache import load_from_cache, dump_to_cache
 
@@ -26,47 +24,35 @@ def calculate(job):
 
 
 def get_encoded_logs(job: dict):
+    processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
+                                                                            json.dumps(job['encoding']),
+                                                                            json.dumps(job['type']),
+                                                                            json.dumps(job['label'])))
 
-    BALANCED = False
+    if os.path.isfile("labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
 
-    train_set_fn = 'train_split-' + str(job['split']['id']) + '.pickle'
-    test_set_fn = train_set_fn.replace('train', 'test')
-    additional_columns_fn = test_set_fn.replace('test', 'additional_columns')
-
-    if os.path.isfile("labeled_log_cache/" + train_set_fn) and \
-        os.path.isfile("labeled_log_cache/" + test_set_fn) and \
-        os.path.isfile("labeled_log_cache/" + additional_columns_fn):
-
-        print('Found Dataset in cache, loading..')
-        pickle_in = open("labeled_log_cache/" + train_set_fn, 'rb')
-        training_log = pickle.load(pickle_in)
-
-        pickle_in = open("labeled_log_cache/" + test_set_fn, 'rb')
-        test_log = pickle.load(pickle_in)
-
-        pickle_in = open("labeled_log_cache/" + additional_columns_fn, 'rb')
-        additional_columns = pickle.load(pickle_in)
-        print('Dataset loaded.')
+        print('Found Labeled Dataset in cache, loading...')
+        training_df, test_df = load_from_cache(processed_df_cache, prefix="labeled_log_cache/")
+        print('Done.')
 
     else:
-        training_log, test_log, additional_columns = prepare_logs(job['split'])
+        df_cache = ('split-%s' % (json.dumps(job['split'])))
 
-        pickle_out = open("labeled_log_cache/" + train_set_fn, "wb")
-        pickle.dump(training_log, pickle_out)
-        pickle_out.close()
+        if os.path.isfile("labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
 
-        pickle_out = open("labeled_log_cache/" + test_set_fn, "wb")
-        pickle.dump(test_log, pickle_out)
-        pickle_out.close()
+            print('Found Dataset in cache, loading..')
+            training_log, test_log, additional_columns = load_from_cache(df_cache, prefix="labeled_log_cache/")
+            print('Dataset loaded.')
 
-        pickle_out = open("labeled_log_cache/" + additional_columns_fn, "wb")
-        pickle.dump(additional_columns, pickle_out)
-        pickle_out.close()
+        else:
+            training_log, test_log, additional_columns = prepare_logs(job['split'])
 
-    # training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-    #                                          additional_columns=additional_columns, balance=BALANCED)
-    training_df, test_df = encode_label_logs_new(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                             additional_columns=additional_columns, balance=BALANCED)
+            dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="labeled_log_cache/")
+
+        training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+                                                 additional_columns=additional_columns)
+
+        dump_to_cache(processed_df_cache, (training_df, test_df), prefix="labeled_log_cache/")
 
     return training_df, test_df
 

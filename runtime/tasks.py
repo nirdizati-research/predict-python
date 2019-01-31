@@ -1,11 +1,10 @@
 from django_rq.decorators import job
 
-from logs.models import Log
-from logs.file_service import get_logs_old
 from core.core import runtime_calculate
-from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
-from core.core import get_run
+from jobs.models import RUNNING, COMPLETED, ERROR
 from jobs.ws_publisher import publish
+from logs.file_service import get_log
+from logs.models import Log
 
 
 @job("default", timeout='1h')
@@ -15,7 +14,7 @@ def runtime_task(job, model):
         job.status = RUNNING
         job.save()
         log = Log.objects.get(pk=job.config['log_id'])
-        run_log = get_logs_old(log.path)[0]
+        run_log = get_log(log.path)
         result_data = runtime_calculate(run_log, model.to_dict())
         result = result_data['prediction']
         job.result = result

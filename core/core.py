@@ -54,11 +54,8 @@ def get_encoded_logs(job: dict):
 
 def run_by_type(training_df, test_df, job):
     model_split = None
-    label_type = job['label'].type
-
     if job['type'] == CLASSIFICATION:
-        is_binary_classifier = _check_is_binary_classifier(label_type)
-        results, model_split = classification(training_df, test_df, job, is_binary_classifier)
+        results, model_split = classification(training_df, test_df, job)
     elif job['type'] == REGRESSION:
         results, model_split = regression(training_df, test_df, job)
     elif job['type'] == LABELLING:
@@ -72,9 +69,7 @@ def run_by_type(training_df, test_df, job):
 def runtime_calculate(run_log, model):
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
     if model['type'] == CLASSIFICATION:
-        label_type = model['label'].type
-        is_binary_classifier = _check_is_binary_classifier(label_type)
-        results = classification_single_log(run_df, model, is_binary_classifier)
+        results = classification_single_log(run_df, model)
     elif model['type'] == REGRESSION:
         results = regression_single_log(run_df, model)
     else:
@@ -88,15 +83,6 @@ def get_run(job):
     if job['type'] == LABELLING:
         return job['encoding'].method + '_' + job['label'].type
     return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type
-
-
-def _check_is_binary_classifier(label_type):
-    if label_type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]:
-        return True
-    elif label_type in [NEXT_ACTIVITY, ATTRIBUTE_STRING]:
-        return False
-    else:
-        raise ValueError("Label type not supported", label_type)
 
 
 def _label_task(df):

@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -13,12 +15,15 @@ from core.common import get_method_config
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
 from utils.result_metrics import calculate_results_binary_classification, calculate_results_multiclass_classification, \
     calculate_auc
+from encoders.common import REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, DURATION
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df: DataFrame, test_df: DataFrame, job: dict, is_binary_classifier: bool):
+def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
+    is_binary_classifier = _check_is_binary_classifier(job['label'].type)
+
     classifier = _choose_classifier(job)
 
     train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
@@ -36,8 +41,9 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: dict, is_bin
     return results, model_split
 
 
-def classification_single_log(run_df: DataFrame, model, is_binary_classifier: bool):
+def classification_single_log(run_df: DataFrame, model: dict):
     result = None
+    is_binary_classifier = _check_is_binary_classifier(model['label'].type)
 
     split = model['split']
     results = dict()
@@ -120,7 +126,7 @@ def _kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifi
     return result_data, auc
 
 
-def _no_clustering_train(original_test_data, train_data, classifier, is_binary_classifier: bool):
+def _no_clustering_train(original_test_data, train_data, classifier: Any, is_binary_classifier: bool):
     y = train_data['label']
     try:
         classifier.fit(train_data.drop('label', 1), y)
@@ -190,3 +196,11 @@ def _choose_classifier(job: dict):
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf
+
+def _check_is_binary_classifier(label_type):
+    if label_type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]:
+        return True
+    elif label_type in [NEXT_ACTIVITY, ATTRIBUTE_STRING]:
+        return False
+    else:
+        raise ValueError("Label type not supported", label_type)

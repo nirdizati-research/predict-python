@@ -1,10 +1,11 @@
 import json
-
+import os
 from core.classification import classification, classification_single_log
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from core.regression import regression, regression_single_log
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
     encode_label_log, DURATION
+from utils.cache import load_from_cache, dump_to_cache, get_digested
 from logs.splitting import prepare_logs
 
 
@@ -18,10 +19,36 @@ def calculate(job):
 
 
 def get_encoded_logs(job: dict):
-    training_log, test_log, additional_columns = prepare_logs(job['split'])
+    processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
+                                                                     json.dumps(job['encoding']),
+                                                                     json.dumps(job['type']),
+                                                                     json.dumps(job['label'])))
 
-    training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                             additional_columns=additional_columns)
+    if os.path.isfile("labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
+
+        print('Found Labeled Dataset in cache, loading...')
+        training_df, test_df = load_from_cache(processed_df_cache, prefix="labeled_log_cache/")
+        print('Done.')
+
+    else:
+        df_cache = ('split-%s' % (json.dumps(job['split'])))
+
+        if os.path.isfile("labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
+
+            print('Found Dataset in cache, loading..')
+            training_log, test_log, additional_columns = load_from_cache(df_cache, prefix="labeled_log_cache/")
+            print('Dataset loaded.')
+
+        else:
+            training_log, test_log, additional_columns = prepare_logs(job['split'])
+
+            dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="labeled_log_cache/")
+
+        training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+                                                 additional_columns=additional_columns)
+
+        dump_to_cache(processed_df_cache, (training_df, test_df), prefix="labeled_log_cache/")
+
     return training_df, test_df
 
 

@@ -1,12 +1,15 @@
+import csv
 import json
 import os
+import time
 
 from core.binary_classification import binary_classifier, binary_classifier_single_log
 from core.constants import \
-    CLASSIFICATION, REGRESSION, LABELLING
+    CLASSIFICATION, REGRESSION, LABELLING, UPDATE
 from core.label_validation import label_task
 from core.multi_classification import multi_classifier, multi_classifier_single_log
 from core.regression import regression, regression_single_log
+from core.update_model import update_model
 from encoders.common import encode_label_logs, REMAINING_TIME, ATTRIBUTE_NUMBER, ATTRIBUTE_STRING, NEXT_ACTIVITY, \
     encode_label_log, DURATION
 from utils.cache import get_digested
@@ -83,18 +86,20 @@ def run_by_type(training_df, test_df, job):
     result = [
         results['f1score'],
         results['acc'],
-        results['true_positive'],
-        results['true_negative'],
-        results['false_negative'],
-        results['false_positive'],
+        results.get('true_positive','--'),
+        results.get('true_negative','--'),
+        results.get('false_negative','--'),
+        results.get('false_positive','--'),
         results['precision'],
         results['recall'],
         results['auc']
     ]
     result += [job['encoding'][index] for index in range(len(job['encoding']))]
     result += [job['label'][index] for index in range(len(job['label']))]
-    result += [job['incremental_train'][index] for index in job['incremental_train'].keys()]
-    result += [job['hyperopt'][index] for index in job['hyperopt'].keys()]
+    if 'incremental_train' in job:
+        result += [job['incremental_train'][index] for index in job['incremental_train'].keys()]
+    if 'hyperopt' in job:
+        result += [job['hyperopt'][index] for index in job['hyperopt'].keys()]
     result += [job['clustering']]
     result += [job['split'][index] for index in job['split'].keys()]
     result += [job['type']]
@@ -115,8 +120,8 @@ def run_by_type(training_df, test_df, job):
                              'auc'] +
                             list(job['encoding']._fields) +
                             list(job['label']._fields) +
-                            list(job['incremental_train'].keys()) +
-                            list(job['hyperopt'].keys()) +
+                            list(job['incremental_train'].keys()) if 'incremental_train' in job else [] +
+                            list(job['hyperopt'].keys()) if 'hyperopt' in job else [] +
                             ['clustering'] +
                             list(job['split'].keys()) +
                             ['type'] +

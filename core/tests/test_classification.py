@@ -12,8 +12,8 @@ class TestClassification(TestCase):
 
     @staticmethod
     def results():
-        return {'f1score': 0.6666666666666666, 'acc': 0.5, 'auc': 0.16666666666666666, 'false_negative': 0,
-                'false_positive': 1, 'true_positive': 1, 'true_negative': 0, 'precision': 0.5, 'recall': 1.0}
+        return {'f1score': 0.66666666666666663, 'acc': 0.5, 'auc': 0.16666666666666666, 'false_negative': 0,
+                'false_positive': 1, 'true_positive': 1, 'true_negative': 0, 'precision': 1.0, 'recall': 0.5}
 
     @staticmethod
     def results2():

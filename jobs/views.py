@@ -66,7 +66,7 @@ def create_multiple(request):
 
     # detect either or not a model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
-            jobs = update(split, payload)
+        jobs = update(split, payload)
     elif payload['type'] == CLASSIFICATION:
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:

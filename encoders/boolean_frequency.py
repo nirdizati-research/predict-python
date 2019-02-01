@@ -53,11 +53,12 @@ def _update_event_happened(event, event_names: list, event_happened: list, encod
     For frequency updates happened count.
     """
     event_name = event['concept:name']
-    event_index = event_names.index(event_name)
-    if encoding.is_boolean():
-        event_happened[event_index] = True
-    else:
-        event_happened[event_index] += 1
+    if event_name in event_names:
+        event_index = event_names.index(event_name)
+        if encoding.is_boolean():
+            event_happened[event_index] = True
+        else:
+            event_happened[event_index] += 1
 
 
 def _create_columns(event_names: list, label: LabelContainer):

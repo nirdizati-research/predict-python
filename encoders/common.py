@@ -35,7 +35,7 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
         training_log['label'] = training_log['label'] < threshold
         test_log['label'] = test_log['label'] < threshold
 
-    if job_type != LABELLING:
+    if job_type != LABELLING and encoding.method != BOOLEAN:
         # init nominal encode
         encoding.init_label_encoder(training_log)
         # encode data

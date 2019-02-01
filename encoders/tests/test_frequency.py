@@ -22,7 +22,7 @@ class TestFrequencySplit(TestCase):
 
     def assert_shape(self, df, shape: tuple):
         names = ['register request', 'examine casually', 'check ticket', 'decide',
-                 'reinitiate request', 'examine thoroughly', 'pay compensation',
+                 'reinitiate request', 'examine thoroughly',
                  'reject request', 'trace_id', 'label', 'elapsed_time']
         for name in names:
             self.assertIn(name, df.columns.values.tolist())

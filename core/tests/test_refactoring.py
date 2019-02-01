@@ -27,9 +27,9 @@ class RefactorProof(TestCase):
         #                               'true_negative': 39,
         #                               'false_negative': 22, 'false_positive': 55, 'precision': 0.65625,
         #                               'recall': 0.8267716535433071, 'auc': 0.5943654099132211})
-        self.assertDictEqual(result, {'f1score': 0.7272727272727273, 'acc': 0.6063348416289592, 'true_positive': 116,
+        self.assertDictEqual(result, {'f1score': 0.50997782705099781, 'acc': 0.6063348416289592, 'true_positive': 116,
                                       'true_negative': 18, 'false_negative': 11, 'false_positive': 76,
-                                      'precision': 0.6041666666666666, 'recall': 0.9133858267716536,
+                                      'precision': 0.6124281609195402, 'recall': 0.55243759423689065,
                                       'auc': 0.5931091058244463})
 
     def test_class_no_cluster(self):
@@ -42,9 +42,9 @@ class RefactorProof(TestCase):
         #                               'true_negative': 45,
         #                               'false_negative': 28, 'false_positive': 49, 'precision': 0.668918918918919,
         #                               'recall': 0.7795275590551181, 'auc': 0.69680851063829774})
-        self.assertDictEqual(result, {'f1score': 0.7222222222222222, 'acc': 0.6832579185520362, 'true_positive': 91,
+        self.assertDictEqual(result, {'f1score': 0.67690058479532156, 'acc': 0.6832579185520362, 'true_positive': 91,
                                       'true_negative': 60, 'false_negative': 36, 'false_positive': 34,
-                                      'precision': 0.728, 'recall': 0.7165354330708661, 'auc': 0.71720556207069863})
+                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577, 'auc': 0.71720556207069863})
 
     def test_next_activity_kmeans(self):
         self.maxDiff = None
@@ -55,7 +55,8 @@ class RefactorProof(TestCase):
         result, _ = calculate(job)
         # self.assertDictEqual(result, {'f1score': 0.23864644588878572, 'acc': 0.74660633484162897,
         #                               'precision': 0.19740887132191481, 'recall': 0.40000000000000002, 'auc': 0})
-        self.assertDictEqual(result, {'f1score': 0.092785699084911674, 'acc': 0.26244343891402716,
+        self.assertDictEqual(result, {'f1score': 0.09278569908491167, 'acc': 0.26244343891402716, 'true_positive': '--',
+                                      'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
                                       'precision': 0.11753774680603948, 'recall': 0.16956521739130434, 'auc': 0})
 
     def test_next_activity_no_cluster(self):

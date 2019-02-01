@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from log_util.log_metrics import *
+from utils.log_metrics import *
 from logs.file_service import get_log
 
 

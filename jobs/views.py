@@ -65,8 +65,9 @@ def create_multiple(request):
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     # detect either or not a model to update has been specified otherwise train a new one.
-    if payload['config']['incremental_train']['base_model'] != None:
-        jobs = update(split, payload)
+    if 'incremental_train' in payload['config']:
+        if payload['config']['incremental_train']['base_model'] is not None:
+            jobs = update(split, payload)
     elif payload['type'] == CLASSIFICATION:
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:

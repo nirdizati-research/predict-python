@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from log_util import log_metrics
-from log_util.time_metrics import *
+from utils import log_metrics
+from utils.time_metrics import *
 from logs.file_service import get_log
 
 

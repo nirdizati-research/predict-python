@@ -2,11 +2,10 @@ import copy
 
 from sklearn.externals import joblib
 
-from core.binary_classification import no_clustering_update
-from core.common import calculate_results
 from core.constants import INCREMENTAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, INCREMENTAL_ADAPTIVE_TREE, \
     INCREMENTAL_HOEFFDING_TREE
 from predModels.models import PredModels
+from utils.result_metrics import calculate_results_classification
 
 
 def retrieve_model_from_cache(job : dict):
@@ -76,7 +75,7 @@ def prepare_results(df, auc: int):
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 
-    row = calculate_results(actual_, predicted_)
+    row = calculate_results_classification(actual_, predicted_)
     row['auc'] = auc
     return row
 

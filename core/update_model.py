@@ -2,8 +2,8 @@ import copy
 
 from sklearn.externals import joblib
 
-from core.constants import INCREMENTAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, INCREMENTAL_ADAPTIVE_TREE, \
-    INCREMENTAL_HOEFFDING_TREE
+from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
+    HOEFFDING_TREE
 from predModels.models import PredModels
 from utils.result_metrics import calculate_results_classification
 
@@ -22,11 +22,11 @@ def retrieve_model_from_cache(job : dict):
 
 def choose_clf_model(job : dict):
     method = job['method']
-    if method == INCREMENTAL_NAIVE_BAYES:
+    if method == MULTINOMIAL_NAIVE_BAYES:
         clf, model = retrieve_model_from_cache(job)
-    elif method == INCREMENTAL_ADAPTIVE_TREE:
+    elif method == ADAPTIVE_TREE:
         clf, model = retrieve_model_from_cache(job)
-    elif method == INCREMENTAL_HOEFFDING_TREE:
+    elif method == HOEFFDING_TREE:
         clf, model = retrieve_model_from_cache(job)
     else:
         raise ValueError('Unexpected Incremental method %s' % method)

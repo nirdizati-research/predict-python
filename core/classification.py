@@ -5,12 +5,16 @@ from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import Perceptron, SGDClassifier
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
 from core.common import get_method_config
-from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST
+from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
+    HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
 from utils.result_metrics import calculate_auc, calculate_results_classification
 from core.constants import KMEANS, NO_CLUSTER
 
@@ -67,7 +71,10 @@ def _kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_
             pass
         else:
             y = clustered_train_data['label']
-            classifier.fit(clustered_train_data.drop('label', 1), y)
+            try:
+                classifier.fit(clustered_train_data.drop('label', 1), y)
+            except:
+                classifier.partial_fit(clustered_train_data.drop('label', 1).values, y)
             models[i] = classifier
     model_split = dict()
     model_split['type'] = KMEANS
@@ -95,14 +102,21 @@ def _kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifi
         else:
             clustered_test_data = original_clustered_test_data.drop(drop_list, 1)
 
-            prediction = classifier[i].predict(clustered_test_data)
+            try:
+                prediction = classifier[i].predict(clustered_test_data)
+            except:
+                prediction = classifier[i].predict(clustered_test_data.values)
             original_clustered_test_data["predicted"] = prediction
 
             if is_binary_classifier:
-                scores = classifier[i].predict_proba(clustered_test_data)
-                if testing:
-                    actual = original_clustered_test_data['label']
-                    auc = calculate_auc(actual, scores, auc)
+                if hasattr(classifier[i], 'predict_proba'):
+                    try:
+                        scores = classifier[i].predict_proba(clustered_test_data)
+                    except:
+                        scores = classifier[i].predict_proba(clustered_test_data.values)
+                    if testing:
+                        actual = original_clustered_test_data['label']
+                        auc = calculate_auc(actual, scores, auc)
             else:
                 if testing:
                     original_clustered_test_data["actual"] = original_clustered_test_data['label']
@@ -183,6 +197,16 @@ def _choose_classifier(job: dict):
         clf = DecisionTreeClassifier(**config)
     elif method == XGBOOST:
         clf = XGBClassifier(**config)
+    elif method == MULTINOMIAL_NAIVE_BAYES: #TODO check which is better BETWEEN (MultinomialNB, BernoulliNB, GaussianNB)
+        clf = MultinomialNB(**config)
+    elif method == ADAPTIVE_TREE:
+        clf = HAT(**config)
+    elif method == HOEFFDING_TREE:
+        clf = HoeffdingTree(**config)
+    elif method == SGDCLASSIFIER:
+        clf = SGDClassifier(**config)
+    elif method == PERCEPTRON:
+        clf = Perceptron(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf

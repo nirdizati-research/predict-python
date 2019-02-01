@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from core.constants import MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, HOEFFDING_TREE, \
+    SGDCLASSIFIER, PERCEPTRON, DECISION_TREE, XGBOOST, KNN, KMEANS
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config
 from encoders.encoding_container import EncodingContainer, COMPLEX, LAST_PAYLOAD, ZERO_PADDING
@@ -28,7 +30,7 @@ class TestClassification(TestCase):
     @staticmethod
     def get_job():
         json = dict()
-        json["clustering"] = "kmeans"
+        json["clustering"] = KMEANS
         json["split"] = split_double()
         json["method"] = "randomForest"
         json["encoding"] = EncodingContainer()
@@ -61,14 +63,51 @@ class TestClassification(TestCase):
 
     def test_class_DecisionTree(self):
         job = self.get_job()
-        job['method'] = 'decisionTree'
+        job['method'] = DECISION_TREE
         add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
 
     def test_class_xgboost(self):
         job = self.get_job()
-        job['method'] = 'xgboost'
+        job['method'] = XGBOOST
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_class_mnb(self):
+        job = self.get_job()
+        job['method'] = MULTINOMIAL_NAIVE_BAYES
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_class_ada(self):
+        job = self.get_job()
+        job['method'] = ADAPTIVE_TREE
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_class_hoeff(self):
+        job = self.get_job()
+        job['method'] = HOEFFDING_TREE
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_class_sgdc(self):
+        job = self.get_job()
+        job['method'] = SGDCLASSIFIER
+        job['classification.' + SGDCLASSIFIER] = dict()
+        job['classification.' + SGDCLASSIFIER]['loss'] = 'log'
+        add_default_config(job)
+        result, _ = calculate(job)
+        self.assertIsNotNone(result)
+
+    def test_class_perceptron(self):
+        job = self.get_job()
+        job['method'] = PERCEPTRON
         add_default_config(job)
         result, _ = calculate(job)
         self.assertIsNotNone(result)
@@ -82,7 +121,7 @@ class TestClassification(TestCase):
 
     def test_next_activity_KNN(self):
         job = self.get_job()
-        job['method'] = 'knn'
+        job['method'] = KNN
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['classification.knn'] = {'n_neighbors': 3}
         job['kmeans'] = _kmeans()
@@ -91,7 +130,7 @@ class TestClassification(TestCase):
 
     def test_next_activity_xgboost(self):
         job = self.get_job()
-        job['method'] = 'xgboost'
+        job['method'] = XGBOOST
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)
         result, _ = calculate(job)
@@ -99,7 +138,7 @@ class TestClassification(TestCase):
 
     def test_attribute_string_knn(self):
         job = self.get_job()
-        job['method'] = 'knn'
+        job['method'] = KNN
         job['label'] = LabelContainer(ATTRIBUTE_STRING, attribute_name='creator')
         job['classification.knn'] = {'n_neighbors': 3}
         job['kmeans'] = _kmeans()
@@ -108,7 +147,7 @@ class TestClassification(TestCase):
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
-        job['method'] = 'decisionTree'
+        job['method'] = DECISION_TREE
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
         add_default_config(job)

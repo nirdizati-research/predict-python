@@ -30,11 +30,13 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    trace_to_row(trace, encoding, i, data_fun, normal_columns_number, additional_columns=additional_columns,
+                    trace_to_row(trace, encoding, i, data_fun, normal_columns_number,
+                                 additional_columns=additional_columns,
                                  atr_classifier=label.attribute_name, **kwargs))
         else:
             encoded_data.append(
-                trace_to_row(trace, encoding, encoding.prefix_length, data_fun, normal_columns_number, additional_columns=additional_columns,
+                trace_to_row(trace, encoding, encoding.prefix_length, data_fun, normal_columns_number,
+                             additional_columns=additional_columns,
                              atr_classifier=label.attribute_name, **kwargs))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
@@ -63,7 +65,7 @@ def data_complex(trace: list, prefix_length: int, additional_columns: list):
 
     Appends values in additional_columns
     """
-    data = [ trace.attributes.get(att, '0') for att in additional_columns['trace_attributes'] ]
+    data = [trace.attributes.get(att, '0') for att in additional_columns['trace_attributes']]
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
@@ -90,7 +92,6 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
         data.append(event_name)
 
     # Attributes of last event
-    #TODO: this is very strange
     for att in additional_columns['event_attributes']:
         if prefix_length - 1 >= len(trace):
             value = '0'
@@ -101,8 +102,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: list)
 
 
 def trace_to_row(trace, encoding: EncodingContainer, event_index: int, data_fun, columns_len, atr_classifier=None,
-                 label=None,
-                 executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
+                 label=None, executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)

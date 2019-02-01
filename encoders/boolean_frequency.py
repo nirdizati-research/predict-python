@@ -31,7 +31,8 @@ def _encode_boolean_frequency(log: list, event_names: list, label: LabelContaine
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    _trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=label.attribute_name, **kwargs))
+                    _trace_to_row(trace, encoding, i, event_names=event_names, atr_classifier=label.attribute_name,
+                                  **kwargs))
         else:
             encoded_data.append(
                 _trace_to_row(trace, encoding, encoding.prefix_length, event_names=event_names,

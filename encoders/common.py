@@ -7,24 +7,22 @@ from encoders.boolean_frequency import frequency, boolean
 from encoders.complex_last_payload import complex, last_payload
 from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD
 from encoders.label_container import *
-from utils.event_attributes import unique_events2, unique_events
+from utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None, event_names=None):
+                      label: LabelContainer, additional_columns=None):
     """Encodes and labels test set and training set as data frames
 
     :param additional_columns: Global trace attributes for complex and last payload encoding
     :returns training_df, test_df
     """  # TODO: complete documentation
-    if encoding.method == BOOLEAN or encoding.method == FREQUENCY:
-        if event_names is None:
-            event_names = unique_events(training_log)
-    training_log = _encode_log(training_log, encoding, label, additional_columns=additional_columns, event_names=event_names)
+    training_log, cols = _encode_log(training_log, encoding, label, additional_columns=additional_columns,
+                                     cols=None)
 
     # TODO pass the columns of the training log
-    test_log = _encode_log(test_log, encoding, label, additional_columns=additional_columns, event_names=event_names)
+    test_log, _ = _encode_log(test_log, encoding, label, additional_columns=additional_columns, cols=cols)
 
     if (label.threshold_type == THRESHOLD_MEAN or
         label.threshold_type == THRESHOLD_CUSTOM) and (label.type == REMAINING_TIME or
@@ -48,15 +46,15 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
 
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
-                     additional_columns=None):
-    if event_names is None:
-        event_names = unique_events(run_log)
-
-    encoded_log = _encode_log(run_log, encoding, label, event_names, additional_columns)
+                     additional_columns=None, fit_encoder=False):
+    encoded_log, _ = _encode_log(run_log, encoding, label, additional_columns)
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
-        encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+        try:
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
+        except:
+            encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
 
     # converts string values to in
     if job_type != LABELLING:
@@ -75,23 +73,26 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     return encoded_log
 
 
-def _encode_log(run_log: list, encoding: EncodingContainer, label: LabelContainer, event_names=None,
-                additional_columns=None):
+def _encode_log(log: list, encoding: EncodingContainer, label: LabelContainer, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if encoding.method == SIMPLE_INDEX:
-        run_df = simple_index(run_log, label, encoding)
+        run_df = simple_index(log, label, encoding)
     elif encoding.method == BOOLEAN:
-        run_df = boolean(run_log, event_names, label, encoding)
+        if cols is None:
+            cols = unique_events(log)
+        run_df = boolean(log, cols, label, encoding)
     elif encoding.method == FREQUENCY:
-        run_df = frequency(run_log, event_names, label, encoding)
+        if cols is None:
+            cols = unique_events(log)
+        run_df = frequency(log, cols, label, encoding)
     elif encoding.method == COMPLEX:
-        run_df = complex(run_log, label, encoding, additional_columns)
+        run_df = complex(log, label, encoding, additional_columns)
     elif encoding.method == LAST_PAYLOAD:
-        run_df = last_payload(run_log, label, encoding, additional_columns)
+        run_df = last_payload(log, label, encoding, additional_columns)
     else:
         raise ValueError("Unknown encoding method {}".format(encoding.method))
-    return run_df
+    return run_df, cols
 
 
 def _label_boolean(df: DataFrame, label: LabelContainer):
@@ -100,6 +101,8 @@ def _label_boolean(df: DataFrame, label: LabelContainer):
     By default use mean of label value
     True if under threshold value
     """
+    if df['label'].dtype == bool:
+        return df
     if label.threshold_type == THRESHOLD_MEAN:
         threshold = df['label'].mean()
     else:
@@ -127,4 +130,6 @@ def _convert(s):
     if s is None:
         # Next activity resources
         s = '0'
+    # TODO this potentially generates collisions and in general is a clever solution for another problem
+    # see https://stackoverflow.com/questions/16008670/how-to-hash-a-string-into-8-digits
     return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8

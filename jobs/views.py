@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from jobs import tasks
-from jobs.job_creator import generate, generate_labelling
+from jobs.job_creator import generate, generate_labelling, update
 from jobs.models import Job
 from jobs.serializers import JobSerializer
 from logs.models import Split
@@ -64,7 +64,11 @@ def create_multiple(request):
     except Split.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
 
-    if payload['type'] == CLASSIFICATION:
+    # detect either or not a model to update has been specified otherwise train a new one.
+    if 'incremental_train' in payload['config']:
+        if payload['config']['incremental_train']['base_model'] is not None:
+            jobs = update(split, payload)
+    elif payload['type'] == CLASSIFICATION:
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:
         jobs = generate(split, payload, REGRESSION)

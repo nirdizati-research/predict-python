@@ -1,7 +1,7 @@
 from django.db import models
 from jsonfield import JSONField
 
-from core.constants import REGRESSION, CLASSIFICATION, LABELLING
+from core.constants import REGRESSION, CLASSIFICATION, LABELLING, UPDATE
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
 from logs.models import Log, Split
@@ -14,13 +14,14 @@ RUNNING = 'running'
 TYPES = (
     (CLASSIFICATION, 'Classification'),
     (REGRESSION, 'Regression'),
-    (LABELLING, 'Labelling')
+    (LABELLING, 'Labelling'),
+    (UPDATE, 'Update')
 )
 STATUSES = (
     (CREATED, 'Created'),
     (COMPLETED, 'Completed'),
     (ERROR, 'Error'),
-    (RUNNING, 'Running'),
+    (RUNNING, 'Running')
 )
 
 

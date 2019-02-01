@@ -1,7 +1,9 @@
+import time
+
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
-from core.constants import KMEANS
+from core.constants import KMEANS, UPDATE, CLASSIFICATION
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
@@ -17,10 +19,13 @@ def prediction_task(job_id):
         if job.status == CREATED:
             job.status = RUNNING
             job.save()
+            start_time = time.time()
             if job.config.get('hyperopt', {}).get('use_hyperopt', False):
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job.to_dict())
+            elapsed_time = time.time() - start_time
+            print('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
             if job.config.get('create_models', False):
                 save_models(model_split, job)
             job.result = result
@@ -42,7 +47,12 @@ def save_models(to_model_split, job):
         log = jobsplit.original_log
     else:
         log = jobsplit.training_log
-    filename_model = 'model_cache/job_{}-split_{}-model-{}.sav'.format(job.id, job.split.id, job.type)
+    if job.type == UPDATE:
+        job.type = CLASSIFICATION
+        filename_model = 'model_cache/job_{}-split_{}-model-{}-v{}.sav'.format(job.id, job.split.id, job.type,
+                                                                               str(to_model_split['versioning'] + 1))
+    else:
+        filename_model = 'model_cache/job_{}-split_{}-model-{}-v0.sav'.format(job.id, job.split.id, job.type)
     joblib.dump(to_model_split['model'], filename_model)
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)

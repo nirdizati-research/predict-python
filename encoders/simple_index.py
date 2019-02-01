@@ -72,7 +72,7 @@ def compute_columns(prefix_length: int):
 
 def get_intercase_attributes(log: list, label: LabelContainer):
     """Dict of kwargs
-    These intercae attributes are expensive operations!!!
+    These intercase attributes are expensive operations!!!
     """
     # Expensive operations
     executed_events = events_by_date(log) if label.add_executed_events else None

@@ -40,6 +40,8 @@ python manage.py test
 ./manage.py test
 ```
 
+NB: always run a redis-server in background if you want your server to accept any incoming post requests!
+
 Start by running migrations and adding sample data
 ```commandline
 python manage.py migrate
@@ -131,9 +133,10 @@ http://localhost:8000/jobs/multiple
 ```
 
 ## Contributors
-- [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi
-- [@fmmaggi](https://github.com/fmmaggi) Fabrizio Maggi
 - [@dfmchiara](https://github.com/dfmchiara) Chiara Di Francescomarino 
-- [@williamsrizzi](https://github.com/WilliamsRizzi) Williams Rizzi
+- [@TKasekamp](https://github.com/TKasekamp) Tõnis Kasekamp 
 - [@mrsonuk](https://github.com/mrsonuk) Santosh Kumar
+- [@fmmaggi](https://github.com/fmmaggi) Fabrizio Maggi
+- [@WilliamsRizzi](https://github.com/WilliamsRizzi) Williams Rizzi
+- [@HitLuca](https://github.com/HitLuca) Luca Simonetto

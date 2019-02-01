@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+tensorflow-gpu = "==1.4.0"
 
 [packages]
 djangorestframework = "==3.7.1"
@@ -26,6 +27,10 @@ rq = "==0.13.0"
 redis = "==3.0.0"
 pm4py = "*"
 Django = "==1.11.18"
+skmultiflow = {git = "https://github.com/scikit-multiflow/scikit-multiflow.git", ref = "master"}
+tensorflow = "*"
+keras = "*"
+h5py = "*"
 
 [requires]
 python_version = "3.6"

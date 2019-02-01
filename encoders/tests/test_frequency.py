@@ -4,8 +4,8 @@ from core.constants import CLASSIFICATION
 from encoders.boolean_frequency import frequency
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
 from encoders.encoding_container import EncodingContainer, FREQUENCY, ZERO_PADDING
-from utils.event_attributes import unique_events
 from logs.file_service import get_log
+from utils.event_attributes import unique_events
 
 
 class TestFrequencySplit(TestCase):
@@ -22,7 +22,7 @@ class TestFrequencySplit(TestCase):
 
     def assert_shape(self, df, shape: tuple):
         names = ['register request', 'examine casually', 'check ticket', 'decide',
-                 'reinitiate request', 'examine thoroughly', 'pay compensation',
+                 'reinitiate request', 'examine thoroughly',
                  'reject request', 'trace_id', 'label', 'elapsed_time']
         for name in names:
             self.assertIn(name, df.columns.values.tolist())

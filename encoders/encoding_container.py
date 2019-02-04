@@ -66,23 +66,24 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
     def init_label_encoder(self, df):
         for column in df:
             if column != 'trace_id' and column != 'label':
-                if ENCODING == LABEL_ENCODER:
-                    encoder[column] = LabelEncoder().fit(
-                            sorted(pd.concat([pd.Series([str(PADDING_VALUE)]), df[column].apply(lambda x: str(x))])))
-                    classes = encoder[column].classes_
-                    transforms = encoder[column].transform(encoder[column].classes_)
-                    label_dict[column] = dict(zip(classes, transforms))
-                elif ENCODING == ONE_HOT_ENCODER:
-                    raise ValueError('Onehot encoder not yet implemented')
-                    # label_encoder[column] = LabelEncoder().fit(df[column])
-                    # classes = label_encoder[column].classes_
-                    # transforms = label_encoder[column].transform(label_encoder[column].classes_)
-                    # label_dict[column] = dict(zip(classes, transforms))
-                    # label_dict[column][PADDING_VALUE] = -1
-                    # if min(transforms) < label_dict[column][PADDING_VALUE]:
-                    #     print('-1 is not a proper value as padding, switching to min-1')
-                    #     label_dict[column][PADDING_VALUE] = min(transforms) - 1
-                    # encoder[column] = OneHotEncoder(handle_unknown='ignore').fit(
-                    #     label_encoder[column].transform(df[column]).reshape(len(df[column]), 1))
-                else:
-                    raise ValueError('Please set the encoding technique!')
+                if df[column].dtype != int or ( df[column].dtype == int and pd.np.any(df[column] < 0)) :
+                    if ENCODING == LABEL_ENCODER:
+                        encoder[column] = LabelEncoder().fit(
+                                sorted(pd.concat([pd.Series([str(PADDING_VALUE)]), df[column].apply(lambda x: str(x))])))
+                        classes = encoder[column].classes_
+                        transforms = encoder[column].transform(classes)
+                        label_dict[column] = dict(zip(classes, transforms))
+                    elif ENCODING == ONE_HOT_ENCODER:
+                        raise ValueError('Onehot encoder not yet implemented')
+                        # label_encoder[column] = LabelEncoder().fit(df[column])
+                        # classes = label_encoder[column].classes_
+                        # transforms = label_encoder[column].transform(label_encoder[column].classes_)
+                        # label_dict[column] = dict(zip(classes, transforms))
+                        # label_dict[column][PADDING_VALUE] = -1
+                        # if min(transforms) < label_dict[column][PADDING_VALUE]:
+                        #     print('-1 is not a proper value as padding, switching to min-1')
+                        #     label_dict[column][PADDING_VALUE] = min(transforms) - 1
+                        # encoder[column] = OneHotEncoder(handle_unknown='ignore').fit(
+                        #     label_encoder[column].transform(df[column]).reshape(len(df[column]), 1))
+                    else:
+                        raise ValueError('Please set the encoding technique!')

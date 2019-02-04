@@ -8,11 +8,11 @@ from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
 def calculate_results_classification(actual: list, predicted: list) -> dict:
-    return {**{'f1score': _get_f1(actual, predicted),
-               'acc': accuracy_score(actual, predicted),
-               'precision': _get_precision(actual, predicted),
-               'recall': _get_recall(actual, predicted)},
-            **get_confusion_matrix(actual, predicted)}
+     return {**{'f1score': _get_f1(actual, predicted),
+                'acc': accuracy_score(actual, predicted),
+                'precision': _get_precision(actual, predicted),
+                'recall': _get_recall(actual, predicted)},
+             **get_confusion_matrix(actual, predicted)}
 
 
 def get_confusion_matrix(actual, predicted) -> dict:

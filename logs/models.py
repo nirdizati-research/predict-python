@@ -1,6 +1,6 @@
 from django.db import models
 from jsonfield.fields import JSONField
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 TYPES = (
     ('single', 'Single'),

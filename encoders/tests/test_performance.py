@@ -8,7 +8,7 @@ from encoders.encoding_container import SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLE
     ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import *
 from utils.event_attributes import unique_events, get_additional_columns
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 
 class TestEncoding(TestCase):

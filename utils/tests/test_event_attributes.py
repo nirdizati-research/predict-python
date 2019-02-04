@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from utils.event_attributes import unique_events, unique_events2, get_event_attributes, \
     get_additional_columns
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 
 class EventAttributes(TestCase):

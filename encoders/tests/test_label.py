@@ -5,7 +5,7 @@ from encoders.common import encode_label_log, BOOLEAN
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, COMPLEX
 from encoders.label_container import *
 from utils.event_attributes import unique_events, get_additional_columns
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 
 class TestLabelSimpleIndex(TestCase):

@@ -5,7 +5,7 @@ from encoders.boolean_frequency import frequency
 from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
 from encoders.encoding_container import EncodingContainer, FREQUENCY, ZERO_PADDING
 from utils.event_attributes import unique_events
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 
 class TestFrequencySplit(TestCase):

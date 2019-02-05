@@ -7,7 +7,7 @@ from encoders.boolean_frequency import frequency, boolean
 from encoders.complex_last_payload import complex, last_payload
 from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD
 from encoders.label_container import *
-from utils.event_attributes import unique_events2, unique_events
+from utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
@@ -47,14 +47,13 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
 
 def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
                      additional_columns=None, fit_encoder=False):
-
     encoded_log, _ = _encode_log(run_log, encoding, label, additional_columns)
 
     # Convert strings to number
     if label.type == ATTRIBUTE_NUMBER:
         try:
             encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
-        except :
+        except:
             encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
 
     # converts string values to in
@@ -131,6 +130,6 @@ def _convert(s):
     if s is None:
         # Next activity resources
         s = '0'
-    #TODO this potentially generates collisions and in general is a clever solution for another problem
+    # TODO this potentially generates collisions and in general is a clever solution for another problem
     # see https://stackoverflow.com/questions/16008670/how-to-hash-a-string-into-8-digits
     return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8

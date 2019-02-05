@@ -1,9 +1,10 @@
 from math import sqrt
 
+import numpy as np
 from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
     mean_squared_error, mean_absolute_error, r2_score, roc_auc_score
-import numpy as np
+
 from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
@@ -18,7 +19,7 @@ def calculate_results_classification(actual: list, predicted: list) -> dict:
 def get_confusion_matrix(actual, predicted) -> dict:
     tn, fp, fn, tp = '--', '--', '--', '--'
     actual_set = list(sorted(set(actual)))
-    if len(actual_set) <= 2 :
+    if len(actual_set) <= 2:
         if not isinstance(actual_set[0], bool) and not isinstance(actual_set[0], np.bool_):
             actual = [el == actual_set[0] for el in actual]
             predicted = [el == actual_set[0] for el in predicted]

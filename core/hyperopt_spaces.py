@@ -50,14 +50,14 @@ def _classification_incremental_naive_bayes():
 def _classification_incremental_adaptive_tree():
     return {
         'grace_period': hp.uniform('grace_period', 1, 5),
-        'split_criterion': hp.choice('split_criterion', [ 'gini', 'info_gain' ]),
+        'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
         'split_confidence': hp.uniform('split_confidence', .0000005, .000001),
         'tie_threshold': hp.uniform('tie_threshold', .1, .6),
         # 'binary_split': hp.choice('binary_split', [ True, False ]),
         # 'stop_mem_management': hp.choice('stop_mem_management', [ True, False ]),
-        'remove_poor_atts': hp.choice('remove_poor_atts', [ True, False ]),
+        'remove_poor_atts': hp.choice('remove_poor_atts', [True, False]),
         # 'no_preprune': hp.choice('no_preprune', [ True, False ]),
-        'leaf_prediction': hp.choice('leaf_prediction', [ 'mc', 'nb', 'nba']),
+        'leaf_prediction': hp.choice('leaf_prediction', ['mc', 'nb', 'nba']),
         'nb_threshold': hp.uniform('nb_threshold', 0.2, 0.6)
     }
 
@@ -65,14 +65,14 @@ def _classification_incremental_adaptive_tree():
 def _classification_incremental_hoeffding_tree():
     return {
         'grace_period': hp.uniform('grace_period', 3, 8),
-        'split_criterion': hp.choice('split_criterion', [ 'gini', 'info_gain' ]),
+        'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
         'split_confidence': hp.uniform('split_confidence', .0000005, .0000009),
         'tie_threshold': hp.uniform('tie_threshold', .4, .8),
         # 'binary_split': hp.choice('binary_split', [ True, False ]),
         # 'stop_mem_management': hp.choice('stop_mem_management', [ True, False ]),
-        'remove_poor_atts': hp.choice('remove_poor_atts', [ True, False ]),
+        'remove_poor_atts': hp.choice('remove_poor_atts', [True, False]),
         # 'no_preprune': hp.choice('no_preprune', [ True, False ]),
-        'leaf_prediction': hp.choice('leaf_prediction', [ 'mc', 'nb', 'nba']),
+        'leaf_prediction': hp.choice('leaf_prediction', ['mc', 'nb', 'nba']),
         'nb_threshold': hp.uniform('nb_threshold', 0.1, 0.5)
     }
 

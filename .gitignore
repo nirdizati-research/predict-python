@@ -79,7 +79,6 @@ src/
 # End of https://www.gitignore.io/api/python,django
 
 dump.rdb
-db/*.sqlite3
 
 *.icloud
 *.sav
@@ -87,8 +86,3 @@ db/*.sqlite3
 *.ipynb_checkpoints/
 
 */migrations/*
-
-model_cache/*
-results/*
-labeled_log_cache/*
-log_cache/*

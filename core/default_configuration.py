@@ -31,45 +31,45 @@ def _classification_decision_tree():
 
 def _classification_incremental_naive_bayes():
     return {
-        'alpha' : 1.0,
-        'fit_prior' : True,
-        'class_prior' : None
+        'alpha': 1.0,
+        'fit_prior': True,
+        'class_prior': None
     }
 
 
 def _classification_incremental_adaptive_tree():
     return {
-        'max_byte_size' : 33554432,
-        'memory_estimate_period' : 1000000,
-        'grace_period' : 200,
-        'split_criterion' : 'info_gain',
-        'split_confidence' : .0000001,
-        'tie_threshold' : .05,
-        'binary_split' : False,
-        'stop_mem_management' : False,
-        'remove_poor_atts' : False,
-        'no_preprune' : False,
-        'leaf_prediction' : 'nba',
-        'nb_threshold' : 0,
-        'nominal_attributes' : [] # <-- if this is empty assume all attributes are numerical
+        'max_byte_size': 33554432,
+        'memory_estimate_period': 1000000,
+        'grace_period': 200,
+        'split_criterion': 'info_gain',
+        'split_confidence': .0000001,
+        'tie_threshold': .05,
+        'binary_split': False,
+        'stop_mem_management': False,
+        'remove_poor_atts': False,
+        'no_preprune': False,
+        'leaf_prediction': 'nba',
+        'nb_threshold': 0,
+        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
     }
 
 
 def _classification_incremental_hoeffding_tree():
     return {
-        'max_byte_size' : 33554432,
-        'memory_estimate_period' : 1000000,
-        'grace_period' : 200,
-        'split_criterion' : 'info_gain',
-        'split_confidence' : .0000001,
-        'tie_threshold' : .05,
-        'binary_split' : False,
-        'stop_mem_management' : False,
-        'remove_poor_atts' : False,
-        'no_preprune' : False,
-        'leaf_prediction' : 'nba',
-        'nb_threshold' : 0,
-        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+        'max_byte_size': 33554432,
+        'memory_estimate_period': 1000000,
+        'grace_period': 200,
+        'split_criterion': 'info_gain',
+        'split_confidence': .0000001,
+        'tie_threshold': .05,
+        'binary_split': False,
+        'stop_mem_management': False,
+        'remove_poor_atts': False,
+        'no_preprune': False,
+        'leaf_prediction': 'nba',
+        'nb_threshold': 0,
+        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
     }
 
 
@@ -86,7 +86,7 @@ def _classification_incremental_sgd_classifier():
         'power_t': 0.5,
         'early_stopping': False,
         'n_iter_no_change': 5,
-        'validation_fraction' : 0.1,
+        'validation_fraction': 0.1,
     }
 
 
@@ -159,9 +159,9 @@ def _kmeans():
 
 def _update_incremental_naive_bayes():
     return {
-        'alpha' : 1.0,
-        'fit_prior' : True,
-        'class_prior' : None
+        'alpha': 1.0,
+        'fit_prior': True,
+        'class_prior': None
     }
 
 
@@ -179,7 +179,7 @@ def _update_incremental_adaptive_tree():
         'no_preprune': False,
         'leaf_prediction': 'nba',
         'nb_threshold': 0.4,
-        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
     }
 
 
@@ -197,7 +197,7 @@ def _update_incremental_hoeffding_tree():
         'no_preprune': False,
         'leaf_prediction': 'mc',
         'nb_threshold': 0.3,
-        'nominal_attributes': [ ]  # <-- if this is empty assume all attributes are numerical
+        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
     }
 
 
@@ -207,16 +207,16 @@ CONF_MAP = {
     CLASSIFICATION_KNN: _classification_knn,
     CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
     CLASSIFICATION_XGBOOST: _classification_xgboost,
-    CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES : _classification_incremental_naive_bayes,
-    CLASSIFICATION_ADAPTIVE_TREE : _classification_incremental_adaptive_tree,
-    CLASSIFICATION_HOEFFDING_TREE : _classification_incremental_hoeffding_tree,
-    CLASSIFICATION_SGDC : _classification_incremental_sgd_classifier,
-    CLASSIFICATION_PERCEPTRON : _classification_incremental_perceptron,
+    CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES: _classification_incremental_naive_bayes,
+    CLASSIFICATION_ADAPTIVE_TREE: _classification_incremental_adaptive_tree,
+    CLASSIFICATION_HOEFFDING_TREE: _classification_incremental_hoeffding_tree,
+    CLASSIFICATION_SGDC: _classification_incremental_sgd_classifier,
+    CLASSIFICATION_PERCEPTRON: _classification_incremental_perceptron,
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,
     REGRESSION_LINEAR: _regression_linear,
-    UPDATE_INCREMENTAL_NAIVE_BAYES : _update_incremental_naive_bayes,
-    UPDATE_INCREMENTAL_ADAPTIVE_TREE : _update_incremental_adaptive_tree,
-    UPDATE_INCREMENTAL_HOEFFDING_TREE : _update_incremental_hoeffding_tree
+    UPDATE_INCREMENTAL_NAIVE_BAYES: _update_incremental_naive_bayes,
+    UPDATE_INCREMENTAL_ADAPTIVE_TREE: _update_incremental_adaptive_tree,
+    UPDATE_INCREMENTAL_HOEFFDING_TREE: _update_incremental_hoeffding_tree
 }

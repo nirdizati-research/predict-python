@@ -7,7 +7,7 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from core.constants import CLASSIFICATION, REGRESSION, LABELLING, UPDATE
+from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from jobs import tasks
 from jobs.job_creator import generate, generate_labelling, update
 from jobs.models import Job

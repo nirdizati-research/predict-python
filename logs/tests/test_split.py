@@ -1,5 +1,7 @@
 from django.test import TestCase
+
 from logs.splitting import prepare_logs
+
 
 class Split(TestCase):
     def test_split_single(self):
@@ -67,7 +69,7 @@ class SplitSingle(TestCase):
 
 def trace_names(log):
     """Get trace names"""
-    return [ trace.attributes['concept:name'] for trace in log ]
+    return [trace.attributes['concept:name'] for trace in log]
 
 
 def split_single():

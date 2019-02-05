@@ -44,7 +44,8 @@ class RefactorProof(TestCase):
         #                               'recall': 0.7795275590551181, 'auc': 0.69680851063829774})
         self.assertDictEqual(result, {'f1score': 0.67690058479532156, 'acc': 0.6832579185520362, 'true_positive': 91,
                                       'true_negative': 60, 'false_negative': 36, 'false_positive': 34,
-                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577, 'auc': 0.71720556207069863})
+                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577,
+                                      'auc': 0.71720556207069863})
 
     def test_next_activity_kmeans(self):
         self.maxDiff = None
@@ -85,7 +86,7 @@ class RefactorProof(TestCase):
         job["type"] = "regression"
         job['label'] = LabelContainer()
         add_default_config(job)
-        result, _ = calculate(job) #TODO double check
+        result, _ = calculate(job)  # TODO double check
         # self.assertAlmostEqual(result['rmse'], 0.29435018)
         self.assertAlmostEqual(result['rmse'], 0.00014490)
         # self.assertAlmostEqual(result['mae'], 0.2264389)
@@ -102,7 +103,7 @@ class RefactorProof(TestCase):
         job['clustering'] = 'noCluster'
         job['label'] = LabelContainer()
         add_default_config(job)
-        result, _ = calculate(job) #TODO double check
+        result, _ = calculate(job)  # TODO double check
         # self.assertAlmostEqual(result['rmse'], 0.29123518)
         self.assertAlmostEqual(result['rmse'], 0.00012752)
         # self.assertAlmostEqual(result['mae'], 0.22594042)

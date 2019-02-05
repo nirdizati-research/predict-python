@@ -54,14 +54,14 @@ def generate_labelling(split, payload):
     return jobs
 
 
-def update(split, payload): #TODO adapt to allow selecting the model to update
+def update(split, payload):  # TODO adapt to allow selecting the model to update
     jobs = []
-    for method in payload[ 'config' ][ 'methods' ]:
-        for clustering in payload[ 'config' ][ 'clusterings' ]:
-            for encMethod in payload[ 'config' ][ 'encodings' ]:
-                encoding = payload[ 'config' ][ 'encoding' ]
-                if encoding[ 'generation_type' ] == UP_TO:
-                    for i in range(1, encoding[ 'prefix_length' ] + 1):
+    for method in payload['config']['methods']:
+        for clustering in payload['config']['clusterings']:
+            for encMethod in payload['config']['encodings']:
+                encoding = payload['config']['encoding']
+                if encoding['generation_type'] == UP_TO:
+                    for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
                             split=split,
                             status=CREATED,
@@ -73,7 +73,7 @@ def update(split, payload): #TODO adapt to allow selecting the model to update
                         split=split,
                         status=CREATED,
                         type=payload['type'],
-                        config=create_config(payload, encMethod, clustering, method, encoding[ 'prefix_length' ]))
+                        config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
     return jobs
 

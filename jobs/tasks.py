@@ -1,4 +1,5 @@
 import time
+
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
@@ -46,11 +47,12 @@ def save_models(to_model_split, job):
         log = jobsplit.original_log
     else:
         log = jobsplit.training_log
-    if job.type == UPDATE :
+    if job.type == UPDATE:
         job.type = CLASSIFICATION
-        filename_model = 'model_cache/job_{}-split_{}-model-{}-v{}.sav'.format(job.id, job.split.id, job.type, str(to_model_split['versioning'] + 1))
+        filename_model = 'model_cache/job_{}-split_{}-model-{}-v{}.sav'.format(job.id, job.split.id, job.type,
+                                                                               str(to_model_split['versioning'] + 1))
     else:
-        filename_model = 'model_cache/job_{}-split_{}-model-{}-v0.sav'.format(job.id,job.split.id, job.type)
+        filename_model = 'model_cache/job_{}-split_{}-model-{}-v0.sav'.format(job.id, job.split.id, job.type)
     joblib.dump(to_model_split['model'], filename_model)
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)

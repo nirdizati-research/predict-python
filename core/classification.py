@@ -1,10 +1,12 @@
+from typing import Any
+
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from sklearn import metrics
 from sklearn.cluster import KMeans
-from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.externals import joblib
 from sklearn.linear_model import Perceptron, SGDClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -13,15 +15,18 @@ from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
 from core.common import get_method_config
+from core.constants import KMEANS, NO_CLUSTER
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
     HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
+from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
 from utils.result_metrics import calculate_auc, calculate_results_classification, _get_auc
-from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df: DataFrame, test_df: DataFrame, job: dict, is_binary_classifier: bool):
+def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
+    is_binary_classifier = _check_is_binary_classifier(job['label'].type)
+
     classifier = _choose_classifier(job)
 
     train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
@@ -39,8 +44,9 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: dict, is_bin
     return results, model_split
 
 
-def classification_single_log(run_df: DataFrame, model, is_binary_classifier: bool):
+def classification_single_log(run_df: DataFrame, model: dict):
     result = None
+    is_binary_classifier = _check_is_binary_classifier(model['label'].type)
 
     split = model['split']
     results = dict()
@@ -59,7 +65,8 @@ def classification_single_log(run_df: DataFrame, model, is_binary_classifier: bo
     return results
 
 
-def _kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_config: dict, is_binary_classifier: bool):
+def _kmeans_clustering_train(original_test_data, train_data, classifier, kmeans_config: dict,
+                             is_binary_classifier: bool):
     estimator = KMeans(**kmeans_config)
     models = dict()
 
@@ -133,7 +140,7 @@ def _kmeans_clustering_test(test_data, classifier, estimator, is_binary_classifi
     return result_data, auc
 
 
-def _no_clustering_train(original_test_data, train_data, classifier, is_binary_classifier: bool):
+def _no_clustering_train(original_test_data, train_data, classifier: Any, is_binary_classifier: bool):
     y = train_data['label']
     try:
         classifier.fit(train_data.drop('label', 1), y)
@@ -163,7 +170,7 @@ def _no_clustering_test(test_data, classifier, testing=False):
             scores = classifier.decision_function(test_data.drop(['trace_id', 'label'], 1))
         else:
             scores = classifier.predict_proba(test_data.drop(['trace_id', 'label'], 1))
-            if np.size(scores, 1) >= 2: # checks number of columns
+            if np.size(scores, 1) >= 2:  # checks number of columns
                 scores = scores[:, 1]
     test_data['predicted'] = classifier.predict(test_data.drop(['trace_id', 'label'], 1))
     return test_data, scores
@@ -196,7 +203,7 @@ def _choose_classifier(job: dict):
         clf = DecisionTreeClassifier(**config)
     elif method == XGBOOST:
         clf = XGBClassifier(**config)
-    elif method == MULTINOMIAL_NAIVE_BAYES: #TODO check which is better BETWEEN (MultinomialNB, BernoulliNB, GaussianNB)
+    elif method == MULTINOMIAL_NAIVE_BAYES:  # TODO check which is better BETWEEN (MultinomialNB, BernoulliNB, GaussianNB)
         clf = MultinomialNB(**config)
     elif method == ADAPTIVE_TREE:
         clf = HAT(**config)
@@ -209,3 +216,12 @@ def _choose_classifier(job: dict):
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return clf
+
+
+def _check_is_binary_classifier(label_type):
+    if label_type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]:
+        return True
+    elif label_type in [NEXT_ACTIVITY, ATTRIBUTE_STRING]:
+        return False
+    else:
+        raise ValueError("Label type not supported", label_type)

@@ -6,15 +6,17 @@ import subprocess
 import xml.etree.ElementTree as Et
 
 from dateutil.parser import parse as dateparser
-# from opyenxes.factory.XFactory import XFactory  # TODO: fix library change
-# from opyenxes.model.XAttributeMap import XAttributeMap
-# from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 
 from core.core import runtime_calculate
 from encoders.encoding_container import ZERO_PADDING, ALL_IN_ONE
 from jobs.ws_publisher import publish
 from predModels.models import PredModels
 from runtime.models import XTrace, XEvent, XLog
+
+
+# from opyenxes.factory.XFactory import XFactory  # TODO: fix library change
+# from opyenxes.model.XAttributeMap import XAttributeMap
+# from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 
 
 def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=False):

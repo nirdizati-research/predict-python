@@ -1,5 +1,9 @@
-import copy
+from sklearn.externals import joblib
 
+from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
+    HOEFFDING_TREE
+from predModels.models import PredModels
+from utils.result_metrics import calculate_results_classification
 from sklearn.externals import joblib
 
 from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
@@ -8,10 +12,10 @@ from predModels.models import PredModels
 from utils.result_metrics import calculate_results_classification
 
 
-def retrieve_model_from_cache(job : dict):
-
+def retrieve_model_from_cache(job: dict):
     try:
-        model = PredModels.objects.filter(type=CLASSIFICATION)[len(PredModels.objects.filter(type=CLASSIFICATION)) - 1]#TODO TO TEST
+        model = PredModels.objects.filter(type=CLASSIFICATION)[
+            len(PredModels.objects.filter(type=CLASSIFICATION)) - 1]  # TODO TO TEST
     except:
         raise KeyError("PredModel not available in DB")
 
@@ -20,7 +24,7 @@ def retrieve_model_from_cache(job : dict):
     return clf, model
 
 
-def choose_clf_model(job : dict):
+def choose_classifier_model(job: dict):
     method = job['method']
     if method == MULTINOMIAL_NAIVE_BAYES:
         clf, model = retrieve_model_from_cache(job)
@@ -34,24 +38,23 @@ def choose_clf_model(job : dict):
 
 
 def update_model(training_df, test_df, job):
-
     training_df, test_df = add_actual(training_df, test_df)
 
     train_data, test_data, original_test_data = drop_columns(training_df, test_df)
 
     if job['clustering'] == NO_CLUSTER:
-        clf, model = choose_clf_model(job)
+        classifier, model = choose_classifier_model(job)
 
-        results_df, auc, model_split, clf = no_clustering_update(original_test_data, train_data, clf)
+        results_df, auc, model_split, classifier = no_clustering_update(original_test_data, train_data, classifier)
     # elif job['clustering'] == KMEANS:
-    #     results_df, auc, model_split = kmeans_clustering_update(original_test_data, train_data, clf, job['kmeans'])
+    #     results_df, auc, model_split = kmeans_clustering_update(original_test_data, train_data, classifier, job['kmeans'])
     else:
         raise ValueError("Unexpected clustering %s" % job['clustering'])
 
     if model.split.model_path[-5] is not 'n':
         model_split['versioning'] = int(model.split.model_path[-5])
     else:
-        model_split[ 'versioning' ] = 0
+        model_split['versioning'] = 0
 
     results = prepare_results(results_df, auc)
 
@@ -78,4 +81,3 @@ def prepare_results(df, auc: int):
     row = calculate_results_classification(actual_, predicted_)
     row['auc'] = auc
     return row
-

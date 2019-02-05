@@ -29,7 +29,6 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-
 def add_trace_row(trace, encoding: EncodingContainer, event_index: int, column_len, atr_classifier=None, label=None,
                   executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""

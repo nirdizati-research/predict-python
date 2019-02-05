@@ -70,7 +70,7 @@ def trace_attributes(log) -> list:
     :return [{name: 'name', type: 'string', example: 34}]
     """
     values = []
-    trace = log[0] #TODO: this might be a bug if first trace has different events then others
+    trace = log[0]  # TODO: this might be a bug if first trace has different events then others
     for attribute in trace.attributes:
         if attribute != "concept:name":
             atr_type = is_number(trace.attributes[attribute])

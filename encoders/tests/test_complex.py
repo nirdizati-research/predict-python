@@ -3,8 +3,8 @@ from unittest import TestCase
 from encoders.complex_last_payload import complex
 from encoders.encoding_container import EncodingContainer, COMPLEX, ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import LabelContainer, NO_LABEL
-from logs.file_service import get_log
 from utils.event_attributes import unique_events, get_additional_columns
+from utils.file_service import get_log
 
 
 class Complex(TestCase):

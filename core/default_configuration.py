@@ -80,7 +80,7 @@ def _classification_incremental_sgd_classifier():
         'alpha': 0.0001,
         'l1_ratio': 0.15,
         'fit_intercept': True,
-        'max_iter': 5,
+        'max_iter': None,
         'tol': 1e-3,
         'eta0': 0.0,
         'power_t': 0.5,

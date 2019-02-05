@@ -51,9 +51,9 @@ def _calculate_and_evaluate(args):
     local_job[method_conf_name] = {**local_job[method_conf_name], **args}
     multiplier = get_metric_multiplier(performance_metric)
     try:
-        results, model_split = run_by_type(training_df, test_df, local_job)
+        results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
         return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,
                 'config': local_job[method_conf_name], 'model_split': model_split}
-    except Exception:
+    except Exception as e:
         return {'loss': 100, 'status': STATUS_FAIL, 'results': {},
                 'config': local_job[method_conf_name]}

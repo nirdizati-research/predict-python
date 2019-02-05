@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from logs.file_service import get_log
 from utils import log_metrics
 from utils.time_metrics import *
+from utils.file_service import get_log
 
 
 class TimeMetrics(TestCase):

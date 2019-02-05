@@ -144,7 +144,7 @@ def _no_clustering_train(original_test_data, train_data, classifier: Any, is_bin
     y = train_data['label']
     try:
         classifier.fit(train_data.drop('label', 1), y)
-    except:
+    except Exception as e:
         classifier.partial_fit(train_data.drop('label', 1).values, y)
 
     actual = original_test_data['label']

@@ -1,9 +1,7 @@
 import functools
-
 from sklearn.model_selection import train_test_split
-
-from logs.file_service import get_log
 from utils.event_attributes import get_additional_columns
+from utils.file_service import get_log
 
 SPLIT_SEQUENTIAL = 'split_sequential'
 SPLIT_TEMPORAL = 'split_temporal'

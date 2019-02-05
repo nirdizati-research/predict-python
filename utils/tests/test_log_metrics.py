@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from logs.file_service import get_log
 from utils.log_metrics import *
+from utils.file_service import get_log
 
 
 class LogTest(TestCase):

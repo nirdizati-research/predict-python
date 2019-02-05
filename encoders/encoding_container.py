@@ -1,6 +1,6 @@
+import pandas as pd
 from collections import namedtuple
 
-import pandas as pd
 # Encoding methods
 from sklearn.preprocessing import LabelEncoder
 
@@ -66,16 +66,12 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
     def init_label_encoder(self, df):
         for column in df:
             if column != 'trace_id' and column != 'label':
-                if df[column].dtype != int:
+                if df[column].dtype != int or ( df[column].dtype == int and pd.np.any(df[column] < 0)) :
                     if ENCODING == LABEL_ENCODER:
-                        # TODO if date order it before encoding
-                        # if is_datetime64tz_dtype(pd.Series(df[column][df[column] != -1].values).dtype):
-                        #     encoder[column] = LabelEncoder().fit(sorted(df[column]))
-                        # else:
                         encoder[column] = LabelEncoder().fit(
-                            pd.concat([pd.Series([str(PADDING_VALUE)]), df[column].apply(lambda x: str(x))]))
+                                sorted(pd.concat([pd.Series([str(PADDING_VALUE)]), df[column].apply(lambda x: str(x))])))
                         classes = encoder[column].classes_
-                        transforms = encoder[column].transform(encoder[column].classes_)
+                        transforms = encoder[column].transform(classes)
                         label_dict[column] = dict(zip(classes, transforms))
                     elif ENCODING == ONE_HOT_ENCODER:
                         raise ValueError('Onehot encoder not yet implemented')

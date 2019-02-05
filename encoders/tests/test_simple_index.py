@@ -5,7 +5,7 @@ from encoders.common import LabelContainer, encode_label_logs, NO_LABEL
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import REMAINING_TIME
 from encoders.simple_index import simple_index
-from logs.file_service import get_log
+from utils.file_service import get_log
 
 
 class TestSplitLogExample(TestCase):

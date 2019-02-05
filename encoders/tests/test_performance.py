@@ -7,8 +7,8 @@ from encoders.common import encode_label_log
 from encoders.encoding_container import SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD, EncodingContainer, \
     ZERO_PADDING, ALL_IN_ONE
 from encoders.label_container import *
-from logs.file_service import get_log
 from utils.event_attributes import unique_events, get_additional_columns
+from utils.file_service import get_log
 
 
 class TestEncoding(TestCase):

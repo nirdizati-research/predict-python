@@ -112,8 +112,8 @@ def run_by_type(training_df, test_df, job):
                                  'auc'] +
                                 list(job['encoding']._fields) +
                                 list(job['label']._fields) +
-                                list(job['incremental_train'].keys()) if 'incremental_train' in job else [] +
-                                list(job['hyperopt'].keys()) if 'hyperopt' in job else [] +
+                                (list(job['incremental_train'].keys()) if 'incremental_train' in job else []) +
+                                (list(job['hyperopt'].keys()) if 'hyperopt' in job else []) +
                                 ['clustering'] +
                                 list(job['split'].keys()) +
                                 ['type'] +

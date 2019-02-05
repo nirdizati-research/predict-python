@@ -55,6 +55,14 @@ def _get_precision(actual, predicted) -> float:
     return precision
 
 
+def _get_auc(actual, scores) -> float:
+    try:
+        auc = roc_auc_score(actual, scores)
+    except ValueError:
+        auc = 0
+    return auc
+
+
 def calculate_auc(actual, scores, auc: int):
     if scores.shape[1] == 1:
         auc += 0

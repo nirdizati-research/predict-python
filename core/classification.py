@@ -15,7 +15,7 @@ from xgboost import XGBClassifier
 from core.common import get_method_config
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
     HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
-from utils.result_metrics import calculate_auc, calculate_results_classification
+from utils.result_metrics import calculate_auc, calculate_results_classification, _get_auc
 from core.constants import KMEANS, NO_CLUSTER
 
 pd.options.mode.chained_assignment = None
@@ -137,18 +137,17 @@ def _no_clustering_train(original_test_data, train_data, classifier, is_binary_c
     y = train_data['label']
     try:
         classifier.fit(train_data.drop('label', 1), y)
-    except Exception as e:
+    except NotImplementedError:
         classifier.partial_fit(train_data.drop('label', 1).values, y)
+    except Exception as e:
+        raise e
 
     actual = original_test_data['label']
     original_test_data, scores = _no_clustering_test(original_test_data, classifier, True)
 
     auc = 0
-    if is_binary_classifier:
-        try:
-            auc = metrics.roc_auc_score(actual, scores)
-        except ValueError:
-            pass
+    if is_binary_classifier or len(set(actual)) <= 2:
+        auc = _get_auc(actual, scores)
     else:
         pass  # TODO: check if AUC is ok for multiclass, otherwise implement
     model_split = dict()

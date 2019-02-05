@@ -24,8 +24,8 @@ class TestClassification(TestCase):
 
     @staticmethod
     def results3():
-        return {'f1score': 0.33333333333333331, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
-                'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0}
+        return {'f1score': 0.3333333333333333, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
+                'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0.5}
 
     @staticmethod
     def get_job():

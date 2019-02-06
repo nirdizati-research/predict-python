@@ -29,11 +29,15 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
 
     train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
 
-    model_split = train(job, train_data, _choose_classifier(job))
-    results_df, auc = test(model_split, test_data, evaluation=True,
-                           is_binary_classifier=_check_is_binary_classifier(job['label'].type))
+    model_split = _train(job, train_data, _choose_classifier(job))
+    results_df, auc = _test(model_split, test_data, evaluation=True,
+                            is_binary_classifier=_check_is_binary_classifier(job['label'].type))
 
     results = _prepare_results(results_df, auc)
+
+    #TODO save model more wisely
+    model_split['type'] = job['clustering']
+
     return results, model_split
 
 
@@ -41,14 +45,18 @@ def classification_single_log(data: DataFrame, model: dict):
     results = dict()
     split = model['split']
     results['label'] = data['label']
-    model_split = joblib.load(split['model_path'])
-    result, _ = test(model_split, data, evaluation=False,
-                     is_binary_classifier=_check_is_binary_classifier(model['label'].type))
+
+    # TODO load model more wisely
+    model_split = dict()
+    model_split['clusterer'] = joblib.load(split['clusterer_path'])
+    model_split['classifier'] = joblib.load(split['model_path'])
+    result, _ = _test(model_split, data, evaluation=False,
+                      is_binary_classifier=_check_is_binary_classifier(model['label'].type))
     results['prediction'] = result['predicted']
     return results
 
 
-def train(job: dict, train_data: DataFrame, classifier) -> dict:
+def _train(job: dict, train_data: DataFrame, classifier) -> dict:
     clusterer = Clustering(job)
     models = dict()
 
@@ -59,9 +67,7 @@ def train(job: dict, train_data: DataFrame, classifier) -> dict:
     for cluster in range(clusterer.n_clusters):
 
         x = train_data[cluster]
-        if x.empty:
-            pass
-        else:
+        if not x.empty:
             y = x['label']
             try:
                 classifier.fit(x.drop('label', 1), y)
@@ -76,7 +82,7 @@ def train(job: dict, train_data: DataFrame, classifier) -> dict:
     return {'clusterer': clusterer, 'classifier': models}
 
 
-def test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (dict, float):
+def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (dict, float):
 
     clusterer = model_split['clusterer']
     classifier = model_split['classifier']

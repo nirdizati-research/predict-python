@@ -79,11 +79,11 @@ def calculate_results_regression(df: DataFrame, label: LabelContainer) -> dict:
     if label.type == REMAINING_TIME:
         # TODO is the remaining time in seconds or hours?
         df['label'] = df['label'] / 3600
-        df['prediction'] = df['prediction'] / 3600
-    rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
-    mae = mean_absolute_error(df['label'], df['prediction'])
-    rscore = r2_score(df['label'], df['prediction'])
-    mape = _mean_absolute_percentage_error(df['label'], df['prediction'])
+        df['prediction'] = df['predicted'] / 3600
+    rmse = sqrt(mean_squared_error(df['label'], df['predicted']))
+    mae = mean_absolute_error(df['label'], df['predicted'])
+    rscore = r2_score(df['label'], df['predicted'])
+    mape = _mean_absolute_percentage_error(df['label'], df['predicted'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row

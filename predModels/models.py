@@ -17,7 +17,7 @@ ENC_TYPES = (
 class ModelSplit(models.Model):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
-    estimator_path = models.CharField(blank=True, null=True, max_length=200)
+    clusterer_path = models.CharField(blank=True, null=True, max_length=200)
     predtype = models.CharField(choices=TYPES, max_length=20, default='Classification')
 
     def to_dict(self):
@@ -25,7 +25,7 @@ class ModelSplit(models.Model):
         split['type'] = self.type
         split['model_path'] = self.model_path
         if self.type == 'double':
-            split['estimator_path'] = self.estimator_path
+            split['clusterer_path'] = self.clusterer_path
         split['predtype'] = self.predtype
         return split
 

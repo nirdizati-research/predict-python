@@ -89,7 +89,7 @@ class RefactorProof(TestCase):
         add_default_config(job)
         result, _ = calculate(job)  # TODO double check
         # self.assertAlmostEqual(result['rmse'], 0.29435018)
-        self.assertAlmostEqual(result['rmse'], 0.00014490)
+        self.assertAlmostEqual(result['rmse'], 0.62164488)
         # self.assertAlmostEqual(result['mae'], 0.2264389)
         self.assertAlmostEqual(result['mae'], 0.00014269)
         # self.assertAlmostEqual(result['rscore'], 0.059686980)

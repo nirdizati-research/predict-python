@@ -9,7 +9,8 @@ from sklearn.linear_model import LinearRegression
 from xgboost import XGBRegressor
 
 from core.common import get_method_config
-from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST
+from core.constants import KMEANS, LINEAR, RANDOM_FOREST, LASSO, NO_CLUSTER, XGBOOST, NN
+from core.nn.nn_regressor import NNRegressor
 from utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
@@ -131,4 +132,7 @@ def _choose_regressor(job: dict):
         regressor = Lasso(**config)
     elif method == XGBOOST:
         regressor = XGBRegressor(**config)
+    elif method == NN:
+        config['encoding'] = job['encoding'][0]
+        regressor = NNRegressor(**config)
     return regressor

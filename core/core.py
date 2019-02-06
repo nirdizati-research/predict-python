@@ -50,7 +50,6 @@ def get_encoded_logs(job: dict):
 
         training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
                                                  additional_columns=additional_columns)
-
         dump_to_cache(processed_df_cache, (training_df, test_df), prefix="labeled_log_cache/")
 
     return training_df, test_df
@@ -107,28 +106,11 @@ def run_by_type(training_df, test_df, job):
                                  'false_positive',
                                  'precision',
                                  'recall',
-                                 'auc'] +
-                                list(job['encoding']._fields) +
-                                list(job['label']._fields) +
-                                list(job['incremental_train'].keys()) if 'incremental_train' in job else [] +
-                                                                                                         list(job[
-                                                                                                                  'hyperopt'].keys()) if 'hyperopt' in job else [] +
-                                                                                                                                                                [
-                                                                                                                                                                    'clustering'] +
-                                                                                                                                                                list(
-                                                                                                                                                                    job[
-                                                                                                                                                                        'split'].keys()) +
-                                                                                                                                                                [
-                                                                                                                                                                    'type'] +
-                                                                                                                                                                list(
-                                                                                                                                                                    job[
-                                                                                                                                                                        job[
-                                                                                                                                                                            'type'] + '.' +
-                                                                                                                                                                        job[
-                                                                                                                                                                            'method']].keys()) +
-                                                                                                                                                                [
-                                                                                                                                                                    'time_elapsed(s)']
-                                )
+                                 'auc'] + list(job['encoding']._fields) + list(job['label']._fields) + list(
+                    job['incremental_train'].keys()) if 'incremental_train' in job else [] + list(
+                    job['hyperopt'].keys()) if 'hyperopt' in job else [] + ['clustering'] + list(
+                    job['split'].keys()) + ['type'] + list(job[job['type'] + '.' + job['method']].keys()) + [
+                                                                          'time_elapsed(s)'])
             writer.writerow(result)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))

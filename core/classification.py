@@ -15,9 +15,10 @@ from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
 from core.common import get_method_config
-from core.constants import KMEANS, NO_CLUSTER
+from core.constants import KMEANS, NO_CLUSTER, NN
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
     HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
+from core.nn.nn_classifier import NNClassifier
 from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
 from utils.result_metrics import calculate_auc, calculate_results_classification
 
@@ -27,7 +28,7 @@ pd.options.mode.chained_assignment = None
 def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
     is_binary_classifier = _check_is_binary_classifier(job['label'].type)
 
-    classifier = _choose_classifier(job)
+    classifier = _choose_classifier(job, is_binary_classifier)
 
     train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
 
@@ -55,12 +56,12 @@ def classification_single_log(run_df: DataFrame, model: dict):
         run_df = run_df.drop('label', 1)
 
     if split['type'] == NO_CLUSTER:
-        clf = joblib.load(split['model_path'])
-        result, _ = _no_clustering_test(run_df, clf)
+        classifier = joblib.load(split['model_path'])
+        result, _ = _no_clustering_test(run_df, classifier)
     elif split['type'] == KMEANS:
-        clf = joblib.load(split['model_path'])
+        classifier = joblib.load(split['model_path'])
         estimator = joblib.load(split['estimator_path'])
-        result, _ = _kmeans_clustering_test(run_df, clf, estimator, is_binary_classifier)
+        result, _ = _kmeans_clustering_test(run_df, classifier, estimator, is_binary_classifier)
     results['prediction'] = result['predicted']
     return results
 
@@ -193,30 +194,34 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame):
     return train_df, test_df, original_test_df
 
 
-def _choose_classifier(job: dict):
+def _choose_classifier(job: dict, is_binary_classifier: bool):
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == KNN:
-        clf = KNeighborsClassifier(**config)
+        classifier = KNeighborsClassifier(**config)
     elif method == RANDOM_FOREST:
-        clf = RandomForestClassifier(**config)
+        classifier = RandomForestClassifier(**config)
     elif method == DECISION_TREE:
-        clf = DecisionTreeClassifier(**config)
+        classifier = DecisionTreeClassifier(**config)
     elif method == XGBOOST:
-        clf = XGBClassifier(**config)
+        classifier = XGBClassifier(**config)
     elif method == MULTINOMIAL_NAIVE_BAYES:  # TODO check which is better BETWEEN (MultinomialNB, BernoulliNB, GaussianNB)
-        clf = MultinomialNB(**config)
+        classifier = MultinomialNB(**config)
     elif method == ADAPTIVE_TREE:
-        clf = HAT(**config)
+        classifier = HAT(**config)
     elif method == HOEFFDING_TREE:
-        clf = HoeffdingTree(**config)
+        classifier = HoeffdingTree(**config)
     elif method == SGDCLASSIFIER:
-        clf = SGDClassifier(**config)
+        classifier = SGDClassifier(**config)
     elif method == PERCEPTRON:
-        clf = Perceptron(**config)
+        classifier = Perceptron(**config)
+    elif method == NN:
+        config['encoding'] = job['encoding'][0]
+        config['is_binary_classifier'] = is_binary_classifier
+        classifier = NNClassifier(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
-    return clf
+    return classifier
 
 
 def _check_is_binary_classifier(label_type):

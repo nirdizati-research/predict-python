@@ -105,6 +105,24 @@ def _classification_incremental_perceptron():
     }
 
 
+def _classification_xgboost():
+    return {
+        'max_depth': 3,
+        'learning_rate': 0.1,
+        'n_estimators': 100
+    }
+
+
+def _classification_nn():
+    return {
+        'n_hidden_layers': 1,
+        'n_hidden_units': 10,
+        'activation': 'sigmoid',
+        'n_epochs': 10,
+        'dropout_rate': 0.0
+    }
+
+
 def _regression_random_forest():
     return {
         'n_estimators': 10,
@@ -139,11 +157,18 @@ def _regression_xgboost():
     }
 
 
-def _classification_xgboost():
+def _regression_nn():
     return {
-        'max_depth': 3,
-        'learning_rate': 0.1,
-        'n_estimators': 100
+        'n_hidden_layers': 1,
+        'n_hidden_units': 10,
+        'activation': 'sigmoid',
+        'n_epochs': 10,
+        'dropout_rate': 0.0
+    }
+
+
+def _time_series_prediction_rnn():
+    return {
     }
 
 
@@ -212,10 +237,16 @@ CONF_MAP = {
     CLASSIFICATION_HOEFFDING_TREE: _classification_incremental_hoeffding_tree,
     CLASSIFICATION_SGDC: _classification_incremental_sgd_classifier,
     CLASSIFICATION_PERCEPTRON: _classification_incremental_perceptron,
+    CLASSIFICATION_NN: _classification_nn,
+
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,
     REGRESSION_LINEAR: _regression_linear,
+    REGRESSION_NN: _regression_nn,
+
+    TIME_SERIES_PREDICTION: _time_series_prediction_rnn,
+
     UPDATE_INCREMENTAL_NAIVE_BAYES: _update_incremental_naive_bayes,
     UPDATE_INCREMENTAL_ADAPTIVE_TREE: _update_incremental_adaptive_tree,
     UPDATE_INCREMENTAL_HOEFFDING_TREE: _update_incremental_hoeffding_tree

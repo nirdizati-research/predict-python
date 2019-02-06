@@ -19,22 +19,22 @@ def retrieve_model_from_cache(job: dict):
     except:
         raise KeyError("PredModel not available in DB")
 
-    clf = joblib.load(model.split.model_path)
+    classifier = joblib.load(model.split.model_path)
 
-    return clf, model
+    return classifier, model
 
 
 def choose_classifier_model(job: dict):
     method = job['method']
     if method == MULTINOMIAL_NAIVE_BAYES:
-        clf, model = retrieve_model_from_cache(job)
+        classifier, model = retrieve_model_from_cache(job)
     elif method == ADAPTIVE_TREE:
-        clf, model = retrieve_model_from_cache(job)
+        classifier, model = retrieve_model_from_cache(job)
     elif method == HOEFFDING_TREE:
-        clf, model = retrieve_model_from_cache(job)
+        classifier, model = retrieve_model_from_cache(job)
     else:
         raise ValueError('Unexpected Incremental method %s' % method)
-    return clf, model
+    return classifier, model
 
 
 def update_model(training_df, test_df, job):

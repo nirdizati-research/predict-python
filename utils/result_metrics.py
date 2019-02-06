@@ -64,7 +64,7 @@ def _get_auc(actual, scores) -> float:
     return auc
 
 
-def calculate_auc(actual, scores, auc: int):
+def calculate_auc(actual, scores, auc: int) -> float:
     if scores.shape[1] == 1:
         auc += 0
     else:
@@ -75,7 +75,7 @@ def calculate_auc(actual, scores, auc: int):
     return auc
 
 
-def calculate_results_regression(df: DataFrame, label: LabelContainer):
+def calculate_results_regression(df: DataFrame, label: LabelContainer) -> dict:
     if label.type == REMAINING_TIME:
         # TODO is the remaining time in seconds or hours?
         df['label'] = df['label'] / 3600

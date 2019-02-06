@@ -1,4 +1,17 @@
-from core.default_configuration import CONF_MAP, _kmeans
+import os
+import sys
+
+from core.default_configuration import CONF_MAP, kmeans
+
+
+class HidePrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
 
 
 def split_single():
@@ -36,5 +49,5 @@ def add_default_config(job: dict, type=""):
     method_conf_name = "{}.{}".format(type, job['method'])
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
-    job['kmeans'] = _kmeans()
+    job['kmeans'] = kmeans()
     return job

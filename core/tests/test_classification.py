@@ -1,16 +1,54 @@
+import itertools
+
 from django.test import TestCase
 
-from core.constants import MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, HOEFFDING_TREE, \
-    SGDCLASSIFIER, PERCEPTRON, DECISION_TREE, XGBOOST, KNN, KMEANS
+from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, classification_methods
 from core.core import calculate
-from core.tests.test_prepare import split_double, add_default_config
-from encoders.encoding_container import EncodingContainer, COMPLEX, LAST_PAYLOAD, ZERO_PADDING
-from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM
-from jobs.job_creator import _kmeans
+from core.tests.test_prepare import split_double, add_default_config, HidePrints
+from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, encoding_methods, paddings
+from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM, DURATION, \
+    classification_labels, ATTRIBUTE_NUMBER, THRESHOLD_MEAN
 
 
 class TestClassification(TestCase):
-    """Proof of concept tests"""
+    @staticmethod
+    def get_job(method=KNN, encoding_method=SIMPLE_INDEX, padding=ZERO_PADDING, label=DURATION,
+                add_elapsed_time=False):
+        json = dict()
+        json['clustering'] = NO_CLUSTER
+        json['split'] = split_double()
+        json['method'] = method
+        json['encoding'] = EncodingContainer(encoding_method, padding=padding)
+        if label == ATTRIBUTE_STRING:
+            json['label'] = LabelContainer(label, attribute_name='creator')
+        elif label == THRESHOLD_CUSTOM:
+            json['label'] = LabelContainer(threshold_type=label, threshold=50)
+        elif label == THRESHOLD_MEAN:
+            json['label'] = LabelContainer(threshold_type=label, threshold=50)
+        else:
+            json['label'] = LabelContainer(label)
+        json['add_elapsed_time'] = add_elapsed_time
+        json['type'] = CLASSIFICATION
+
+        if method != KNN:
+            add_default_config(json)
+        else:
+            json['classification.knn'] = {'n_neighbors': 3}
+        return json
+
+    def test_no_exceptions(self):
+        filtered_labels = [x for x in classification_labels if
+                           x not in [ATTRIBUTE_NUMBER]]  # TODO: check how to add TRACE_NUMBER_ATTRIBUTE
+        choices = [encoding_methods, paddings, classification_methods, filtered_labels]
+
+        job_combinations = list(itertools.product(*choices))
+
+        for (encoding, padding, method, label) in job_combinations:
+            print(encoding, padding, method, label)
+
+            job = self.get_job(method=method, encoding_method=encoding, padding=padding, label=label)
+            with HidePrints():
+                calculate(job)
 
     @staticmethod
     def results():
@@ -27,123 +65,12 @@ class TestClassification(TestCase):
         return {'f1score': 0.33333333333333331, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
                 'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0}
 
-    @staticmethod
-    def get_job():
-        json = dict()
-        json["clustering"] = KMEANS
-        json["split"] = split_double()
-        json["method"] = "randomForest"
-        json["encoding"] = EncodingContainer()
-        json["type"] = "classification"
-        json['label'] = LabelContainer(add_elapsed_time=True)
-        return json
-
     def test_class_randomForest(self):
         job = self.get_job()
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
         self.assertDictEqual(result, self.results2())
-
-    def test_class_randomForest_p4(self):
-        job = self.get_job()
-        job['clustering'] = 'noCluster'
-        job["prefix_length"] = 4
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_KNN(self):
-        job = self.get_job()
-        job['method'] = 'knn'
-        job['clustering'] = 'noCluster'
-        job['classification.knn'] = {'n_neighbors': 3}
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_DecisionTree(self):
-        job = self.get_job()
-        job['method'] = DECISION_TREE
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_xgboost(self):
-        job = self.get_job()
-        job['method'] = XGBOOST
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_mnb(self):
-        job = self.get_job()
-        job['method'] = MULTINOMIAL_NAIVE_BAYES
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_ada(self):
-        job = self.get_job()
-        job['method'] = ADAPTIVE_TREE
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_hoeff(self):
-        job = self.get_job()
-        job['method'] = HOEFFDING_TREE
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_sgdc(self):
-        job = self.get_job()
-        job['method'] = SGDCLASSIFIER
-        job['classification.' + SGDCLASSIFIER] = dict()
-        job['classification.' + SGDCLASSIFIER]['loss'] = 'log'
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_class_perceptron(self):
-        job = self.get_job()
-        job['method'] = PERCEPTRON
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_next_activity_randomForest(self):
-        job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_next_activity_KNN(self):
-        job = self.get_job()
-        job['method'] = KNN
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
-        job['classification.knn'] = {'n_neighbors': 3}
-        job['kmeans'] = _kmeans()
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_next_activity_xgboost(self):
-        job = self.get_job()
-        job['method'] = XGBOOST
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-
-    def test_attribute_string_knn(self):
-        job = self.get_job()
-        job['method'] = KNN
-        job['label'] = LabelContainer(ATTRIBUTE_STRING, attribute_name='creator')
-        job['classification.knn'] = {'n_neighbors': 3}
-        job['kmeans'] = _kmeans()
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
 
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
@@ -154,38 +81,3 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         self.assertDictEqual(result, self.results3())
 
-    def test_class_complex(self):
-        job = self.get_job()
-        job['clustering'] = 'noCluster'
-        job["encoding"] = EncodingContainer(COMPLEX)
-        add_default_config(job)
-        result, _ = calculate(job)
-        # it works, but results are unreliable
-
-    def test_class_complex_zero_padding(self):
-        job = self.get_job()
-        job['clustering'] = 'noCluster'
-        job["encoding"] = EncodingContainer(COMPLEX, prefix_length=8, padding=ZERO_PADDING)
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-        # it works, but results are unreliable
-
-    def test_class_last_payload(self):
-        job = self.get_job()
-        job['clustering'] = 'noCluster'
-        job["encoding"] = EncodingContainer(LAST_PAYLOAD)
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-        # it works, but results are unreliable
-
-    def test_class_last_payload_custom_threshold(self):
-        job = self.get_job()
-        job['clustering'] = 'noCluster'
-        job["encoding"] = EncodingContainer(LAST_PAYLOAD, prefix_length=5)
-        job['label'] = LabelContainer(threshold_type=THRESHOLD_CUSTOM, threshold=50)
-        add_default_config(job)
-        result, _ = calculate(job)
-        self.assertIsNotNone(result)
-        # it works, but results are unreliable

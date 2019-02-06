@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from core.constants import *
-from core.default_configuration import CONF_MAP, _kmeans
+from core.default_configuration import CONF_MAP, kmeans
 from encoders.encoding_container import UP_TO, SIMPLE_INDEX
 from jobs.models import Job, CREATED
 
@@ -95,7 +95,7 @@ def create_config(payload: dict, enc_method: str, clustering: str, method: str, 
         except KeyError:
             pass
     if clustering == KMEANS:
-        config['kmeans'] = {**_kmeans(), **payload['config'].get('kmeans', dict())}
+        config['kmeans'] = {**kmeans(), **payload['config'].get('kmeans', dict())}
     elif 'kmeans' in config:
         del config['kmeans']
     config[method_conf_name] = method_conf

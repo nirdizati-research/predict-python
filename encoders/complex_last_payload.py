@@ -41,7 +41,7 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: list):
+def columns_complex(prefix_length: int, additional_columns: dict):
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
@@ -51,7 +51,7 @@ def columns_complex(prefix_length: int, additional_columns: list):
     return columns
 
 
-def columns_last_payload(prefix_length: int, additional_columns: list):
+def columns_last_payload(prefix_length: int, additional_columns: dict):
     columns = ['trace_id']
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
@@ -60,7 +60,7 @@ def columns_last_payload(prefix_length: int, additional_columns: list):
     return columns
 
 
-def data_complex(trace: list, prefix_length: int, additional_columns: list):
+def data_complex(trace: list, prefix_length: int, additional_columns: dict):
     """Creates list in form [1, value1, value2, 2, ...]
 
     Appends values in additional_columns
@@ -78,7 +78,7 @@ def data_complex(trace: list, prefix_length: int, additional_columns: list):
     return data
 
 
-def data_last_payload(trace: list, prefix_length: int, additional_columns: list):
+def data_last_payload(trace: list, prefix_length: int, additional_columns: dict):
     """Creates list in form [1, 2, value1, value2,]
 
     Event name index of the position they are in event_names

@@ -30,6 +30,9 @@ label_encoder = {}
 encoder = {}
 label_dict = {}
 
+encoding_methods = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
+
+paddings = [ZERO_PADDING, NO_PADDING]
 
 class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_length", "padding", "generation_type"])):
     """Inner object describing encoding configuration.
@@ -65,7 +68,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
 
     def init_label_encoder(self, df):
         for column in df:
-            if column != 'trace_id' and column != 'label':
+            if column != 'trace_id':
                 if df[column].dtype != int or ( df[column].dtype == int and pd.np.any(df[column] < 0)) :
                     if ENCODING == LABEL_ENCODER:
                         encoder[column] = LabelEncoder().fit(

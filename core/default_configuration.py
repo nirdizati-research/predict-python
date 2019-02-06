@@ -172,7 +172,7 @@ def _time_series_prediction_rnn():
     }
 
 
-def _kmeans():
+def kmeans():
     return {
         'n_clusters': 3,
         'max_iter': 300,

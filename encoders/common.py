@@ -20,14 +20,11 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
     """  # TODO: complete documentation
     training_log, cols = _encode_log(training_log, encoding, label, additional_columns=additional_columns,
                                      cols=None)
-
     # TODO pass the columns of the training log
     test_log, _ = _encode_log(test_log, encoding, label, additional_columns=additional_columns, cols=cols)
 
-    if (label.threshold_type == THRESHOLD_MEAN or
-        label.threshold_type == THRESHOLD_CUSTOM) and (label.type == REMAINING_TIME or
-                                                       label.type == ATTRIBUTE_NUMBER or
-                                                       label.type == DURATION):
+    if (label.threshold_type in [THRESHOLD_MEAN, THRESHOLD_CUSTOM]) and (
+        label.type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]):
         if label.threshold_type == THRESHOLD_MEAN:
             threshold = training_log['label'].mean()
         elif label.threshold_type == THRESHOLD_CUSTOM:

@@ -40,6 +40,7 @@ def prediction_task(job_id):
         publish(job)
 
 
+# TODO review the model_split saving and subst 'estimator' with 'cluster'
 def save_models(to_model_split, job):
     print("Start saving models of JOB {}".format(job.id))
     jobsplit = job.split
@@ -57,9 +58,9 @@ def save_models(to_model_split, job):
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)
     if to_model_split['type'] == KMEANS:
-        filename_estimator = 'model_cache/job_{}-split_{}-estimator-{}.sav'.format(job.id, job.split.id, job.type)
-        joblib.dump(to_model_split['estimator'], filename_estimator)
-        model_split.estimator_path = filename_estimator
+        filename_clusterer = 'model_cache/job_{}-split_{}-clusterer-{}.sav'.format(job.id, job.split.id, job.type)
+        joblib.dump(to_model_split['clusterer'], filename_clusterer)
+        model_split.clusterer_path = filename_clusterer
         model_split.save()
     PredModels.objects.create(pk=job.id, split=model_split, type=job.type, log=log, config=job.config)
 

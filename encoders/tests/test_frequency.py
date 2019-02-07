@@ -6,12 +6,13 @@ from encoders.common import LabelContainer, NO_LABEL, encode_label_logs
 from encoders.encoding_container import EncodingContainer, FREQUENCY, ZERO_PADDING
 from utils.event_attributes import unique_events
 from utils.file_service import get_log
+from utils.tests_utils import general_example_test_filepath, general_example_train_filepath
 
 
 class TestFrequencySplit(TestCase):
     def setUp(self):
-        test_log = get_log("log_cache/general_example_test.xes")
-        training_log = get_log("log_cache/general_example_training.xes")
+        test_log = get_log(general_example_test_filepath)
+        training_log = get_log(general_example_train_filepath)
         self.training_df, self.test_df = encode_label_logs(training_log, test_log, EncodingContainer(FREQUENCY),
                                                            CLASSIFICATION,
                                                            LabelContainer(add_elapsed_time=True))
@@ -33,7 +34,7 @@ class TestGeneralTest(TestCase):
     """Making sure it actually works"""
 
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer(FREQUENCY)

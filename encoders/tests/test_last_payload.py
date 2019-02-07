@@ -9,7 +9,7 @@ from utils.file_service import get_log
 
 class LastPayload(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log("log_cache/test_logs/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.add_col = get_additional_columns(self.log)

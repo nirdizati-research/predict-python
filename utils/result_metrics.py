@@ -9,11 +9,11 @@ from encoders.label_container import LabelContainer, REMAINING_TIME
 
 
 def calculate_results_classification(actual: list, predicted: list) -> dict:
-     return {**{'f1score': _get_f1(actual, predicted),
-                'acc': accuracy_score(actual, predicted),
-                'precision': _get_precision(actual, predicted),
-                'recall': _get_recall(actual, predicted)},
-             **get_confusion_matrix(actual, predicted)}
+    return {**{'f1score': _get_f1(actual, predicted),
+               'acc': accuracy_score(actual, predicted),
+               'precision': _get_precision(actual, predicted),
+               'recall': _get_recall(actual, predicted)},
+            **get_confusion_matrix(actual, predicted)}
 
 
 def get_confusion_matrix(actual, predicted) -> dict:
@@ -56,7 +56,15 @@ def _get_precision(actual, predicted) -> float:
     return precision
 
 
-def calculate_auc(actual, scores, auc: int):
+def _get_auc(actual, scores) -> float:
+    try:
+        auc = roc_auc_score(actual, scores)
+    except ValueError:
+        auc = 0
+    return auc
+
+
+def calculate_auc(actual, scores, auc: int) -> float:
     if scores.shape[1] == 1:
         auc += 0
     else:
@@ -67,15 +75,15 @@ def calculate_auc(actual, scores, auc: int):
     return auc
 
 
-def calculate_results_regression(df: DataFrame, label: LabelContainer):
+def calculate_results_regression(df: DataFrame, label: LabelContainer) -> dict:
     if label.type == REMAINING_TIME:
         # TODO is the remaining time in seconds or hours?
         df['label'] = df['label'] / 3600
-        df['prediction'] = df['prediction'] / 3600
-    rmse = sqrt(mean_squared_error(df['label'], df['prediction']))
-    mae = mean_absolute_error(df['label'], df['prediction'])
-    rscore = r2_score(df['label'], df['prediction'])
-    mape = _mean_absolute_percentage_error(df['label'], df['prediction'])
+        df['prediction'] = df['predicted'] / 3600
+    rmse = sqrt(mean_squared_error(df['label'], df['predicted']))
+    mae = mean_absolute_error(df['label'], df['predicted'])
+    rscore = r2_score(df['label'], df['predicted'])
+    mape = _mean_absolute_percentage_error(df['label'], df['predicted'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row

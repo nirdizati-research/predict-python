@@ -81,7 +81,8 @@ def trace_attributes(log) -> list:
 
 
 def is_number(s) -> str:
-    if (isinstance(s, float) or isinstance(s, int) or (s.isdigit() if hasattr(s, 'isdigit') else False)) and not isinstance(s, bool):
+    if (isinstance(s, float) or isinstance(s, int) or (
+        s.isdigit() if hasattr(s, 'isdigit') else False)) and not isinstance(s, bool):
         return 'number'
     else:
         return 'string'

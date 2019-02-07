@@ -1,5 +1,7 @@
 import functools
+
 from sklearn.model_selection import train_test_split
+
 from utils.event_attributes import get_additional_columns
 from utils.file_service import get_log
 

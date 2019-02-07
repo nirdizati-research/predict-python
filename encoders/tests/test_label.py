@@ -10,7 +10,7 @@ from utils.file_service import get_log
 
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log("log_cache/test_logs/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(prefix_length=2)
 
@@ -166,7 +166,7 @@ class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
 
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log("log_cache/test_logs/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.add_col = get_additional_columns(self.log)
         self.encoding = EncodingContainer(COMPLEX, prefix_length=2)
@@ -270,7 +270,7 @@ class TestLabelComplex(TestCase):
 
 class TestLabelBoolean(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log("log_cache/test_logs/general_example_test.xes")
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(BOOLEAN, prefix_length=2)
 

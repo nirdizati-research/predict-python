@@ -7,7 +7,7 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from core.constants import CLASSIFICATION, REGRESSION, LABELLING
+from core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from jobs import tasks
 from jobs.job_creator import generate, generate_labelling, update
 from jobs.models import Job
@@ -71,6 +71,8 @@ def create_multiple(request):
         jobs = generate(split, payload)
     elif payload['type'] == REGRESSION:
         jobs = generate(split, payload, REGRESSION)
+    elif payload['type'] == TIME_SERIES_PREDICTION:
+        jobs = generate(split, payload, TIME_SERIES_PREDICTION)
     elif payload['type'] == LABELLING:
         jobs = generate_labelling(split, payload)
     else:

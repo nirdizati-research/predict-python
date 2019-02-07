@@ -14,6 +14,7 @@ classification_labels = [NEXT_ACTIVITY, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER, THRE
 
 regression_labels = [REMAINING_TIME, ATTRIBUTE_NUMBER]
 
+
 class LabelContainer(namedtuple('LabelContainer', ["type", "attribute_name", "threshold_type", "threshold",
                                                    "add_remaining_time", "add_elapsed_time", "add_executed_events",
                                                    "add_resources_used", "add_new_traces"])):

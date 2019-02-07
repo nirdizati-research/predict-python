@@ -27,10 +27,10 @@ class RefactorProof(TestCase):
         #                               'true_negative': 39,
         #                               'false_negative': 22, 'false_positive': 55, 'precision': 0.65625,
         #                               'recall': 0.8267716535433071, 'auc': 0.5943654099132211})
-        self.assertDictEqual(result, {'f1score': 0.50997782705099781, 'acc': 0.6063348416289592, 'true_positive': 116,
-                                      'true_negative': 18, 'false_negative': 11, 'false_positive': 76,
-                                      'precision': 0.6124281609195402, 'recall': 0.55243759423689065,
-                                      'auc': 0.5931091058244463})
+        self.assertDictEqual(result, {'f1score': 0.67690058479532156, 'acc': 0.68325791855203621, 'true_positive': 91,
+                                      'true_negative': 60, 'false_negative': 36, 'false_positive': 34,
+                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577,
+                                      'auc': 0.5913497814050234})
 
     def test_class_no_cluster(self):
         self.maxDiff = None
@@ -56,9 +56,10 @@ class RefactorProof(TestCase):
         result, _ = calculate(job)
         # self.assertDictEqual(result, {'f1score': 0.23864644588878572, 'acc': 0.74660633484162897,
         #                               'precision': 0.19740887132191481, 'recall': 0.40000000000000002, 'auc': 0})
-        self.assertDictEqual(result, {'f1score': 0.09278569908491167, 'acc': 0.26244343891402716, 'true_positive': '--',
+        self.assertDictEqual(result, {'f1score': 0.54239884582595577, 'acc': 0.80995475113122173, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
-                                      'precision': 0.11753774680603948, 'recall': 0.16956521739130434, 'auc': 0})
+                                      'precision': 0.62344720496894401, 'recall': 0.5224945442336747,
+                                      'auc': 0.19638554216867468})
 
     def test_next_activity_no_cluster(self):
         self.maxDiff = None
@@ -88,7 +89,7 @@ class RefactorProof(TestCase):
         add_default_config(job)
         result, _ = calculate(job)  # TODO double check
         # self.assertAlmostEqual(result['rmse'], 0.29435018)
-        self.assertAlmostEqual(result['rmse'], 0.00014490)
+        self.assertAlmostEqual(result['rmse'], 0.62164488)
         # self.assertAlmostEqual(result['mae'], 0.2264389)
         self.assertAlmostEqual(result['mae'], 0.00014269)
         # self.assertAlmostEqual(result['rscore'], 0.059686980)

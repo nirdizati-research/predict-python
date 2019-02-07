@@ -4,7 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-tensorflow-gpu = "==1.4.0"
 
 [packages]
 djangorestframework = "==3.7.1"

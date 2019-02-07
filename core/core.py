@@ -1,4 +1,3 @@
-import csv
 import json
 import os
 import time
@@ -11,6 +10,7 @@ from core.update_model import update_model
 from encoders.common import encode_label_logs, encode_label_log
 from logs.splitting import prepare_logs
 from utils.cache import load_from_cache, dump_to_cache, get_digested
+from utils.file_service import save_result
 
 
 def calculate(job):
@@ -63,6 +63,8 @@ def run_by_type(training_df, test_df, job):
         results, model_split = classification(training_df, test_df, job)
     elif job['type'] == REGRESSION:
         results, model_split = regression(training_df, test_df, job)
+    elif job['type'] == TIME_SERIES_PREDICTION:
+        results, model_split = time_series_prediction(training_df, test_df, job)
     elif job['type'] == LABELLING:
         results = _label_task(training_df)
     elif job['type'] == UPDATE:
@@ -71,47 +73,7 @@ def run_by_type(training_df, test_df, job):
         raise ValueError("Type not supported", job['type'])
 
     if job['type'] == CLASSIFICATION:
-        result = [
-            results['f1score'],
-            results['acc'],
-            results['true_positive'],
-            results['true_negative'],
-            results['false_negative'],
-            results['false_positive'],
-            results['precision'],
-            results['recall'],
-            results['auc']
-        ]
-        result += [job['encoding'][index] for index in range(len(job['encoding']))]
-        result += [job['label'][index] for index in range(len(job['label']))]
-        if 'incremental_train' in job:
-            result += [job['incremental_train'][index] for index in job['incremental_train'].keys()]
-        if 'hyperopt' in job:
-            result += [job['hyperopt'][index] for index in job['hyperopt'].keys()]
-        result += [job['clustering']]
-        result += [job['split'][index] for index in job['split'].keys()]
-        result += [job['type']]
-        result += [job[job['type'] + '.' + job['method']][index] for index in
-                   job[job['type'] + '.' + job['method']].keys()]
-        result += [str(time.time() - start_time)]
-
-        with open('results/' + job['type'] + '-' + job['method'] + '_result.csv', 'a+') as log_result_file:
-            writer = csv.writer(log_result_file)
-            if sum(1 for line in open('results/' + job['type'] + '-' + job['method'] + '_result.csv')) == 0:
-                writer.writerow(['f1score',
-                                 'acc',
-                                 'true_positive',
-                                 'true_negative',
-                                 'false_negative',
-                                 'false_positive',
-                                 'precision',
-                                 'recall',
-                                 'auc'] + list(job['encoding']._fields) + list(job['label']._fields) + list(
-                    job['incremental_train'].keys()) if 'incremental_train' in job else [] + list(
-                    job['hyperopt'].keys()) if 'hyperopt' in job else [] + ['clustering'] + list(
-                    job['split'].keys()) + ['type'] + list(job[job['type'] + '.' + job['method']].keys()) + [
-                                                                          'time_elapsed(s)'])
-            writer.writerow(result)
+        save_result(results, job, start_time)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))
     print("\tResults {} .".format(results))

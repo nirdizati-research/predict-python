@@ -8,6 +8,7 @@ from core.hyperopt_wrapper import calculate_hyperopt
 from core.tests.test_prepare import split_single, add_default_config
 from encoders.encoding_container import EncodingContainer, BOOLEAN
 from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, NEXT_ACTIVITY
+from utils.tests_utils import bpi_log_filepath
 
 
 @unittest.skip("performance test not needed normally")
@@ -17,7 +18,7 @@ class TestClassPerf(TestCase):
         json = dict()
         json["clustering"] = "noCluster"
         json["split"] = split_single()
-        json["split"]["original_log_path"] = "log_cache/BPI Challenge 2017.xes.gz"
+        json["split"]["original_log_path"] = bpi_log_filepath
         json["method"] = "randomForest"
         json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
         json["type"] = "classification"
@@ -74,7 +75,7 @@ class RegPerf(TestCase):
         json = dict()
         json["clustering"] = "noCluster"
         json["split"] = split_single()
-        json["split"]["original_log_path"] = "log_cache/BPI Challenge 2017.xes.gz"
+        json["split"]["original_log_path"] = bpi_log_filepath
         json["method"] = "randomForest"
         json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
         json["prefix_length"] = 20

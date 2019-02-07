@@ -2,7 +2,7 @@ import itertools
 
 from django.test import TestCase
 
-from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, classification_methods
+from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, classification_methods, RANDOM_FOREST
 from core.core import calculate
 from core.tests.test_prepare import split_double, add_default_config, HidePrints
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, encoding_methods, paddings
@@ -62,11 +62,12 @@ class TestClassification(TestCase):
 
     @staticmethod
     def results3():
-        return {'f1score': 0.33333333333333331, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
-                'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0}
+        return {'f1score': 0.3333333333333333, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
+                'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0.5}
 
     def test_class_randomForest(self):
         job = self.get_job()
+        job['method'] = RANDOM_FOREST
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
@@ -80,4 +81,3 @@ class TestClassification(TestCase):
         add_default_config(job)
         result, _ = calculate(job)
         self.assertDictEqual(result, self.results3())
-

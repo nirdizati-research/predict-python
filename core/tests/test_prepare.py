@@ -2,6 +2,8 @@ import os
 import sys
 
 from core.default_configuration import CONF_MAP, kmeans
+from utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
+    general_example_train_filepath
 
 
 class HidePrints:
@@ -19,7 +21,7 @@ def split_single():
     split['id'] = 1
     split['config'] = dict()
     split['type'] = 'single'
-    split['original_log_path'] = 'log_cache/general_example.xes'
+    split['original_log_path'] = general_example_filepath
     return split
 
 
@@ -28,8 +30,8 @@ def split_double():
     split['id'] = 1
     split['config'] = dict()
     split['type'] = 'double'
-    split['test_log_path'] = 'log_cache/general_example_test.xes'
-    split['training_log_path'] = 'log_cache/general_example_training.xes'
+    split['test_log_path'] = general_example_test_filepath
+    split['training_log_path'] = general_example_train_filepath
     return split
 
 
@@ -38,7 +40,7 @@ def repair_example():
     split['id'] = 1
     split['config'] = dict()
     split['type'] = 'single'
-    split['original_log_path'] = 'log_cache/repairExample.xes'
+    split['original_log_path'] = repair_example_filepath
     return split
 
 

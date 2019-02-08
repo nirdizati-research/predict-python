@@ -1,14 +1,15 @@
 import threading
-import django_rq
-
 from datetime import timedelta
 from random import randint
+
+import django_rq
 from rest_framework import status
 from rest_framework.response import Response
 from rq_scheduler import Scheduler
-from utils.file_service import get_log
+
 from logs.models import Log
 from runtime.models import DemoReplayer
+from utils.file_service import get_log
 from .replay_core import prepare
 
 scheduler = Scheduler(connection=django_rq.get_connection('default'), interval=5)

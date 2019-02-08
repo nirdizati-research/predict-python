@@ -7,11 +7,12 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from logs.models import Log, Split
+from utils.tests_utils import general_example_filepath, general_example_test_filepath
 
 
 class LogModelTest(TestCase):
     def setUp(self):
-        Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        Log.objects.create(name="general_example.xes", path=general_example_filepath)
 
     def test_can_find_log_file(self):
         """Log file can be found by id"""
@@ -23,7 +24,7 @@ class LogModelTest(TestCase):
 
 class SplitModelTest(TestCase):
     def setUp(self):
-        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         Split.objects.create(original_log=log)
 
     def test_can_find_split_original_file(self):
@@ -37,7 +38,7 @@ class SplitModelTest(TestCase):
     def test_to_dict(self):
         split = Split.objects.get(id=1).to_dict()
         self.assertEqual('single', split['type'])
-        self.assertEqual('log_cache/general_example.xes', split['original_log_path'])
+        self.assertEqual(general_example_filepath, split['original_log_path'])
         self.assertEqual({}, split['config'])
 
 
@@ -54,7 +55,7 @@ class FileUploadTests(APITestCase):
 
     @staticmethod
     def _create_test_file(path):
-        copyfile('log_cache/general_example_test.xes', path)
+        copyfile(general_example_test_filepath, path)
         f = open(path, 'rb')
         return f
 

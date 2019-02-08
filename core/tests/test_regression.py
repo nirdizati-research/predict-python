@@ -1,4 +1,5 @@
 import itertools
+
 from django.test import TestCase
 
 from core.constants import regression_methods, NO_CLUSTER, LINEAR, REGRESSION

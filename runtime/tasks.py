@@ -3,8 +3,8 @@ from django_rq.decorators import job
 from core.core import runtime_calculate
 from jobs.models import RUNNING, COMPLETED, ERROR
 from jobs.ws_publisher import publish
-from utils.file_service import get_log
 from logs.models import Log
+from utils.file_service import get_log
 
 
 @job("default", timeout='1h')

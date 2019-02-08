@@ -11,6 +11,7 @@ from jobs.job_creator import create_config
 from jobs.models import Job
 from jobs.tasks import prediction_task
 from logs.models import Log, Split
+from utils.tests_utils import general_example_filepath
 
 
 class JobModelTest(TestCase):
@@ -23,7 +24,7 @@ class JobModelTest(TestCase):
                        "create_models": False,
                        "label": {'type': 'remaining_time'}
                        }
-        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
                            type=CLASSIFICATION)
@@ -50,7 +51,7 @@ class JobModelTest(TestCase):
 
         self.assertEquals(CLASSIFICATION, job['type'])
         self.assertDictEqual({'type': 'single',
-                              'original_log_path': "log_cache/general_example.xes",
+                              'original_log_path': general_example_filepath,
                               'config': {},
                               'id': 1},
                              job['split'])
@@ -103,7 +104,7 @@ class Hyperopt(TestCase):
             "label": {"type": "remaining_time"},
             "hyperopt": {"use_hyperopt": True, "max_evals": 2, "performance_metric": "acc"}
         }
-        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         split = Split.objects.create(original_log=log)
         Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
                            type=CLASSIFICATION)
@@ -116,7 +117,7 @@ class Hyperopt(TestCase):
 
 class CreateJobsTests(APITestCase):
     def setUp(self):
-        log = Log.objects.create(name="general_example.xes", path="log_cache/general_example.xes")
+        log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         Split.objects.create(original_log=log)
 
     def tearDown(self):

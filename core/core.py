@@ -64,6 +64,8 @@ def run_by_type(training_df, test_df, job):
         results, model_split = classification(training_df, test_df, job)
     elif job['type'] == REGRESSION:
         results, model_split = regression(training_df, test_df, job)
+    elif job['type'] == TIME_SERIES_PREDICTION:
+        results, model_split = time_series_prediction(training_df, test_df, job)
     elif job['type'] == LABELLING:
         results = _label_task(training_df)
     elif job['type'] == UPDATE:

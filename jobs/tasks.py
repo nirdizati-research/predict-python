@@ -39,7 +39,6 @@ def prediction_task(job_id):
         job.save()
         publish(job)
 
-#TODO review the model_split saving and subst 'estimator' with 'cluster'
 def save_models(to_model_split, job):
     print("Start saving models of JOB {}".format(job.id))
     jobsplit = job.split

@@ -1,11 +1,12 @@
 from typing import Dict, Union
+
+import numpy as np
 from keras import Input, Model
 from keras.layers import Flatten, Embedding, Dense, Dropout
-from keras.utils import to_categorical
-from pandas import DataFrame
-from core.nn.encoding_parser import EncodingParser
 from numpy import ndarray
-import numpy as np
+from pandas import DataFrame
+
+from core.nn.encoding_parser import EncodingParser
 
 
 class NNClassifier:
@@ -20,6 +21,7 @@ class NNClassifier:
         self._is_binary_classifier = bool(kwargs['is_binary_classifier'])
         self._embedding_dim = 8  # TODO: add as parameter
         self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier, regression_task=False)
+        self._model = None
 
     def fit(self, train_data: DataFrame, y: DataFrame) -> None:
         train_data = self._encoding_parser.parse_training_dataset(train_data)
@@ -64,5 +66,5 @@ class NNClassifier:
         predictions = self._model.predict(test_data)
         if self._is_binary_classifier:
             predictions = np.max(predictions, -1)
-            predictions = np.vstack((1-predictions, predictions)).T
+            predictions = np.vstack((1 - predictions, predictions)).T
         return predictions

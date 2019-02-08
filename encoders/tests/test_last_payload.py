@@ -1,15 +1,16 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from encoders.complex_last_payload import last_payload
 from encoders.encoding_container import EncodingContainer, LAST_PAYLOAD, ALL_IN_ONE, ZERO_PADDING
 from encoders.label_container import LabelContainer, NO_LABEL
 from utils.event_attributes import unique_events, get_additional_columns
 from utils.file_service import get_log
+from utils.tests_utils import general_example_test_filepath
 
 
 class LastPayload(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.add_col = get_additional_columns(self.log)

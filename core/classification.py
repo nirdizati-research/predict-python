@@ -15,9 +15,9 @@ from xgboost import XGBClassifier
 
 from core.clustering import Clustering
 from core.common import get_method_config
-from core.constants import NN
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
     HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
+from core.constants import NN
 from core.nn.nn_classifier import NNClassifier
 from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
 from utils.result_metrics import calculate_results_classification, _get_auc
@@ -25,8 +25,7 @@ from utils.result_metrics import calculate_results_classification, _get_auc
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
-
+def classification(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
     train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
 
     model_split = _train(job, train_data, _choose_classifier(job))
@@ -35,13 +34,13 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: dict):
 
     results = _prepare_results(results_df, auc)
 
-    #TODO save model more wisely
+    # TODO save model more wisely
     model_split['type'] = job['clustering']
 
     return results, model_split
 
 
-def classification_single_log(data: DataFrame, model: dict):
+def classification_single_log(data: DataFrame, model: dict) -> dict:
     results = dict()
     split = model['split']
     results['label'] = data['label']
@@ -56,7 +55,7 @@ def classification_single_log(data: DataFrame, model: dict):
     return results
 
 
-def _train(job: dict, train_data: DataFrame, classifier) -> dict:
+def _train(job: dict, train_data: DataFrame, classifier: Any) -> dict:
     clusterer = Clustering(job)
     models = dict()
 
@@ -87,7 +86,6 @@ def _train(job: dict, train_data: DataFrame, classifier) -> dict:
 
 
 def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (dict, float):
-
     clusterer = model_split['clusterer']
     classifier = model_split['classifier']
 
@@ -125,7 +123,7 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classi
     return results_df, auc
 
 
-def _prepare_results(df: DataFrame, auc: int):
+def _prepare_results(df: DataFrame, auc: int) -> dict:
     actual = df['label'].values
     predicted = df['predicted'].values
 
@@ -141,7 +139,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df, original_test_df
 
 
-def _choose_classifier(job: dict, is_binary_classifier: bool):
+def _choose_classifier(job: dict) -> Any:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == KNN:
@@ -164,14 +162,14 @@ def _choose_classifier(job: dict, is_binary_classifier: bool):
         classifier = Perceptron(**config)
     elif method == NN:
         config['encoding'] = job['encoding'][0]
-        config['is_binary_classifier'] = is_binary_classifier
+        config['is_binary_classifier'] = _check_is_binary_classifier(job['label'].type)
         classifier = NNClassifier(**config)
     else:
         raise ValueError("Unexpected classification method {}".format(method))
     return classifier
 
 
-def _check_is_binary_classifier(label_type):
+def _check_is_binary_classifier(label_type: str) -> bool:
     if label_type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]:
         return True
     elif label_type in [NEXT_ACTIVITY, ATTRIBUTE_STRING]:

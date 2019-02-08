@@ -96,7 +96,6 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame):
 def _choose_regressor(job: dict):
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
-    regressor = None
     if method == LINEAR:
         regressor = LinearRegression(**config)
     elif method == RANDOM_FOREST:
@@ -108,4 +107,6 @@ def _choose_regressor(job: dict):
     elif method == NN:
         config['encoding'] = job['encoding'][0]
         regressor = NNRegressor(**config)
+    else:
+        raise ValueError("Unexpected regression method {}".format(method))
     return regressor

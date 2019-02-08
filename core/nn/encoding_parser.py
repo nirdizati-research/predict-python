@@ -2,11 +2,9 @@ from types import FunctionType
 from typing import Dict
 
 import numpy as np
-import re
-
 from keras.utils import to_categorical
-from pandas import DataFrame
 from numpy import ndarray
+from pandas import DataFrame
 
 
 class EncodingParser:

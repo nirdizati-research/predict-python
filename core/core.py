@@ -3,9 +3,10 @@ import os
 import time
 
 from core.classification import classification, classification_single_log
-from core.constants import CLASSIFICATION, REGRESSION, LABELLING
+from core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from core.constants import UPDATE
 from core.regression import regression, regression_single_log
+from core.time_series_prediction import time_series_prediction
 from core.update_model import update_model
 from encoders.common import encode_label_logs, encode_label_log
 from logs.splitting import prepare_logs

@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from encoders.complex_last_payload import complex
 from encoders.encoding_container import EncodingContainer, COMPLEX, ZERO_PADDING, ALL_IN_ONE

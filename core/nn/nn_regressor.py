@@ -2,8 +2,8 @@ from typing import Dict, Union
 
 from keras import Input, Model
 from keras.layers import Dense, Embedding, Flatten, Dropout
-from pandas import DataFrame
 from numpy import ndarray
+from pandas import DataFrame
 
 from .encoding_parser import EncodingParser
 
@@ -19,10 +19,9 @@ class NNRegressor:
         self._dropout_rate = float(kwargs['dropout_rate'])
         self._embedding_dim = 8  # TODO: add as parameter
         self._encoding_parser = EncodingParser(self._encoding, None, regression_task=True)
+        self._model = None
 
     def fit(self, train_data: DataFrame, y: DataFrame) -> None:
-        print(train_data)
-        print(y)
         train_data = self._encoding_parser.parse_training_dataset(train_data)
         y = self._encoding_parser.parse_y(y)
 

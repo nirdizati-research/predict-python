@@ -1,7 +1,7 @@
 # Test performance for thesis
 import time
 import unittest
-from unittest import TestCase
+from django.test import TestCase
 
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt

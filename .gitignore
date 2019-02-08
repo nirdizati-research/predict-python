@@ -62,9 +62,6 @@ env.bak/
 venv.bak/
 
 .settings/
-model_cache/
-log_cache/BPI2011_20.xes
-log_cache/BPI2011_80.xes
 .dbeaver-data-sources.xml
 rqworker.sh
 supervisord.conf.save
@@ -78,6 +75,8 @@ src/
 
 # End of https://www.gitignore.io/api/python,django
 
+log_cache/*
+!log_cache/test_logs/
 dump.rdb
 
 *.icloud
@@ -86,3 +85,4 @@ dump.rdb
 *.ipynb_checkpoints/
 
 */migrations/*
+!*/migrations/__init__.py

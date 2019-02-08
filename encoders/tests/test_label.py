@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from core.constants import CLASSIFICATION
 from encoders.common import encode_label_log, BOOLEAN
@@ -6,11 +6,12 @@ from encoders.encoding_container import EncodingContainer, ZERO_PADDING, COMPLEX
 from encoders.label_container import *
 from utils.event_attributes import unique_events, get_additional_columns
 from utils.file_service import get_log
+from utils.tests_utils import general_example_test_filepath
 
 
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(prefix_length=2)
 
@@ -166,7 +167,7 @@ class TestLabelComplex(TestCase):
     """Cant be bothered to write better tests"""
 
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.add_col = get_additional_columns(self.log)
         self.encoding = EncodingContainer(COMPLEX, prefix_length=2)
@@ -270,7 +271,7 @@ class TestLabelComplex(TestCase):
 
 class TestLabelBoolean(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example_test.xes")
+        self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(BOOLEAN, prefix_length=2)
 

@@ -1,6 +1,6 @@
 import time
 import unittest
-from unittest import TestCase
+from django.test import TestCase
 
 from core.constants import REGRESSION
 from encoders.common import encode_label_log

@@ -1,4 +1,4 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from core.constants import CLASSIFICATION
 from encoders.boolean_frequency import frequency

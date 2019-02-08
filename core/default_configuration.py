@@ -169,6 +169,9 @@ def _regression_nn():
 
 def _time_series_prediction_rnn():
     return {
+        'n_units': 16,
+        'rnn_type': 'lstm',
+        'n_epochs': 10,
     }
 
 
@@ -245,7 +248,7 @@ CONF_MAP = {
     REGRESSION_LINEAR: _regression_linear,
     REGRESSION_NN: _regression_nn,
 
-    TIME_SERIES_PREDICTION: _time_series_prediction_rnn,
+    TIME_SERIES_PREDICTION_RNN: _time_series_prediction_rnn,
 
     UPDATE_INCREMENTAL_NAIVE_BAYES: _update_incremental_naive_bayes,
     UPDATE_INCREMENTAL_ADAPTIVE_TREE: _update_incremental_adaptive_tree,

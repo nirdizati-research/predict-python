@@ -1,13 +1,14 @@
-from unittest import TestCase
+from django.test import TestCase
 
 from utils import log_metrics
-from utils.time_metrics import *
 from utils.file_service import get_log
+from utils.tests_utils import general_example_filepath
+from utils.time_metrics import *
 
 
 class TimeMetrics(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/general_example.xes")
+        self.log = get_log(general_example_filepath)
 
     def test_calculate_remaining_time(self):
         trace = self.log[0]

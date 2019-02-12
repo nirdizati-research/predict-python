@@ -6,7 +6,7 @@ from core.hyperopt_spaces import _get_space
 trial_nr = 0
 
 
-def calculate_hyperopt(job: dict):
+def calculate_hyperopt(job: dict) -> (dict, dict, dict):
     """ Main entry method for hyperopt calculations
         Returns the model for the best trial
     """
@@ -34,13 +34,13 @@ def calculate_hyperopt(job: dict):
     return current_best['results'], current_best['config'], current_best['model_split']
 
 
-def get_metric_multiplier(performance_metric: int):
+def get_metric_multiplier(performance_metric: int) -> int:
     metric_map = {'rmse': -1, 'mae': -1, 'rscore': 1, 'acc': 1, 'f1score': 1, 'auc': 1, 'precision': 1, 'recall': 1,
                   'true_positive': 1, 'true_negative': 1, 'false_positive': 1, 'false_negative': 1, 'mape': -1}
     return metric_map[performance_metric]
 
 
-def _calculate_and_evaluate(args):
+def _calculate_and_evaluate(args) -> dict:
     global trial_nr
     if trial_nr % 20 == 0:
         print("Trial {}".format(trial_nr))

@@ -14,7 +14,7 @@ def create_log(file, name: str, folder='log_cache/'):
     return Log.objects.create(name=name, path=path, properties=properties)
 
 
-def create_properties(path: str):
+def create_properties(path: str) -> dict:
     """Create read-only dict with methods in this class"""
     print("Creating properties for log {}".format(path))
     logs = get_log(path)

@@ -1,4 +1,6 @@
 import pandas as pd
+from pandas import DataFrame
+from pm4py.objects.log.log import Trace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import *
@@ -8,7 +10,7 @@ from utils.time_metrics import duration, elapsed_time_id, remaining_time_id, cou
 ATTRIBUTE_CLASSIFIER = None
 
 
-def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
+def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer) -> DataFrame:
     columns = compute_columns(encoding.prefix_length)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, label)
@@ -29,10 +31,11 @@ def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer):
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace, encoding: EncodingContainer, event_index: int, column_len, atr_classifier=None, label=None,
+def add_trace_row(trace: Trace, encoding: EncodingContainer, event_index: int, column_len: int, atr_classifier=None,
+                  label=None,
                   executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
-    trace_row = list()
+    trace_row = []
     trace_row.append(trace.attributes['concept:name'])
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
@@ -42,9 +45,11 @@ def add_trace_row(trace, encoding: EncodingContainer, event_index: int, column_l
     return trace_row
 
 
-def trace_prefixes(trace: list, prefix_length: int):
-    """List of indexes of the position they are in event_names"""
-    prefixes = list()
+def trace_prefixes(trace: Trace, prefix_length: int) -> list:
+    """List of indexes of the position they are in event_names
+
+    """
+    prefixes = []
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
@@ -54,8 +59,7 @@ def trace_prefixes(trace: list, prefix_length: int):
 
 
 def next_event_name(trace: list, prefix_length: int):
-    """Return the event event name at prefix length
-    Or '0' if out of range.
+    """Return the event event name at prefix length or 0 if out of range.
     """
     if prefix_length < len(trace):
         next_event = trace[prefix_length]
@@ -83,7 +87,7 @@ def get_intercase_attributes(log: list, label: LabelContainer):
     return kwargs
 
 
-def compute_label_columns(columns: list, label: LabelContainer):
+def compute_label_columns(columns: list, label: LabelContainer) -> list:
     if label.type == NO_LABEL:
         return columns
     if label.add_elapsed_time:

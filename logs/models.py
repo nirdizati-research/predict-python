@@ -30,7 +30,7 @@ class Split(models.Model):
     training_log = models.ForeignKey('Log', on_delete=models.CASCADE, related_name='training_log', blank=True,
                                      null=True)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         split = dict()
         split['id'] = self.id
         split['type'] = self.type

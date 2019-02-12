@@ -1,6 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 from sklearn import clone
+from sklearn.base import RegressorMixin
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.externals import joblib
 from sklearn.linear_model import Lasso
@@ -16,8 +17,8 @@ from utils.result_metrics import calculate_results_regression
 pd.options.mode.chained_assignment = None
 
 
-def regression(training_df: DataFrame, test_df: DataFrame, job: dict):
-    train_data, test_data, original_test_data = _prep_data(training_df, test_df)
+def regression(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+    train_data, test_data = _prep_data(training_df, test_df)
 
     model_split = _train(job, train_data, _choose_regressor(job))
     results_df = _test(model_split, test_data)
@@ -30,7 +31,7 @@ def regression(training_df: DataFrame, test_df: DataFrame, job: dict):
     return results, model_split
 
 
-def regression_single_log(data: DataFrame, model):
+def regression_single_log(data: DataFrame, model: dict) -> DataFrame:
     split = model['split']
     data = data.drop([col for col in ['label', 'remaining_time', 'trace_id'] if col in data.columns], 1)
 
@@ -42,7 +43,7 @@ def regression_single_log(data: DataFrame, model):
     return results_df
 
 
-def _train(job: dict, train_data: DataFrame, regressor) -> dict:
+def _train(job: dict, train_data: DataFrame, regressor: RegressorMixin) -> dict:
     clusterer = Clustering(job)
     models = dict()
 
@@ -66,7 +67,7 @@ def _train(job: dict, train_data: DataFrame, regressor) -> dict:
     return {'clusterer': clusterer, 'regressor': models}
 
 
-def _test(model_split, data: DataFrame) -> dict:
+def _test(model_split: dict, data: DataFrame) -> DataFrame:
     clusterer = model_split['clusterer']
     regressor = model_split['regressor']
 
@@ -82,18 +83,16 @@ def _test(model_split, data: DataFrame) -> dict:
     return results_df
 
 
-def _prep_data(training_df: DataFrame, test_df: DataFrame):
+def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
     train_data = training_df
     test_data = test_df
 
-    original_test_data = test_data
-
     test_data = test_data.drop(['trace_id'], 1)
     train_data = train_data.drop('trace_id', 1)
-    return train_data, test_data, original_test_data
+    return train_data, test_data
 
 
-def _choose_regressor(job: dict):
+def _choose_regressor(job: dict) -> RegressorMixin:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == LINEAR:

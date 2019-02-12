@@ -13,10 +13,15 @@ from .simple_index import simple_index
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
                       label: LabelContainer, additional_columns=None):
-    """Encodes and labels test set and training set as data frames
+    """encodes and labels test set and training set as data frames
 
+    :param training_log: 
+    :param test_log: 
+    :param encoding: 
+    :param job_type: 
+    :param label: 
     :param additional_columns: Global trace attributes for complex and last payload encoding
-    :returns training_df, test_df
+    :return: training_df, test_df
     """  # TODO: complete documentation
     training_log, cols = _encode_log(training_log, encoding, label, additional_columns=additional_columns,
                                      cols=None)
@@ -94,11 +99,14 @@ def _encode_log(log: list, encoding: EncodingContainer, label: LabelContainer, a
     return run_df, cols
 
 
-def _label_boolean(df: DataFrame, label: LabelContainer):
+def _label_boolean(df: DataFrame, label: LabelContainer) -> DataFrame:
     """Label a numeric attribute as True or False based on threshold
-    This is essentially a Fast/Slow classification without string labels
-    By default use mean of label value
-    True if under threshold value
+
+    This is essentially a Fast/Slow classification without string labels. By default use mean of label value True if 7
+    under threshold value
+    :param df:
+    :param label:
+    :return:
     """
     if df['label'].dtype == bool:
         return df
@@ -110,7 +118,7 @@ def _label_boolean(df: DataFrame, label: LabelContainer):
     return df
 
 
-def _categorical_encode(df):
+def _categorical_encode(df: DataFrame) -> DataFrame:
     """Encodes every column except trace_id and label as int
 
     Encoders module puts event name in cell, which can't be used by machine learning methods directly.

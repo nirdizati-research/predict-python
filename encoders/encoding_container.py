@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 import pandas as pd
-# Encoding methods
+from pandas import DataFrame
 from sklearn.preprocessing import LabelEncoder
 
 SIMPLE_INDEX = 'simpleIndex'
@@ -41,22 +41,23 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
 
     def __new__(cls, method: str = SIMPLE_INDEX, prefix_length: int = 1, padding: str = NO_PADDING,
                 generation_type: str = ONLY_THIS):
+        # noinspection PyArgumentList
         return super(EncodingContainer, cls).__new__(cls, method, prefix_length, padding, generation_type)
 
-    def is_zero_padding(self):
+    def is_zero_padding(self) -> bool:
         return self.padding == ZERO_PADDING
 
-    def is_all_in_one(self):
+    def is_all_in_one(self) -> bool:
         return self.generation_type == ALL_IN_ONE
 
-    def is_boolean(self):
+    def is_boolean(self) -> bool:
         return self.method == BOOLEAN
 
-    def is_complex(self):
+    def is_complex(self) -> bool:
         return self.method == COMPLEX
 
     @staticmethod
-    def encode(df):
+    def encode(df: DataFrame) -> None:
         for column in df:
             if column in encoder:
                 if ENCODING == LABEL_ENCODER:
@@ -69,7 +70,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
                     raise ValueError('Please set the encoding technique!')
 
     @staticmethod
-    def init_label_encoder(df):
+    def init_label_encoder(df: DataFrame) -> None:
         for column in df:
             if column != 'trace_id':
                 if df[column].dtype != int or (df[column].dtype == int and pd.np.any(df[column] < 0)):

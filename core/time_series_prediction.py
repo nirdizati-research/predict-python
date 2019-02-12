@@ -13,10 +13,10 @@ from utils.result_metrics import calculate_results_classification
 pd.options.mode.chained_assignment = None
 
 
-def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict):
+def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
     train_data, test_data = _drop_columns(train_df, test_df)
 
-    model_split = _train(job, train_data, _choose_classifier(job))
+    model_split = _train(job, train_data, _choose_time_series_predictor(job))
     results_df, nlevenshtein = _test(model_split, test_data, evaluation=True)
 
     results = _prepare_results(results_df, nlevenshtein)
@@ -27,7 +27,7 @@ def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict):
     return results, model_split
 
 
-def time_series_prediction_single_log(data: DataFrame, model: dict):
+def time_series_prediction_single_log(data: DataFrame, model: dict) -> dict:
     results = dict()
     split = model['split']
     results['input'] = data
@@ -102,7 +102,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df
 
 
-def _choose_classifier(job: dict) -> Any:
+def _choose_time_series_predictor(job: dict) -> Any:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == RNN:

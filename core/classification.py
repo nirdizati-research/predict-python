@@ -1,9 +1,8 @@
-from typing import Any
-
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from sklearn import clone
+from sklearn.base import ClassifierMixin
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
 from sklearn.linear_model import Perceptron, SGDClassifier
@@ -55,7 +54,7 @@ def classification_single_log(data: DataFrame, model: dict) -> dict:
     return results
 
 
-def _train(job: dict, train_data: DataFrame, classifier: Any) -> dict:
+def _train(job: dict, train_data: DataFrame, classifier: ClassifierMixin) -> dict:
     clusterer = Clustering(job)
     models = dict()
 
@@ -139,7 +138,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df, original_test_df
 
 
-def _choose_classifier(job: dict) -> Any:
+def _choose_classifier(job: dict) -> ClassifierMixin:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == KNN:

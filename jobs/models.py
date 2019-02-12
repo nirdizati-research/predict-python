@@ -4,7 +4,7 @@ from jsonfield import JSONField
 from core.constants import REGRESSION, CLASSIFICATION, LABELLING, UPDATE
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
-from logs.models import Log, Split
+from logs.models import Split
 
 CREATED = 'created'
 COMPLETED = 'completed'
@@ -41,7 +41,7 @@ class Job(BaseModel):
     type = models.CharField(choices=TYPES, max_length=20)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         job = dict(self.config)
         job['type'] = self.type
         job['split'] = self.split.to_dict()

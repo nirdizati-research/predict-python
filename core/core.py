@@ -2,6 +2,8 @@ import json
 import os
 import time
 
+from pandas import DataFrame
+
 from core.classification import classification, classification_single_log
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from core.constants import UPDATE
@@ -14,7 +16,7 @@ from utils.cache import load_from_cache, dump_to_cache, get_digested
 from utils.file_service import save_result
 
 
-def calculate(job):
+def calculate(job: dict) -> (dict, dict):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
     training_df, test_df = get_encoded_logs(job)
@@ -22,7 +24,7 @@ def calculate(job):
     return results, model_split
 
 
-def get_encoded_logs(job: dict, use_cache: bool = True):
+def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame):
     if use_cache:
         processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
                                                                          json.dumps(job['encoding']),
@@ -58,7 +60,7 @@ def get_encoded_logs(job: dict, use_cache: bool = True):
     return training_df, test_df
 
 
-def run_by_type(training_df, test_df, job):
+def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
     model_split = None
 
     start_time = time.time()
@@ -83,7 +85,7 @@ def run_by_type(training_df, test_df, job):
     return results, model_split
 
 
-def runtime_calculate(run_log, model):
+def runtime_calculate(run_log: list, model: dict) -> dict:
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
     if model['type'] == CLASSIFICATION:
         results = classification_single_log(run_df, model)
@@ -95,17 +97,17 @@ def runtime_calculate(run_log, model):
     return results
 
 
-def get_run(job):
+def get_run(job: dict) -> str:
     """Defines job identity"""
     if job['type'] == LABELLING:
         return job['encoding'].method + '_' + job['label'].type
     return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type
 
 
-def _label_task(df):
-    """Calculates the distribution of labels in the data frame
+def _label_task(df: DataFrame) -> dict:
+    """calculates the distribution of labels in the data frame
 
-    :return Dict of string and int {'label1': label1_count, 'label2': label2_count}
+    :return: Dict of string and int {'label1': label1_count, 'label2': label2_count}
     """
     # Stupid but it works
     # True must be turned into 'true'

@@ -1,4 +1,8 @@
+from typing import Callable
+
 import pandas as pd
+from pandas import DataFrame
+from pm4py.objects.log.log import Trace
 
 from encoders.encoding_container import EncodingContainer
 from encoders.label_container import LabelContainer
@@ -7,16 +11,16 @@ from encoders.simple_index import compute_label_columns, add_labels, get_interca
 ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list):
+def complex(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list) -> DataFrame:
     return encode_complex_latest(log, label, encoding, additional_columns, columns_complex, data_complex)
 
 
-def last_payload(log, label: LabelContainer, encoding: EncodingContainer, additional_columns: list):
+def last_payload(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list) -> DataFrame:
     return encode_complex_latest(log, label, encoding, additional_columns, columns_last_payload, data_last_payload)
 
 
 def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list,
-                          column_fun, data_fun):
+                          column_fun: Callable, data_fun: Callable) -> DataFrame:
     columns = column_fun(encoding.prefix_length, additional_columns)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, label)
@@ -41,7 +45,7 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: dict):
+def columns_complex(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
@@ -51,8 +55,9 @@ def columns_complex(prefix_length: int, additional_columns: dict):
     return columns
 
 
-def columns_last_payload(prefix_length: int, additional_columns: dict):
+def columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
+    i = 0
     for i in range(1, prefix_length + 1):
         columns.append("prefix_" + str(i))
     for additional_column in additional_columns['event_attributes']:
@@ -60,7 +65,7 @@ def columns_last_payload(prefix_length: int, additional_columns: dict):
     return columns
 
 
-def data_complex(trace: list, prefix_length: int, additional_columns: dict):
+def data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> list:
     """Creates list in form [1, value1, value2, 2, ...]
 
     Appends values in additional_columns
@@ -78,7 +83,7 @@ def data_complex(trace: list, prefix_length: int, additional_columns: dict):
     return data
 
 
-def data_last_payload(trace: list, prefix_length: int, additional_columns: dict):
+def data_last_payload(trace: list, prefix_length: int, additional_columns: dict) -> list:
     """Creates list in form [1, 2, value1, value2,]
 
     Event name index of the position they are in event_names
@@ -101,8 +106,9 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: dict)
     return data
 
 
-def trace_to_row(trace, encoding: EncodingContainer, event_index: int, data_fun, columns_len, atr_classifier=None,
-                 label=None, executed_events=None, resources_used=None, new_traces=None, additional_columns=None):
+def trace_to_row(trace: Trace, encoding: EncodingContainer, event_index: int, data_fun: Callable, columns_len: int,
+                 atr_classifier=None, label=None, executed_events=None, resources_used=None, new_traces=None,
+                 additional_columns=None) -> list:
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)

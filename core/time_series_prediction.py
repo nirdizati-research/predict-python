@@ -1,11 +1,11 @@
 from typing import Any
 
-import numpy as np
 import pandas as pd
+import numpy as np
+
 from pandas import DataFrame
 from sklearn import clone
 from sklearn.externals import joblib
-
 from core.clustering import Clustering
 from core.common import get_method_config
 from core.constants import RNN
@@ -16,7 +16,7 @@ from utils.result_metrics import calculate_results_time_series_prediction, \
 pd.options.mode.chained_assignment = None
 
 
-def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict):
+def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
     train_data, test_data = _drop_columns(train_df, test_df)
 
     model_split = _train(job, train_data, _choose_time_series_predictor(job))

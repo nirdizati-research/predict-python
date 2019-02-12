@@ -31,7 +31,7 @@ class Replayer:
                 self.log = Log.objects.get(pk=self.log_id)
             except Log.DoesNotExist:
                 return Response({'error': 'not in database'},
-                                status=status.HTTP_404_NOT_FOUND)  # TODO: fix unresolved reference
+                                status=status.HTTP_404_NOT_FOUND)
             replayer.running = True
             replayer.save()
             self.execute(replayer.id)
@@ -39,8 +39,7 @@ class Replayer:
     def execute(self, id):
         xlog = get_log(self.log.path)
         # t=threading.Thread(target=self.events_list, args=(xlog, id))
-        events = self.events_list(xlog, id)  # TODO: fix function call that doesn't return anything
-        # TODO: fix events not being returned
+        self.events_list(xlog, id)
 
     def send_events(self, trace, log, replayer):
         c = 0

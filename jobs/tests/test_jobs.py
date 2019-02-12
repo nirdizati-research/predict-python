@@ -26,7 +26,7 @@ class JobModelTest(TestCase):
                        }
         log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
+        Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
                            type=CLASSIFICATION)
         Job.objects.create(config=self.config, split=split, type='asdsd')
         Job.objects.create(config={}, split=split, type=REGRESSION)
@@ -106,7 +106,7 @@ class Hyperopt(TestCase):
         }
         log = Log.objects.create(name="general_example.xes", path=general_example_filepath)
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=add_default_config(self.config, type=CLASSIFICATION), split=split,
+        Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
                            type=CLASSIFICATION)
 
     def test_hyperopt(self):

@@ -1,9 +1,4 @@
-from sklearn.externals import joblib
-
-from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
-    HOEFFDING_TREE
-from predModels.models import PredModels
-from utils.result_metrics import calculate_results_classification
+from pandas import DataFrame
 from sklearn.externals import joblib
 
 from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
@@ -61,20 +56,20 @@ def update_model(training_df, test_df, job):
     return results, model_split
 
 
-def add_actual(training_df, test_df):
+def add_actual(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
     training_df['actual'] = training_df['label']
     test_df['actual'] = test_df['label']
     return training_df, test_df
 
 
-def drop_columns(training_df, test_df):
+def drop_columns(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame, DataFrame):
     training_df = training_df.drop(['label', 'trace_id'], 1)
     original_test_df = test_df.drop('label', 1)
     test_df = test_df.drop(['label', 'trace_id'], 1)
     return training_df, test_df, original_test_df
 
 
-def prepare_results(df, auc: int):
+def prepare_results(df: DataFrame, auc: int) -> dict:
     actual_ = df['actual'].values
     predicted_ = df['predicted'].values
 

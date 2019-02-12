@@ -5,12 +5,12 @@ from hyperopt.pyll.base import scope
 from core.constants import *
 
 
-def _get_space(job: dict):
+def _get_space(job: dict) -> dict:
     method_conf_name = "{}.{}".format(job['type'], job['method'])
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 
-def _classification_random_forest():
+def _classification_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
@@ -18,14 +18,14 @@ def _classification_random_forest():
     }
 
 
-def _classification_knn():
+def _classification_knn() -> dict:
     return {
         'n_neighbors': hp.choice('n_neighbors', np.arange(1, 20, dtype=int)),
         'weights': hp.choice('weights', ['uniform', 'distance']),
     }
 
 
-def _classification_decision_tree():
+def _classification_decision_tree() -> dict:
     return {
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
         'min_samples_split': hp.choice('min_samples_split', np.arange(2, 10, dtype=int)),
@@ -33,21 +33,21 @@ def _classification_decision_tree():
     }
 
 
-def _classification_xgboost():
+def _classification_xgboost() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 3, 30, 1)),
     }
 
 
-def _classification_incremental_naive_bayes():
+def _classification_incremental_naive_bayes() -> dict:
     return {
         'alpha': hp.uniform('alpha', 0, 10),
         'fit_prior': True
     }
 
 
-def _classification_incremental_adaptive_tree():
+def _classification_incremental_adaptive_tree() -> dict:
     return {
         'grace_period': hp.uniform('grace_period', 1, 5),
         'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
@@ -62,7 +62,7 @@ def _classification_incremental_adaptive_tree():
     }
 
 
-def _classification_incremental_hoeffding_tree():
+def _classification_incremental_hoeffding_tree() -> dict:
     return {
         'grace_period': hp.uniform('grace_period', 3, 8),
         'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
@@ -77,7 +77,7 @@ def _classification_incremental_hoeffding_tree():
     }
 
 
-def _classification_incremental_sgd_classifier():
+def _classification_incremental_sgd_classifier() -> dict:
     return {
         'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss',
                                    'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive']),
@@ -97,7 +97,7 @@ def _classification_incremental_sgd_classifier():
     }
 
 
-def _classification_incremental_perceptron():
+def _classification_incremental_perceptron() -> dict:
     return {
         'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
         'alpha': hp.uniform('alpha', 0.0001, 0.5),
@@ -111,7 +111,7 @@ def _classification_incremental_perceptron():
     }
 
 
-def _regression_random_forest():
+def _regression_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_features': hp.uniform('max_features', 0.0, 1.0),
@@ -119,7 +119,7 @@ def _regression_random_forest():
     }
 
 
-def _regression_lasso():
+def _regression_lasso() -> dict:
     return {
         'alpha': hp.uniform('alpha', 0.01, 2.0),
         'fit_intercept': hp.choice('fit_intercept', [True, False]),
@@ -127,14 +127,14 @@ def _regression_lasso():
     }
 
 
-def _regression_linear():
+def _regression_linear() -> dict:
     return {
         'fit_intercept': hp.choice('fit_intercept', [True, False]),
         'normalize': hp.choice('normalize', [True, False])
     }
 
 
-def _regression_xgboost():
+def _regression_xgboost() -> dict:
     return {
         'max_depth': scope.int(hp.quniform('max_depth', 3, 100, 1)),
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),

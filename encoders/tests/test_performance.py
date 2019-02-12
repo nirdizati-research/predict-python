@@ -1,5 +1,6 @@
 import time
 import unittest
+
 from django.test import TestCase
 
 from core.constants import REGRESSION
@@ -23,8 +24,7 @@ class TestEncoding(TestCase):
         # log = get_logs("log_cache/repairExample.xes")[0]
         event_names = unique_events(self.log)
         encode_label_log(self.log, encoding, REGRESSION, self.label, event_names=event_names,
-                         prefix_length=180, zero_padding=True, additional_columns=self.add_col)
-        # TODO: fix unexpected parameters
+                         additional_columns=self.add_col)
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
     # This is test

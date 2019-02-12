@@ -4,9 +4,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.utils.encoders import JSONEncoder
 
 
-# TODO: fix this unprofessional comments
-# THIS IS SHIT. FIX IF POSSIBLE
-# Somehow set allow_nan to true in JSONEncoder
 # default renderer cannot handle JSON inf values
 # https://stackoverflow.com/questions/35939464/django-rest-framework-json-data-monkey-patching
 class CustomJSONEncoder(JSONEncoder):

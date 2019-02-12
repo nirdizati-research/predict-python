@@ -1,6 +1,7 @@
 # Test performance for thesis
 import time
 import unittest
+
 from django.test import TestCase
 
 from core.core import calculate

@@ -5,13 +5,22 @@ from keras import Input, Model
 from keras.layers import Flatten, Embedding, Dense, Dropout
 from numpy import ndarray
 from pandas import DataFrame
+from sklearn.base import ClassifierMixin
 
 from core.nn.encoding_parser import EncodingParser
 
 
-class NNClassifier:
+class NNClassifier(ClassifierMixin):
+    """
+    Neural Network classifier, implements the same methods as the sklearn models to make it simple to add
+    """
+
     # noinspection PyTypeChecker
     def __init__(self, **kwargs: Dict[str, Union[int, str, float]]):
+        """initializes the Neural Network classifier
+
+        :param kwargs: configuration containing the model parameters, encoding and training parameters
+        """
         self._n_hidden_layers = int(kwargs['n_hidden_layers'])
         self._n_hidden_units = int(kwargs['n_hidden_units'])
         self._activation = str(kwargs['activation'])
@@ -24,6 +33,12 @@ class NNClassifier:
         self._model = None
 
     def fit(self, train_data: DataFrame, y: DataFrame) -> None:
+        """creates and fits the model
+
+        first the encoded data is parsed, then the model created and then trained
+        :param train_data: encoded training dataset
+        :param y: encoded target dataset
+        """
         train_data = self._encoding_parser.parse_training_dataset(train_data)
         y = self._encoding_parser.parse_y(y)
 
@@ -51,6 +66,12 @@ class NNClassifier:
         self._model.fit(train_data, y, epochs=self._n_epochs)
 
     def predict(self, test_data: DataFrame) -> ndarray:
+        """returns model predictions
+
+        parses the encoded test dataset, then returns the model predictions
+        :param test_data: encoded test dataset
+        :return: model predictions
+        """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
 
         predictions = self._model.predict(test_data)
@@ -61,6 +82,12 @@ class NNClassifier:
         return predictions
 
     def predict_proba(self, test_data: DataFrame) -> ndarray:
+        """returns the classification probability
+
+        parses the test dataset and returns the raw prediction probabilities of the model
+        :param test_data: encoded test dataset
+        :return: model prediction probabilities
+        """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
 
         predictions = self._model.predict(test_data)

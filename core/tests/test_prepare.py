@@ -44,11 +44,11 @@ def repair_example():
     return split
 
 
-def add_default_config(job: dict, type=""):
+def add_default_config(job: dict, prediction_method=""):
     """Map to job method default config"""
-    if type == "":
-        type = job['type']
-    method_conf_name = "{}.{}".format(type, job['method'])
+    if prediction_method == "":
+        prediction_method = job['type']
+    method_conf_name = "{}.{}".format(prediction_method, job['method'])
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
     job['kmeans'] = kmeans()

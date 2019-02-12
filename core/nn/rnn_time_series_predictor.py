@@ -11,8 +11,18 @@ from .encoding_parser import EncodingParser
 
 
 class RNNTimeSeriesPredictor:
+    """
+    Recurrent Neural Network Time Series predictor, implements the same methods as the sklearn models to make it simple
+    to add.
+    This architecture is of the seq2seq type, taking as input a sequence (0...t) and outputting a sequence (1...t+1)
+    """
+
     # noinspection PyTypeChecker
     def __init__(self, **kwargs: Dict[str, Union[int, str, float]]):
+        """initializes the Recurrent Neural Network Time Series predictor
+
+        :param kwargs: configuration containing the model parameters, encoding and training parameters
+        """
         self._n_units = int(kwargs['n_units'])
         self._rnn_type = str(kwargs['rnn_type'])
         self._n_epochs = int(kwargs['n_epochs'])
@@ -22,6 +32,11 @@ class RNNTimeSeriesPredictor:
         self._model = None
 
     def fit(self, train_data: DataFrame) -> None:
+        """creates and fits the model
+
+        first the encoded data is parsed, then the model created and then trained
+        :param train_data: encoded training dataset
+        """
         train_data = self._encoding_parser.parse_training_dataset(train_data)
 
         y = to_categorical(train_data[:, 1:], self._encoding_parser.n_classes_x + 1)
@@ -41,9 +56,15 @@ class RNNTimeSeriesPredictor:
 
         self._model = Model(model_inputs, predicted)
         self._model.compile(loss='categorical_crossentropy', optimizer='adam')
-        # self._model.fit(train_data, y, epochs=self._n_epochs)
+        self._model.fit(train_data, y, epochs=self._n_epochs)
 
     def predict(self, test_data: DataFrame) -> ndarray:
+        """returns model predictions
+
+        parses the encoded test dataset, then returns the model predictions
+        :param test_data: encoded test dataset
+        :return: model predictions
+        """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
         input_test_data = test_data[:, :-1]
         predictions = self._model.predict(input_test_data)

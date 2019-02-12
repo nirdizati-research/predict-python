@@ -20,7 +20,7 @@ from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMI
 from core.constants import NN
 from core.nn.nn_classifier import NNClassifier
 from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
-from utils.result_metrics import calculate_results_classification, _get_auc
+from utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
 
@@ -85,7 +85,7 @@ def _train(job: dict, train_data: DataFrame, classifier: Any) -> dict:
     return {'clusterer': clusterer, 'classifier': models}
 
 
-def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (dict, float):
+def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (DataFrame, float):
     clusterer = model_split['clusterer']
     classifier = model_split['classifier']
 
@@ -109,8 +109,7 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classi
                     scores = classifier[cluster].predict_proba(x.drop(['label'], 1))
                     if np.size(scores, 1) >= 2:  # checks number of columns
                         scores = scores[:, 1]
-                auc += _get_auc(y, scores)
-
+                auc += get_auc(y, scores)
             x['predicted'] = classifier[cluster].predict(x.drop(['label'], 1))
 
             results_df = results_df.append(x)

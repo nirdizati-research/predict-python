@@ -1,6 +1,8 @@
 from math import sqrt
 
+from distance import nlevenshtein
 import numpy as np
+from numpy import ndarray
 from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
     mean_squared_error, mean_absolute_error, r2_score, roc_auc_score
@@ -14,6 +16,10 @@ def calculate_results_classification(actual: list, predicted: list) -> dict:
                'precision': _get_precision(actual, predicted),
                'recall': _get_recall(actual, predicted)},
             **get_confusion_matrix(actual, predicted)}
+
+
+def calculate_results_time_series_prediction(actual: ndarray, predicted: ndarray) -> dict:
+    return {}
 
 
 def get_confusion_matrix(actual, predicted) -> dict:
@@ -56,7 +62,16 @@ def _get_precision(actual, predicted) -> float:
     return precision
 
 
-def _get_auc(actual, scores) -> float:
+def calculate_nlevenshtein(actual: ndarray, predicted: ndarray) -> float:
+    distances = []
+
+    for row in range(actual.shape[0]):
+        distances.append(nlevenshtein(np.array2string(actual[row]), np.array2string(predicted[row])))
+
+    return float(np.mean(distances))
+
+
+def get_auc(actual, scores) -> float:
     try:
         auc = roc_auc_score(actual, scores)
     except ValueError:

@@ -30,6 +30,7 @@ skmultiflow = {git = "https://github.com/scikit-multiflow/scikit-multiflow.git",
 tensorflow = "*"
 keras = "*"
 h5py = "*"
+distance = "*"
 
 [requires]
 python_version = "3.6"

@@ -24,11 +24,13 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
     test_log, _ = _encode_log(test_log, encoding, label, additional_columns=additional_columns, cols=cols)
 
     if (label.threshold_type in [THRESHOLD_MEAN, THRESHOLD_CUSTOM]) and (
-        label.type in [REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION]):
+        label.type in [ATTRIBUTE_NUMBER, DURATION]):
         if label.threshold_type == THRESHOLD_MEAN:
             threshold = training_log['label'].mean()
         elif label.threshold_type == THRESHOLD_CUSTOM:
             threshold = label.threshold
+        else:
+            threshold = -1
         training_log['label'] = training_log['label'] < threshold
         test_log['label'] = test_log['label'] < threshold
 

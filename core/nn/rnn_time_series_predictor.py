@@ -1,10 +1,10 @@
 from typing import Dict, Union
 
+import numpy as np
 from keras import Input, Model
 from keras.layers import Dense, Embedding, LSTM, GRU
 from keras.utils import to_categorical
 from numpy import ndarray
-import numpy as np
 from pandas import DataFrame
 
 from .encoding_parser import EncodingParser
@@ -41,9 +41,13 @@ class RNNTimeSeriesPredictor:
 
         self._model = Model(model_inputs, predicted)
         self._model.compile(loss='categorical_crossentropy', optimizer='adam')
-        self._model.fit(train_data, y, epochs=self._n_epochs)
+        # self._model.fit(train_data, y, epochs=self._n_epochs)
 
     def predict(self, test_data: DataFrame) -> ndarray:
-        test_data = self._encoding_parser.parse_testing_dataset(test_data)[:, :-1]
-        predictions = self._model.predict(test_data)
-        return np.argmax(predictions, -1)
+        test_data = self._encoding_parser.parse_testing_dataset(test_data)
+        input_test_data = test_data[:, :-1]
+        predictions = self._model.predict(input_test_data)
+        predictions = np.argmax(predictions, -1)
+
+        predictions = np.hstack((test_data[:, 0:1], predictions))
+        return predictions

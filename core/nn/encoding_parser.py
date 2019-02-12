@@ -102,7 +102,7 @@ class EncodingParser:
         test_data = np.clip(test_data, 0, 1)
         return test_data
 
-    def denormalize_predictions(self, predictions):
+    def denormalize_predictions(self, predictions: ndarray) -> ndarray:
         return self._denormalize(predictions, self._y_min, self._y_max)
 
     @staticmethod

@@ -4,24 +4,14 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame
 from sklearn import clone
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
-from sklearn.linear_model import Perceptron, SGDClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from skmultiflow.trees import HoeffdingTree, HAT
-from xgboost import XGBClassifier
 
 from core.clustering import Clustering
 from core.common import get_method_config
-from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
-    HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON, RNN
-from core.constants import NN
-from core.nn.nn_classifier import NNClassifier
+from core.constants import RNN
 from core.nn.rnn_time_series_predictor import RNNTimeSeriesPredictor
-from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
-from utils.result_metrics import calculate_results_classification, _get_auc
+from utils.result_metrics import calculate_results_time_series_prediction, \
+    calculate_nlevenshtein
 
 pd.options.mode.chained_assignment = None
 
@@ -29,7 +19,7 @@ pd.options.mode.chained_assignment = None
 def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict):
     train_data, test_data = _drop_columns(train_df, test_df)
 
-    model_split = _train(job, train_data, _choose_classifier(job))
+    model_split = _train(job, train_data, _choose_time_series_predictor(job))
     results_df, nlevenshtein = _test(model_split, test_data, evaluation=True)
 
     results = _prepare_results(results_df, nlevenshtein)
@@ -40,7 +30,7 @@ def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict):
     return results, model_split
 
 
-def time_series_prediction_single_log(data: DataFrame, model: dict):
+def time_series_prediction_single_log(data: DataFrame, model: dict) -> dict:
     results = dict()
     split = model['split']
     results['input'] = data
@@ -69,11 +59,11 @@ def _train(job: dict, train_data: DataFrame, time_series_predictor: Any) -> dict
             time_series_predictor.fit(x)
 
             models[cluster] = time_series_predictor
-
+            time_series_predictor = clone(time_series_predictor, safe=False)
     return {'clusterer': clusterer, 'time_series_predictor': models}
 
 
-def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (dict, float):
+def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, float):
     clusterer = model_split['clusterer']
     time_series_predictor = model_split['time_series_predictor']
 
@@ -93,19 +83,24 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (dict, float)
             if evaluation:
                 predictions = time_series_predictor[cluster].predict(x)
 
-            x['predicted'] = time_series_predictor[cluster].predict(x)
+                nlevenshtein = calculate_nlevenshtein(x.values, predictions)
+                nlevenshtein_distances.append(nlevenshtein)
+            temp_actual = x.values.tolist()
+            x['predicted'] = time_series_predictor[cluster].predict(x).tolist()
+            x['actual'] = temp_actual
 
             results_df = results_df.append(x)
+
+    nlevenshtein = float(np.mean(nlevenshtein_distances))
 
     return results_df, nlevenshtein
 
 
-def _prepare_results(df: DataFrame, auc: int) -> dict:
-    actual = df['label'].values
-    predicted = df['predicted'].values
-
-    row = calculate_results_classification(actual, predicted)
-    row['auc'] = auc
+def _prepare_results(df: DataFrame, nlevenshtein: float) -> dict:
+    actual = np.array(df['actual'].values.tolist())
+    predicted = np.array(df['predicted'].values.tolist())
+    row = calculate_results_time_series_prediction(actual, predicted)
+    row['nlevenshtein'] = nlevenshtein
     return row
 
 
@@ -115,7 +110,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df
 
 
-def _choose_classifier(job: dict) -> Any:
+def _choose_time_series_predictor(job: dict) -> Any:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == RNN:

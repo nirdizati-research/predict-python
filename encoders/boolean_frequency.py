@@ -37,6 +37,7 @@ def _encode_boolean_frequency(log: list, event_names: list, label: LabelContaine
             encoded_data.append(
                 _trace_to_row(trace, encoding, encoding.prefix_length, event_names=event_names,
                               atr_classifier=label.attribute_name, **kwargs))
+
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
@@ -64,7 +65,7 @@ def _update_event_happened(event, event_names: list, event_happened: list, encod
 
 def _create_columns(event_names: list, label: LabelContainer):
     columns = ["trace_id"]
-    columns = np.append(columns, event_names).tolist()
+    columns: list = np.append(columns, event_names).tolist()
     return compute_label_columns(columns, label)
 
 
@@ -83,4 +84,6 @@ def _trace_to_row(trace, encoding: EncodingContainer, event_index: int, label=No
     trace_row += event_happened
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
+    if trace_row[-1] in event_names:
+        trace_row[-1] = event_names.index(trace_row[-1])
     return trace_row

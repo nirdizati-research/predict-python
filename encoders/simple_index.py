@@ -36,7 +36,7 @@ def add_trace_row(trace, encoding: EncodingContainer, event_index: int, column_l
     trace_row.append(trace.attributes['concept:name'])
     trace_row += trace_prefixes(trace, event_index)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(len(trace_row), column_len)]
+        trace_row += [0 for _ in range(len(trace_row), column_len)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
@@ -62,7 +62,7 @@ def next_event_name(trace: list, prefix_length: int):
         name = next_event['concept:name']
         return name
     else:
-        return '0'
+        return 0
 
 
 def compute_columns(prefix_length: int):

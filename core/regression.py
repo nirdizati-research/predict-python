@@ -16,7 +16,7 @@ from utils.result_metrics import calculate_results_regression
 pd.options.mode.chained_assignment = None
 
 
-def regression(training_df: DataFrame, test_df:DataFrame, job: dict):
+def regression(training_df: DataFrame, test_df: DataFrame, job: dict):
     train_data, test_data, original_test_data = _prep_data(training_df, test_df)
 
     model_split = _train(job, train_data, _choose_regressor(job))
@@ -24,7 +24,7 @@ def regression(training_df: DataFrame, test_df:DataFrame, job: dict):
 
     results = calculate_results_regression(results_df, job['label'])
 
-    #TODO save model more wisely
+    # TODO save model more wisely
     model_split['type'] = job['clustering']
 
     return results, model_split
@@ -32,7 +32,7 @@ def regression(training_df: DataFrame, test_df:DataFrame, job: dict):
 
 def regression_single_log(data: DataFrame, model):
     split = model['split']
-    data = data.drop([ col for col in ['label', 'remaining_time', 'trace_id'] if col in data.columns ], 1)
+    data = data.drop([col for col in ['label', 'remaining_time', 'trace_id'] if col in data.columns], 1)
 
     # TODO load model more wisely
     model_split = dict()

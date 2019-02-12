@@ -17,42 +17,44 @@ from utils.file_service import save_result
 def calculate(job):
     """ Main entry method for calculations"""
     print("Start job {} with {}".format(job['type'], get_run(job)))
-
     training_df, test_df = get_encoded_logs(job)
     results, model_split = run_by_type(training_df, test_df, job)
     return results, model_split
 
 
-def get_encoded_logs(job: dict):
-    processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
-                                                                     json.dumps(job['encoding']),
-                                                                     json.dumps(job['type']),
-                                                                     json.dumps(job['label'])))
+def get_encoded_logs(job: dict, use_cache: bool = True):
+    if use_cache:
+        processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
+                                                                         json.dumps(job['encoding']),
+                                                                         json.dumps(job['type']),
+                                                                         json.dumps(job['label'])))
 
-    if os.path.isfile("labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
+        if os.path.isfile("labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
 
-        print('Found Labeled Dataset in cache, loading...')
-        training_df, test_df = load_from_cache(processed_df_cache, prefix="labeled_log_cache/")
-        print('Done.')
-
-    else:
-        df_cache = ('split-%s' % (json.dumps(job['split'])))
-
-        if os.path.isfile("labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
-
-            print('Found Dataset in cache, loading..')
-            training_log, test_log, additional_columns = load_from_cache(df_cache, prefix="labeled_log_cache/")
-            print('Dataset loaded.')
+            print('Found Labeled Dataset in cache, loading...')
+            training_df, test_df = load_from_cache(processed_df_cache, prefix="labeled_log_cache/")
+            print('Done.')
 
         else:
-            training_log, test_log, additional_columns = prepare_logs(job['split'])
+            df_cache = ('split-%s' % (json.dumps(job['split'])))
 
-            dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="labeled_log_cache/")
+            if os.path.isfile("labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
 
+                print('Found Dataset in cache, loading..')
+                training_log, test_log, additional_columns = load_from_cache(df_cache, prefix="labeled_log_cache/")
+                print('Dataset loaded.')
+
+            else:
+                training_log, test_log, additional_columns = prepare_logs(job['split'])
+                dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="labeled_log_cache/")
+
+            training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
+                                                     additional_columns=additional_columns)
+            dump_to_cache(processed_df_cache, (training_df, test_df), prefix="labeled_log_cache/")
+    else:
+        training_log, test_log, additional_columns = prepare_logs(job['split'])
         training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
                                                  additional_columns=additional_columns)
-        dump_to_cache(processed_df_cache, (training_df, test_df), prefix="labeled_log_cache/")
-
     return training_df, test_df
 
 

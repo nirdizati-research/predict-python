@@ -1,10 +1,10 @@
 from typing import Dict, Union
 
+import numpy as np
 from keras import Input, Model
 from keras.layers import Dense, Embedding, LSTM, GRU
 from keras.utils import to_categorical
 from numpy import ndarray
-import numpy as np
 from pandas import DataFrame
 
 from .encoding_parser import EncodingParser

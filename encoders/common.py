@@ -29,6 +29,8 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
             threshold = training_log['label'].mean()
         elif label.threshold_type == THRESHOLD_CUSTOM:
             threshold = label.threshold
+        else:
+            threshold = -1
         training_log['label'] = training_log['label'] < threshold
         test_log['label'] = test_log['label'] < threshold
 

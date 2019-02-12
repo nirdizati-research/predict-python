@@ -35,12 +35,12 @@ encoding_methods = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
 paddings = [ZERO_PADDING, NO_PADDING]
 
 
-class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_length", "padding", "generation_type"])):
+class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_length', 'padding', 'generation_type'])):
     """Inner object describing encoding configuration.
     """
 
-    def __new__(cls, method=SIMPLE_INDEX, prefix_length=1, padding=NO_PADDING,
-                generation_type=ONLY_THIS):  # TODO: fix incompatible signatures of __new__ and __init__
+    def __new__(cls, method: str = SIMPLE_INDEX, prefix_length: int = 1, padding: str = NO_PADDING,
+                generation_type: str = ONLY_THIS):
         return super(EncodingContainer, cls).__new__(cls, method, prefix_length, padding, generation_type)
 
     def is_zero_padding(self):
@@ -55,19 +55,21 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
     def is_complex(self):
         return self.method == COMPLEX
 
-    def encode(self, df):
+    @staticmethod
+    def encode(df):
         for column in df:
             if column in encoder:
                 if ENCODING == LABEL_ENCODER:
                     df[column] = df[column].apply(lambda x: label_dict[column].get(x, PADDING_VALUE))
                 elif ENCODING == ONE_HOT_ENCODER:
-                    raise ValueError('Onehot encoder not yet implemented')
+                    raise NotImplementedError('Onehot encoder not yet implemented')
                     # values = np.array([ label_dict[column].get(x, label_dict[column][PADDING_VALUE]) for x in df[column] ])
                     # df[column] = np.array(encoder[column].transform(values.reshape(len(values), 1)).toarray())
                 else:
                     raise ValueError('Please set the encoding technique!')
 
-    def init_label_encoder(self, df):
+    @staticmethod
+    def init_label_encoder(df):
         for column in df:
             if column != 'trace_id':
                 if df[column].dtype != int or (df[column].dtype == int and pd.np.any(df[column] < 0)):
@@ -78,7 +80,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ["method", "prefix_lengt
                         transforms = encoder[column].transform(classes)
                         label_dict[column] = dict(zip(classes, transforms))
                     elif ENCODING == ONE_HOT_ENCODER:
-                        raise ValueError('Onehot encoder not yet implemented')
+                        raise NotImplementedError('Onehot encoder not yet implemented')
                         # label_encoder[column] = LabelEncoder().fit(df[column])
                         # classes = label_encoder[column].classes_
                         # transforms = label_encoder[column].transform(label_encoder[column].classes_)

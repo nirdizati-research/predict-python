@@ -1,27 +1,14 @@
 from typing import Any
 
-import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from sklearn import clone
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.externals import joblib
-from sklearn.linear_model import Perceptron, SGDClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from skmultiflow.trees import HoeffdingTree, HAT
-from xgboost import XGBClassifier
 
 from core.clustering import Clustering
 from core.common import get_method_config
-from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
-    HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON, RNN
-from core.constants import NN
-from core.nn.nn_classifier import NNClassifier
+from core.constants import RNN
 from core.nn.rnn_time_series_predictor import RNNTimeSeriesPredictor
-from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
-from utils.result_metrics import calculate_results_classification, _get_auc
+from utils.result_metrics import calculate_results_classification
 
 pd.options.mode.chained_assignment = None
 

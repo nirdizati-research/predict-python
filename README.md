@@ -1,6 +1,7 @@
 # Predict python
 
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=master)](https://travis-ci.org/nirdizati-research/predict-python)
+[![Coverage Status](https://coveralls.io/repos/github/nirdizati-research/predict-python/badge.svg?branch=master)](https://coveralls.io/github/nirdizati-research/predict-python?branch=master)
 
 Django backend server for machine learning on event logs.
 

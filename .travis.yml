@@ -6,17 +6,19 @@ env:
 jobs:
   include:
     - language: python
-      python: '3.5'
-      cache: pip
-      services: redis-server
-      install: pip install -r requirements.txt
-      script: python manage.py test
-    - language: python
       python: '3.6'
       cache: pip
       services: redis-server
-      install: pip install -r requirements.txt
-      script: python manage.py test
+      install:
+        - pip install -r requirements.txt
+        - pip install --no-cache-dir git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
+        - pip install codecov
+      script:
+        - python manage.py makemigrations
+        - python manage.py migrate
+        - coverage run --source=. manage.py test
+      after_success:
+        - codecov
 
     - stage: before_deploy
       if: branch = master AND type = push

@@ -303,6 +303,7 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, True, False, False, True, 248400.0, False])
 
+    @unittest.skip('needs refactoring')
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
 

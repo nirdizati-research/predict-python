@@ -1,5 +1,4 @@
-from types import FunctionType
-from typing import Dict
+from typing import Dict, Callable
 
 import numpy as np
 from keras.utils import to_categorical
@@ -27,7 +26,7 @@ class EncodingParser:
         self.n_classes_y = 0
         self._x_min, self._x_max, self._y_min, self._y_max = -1, -1, -1, -1
 
-        self._training_parsing_functions: Dict[str, FunctionType] = {
+        self._training_parsing_functions: Dict[str, Callable] = {
             'simpleIndex': self._parse_train_data_simple_index,
             'boolean': self._parse_train_data_boolean,
             'frequency': self._parse_train_data_frequency,
@@ -35,7 +34,7 @@ class EncodingParser:
             'lastPayload': self._parse_train_data_simple_index,
         }
 
-        self._testing_parsing_functions: Dict[str, FunctionType] = {
+        self._testing_parsing_functions: Dict[str, Callable] = {
             'simpleIndex': self._parse_test_data_simple_index,
             'boolean': self._parse_test_data_boolean,
             'frequency': self._parse_test_data_frequency,

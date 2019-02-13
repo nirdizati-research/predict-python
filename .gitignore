@@ -24,3 +24,4 @@ dump.rdb
 *.ipynb_checkpoints/
 
 .idea/
+.coverage

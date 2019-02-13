@@ -43,6 +43,7 @@ jobs:
     - stage: after_deploy
       if: branch = master AND type = push
       install:
+        - pip install --upgrade pip
         - pip install pytest
         - pip install pytest-cov
         - pip install coveralls

@@ -11,17 +11,16 @@ jobs:
       services: redis-server
       install:
         - pip install -r requirements.txt
-        - pip install --no-cache-dir git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
+        - pip install git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
         - pip install codecov
       script:
         - python manage.py makemigrations
-        - python manage.py migrate
         - coverage run --source=. manage.py test
       after_success:
         - codecov
 
     - stage: before_deploy
-      if: branch = master AND type = push
+      if: repo = nirdizati-research/predict-python AND branch = master AND type = push
       language: minimal
       name: Build Docker image and push to Docker Hub registry
       services: docker
@@ -33,7 +32,7 @@ jobs:
         - docker push nirdizatiresearch/predict-python
 
     - stage: deploy
-      if: branch = master AND type = push
+      if: repo = nirdizati-research/predict-python AND branch = master AND type = push
       dist: xenial
       name: Server deployment
       language: minimal

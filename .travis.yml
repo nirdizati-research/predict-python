@@ -39,3 +39,15 @@ jobs:
         provider: script
         skip_cleanup: true
         script: bash deploy.sh
+
+    - stage: after_deploy
+      if: branch = master AND type = push
+      install:
+        - pip install pytest
+        - pip install pytest-cov
+        - pip install coveralls
+      script:
+        - pytest --cov=./
+      after_success:
+        - coveralls
+        

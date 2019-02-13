@@ -1,4 +1,4 @@
-Django==1.11.19
+Django==1.11.20
 djangorestframework==3.7.1
 NumPy==1.15
 pytz==2017.3

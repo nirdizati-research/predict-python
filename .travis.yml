@@ -9,14 +9,20 @@ jobs:
       python: '3.5'
       cache: pip
       services: redis-server
-      install: pip install -r requirements.txt
+      install:
+        - pip install -r requirements.txt
+        - pip install coveralls
       script: python manage.py test
     - language: python
       python: '3.6'
       cache: pip
       services: redis-server
       install: pip install -r requirements.txt
-      script: python manage.py test
+      script:
+        - python manage.py test
+        - coverage run --source=. manage.py test
+      after_success:
+        - coveralls
 
     - stage: before_deploy
       if: branch = master AND type = push
@@ -39,16 +45,3 @@ jobs:
         provider: script
         skip_cleanup: true
         script: bash deploy.sh
-
-    - stage: after_deploy
-      if: branch = master AND type = push
-      install:
-        - pip install requests[security]
-        - pip install -U pytest
-        - pip install -U pytest-cov
-        - pip install -U coveralls
-      script:
-        - pytest --cov=./
-      after_success:
-        - coveralls
-        

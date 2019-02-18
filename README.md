@@ -3,14 +3,14 @@
 Master
 
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=master)](https://travis-ci.org/nirdizati-research/predict-python)
-[![Coverage Status](https://coveralls.io/repos/github/nirdizati-research/predict-python/badge.svg?branch=master)](https://coveralls.io/github/nirdizati-research/predict-python?branch=master)
+[![codecov](https://codecov.io/gh/nirdizati-research/predict-python/branch/master/graph/badge.svg)](https://codecov.io/gh/nirdizati-research/predict-python)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/nirdizati-research/predict-python.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nirdizati-research/predict-python/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/nirdizati-research/predict-python.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nirdizati-research/predict-python/context:python)
 
 Development
 
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=development)](https://travis-ci.org/nirdizati-research/predict-python)
-[![Coverage Status](https://coveralls.io/repos/github/nirdizati-research/predict-python/badge.svg?branch=development)](https://coveralls.io/github/nirdizati-research/predict-python?branch=development)
+[![codecov](https://codecov.io/gh/nirdizati-research/predict-python/branch/development/graph/badge.svg)](https://codecov.io/gh/nirdizati-research/predict-python)
 
 
 Django backend server for machine learning on event logs.

@@ -1,5 +1,8 @@
 # Predict python
 
+[![License MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![HitCount](http://hits.dwyl.io/nirdizati-research/predict-python.svg)](http://hits.dwyl.io/nirdizati-research/predict-python)
+
 Master
 
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=master)](https://travis-ci.org/nirdizati-research/predict-python)
@@ -30,7 +33,7 @@ To run the project:
 docker-compose up redis server scheduler worker
 ```
 
-##### [USEFUL TIP] To access a generic remote Django server you can use the ssh tunneling functionality as shown in the following sample:
+To access a generic remote Django server you can use the ssh tunneling functionality as shown in the following sample:
 ```commandline
 ssh -L 8000:127.0.0.1:8000 <user>@<host>
 ```

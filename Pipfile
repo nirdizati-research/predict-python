@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 codecov = "==2.0.15"
 Sphinx = "==1.8.4"
+sphinx-rtd-theme = "*"
 
 [packages]
 djangorestframework = "==3.7.1"

@@ -21,7 +21,7 @@ def _encode_boolean_frequency(log: list, event_names: list, label: LabelContaine
     """Encodes the log by boolean or frequency
 
     trace_id, event_nr, event_names, label stuff
-    :return pandas dataframe
+    :return pandas DataFrame
     """
     columns = _create_columns(event_names, label)
     encoded_data = []

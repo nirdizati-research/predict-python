@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for folder in core encoders jobs logs nirdizati-research pred_models runtime utils:
+for folder in core encoders jobs logs nirdizati-research pred_models runtime utils
 do
-    sphinx-apidoc -f -o source/ ../$folder
+    sphinx-apidoc -f -o source/api/ ../${folder}
 done

@@ -1,19 +1,26 @@
-.. Nirdizati Research documentation master file, created by
-   sphinx-quickstart on Tue Feb 19 10:51:02 2019.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. include:: readme/readme_common.rst
 
-Welcome to Nirdizati Research's documentation!
-==============================================
+.. image:: _static/nirdizati_screenshot.png
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+    :caption: README
+    :titlesonly:
+    :maxdepth: 2
 
+    readme/readme_frontend.rst
+    readme/readme_backend.rst
 
-Indices and tables
-==================
+.. toctree::
+    :caption: API
+    :titlesonly:
+    :maxdepth: 2
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+    api/core.rst
+    api/encoders.rst
+    api/jobs.rst
+    api/logs.rst
+    api/nirdizati-research.rst
+    api/pred_models.rst
+    api/runtime.rst
+    api/utils.rst
+

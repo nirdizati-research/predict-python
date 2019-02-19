@@ -7,8 +7,8 @@ from jobs.models import CREATED
 from jobs.models import Job
 from jobs.serializers import JobSerializer
 from logs.models import Log, Split
-from predModels.models import PredModels
-from predModels.serializers import ModelSerializer
+from pred_models.models import PredModels
+from pred_models.serializers import ModelSerializer
 from .models import XTrace
 from .replayer import Replayer
 from .serializers import TraceSerializer

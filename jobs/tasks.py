@@ -8,7 +8,7 @@ from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
 from jobs.models import Job, CREATED, RUNNING, COMPLETED, ERROR
 from jobs.ws_publisher import publish
-from predModels.models import ModelSplit, PredModels
+from pred_models.models import ModelSplit, PredModels
 
 
 @job("default", timeout='1h')

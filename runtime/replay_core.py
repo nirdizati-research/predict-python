@@ -10,7 +10,7 @@ from dateutil.parser import parse as dateparser
 from core.core import runtime_calculate
 from encoders.encoding_container import ZERO_PADDING, ALL_IN_ONE
 from jobs.ws_publisher import publish
-from predModels.models import PredModels
+from pred_models.models import PredModels
 from runtime.models import XTrace, XEvent, XLog
 
 

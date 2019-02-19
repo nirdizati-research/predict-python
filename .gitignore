@@ -25,3 +25,4 @@ dump.rdb
 
 .idea/
 .coverage
+/docs/build/

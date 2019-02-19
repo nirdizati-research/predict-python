@@ -70,7 +70,7 @@ def data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> 
 
     Appends values in additional_columns
     """
-    data = [trace.attributes.get(att, '0') for att in additional_columns['trace_attributes']]
+    data = [trace.attributes.get(att, 0) for att in additional_columns['trace_attributes']]
     for idx, event in enumerate(trace):
         if idx == prefix_length:
             break
@@ -99,7 +99,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: dict)
     # Attributes of last event
     for att in additional_columns['event_attributes']:
         if prefix_length - 1 >= len(trace):
-            value = '0'
+            value = 0
         else:
             value = trace[prefix_length - 1][att]
         data.append(value)
@@ -113,7 +113,7 @@ def trace_to_row(trace: Trace, encoding: EncodingContainer, event_index: int, da
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
-        trace_row += ['0' for _ in range(len(trace_row), columns_len)]
+        trace_row += [0 for _ in range(len(trace_row), columns_len)]
     trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

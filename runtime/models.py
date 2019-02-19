@@ -2,7 +2,7 @@ from django.db import models
 from jsonfield.fields import JSONField
 
 from logs.models import Log
-from predModels.models import PredModels
+from pred_models.models import PredModels
 
 
 class DemoReplayer(models.Model):

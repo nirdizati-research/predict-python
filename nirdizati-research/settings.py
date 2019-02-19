@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'logs.apps.LogsConfig',
     'jobs.apps.JobsConfig',
-    'predModels.apps.PredictionModelsConfig',
+    'pred_models.apps.PredictionModelsConfig',
     'runtime.apps.RuntimeConfig',
     'rest_framework',
     'django.contrib.admin',

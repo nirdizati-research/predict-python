@@ -3,7 +3,7 @@ from sklearn.externals import joblib
 
 from core.constants import MULTINOMIAL_NAIVE_BAYES, NO_CLUSTER, CLASSIFICATION, ADAPTIVE_TREE, \
     HOEFFDING_TREE
-from predModels.models import PredModels
+from pred_models.models import PredModels
 from utils.result_metrics import calculate_results_classification
 
 

@@ -67,9 +67,9 @@ def _train(job: dict, train_data: DataFrame, classifier) -> dict:
         if not x.empty:
             y = DataFrame(x['label'])
             try:
-                classifier.fit(x.drop('label', 1), y)
+                classifier.fit(x.drop('label', 1), y.values.ravel())
             except NotImplementedError:
-                classifier.partial_fit(x.drop('label', 1), y)
+                classifier.partial_fit(x.drop('label', 1), y.values.ravel())
             except Exception as e:
                 raise e
 

@@ -3,12 +3,12 @@
 .. image:: _static/nirdizati_screenshot.png
 
 .. toctree::
-    :caption: README
+    :caption: READMEs
     :titlesonly:
     :maxdepth: 2
 
-    readme/readme_frontend.rst
     readme/readme_backend.rst
+    readme/readme_frontend.rst
 
 .. toctree::
     :caption: API

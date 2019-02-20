@@ -18,7 +18,7 @@ class TestRegression(TestCase):
         json['clustering'] = NO_CLUSTER
         json['split'] = split_double()
         json['method'] = method
-        json['encoding'] = EncodingContainer(encoding_method, padding=padding)
+        json['encoding'] = EncodingContainer(encoding_method, padding=padding, prefix_length=4)
         json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
         json['type'] = REGRESSION

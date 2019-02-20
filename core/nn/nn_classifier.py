@@ -7,7 +7,7 @@ from numpy import ndarray
 from pandas import DataFrame
 from sklearn.base import ClassifierMixin
 
-from core.nn.encoding_parser import EncodingParser
+from encoders.encoding_parser import EncodingParser, Tasks
 
 
 class NNClassifier(ClassifierMixin):
@@ -20,6 +20,7 @@ class NNClassifier(ClassifierMixin):
         """initializes the Neural Network classifier
 
         :param kwargs: configuration containing the model parameters, encoding and training parameters
+
         """
         self._n_hidden_layers = int(kwargs['n_hidden_layers'])
         self._n_hidden_units = int(kwargs['n_hidden_units'])
@@ -29,15 +30,17 @@ class NNClassifier(ClassifierMixin):
         self._dropout_rate = float(kwargs['dropout_rate'])
         self._is_binary_classifier = bool(kwargs['is_binary_classifier'])
         self._embedding_dim = 8  # TODO: add as parameter
-        self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier, regression_task=False)
+        self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier, task=Tasks.CLASSIFICATION)
         self._model = None
 
     def fit(self, train_data: DataFrame, y: DataFrame) -> None:
         """creates and fits the model
 
         first the encoded data is parsed, then the model created and then trained
+
         :param train_data: encoded training dataset
         :param y: encoded target dataset
+
         """
         train_data = self._encoding_parser.parse_training_dataset(train_data)
         y = self._encoding_parser.parse_y(y)
@@ -69,8 +72,10 @@ class NNClassifier(ClassifierMixin):
         """returns model predictions
 
         parses the encoded test dataset, then returns the model predictions
+
         :param test_data: encoded test dataset
         :return: model predictions
+
         """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
 
@@ -85,8 +90,10 @@ class NNClassifier(ClassifierMixin):
         """returns the classification probability
 
         parses the test dataset and returns the raw prediction probabilities of the model
+
         :param test_data: encoded test dataset
         :return: model prediction probabilities
+
         """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
 

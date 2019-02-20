@@ -12,9 +12,9 @@ class Tasks(Enum):
     """
     defines the type of tasks that can be used during dataset parsing (for example when deciding if to remove some columns)
     """
-    CLASSIFICATION = auto
-    REGRESSION = auto
-    TIME_SERIES_PREDICTION = auto
+    CLASSIFICATION = 0
+    REGRESSION = 1
+    TIME_SERIES_PREDICTION = 2
 
 
 class EncodingParser:
@@ -179,6 +179,9 @@ class EncodingParser:
         """
         test_data = test_data.values
         test_data = np.clip(test_data, 0, self.n_classes_x + 1)
+
+        if self._task == Tasks.TIME_SERIES_PREDICTION:
+            test_data = np.expand_dims(test_data, -1)
         return test_data
 
     def _parse_test_data_complex(self, test_data: DataFrame) -> ndarray:

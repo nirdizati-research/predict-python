@@ -78,7 +78,7 @@ def data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> 
         data.append(event_name)
 
         for att in additional_columns['event_attributes']:
-            data.append(event[att])
+            data.append(event.get(att, '0'))
 
     return data
 

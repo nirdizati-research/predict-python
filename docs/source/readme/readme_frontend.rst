@@ -2,7 +2,16 @@
 Nirdizati Research frontend
 ***************************
 
-|Build Status| |Coverage status| |License| |HitCount|
+|License| |HitCount|
+
+Master
+
+|Build Status master| |Coverage Status master| |Total alerts master| |Language grade: Javascript master|
+
+
+Development
+
+|Build Status development| |Coverage Status development|
 
 React frontend to perform Predictive Monitoring analysis over event logs.
 
@@ -68,11 +77,23 @@ Contributors
 -  `@HitLuca <https://github.com/HitLuca>`_ Luca Simonetto
 
 
-.. |Build Status| image:: https://travis-ci.org/nirdizati-research/predict-react.svg?branch=master
+.. |Build Status master| image:: https://travis-ci.org/nirdizati-research/predict-react.svg?branch=master
    :target: https://travis-ci.org/nirdizati-research/predict-react
 
-.. |Coverage Status| image:: https://coveralls.io/repos/github/nirdizati-research/predict-react/badge.svg?branch=master
-   :target: https://coveralls.io/github/nirdizati-research/predict-react?branch=master
+.. |Coverage Status master| image:: https://codecov.io/gh/nirdizati-research/predict-react/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/nirdizati-research/predict-react
+
+.. |Total alerts master| image:: https://img.shields.io/lgtm/alerts/g/nirdizati-research/predict-react.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/nirdizati-research/predict-react/alerts/
+
+.. |Language grade: Javascript master| image:: https://img.shields.io/lgtm/grade/javascript/g/nirdizati-research/predict-react.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/nirdizati-research/predict-react/context:javascript
+
+.. |Build Status development| image:: https://travis-ci.org/nirdizati-research/predict-react.svg?branch=development
+   :target: https://travis-ci.org/nirdizati-research/predict-react
+
+.. |Coverage Status development| image:: https://codecov.io/gh/nirdizati-research/predict-react/branch/development/graph/badge.svg
+   :target: https://codecov.io/gh/nirdizati-research/predict-react
 
 .. |HitCount| image:: http://hits.dwyl.io/nirdizati-research/predict-react.svg
    :target: http://hits.dwyl.io/nirdizati-research/predict-react

@@ -17,6 +17,7 @@ from core.common import get_method_config
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
     HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
 from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
+from predModels.models import PredModels, ModelSplit
 from utils.result_metrics import calculate_results_classification, _get_auc
 
 pd.options.mode.chained_assignment = None
@@ -53,6 +54,22 @@ def classification_single_log(data: DataFrame, model: dict):
     return results
 
 
+def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
+    train_data, test_data, original_test_data = _drop_columns(training_df, test_df)
+
+    model_split = _update(job, train_data, _choose_classifier(job))
+
+    results_df, auc = _test(model_split, test_data, evaluation=True,
+                            is_binary_classifier=_check_is_binary_classifier(job['label'].type))
+
+    results = _prepare_results(results_df, auc)
+
+    # TODO mmh not sure
+    model_split['type'] = job['clustering']
+
+    return results, model_split
+
+
 def _train(job: dict, train_data: DataFrame, classifier) -> dict:
     clusterer = Clustering(job)
     models = dict()
@@ -82,6 +99,21 @@ def _train(job: dict, train_data: DataFrame, classifier) -> dict:
 
     return {'clusterer': clusterer, 'classifier': models}
 
+
+def _update(job: dict, data: DataFrame, models) -> dict:
+    clusterer = Clustering.load_model(job)
+
+    update_data = clusterer.cluster_data(data)
+
+
+    for cluster in range(clusterer.n_clusters):
+        x = update_data[cluster]
+        if not x.empty:
+            y = x['label']
+
+            models[cluster].partial_fit(x.drop('label', 1), y)
+
+    return {'clusterer': clusterer, 'classifier': models}
 
 def _test(model_split: dict, data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (dict, float):
 
@@ -139,28 +171,45 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 
 
 def _choose_classifier(job: dict):
-    method, config = get_method_config(job)
-    print("Using method {} with config {}".format(method, config))
-    if method == KNN:
-        classifier = KNeighborsClassifier(**config)
-    elif method == RANDOM_FOREST:
-        classifier = RandomForestClassifier(**config)
-    elif method == DECISION_TREE:
-        classifier = DecisionTreeClassifier(**config)
-    elif method == XGBOOST:
-        classifier = XGBClassifier(**config)
-    elif method == MULTINOMIAL_NAIVE_BAYES:
-        classifier = MultinomialNB(**config)
-    elif method == ADAPTIVE_TREE:
-        classifier = HAT(**config)
-    elif method == HOEFFDING_TREE:
-        classifier = HoeffdingTree(**config)
-    elif method == SGDCLASSIFIER:
-        classifier = SGDClassifier(**config)
-    elif method == PERCEPTRON:
-        classifier = Perceptron(**config)
+    if job['type'] == UPDATE:
+        classifier = _load_model(job['incremental_train']['base_model'])
+        assert classifier.__class__.__name__ == job['method'] # are we updating a model with its own methods ?
     else:
-        raise ValueError("Unexpected classification method {}".format(method))
+        method, config = get_method_config(job)
+        print("Using method {} with config {}".format(method, config))
+        if method == KNN:
+            classifier = KNeighborsClassifier(**config)
+        elif method == RANDOM_FOREST:
+            classifier = RandomForestClassifier(**config)
+        elif method == DECISION_TREE:
+            classifier = DecisionTreeClassifier(**config)
+        elif method == XGBOOST:
+            classifier = XGBClassifier(**config)
+        elif method == MULTINOMIAL_NAIVE_BAYES:
+            classifier = MultinomialNB(**config)
+        elif method == ADAPTIVE_TREE:
+            classifier = HAT(**config)
+        elif method == HOEFFDING_TREE:
+            classifier = HoeffdingTree(**config)
+        elif method == SGDCLASSIFIER:
+            classifier = SGDClassifier(**config)
+        elif method == PERCEPTRON:
+            classifier = Perceptron(**config)
+        else:
+            raise ValueError("Unexpected classification method {}".format(method))
+    return classifier
+
+
+def _load_model(incremental_base_model: int):
+    classifier = PredModels.objects.filter(id=incremental_base_model)
+    assert len(classifier) == 1 # asserting that the used id is unique
+    classifier_details = classifier[0]
+    classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
+    assert len(classifier) == 1
+    classifier = classifier[0]
+    classifier = joblib.load(classifier.model_path)
+    assert len(classifier) == 1
+    classifier = classifier[0]
     return classifier
 
 

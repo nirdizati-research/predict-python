@@ -9,6 +9,8 @@ def _get_space(job: dict):
     method_conf_name = "{}.{}".format(job['type'], job['method'])
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
+#TODO this will change when using more than one type of cluster
+
 
 def _classification_random_forest():
     return {

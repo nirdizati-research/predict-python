@@ -2,11 +2,10 @@ import json
 import os
 import time
 
-from core.classification import classification, classification_single_log
+from core.classification import classification, classification_single_log, update_and_test
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING
 from core.constants import UPDATE
 from core.regression import regression, regression_single_log
-from core.update_model import update_model
 from encoders.common import encode_label_logs, encode_label_log
 from logs.splitting import prepare_logs
 from utils.cache import load_from_cache, dump_to_cache, get_digested
@@ -59,6 +58,9 @@ def get_encoded_logs(job: dict):
 def run_by_type(training_df, test_df, job):
     model_split = None
 
+    if job['incremental_train']['base_model'] is not None:
+        job['type'] = UPDATE
+
     start_time = time.time()
     if job['type'] == CLASSIFICATION:
         results, model_split = classification(training_df, test_df, job)
@@ -67,7 +69,7 @@ def run_by_type(training_df, test_df, job):
     elif job['type'] == LABELLING:
         results = _label_task(training_df)
     elif job['type'] == UPDATE:
-        results, model_split = update_model(training_df, test_df, job)
+        results, model_split = update_and_test(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
 

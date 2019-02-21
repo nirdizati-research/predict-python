@@ -3,6 +3,7 @@ import time
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
+from core.clustering import Clustering
 from core.constants import KMEANS, UPDATE, CLASSIFICATION
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
@@ -51,13 +52,12 @@ def save_models(to_model_split, job):
         job.type = CLASSIFICATION
         filename_model = 'model_cache/job_{}-split_{}-model-{}-v{}.sav'.format(job.id, job.split.id, job.type, str(to_model_split['versioning'] + 1))
     else:
-
         filename_model = 'model_cache/job_{}-split_{}-model-{}-v0.sav'.format(job.id, job.split.id, job.type)
     joblib.dump(to_model_split['classifier'], filename_model)
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)
     if to_model_split['type'] == Clustering.KMEANS: #TODO this will change when using more than one type of cluster
-        filename_clusterer = 'model_cache/job_{}-split_{}-clusterer-{}.sav'.format(job.id, job.split.id, job.type)
+        filename_clusterer = 'model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id, job.type)
         joblib.dump(to_model_split['clusterer'], filename_clusterer)
         model_split.clusterer_path = filename_clusterer
         model_split.save()

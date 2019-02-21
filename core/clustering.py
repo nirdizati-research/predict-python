@@ -44,17 +44,16 @@ class Clustering:
 
     @classmethod
     def load_model(cls, job):
-        if job['type'] == cls.KMEANS:
-            classifier = PredModels.objects.filter(id=job['incremental_trains']['base_model'])
+        if job['clustering'] == cls.KMEANS:
+            classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
             assert len(classifier) == 1  # asserting that the used id is unique
             classifier_details = classifier[0]
             classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
             assert len(classifier) == 1
             classifier = classifier[0]
-            clusterer = joblib.load(classifier.model_path.replace('classifier', 'clusterer'))
-            assert len(clusterer) == 1
-            clusterer = clusterer[0]
-        elif job['type'] == cls.NO_CLUSTER:
+            #TODO this is a bad workaround
+            clusterer = joblib.load(classifier.model_path[:11] + classifier.model_path[11:].replace('model', 'clusterer'))
+        elif job['clustering'] == cls.NO_CLUSTER:
             clusterer = Clustering(job)
         else:
             raise ValueError("Unexpected clustering method {}".format(job['clustering']))

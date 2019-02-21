@@ -15,7 +15,7 @@ from xgboost import XGBClassifier
 from core.clustering import Clustering
 from core.common import get_method_config
 from core.constants import KNN, RANDOM_FOREST, DECISION_TREE, XGBOOST, MULTINOMIAL_NAIVE_BAYES, ADAPTIVE_TREE, \
-    HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON
+    HOEFFDING_TREE, SGDCLASSIFIER, PERCEPTRON, UPDATE
 from encoders.label_container import REMAINING_TIME, ATTRIBUTE_NUMBER, DURATION, NEXT_ACTIVITY, ATTRIBUTE_STRING
 from predModels.models import PredModels, ModelSplit
 from utils.result_metrics import calculate_results_classification, _get_auc
@@ -67,6 +67,8 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
     # TODO mmh not sure
     model_split['type'] = job['clustering']
 
+    job['type'] = UPDATE
+
     return results, model_split
 
 
@@ -105,13 +107,12 @@ def _update(job: dict, data: DataFrame, models) -> dict:
 
     update_data = clusterer.cluster_data(data)
 
-
     for cluster in range(clusterer.n_clusters):
         x = update_data[cluster]
         if not x.empty:
             y = x['label']
 
-            models[cluster].partial_fit(x.drop('label', 1), y)
+            models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
 
     return {'clusterer': clusterer, 'classifier': models}
 
@@ -173,7 +174,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_classifier(job: dict):
     if job['type'] == UPDATE:
         classifier = _load_model(job['incremental_train']['base_model'])
-        assert classifier.__class__.__name__ == job['method'] # are we updating a model with its own methods ?
+        assert classifier[0].__class__.__name__ == job['method'] # are we updating a model with its own methods ?
     else:
         method, config = get_method_config(job)
         print("Using method {} with config {}".format(method, config))
@@ -208,8 +209,6 @@ def _load_model(incremental_base_model: int):
     assert len(classifier) == 1
     classifier = classifier[0]
     classifier = joblib.load(classifier.model_path)
-    assert len(classifier) == 1
-    classifier = classifier[0]
     return classifier
 
 

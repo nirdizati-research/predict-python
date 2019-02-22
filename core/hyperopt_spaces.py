@@ -81,7 +81,7 @@ def _classification_incremental_hoeffding_tree():
 
 def _classification_incremental_sgd_classifier():
     return {
-        'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss',
+        'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron','squared_loss',
                                    'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive']),
         'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
         'alpha': hp.uniform('alpha', 0.0001, 0.5),
@@ -91,7 +91,7 @@ def _classification_incremental_sgd_classifier():
         'epsilon': hp.uniform('epsilon', 1e-3, 0.5),
         'learning_rate': hp.choice('learning_rate', ['constant', 'optimal', 'invscaling', 'adaptive']),
         'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
-        'power_t': hp.uniform('power_t', 0.5, 0.1),
+        'power_t': hp.uniform('power_t', 0.3, 0.7),
         'early_stopping': hp.choice('early_stopping', [True, False]),
         'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5)),
         'validation_fraction': 0.1,

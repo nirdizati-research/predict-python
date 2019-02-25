@@ -32,7 +32,11 @@ label_dict = {}
 
 encoding_methods = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
 
+time_series_prediction_encodings = [SIMPLE_INDEX, COMPLEX]
+
 paddings = [ZERO_PADDING, NO_PADDING]
+
+time_series_prediction_paddings = [ZERO_PADDING]
 
 
 class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_length', 'padding', 'generation_type'])):
@@ -64,7 +68,8 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
                     df[column] = df[column].apply(lambda x: label_dict[column].get(x, PADDING_VALUE))
                 elif ENCODING == ONE_HOT_ENCODER:
                     raise NotImplementedError('Onehot encoder not yet implemented')
-                    # values = np.array([ label_dict[column].get(x, label_dict[column][PADDING_VALUE]) for x in df[column] ])
+                    # values = np.array([ label_dict[column].get(x, label_dict[column][PADDING_VALUE]) for
+                    # x in df[column] ])
                     # df[column] = np.array(encoder[column].transform(values.reshape(len(values), 1)).toarray())
                 else:
                     raise ValueError('Please set the encoding technique!')

@@ -4,22 +4,10 @@ logs.tests package
 Submodules
 ----------
 
-logs.tests.test\_split module
------------------------------
+.. toctree::
 
-.. automodule:: logs.tests.test_split
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-logs.tests.tests module
------------------------
-
-.. automodule:: logs.tests.tests
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   logs.tests.test_split
+   logs.tests.tests
 
 Module contents
 ---------------

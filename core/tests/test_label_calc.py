@@ -1,9 +1,13 @@
+"""
+label calculation tests
+"""
+
 import unittest
 
 from django.test import TestCase
 
 from core.core import calculate
-from core.tests.test_prepare import repair_example
+from core.tests.common import repair_example
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, THRESHOLD_CUSTOM, ATTRIBUTE_STRING, DURATION
 

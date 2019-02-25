@@ -1,11 +1,15 @@
+"""
+classification tests
+"""
+
 import itertools
 import unittest
 
 from django.test import TestCase
 
-from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, classification_methods, RANDOM_FOREST
+from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, CLASSIFICATION_METHODS, RANDOM_FOREST
 from core.core import calculate
-from core.tests.test_prepare import split_double, add_default_config, HidePrints
+from core.tests.common import split_double, add_default_config, HidePrints
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, encoding_methods, paddings
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM, DURATION, \
     classification_labels, ATTRIBUTE_NUMBER, THRESHOLD_MEAN
@@ -41,7 +45,7 @@ class TestClassification(TestCase):
     def test_no_exceptions(self):
         filtered_labels = [x for x in classification_labels if
                            x not in [ATTRIBUTE_NUMBER]]  # TODO: check how to add TRACE_NUMBER_ATTRIBUTE
-        choices = [encoding_methods, paddings, classification_methods, filtered_labels]
+        choices = [encoding_methods, paddings, CLASSIFICATION_METHODS, filtered_labels]
 
         job_combinations = list(itertools.product(*choices))
 

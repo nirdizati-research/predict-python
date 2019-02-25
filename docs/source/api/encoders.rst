@@ -11,62 +11,15 @@ Subpackages
 Submodules
 ----------
 
-encoders.boolean\_frequency module
-----------------------------------
+.. toctree::
 
-.. automodule:: encoders.boolean_frequency
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.common module
-----------------------
-
-.. automodule:: encoders.common
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.complex\_last\_payload module
---------------------------------------
-
-.. automodule:: encoders.complex_last_payload
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.encoding\_container module
------------------------------------
-
-.. automodule:: encoders.encoding_container
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.encoding\_parser module
---------------------------------
-
-.. automodule:: encoders.encoding_parser
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.label\_container module
---------------------------------
-
-.. automodule:: encoders.label_container
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-encoders.simple\_index module
------------------------------
-
-.. automodule:: encoders.simple_index
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   encoders.boolean_frequency
+   encoders.common
+   encoders.complex_last_payload
+   encoders.encoding_container
+   encoders.encoding_parser
+   encoders.label_container
+   encoders.simple_index
 
 Module contents
 ---------------

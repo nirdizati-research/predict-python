@@ -1,3 +1,7 @@
+"""
+constants used in the project to allow easy modifications
+"""
+
 from sklearn.linear_model import SGDClassifier, Perceptron
 from sklearn.naive_bayes import MultinomialNB
 
@@ -57,16 +61,16 @@ UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(UPDATE, MULTINOMIAL_NAIVE_BAYES)
 UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(UPDATE, ADAPTIVE_TREE)
 UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(UPDATE, HOEFFDING_TREE)
 
-classification_methods = [KNN, DECISION_TREE, RANDOM_FOREST,
+CLASSIFICATION_METHODS = [KNN, DECISION_TREE, RANDOM_FOREST,
                           XGBOOST, MULTINOMIAL_NAIVE_BAYES, HOEFFDING_TREE,
                           ADAPTIVE_TREE, SGDCLASSIFIER, PERCEPTRON,
                           NN]
 
-regression_methods = [LINEAR, RANDOM_FOREST, LASSO, XGBOOST, NN]
+REGRESSION_METHODS = [LINEAR, RANDOM_FOREST, LASSO, XGBOOST, NN]
 
-time_series_prediction_methods = [RNN]
+TIME_SERIES_PREDICTION_METHODS = [RNN]
 
-all_configs = [
+ALL_CONFIGS = [
     CLASSIFICATION_RANDOM_FOREST,
     CLASSIFICATION_KNN,
     CLASSIFICATION_DECISION_TREE,

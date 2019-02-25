@@ -1,5 +1,12 @@
-# Default configurations
-from core.constants import *
+"""
+default configurations for the prediction methods
+"""
+from core.constants import CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN, CLASSIFICATION_DECISION_TREE, \
+    CLASSIFICATION_XGBOOST, CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES, CLASSIFICATION_ADAPTIVE_TREE, \
+    CLASSIFICATION_HOEFFDING_TREE, CLASSIFICATION_SGDC, CLASSIFICATION_PERCEPTRON, CLASSIFICATION_NN, \
+    REGRESSION_RANDOM_FOREST, REGRESSION_XGBOOST, REGRESSION_LASSO, REGRESSION_LINEAR, REGRESSION_NN, \
+    TIME_SERIES_PREDICTION_RNN, UPDATE_INCREMENTAL_NAIVE_BAYES, UPDATE_INCREMENTAL_ADAPTIVE_TREE, \
+    UPDATE_INCREMENTAL_HOEFFDING_TREE
 
 
 def _classification_random_forest():
@@ -175,7 +182,7 @@ def _time_series_prediction_rnn():
     }
 
 
-def kmeans():
+def _kmeans():
     return {
         'n_clusters': 3,
         'max_iter': 300,

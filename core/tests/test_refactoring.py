@@ -1,9 +1,13 @@
+"""
+refactoring tests
+"""
+
 import unittest
 
 from django.test import TestCase
 
 from core.core import calculate
-from core.tests.test_prepare import repair_example, add_default_config
+from core.tests.common import repair_example, add_default_config
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY
 
@@ -22,7 +26,7 @@ class RefactorProof(TestCase):
         return json
 
     def test_class_kmeans(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         add_default_config(job)
         result, _ = calculate(job)
@@ -36,7 +40,7 @@ class RefactorProof(TestCase):
                                       'auc': 0.5913497814050234})
 
     def test_class_no_cluster(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         job['clustering'] = 'noCluster'
         add_default_config(job)
@@ -51,7 +55,7 @@ class RefactorProof(TestCase):
                                       'auc': 0.71720556207069863})
 
     def test_next_activity_kmeans(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         job["label"] = LabelContainer(NEXT_ACTIVITY)
         job["encoding"] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
@@ -65,7 +69,7 @@ class RefactorProof(TestCase):
                                       'auc': 0.19638554216867468})
 
     def test_next_activity_no_cluster(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         job["label"] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
@@ -85,7 +89,7 @@ class RefactorProof(TestCase):
         #  'false_positive': 42, 'precision': 0.8099547511312217, 'recall': 1.0, 'auc': 0})
 
     def test_regression_kmeans(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         job["type"] = "regression"
         job['label'] = LabelContainer()
@@ -101,7 +105,7 @@ class RefactorProof(TestCase):
         self.assertAlmostEqual(result['mape'], float('inf'))
 
     def test_regression_no_cluster(self):
-        self.maxDiff = None
+        self.max_diff = None
         job = self.get_job()
         job["type"] = "regression"
         job['clustering'] = 'noCluster'

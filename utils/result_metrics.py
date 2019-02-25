@@ -1,7 +1,7 @@
 from math import sqrt
 
-from distance import nlevenshtein
 import numpy as np
+from distance import nlevenshtein
 from numpy import ndarray
 from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
@@ -23,19 +23,21 @@ def calculate_results_time_series_prediction(actual: ndarray, predicted: ndarray
 
 
 def get_confusion_matrix(actual, predicted) -> dict:
-    tn, fp, fn, tp = '--', '--', '--', '--'
+    true_negatives, false_positives, false_negatives, true_positives = '--', '--', '--', '--'
     actual_set = list(sorted(set(actual)))
     if len(actual_set) <= 2:
         if not isinstance(actual_set[0], bool) and not isinstance(actual_set[0], np.bool_):
             actual = [el == actual_set[0] for el in actual]
             predicted = [el == actual_set[0] for el in predicted]
 
-        tn, fp, fn, tp = confusion_matrix(actual, predicted, labels=[False, True]).ravel()
+        true_negatives, false_positives, false_negatives, true_positives = confusion_matrix(actual, predicted,
+                                                                                            labels=[False,
+                                                                                                    True]).ravel()
 
-    return {'true_positive': tp,
-            'true_negative': tn,
-            'false_negative': fn,
-            'false_positive': fp}
+    return {'true_positive': true_positives,
+            'true_negative': true_negatives,
+            'false_negative': false_negatives,
+            'false_positive': false_positives}
 
 
 def _get_f1(actual, predicted) -> float:
@@ -90,15 +92,15 @@ def calculate_auc(actual, scores, auc: int) -> float:
     return auc
 
 
-def calculate_results_regression(df: DataFrame, label: LabelContainer) -> dict:
+def calculate_results_regression(input_df: DataFrame, label: LabelContainer) -> dict:
     if label.type == REMAINING_TIME:
         # TODO is the remaining time in seconds or hours?
-        df['label'] = df['label'] / 3600
-        df['prediction'] = df['predicted'] / 3600
-    rmse = sqrt(mean_squared_error(df['label'], df['predicted']))
-    mae = mean_absolute_error(df['label'], df['predicted'])
-    rscore = r2_score(df['label'], df['predicted'])
-    mape = _mean_absolute_percentage_error(df['label'], df['predicted'])
+        input_df['label'] = input_df['label'] / 3600
+        input_df['prediction'] = input_df['predicted'] / 3600
+    rmse = sqrt(mean_squared_error(input_df['label'], input_df['predicted']))
+    mae = mean_absolute_error(input_df['label'], input_df['predicted'])
+    rscore = r2_score(input_df['label'], input_df['predicted'])
+    mape = _mean_absolute_percentage_error(input_df['label'], input_df['predicted'])
 
     row = {'rmse': rmse, 'mae': mae, 'rscore': rscore, 'mape': mape}
     return row

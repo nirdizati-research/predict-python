@@ -1,12 +1,12 @@
 from copy import deepcopy
 
-from core.constants import *
-from core.default_configuration import CONF_MAP, kmeans
+from core.constants import LABELLING, ALL_CONFIGS, KMEANS, CLASSIFICATION
+from core.default_configuration import CONF_MAP, _kmeans
 from encoders.encoding_container import UP_TO, SIMPLE_INDEX
 from jobs.models import Job, CREATED
 
 
-def generate(split, payload, type=CLASSIFICATION):
+def generate(split, payload, generation_type=CLASSIFICATION):
     jobs = []
 
     for method in payload['config']['methods']:
@@ -18,14 +18,14 @@ def generate(split, payload, type=CLASSIFICATION):
                         item = Job.objects.create(
                             split=split,
                             status=CREATED,
-                            type=type,
+                            type=generation_type,
                             config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
                         split=split,
                         status=CREATED,
-                        type=type,
+                        type=generation_type,
                         config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
 
@@ -89,13 +89,13 @@ def create_config(payload: dict, enc_method: str, clustering: str, method: str, 
     method_conf_name = "{}.{}".format(payload['type'], method)
     method_conf = {**CONF_MAP[method_conf_name](), **payload['config'].get(method_conf_name, dict())}
     # Remove configs that are not needed for this method
-    for any_conf_name in all_configs:
+    for any_conf_name in ALL_CONFIGS:
         try:
             del config[any_conf_name]
         except KeyError:
             pass
     if clustering == KMEANS:
-        config['kmeans'] = {**kmeans(), **payload['config'].get('kmeans', dict())}
+        config['kmeans'] = {**_kmeans(), **payload['config'].get('kmeans', dict())}
     elif 'kmeans' in config:
         del config['kmeans']
     config[method_conf_name] = method_conf

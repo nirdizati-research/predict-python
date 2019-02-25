@@ -4,14 +4,9 @@ jobs.tests package
 Submodules
 ----------
 
-jobs.tests.test\_jobs module
-----------------------------
+.. toctree::
 
-.. automodule:: jobs.tests.test_jobs
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   jobs.tests.test_jobs
 
 Module contents
 ---------------

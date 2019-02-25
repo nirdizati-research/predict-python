@@ -4,14 +4,9 @@ runtime.migrations package
 Submodules
 ----------
 
-runtime.migrations.0001\_initial module
----------------------------------------
+.. toctree::
 
-.. automodule:: runtime.migrations.0001_initial
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   runtime.migrations.0001_initial
 
 Module contents
 ---------------

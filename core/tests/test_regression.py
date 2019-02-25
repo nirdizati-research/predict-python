@@ -1,10 +1,14 @@
+"""
+regression tests
+"""
+
 import itertools
 
 from django.test import TestCase
 
-from core.constants import regression_methods, NO_CLUSTER, LINEAR, REGRESSION
+from core.constants import REGRESSION_METHODS, NO_CLUSTER, LINEAR, REGRESSION
 from core.core import calculate
-from core.tests.test_prepare import split_double, add_default_config, HidePrints
+from core.tests.common import split_double, add_default_config, HidePrints
 from encoders.encoding_container import EncodingContainer, SIMPLE_INDEX, ZERO_PADDING, encoding_methods, \
     paddings
 from encoders.label_container import LabelContainer, REMAINING_TIME, regression_labels, ATTRIBUTE_NUMBER
@@ -28,8 +32,9 @@ class TestRegression(TestCase):
 
     def test_no_exceptions(self):
         filtered_labels = [x for x in regression_labels if
-                           x != ATTRIBUTE_NUMBER]  # TODO: check how to add TRACE_NUMBER_ATTRIBUTE (test logs don't have numeric attributes
-        choices = [encoding_methods, paddings, regression_methods, filtered_labels]
+                           x != ATTRIBUTE_NUMBER]
+        # TODO: check how to add TRACE_NUMBER_ATTRIBUTE (test logs don't have numeric attributes
+        choices = [encoding_methods, paddings, REGRESSION_METHODS, filtered_labels]
 
         job_combinations = list(itertools.product(*choices))
 

@@ -1,3 +1,7 @@
+"""
+core methods and functionalities related to training/validation
+"""
+
 import json
 import os
 import time
@@ -16,7 +20,13 @@ from utils.file_service import save_result
 
 
 def calculate(job: dict) -> (dict, dict):
-    """ Main entry method for calculations"""
+    """main entry point for calculations
+
+    encodes the logs based on the given configuration and runs the selected task
+    :param job: job configuration
+    :return: results and model split
+
+    """
     print("Start job {} with {}".format(job['type'], get_run(job)))
     training_df, test_df = get_encoded_logs(job)
     results, model_split = run_by_type(training_df, test_df, job)
@@ -24,6 +34,14 @@ def calculate(job: dict) -> (dict, dict):
 
 
 def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame):
+    """returns the encoded logs
+
+    returns the training and test DataFrames encoded using the given job configuration, loading from cache if possible
+    :param job: job configuration
+    :param use_cache: load or not saved datasets from cache
+    :return: training and testing DataFrame
+
+    """
     if use_cache:
         processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
                                                                          json.dumps(job['encoding']),
@@ -60,6 +78,14 @@ def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame
 
 
 def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+    """runs the specified training/evaluation run
+
+    :param training_df: training DataFrame
+    :param test_df: testing DataFrame
+    :param job: job configuration
+    :return: results and model split
+
+    """
     model_split = None
 
     start_time = time.time()
@@ -72,7 +98,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     elif job['type'] == LABELLING:
         results = _label_task(training_df)
     elif job['type'] == UPDATE:
-        results, model_split = update_model(training_df, test_df, job)
+        results, model_split = update_model(training_df, test_df, job)  # TODO: fix reference
     else:
         raise ValueError("Type not supported", job['type'])
 
@@ -85,6 +111,13 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
 
 
 def runtime_calculate(run_log: list, model: dict) -> dict:
+    """calculate the model's score for runtime tasks
+
+    :param run_log: run dataset
+    :param model: model dictionary
+    :return: runtime results
+
+    """
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
     if model['type'] == CLASSIFICATION:
         results = classification_single_log(run_df, model)
@@ -97,18 +130,25 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
 
 
 def get_run(job: dict) -> str:
-    """Defines job identity"""
+    """defines the job's identity
+
+    returns a string indicating the job configuration in an unique way
+
+    :param job: job configuration
+    :return: job's identity string
+    """
     if job['type'] == LABELLING:
         return job['encoding'].method + '_' + job['label'].type
     return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type
 
 
-def _label_task(df: DataFrame) -> dict:
+def _label_task(input_dataframe: DataFrame) -> dict:
     """calculates the distribution of labels in the data frame
 
     :return: Dict of string and int {'label1': label1_count, 'label2': label2_count}
+
     """
     # Stupid but it works
     # True must be turned into 'true'
-    json_value = df.label.value_counts().to_json()
+    json_value = input_dataframe.label.value_counts().to_json()
     return json.loads(json_value)

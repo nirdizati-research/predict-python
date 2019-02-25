@@ -4,14 +4,9 @@ logs.migrations package
 Submodules
 ----------
 
-logs.migrations.0001\_initial module
-------------------------------------
+.. toctree::
 
-.. automodule:: logs.migrations.0001_initial
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   logs.migrations.0001_initial
 
 Module contents
 ---------------

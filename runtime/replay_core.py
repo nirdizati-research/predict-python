@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import csv
 import datetime
 import json
@@ -12,11 +11,6 @@ from encoders.encoding_container import ZERO_PADDING, ALL_IN_ONE
 from jobs.ws_publisher import publish
 from pred_models.models import PredModels
 from runtime.models import XTrace, XEvent, XLog
-
-
-# from opyenxes.factory.XFactory import XFactory  # TODO: fix library change
-# from opyenxes.model.XAttributeMap import XAttributeMap
-# from opyenxes.out.XesXmlSerializer import XesXmlSerializer
 
 
 def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=False):
@@ -118,8 +112,7 @@ def prepare(ev, tr, lg, replayer_id, reg_id, class_id, real_log, nn=False, end=F
         try:
             if trace.class_model is not None:
                 if trace.class_model.config['encoding']['padding'] != ZERO_PADDING and \
-                    trace.class_model.config['encoding'][
-                        'generation_type'] != ALL_IN_ONE:
+                    trace.class_model.config['encoding']['generation_type'] != ALL_IN_ONE:
                     class_config = trace.class_model.config
                     class_config['encoding']['prefix_length'] = c
                     right_class_model = PredModels.objects.filter(config=class_config)

@@ -6,12 +6,14 @@ verify_ssl = true
 [dev-packages]
 codecov = "==2.0.15"
 Sphinx = "==1.8.4"
-sphinx-rtd-theme = "*"
+sphinx-rtd-theme = "==0.4.3"
+pylint = "==2.2.2"
+sphinx-autodoc-typehints = "==1.6.0"
 
 [packages]
 djangorestframework = "==3.7.1"
 pytz = "==2017.3"
-numpy = "==1.15"
+numpy = "==1.15.1"
 pandas = "==0.23.4"
 scikit-learn = "==0.20"
 scipy = "==1.1.0"

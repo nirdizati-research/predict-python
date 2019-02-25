@@ -11,30 +11,11 @@ Subpackages
 Submodules
 ----------
 
-pred\_models.apps module
-------------------------
+.. toctree::
 
-.. automodule:: pred_models.apps
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pred\_models.models module
---------------------------
-
-.. automodule:: pred_models.models
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-pred\_models.serializers module
--------------------------------
-
-.. automodule:: pred_models.serializers
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   pred_models.apps
+   pred_models.models
+   pred_models.serializers
 
 Module contents
 ---------------

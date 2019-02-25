@@ -1,8 +1,16 @@
+"""
+hyperopt search spaces for each prediction method
+"""
+
 import numpy as np
 from hyperopt import hp
 from hyperopt.pyll.base import scope
 
-from core.constants import *
+from core.constants import CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN, CLASSIFICATION_XGBOOST, \
+    CLASSIFICATION_DECISION_TREE, CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES, CLASSIFICATION_ADAPTIVE_TREE, \
+    CLASSIFICATION_HOEFFDING_TREE, CLASSIFICATION_SGDC, CLASSIFICATION_PERCEPTRON, CLASSIFICATION_NN, \
+    REGRESSION_RANDOM_FOREST, REGRESSION_XGBOOST, REGRESSION_LASSO, REGRESSION_LINEAR, REGRESSION_NN, \
+    TIME_SERIES_PREDICTION_RNN
 
 
 def _get_space(job: dict) -> dict:
@@ -111,6 +119,16 @@ def _classification_incremental_perceptron() -> dict:
     }
 
 
+def _classification_nn() -> dict:
+    return {
+        'hidden_layers': hp.quniform('hidden_layers', 1, 10),
+        'hidden_units': hp.quniform('hidden_layers', 1, 100),
+        'activation_function': hp.choice('activation_function', ['sigmoid', 'tanh', 'relu']),
+        'epochs': hp.quniform('epochs', 1, 50),
+        'dropout_rate': hp.uniform('dropout_rate', 0, 1)
+    }
+
+
 def _regression_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
@@ -141,6 +159,20 @@ def _regression_xgboost() -> dict:
     }
 
 
+def _regression_nn() -> dict:
+    return {
+        'hidden_layers': hp.quniform('hidden_layers', 1, 10),
+        'hidden_units': hp.quniform('hidden_layers', 1, 100),
+        'activation_function': hp.choice('activation_function', ['sigmoid', 'tanh', 'relu']),
+        'epochs': hp.quniform('epochs', 1, 50),
+        'dropout_rate': hp.uniform('dropout_rate', 0, 1)
+    }
+
+
+def _time_series_prediction_rnn() -> dict:
+    raise NotImplementedError
+
+
 HYPEROPT_SPACE_MAP = {
     CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
     CLASSIFICATION_KNN: _classification_knn,
@@ -151,8 +183,13 @@ HYPEROPT_SPACE_MAP = {
     CLASSIFICATION_HOEFFDING_TREE: _classification_incremental_hoeffding_tree,
     CLASSIFICATION_SGDC: _classification_incremental_sgd_classifier,
     CLASSIFICATION_PERCEPTRON: _classification_incremental_perceptron,
+    CLASSIFICATION_NN: _classification_nn,
+
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,
-    REGRESSION_LINEAR: _regression_linear
+    REGRESSION_LINEAR: _regression_linear,
+    REGRESSION_NN: _regression_nn,
+
+    TIME_SERIES_PREDICTION_RNN: _time_series_prediction_rnn
 }

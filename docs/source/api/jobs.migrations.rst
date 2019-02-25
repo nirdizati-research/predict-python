@@ -4,14 +4,9 @@ jobs.migrations package
 Submodules
 ----------
 
-jobs.migrations.0001\_initial module
-------------------------------------
+.. toctree::
 
-.. automodule:: jobs.migrations.0001_initial
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   jobs.migrations.0001_initial
 
 Module contents
 ---------------

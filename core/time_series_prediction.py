@@ -1,23 +1,37 @@
+"""
+time series prediction methods and functionalities
+"""
+
 from typing import Any
 
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 from pandas import DataFrame
 from sklearn import clone
 from sklearn.externals import joblib
+
 from core.clustering import Clustering
 from core.common import get_method_config
 from core.constants import RNN
-from core.nn.rnn_time_series_predictor import RNNTimeSeriesPredictor
+from core.nn_models import RNNTimeSeriesPredictor
 from utils.result_metrics import calculate_results_time_series_prediction, \
     calculate_nlevenshtein
 
 pd.options.mode.chained_assignment = None
 
 
-def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
-    train_data, test_data = _drop_columns(train_df, test_df)
+def time_series_prediction(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+    """main time series prediction entry point
+
+    train and tests the time series predictor using the provided data
+
+    :param training_df: training DataFrame
+    :param test_df: testing DataFrame
+    :param job: job configuration
+    :return: model scores and split
+
+    """
+    train_data, test_data = _drop_columns(training_df, test_df)
 
     model_split = _train(job, train_data, _choose_time_series_predictor(job))
     results_df, nlevenshtein = _test(model_split, test_data, evaluation=True)
@@ -30,16 +44,25 @@ def time_series_prediction(train_df: DataFrame, test_df: DataFrame, job: dict) -
     return results, model_split
 
 
-def time_series_prediction_single_log(data: DataFrame, model: dict) -> dict:
+def time_series_prediction_single_log(input_df: DataFrame, model: dict) -> dict:
+    """single log time series prediction
+
+    time series predicts a single log using the provided TODO: complete
+
+    :param input_df: input DataFrame
+    :param model: TODO: complete
+    :return: model scores
+
+    """
     results = dict()
     split = model['split']
-    results['input'] = data
+    results['input'] = input_df
 
     # TODO load model more wisely
     model_split = dict()
     model_split['clusterer'] = joblib.load(split['clusterer_path'])
     model_split['time_series_predictor'] = joblib.load(split['model_path'])
-    result, _ = _test(model_split, data, evaluation=False)
+    result, _ = _test(model_split, input_df, evaluation=False)
     results['prediction'] = result['predicted']
     return results
 
@@ -54,9 +77,9 @@ def _train(job: dict, train_data: DataFrame, time_series_predictor: Any) -> dict
 
     for cluster in range(clusterer.n_clusters):
 
-        x = train_data[cluster]
-        if not x.empty:
-            time_series_predictor.fit(x)
+        cluster_train_df = train_data[cluster]
+        if not cluster_train_df.empty:
+            time_series_predictor.fit(cluster_train_df)
 
             models[cluster] = time_series_predictor
             time_series_predictor = clone(time_series_predictor, safe=False)
@@ -76,20 +99,20 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, f
     nlevenshtein_distances = []
 
     for cluster in range(clusterer.n_clusters):
-        x = test_data[cluster]
-        if x.empty:
+        cluster_test_df = test_data[cluster]
+        if cluster_test_df.empty:
             non_empty_clusters -= 1
         else:
             if evaluation:
-                predictions = time_series_predictor[cluster].predict(x)
+                predictions = time_series_predictor[cluster].predict(cluster_test_df)
 
-                nlevenshtein = calculate_nlevenshtein(x.values, predictions)
+                nlevenshtein = calculate_nlevenshtein(cluster_test_df.values, predictions)
                 nlevenshtein_distances.append(nlevenshtein)
-            temp_actual = x.values.tolist()
-            x['predicted'] = time_series_predictor[cluster].predict(x).tolist()
-            x['actual'] = temp_actual
+            temp_actual = cluster_test_df.values.tolist()
+            cluster_test_df['predicted'] = time_series_predictor[cluster].predict(cluster_test_df).tolist()
+            cluster_test_df['actual'] = temp_actual
 
-            results_df = results_df.append(x)
+            results_df = results_df.append(cluster_test_df)
 
     nlevenshtein = float(np.mean(nlevenshtein_distances))
 

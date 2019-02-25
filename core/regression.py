@@ -1,3 +1,7 @@
+"""
+regression methods and functionalities
+"""
+
 import pandas as pd
 from pandas import DataFrame
 from sklearn import clone
@@ -11,13 +15,23 @@ from xgboost import XGBRegressor
 from core.clustering import Clustering
 from core.common import get_method_config
 from core.constants import LINEAR, RANDOM_FOREST, LASSO, XGBOOST, NN
-from core.nn.nn_regressor import NNRegressor
+from core.nn_models import NNRegressor
 from utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
 
 
 def regression(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+    """main regression entry point
+
+    train and tests the regressor using the provided data
+
+    :param training_df: training DataFrame
+    :param test_df: testing DataFrame
+    :param job: job configuration
+    :return: model scores and split
+
+    """
     train_data, test_data = _prep_data(training_df, test_df)
 
     model_split = _train(job, train_data, _choose_regressor(job))
@@ -31,15 +45,24 @@ def regression(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, 
     return results, model_split
 
 
-def regression_single_log(data: DataFrame, model: dict) -> DataFrame:
+def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
+    """single log regression
+
+    classifies a single log using the provided TODO: complete
+
+    :param input_df: input DataFrame
+    :param model: TODO: complete
+    :return: model scores
+
+    """
     split = model['split']
-    data = data.drop([col for col in ['label', 'remaining_time', 'trace_id'] if col in data.columns], 1)
+    input_df = input_df.drop([col for col in ['label', 'remaining_time', 'trace_id'] if col in input_df.columns], 1)
 
     # TODO load model more wisely
     model_split = dict()
     model_split['clusterer'] = joblib.load(split['clusterer_path'])
     model_split['regressor'] = joblib.load(split['model_path'])
-    results_df = _test(model_split, data)
+    results_df = _test(model_split, input_df)
     return results_df
 
 
@@ -53,10 +76,10 @@ def _train(job: dict, train_data: DataFrame, regressor: RegressorMixin) -> dict:
 
     for cluster in range(clusterer.n_clusters):
 
-        x = train_data[cluster]
-        if not x.empty:
-            y = x['label']
-            regressor.fit(x.drop('label', 1), y)
+        cluster_train_df = train_data[cluster]
+        if not cluster_train_df.empty:
+            cluster_targets_df = cluster_train_df['label']
+            regressor.fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
 
             models[cluster] = regressor
             try:
@@ -76,10 +99,10 @@ def _test(model_split: dict, data: DataFrame) -> DataFrame:
     results_df = DataFrame()
 
     for cluster in range(clusterer.n_clusters):
-        x = test_data[cluster]
-        if not x.empty:
-            x['predicted'] = regressor[cluster].predict(x.drop('label', 1))
-            results_df = results_df.append(x)
+        cluster_test_df = test_data[cluster]
+        if not cluster_test_df.empty:
+            cluster_test_df['predicted'] = regressor[cluster].predict(cluster_test_df.drop('label', 1))
+            results_df = results_df.append(cluster_test_df)
     return results_df
 
 

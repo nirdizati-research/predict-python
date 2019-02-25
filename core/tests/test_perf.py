@@ -1,4 +1,7 @@
-# Test performance for thesis
+"""
+performance tests
+"""
+
 import time
 import unittest
 
@@ -6,7 +9,7 @@ from django.test import TestCase
 
 from core.core import calculate
 from core.hyperopt_wrapper import calculate_hyperopt
-from core.tests.test_prepare import split_single, add_default_config
+from core.tests.common import split_single, add_default_config
 from encoders.encoding_container import EncodingContainer, BOOLEAN
 from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, NEXT_ACTIVITY
 from utils.tests_utils import bpi_log_filepath
@@ -43,7 +46,7 @@ class TestClassPerf(TestCase):
         add_default_config(job)
         self.calculate_helper(job)
 
-    def ne_randomForest(self):
+    def test_next_activity_randomForest(self):
         job = self.get_job()
         job['label'] = LabelContainer(NEXT_ACTIVITY)
         add_default_config(job)

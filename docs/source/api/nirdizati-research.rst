@@ -4,30 +4,11 @@ nirdizati\-research package
 Submodules
 ----------
 
-nirdizati\-research.settings module
------------------------------------
+.. toctree::
 
-.. automodule:: nirdizati-research.settings
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nirdizati\-research.urls module
--------------------------------
-
-.. automodule:: nirdizati-research.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-nirdizati\-research.wsgi module
--------------------------------
-
-.. automodule:: nirdizati-research.wsgi
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   nirdizati-research.settings
+   nirdizati-research.urls
+   nirdizati-research.wsgi
 
 Module contents
 ---------------

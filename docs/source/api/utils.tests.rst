@@ -4,30 +4,11 @@ utils.tests package
 Submodules
 ----------
 
-utils.tests.test\_event\_attributes module
-------------------------------------------
+.. toctree::
 
-.. automodule:: utils.tests.test_event_attributes
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-utils.tests.test\_log\_metrics module
--------------------------------------
-
-.. automodule:: utils.tests.test_log_metrics
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-utils.tests.test\_time\_metrics module
---------------------------------------
-
-.. automodule:: utils.tests.test_time_metrics
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   utils.tests.test_event_attributes
+   utils.tests.test_log_metrics
+   utils.tests.test_time_metrics
 
 Module contents
 ---------------

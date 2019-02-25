@@ -11,78 +11,17 @@ Subpackages
 Submodules
 ----------
 
-runtime.apps module
--------------------
+.. toctree::
 
-.. automodule:: runtime.apps
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.models module
----------------------
-
-.. automodule:: runtime.models
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.replay\_core module
----------------------------
-
-.. automodule:: runtime.replay_core
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.replayer module
------------------------
-
-.. automodule:: runtime.replayer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.serializers module
---------------------------
-
-.. automodule:: runtime.serializers
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.tasks module
---------------------
-
-.. automodule:: runtime.tasks
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.tests module
---------------------
-
-.. automodule:: runtime.tests
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.urls module
--------------------
-
-.. automodule:: runtime.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-runtime.views module
---------------------
-
-.. automodule:: runtime.views
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   runtime.apps
+   runtime.models
+   runtime.replay_core
+   runtime.replayer
+   runtime.serializers
+   runtime.tasks
+   runtime.tests
+   runtime.urls
+   runtime.views
 
 Module contents
 ---------------

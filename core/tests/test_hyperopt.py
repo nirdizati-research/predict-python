@@ -1,7 +1,11 @@
+"""
+hyperopt tests
+"""
+
 from django.test import TestCase
 
 from core.hyperopt_wrapper import calculate_hyperopt
-from core.tests.test_prepare import add_default_config, repair_example
+from core.tests.common import add_default_config, repair_example
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING
 from encoders.label_container import LabelContainer
 
@@ -24,7 +28,7 @@ class TestHyperopt(TestCase):
     def test_class_randomForest(self):
         job = self.get_job()
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -32,7 +36,7 @@ class TestHyperopt(TestCase):
         job = self.get_job()
         job["method"] = "knn"
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -40,7 +44,7 @@ class TestHyperopt(TestCase):
         job = self.get_job()
         job["method"] = "xgboost"
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -48,7 +52,7 @@ class TestHyperopt(TestCase):
         job = self.get_job()
         job["method"] = "decisionTree"
         job['classification.decisionTree'] = {}
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -57,7 +61,7 @@ class TestHyperopt(TestCase):
         job["type"] = "regression"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -67,7 +71,7 @@ class TestHyperopt(TestCase):
         job["method"] = "linear"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -77,7 +81,7 @@ class TestHyperopt(TestCase):
         job["method"] = "lasso"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)
 
@@ -87,6 +91,6 @@ class TestHyperopt(TestCase):
         job["method"] = "xgboost"
         job['hyperopt']['performance_metric'] = 'rmse'
         add_default_config(job)
-        results, config, model_split = calculate_hyperopt(job)
+        results, config, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
         self.assertIsNotNone(config)

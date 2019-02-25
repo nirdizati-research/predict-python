@@ -4,62 +4,16 @@ core.tests package
 Submodules
 ----------
 
-core.tests.test\_classification module
---------------------------------------
+.. toctree::
 
-.. automodule:: core.tests.test_classification
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_hyperopt module
---------------------------------
-
-.. automodule:: core.tests.test_hyperopt
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_label\_calc module
------------------------------------
-
-.. automodule:: core.tests.test_label_calc
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_perf module
-----------------------------
-
-.. automodule:: core.tests.test_perf
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_prepare module
--------------------------------
-
-.. automodule:: core.tests.test_prepare
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_refactoring module
------------------------------------
-
-.. automodule:: core.tests.test_refactoring
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-core.tests.test\_regression module
-----------------------------------
-
-.. automodule:: core.tests.test_regression
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   core.tests.common
+   core.tests.test_classification
+   core.tests.test_hyperopt
+   core.tests.test_label_calc
+   core.tests.test_perf
+   core.tests.test_refactoring
+   core.tests.test_regression
+   core.tests.test_time_series_prediction
 
 Module contents
 ---------------

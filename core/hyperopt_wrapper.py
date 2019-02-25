@@ -1,14 +1,22 @@
+"""
+hyperopt methods and functionalities
+"""
+
 from hyperopt import Trials, STATUS_OK, tpe, fmin, STATUS_FAIL
 
 from core.core import get_run, get_encoded_logs, run_by_type
 from core.hyperopt_spaces import _get_space
 
-trial_nr = 0
+trial_number = 0
 
 
 def calculate_hyperopt(job: dict) -> (dict, dict, dict):
-    """ Main entry method for hyperopt calculations
-        Returns the model for the best trial
+    """main entry method for hyperopt calculations
+    returns the model for the best trial
+
+    :param job: job configuration
+    :return: tuple containing the results, config and model split from the search
+
     """
     print("Start hyperopt job {} with {}, performance_metric {}".format(job['type'], get_run(job),
                                                                         job['hyperopt']['performance_metric']))
@@ -35,16 +43,21 @@ def calculate_hyperopt(job: dict) -> (dict, dict, dict):
 
 
 def get_metric_multiplier(performance_metric: int) -> int:
+    """returns the multiplier to be used for each metric
+
+    :param performance_metric: metric used (index)
+    :return: metric multiplier associated
+    """
     metric_map = {'rmse': -1, 'mae': -1, 'rscore': 1, 'acc': 1, 'f1score': 1, 'auc': 1, 'precision': 1, 'recall': 1,
                   'true_positive': 1, 'true_negative': 1, 'false_positive': 1, 'false_negative': 1, 'mape': -1}
     return metric_map[performance_metric]
 
 
 def _calculate_and_evaluate(args) -> dict:
-    global trial_nr
-    if trial_nr % 20 == 0:
-        print("Trial {}".format(trial_nr))
-    trial_nr += 1
+    global trial_number
+    if trial_number % 20 == 0:
+        print("Trial {}".format(trial_number))
+    trial_number += 1
     local_job = global_job
     performance_metric = local_job['hyperopt']['performance_metric']
     method_conf_name = "{}.{}".format(local_job['type'], local_job['method'])
@@ -54,6 +67,6 @@ def _calculate_and_evaluate(args) -> dict:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
         return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,
                 'config': local_job[method_conf_name], 'model_split': model_split}
-    except Exception as e:
+    except Exception as exception:
         return {'loss': 100, 'status': STATUS_FAIL, 'results': {},
                 'config': local_job[method_conf_name]}

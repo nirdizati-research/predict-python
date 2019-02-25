@@ -4,14 +4,9 @@ pred\_models.migrations package
 Submodules
 ----------
 
-pred\_models.migrations.0001\_initial module
---------------------------------------------
+.. toctree::
 
-.. automodule:: pred_models.migrations.0001_initial
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   pred_models.migrations.0001_initial
 
 Module contents
 ---------------

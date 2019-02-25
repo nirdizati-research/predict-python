@@ -27,3 +27,4 @@ sphinx-rtd-theme==0.4.3
 sphinx-autodoc-typehints==1.6.0
 codecov==2.0.15
 pylint ==2.2.2
+scikit-multiflow==0.1.2

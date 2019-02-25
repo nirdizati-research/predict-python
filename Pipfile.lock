@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f64a58ea0f6cca9fc608cf5770aea43fbaa2323ba594f55586bfa265d66dfa2c"
+            "sha256": "badf5bb88546db1221a4e5cf5879ddf286d56e66cb443166a04d7cc654c99369"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -753,6 +753,14 @@
             "index": "pypi",
             "version": "==0.20"
         },
+        "scikit-multiflow": {
+            "hashes": [
+                "sha256:502c42209f5168fe71f8624f9e698c3f8a8f402c41daf80cca7645041b0e0cc0",
+                "sha256:df8e297c271ce747e18a9a9c936d2b478fdc9c581b81b630ee2d38d015a419fa"
+            ],
+            "index": "pypi",
+            "version": "==0.1.2"
+        },
         "scipy": {
             "hashes": [
                 "sha256:0611ee97296265af4a21164a5323f8c1b4e8e15c582d3dfa7610825900136bb7",
@@ -800,9 +808,12 @@
             ],
             "version": "==1.12.0"
         },
-        "skmultiflow": {
-            "git": "https://github.com/scikit-multiflow/scikit-multiflow.git",
-            "ref": "6fd86e40dfbacd9ac9c5eb0ba6590f33450772cb"
+        "sortedcontainers": {
+            "hashes": [
+                "sha256:974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a",
+                "sha256:d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"
+            ],
+            "version": "==2.1.0"
         },
         "tensorboard": {
             "hashes": [

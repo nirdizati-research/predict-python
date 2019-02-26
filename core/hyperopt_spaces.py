@@ -92,7 +92,7 @@ def _classification_incremental_sgd_classifier():
         'learning_rate': hp.choice('learning_rate', ['constant', 'optimal', 'invscaling', 'adaptive']),
         'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
         'power_t': hp.uniform('power_t', 0.3, 0.7),
-        'early_stopping': hp.choice('early_stopping', [True, False]),
+        # 'early_stopping': hp.choice('early_stopping', [True, False]), #needs to be false with partial_fit
         'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5)),
         'validation_fraction': 0.1,
         'average': hp.choice('average', [True, False])
@@ -107,7 +107,7 @@ def _classification_incremental_perceptron():
         'tol': hp.uniform('tol', 1e-3, 0.5),
         'shuffle': hp.choice('shuffle', [True, False]),
         'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
-        'early_stopping': hp.choice('early_stopping', [True, False]),
+        # 'early_stopping': hp.choice('early_stopping', [True, False]), #needs to be false with partial_fit
         'validation_fraction': 0.1,
         'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5))
     }

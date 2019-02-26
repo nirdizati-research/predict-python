@@ -7,12 +7,14 @@ import unittest
 
 from django.test import TestCase
 
-from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, CLASSIFICATION_METHODS, RANDOM_FOREST
+from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, CLASSIFICATION_METHODS, RANDOM_FOREST, \
+    HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, PERCEPTRON, NN
 from core.core import calculate
 from core.tests.common import split_double, add_default_config, HidePrints
-from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, encoding_methods, paddings
+from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, ENCODING_METHODS, PADDINGS, \
+    NO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM, DURATION, \
-    classification_labels, ATTRIBUTE_NUMBER, THRESHOLD_MEAN
+    CLASSIFICATION_LABELS, ATTRIBUTE_NUMBER, THRESHOLD_MEAN
 
 
 class TestClassification(TestCase):
@@ -41,20 +43,25 @@ class TestClassification(TestCase):
             json['classification.knn'] = {'n_neighbors': 3}
         return json
 
-    @unittest.skip('needs refactoring')
     def test_no_exceptions(self):
-        filtered_labels = [x for x in classification_labels if
+        filtered_labels = [x for x in CLASSIFICATION_LABELS if
                            x not in [ATTRIBUTE_NUMBER]]  # TODO: check how to add TRACE_NUMBER_ATTRIBUTE
-        choices = [encoding_methods, paddings, CLASSIFICATION_METHODS, filtered_labels]
+
+        filtered_classification_methods = [x for x in CLASSIFICATION_METHODS if x not in
+                                           [HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, PERCEPTRON,
+                                            NN]]  # TODO: fix new models
+        choices = [ENCODING_METHODS, PADDINGS, filtered_classification_methods, filtered_labels]
 
         job_combinations = list(itertools.product(*choices))
 
         for (encoding, padding, method, label) in job_combinations:
             print(encoding, padding, method, label)
 
+            if method == 'nn' and (padding == NO_PADDING or label == ATTRIBUTE_STRING):
+                pass
             job = self.get_job(method=method, encoding_method=encoding, padding=padding, label=label)
-            with HidePrints():
-                calculate(job)
+            # with HidePrints():
+            calculate(job)
 
     @staticmethod
     def results():

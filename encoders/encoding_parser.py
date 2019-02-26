@@ -119,13 +119,13 @@ class EncodingParser:
 
         """
         train_data = train_data.values
-        self.n_classes_x = np.max(train_data)
-        if 0 not in train_data:
-            self.n_classes_x += 1
+        self.n_classes_x = np.max(train_data) + 1
 
         if self._task == Tasks.TIME_SERIES_PREDICTION:
             train_data = np.expand_dims(train_data, -1)
 
+        if train_data.shape[-1] == 1:
+            train_data = np.expand_dims(train_data, -1)
         train_data = to_categorical(train_data, self.n_classes_x + 1)
         return train_data
 
@@ -143,7 +143,7 @@ class EncodingParser:
         self.n_events = self._extract_n_events(train_data)
         train_data = train_data.values
 
-        self.n_classes_x = np.max(train_data)
+        self.n_classes_x = np.max(train_data) + 1
         if 0 not in train_data:
             self.n_classes_x += 1
 
@@ -197,6 +197,8 @@ class EncodingParser:
         if self._task == Tasks.TIME_SERIES_PREDICTION:
             test_data = np.expand_dims(test_data, -1)
 
+        if test_data.shape[-1] == 1:
+            test_data = np.expand_dims(test_data, -1)
         test_data = to_categorical(test_data, self.n_classes_x + 1)
         return test_data
 

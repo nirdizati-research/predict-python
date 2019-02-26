@@ -10,9 +10,9 @@ from core.constants import KNN, NO_CLUSTER, RNN, TIME_SERIES_PREDICTION, TIME_SE
 from core.core import calculate
 from core.tests.common import split_double, add_default_config, HidePrints
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, \
-    time_series_prediction_encodings, time_series_prediction_paddings
+    TIME_SERIES_PREDICTION_ENCODINGS, TIME_SERIES_PREDICTION_PADDINGS
 from encoders.label_container import LabelContainer, ATTRIBUTE_STRING, THRESHOLD_CUSTOM, DURATION, \
-    THRESHOLD_MEAN, time_series_prediction_labels
+    THRESHOLD_MEAN, TIME_SERIES_PREDICTION_LABELS
 
 
 class TestTimeSeriesPrediction(TestCase):
@@ -42,8 +42,8 @@ class TestTimeSeriesPrediction(TestCase):
         return json
 
     def test_no_exceptions(self):
-        choices = [time_series_prediction_encodings, time_series_prediction_paddings, TIME_SERIES_PREDICTION_METHODS,
-                   time_series_prediction_labels]
+        choices = [TIME_SERIES_PREDICTION_ENCODINGS, TIME_SERIES_PREDICTION_PADDINGS, TIME_SERIES_PREDICTION_METHODS,
+                   TIME_SERIES_PREDICTION_LABELS]
 
         job_combinations = list(itertools.product(*choices))
 

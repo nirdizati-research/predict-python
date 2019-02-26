@@ -60,6 +60,7 @@ def trace_prefixes(trace: Trace, prefix_length: int) -> list:
 
 def next_event_name(trace: list, prefix_length: int):
     """Return the event event name at prefix length or 0 if out of range.
+
     """
     if prefix_length < len(trace):
         next_event = trace[prefix_length]
@@ -70,7 +71,9 @@ def next_event_name(trace: list, prefix_length: int):
 
 
 def compute_columns(prefix_length: int):
-    """trace_id, prefixes, any other columns, label"""
+    """trace_id, prefixes, any other columns, label
+
+    """
     return ["trace_id"] + ["prefix_" + str(i + 1) for i in range(0, prefix_length)]
 
 
@@ -106,7 +109,9 @@ def compute_label_columns(columns: list, label: LabelContainer) -> list:
 
 def add_labels(label: LabelContainer, prefix_length: int, trace,
                atr_classifier=None, executed_events=None, resources_used=None, new_traces=None):
-    """Adds any number of label cells with last as label"""
+    """
+    Adds any number of label cells with last as label
+    """
     labels = []
     if label.type == NO_LABEL:
         return labels

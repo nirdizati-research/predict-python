@@ -208,7 +208,7 @@ class RNNTimeSeriesPredictor:
         self._rnn_type = str(kwargs['rnn_type'])
         self._n_epochs = int(kwargs['n_epochs'])
         self._encoding = str(kwargs['encoding'])
-        self._prefix_length = 0.25
+        self._prefix_length = 0.25  # n x dataset length
         self._prediction_limit = 1.5  # n x dataset length
         self._encoding_parser = EncodingParser(self._encoding, None, task=Tasks.TIME_SERIES_PREDICTION)
         self._model = None
@@ -222,9 +222,6 @@ class RNNTimeSeriesPredictor:
 
         """
         train_data = self._encoding_parser.parse_training_dataset(train_data)
-
-        if self._encoding == 'simpleIndex':
-            train_data = np.expand_dims(train_data, -2)
 
         targets = train_data[:, 1:]
         train_data = train_data[:, :-1]
@@ -246,7 +243,7 @@ class RNNTimeSeriesPredictor:
 
         self._model = Model(model_inputs, predicted)
         self._model.compile(loss='categorical_crossentropy', optimizer='adam')
-        self._model.fit(train_data, targets, epochs=self._n_epochs, verbose=0)
+        self._model.fit(train_data, targets, epochs=self._n_epochs)
 
     def predict(self, test_data: DataFrame) -> ndarray:
         """returns model predictions
@@ -258,9 +255,6 @@ class RNNTimeSeriesPredictor:
 
         """
         test_data = self._encoding_parser.parse_testing_dataset(test_data)
-
-        if self._encoding == 'simpleIndex':
-            test_data = np.expand_dims(test_data, -2)
 
         temp_prediction_length = test_data.shape[1] - 1
         temp_prediction = np.zeros((test_data.shape[0], temp_prediction_length, test_data.shape[2], test_data.shape[3]))

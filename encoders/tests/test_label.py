@@ -14,7 +14,6 @@ from utils.tests_utils import general_example_test_filepath
 # TODO: refactor tests
 
 
-@unittest.skip('needs refactoring')
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
         self.log = get_log(general_example_test_filepath)
@@ -39,13 +38,10 @@ class TestLabelSimpleIndex(TestCase):
         df = encode_label_log(self.log, encoding, CLASSIFICATION, label, event_names=self.event_names)
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5,
-                             ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381, 1149821,
-                              70355923, 34856381])
+        self.assertListEqual(trace_5, ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381,
+                                       1149821, 70355923, 34856381])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4,
-                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
-                              2595305])
+        self.assertListEqual(trace_4, ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0])
 
     def test_remaining_time(self):
         label = LabelContainer()
@@ -81,8 +77,7 @@ class TestLabelSimpleIndex(TestCase):
                               70355923, 34856381, 1296240.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
-                              2595305, 520920.0, True])
+                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, True])
 
     def test_next_activity(self):
         label = LabelContainer(type=NEXT_ACTIVITY)
@@ -108,8 +103,7 @@ class TestLabelSimpleIndex(TestCase):
                               70355923, 34856381, 1296240.0, 32171502])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 2595305, 2595305, 2595305, 2595305,
-                              2595305, 520920.0, 2595305])
+                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, 0])
 
     def test_attribute_string(self):
         label = LabelContainer(type=ATTRIBUTE_STRING, attribute_name='creator')

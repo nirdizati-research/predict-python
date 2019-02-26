@@ -30,13 +30,13 @@ label_encoder = {}
 encoder = {}
 label_dict = {}
 
-encoding_methods = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
+ENCODING_METHODS = [SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, LAST_PAYLOAD]
 
-time_series_prediction_encodings = [SIMPLE_INDEX, COMPLEX]
+TIME_SERIES_PREDICTION_ENCODINGS = [SIMPLE_INDEX, COMPLEX]
 
-paddings = [ZERO_PADDING, NO_PADDING]
+PADDINGS = [ZERO_PADDING, NO_PADDING]
 
-time_series_prediction_paddings = [ZERO_PADDING]
+TIME_SERIES_PREDICTION_PADDINGS = [ZERO_PADDING]
 
 
 class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_length', 'padding', 'generation_type'])):

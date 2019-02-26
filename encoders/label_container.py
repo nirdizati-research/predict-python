@@ -10,11 +10,11 @@ DURATION = 'duration'
 THRESHOLD_MEAN = 'threshold_mean'
 THRESHOLD_CUSTOM = 'threshold_custom'
 
-classification_labels = [NEXT_ACTIVITY, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER, THRESHOLD_MEAN, THRESHOLD_CUSTOM]
+CLASSIFICATION_LABELS = [NEXT_ACTIVITY, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER, THRESHOLD_MEAN, THRESHOLD_CUSTOM]
 
-regression_labels = [REMAINING_TIME, ATTRIBUTE_NUMBER]
+REGRESSION_LABELS = [REMAINING_TIME, ATTRIBUTE_NUMBER]
 
-time_series_prediction_labels = [NEXT_ACTIVITY]
+TIME_SERIES_PREDICTION_LABELS = [NEXT_ACTIVITY]
 
 
 class LabelContainer(namedtuple('LabelContainer', ['type', 'attribute_name', 'threshold_type', 'threshold',

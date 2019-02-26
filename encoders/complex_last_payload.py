@@ -11,15 +11,15 @@ from encoders.simple_index import compute_label_columns, add_labels, get_interca
 ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list) -> DataFrame:
+def complex(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict) -> DataFrame:
     return encode_complex_latest(log, label, encoding, additional_columns, columns_complex, data_complex)
 
 
-def last_payload(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list) -> DataFrame:
+def last_payload(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict) -> DataFrame:
     return encode_complex_latest(log, label, encoding, additional_columns, columns_last_payload, data_last_payload)
 
 
-def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: list,
+def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict,
                           column_fun: Callable, data_fun: Callable) -> DataFrame:
     columns = column_fun(encoding.prefix_length, additional_columns)
     normal_columns_number = len(columns)
@@ -108,7 +108,7 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: dict)
 
 def trace_to_row(trace: Trace, encoding: EncodingContainer, event_index: int, data_fun: Callable, columns_len: int,
                  atr_classifier=None, label=None, executed_events=None, resources_used=None, new_traces=None,
-                 additional_columns=None) -> list:
+                 additional_columns: dict = None) -> list:
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)

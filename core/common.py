@@ -3,11 +3,11 @@ common methods used in the core package
 """
 
 
-def get_method_config(job: dict):  # -> TODO: complete
+def get_method_config(job: dict) -> (str, dict):
     """returns the method configuration dictionary
 
     :param job: job configuration
-    :return: method string and method configuration
+    :return: method string and method configuration dict
 
     """
     method = job['method']

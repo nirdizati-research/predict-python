@@ -49,8 +49,8 @@ def split_double():
     split['id'] = 1
     split['config'] = dict()
     split['type'] = 'double'
-    split['test_log_path'] = general_example_test_filepath
     split['training_log_path'] = general_example_train_filepath
+    split['test_log_path'] = general_example_test_filepath
     return split
 
 

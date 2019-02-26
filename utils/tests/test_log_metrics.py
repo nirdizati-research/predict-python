@@ -49,7 +49,7 @@ class LogTest(TestCase):
         self.assertEqual(6, len(result.keys()))
         self.assertEqual(9, result['3'])
 
-    def max_events_in_log(self):
+    def test_max_events_in_log(self):
         logs = get_log(general_example_filepath)
         result = max_events_in_log(logs)
         self.assertEqual(13, result)

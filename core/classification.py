@@ -136,7 +136,7 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
 
             results_df = results_df.append(cluster_test_df)
 
-    if is_binary_classifier or len(set(test_data['label'])) <= 2:
+    if is_binary_classifier or max([len(set(t['label'])) for _, t in test_data.items()]) <= 2:
         auc = float(auc) / non_empty_clusters
     else:
         pass  # TODO: check if AUC is ok for multiclass, otherwise implement

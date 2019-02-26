@@ -12,7 +12,7 @@ from core.classification import classification, classification_single_log
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from core.constants import UPDATE
 from core.regression import regression, regression_single_log
-from core.time_series_prediction import time_series_prediction
+from core.time_series_prediction import time_series_prediction, time_series_prediction_single_log
 from encoders.common import encode_label_logs, encode_label_log
 from logs.splitting import prepare_logs
 from utils.cache import load_from_cache, dump_to_cache, get_digested
@@ -123,6 +123,8 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
         results = classification_single_log(run_df, model)
     elif model['type'] == REGRESSION:
         results = regression_single_log(run_df, model)
+    elif model['type'] == TIME_SERIES_PREDICTION:
+        results = time_series_prediction_single_log(run_df, model)
     else:
         raise ValueError("Type not supported", model['type'])
     print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))

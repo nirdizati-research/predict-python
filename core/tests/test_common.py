@@ -14,6 +14,8 @@ class TestCommon(TestCase):
         job['method'] = 'nn'
         job['type'] = REGRESSION
         job['regression.nn'] = 'TEST'
+        job['incremental_train'] = {'base_model': None}
+
         method, config = get_method_config(job)
 
         self.assertEqual(job['method'], method)

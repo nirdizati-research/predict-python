@@ -22,6 +22,7 @@ class TestNNModels(TestCase):
         config['encoding'] = encoding
         config['dropout_rate'] = 0.1
         config['is_binary_classifier'] = binary
+        config['incremental_train'] = {'base_model': None}
         return config
 
     def test_nn_classifier_simple_index_binary_no_exceptions(self):

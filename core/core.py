@@ -1,14 +1,10 @@
-"""
-core methods and functionalities related to training/validation
-"""
-
 import json
 import os
 import time
 
 from pandas import DataFrame
 
-from core.classification import classification, classification_single_log
+from core.classification import classification, classification_single_log, update_and_test
 from core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from core.constants import UPDATE
 from core.regression import regression, regression_single_log
@@ -88,6 +84,9 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     """
     model_split = None
 
+    if job['incremental_train']['base_model'] is not None:
+        job['type'] = UPDATE
+
     start_time = time.time()
     if job['type'] == CLASSIFICATION:
         results, model_split = classification(training_df, test_df, job)
@@ -98,7 +97,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     elif job['type'] == LABELLING:
         results = _label_task(training_df)
     elif job['type'] == UPDATE:
-        results, model_split = update_model(training_df, test_df, job)  # TODO: fix reference
+        results, model_split = update_and_test(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
 

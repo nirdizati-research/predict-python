@@ -10,7 +10,7 @@ from django.test import TestCase
 from core.constants import DECISION_TREE, KNN, NO_CLUSTER, CLASSIFICATION, CLASSIFICATION_METHODS, RANDOM_FOREST, \
     HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, PERCEPTRON, NN
 from core.core import calculate
-from core.tests.common import split_double, add_default_config, HidePrints
+from core.tests.common import split_double, add_default_config
 from encoders.encoding_container import EncodingContainer, ZERO_PADDING, SIMPLE_INDEX, ENCODING_METHODS, PADDINGS, \
     NO_PADDING
 from encoders.label_container import LabelContainer, NEXT_ACTIVITY, ATTRIBUTE_STRING, THRESHOLD_CUSTOM, DURATION, \
@@ -26,6 +26,7 @@ class TestClassification(TestCase):
         json['split'] = split_double()
         json['method'] = method
         json['encoding'] = EncodingContainer(encoding_method, padding=padding)
+        json['incremental_train'] = {'base_model': None}
         if label == ATTRIBUTE_STRING:
             json['label'] = LabelContainer(label, attribute_name='creator')
         elif label == THRESHOLD_CUSTOM:

@@ -5,13 +5,9 @@ clustering methods and functionalities
 import numpy as np
 from pandas import Series, DataFrame
 from sklearn.cluster import KMeans
+from sklearn.externals import joblib
 
-from core.constants import KMEANS, NO_CLUSTER
-
-config = None
-clusterer = None
-labels = None
-n_clusters = None
+from pred_models.models import PredModels, ModelSplit
 
 
 class Clustering:
@@ -19,7 +15,10 @@ class Clustering:
     clustering related tasks, stores both the clustered data and the models trained on each cluster
     """
 
-    def __init__(self, job: dict):
+    KMEANS = 'kmeans'
+    NO_CLUSTER = 'noCluster'
+
+    def __init__(self, job):
         """initializes the clustering class
 
         by default the number of clusters is set to 1, meaning no clustering
@@ -27,7 +26,7 @@ class Clustering:
         :param job: job configuration
 
         """
-        self.config = job[KMEANS] if KMEANS in job else dict()
+        self.config = job[self.KMEANS] if self.KMEANS in job else dict()
         self._choose_clusterer(job)
         self.n_clusters = 1
         self.labels = [0]
@@ -60,15 +59,34 @@ class Clustering:
 
         :param input_df: input DataFrame
         :return: dictionary containing the clustered data
-
         """
-        return {cluster: input_df.iloc[np.where(self.predict(input_df) == cluster)] for cluster in
-                range(self.n_clusters)}
+        return {
+            cluster: input_df.iloc[np.where(self.predict(input_df) == cluster)]
+            for cluster in range(self.n_clusters)
+        }
 
-    def _choose_clusterer(self, job: dict) -> None:
-        if job['clustering'] == KMEANS:
+    def _choose_clusterer(self, job):  # TODO this will change when using more than one type of cluster
+        if job['clustering'] == self.KMEANS:
             self.clusterer = KMeans(**self.config)
-        elif job['clustering'] == NO_CLUSTER:
+        elif job['clustering'] == self.NO_CLUSTER:
             self.clusterer = None
         else:
             raise ValueError("Unexpected clustering method {}".format(job['clustering']))
+
+    @classmethod
+    def load_model(cls, job):
+        if job['clustering'] == cls.KMEANS:
+            classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
+            assert len(classifier) == 1  # asserting that the used id is unique
+            classifier_details = classifier[0]
+            classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
+            assert len(classifier) == 1
+            classifier = classifier[0]
+            # TODO this is a bad workaround
+            clusterer = joblib.load(
+                classifier.model_path[:11] + classifier.model_path[11:].replace('model', 'clusterer'))
+        elif job['clustering'] == cls.NO_CLUSTER:
+            clusterer = Clustering(job)
+        else:
+            raise ValueError("Unexpected clustering method {}".format(job['clustering']))
+        return clusterer

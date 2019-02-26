@@ -24,6 +24,7 @@ class TestTimeSeriesPrediction(TestCase):
         json['split'] = split_double()
         json['method'] = method
         json['encoding'] = EncodingContainer(encoding_method, padding=padding, prefix_length=4)
+        json['incremental_train'] = {'base_model': None}
         if label == ATTRIBUTE_STRING:
             json['label'] = LabelContainer(label, attribute_name='creator')
         elif label == THRESHOLD_CUSTOM:

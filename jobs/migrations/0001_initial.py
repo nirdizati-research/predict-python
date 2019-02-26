@@ -30,7 +30,8 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(choices=[('classification', 'Classification'), ('regression', 'Regression'),
                                                    ('labelling', 'Labelling'), ('update', 'Update')], max_length=20)),
                 (
-                'split', models.ForeignKey(null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='logs.Split')),
+                    'split',
+                    models.ForeignKey(null=True, on_delete=django.db.models.deletion.DO_NOTHING, to='logs.Split')),
             ],
             options={
                 'abstract': False,

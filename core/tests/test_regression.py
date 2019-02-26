@@ -26,6 +26,7 @@ class TestRegression(TestCase):
         json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
         json['type'] = REGRESSION
+        json['incremental_train'] = {'base_model': None}
 
         add_default_config(json)
         return json

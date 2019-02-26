@@ -1,6 +1,6 @@
-"""
+'''
 performance tests
-"""
+'''
 
 import time
 import unittest
@@ -15,31 +15,32 @@ from encoders.label_container import LabelContainer, DURATION, REMAINING_TIME, N
 from utils.tests_utils import bpi_log_filepath
 
 
-@unittest.skip("performance test not needed normally")
+@unittest.skip('performance test not needed normally')
 class TestClassPerf(TestCase):
     @staticmethod
     def get_job():
         json = dict()
-        json["clustering"] = "noCluster"
-        json["split"] = split_single()
-        json["split"]["original_log_path"] = bpi_log_filepath
-        json["method"] = "randomForest"
-        json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
-        json["type"] = "classification"
+        json['clustering'] = 'noCluster'
+        json['split'] = split_single()
+        json['split']['original_log_path'] = bpi_log_filepath
+        json['method'] = 'randomForest'
+        json['encoding'] = EncodingContainer(BOOLEAN, prefix_length=20)
+        json['type'] = 'classification'
         json['label'] = LabelContainer(DURATION)
+        json['incremental_train'] = {'base_model': None}
         return json
 
     @staticmethod
     def calculate_helper(job):
         start_time = time.time()
         calculate(job)
-        print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
+        print('Total for %s %s seconds' % (job['method'], time.time() - start_time))
 
     @staticmethod
     def calculate_helper_hyperopt(job):
         start_time = time.time()
         calculate_hyperopt(job)
-        print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
+        print('Total for %s %s seconds' % (job['method'], time.time() - start_time))
 
     def test_class_randomForest(self):
         job = self.get_job()
@@ -72,19 +73,19 @@ class TestClassPerf(TestCase):
         self.calculate_helper_hyperopt(job)
 
 
-@unittest.skip("performance test not needed normally")
+@unittest.skip('performance test not needed normally')
 class RegPerf(TestCase):
     @staticmethod
     def get_job():
         json = dict()
-        json["clustering"] = "noCluster"
-        json["split"] = split_single()
-        json["split"]["original_log_path"] = bpi_log_filepath
-        json["method"] = "randomForest"
-        json["encoding"] = EncodingContainer(BOOLEAN, prefix_length=20)
-        json["prefix_length"] = 20
-        json["type"] = "regression"
-        json["padding"] = 'no_padding'
+        json['clustering'] = 'noCluster'
+        json['split'] = split_single()
+        json['split']['original_log_path'] = bpi_log_filepath
+        json['method'] = 'randomForest'
+        json['encoding'] = EncodingContainer(BOOLEAN, prefix_length=20)
+        json['prefix_length'] = 20
+        json['type'] = 'regression'
+        json['padding'] = 'no_padding'
         json['label'] = LabelContainer(REMAINING_TIME)
         return json
 
@@ -92,13 +93,13 @@ class RegPerf(TestCase):
     def calculate_helper(job):
         start_time = time.time()
         calculate(job)
-        print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
+        print('Total for %s %s seconds' % (job['method'], time.time() - start_time))
 
     @staticmethod
     def calculate_helper_hyperopt(job):
         start_time = time.time()
         calculate_hyperopt(job)
-        print("Total for %s %s seconds" % (job['method'], time.time() - start_time))
+        print('Total for %s %s seconds' % (job['method'], time.time() - start_time))
 
     def test_reg_randomForest(self):
         job = self.get_job()

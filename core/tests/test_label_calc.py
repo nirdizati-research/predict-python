@@ -1,6 +1,6 @@
-"""
+'''
 label calculation tests
-"""
+'''
 
 import unittest
 
@@ -16,10 +16,11 @@ class Labelling(TestCase):
     @staticmethod
     def get_job():
         json = dict()
-        json["split"] = repair_example()
-        json["encoding"] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
-        json["type"] = "labelling"
+        json['split'] = repair_example()
+        json['encoding'] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
+        json['type'] = 'labelling'
         json['label'] = LabelContainer()
+        json['incremental_train'] = {'base_model': None}
         return json
 
     @unittest.skip('needs refactoring')
@@ -49,7 +50,7 @@ class Labelling(TestCase):
         self.assertEqual(result, {'Simulated process instance': 883})
 
     def test_duration(self):
-        """Trace atr, zero padding means prefix length has no effect"""
+        '''Trace atr, zero padding means prefix length has no effect'''
         job = self.get_job()
         job['label'] = LabelContainer(DURATION)
         result1, _ = calculate(job)

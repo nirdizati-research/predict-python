@@ -1,6 +1,6 @@
-"""
+'''
 refactoring tests
-"""
+'''
 
 import unittest
 
@@ -17,12 +17,13 @@ class RefactorProof(TestCase):
     @staticmethod
     def get_job():
         json = dict()
-        json["clustering"] = "kmeans"
-        json["split"] = repair_example()
-        json["method"] = "randomForest"
-        json["encoding"] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
-        json["type"] = "classification"
+        json['clustering'] = 'kmeans'
+        json['split'] = repair_example()
+        json['method'] = 'randomForest'
+        json['encoding'] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
+        json['type'] = 'classification'
         json['label'] = LabelContainer(add_elapsed_time=True)
+        json['incremental_train'] = {'base_model': None}
         return json
 
     def test_class_kmeans(self):
@@ -57,8 +58,8 @@ class RefactorProof(TestCase):
     def test_next_activity_kmeans(self):
         self.max_diff = None
         job = self.get_job()
-        job["label"] = LabelContainer(NEXT_ACTIVITY)
-        job["encoding"] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
         # self.assertDictEqual(result, {'f1score': 0.23864644588878572, 'acc': 0.74660633484162897,
@@ -71,9 +72,9 @@ class RefactorProof(TestCase):
     def test_next_activity_no_cluster(self):
         self.max_diff = None
         job = self.get_job()
-        job["label"] = LabelContainer(NEXT_ACTIVITY)
+        job['label'] = LabelContainer(NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
-        job["encoding"] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
+        job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
 
@@ -91,7 +92,7 @@ class RefactorProof(TestCase):
     def test_regression_kmeans(self):
         self.max_diff = None
         job = self.get_job()
-        job["type"] = "regression"
+        job['type'] = 'regression'
         job['label'] = LabelContainer()
         add_default_config(job)
         result, _ = calculate(job)  # TODO double check
@@ -107,7 +108,7 @@ class RefactorProof(TestCase):
     def test_regression_no_cluster(self):
         self.max_diff = None
         job = self.get_job()
-        job["type"] = "regression"
+        job['type'] = 'regression'
         job['clustering'] = 'noCluster'
         job['label'] = LabelContainer()
         add_default_config(job)

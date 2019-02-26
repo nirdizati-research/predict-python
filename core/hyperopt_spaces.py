@@ -18,6 +18,9 @@ def _get_space(job: dict) -> dict:
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 
+# TODO this will change when using more than one type of cluster
+
+
 def _classification_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
@@ -97,8 +100,8 @@ def _classification_incremental_sgd_classifier() -> dict:
         'epsilon': hp.uniform('epsilon', 1e-3, 0.5),
         'learning_rate': hp.choice('learning_rate', ['constant', 'optimal', 'invscaling', 'adaptive']),
         'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
-        'power_t': hp.uniform('power_t', 0.5, 0.1),
-        'early_stopping': hp.choice('early_stopping', [True, False]),
+        'power_t': hp.uniform('power_t', 0.3, 0.7),
+        # 'early_stopping': hp.choice('early_stopping', [True, False]), #needs to be false with partial_fit
         'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5)),
         'validation_fraction': 0.1,
         'average': hp.choice('average', [True, False])
@@ -113,7 +116,7 @@ def _classification_incremental_perceptron() -> dict:
         'tol': hp.uniform('tol', 1e-3, 0.5),
         'shuffle': hp.choice('shuffle', [True, False]),
         'eta0': scope.int(hp.quniform('eta0', 4, 30, 1)),
-        'early_stopping': hp.choice('early_stopping', [True, False]),
+        # 'early_stopping': hp.choice('early_stopping', [True, False]), #needs to be false with partial_fit
         'validation_fraction': 0.1,
         'n_iter_no_change': scope.int(hp.quniform('n_iter_no_change', 5, 30, 5))
     }

@@ -68,8 +68,16 @@ class MulticlassClassificationMetrics(ClassificationMetricsBase):
 
 
 class RegressionMetrics(MetricsBase):
+    rmse = models.FloatField()
+    mae = models.FloatField()
+    mape = models.FloatField()
+
     def to_dict(self):
-        return {}
+        return {
+            'rmse': self.rmse,
+            'mae': self.mae,
+            'mape': self.mape
+        }
 
 
 class TimeSeriesPredictionMetrics(MetricsBase):

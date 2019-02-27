@@ -74,6 +74,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
     ('relu', 'relu')
 )
 
+
 class NeuralNetworks(RegressorBase):
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()

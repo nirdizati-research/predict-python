@@ -227,11 +227,13 @@ class Perceptron(ClassifierBase):
             'n_iter_no_change': self.n_iter_no_change
         }
 
+
 NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
     ('sigmoid', 'sigmoid'),
     ('tanh', 'tanh'),
     ('relu', 'relu')
 )
+
 
 class NeuralNetworks(ClassifierBase):
     hidden_layers = models.PositiveIntegerField()

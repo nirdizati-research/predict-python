@@ -6,7 +6,7 @@ from src.utils.log_metrics import events_by_date, resources_by_date, max_events_
     new_trace_start
 
 
-def create_log(file, name: str, folder='log_cache/'):
+def create_log(file, name: str, folder='cache/log_cache/'):
     # just a way to avoid two files with same name shadow each other
     name = name.replace('.', '_' + str(time.time()).replace('.', '') + '.')
     path = folder + name

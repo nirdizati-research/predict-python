@@ -59,7 +59,7 @@ NB: always run a redis-server in background if you want your server to accept an
 Start by running migrations and adding sample data
 ```commandline
 python manage.py migrate
-python manage.py loaddata all_model_data.json
+python manage.py loaddata <your_file.json>
 ```
 
 Start jobs from command line

@@ -29,10 +29,17 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'logs.apps.LogsConfig',
-    'jobs.apps.JobsConfig',
+    'src.logs.apps.LogsConfig',
+    'src.split.apps.SplitConfig',
+    'src.encoding.apps.EncodingConfig',
+    'src.labelling.apps.LabellingConfig',
+    'src.predictive_model.apps.PredictiveModelConfig',
+    'src.clustering.apps.ClusteringConfig',
+    'src.evaluation.apps.EvaluationConfig',
+    'src.jobs.apps.JobsConfig',
+    'src.runtime.apps.RuntimeConfig',
+
     'pred_models.apps.PredictionModelsConfig',
-    'runtime.apps.RuntimeConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -89,7 +96,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
     'DEFAULT_RENDERER_CLASSES': (
-        'jobs.json_renderer.PalJSONRenderer',
+        'src.jobs.json_renderer.PalJSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
 }

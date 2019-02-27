@@ -42,9 +42,10 @@ class Job(JobBase):
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
 
     def to_dict(self) -> dict:
-        job = dict(self.config)
-        job['type'] = self.type
-        job['split'] = self.split.to_dict()
-        job['label'] = LabelContainer(**self.config['label'])
-        job['encoding'] = EncodingContainer(**self.config['encoding'])
-        return job
+        return {
+            **self.config,
+            'type': self.type,
+            'split': self.split.to_dict(),
+            'label': LabelContainer(**self.config['label']),
+            'encoding': EncodingContainer(**self.config['encoding'])
+        }

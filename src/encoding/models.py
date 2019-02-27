@@ -29,7 +29,7 @@ class Encoding(models.Model):
     prefix_len = models.PositiveIntegerField()
     padding = models.BooleanField(default=False)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'split': self.split,
             'data_encoding': self.data_encoding,

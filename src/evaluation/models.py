@@ -11,7 +11,7 @@ class Evaluation(models.Model):
                                          blank=True, null=True)
     metrics = models.ForeignKey('MetricsBase', on_delete=models.DO_NOTHING, blank=True, null=True)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'split': self.split,
             'encoding': self.encoding,
@@ -24,7 +24,7 @@ class Evaluation(models.Model):
 class MetricsBase(models.Model):
     elapsed_time = models.FloatField()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'elapsed_time': self.elapsed_time
         }
@@ -36,7 +36,7 @@ class ClassificationMetricsBase(MetricsBase):
     precision = models.FloatField()
     recall = models.FloatField()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'f1_score': self.f1_score,
             'accuracy': self.accuracy,
@@ -52,7 +52,7 @@ class BinaryClassificationMetrics(ClassificationMetricsBase):
     false_positive = models.FloatField()
     auc = models.FloatField()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'true_positive': self.true_positive,
             'true_negative': self.true_negative,
@@ -63,7 +63,7 @@ class BinaryClassificationMetrics(ClassificationMetricsBase):
 
 
 class MulticlassClassificationMetrics(ClassificationMetricsBase):
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {}
 
 
@@ -72,7 +72,7 @@ class RegressionMetrics(MetricsBase):
     mae = models.FloatField()
     mape = models.FloatField()
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             'rmse': self.rmse,
             'mae': self.mae,
@@ -81,5 +81,5 @@ class RegressionMetrics(MetricsBase):
 
 
 class TimeSeriesPredictionMetrics(MetricsBase):
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {}

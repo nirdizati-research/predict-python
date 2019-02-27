@@ -5,6 +5,10 @@ from src.predictive_model.models import PredictiveModelBase
 
 class Classification(PredictiveModelBase):
     """Container of Classification to be shown in frontend"""
+    #TODO: shouldnt we add the training data?
+    # split = models.ForeignKey('split.Split', on_delete=models.DO_NOTHING, blank=True, null=True)
+    # encoding = models.ForeignKey('encoding.Encoding', on_delete=models.DO_NOTHING, blank=True, null=True)
+    # labelling = models.ForeignKey('labelling.Labelling', on_delete=models.DO_NOTHING, blank=True, null=True)
     clustering = models.ForeignKey('clustering.Clustering', on_delete=models.DO_NOTHING, blank=True, null=True)
     config = models.ForeignKey('ClassifierBase', on_delete=models.DO_NOTHING, blank=True, null=True)
 

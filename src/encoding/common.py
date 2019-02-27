@@ -45,6 +45,19 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
         encoding.encode(training_log)
         encoding.encode(test_log)
 
+    #TODO: check proper usage
+    # Encoding.objects.create(
+    #     split=,
+    #     data_encoding=,
+    #     value_encoding=,
+    #     additional_features=,
+    #     temporal_features=,
+    #     intercase_features=,
+    #     features=,
+    #     prefix_len=,
+    #     padding=
+    # )
+
     return training_log, test_log
 
 

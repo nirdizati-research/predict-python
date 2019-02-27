@@ -191,12 +191,14 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_classifier(job: dict):
     if job['type'] == UPDATE:
         classifier = _load_model(job['incremental_train']['base_model'])
-        assert classifier[0].__class__.__name__ == job[
-            'method']  # are we updating a predictive_model with its own methods ?
+        assert classifier[0].__class__.__name__ == job['method'] # are we updating a predictive_model with its own methods?
     else:
         method, config = get_method_config(job)
         print("Using method {} with config {}".format(method, config))
         if method == KNN:
+            # TODO: retrieve entry from db or create new one
+            # Classifier.objects.filter()
+            # Classifier.objects.create(clustering=, config=)
             classifier = KNeighborsClassifier(**config)
         elif method == RANDOM_FOREST:
             classifier = RandomForestClassifier(**config)

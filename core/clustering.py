@@ -1,8 +1,9 @@
 import numpy as np
 from pandas import Series, DataFrame
 from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
 
-from core.constants import KMEANS, NO_CLUSTER
+from core.constants import KMEANS, DBSCAN, NO_CLUSTER
 
 config = None
 clusterer = None
@@ -13,7 +14,9 @@ n_clusters = None
 class Clustering:
 
     def __init__(self, job: dict):
-        self.config = job[KMEANS] if KMEANS in job else dict()
+        self.config = job[KMEANS] if KMEANS in job \
+                else job[DBSCAN] if DBSCAN in job \
+                else dict()
         self._choose_clusterer(job)
         self.n_clusters = 1
         self.labels = [0]
@@ -36,6 +39,8 @@ class Clustering:
     def _choose_clusterer(self, job: dict) -> None:
         if job['clustering'] == KMEANS:
             self.clusterer = KMeans(**self.config)
+        elif job['clustering'] == DBSCAN:
+            self.clusterer = DBSCAN(**self.config)
         elif job['clustering'] == NO_CLUSTER:
             self.clusterer = None
         else:

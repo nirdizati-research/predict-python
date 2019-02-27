@@ -226,3 +226,26 @@ class Perceptron(ClassifierBase):
             'validation_fraction': self.validation_fraction,
             'n_iter_no_change': self.n_iter_no_change
         }
+
+NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
+    ('sigmoid', 'sigmoid'),
+    ('tanh', 'tanh'),
+    ('relu', 'relu')
+)
+
+class NeuralNetworks(ClassifierBase):
+    hidden_layers = models.PositiveIntegerField()
+    hidden_units = models.PositiveIntegerField()
+    activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu', max_length=20)
+    epochs = models.PositiveIntegerField()
+    dropout_rate = models.PositiveIntegerField()
+
+    def to_dict(self):
+        return {
+            'hidden_layers': self.hidden_layers,
+            'hidden_units': self.hidden_units,
+            'activation_function': self.activation_function,
+            'epochs': self.epochs,
+            'dropout_rate': self.dropout_rate
+
+        }

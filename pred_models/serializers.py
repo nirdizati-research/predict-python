@@ -1,14 +1,7 @@
 from rest_framework import serializers
 
-from .models import ModelSplit, PredModels
-
-
-class SplitSerializer(serializers.ModelSerializer):
-    type = serializers.CharField()
-
-    class Meta:
-        model = ModelSplit
-        fields = ('id', 'type')
+from src.split.serializers import SplitSerializer
+from .models import PredModels
 
 
 class ModelSerializer(serializers.ModelSerializer):

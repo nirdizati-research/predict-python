@@ -2,6 +2,8 @@ import hashlib
 
 from pandas import DataFrame
 
+from src.encoding.models import Encoding
+from src.split.models import Split
 from src.core.constants import LABELLING, REGRESSION
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
@@ -46,18 +48,18 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
         encoding.encode(test_log)
 
     #TODO: check proper usage
-    # Encoding.objects.create(
-    #     split=split_id,
-    #     data_encoding=encoding.method,
-    #     value_encoding=encoding.ENCODING,
-    #     additional_features= label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or
-    #                                                    label.add_resources_used or label.add_new_traces,
-    #     temporal_features= label.add_remaining_time or label.add_elapsed_time,
-    #     intercase_features=label.add_executed_events or label.add_resources_used or label.add_new_traces,
-    #     features=training_log.columns,
-    #     prefix_len=encoding.prefix_length,
-    #     padding=encoding.is_zero_padding()
-    # )
+    Encoding.objects.create(
+        split=Split.objects.filter(id=split_id)[0],
+        data_encoding=encoding.method, #TODO: @Hitluca check which is the proper whay to handle this
+        value_encoding=encoding.generation_type,
+        additional_features=label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or
+                            label.add_resources_used or label.add_new_traces,
+        temporal_features=label.add_remaining_time or label.add_elapsed_time,
+        intercase_features=label.add_executed_events or label.add_resources_used or label.add_new_traces,
+        features={'features': list(training_log.columns.values)},
+        prefix_len=encoding.prefix_length,
+        padding=encoding.is_zero_padding()
+    )
 
     return training_log, test_log
 

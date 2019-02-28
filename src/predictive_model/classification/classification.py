@@ -12,6 +12,7 @@ from sklearn.tree import DecisionTreeClassifier
 from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
+from src.encoding.models import Encoding
 from pred_models.models import PredModels, ModelSplit
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config

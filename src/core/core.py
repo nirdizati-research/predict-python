@@ -4,6 +4,7 @@ import time
 
 from pandas import DataFrame
 
+from src.evaluation.models import Evaluation
 from src.core.constants import TIME_SERIES_PREDICTION, REGRESSION, CLASSIFICATION, LABELLING, UPDATE
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
@@ -104,7 +105,13 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
         raise ValueError("Type not supported", job['type'])
 
     #TODO: save results in db
-    # Evaluation.objects.create(split=, encoding=, labelling=, clustering=, predictive_model=, metrics= )
+    # Evaluation.objects.create(split=Split.objects.filter(id=job['split'])[0],
+    #                           encoding=Job.encoding,
+    #                           labelling=Job.labelling,
+    #                           clustering=Job.clustering,
+    #                           predictive_model=Job.predictive_model,
+    #                           metrics=
+    #                           )
 
     if job['type'] == CLASSIFICATION:
         save_result(results, job, start_time)

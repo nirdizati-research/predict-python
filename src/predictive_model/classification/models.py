@@ -1,10 +1,53 @@
 from django.db import models
 
 from src.predictive_model.models import PredictiveModel
+from src.core.constants import KNN, DECISION_TREE, RANDOM_FOREST, XGBOOST, HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, \
+    PERCEPTRON
 
 
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
+
+    @staticmethod
+    def init(classification, configuration=None):
+        if classification == DECISION_TREE:
+            return DecisionTree.objects.get_or_create(
+
+            )
+        elif classification == KNN:
+            return Knn.objects.get_or_create(
+
+            )
+        elif classification == RANDOM_FOREST:
+            return RandomForest.objects.get_or_create(
+
+            )
+        elif classification == XGBOOST:
+            return XGBoost.objects.get_or_create(
+
+            )
+        elif classification == NAIVE_BAYES:
+            return NaiveBayes.objects.get_or_create(
+
+            )
+        elif classification == HOEFFDING_TREE:
+            return HoeffdingTree.objects.get_or_create(
+
+            )
+        elif classification == ADAPTIVE_TREE:
+            return AdaptiveHoeffdingTree.objects.get_or_create(
+
+            )
+        elif classification == SGDCLASSIFIER:
+            return SGDClassifier.objects.get_or_create(
+
+            )
+        elif classification == PERCEPTRON:
+            return Perceptron.objects.get_or_create(
+
+            )
+        else:
+            raise ValueError('classification ', classification, 'not recognized')
 
     def to_dict(self):
         return {}

@@ -1,6 +1,7 @@
 from copy import deepcopy
 
-from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION
+from src.clustering.models import Clustering
+from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION, PREDICTION
 from src.core.default_configuration import CONF_MAP, kmeans
 from src.encoding.encoding_container import UP_TO, SIMPLE_INDEX
 from src.encoding.models import Encoding

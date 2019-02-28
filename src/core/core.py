@@ -66,12 +66,12 @@ def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame
                 dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="cache/labeled_log_cache/")
 
             training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                                     additional_columns=additional_columns)
+                                                     additional_columns=additional_columns, split_id=job['split']['id'])
             dump_to_cache(processed_df_cache, (training_df, test_df), prefix="cache/labeled_log_cache/")
     else:
         training_log, test_log, additional_columns = prepare_logs(job['split'])
         training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                                 additional_columns=additional_columns)
+                                                 additional_columns=additional_columns, split_id=job['split']['id'])
     return training_df, test_df
 
 
@@ -102,6 +102,9 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
         results, model_split = update_and_test(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
+
+    #TODO: save results in db
+    # Evaluation.objects.create(split=, encoding=, labelling=, clustering=, predictive_model=, metrics= )
 
     if job['type'] == CLASSIFICATION:
         save_result(results, job, start_time)

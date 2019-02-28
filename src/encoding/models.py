@@ -1,5 +1,4 @@
 from django.db import models
-from rest_framework.fields import ListField
 
 from src.encoding.encoding_container import LABEL_ENCODER, ONE_HOT_ENCODER, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, \
     LAST_PAYLOAD
@@ -25,7 +24,7 @@ class Encoding(models.Model):
     additional_features = models.BooleanField(default=False)
     temporal_features = models.BooleanField(default=False)
     intercase_features = models.BooleanField(default=False)
-    features = ListField()  # TODO is this correct?
+    features = models.BinaryField()  # TODO is this correct?
     prefix_len = models.PositiveIntegerField()
     padding = models.BooleanField(default=False)
 

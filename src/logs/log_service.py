@@ -19,11 +19,10 @@ def create_properties(path: str) -> dict:
     """Create read-only dict with methods in this class"""
     print("Creating properties for log {}".format(path))
     logs = get_log(path)
-    properties = dict()
-    properties["events"] = events_by_date(logs)
-    properties["resources"] = resources_by_date(logs)
-    properties["maxEventsInLog"] = max_events_in_log(logs)
-    properties["traceAttributes"] = trace_attributes(logs)
-    properties["newTraces"] = new_trace_start(logs)
-    print("Properties created")
-    return properties
+    return {
+        'events': events_by_date(logs),
+        'resources': resources_by_date(logs),
+        'maxEventsInLog': max_events_in_log(logs),
+        'traceAttributes': trace_attributes(logs),
+        'newTraces': new_trace_start(logs)
+    }

@@ -9,7 +9,7 @@ SPLIT_TYPES = (
 
 class Split(models.Model):
     """Container of Split to be shown in frontend"""
-    config = JSONField(default={})
+    config = JSONField(default={}) #TODO swap with new object (WHY IS IT HERE? )
     type = models.CharField(choices=SPLIT_TYPES, default='single', max_length=20)
     original_log = models.ForeignKey('logs.Log', on_delete=models.DO_NOTHING, related_name='original_log', blank=True,
                                      null=True)
@@ -18,10 +18,11 @@ class Split(models.Model):
                                      null=True)
 
     def to_dict(self) -> dict:
-        split = dict()
-        split['id'] = self.id
-        split['type'] = self.type
-        split['config'] = self.config
+        split = {
+            'id': self.id,
+            'type': self.type,
+            'config': self.config
+        }
         if self.type == 'single':
             split['original_log_path'] = self.original_log.path
         else:

@@ -37,7 +37,7 @@ class Job(JobBase):
     config = JSONField()
     error = models.CharField(default='', max_length=200)
     status = models.CharField(choices=STATUSES, default=CREATED, max_length=20)
-    result = JSONField(default={})
+    result = JSONField(default={}) #TODO exported key to EvaluationDB
     type = models.CharField(choices=TYPES, max_length=20)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
 

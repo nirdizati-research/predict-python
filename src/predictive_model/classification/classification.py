@@ -76,6 +76,9 @@ def classification_single_log(input_df: DataFrame, model: dict) -> dict:
 def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
     train_data, test_data = _drop_columns(training_df, test_df)
 
+    #TODO load previously used data structure to check input conformance
+    # Encoder.objects.filter()
+
     model_split = _update(job, train_data, _choose_classifier(job))
 
     results_df, auc = _test(model_split, test_data, evaluation=True,

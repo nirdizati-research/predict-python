@@ -12,7 +12,7 @@ from .simple_index import simple_index
 
 
 def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
-                      label: LabelContainer, additional_columns=None):
+                      label: LabelContainer, additional_columns=None, split_id=None):
     """encodes and labels test set and training set as data frames
 
     :param training_log: 
@@ -47,15 +47,16 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
 
     #TODO: check proper usage
     # Encoding.objects.create(
-    #     split=,
-    #     data_encoding=,
-    #     value_encoding=,
-    #     additional_features=,
-    #     temporal_features=,
-    #     intercase_features=,
-    #     features=,
-    #     prefix_len=,
-    #     padding=
+    #     split=split_id,
+    #     data_encoding=encoding.method,
+    #     value_encoding=encoding.ENCODING,
+    #     additional_features= label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or
+    #                                                    label.add_resources_used or label.add_new_traces,
+    #     temporal_features= label.add_remaining_time or label.add_elapsed_time,
+    #     intercase_features=label.add_executed_events or label.add_resources_used or label.add_new_traces,
+    #     features=training_log.columns,
+    #     prefix_len=encoding.prefix_length,
+    #     padding=encoding.is_zero_padding()
     # )
 
     return training_log, test_log

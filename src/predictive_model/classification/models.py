@@ -29,7 +29,7 @@ KNN_WEIGHTS = (
 )
 
 
-class KNN(Classification):
+class Knn(Classification):
     n_neighbors = models.PositiveIntegerField()
     weights = models.CharField(choices=KNN_WEIGHTS, default='uniform', max_length=20)
 

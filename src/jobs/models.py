@@ -1,13 +1,10 @@
 from django.db import models
 
-from pred_models.models import TYPES
 from src.clustering.models import Clustering
 from src.core.constants import PREDICTION, LABELLING, UPDATE
 from src.evaluation.models import Evaluation
 from src.labelling.models import Labelling
 from src.encoding.models import Encoding
-from src.encoding.encoding_container import EncodingContainer
-from src.labelling.label_container import LabelContainer
 from src.predictive_model.models import PredictiveModel
 from src.split.models import Split
 
@@ -23,6 +20,7 @@ STATUSES = (
     (ERROR, 'error'),
     (RUNNING, 'running')
 )
+
 
 TYPES = (
     (PREDICTION, 'prediction'),

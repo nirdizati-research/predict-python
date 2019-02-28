@@ -1,7 +1,6 @@
 from django.db import models
 from jsonfield.fields import JSONField
 
-from src.core import *
 from src.core.constants import KMEANS, NO_CLUSTER
 from src.encoding.encoding_container import EncodingContainer
 from src.jobs.models import TYPES

@@ -8,6 +8,20 @@ from src.core.constants import CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN,
     UPDATE_INCREMENTAL_NAIVE_BAYES, UPDATE_INCREMENTAL_ADAPTIVE_TREE, UPDATE_INCREMENTAL_HOEFFDING_TREE
 
 
+def clustering_kmeans():
+    return {
+        'n_clusters': 8,
+        'init': 'k-means++',
+        'n_init': 10,
+        'max_iter': 300,
+        'tol': 1e-4,
+        'precompute_distances': 'auto',
+        'random_state': None,
+        'copy_x': None,
+        'algorithm': None
+    }
+
+
 def classification_random_forest():
     return {
         'n_estimators': 10,

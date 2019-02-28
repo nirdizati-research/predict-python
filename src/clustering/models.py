@@ -1,8 +1,31 @@
 from django.db import models
 
+from src.core.constants import KMEANS, NO_CLUSTER
+from src.core.default_configuration import clustering_kmeans
+
 
 class Clustering(models.Model):
     """Container of Classification to be shown in frontend"""
+
+    @staticmethod
+    def init(clustering, configuration=None):
+        if clustering == NO_CLUSTER:
+            return NoClustering.objects.get_or_create(id=1)
+        elif clustering == KMEANS:
+            default_configuration = clustering_kmeans()
+            return KMeans.objects.get_or_create(
+                n_clusters=configuration.get('n_clusters', default_configuration['n_clusters']),
+                init=configuration.get('init', default_configuration['init']),
+                n_init=configuration.get('n_init', default_configuration['n_init']),
+                max_iter=configuration.get('max_iter', default_configuration['max_iter']),
+                tol=configuration.get('tol', default_configuration['tol']),
+                precompute_distances=configuration.get('precompute_distances', default_configuration['precompute_distances']),
+                random_state=configuration.get('random_state', default_configuration['random_state']),
+                copy_x=configuration.get('copy_x', default_configuration['copy_x']),
+                algorithm=configuration.get('algorithm', default_configuration['algorithm'])
+            )
+        else:
+            raise ValueError('configuration ', clustering, 'not recognized')
 
     def to_dict(self) -> dict:
         return {}

@@ -1,8 +1,12 @@
 from django.db import models
 
+from src.core.default_configuration import classification_knn, classification_random_forest, \
+    classification_decision_tree, classification_xgboost, classification_incremental_naive_bayes, \
+    classification_incremental_hoeffding_tree, classification_incremental_adaptive_tree, \
+    classification_incremental_sgd_classifier, classification_incremental_perceptron
 from src.predictive_model.models import PredictiveModel
 from src.core.constants import KNN, DECISION_TREE, RANDOM_FOREST, XGBOOST, HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, \
-    PERCEPTRON
+    PERCEPTRON, MULTINOMIAL_NAIVE_BAYES
 
 
 class Classification(PredictiveModel):
@@ -10,41 +14,88 @@ class Classification(PredictiveModel):
 
     @staticmethod
     def init(classification, configuration=None):
+        default_configuration = classification_decision_tree()
         if classification == DECISION_TREE:
             return DecisionTree.objects.get_or_create(
-
+                max_depth=configuration.get('max_depth', default_configuration['max_depth']),
+                min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
+                min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])
             )
         elif classification == KNN:
+            default_configuration = classification_knn()
             return Knn.objects.get_or_create(
-
+                n_neighbors=configuration.get('n_neighbors', default_configuration['n_neighbors']),
+                weights=configuration.get('weights', default_configuration['weights'])
             )
         elif classification == RANDOM_FOREST:
+            default_configuration = classification_random_forest()
             return RandomForest.objects.get_or_create(
-
+                n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
+                max_depth=configuration.get('max_depth', default_configuration['max_depth']),
+                max_features=configuration.get('max_features', default_configuration['max_features'])
             )
         elif classification == XGBOOST:
+            default_configuration = classification_xgboost()
             return XGBoost.objects.get_or_create(
-
+                n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
+                max_depth=configuration.get('max_depth', default_configuration['max_depth'])
             )
-        elif classification == NAIVE_BAYES:
+        elif classification == MULTINOMIAL_NAIVE_BAYES:
+            default_configuration = classification_incremental_naive_bayes()
             return NaiveBayes.objects.get_or_create(
-
+                alpha=configuration.get('alpha', default_configuration['alpha']),
+                fit_prior=configuration.get('fit_prior', default_configuration['fit_prior'])
             )
         elif classification == HOEFFDING_TREE:
+            default_configuration = classification_incremental_hoeffding_tree()
             return HoeffdingTree.objects.get_or_create(
-
+                grace_period=configuration.get('grace_period', default_configuration['grace_period']),
+                split_criterion=configuration.get('split_criterion', default_configuration['split_criterion']),
+                split_confidence=configuration.get('split_confidence', default_configuration['split_confidence']),
+                tie_threshold=configuration.get('tie_threshold', default_configuration['tie_threshold']),
+                remove_poor_atts=configuration.get('remove_poor_atts', default_configuration['remove_poor_atts']),
+                leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
+                nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
             )
         elif classification == ADAPTIVE_TREE:
+            default_configuration = classification_incremental_adaptive_tree()
             return AdaptiveHoeffdingTree.objects.get_or_create(
-
+                grace_period=configuration.get('grace_period', default_configuration['grace_period']),
+                split_criterion=configuration.get('split_criterion', default_configuration['split_criterion']),
+                split_confidence=configuration.get('split_confidence', default_configuration['split_confidence']),
+                tie_threshold=configuration.get('tie_threshold', default_configuration['tie_threshold']),
+                remove_poor_atts=configuration.get('remove_poor_atts', default_configuration['remove_poor_atts']),
+                leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
+                nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
             )
         elif classification == SGDCLASSIFIER:
+            default_configuration = classification_incremental_sgd_classifier()
             return SGDClassifier.objects.get_or_create(
-
+                loss=configuration.get('loss', default_configuration['loss ']),
+                penalty=configuration.get('penalty', default_configuration['penalty ']),
+                alpha=configuration.get('alpha', default_configuration['alpha ']),
+                l1_ratio=configuration.get('l1_ratio', default_configuration['l1_ratio ']),
+                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept ']),
+                tol=configuration.get('tol', default_configuration['tol ']),
+                epsilon=configuration.get('epsilon', default_configuration['epsilon ']),
+                learning_rate=configuration.get('learning_rate', default_configuration['learning_rate ']),
+                eta0=configuration.get('eta0', default_configuration['eta0 ']),
+                power_t=configuration.get('power_t', default_configuration['power_t ']),
+                n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change ']),
+                validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction ']),
+                average=configuration.get('average', default_configuration['average '])
             )
         elif classification == PERCEPTRON:
+            default_configuration = classification_incremental_perceptron()
             return Perceptron.objects.get_or_create(
-
+                penalty=configuration.get('penalty', default_configuration['penalty']),
+                alpha=configuration.get('alpha', default_configuration['alpha']),
+                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
+                tol=configuration.get('tol', default_configuration['tol']),
+                shuffle=configuration.get('shuffle', default_configuration['shuffle']),
+                eta0=configuration.get('eta0', default_configuration['eta0']),
+                validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction']),
+                n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change'])
             )
         else:
             raise ValueError('classification ', classification, 'not recognized')

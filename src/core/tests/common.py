@@ -5,7 +5,7 @@ common methods and functionalities for the core tests
 import os
 import sys
 
-from src.core.default_configuration import CONF_MAP, kmeans
+from src.core.default_configuration import CONF_MAP, clustering_kmeans
 from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
     general_example_train_filepath
 
@@ -70,5 +70,5 @@ def add_default_config(job: dict, prediction_method=""):
     method_conf_name = "{}.{}".format(prediction_method, job['method'])
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
-    job['kmeans'] = kmeans()
+    job['kmeans'] = clustering_kmeans()
     return job

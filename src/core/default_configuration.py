@@ -32,7 +32,7 @@ def classification_random_forest():
     }
 
 
-def _classification_knn():
+def classification_knn():
     return {
         'n_neighbors': 5,
         'n_jobs': -1,
@@ -40,7 +40,7 @@ def _classification_knn():
     }
 
 
-def _classification_decision_tree():
+def classification_decision_tree():
     return {
         'max_depth': None,
         'min_samples_split': 2,
@@ -49,7 +49,7 @@ def _classification_decision_tree():
     }
 
 
-def _classification_incremental_naive_bayes():
+def classification_incremental_naive_bayes():
     return {
         'alpha': 1.0,
         'fit_prior': True,
@@ -57,7 +57,7 @@ def _classification_incremental_naive_bayes():
     }
 
 
-def _classification_incremental_adaptive_tree():
+def classification_incremental_adaptive_tree():
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
@@ -75,7 +75,7 @@ def _classification_incremental_adaptive_tree():
     }
 
 
-def _classification_incremental_hoeffding_tree():
+def classification_incremental_hoeffding_tree():
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
@@ -93,7 +93,7 @@ def _classification_incremental_hoeffding_tree():
     }
 
 
-def _classification_incremental_sgd_classifier():
+def classification_incremental_sgd_classifier():
     return {
         'loss': 'hinge',
         'penalty': 'l2',
@@ -110,7 +110,7 @@ def _classification_incremental_sgd_classifier():
     }
 
 
-def _classification_incremental_perceptron():
+def classification_incremental_perceptron():
     return {
         'penalty': None,
         'alpha': 0.0001,
@@ -125,7 +125,7 @@ def _classification_incremental_perceptron():
     }
 
 
-def _classification_xgboost():
+def classification_xgboost():
     return {
         'max_depth': 3,
         'learning_rate': 0.1,
@@ -133,7 +133,7 @@ def _classification_xgboost():
     }
 
 
-def _classification_nn():
+def classification_nn():
     return {
         'n_hidden_layers': 1,
         'n_hidden_units': 10,
@@ -143,7 +143,7 @@ def _classification_nn():
     }
 
 
-def _regression_random_forest():
+def regression_random_forest():
     return {
         'n_estimators': 10,
         'max_depth': None,
@@ -153,7 +153,7 @@ def _regression_random_forest():
     }
 
 
-def _regression_lasso():
+def regression_lasso():
     return {
         'alpha': 1.0,
         'fit_intercept': True,
@@ -162,7 +162,7 @@ def _regression_lasso():
     }
 
 
-def _regression_linear():
+def regression_linear():
     return {
         'fit_intercept': True,
         'n_jobs': -1,
@@ -170,14 +170,14 @@ def _regression_linear():
     }
 
 
-def _regression_xgboost():
+def regression_xgboost():
     return {
         'n_estimators': 100,
         'max_depth': 3
     }
 
 
-def _regression_nn():
+def regression_nn():
     return {
         'n_hidden_layers': 1,
         'n_hidden_units': 10,
@@ -187,21 +187,11 @@ def _regression_nn():
     }
 
 
-def _time_series_prediction_rnn():
+def time_series_prediction_rnn():
     return {
         'n_units': 16,
         'rnn_type': 'lstm',
         'n_epochs': 10,
-    }
-
-
-def kmeans():
-    return {
-        'n_clusters': 3,
-        'max_iter': 300,
-        'n_jobs': -1,
-        'algorithm': 'auto',
-        'random_state': 21
     }
 
 
@@ -227,7 +217,7 @@ def _update_incremental_adaptive_tree():
         'no_preprune': False,
         'leaf_prediction': 'nba',
         'nb_threshold': 0.4,
-        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
+        'nominal_attributes': []  # <-- TODO: if this is empty assume all attributes are numerical
     }
 
 
@@ -245,30 +235,30 @@ def _update_incremental_hoeffding_tree():
         'no_preprune': False,
         'leaf_prediction': 'mc',
         'nb_threshold': 0.3,
-        'nominal_attributes': []  # <-- if this is empty assume all attributes are numerical
+        'nominal_attributes': []  # <-- TODO: if this is empty assume all attributes are numerical
     }
 
 
 # Map method config to a dict
 CONF_MAP = {
     CLASSIFICATION_RANDOM_FOREST: classification_random_forest,
-    CLASSIFICATION_KNN: _classification_knn,
-    CLASSIFICATION_DECISION_TREE: _classification_decision_tree,
-    CLASSIFICATION_XGBOOST: _classification_xgboost,
-    CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES: _classification_incremental_naive_bayes,
-    CLASSIFICATION_ADAPTIVE_TREE: _classification_incremental_adaptive_tree,
-    CLASSIFICATION_HOEFFDING_TREE: _classification_incremental_hoeffding_tree,
-    CLASSIFICATION_SGDC: _classification_incremental_sgd_classifier,
-    CLASSIFICATION_PERCEPTRON: _classification_incremental_perceptron,
-    CLASSIFICATION_NN: _classification_nn,
+    CLASSIFICATION_KNN: classification_knn,
+    CLASSIFICATION_DECISION_TREE: classification_decision_tree,
+    CLASSIFICATION_XGBOOST: classification_xgboost,
+    CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES: classification_incremental_naive_bayes,
+    CLASSIFICATION_ADAPTIVE_TREE: classification_incremental_adaptive_tree,
+    CLASSIFICATION_HOEFFDING_TREE: classification_incremental_hoeffding_tree,
+    CLASSIFICATION_SGDC: classification_incremental_sgd_classifier,
+    CLASSIFICATION_PERCEPTRON: classification_incremental_perceptron,
+    CLASSIFICATION_NN: classification_nn,
 
-    REGRESSION_RANDOM_FOREST: _regression_random_forest,
-    REGRESSION_XGBOOST: _regression_xgboost,
-    REGRESSION_LASSO: _regression_lasso,
-    REGRESSION_LINEAR: _regression_linear,
-    REGRESSION_NN: _regression_nn,
+    REGRESSION_RANDOM_FOREST: regression_random_forest,
+    REGRESSION_XGBOOST: regression_xgboost,
+    REGRESSION_LASSO: regression_lasso,
+    REGRESSION_LINEAR: regression_linear,
+    REGRESSION_NN: regression_nn,
 
-    TIME_SERIES_PREDICTION_RNN: _time_series_prediction_rnn,
+    TIME_SERIES_PREDICTION_RNN: time_series_prediction_rnn,
 
     UPDATE_INCREMENTAL_NAIVE_BAYES: _update_incremental_naive_bayes,
     UPDATE_INCREMENTAL_ADAPTIVE_TREE: _update_incremental_adaptive_tree,

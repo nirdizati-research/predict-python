@@ -9,8 +9,8 @@ local_settings.py
 db.sqlite3
 media
 
-*/migrations/*
-!*/migrations/__init__.py
+**/migrations/*
+!**/migrations/__init__.py
 
 # End of https://www.gitignore.io/api/django
 
@@ -26,3 +26,4 @@ dump.rdb
 .idea/
 .coverage
 /docs/build/
+docs/source/_templates/

@@ -48,11 +48,11 @@ class FileUploadTests(APITestCase):
         Log.objects.all().delete()
         # I hate that Python can't just delete
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/test_upload.xes')
+            remove('cache/log_cache/test_upload.xes')
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/file1.xes')
+            remove('cache/log_cache/file1.xes')
         with contextlib.suppress(FileNotFoundError):
-            remove('log_cache/file2.xes')
+            remove('cache/log_cache/file2.xes')
 
     @staticmethod
     def _create_test_file(path):

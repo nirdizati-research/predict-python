@@ -15,12 +15,4 @@
     :titlesonly:
     :maxdepth: 2
 
-    api/core.rst
-    api/encoders.rst
-    api/jobs.rst
-    api/logs.rst
-    api/nirdizati-research.rst
-    api/pred_models.rst
-    api/runtime.rst
-    api/utils.rst
-
+    api/modules.rst

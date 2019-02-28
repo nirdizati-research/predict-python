@@ -2,6 +2,7 @@ from django.db import models
 
 from pred_models.models import TYPES
 from src.clustering.models import Clustering
+from src.core.constants import PREDICTION, LABELLING, UPDATE
 from src.evaluation.models import Evaluation
 from src.labelling.models import Labelling
 from src.encoding.models import Encoding
@@ -23,6 +24,11 @@ STATUSES = (
     (RUNNING, 'running')
 )
 
+TYPES = (
+    (PREDICTION, 'prediction'),
+    (LABELLING, 'labelling'),
+    (UPDATE, 'update')
+)
 
 class Job(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)

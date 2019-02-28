@@ -3,7 +3,9 @@ from copy import deepcopy
 from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION
 from src.core.default_configuration import CONF_MAP, kmeans
 from src.encoding.encoding_container import UP_TO, SIMPLE_INDEX
+from src.encoding.models import Encoding
 from src.jobs.models import Job, CREATED
+from src.labelling.models import Labelling
 
 
 def generate(split, payload, generation_type=CLASSIFICATION):

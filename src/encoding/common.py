@@ -49,7 +49,6 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
 
     #TODO: check proper usage
     Encoding.objects.create(
-        split=Split.objects.filter(id=split_id)[0],
         data_encoding=encoding.method, #TODO: @Hitluca check which is the proper whay to handle this
         value_encoding=encoding.generation_type,
         additional_features=label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or

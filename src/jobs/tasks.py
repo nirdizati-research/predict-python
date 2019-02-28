@@ -60,8 +60,7 @@ def save_models(to_model_split, job):
     else:
         filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(job.id, job.split.id, job.type)
     joblib.dump(to_model_split['classifier'], filename_model)
-    model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
-                                                            predtype=job.type)
+    model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model, predtype=job.type)
     if to_model_split['type'] == Clustering.KMEANS:  # TODO this will change when using more than one type of cluster
         filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id, job.type)
         joblib.dump(to_model_split['clusterer'], filename_clusterer)

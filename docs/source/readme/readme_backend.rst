@@ -54,7 +54,7 @@ Start server with
 
 Run tests with one of the following
 
-.. code-block::
+.. code-block:: none
 
    python manage.py test
    ./manage.py test
@@ -64,14 +64,14 @@ accept any incoming post requests!
 
 Start by running migrations and adding sample data
 
-.. code-block::
+.. code-block:: none
 
    python manage.py migrate
-   python manage.py loaddata all_model_data.json
+   python manage.py loaddata <your_file.json>
 
 Start jobs from command line
 
-.. code-block::
+.. code-block:: none
 
     curl --request POST \
       --header 'Content-Type: application/json' \

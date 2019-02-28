@@ -17,6 +17,14 @@ import sys
 
 sys.path.insert(0, os.path.abspath('../..'))
 
+os.environ['DJANGO_SETTINGS_MODULE'] = 'nirdizati-research.settings'
+os.environ['REDIS_HOST'] = 'localhost'
+os.environ['REDIS_PORT'] = '6379'
+
+import django
+
+django.setup()
+
 # -- Project information -----------------------------------------------------
 
 project = 'Nirdizati Research'
@@ -66,7 +74,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ['**/*.migrations.rst', '**/*.tests.rst']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = None

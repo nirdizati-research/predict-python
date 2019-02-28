@@ -14,7 +14,7 @@ from src.utils.file_service import get_log
 
 class TestEncoding(TestCase):
     def setUp(self):
-        self.log = get_log("log_cache/repairExample.xes")
+        self.log = get_log("cache/log_cache/repairExample.xes")
         # self.log = get_logs("log_cache/BPI Challenge 2017.xes.gz")[0]
         self.label = LabelContainer(NO_LABEL)
         self.add_col = get_additional_columns(self.log)
@@ -42,7 +42,7 @@ class TestAgainstNirdizatiTraining(TestCase):
     def do_test(encoding):
         start_time = time.time()
         # log = get_logs("log_cache/general_example.xes")[0]
-        log = get_log("log_cache/Sepsis Cases - Event Log.xes")
+        log = get_log("cache/log_cache/Sepsis Cases - Event Log.xes")
         label = LabelContainer(REMAINING_TIME, add_elapsed_time=True)
         encoding = EncodingContainer(encoding, prefix_length=185, generation_type=ALL_IN_ONE,
                                      padding=ZERO_PADDING)
@@ -64,13 +64,13 @@ class TestTraceLengthTime(TestCase):
     def setUp(self):
         self.label = LabelContainer(NO_LABEL)
         start_time = time.time()
-        self.log1 = get_log("log_cache/Sepsis Cases - Event Log.xes.gz")
+        self.log1 = get_log("cache/log_cache/Sepsis Cases - Event Log.xes.gz")
         print("Total for %s %s seconds" % ("sepsis", time.time() - start_time))
         start_time = time.time()
-        self.log2 = get_log("log_cache/financial_log.xes.gz")
+        self.log2 = get_log("cache/log_cache/financial_log.xes.gz")
         print("Total for %s %s seconds" % ("financial", time.time() - start_time))
         start_time = time.time()
-        self.log3 = get_log("log_cache/BPI Challenge 2017.xes.gz")
+        self.log3 = get_log("cache/log_cache/BPI Challenge 2017.xes.gz")
         print("Total for %s %s seconds" % ("2017", time.time() - start_time))
 
     def do_test(self, encoding, log):

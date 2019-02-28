@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'src.predictive_model.apps.PredictiveModelConfig',
     'src.predictive_model.classification.apps.ClassificationConfig',
     'src.predictive_model.regression.apps.RegressionConfig',
+    'src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig',
     'src.evaluation.apps.EvaluationConfig',
     'src.jobs.apps.JobsConfig',
     'src.runtime.apps.RuntimeConfig',

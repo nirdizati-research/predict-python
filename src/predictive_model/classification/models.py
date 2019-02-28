@@ -1,30 +1,16 @@
 from django.db import models
 
-from src.predictive_model.models import PredictiveModelBase
+from src.predictive_model.models import PredictiveModel
 
 
-class Classification(PredictiveModelBase):
+class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
-    #TODO: shouldnt we add the training data?
-    # split = models.ForeignKey('split.Split', on_delete=models.DO_NOTHING, blank=True, null=True)
-    # encoding = models.ForeignKey('encoding.Encoding', on_delete=models.DO_NOTHING, blank=True, null=True)
-    # labelling = models.ForeignKey('labelling.Labelling', on_delete=models.DO_NOTHING, blank=True, null=True)
-    clustering = models.ForeignKey('clustering.Clustering', on_delete=models.DO_NOTHING, blank=True, null=True)
-    config = models.ForeignKey('ClassifierBase', on_delete=models.DO_NOTHING, blank=True, null=True)
 
-    def to_dict(self):
-        return {
-            'clustering': self.clustering,
-            'config': self.config
-        }
-
-
-class ClassifierBase(models.Model):
     def to_dict(self):
         return {}
 
 
-class DecisionTree(ClassifierBase):
+class DecisionTree(Classification):
     max_depth = models.PositiveIntegerField()
     min_samples_split = models.PositiveIntegerField()
     min_samples_leaf = models.PositiveIntegerField()
@@ -43,7 +29,7 @@ KNN_WEIGHTS = (
 )
 
 
-class KNN(ClassifierBase):
+class KNN(Classification):
     n_neighbors = models.PositiveIntegerField()
     weights = models.CharField(choices=KNN_WEIGHTS, default='uniform', max_length=20)
 
@@ -54,7 +40,7 @@ class KNN(ClassifierBase):
         }
 
 
-class RandomForest(ClassifierBase):
+class RandomForest(Classification):
     n_estimators = models.PositiveIntegerField()
     max_depth = models.PositiveIntegerField()
     max_features = models.PositiveIntegerField()
@@ -67,7 +53,7 @@ class RandomForest(ClassifierBase):
         }
 
 
-class XGBoost(ClassifierBase):
+class XGBoost(Classification):
     n_estimators = models.PositiveIntegerField()
     max_depth = models.PositiveIntegerField()
 
@@ -78,7 +64,7 @@ class XGBoost(ClassifierBase):
         }
 
 
-class NaiveBayes(ClassifierBase):
+class NaiveBayes(Classification):
     alpha = models.FloatField()
     fit_prior = models.BooleanField()
 
@@ -101,7 +87,7 @@ HOEFFDING_TREE_LEAF_PREDICTION = (
 )
 
 
-class HoeffdingTree(ClassifierBase):
+class HoeffdingTree(Classification):
     grace_period = models.PositiveIntegerField()
     split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=20)
     split_confidence = models.FloatField()
@@ -122,7 +108,7 @@ class HoeffdingTree(ClassifierBase):
         }
 
 
-class AdaptiveHoeffdingTree(ClassifierBase):
+class AdaptiveHoeffdingTree(Classification):
     grace_period = models.PositiveIntegerField()
     split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=20)
     split_confidence = models.FloatField()
@@ -169,7 +155,7 @@ SGDCLASSIFIER_LEARNING_RATE = (
 )
 
 
-class SGDClassifier(ClassifierBase):
+class SGDClassifier(Classification):
     loss = models.CharField(choices=SGDCLASSIFIER_LOSS, default='uniform', max_length=20)
     penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20)
     alpha = models.FloatField()
@@ -209,7 +195,7 @@ PERCEPTRON_PENALTY = (
 )
 
 
-class Perceptron(ClassifierBase):
+class Perceptron(Classification):
     penalty = models.CharField(choices=PERCEPTRON_PENALTY, default='l1', max_length=20)
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
@@ -239,7 +225,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 )
 
 
-class NeuralNetworks(ClassifierBase):
+class NeuralNetworks(Classification):
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu', max_length=20)

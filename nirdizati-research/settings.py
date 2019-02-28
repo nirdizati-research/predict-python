@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django_rq",
     'corsheaders',
     'ws4redis',
+    'django_extensions'
 ]
 
 LOGGING = {

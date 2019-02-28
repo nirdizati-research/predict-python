@@ -1,7 +1,6 @@
 from django.db import models
 from jsonfield.fields import JSONField
 
-from src.split.models import Split
 from src.encoding.encoding_container import LABEL_ENCODER, ONE_HOT_ENCODER, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, \
     LAST_PAYLOAD
 
@@ -20,7 +19,6 @@ VALUE_ENCODING = (
 
 
 class Encoding(models.Model):
-    split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, blank=True, null=True)
     data_encoding = models.CharField(choices=DATA_ENCODING, default='label_encoder', max_length=20)
     value_encoding = models.CharField(choices=VALUE_ENCODING, default='label_encoder', max_length=20)
     additional_features = models.BooleanField(default=False)
@@ -32,7 +30,6 @@ class Encoding(models.Model):
 
     def to_dict(self) -> dict:
         return {
-            'split': self.split,
             'data_encoding': self.data_encoding,
             'value_encoding': self.value_encoding,
             'additional_features': self.additional_features,

@@ -18,7 +18,7 @@ class ModelSplit(models.Model):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     clusterer_path = models.CharField(blank=True, null=True, max_length=200)
-    predtype = models.CharField(choices=TYPES, max_length=20, default='Classification')
+    predtype = models.CharField(choices=TYPES, max_length=20, default='Prediction')
 
     def to_dict(self):
         split = dict()

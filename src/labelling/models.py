@@ -25,7 +25,6 @@ class Labelling(models.Model):
     attribute_name = models.CharField(default='label', max_length=20)
     threshold_type = models.CharField(choices=THRESHOLD_TYPES, default='threshold_mean', max_length=20)
     threshold = models.IntegerField()
-    split = models.ForeignKey('split.Split', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def to_dict(self):
         return {
@@ -33,5 +32,4 @@ class Labelling(models.Model):
             'attribute_name': self.attribute_name,
             'threshold_type': self.threshold_type,
             'threshold': self.threshold,
-            'split': self.split
         }

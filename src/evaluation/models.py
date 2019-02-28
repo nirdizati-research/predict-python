@@ -1,27 +1,16 @@
 from django.db import models
 
-
 class Evaluation(models.Model):
     """Container of Classification to be shown in frontend"""
-    split = models.ForeignKey('split.Split', on_delete=models.DO_NOTHING, blank=True, null=True)
-    encoding = models.ForeignKey('encoding.Encoding', on_delete=models.DO_NOTHING, blank=True, null=True)
-    labelling = models.ForeignKey('labelling.Labelling', on_delete=models.DO_NOTHING, blank=True, null=True)
-    clustering = models.ForeignKey('clustering.Clustering', on_delete=models.DO_NOTHING, blank=True, null=True)
-    predictive_model = models.ForeignKey('predictive_model.PredictiveModelBase', on_delete=models.DO_NOTHING,
-                                         blank=True, null=True)
-    metrics = models.ForeignKey('MetricsBase', on_delete=models.DO_NOTHING, blank=True, null=True)
+    metrics = models.ForeignKey('Metrics', on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def to_dict(self) -> dict:
         return {
-            'split': self.split,
-            'encoding': self.encoding,
-            'labelling': self.labelling,
-            'clustering': self.clustering,
-            'predictive_model': self.predictive_model
+            'metrics': self.metrics
         }
 
 
-class MetricsBase(models.Model):
+class Metrics(models.Model):
     elapsed_time = models.FloatField()
 
     def to_dict(self) -> dict:
@@ -30,7 +19,7 @@ class MetricsBase(models.Model):
         }
 
 
-class ClassificationMetricsBase(MetricsBase):
+class ClassificationMetrics(Metrics):
     f1_score = models.FloatField()
     accuracy = models.FloatField()
     precision = models.FloatField()
@@ -45,7 +34,7 @@ class ClassificationMetricsBase(MetricsBase):
         }
 
 
-class BinaryClassificationMetrics(ClassificationMetricsBase):
+class BinaryClassificationMetrics(ClassificationMetrics):
     true_positive = models.FloatField()
     true_negative = models.FloatField()
     false_negative = models.FloatField()
@@ -62,12 +51,12 @@ class BinaryClassificationMetrics(ClassificationMetricsBase):
         }
 
 
-class MulticlassClassificationMetrics(ClassificationMetricsBase):
+class MulticlassClassificationMetrics(ClassificationMetrics):
     def to_dict(self) -> dict:
         return {}
 
 
-class RegressionMetrics(MetricsBase):
+class RegressionMetrics(Metrics):
     rmse = models.FloatField()
     mae = models.FloatField()
     mape = models.FloatField()
@@ -80,6 +69,6 @@ class RegressionMetrics(MetricsBase):
         }
 
 
-class TimeSeriesPredictionMetrics(MetricsBase):
+class TimeSeriesPredictionMetrics(Metrics):
     def to_dict(self) -> dict:
         return {}

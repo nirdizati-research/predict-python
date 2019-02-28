@@ -33,6 +33,7 @@ NO_CLUSTER = 'noCluster'
 # Job types
 CLASSIFICATION = 'classification'
 REGRESSION = 'regression'
+PREDICTION = 'prediction'
 LABELLING = 'labelling'
 TIME_SERIES_PREDICTION = 'timeSeriesPrediction'
 UPDATE = 'update'

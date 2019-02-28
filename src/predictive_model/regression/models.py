@@ -1,26 +1,16 @@
 from django.db import models
 
-from src.predictive_model.models import PredictiveModelBase
+from src.predictive_model.models import PredictiveModel
 
 
-class Regression(PredictiveModelBase):
+class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
-    clustering = models.ForeignKey('clustering.Clustering', on_delete=models.DO_NOTHING, blank=True, null=True)
-    config = models.ForeignKey('RegressorBase', on_delete=models.DO_NOTHING, blank=True, null=True)
 
-    def to_dict(self):
-        return {
-            'clustering': self.clustering,
-            'config': self.config
-        }
-
-
-class RegressorBase(models.Model):
     def to_dict(self):
         return {}
 
 
-class RandomForest(RegressorBase):
+class RandomForest(Regression):
     n_estimators = models.PositiveIntegerField()
     max_features = models.FloatField()
     max_depth = models.PositiveIntegerField()
@@ -33,7 +23,7 @@ class RandomForest(RegressorBase):
         }
 
 
-class Lasso(RegressorBase):
+class Lasso(Regression):
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
@@ -46,7 +36,7 @@ class Lasso(RegressorBase):
         }
 
 
-class Linear(RegressorBase):
+class Linear(Regression):
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
 
@@ -57,7 +47,7 @@ class Linear(RegressorBase):
         }
 
 
-class XGBoost(RegressorBase):
+class XGBoost(Regression):
     max_depth = models.PositiveIntegerField()
     n_estimators = models.PositiveIntegerField()
 
@@ -75,7 +65,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 )
 
 
-class NeuralNetworks(RegressorBase):
+class NeuralNetworks(Regression):
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',

@@ -26,17 +26,17 @@ class ThresholdTypes(Enum):
 
 
 LABELLING_TYPE_MAPPINGS = (
-    (LabelTypes.NEXT_ACTIVITY, 'next_activity'),
-    (LabelTypes.ATTRIBUTE_STRING, 'attribute_string'),
-    (LabelTypes.ATTRIBUTE_NUMBER, 'attribute_number'),
-    (LabelTypes.REMAINING_TIME, 'remaining_time'),
-    (LabelTypes.DURATION, 'duration'),
-    (LabelTypes.NO_LABEL, 'no_label')
+    (LabelTypes.NEXT_ACTIVITY.value, 'next_activity'),
+    (LabelTypes.ATTRIBUTE_STRING.value, 'attribute_string'),
+    (LabelTypes.ATTRIBUTE_NUMBER.value, 'attribute_number'),
+    (LabelTypes.REMAINING_TIME.value, 'remaining_time'),
+    (LabelTypes.DURATION.value, 'duration'),
+    (LabelTypes.NO_LABEL.value, 'no_label')
 )
 
 THRESHOLD_TYPE_MAPPINGS = (
-    (ThresholdTypes.THRESHOLD_MEAN, 'threshold_mean'),
-    (ThresholdTypes.THRESHOLD_CUSTOM, 'threshold_custom')
+    (ThresholdTypes.THRESHOLD_MEAN.value, 'threshold_mean'),
+    (ThresholdTypes.THRESHOLD_CUSTOM.value, 'threshold_custom')
 )
 
 

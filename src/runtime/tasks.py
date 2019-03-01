@@ -11,18 +11,18 @@ from src.utils.file_service import get_log
 def runtime_task(job, model):
     print("Start runtime task ID {}".format(job.pk))
     try:
-        job.status = JobStatuses.RUNNING
+        job.status = JobStatuses.RUNNING.value
         job.save()
         log = Log.objects.get(pk=job.config['log_id'])
         run_log = get_log(log.path)
         result_data = runtime_calculate(run_log, model.to_dict())
         result = result_data['prediction']
         job.result = result
-        job.status = JobStatuses.COMPLETED
+        job.status = JobStatuses.COMPLETED.value
         job.error = ''
     except Exception as e:
         print("error " + str(e.__repr__()))
-        job.status = JobStatuses.ERROR
+        job.status = JobStatuses.ERROR.value
         job.error = str(e.__repr__())
         raise e
     finally:

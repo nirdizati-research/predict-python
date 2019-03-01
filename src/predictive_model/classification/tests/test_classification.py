@@ -21,16 +21,16 @@ from src.predictive_model.models import PredictiveModelTypes
 
 class TestClassification(TestCase):
     @staticmethod
-    def get_job(method=ClassificationMethods.KNN, encoding_method=ValueEncodings.SIMPLE_INDEX, padding=ZERO_PADDING,
-                label=LabelTypes.DURATION,
+    def get_job(method=ClassificationMethods.KNN.value, encoding_method=ValueEncodings.SIMPLE_INDEX.value, padding=ZERO_PADDING,
+                label=LabelTypes.DURATION.value,
                 add_elapsed_time=False):
         json = dict()
-        json['clustering'] = ClusteringMethods.NO_CLUSTER
+        json['clustering'] = ClusteringMethods.NO_CLUSTER.value
         json['split'] = split_double()
         json['method'] = method
         json['encoding'] = EncodingContainer(encoding_method, padding=padding)
         json['incremental_train'] = {'base_model': None}
-        if label == LabelTypes.ATTRIBUTE_STRING:
+        if label == LabelTypes.ATTRIBUTE_STRING.value:
             json['label'] = LabelContainer(label, attribute_name='creator')
         elif label == ThresholdTypes.THRESHOLD_CUSTOM:
             json['label'] = LabelContainer(threshold_type=label, threshold=50)
@@ -39,9 +39,9 @@ class TestClassification(TestCase):
         else:
             json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
-        json['type'] = PredictiveModelTypes.CLASSIFICATION
+        json['type'] = PredictiveModelTypes.CLASSIFICATION.value
 
-        if method != ClassificationMethods.KNN:
+        if method != ClassificationMethods.KNN.value:
             add_default_config(json)
         else:
             json['classification.knn'] = {'n_neighbors': 3}
@@ -86,7 +86,7 @@ class TestClassification(TestCase):
     @unittest.skip('needs refactoring')
     def test_class_randomForest(self):
         job = self.get_job()
-        job['method'] = ClassificationMethods.RANDOM_FOREST
+        job['method'] = ClassificationMethods.RANDOM_FOREST.value
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)
@@ -95,8 +95,8 @@ class TestClassification(TestCase):
     @unittest.skip('needs refactoring')
     def test_next_activity_DecisionTree(self):
         job = self.get_job()
-        job['method'] = ClassificationMethods.DECISION_TREE
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
+        job['method'] = ClassificationMethods.DECISION_TREE.value
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         job['clustering'] = 'noCluster'
         add_default_config(job)
         result, _ = calculate(job)

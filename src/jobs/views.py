@@ -67,13 +67,13 @@ def create_multiple(request):
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
         jobs = update(split, payload)
-    elif payload['type'] == PredictiveModelTypes.CLASSIFICATION:
+    elif payload['type'] == PredictiveModelTypes.CLASSIFICATION.value:
         jobs = generate(split, payload)
-    elif payload['type'] == PredictiveModelTypes.REGRESSION:
+    elif payload['type'] == PredictiveModelTypes.REGRESSION.value:
         jobs = generate(split, payload, PredictiveModelTypes.REGRESSION)
-    elif payload['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION:
+    elif payload['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
         jobs = generate(split, payload, PredictiveModelTypes.TIME_SERIES_PREDICTION)
-    elif payload['type'] == JobTypes.LABELLING:
+    elif payload['type'] == JobTypes.LABELLING.value:
         jobs = generate_labelling(split, payload)
     else:
         return Response({'error': 'type not supported'.format(payload['type'])},

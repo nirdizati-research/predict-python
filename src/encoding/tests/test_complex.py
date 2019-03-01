@@ -41,7 +41,7 @@ class Complex(TestCase):
                               'Pete', 0.0, 520920.0])
 
     def test_prefix1_no_label(self):
-        label = LabelContainer(LabelTypes.NO_LABEL)
+        label = LabelContainer(LabelTypes.NO_LABEL.value)
         df = complex(self.log, label, self.encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()

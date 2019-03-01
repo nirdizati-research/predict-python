@@ -59,7 +59,7 @@ class RefactorProof(TestCase):
     def test_next_activity_kmeans(self):
         self.max_diff = None
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
@@ -73,7 +73,7 @@ class RefactorProof(TestCase):
     def test_next_activity_no_cluster(self):
         self.max_diff = None
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         job['clustering'] = 'noCluster'
         job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)

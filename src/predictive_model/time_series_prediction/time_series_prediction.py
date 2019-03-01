@@ -136,7 +136,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_time_series_predictor(job: dict) -> Any:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
-    if method == TimeSeriesPredictionMethods.RNN:
+    if method == TimeSeriesPredictionMethods.RNN.value:
         config['encoding'] = job['encoding'][0]
         time_series_predictor = RNNTimeSeriesPredictor(**config)
     else:

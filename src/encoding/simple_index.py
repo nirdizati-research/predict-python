@@ -90,11 +90,11 @@ def get_intercase_attributes(log: list, label: LabelContainer):
 
 
 def compute_label_columns(columns: list, label: LabelContainer) -> list:
-    if label.type == LabelTypes.NO_LABEL:
+    if label.type == LabelTypes.NO_LABEL.value:
         return columns
     if label.add_elapsed_time:
         columns.append('elapsed_time')
-    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME:
+    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME.value:
         columns.append('remaining_time')
     if label.add_executed_events:
         columns.append('executed_events')
@@ -112,12 +112,12 @@ def add_labels(label: LabelContainer, prefix_length: int, trace,
     Adds any number of label cells with last as label
     """
     labels = []
-    if label.type == LabelTypes.NO_LABEL:
+    if label.type == LabelTypes.NO_LABEL.value:
         return labels
     # Values that can just be there
     if label.add_elapsed_time:
         labels.append(elapsed_time_id(trace, prefix_length - 1))
-    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME:
+    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME.value:
         labels.append(remaining_time_id(trace, prefix_length - 1))
     if label.add_executed_events:
         labels.append(count_on_event_day(trace, executed_events, prefix_length - 1))
@@ -126,12 +126,12 @@ def add_labels(label: LabelContainer, prefix_length: int, trace,
     if label.add_new_traces:
         labels.append(count_on_event_day(trace, new_traces, prefix_length - 1))
     # Label
-    if label.type == LabelTypes.REMAINING_TIME:
+    if label.type == LabelTypes.REMAINING_TIME.value:
         labels.append(remaining_time_id(trace, prefix_length - 1))
-    elif label.type == LabelTypes.NEXT_ACTIVITY:
+    elif label.type == LabelTypes.NEXT_ACTIVITY.value:
         labels.append(next_event_name(trace, prefix_length))
-    elif label.type == LabelTypes.ATTRIBUTE_STRING or label.type == LabelTypes.ATTRIBUTE_NUMBER:
+    elif label.type == LabelTypes.ATTRIBUTE_STRING.value or label.type == LabelTypes.ATTRIBUTE_NUMBER.value:
         labels.append(trace.attributes[atr_classifier])
-    elif label.type == LabelTypes.DURATION:
+    elif label.type == LabelTypes.DURATION.value:
         labels.append(duration(trace))
     return labels

@@ -74,7 +74,7 @@ def generate_run(logid, model, modelid, split):
         item = Job.objects.get(split=split, config=config, type=model.type)
     except Job.DoesNotExist:
         item = Job.objects.create(
-            status=JobStatuses.CREATED,
+            status=JobStatuses.CREATED.value,
             type=model.type,
             config=config,
             split=split)

@@ -24,16 +24,16 @@ class JobTypes(Enum):
 
 
 JOB_STATUS_MAPPINGS = (
-    (JobStatuses.CREATED, 'created'),
-    (JobStatuses.COMPLETED, 'completed'),
-    (JobStatuses.ERROR, 'error'),
-    (JobStatuses.RUNNING, 'running')
+    (JobStatuses.CREATED.value, 'created'),
+    (JobStatuses.COMPLETED.value, 'completed'),
+    (JobStatuses.ERROR.value, 'error'),
+    (JobStatuses.RUNNING.value, 'running')
 )
 
 JOB_TYPE_MAPPINGS = (
-    (JobTypes.PREDICTION, 'prediction'),
-    (JobTypes.LABELLING, 'labelling'),
-    (JobTypes.UPDATE, 'update')
+    (JobTypes.PREDICTION.value, 'prediction'),
+    (JobTypes.LABELLING.value, 'labelling'),
+    (JobTypes.UPDATE.value, 'update')
 )
 
 
@@ -42,8 +42,8 @@ class Job(models.Model):
     modified_date = models.DateTimeField(auto_now=True)
 
     error = models.CharField(default='', max_length=200)
-    status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED, max_length=20)
-    type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION, max_length=20)
+    status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED.value, max_length=20)
+    type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION.value, max_length=20)
 
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     encoding = models.ForeignKey(Encoding, on_delete=models.DO_NOTHING, null=True)

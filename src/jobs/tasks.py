@@ -17,8 +17,8 @@ def prediction_task(job_id):
     print("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
     try:
-        if job.status == JobStatuses.CREATED:
-            job.status = JobStatuses.RUNNING
+        if job.status == JobStatuses.CREATED.value:
+            job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()
             if job.config.get('hyperopt', {}).get('use_hyperopt', False):
@@ -30,10 +30,10 @@ def prediction_task(job_id):
             if job.config.get('create_models', False):
                 save_models(model_split, job)
             job.result = result
-            job.status = JobStatuses.COMPLETED
+            job.status = JobStatuses.COMPLETED.value
     except Exception as e:
         print("error " + str(e.__repr__()))
-        job.status = JobStatuses.ERROR
+        job.status = JobStatuses.ERROR.value
         job.error = str(e.__repr__())
         raise e
     finally:
@@ -48,8 +48,8 @@ def save_models(to_model_split, job):
         log = job_split.original_log
     else:
         log = job_split.training_log
-    if job.type == JobTypes.UPDATE or job.config['incremental_train']['base_model'] is not None:
-        job.type = PredictiveModelTypes.CLASSIFICATION
+    if job.type == JobTypes.UPDATE.value or job.config['incremental_train']['base_model'] is not None:
+        job.type = PredictiveModelTypes.CLASSIFICATION.value
         filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(job.id, job.split.id,
                                                                                           job.type,
                                                                                           str(time.time()))

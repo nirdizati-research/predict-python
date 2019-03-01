@@ -3,7 +3,7 @@ import time
 
 from pm4py.objects.log.importer.xes import factory as xes_importer
 
-from src.jobs.models import Job
+# from src.jobs.models import Job
 
 
 def get_log(file_path: str):
@@ -22,7 +22,7 @@ def save_file(file, path):
             destination.write(chunk)
 
 
-def save_result(results: dict, job: Job, start_time: float):
+def save_result(results: dict, job, start_time: float):
     result = [
         results['f1score'],
         results['acc'],

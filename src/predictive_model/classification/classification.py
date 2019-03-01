@@ -89,7 +89,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     # TODO mmh not sure
     model_split['type'] = job['clustering']
 
-    job['type'] = JobTypes.UPDATE
+    job['type'] = JobTypes.UPDATE.value
 
     return results, model_split
 
@@ -192,34 +192,34 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 
 
 def _choose_classifier(job: Job):
-    if job.type == JobTypes.UPDATE:
+    if job.type == JobTypes.UPDATE.value:
         classifier = _load_model(job['incremental_train']['base_model'])
         assert classifier[0].__class__.__name__ == job.method # are we updating a predictive_model with its own methods?
     else:
         method, config = get_method_config(job)
         print("Using method {} with config {}".format(method, config))
-        if method == ClassificationMethods.KNN:
+        if method == ClassificationMethods.KNN.value:
             # TODO: integrateme
             # Classifier.objects.filter()
             # Classifier.objects.create(clustering=, config=)
             classifier = KNeighborsClassifier(**config)
-        elif method == ClassificationMethods.RANDOM_FOREST:
+        elif method == ClassificationMethods.RANDOM_FOREST.value:
             classifier = RandomForestClassifier(**config)
-        elif method == ClassificationMethods.DECISION_TREE:
+        elif method == ClassificationMethods.DECISION_TREE.value:
             classifier = DecisionTreeClassifier(**config)
-        elif method == ClassificationMethods.XGBOOST:
+        elif method == ClassificationMethods.XGBOOST.value:
             classifier = XGBClassifier(**config)
-        elif method == ClassificationMethods.MULTINOMIAL_NAIVE_BAYES:
+        elif method == ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value:
             classifier = MultinomialNB(**config)
-        elif method == ClassificationMethods.ADAPTIVE_TREE:
+        elif method == ClassificationMethods.ADAPTIVE_TREE.value:
             classifier = HAT(**config)
-        elif method == ClassificationMethods.HOEFFDING_TREE:
+        elif method == ClassificationMethods.HOEFFDING_TREE.value:
             classifier = HoeffdingTree(**config)
-        elif method == ClassificationMethods.SGDCLASSIFIER:
+        elif method == ClassificationMethods.SGDCLASSIFIER.value:
             classifier = SGDClassifier(**config)
-        elif method == ClassificationMethods.PERCEPTRON:
+        elif method == ClassificationMethods.PERCEPTRON.value:
             classifier = Perceptron(**config)
-        elif method == ClassificationMethods.NN:
+        elif method == ClassificationMethods.NN.value:
             config['encoding'] = job['encoding'][0]
             config['is_binary_classifier'] = _check_is_binary_classifier(job['label'].type)
             classifier = NNClassifier(**config)
@@ -240,8 +240,8 @@ def _load_model(incremental_base_model: int):
 
 
 def _check_is_binary_classifier(label_type: str) -> bool:
-    if label_type in [LabelTypes.REMAINING_TIME, LabelTypes.ATTRIBUTE_NUMBER, LabelTypes.DURATION]:
+    if label_type in [LabelTypes.REMAINING_TIME.value, LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value]:
         return True
-    if label_type in [LabelTypes.NEXT_ACTIVITY, LabelTypes.ATTRIBUTE_STRING]:
+    if label_type in [LabelTypes.NEXT_ACTIVITY.value, LabelTypes.ATTRIBUTE_STRING.value]:
         return False
     raise ValueError("Label type not supported", label_type)

@@ -24,7 +24,7 @@ def generate(split, payload, generation_type=PredictiveModelTypes.CLASSIFICATION
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.get_or_create(
-                            status=JobStatuses.CREATED,
+                            status=JobStatuses.CREATED.value,
                             type=generation_type,
 
                             split=split,
@@ -49,7 +49,7 @@ def generate(split, payload, generation_type=PredictiveModelTypes.CLASSIFICATION
                         jobs.append(item)
                 else:
                     item = Job.objects.get_or_create(
-                        status=JobStatuses.CREATED,
+                        status=JobStatuses.CREATED.value,
                         type=generation_type,
 
                         split=split,
@@ -82,8 +82,8 @@ def generate_labelling(split, payload):
     if encoding['generation_type'] == UP_TO:
         for i in range(1, encoding['prefix_length'] + 1):
             item = Job.objects.get_or_create(
-                status=JobStatuses.CREATED,
-                type=JobTypes.LABELLING,
+                status=JobStatuses.CREATED.value,
+                type=JobTypes.LABELLING.value,
 
                 split=split,
                 encoding=Encoding.objects.get_or_create(
@@ -108,8 +108,8 @@ def generate_labelling(split, payload):
             jobs.append(item)
     else:
         item = Job.objects.get_or_create(
-            status=JobStatuses.CREATED,
-            type=JobTypes.LABELLING,
+            status=JobStatuses.CREATED.value,
+            type=JobTypes.LABELLING.value,
 
             split=split,
             encoding=Encoding.objects.get_or_create(
@@ -145,7 +145,7 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.get_or_create(
-                            status=JobStatuses.CREATED,
+                            status=JobStatuses.CREATED.value,
                             type=payload['type'],
 
                             split=split,
@@ -177,7 +177,7 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                         jobs.append(item)
                 else:
                     item = Job.objects.get_or_create(
-                        status=JobStatuses.CREATED,
+                        status=JobStatuses.CREATED.value,
                         type=payload['type'],
 
                         split=split,

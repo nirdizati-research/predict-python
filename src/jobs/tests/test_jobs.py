@@ -5,48 +5,48 @@ from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from src.core.constants import CLASSIFICATION, REGRESSION
+from src.core.constants import CLASSIFICATION
 from src.core.default_configuration import classification_random_forest
 from src.core.tests.common import add_default_config
 from src.jobs.job_creator import create_config
-from src.jobs.models import Job
+from src.jobs.models import Job, JobStatus
 from src.jobs.tasks import prediction_task
 from src.labelling.label_container import LabelContainer, THRESHOLD_MEAN
 from src.logs.models import Log
 from src.split.models import Split
-from src.utils.tests_utils import general_example_filepath
+from src.utils.tests_utils import general_example_filepath, create_test_job_prediction
 
 
 class JobModelTest(TestCase):
     def setUp(self):
-        self.config = {'key': 123,
-                       'method': 'randomForest',
-                       'encoding': {'method': 'simpleIndex', 'prefix_length': 1,
-                                    'padding': 'no_padding', 'generation_type': 'only'},
-                       'clustering': 'noCluster',
-                       'create_models': False,
-                       'label': {'type': 'remaining_time'},
-                       'incremental_train': {'base_model': None}
-                       }
-        log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
-        split = Split.objects.create(original_log=log)
-        Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
-                           type=CLASSIFICATION)
-        Job.objects.create(config=self.config, split=split, type='asdsd')
-        Job.objects.create(config={}, split=split, type=REGRESSION)
+        create_test_job_prediction()
+        # self.config = {'key': 123,
+        #                'method': 'randomForest',
+        #                'encoding': {'method': 'simpleIndex', 'prefix_length': 1,
+        #                             'padding': 'no_padding', 'generation_type': 'only'},
+        #                'clustering': 'noCluster',
+        #                'create_models': False,
+        #                'label': {'type': 'remaining_time'},
+        #                'incremental_train': {'base_model': None}
+        #                }
+        # log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
+        # split = Split.objects.create(original_log=log)
+        # Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
+        #                    type=CLASSIFICATION)
+        # Job.objects.create(config=self.config, split=split, type='asdsd')
+        # Job.objects.create(config={}, split=split, type=REGRESSION)
 
     def test_default(self):
         job = Job.objects.get(id=1)
 
-        self.assertEqual(self.config, job.config)
         self.assertEqual('created', job.status)
         self.assertIsNotNone(job.created_date)
         self.assertIsNotNone(job.modified_date)
-        self.assertEqual({}, job.result)
+        self.assertIsNone(job.evaluation)
 
     def test_modified(self):
         job = Job.objects.get(id=1)
-        job.status = 'completed'
+        job.status = JobStatus.COMPLETED
 
         self.assertNotEquals(job.created_date, job.modified_date)
 

@@ -1,16 +1,16 @@
 from copy import deepcopy
 
 from src.clustering.models import Clustering
-from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION, PREDICTION
+from src.core.constants import KMEANS, ALL_CONFIGS
 from src.core.default_configuration import CONF_MAP, clustering_kmeans
-from src.encoding.encoding_container import UP_TO, SIMPLE_INDEX
+from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding
-from src.jobs.models import Job, CREATED
+from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
 
 
-def generate(split, payload, generation_type=PREDICTION):
+def generate(split, payload, generation_type=PredictiveModelTypes.PREDICTION):
     jobs = []
 
     for method in payload['config']['methods']:
@@ -20,7 +20,7 @@ def generate(split, payload, generation_type=PREDICTION):
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
-                            status=CREATED,
+                            status=JobStatuses.CREATED,
                             type=generation_type,
 
                             split=split,
@@ -47,14 +47,14 @@ def generate(split, payload, generation_type=PREDICTION):
                                 threshold=payload['config']['label']['threshold']
                             ),
                             clustering=Clustering.init(clustering, configuration=None),
-                            predictive_model=PredictiveModel.init(prediction, configuration=payload)
+                            predictive_model=PredictiveModel.init(payload['type'], configuration=payload) #here there should not be tha first param
 
                         )
                             # config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
-                        status=CREATED,
+                        status=JobStatuses.CREATED,
                         type=generation_type,
 
                         split=split,
@@ -93,8 +93,8 @@ def generate_labelling(split, payload):
     if encoding['generation_type'] == UP_TO:
         for i in range(1, encoding['prefix_length'] + 1):
             item = Job.objects.create(
-                status=CREATED,
-                type=LABELLING,
+                status=JobStatuses.CREATED,
+                type=JobTypes.LABELLING,
 
                 split=split,
                 encoding=Encoding.objects.get_or_create(
@@ -119,8 +119,8 @@ def generate_labelling(split, payload):
             jobs.append(item)
     else:
         item = Job.objects.create(
-            status=CREATED,
-            type=LABELLING,
+            status=JobStatuses.CREATED,
+            type=JobTypes.LABELLING,
 
             split=split,
             encoding=Encoding.objects.get_or_create(
@@ -157,14 +157,14 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
                             split=split,
-                            status=CREATED,
+                            status=JobStatuses.CREATED,
                             type=payload['type'],
                             config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
                         split=split,
-                        status=CREATED,
+                        status=JobStatuses.CREATED,
                         type=payload['type'],
                         config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)

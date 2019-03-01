@@ -9,6 +9,8 @@ Sphinx = "==1.8.4"
 sphinx-rtd-theme = "==0.4.3"
 pylint = "==2.2.2"
 sphinx-autodoc-typehints = "==1.6.0"
+pyparsing = "*"
+pydot = "*"
 
 [packages]
 djangorestframework = "==3.7.1"
@@ -36,6 +38,8 @@ Django = "==1.11.18"
 Distance = "==0.1.3"
 Keras = "==2.2.4"
 scikit-multiflow = "==0.1.2"
+django-extensions = "*"
+
 
 [requires]
 python_version = "3.6"

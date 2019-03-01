@@ -1,52 +1,65 @@
+from enum import Enum
+
 from django.db import models
 
 from src.core.default_configuration import classification_knn, classification_random_forest, \
     classification_decision_tree, classification_xgboost, classification_incremental_naive_bayes, \
     classification_incremental_hoeffding_tree, classification_incremental_adaptive_tree, \
-    classification_incremental_sgd_classifier, classification_incremental_perceptron
+    classification_incremental_sgd_classifier, classification_incremental_perceptron, classification_nn
 from src.predictive_model.models import PredictiveModel
-from src.core.constants import KNN, DECISION_TREE, RANDOM_FOREST, XGBOOST, HOEFFDING_TREE, ADAPTIVE_TREE, SGDCLASSIFIER, \
-    PERCEPTRON, MULTINOMIAL_NAIVE_BAYES
+
+
+class ClassificationMethods(Enum):
+    KNN = 'knn'
+    RANDOM_FOREST = 'randomForest'
+    DECISION_TREE = 'decisionTree'
+    MULTINOMIAL_NAIVE_BAYES = 'multinomialNB'
+    ADAPTIVE_TREE = 'adaptiveTree'
+    HOEFFDING_TREE = 'hoeffdingTree'
+    SGDCLASSIFIER = 'SGDClassifier'
+    PERCEPTRON = 'perceptron'
+    NN = 'nn'
 
 
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(classification, configuration=None):
-        default_configuration = classification_decision_tree()
-        if classification == DECISION_TREE:
+    def init(configuration: dict = {ClassificationMethods.DECISION_TREE}):
+        classifier_type = configuration['type']
+        if classifier_type == ClassificationMethods.DECISION_TREE:
+            default_configuration = classification_decision_tree()
             return DecisionTree.objects.get_or_create(
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
                 min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])
             )
-        elif classification == KNN:
+        elif classifier_type == ClassificationMethods.KNN:
             default_configuration = classification_knn()
             return Knn.objects.get_or_create(
                 n_neighbors=configuration.get('n_neighbors', default_configuration['n_neighbors']),
                 weights=configuration.get('weights', default_configuration['weights'])
             )
-        elif classification == RANDOM_FOREST:
+        elif classifier_type == ClassificationMethods.RANDOM_FOREST:
             default_configuration = classification_random_forest()
             return RandomForest.objects.get_or_create(
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 max_features=configuration.get('max_features', default_configuration['max_features'])
             )
-        elif classification == XGBOOST:
+        elif classifier_type == ClassificationMethods.XGBOOST:
             default_configuration = classification_xgboost()
             return XGBoost.objects.get_or_create(
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
             )
-        elif classification == MULTINOMIAL_NAIVE_BAYES:
+        elif classifier_type == ClassificationMethods.MULTINOMIAL_NAIVE_BAYES:
             default_configuration = classification_incremental_naive_bayes()
             return NaiveBayes.objects.get_or_create(
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_prior=configuration.get('fit_prior', default_configuration['fit_prior'])
             )
-        elif classification == HOEFFDING_TREE:
+        elif classifier_type == ClassificationMethods.HOEFFDING_TREE:
             default_configuration = classification_incremental_hoeffding_tree()
             return HoeffdingTree.objects.get_or_create(
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
@@ -57,7 +70,7 @@ class Classification(PredictiveModel):
                 leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
                 nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
             )
-        elif classification == ADAPTIVE_TREE:
+        elif classifier_type == ClassificationMethods.ADAPTIVE_TREE:
             default_configuration = classification_incremental_adaptive_tree()
             return AdaptiveHoeffdingTree.objects.get_or_create(
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
@@ -68,7 +81,7 @@ class Classification(PredictiveModel):
                 leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
                 nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
             )
-        elif classification == SGDCLASSIFIER:
+        elif classifier_type == ClassificationMethods.SGDCLASSIFIER:
             default_configuration = classification_incremental_sgd_classifier()
             return SGDClassifier.objects.get_or_create(
                 loss=configuration.get('loss', default_configuration['loss ']),
@@ -85,7 +98,7 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction ']),
                 average=configuration.get('average', default_configuration['average '])
             )
-        elif classification == PERCEPTRON:
+        elif classifier_type == ClassificationMethods.PERCEPTRON:
             default_configuration = classification_incremental_perceptron()
             return Perceptron.objects.get_or_create(
                 penalty=configuration.get('penalty', default_configuration['penalty']),
@@ -97,8 +110,18 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change'])
             )
+        elif classifier_type == ClassificationMethods.NN:
+            default_configuration = classification_nn()
+            return Perceptron.objects.get_or_create(
+                hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
+                hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
+                activation_function=configuration.get('activation_function',
+                                                      default_configuration['activation_function']),
+                epochs=configuration.get('epochs', default_configuration['epochs']),
+                dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate']),
+            )
         else:
-            raise ValueError('classification ', classification, 'not recognized')
+            raise ValueError('classifier type ' + classifier_type + ' not recognized')
 
     def to_dict(self):
         return {}
@@ -136,8 +159,8 @@ class Knn(Classification):
 
 class RandomForest(Classification):
     n_estimators = models.PositiveIntegerField()
-    max_depth = models.PositiveIntegerField()
-    max_features = models.PositiveIntegerField()
+    max_depth = models.PositiveIntegerField(null=True)
+    max_features = models.CharField(default='auto', max_length=10)
 
     def to_dict(self):
         return {
@@ -319,7 +342,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 )
 
 
-class NeuralNetworks(Classification):
+class NeuralNetwork(Classification):
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu', max_length=20)

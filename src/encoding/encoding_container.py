@@ -4,12 +4,6 @@ import pandas as pd
 from pandas import DataFrame
 from sklearn.preprocessing import LabelEncoder
 
-SIMPLE_INDEX = 'simpleIndex'
-BOOLEAN = 'boolean'
-FREQUENCY = 'frequency'
-COMPLEX = 'complex'
-LAST_PAYLOAD = 'lastPayload'
-
 # Generation types
 UP_TO = 'up_to'
 ONLY_THIS = 'only'
@@ -21,8 +15,7 @@ NO_PADDING = 'no_padding'
 PADDING_VALUE = 0
 
 # Encoding methods
-LABEL_ENCODER = 'label_encoder'
-ONE_HOT_ENCODER = 'one_hot'
+
 
 ENCODING = LABEL_ENCODER
 

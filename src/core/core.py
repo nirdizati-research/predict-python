@@ -4,7 +4,6 @@ import time
 
 from pandas import DataFrame
 
-from src.evaluation.models import Evaluation
 from src.core.constants import TIME_SERIES_PREDICTION, REGRESSION, CLASSIFICATION, LABELLING, UPDATE
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \

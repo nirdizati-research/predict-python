@@ -13,10 +13,13 @@ from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
 def generate(split, payload, generation_type=PredictiveModelTypes.PREDICTION):
     jobs = []
 
-    for method in payload['config']['methods']:
-        for clustering in payload['config']['clusterings']:
-            for encMethod in payload['config']['encodings']:
-                encoding = payload['config']['encoding']
+    config = payload['config']
+    label = config['label']
+
+    for method in config['methods']:
+        for clustering in config['clusterings']:
+            for encMethod in config['encodings']:
+                encoding = config['encoding']
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
@@ -25,29 +28,22 @@ def generate(split, payload, generation_type=PredictiveModelTypes.PREDICTION):
 
                             split=split,
                             encoding=Encoding.objects.get_or_create(
-                                data_encoding='label_encoder',
+                                data_encoding=encMethod,
                                 # TODO: @HitLuca [value_encoding=,]
-                                additional_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
-                                    'add_elapsed_time'] or
-                                                    payload['config']['label']['add_executed_events'] or payload['config']['label'][
-                                                        'add_resources_used'] or
-                                                    payload['config']['label']['add_new_traces'],
-                                temporal_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
-                                    'add_elapsed_time'],
-                                intercase_features=payload['config']['label']['add_executed_events'] or payload['config']['label'][
-                                    'add_resources_used'] or
-                                                   payload['config']['label']['add_new_traces'],
-                                prefix_len=payload['config']['encoding']['prefix_length'],
-                                padding=payload['config']['encoding']['padding']
+                                additional_features=label['add_remaining_time'] or label['add_elapsed_time'] or label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
+                                temporal_features=label['add_remaining_time'] or label['add_elapsed_time'],
+                                intercase_features=label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
+                                prefix_len=i,
+                                padding=config['encoding']['padding']
                             ),
                             labelling=Labelling.objects.get_or_create(
-                                type=payload['config']['label']['type'],
-                                attribute_name=payload['config']['label']['attribute_name'],
-                                threshold_type=payload['config']['label']['threshold_type'],
-                                threshold=payload['config']['label']['threshold']
+                                type=label['type'],
+                                attribute_name=label['attribute_name'],
+                                threshold_type=label['threshold_type'],
+                                threshold=label['threshold']
                             ),
                             clustering=Clustering.init(clustering, configuration=None),
-                            predictive_model=PredictiveModel.init(payload['type'], configuration=payload) #here there should not be tha first param
+                            predictive_model=PredictiveModel.init(payload['type'], configuration=payload)
 
                         )
                             # config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
@@ -59,27 +55,22 @@ def generate(split, payload, generation_type=PredictiveModelTypes.PREDICTION):
 
                         split=split,
                         encoding=Encoding.objects.get_or_create(
-                            data_encoding='label_encoder',
+                            data_encoding=encMethod,
                             # TODO: @HitLuca [value_encoding=,]
-                            additional_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
-                                'add_elapsed_time'] or
-                                                payload['config']['label']['add_executed_events'] or payload['config']['label'][
-                                                    'add_resources_used'] or
-                                                payload['config']['label']['add_new_traces'],
-                            temporal_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
-                                'add_elapsed_time'],
-                            intercase_features=payload['config']['label']['add_executed_events'] or payload['config']['label'][
-                                'add_resources_used'] or
-                                               payload['config']['label']['add_new_traces'],
-                            prefix_len=payload['config']['encoding']['prefix_length'],
-                            padding=payload['config']['encoding']['padding']
+                            additional_features=label['add_remaining_time'] or label['add_elapsed_time'] or label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
+                            temporal_features=label['add_remaining_time'] or label['add_elapsed_time'],
+                            intercase_features=label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
+                            prefix_len=config['encoding']['prefix_length'],
+                            padding=config['encoding']['padding']
                         ),
                         labelling=Labelling.objects.get_or_create(
-                            type=payload['config']['label']['type'],
-                            attribute_name=payload['config']['label']['attribute_name'],
-                            threshold_type=payload['config']['label']['threshold_type'],
-                            threshold=payload['config']['label']['threshold']
-                        )
+                            type=label['type'],
+                            attribute_name=label['attribute_name'],
+                            threshold_type=label['threshold_type'],
+                            threshold=label['threshold']
+                        ),
+                        clustering=Clustering.init(clustering, configuration=None),
+                        predictive_model=PredictiveModel.init(payload['type'], configuration=payload)
                     )
                         # config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)

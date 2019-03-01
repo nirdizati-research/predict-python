@@ -47,8 +47,23 @@ UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(JobTypes.UPDATE.value, Classif
 UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.HOEFFDING_TREE.value)
 
 
+CLASSIFICATION_METHODS = (
+    (ClassificationMethods.KNN.value, 'knn'),
+    (ClassificationMethods.RANDOM_FOREST.value, 'randomForest'),
+    (ClassificationMethods.XGBOOST.value, 'xgboost'),
+    (ClassificationMethods.DECISION_TREE.value, 'decisionTree'),
+    (ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value, 'multinomialNB'),
+    (ClassificationMethods.ADAPTIVE_TREE.value, 'adaptiveTree'),
+    (ClassificationMethods.HOEFFDING_TREE.value, 'hoeffdingTree'),
+    (ClassificationMethods.SGDCLASSIFIER.value, 'SGDClassifier'),
+    (ClassificationMethods.PERCEPTRON.value, 'perceptron'),
+    (ClassificationMethods.NN.value, 'nn')
+)
+
+
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
+    method = models.CharField(choices=CLASSIFICATION_METHODS, default='uniform', max_length=20)
 
     @staticmethod
     def init(configuration: dict = {'type': ClassificationMethods.DECISION_TREE.value}):
@@ -57,6 +72,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_decision_tree()
             return DecisionTree.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.DECISION_TREE.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
                 min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])
@@ -65,6 +81,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_knn()
             return Knn.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.KNN.value,
                 n_neighbors=configuration.get('n_neighbors', default_configuration['n_neighbors']),
                 weights=configuration.get('weights', default_configuration['weights'])
             )
@@ -72,6 +89,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_random_forest()
             return RandomForest.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.RANDOM_FOREST.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 max_features=configuration.get('max_features', default_configuration['max_features'])
@@ -80,6 +98,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_xgboost()
             return XGBoost.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.XGBOOST.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
             )
@@ -87,6 +106,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_incremental_naive_bayes()
             return NaiveBayes.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_prior=configuration.get('fit_prior', default_configuration['fit_prior'])
             )
@@ -94,6 +114,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_incremental_hoeffding_tree()
             return HoeffdingTree.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.HOEFFDING_TREE.value,
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
                 split_criterion=configuration.get('split_criterion', default_configuration['split_criterion']),
                 split_confidence=configuration.get('split_confidence', default_configuration['split_confidence']),
@@ -106,6 +127,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_incremental_adaptive_tree()
             return AdaptiveHoeffdingTree.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.ADAPTIVE_TREE.value,
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
                 split_criterion=configuration.get('split_criterion', default_configuration['split_criterion']),
                 split_confidence=configuration.get('split_confidence', default_configuration['split_confidence']),
@@ -118,6 +140,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_incremental_sgd_classifier()
             return SGDClassifier.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.SGDCLASSIFIER.value,
                 loss=configuration.get('loss', default_configuration['loss ']),
                 penalty=configuration.get('penalty', default_configuration['penalty ']),
                 alpha=configuration.get('alpha', default_configuration['alpha ']),
@@ -136,6 +159,7 @@ class Classification(PredictiveModel):
             default_configuration = classification_incremental_perceptron()
             return Perceptron.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.PERCEPTRON.value,
                 penalty=configuration.get('penalty', default_configuration['penalty']),
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
@@ -147,8 +171,9 @@ class Classification(PredictiveModel):
             )
         elif classifier_type == ClassificationMethods.NN.value:
             default_configuration = classification_nn()
-            return Perceptron.objects.get_or_create(
+            return NeuralNetwork.objects.get_or_create(
                 type=PredictiveModelTypes.CLASSIFICATION,
+                method=ClassificationMethods.NN.value,
                 hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
                 hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
                 activation_function=configuration.get('activation_function',

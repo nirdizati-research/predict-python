@@ -22,8 +22,17 @@ REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value,
 REGRESSION_NN = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.NN.value)
 
 
+REGRESSION_METHODS = (
+    (RegressionMethods.LINEAR.value, 'linear'),
+    (RegressionMethods.RANDOM_FOREST.value, 'randomForest'),
+    (RegressionMethods.LASSO.value, 'lasso'),
+    (RegressionMethods.XGBOOST.value, 'xgboost'),
+    (RegressionMethods.NN.value, 'nn')
+)
+
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
+    method = models.CharField(choices=REGRESSION_METHODS, default='uniform', max_length=20)
 
     @staticmethod
     def init(configuration: dict = {'type': RegressionMethods.RANDOM_FOREST.value}):
@@ -32,6 +41,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_random_forest()
             return RandomForest.objects.get_or_create(
                 type=PredictiveModelTypes.REGRESSION,
+                method=RegressionMethods.RANDOM_FOREST.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_features=configuration.get('max_features', default_configuration['max_features']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
@@ -39,6 +49,8 @@ class Regression(PredictiveModel):
         elif regressor_type == RegressionMethods.LASSO.value:
             default_configuration = regression_lasso()
             return Lasso.objects.get_or_create(
+                type=PredictiveModelTypes.REGRESSION,
+                method=RegressionMethods.LASSO.value,
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize'])
@@ -47,6 +59,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_linear()
             return Linear.objects.get_or_create(
                 type=PredictiveModelTypes.REGRESSION,
+                method=RegressionMethods.LINEAR.value,
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize']),
             )
@@ -54,6 +67,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_xgboost()
             return XGBoost.objects.get_or_create(
                 type=PredictiveModelTypes.REGRESSION,
+                method=RegressionMethods.XGBOOST.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators'])
             )
@@ -61,6 +75,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_nn()
             return NeuralNetwork.objects.get_or_create(
                 type=PredictiveModelTypes.REGRESSION,
+                method=RegressionMethods.NN.value,
                 hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
                 hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
                 activation_function=configuration.get('activation_function',

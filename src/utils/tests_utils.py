@@ -1,13 +1,11 @@
-from src.clustering.models import Clustering
-from src.core.constants import PREDICTION, RANDOM_FOREST, CLASSIFICATION, NO_CLUSTER
-from src.encoding.encoding_container import LABEL_ENCODER
-from src.encoding.models import Encoding
-from src.jobs.models import Job, CREATED
-from src.labelling.label_container import NEXT_ACTIVITY
-from src.labelling.models import Labelling
+from src.clustering.models import Clustering, ClusteringMethods
+from src.encoding.models import Encoding, DataEncodings
+from src.jobs.models import Job, JobStatuses, JobTypes
+from src.labelling.models import Labelling, LabelTypes
 from src.logs.models import Log
-from src.predictive_model.models import PredictiveModel
-from src.split.models import Split, SPLIT_SINGLE
+from src.predictive_model.classification.models import ClassificationMethods
+from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
+from src.split.models import Split, SplitTypes
 
 bpi_log_filepath = "cache/log_cache/test_logs/BPI Challenge 2017.xes.gz"
 general_example_filepath = 'cache/log_cache/test_logs/general_example.xes'
@@ -22,32 +20,33 @@ def create_test_log(log_name: str = 'general_example.xes', log_filepath: str = g
     return log[0]
 
 
-def create_test_split(split_type: str = SPLIT_SINGLE, log: Log = create_test_log()):
+def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE, log: Log = create_test_log()):
     split = Split.objects.get_or_create(type=split_type, original_log=log)
     return split[0]
 
 
 def create_test_encoding(prefix_length: int = 1, padding: bool = False) -> Encoding:
     encoding = Encoding.objects.get_or_create(
-        data_encoding=LABEL_ENCODER,
+        data_encoding=DataEncodings.LABEL_ENCODER,
         prefix_len=prefix_length,
         padding=padding)
     return encoding[0]
 
 
-def create_test_labelling(label_type: str = NEXT_ACTIVITY) -> Labelling:
+def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY) -> Labelling:
     labelling = Labelling.objects.get_or_create(
         type=label_type)
     return labelling[0]
 
 
-def create_test_clustering(clustering_type: str = NO_CLUSTER, configuration: dict = None) -> Clustering:
+def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER,
+                           configuration: dict = None) -> Clustering:
     clustering = Clustering.init(clustering_type, configuration)
     return clustering[0]
 
 
-def create_test_predictive_model(prediction_type: str = CLASSIFICATION,
-                                 predictive_model_type: str = RANDOM_FOREST) -> PredictiveModel:
+def create_test_predictive_model(prediction_type: str = PredictiveModelTypes.CLASSIFICATION,
+                                 predictive_model_type: str = ClassificationMethods.RANDOM_FOREST) -> PredictiveModel:
     predictive_model = PredictiveModel.init(prediction_type, {'type': predictive_model_type})
     return predictive_model[0]
 
@@ -58,8 +57,8 @@ def create_test_job_prediction(split: Split = create_test_split(),
                                clustering: Clustering = create_test_clustering(),
                                predictive_model: PredictiveModel = create_test_predictive_model()):
     job = Job.objects.create(
-        status=CREATED,
-        type=PREDICTION,
+        status=JobStatuses.CREATED,
+        type=JobTypes.PREDICTION,
         split=split,
         encoding=encoding,
         labelling=labelling,

@@ -5,8 +5,7 @@ from rest_framework.response import Response
 
 from pred_models.models import PredModels
 from pred_models.serializers import ModelSerializer
-from src.jobs.models import CREATED
-from src.jobs.models import Job
+from src.jobs.models import Job, JobStatuses
 from src.jobs.serializers import JobSerializer
 from src.logs.models import Log
 from src.split.models import Split
@@ -75,7 +74,7 @@ def generate_run(logid, model, modelid, split):
         item = Job.objects.get(split=split, config=config, type=model.type)
     except Job.DoesNotExist:
         item = Job.objects.create(
-            status=CREATED,
+            status=JobStatuses.CREATED,
             type=model.type,
             config=config,
             split=split)

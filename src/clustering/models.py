@@ -1,17 +1,22 @@
+from enum import Enum
+
 from django.db import models
 
-from src.core.constants import KMEANS, NO_CLUSTER
-from src.core.default_configuration import clustering_kmeans
+
+class ClusteringMethods(Enum):
+    KMEANS = 'kmeans'
+    NO_CLUSTER = 'noCluster'
 
 
 class Clustering(models.Model):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(clustering: str = NO_CLUSTER, configuration: dict = None):
-        if clustering == NO_CLUSTER:
+    def init(clustering: str = ClusteringMethods.NO_CLUSTER, configuration: dict = None):
+        if clustering == ClusteringMethods.NO_CLUSTER:
             return NoClustering.objects.get_or_create(id=1)
-        elif clustering == KMEANS:
+        elif clustering == ClusteringMethods.KMEANS:
+            from src.core.default_configuration import clustering_kmeans
             default_configuration = clustering_kmeans()
             return KMeans.objects.get_or_create(
                 n_clusters=configuration.get('n_clusters', default_configuration['n_clusters']),
@@ -37,18 +42,18 @@ class NoClustering(Clustering):
         return {}
 
 
-KMEANS_INIT = (
+KMEANS_INIT_MAPPINGS = (
     ('k-means++', 'k-means++'),
     ('random', 'random')
 )
 
-KMEANS_PRECOMPUTE_DISTANCES = (
+KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS = (
     (True, 'True'),
     (False, 'False'),
     ('auto', 'auto')
 )
 
-KMEANS_ALGORITHM = (
+KMEANS_ALGORITHM_MAPPINGS = (
     ('auto', 'auto'),
     ('full', 'full'),
     ('elkan', 'elkan')
@@ -57,14 +62,14 @@ KMEANS_ALGORITHM = (
 
 class KMeans(Clustering):
     n_clusters = models.PositiveIntegerField()
-    init = models.CharField(choices=KMEANS_INIT, default='k-means++', max_length=20)
+    init = models.CharField(choices=KMEANS_INIT_MAPPINGS, default='k-means++', max_length=20)
     n_init = models.PositiveIntegerField()
     max_iter = models.PositiveIntegerField()
     tol = models.FloatField()
-    precompute_distances = models.CharField(choices=KMEANS_PRECOMPUTE_DISTANCES, default='auto', max_length=20)
+    precompute_distances = models.CharField(choices=KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS, default='auto', max_length=20)
     random_state = models.PositiveIntegerField()
     copy_x = models.BooleanField()
-    algorithm = models.CharField(choices=KMEANS_ALGORITHM, default='auto', max_length=20)
+    algorithm = models.CharField(choices=KMEANS_ALGORITHM_MAPPINGS, default='auto', max_length=20)
 
     def to_dict(self) -> dict:
         return {

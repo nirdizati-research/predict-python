@@ -2,12 +2,17 @@ from enum import Enum
 
 from django.db import models
 
-from src.core.default_configuration import time_series_prediction_rnn
-from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
+from src.predictive_model.time_series_prediction.methods_default_config import time_series_prediction_rnn
 
 
 class TimeSeriesPredictionMethods(Enum):
     RNN = 'rnn'
+
+
+TIME_SERIES_PREDICTION_RNN = '{}.{}'.format(PredictiveModelTypes.TIME_SERIES_PREDICTION,
+                                            TimeSeriesPredictionMethods.RNN)
+
 
 class TimeSeriesPrediction(PredictiveModel):
     """Container of Classification to be shown in frontend"""

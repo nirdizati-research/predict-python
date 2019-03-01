@@ -8,9 +8,15 @@ from src.encoding.models import Encoding
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
+from src.clustering.methods_default_config import clustering_kmeans
+from src.clustering.models import ClusteringMethods
+from src.encoding.encoding_container import UP_TO
+from src.encoding.models import DataEncodings
+from src.jobs.models import Job, JobStatuses, JobTypes
+from src.predictive_model.models import PredictiveModelTypes
 
 
-def generate(split, payload, generation_type=PredictiveModelTypes.PREDICTION):
+def generate(split, payload, generation_type=PredictiveModelTypes.CLASSIFICATION):
     jobs = []
 
     config = payload['config']

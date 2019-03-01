@@ -7,11 +7,11 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
-from src.core.constants import CLASSIFICATION, REGRESSION, LABELLING, TIME_SERIES_PREDICTION
 from src.jobs import tasks
 from src.jobs.job_creator import generate, generate_labelling, update
-from src.jobs.models import Job
+from src.jobs.models import Job, JobTypes
 from src.jobs.serializers import JobSerializer
+from src.predictive_model.models import PredictiveModelTypes
 from src.split.models import Split
 
 
@@ -67,13 +67,13 @@ def create_multiple(request):
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
         jobs = update(split, payload)
-    elif payload['type'] == CLASSIFICATION:
+    elif payload['type'] == PredictiveModelTypes.CLASSIFICATION:
         jobs = generate(split, payload)
-    elif payload['type'] == REGRESSION:
-        jobs = generate(split, payload, REGRESSION)
-    elif payload['type'] == TIME_SERIES_PREDICTION:
-        jobs = generate(split, payload, TIME_SERIES_PREDICTION)
-    elif payload['type'] == LABELLING:
+    elif payload['type'] == PredictiveModelTypes.REGRESSION:
+        jobs = generate(split, payload, PredictiveModelTypes.REGRESSION)
+    elif payload['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION:
+        jobs = generate(split, payload, PredictiveModelTypes.TIME_SERIES_PREDICTION)
+    elif payload['type'] == JobTypes.LABELLING:
         jobs = generate_labelling(split, payload)
     else:
         return Response({'error': 'type not supported'.format(payload['type'])},

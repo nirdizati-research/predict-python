@@ -12,8 +12,8 @@ from sklearn.externals import joblib
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.core.constants import RNN
 from src.predictive_model.nn_models import RNNTimeSeriesPredictor
+from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
 from src.utils.result_metrics import calculate_results_time_series_prediction, \
     calculate_nlevenshtein
 
@@ -136,7 +136,7 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_time_series_predictor(job: dict) -> Any:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
-    if method == RNN:
+    if method == TimeSeriesPredictionMethods.RNN:
         config['encoding'] = job['encoding'][0]
         time_series_predictor = RNNTimeSeriesPredictor(**config)
     else:

@@ -1,4 +1,5 @@
 import functools
+from typing import Union
 
 from sklearn.model_selection import train_test_split
 
@@ -64,7 +65,7 @@ def _temporal_split_strict(log: list, test_size: float):
     return list(training_log), test_log
 
 
-def _split_log(log: list, test_size=0.2, random_state=4, shuffle=True):
+def _split_log(log: list, test_size=0.2, random_state: Union[int, None] = 4, shuffle=True):
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state, shuffle=shuffle)
     return training_log, test_log
 

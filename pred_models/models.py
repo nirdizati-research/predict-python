@@ -1,15 +1,15 @@
 from django.db import models
 from jsonfield.fields import JSONField
 
-from src.core.constants import KMEANS, NO_CLUSTER
+from src.clustering.models import ClusteringMethods
 from src.encoding.encoding_container import EncodingContainer
-from src.jobs.models import TYPES
+from src.jobs.models import JOB_TYPE_MAPPINGS
 from src.labelling.label_container import LabelContainer
 from src.logs.models import Log
 
 ENC_TYPES = (
-    (KMEANS, 'kmeans'),
-    (NO_CLUSTER, 'noCluster'),
+    (ClusteringMethods.KMEANS, 'kmeans'),
+    (ClusteringMethods.NO_CLUSTER, 'noCluster'),
 )
 
 
@@ -17,7 +17,7 @@ class ModelSplit(models.Model):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     clusterer_path = models.CharField(blank=True, null=True, max_length=200)
-    predtype = models.CharField(choices=TYPES, max_length=20, default='Prediction')
+    predtype = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20, default='Prediction')
 
     def to_dict(self):
         split = dict()
@@ -31,7 +31,7 @@ class ModelSplit(models.Model):
 
 class PredModels(models.Model):
     split = models.ForeignKey('ModelSplit', on_delete=models.DO_NOTHING, related_name='split', blank=True, null=True)
-    type = models.CharField(choices=TYPES, max_length=20)
+    type = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20)
     log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='log', blank=True, null=True)
     config = JSONField(default={})
 

@@ -8,6 +8,7 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
 from pred_models.models import PredModels, ModelSplit
+from src.jobs.models import Job
 
 
 class Clustering:
@@ -18,7 +19,7 @@ class Clustering:
     KMEANS = 'kmeans'
     NO_CLUSTER = 'noCluster'
 
-    def __init__(self, job):
+    def __init__(self, job: Job):
         """initializes the clustering class
 
         by default the number of clusters is set to 1, meaning no clustering

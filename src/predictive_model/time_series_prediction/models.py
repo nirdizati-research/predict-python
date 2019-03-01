@@ -23,6 +23,7 @@ class TimeSeriesPrediction(PredictiveModel):
         if time_series_predictor_type == TimeSeriesPredictionMethods.RNN:
             default_configuration = time_series_prediction_rnn()
             return RecurrentNeuralNetwork.objects.get_or_create(
+                type=PredictiveModelTypes.TIME_SERIES_PREDICTION,
                 n_units=configuration.get('n_units', default_configuration['n_units']),
                 rnn_type=configuration.get('rnn_type', default_configuration['rnn_type']),
                 n_epochs=configuration.get('n_epochs', default_configuration['n_epochs'])

@@ -9,7 +9,7 @@ from src.core.core import calculate
 from src.core.hyperopt_wrapper import calculate_hyperopt
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.ws_publisher import publish
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictiveModelTypes, PredictiveModel
 
 
 @job("default", timeout='1h')
@@ -24,7 +24,7 @@ def prediction_task(job_id):
             if job.config.get('hyperopt', {}).get('use_hyperopt', False):
                 result, model_split = hyperopt_task(job)
             else:
-                result, model_split = calculate(job.to_dict())
+                result, model_split = calculate(job)
             elapsed_time = time.time() - start_time
             print('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
             if job.config.get('create_models', False):
@@ -63,13 +63,8 @@ def save_models(to_model_split, job):
         model_split.clusterer_path = filename_clusterer
         model_split.save()
     PredModels.objects.create(pk=job.id, split=model_split, type=job.type, log=log, config=job.config)
-    #TODO this will become a Predictive_model object DB
-    # PredictiveModel.objects.create(
-    #     split= Split.objects.filter(id=job['split'])[0],
-    #     encoding= Encoding.objects.filter()[0],
-    #     labelling=Labelling.objects.filter()[0],
-    #     model_type=
-    # )
+    #TODO: integrateme
+    # Job.predictive_model.model_path = filename_model
 
 
 def hyperopt_task(job):

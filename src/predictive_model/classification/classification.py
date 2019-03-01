@@ -15,7 +15,7 @@ from xgboost import XGBClassifier
 from pred_models.models import PredModels, ModelSplit
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.jobs.models import JobTypes
+from src.jobs.models import JobTypes, Job
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.nn_models import NNClassifier
@@ -24,7 +24,7 @@ from src.utils.result_metrics import calculate_results_classification, get_auc
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+def classification(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, dict):
     """main classification entry point
 
     train and tests the classifier using the provided data
@@ -39,7 +39,7 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: dict) -> (di
 
     model_split = _train(job, train_data, _choose_classifier(job))
     results_df, auc = _test(model_split, test_data, evaluation=True,
-                            is_binary_classifier=_check_is_binary_classifier(job['label'].type))
+                            is_binary_classifier=_check_is_binary_classifier(job.labelling.type))
 
     results = _prepare_results(results_df, auc)
 
@@ -73,7 +73,7 @@ def classification_single_log(input_df: DataFrame, model: dict) -> dict:
     return results
 
 
-def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
+def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     train_data, test_data = _drop_columns(training_df, test_df)
 
     #TODO load previously used data structure to check input conformance
@@ -82,7 +82,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
     model_split = _update(job, train_data, _choose_classifier(job))
 
     results_df, auc = _test(model_split, test_data, evaluation=True,
-                            is_binary_classifier=_check_is_binary_classifier(job['label'].type))
+                            is_binary_classifier=_check_is_binary_classifier(job.labelling.type))
 
     results = _prepare_results(results_df, auc)
 
@@ -94,7 +94,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: dict):
     return results, model_split
 
 
-def _train(job: dict, train_data: DataFrame, classifier: ClassifierMixin) -> dict:
+def _train(job: Job, train_data: DataFrame, classifier: ClassifierMixin) -> dict:
     clusterer = Clustering(job)
     models = dict()
 
@@ -124,7 +124,7 @@ def _train(job: dict, train_data: DataFrame, classifier: ClassifierMixin) -> dic
     return {'clusterer': clusterer, 'classifier': models}
 
 
-def _update(job: dict, data: DataFrame, models) -> dict:
+def _update(job: Job, data: DataFrame, models) -> dict:
     clusterer = Clustering.load_model(job)
 
     update_data = clusterer.cluster_data(data)
@@ -191,15 +191,15 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df
 
 
-def _choose_classifier(job: dict):
-    if job['type'] == JobTypes.UPDATE:
+def _choose_classifier(job: Job):
+    if job.type == JobTypes.UPDATE:
         classifier = _load_model(job['incremental_train']['base_model'])
-        assert classifier[0].__class__.__name__ == job['method'] # are we updating a predictive_model with its own methods?
+        assert classifier[0].__class__.__name__ == job.method # are we updating a predictive_model with its own methods?
     else:
         method, config = get_method_config(job)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN:
-            # TODO: retrieve entry from db or create new one
+            # TODO: integrateme
             # Classifier.objects.filter()
             # Classifier.objects.create(clustering=, config=)
             classifier = KNeighborsClassifier(**config)

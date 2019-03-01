@@ -16,7 +16,7 @@ class Clustering(models.Model):
         if clustering == ClusteringMethods.NO_CLUSTER:
             return NoClustering.objects.get_or_create(id=1)
         elif clustering == ClusteringMethods.KMEANS:
-            from src.core.default_configuration import clustering_kmeans
+            from src.core.default_configuration import clustering_kmeans #TODO: fixme
             default_configuration = clustering_kmeans()
             return KMeans.objects.get_or_create(
                 n_clusters=configuration.get('n_clusters', default_configuration['n_clusters']),

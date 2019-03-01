@@ -5,7 +5,8 @@ import time
 from pandas import DataFrame
 
 from src.encoding.common import encode_label_log, encode_label_logs
-from src.jobs.models import JobTypes
+from src.evaluation.models import Evaluation
+from src.jobs.models import JobTypes, Job
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
 from src.predictive_model.models import PredictiveModelTypes
@@ -17,7 +18,7 @@ from src.utils.cache import load_from_cache, dump_to_cache, get_digested
 from src.utils.file_service import save_result
 
 
-def calculate(job: dict) -> (dict, dict):
+def calculate(job: Job) -> (dict, dict):
     """main entry point for calculations
 
     encodes the logs based on the given configuration and runs the selected task
@@ -25,13 +26,13 @@ def calculate(job: dict) -> (dict, dict):
     :return: results and predictive_model split
 
     """
-    print("Start job {} with {}".format(job['type'], get_run(job)))
+    print("Start job {} with {}".format(job.type, get_run(job)))
     training_df, test_df = get_encoded_logs(job)
     results, model_split = run_by_type(training_df, test_df, job)
     return results, model_split
 
 
-def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame):
+def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame):
     """returns the encoded logs
 
     returns the training and test DataFrames encoded using the given job configuration, loading from cache if possible
@@ -41,10 +42,10 @@ def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame
 
     """
     if use_cache:
-        processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job['split']),
-                                                                         json.dumps(job['encoding']),
-                                                                         json.dumps(job['type']),
-                                                                         json.dumps(job['label'])))
+        processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job.split),
+                                                                         json.dumps(job.encoding),
+                                                                         json.dumps(job.type),
+                                                                         json.dumps(job.labelling)))
 
         if os.path.isfile("cache/labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
 
@@ -53,7 +54,7 @@ def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame
             print('Done.')
 
         else:
-            df_cache = ('split-%s' % (json.dumps(job['split'])))
+            df_cache = ('split-%s' % (json.dumps(job.split)))
 
             if os.path.isfile("cache/labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
 
@@ -63,20 +64,20 @@ def get_encoded_logs(job: dict, use_cache: bool = True) -> (DataFrame, DataFrame
                 print('Dataset loaded.')
 
             else:
-                training_log, test_log, additional_columns = prepare_logs(job['split'])
+                training_log, test_log, additional_columns = prepare_logs(job.split)
                 dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="cache/labeled_log_cache/")
 
-            training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                                     additional_columns=additional_columns, split_id=job['split']['id'])
+            training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,
+                                                     additional_columns=additional_columns, split_id=job.split.id)
             dump_to_cache(processed_df_cache, (training_df, test_df), prefix="cache/labeled_log_cache/")
     else:
-        training_log, test_log, additional_columns = prepare_logs(job['split'])
-        training_df, test_df = encode_label_logs(training_log, test_log, job['encoding'], job['type'], job['label'],
-                                                 additional_columns=additional_columns, split_id=job['split']['id'])
+        training_log, test_log, additional_columns = prepare_logs(job.split)
+        training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,
+                                                 additional_columns=additional_columns, split_id=job.split.id)
     return training_df, test_df
 
 
-def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, dict):
     """runs the specified training/evaluation run
 
     :param training_df: training DataFrame
@@ -104,16 +105,10 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     else:
         raise ValueError("Type not supported", job['type'])
 
-    #TODO: save results in db
-    # Evaluation.objects.create(split=Split.objects.filter(id=job['split'])[0],
-    #                           encoding=Job.encoding,
-    #                           labelling=Job.labelling,
-    #                           clustering=Job.clustering,
-    #                           predictive_model=Job.predictive_model,
-    #                           metrics=
-    #                           )
+    #TODO: integrateme
+    Job.evaluation = Evaluation.init(job.predictive_model.type, results)
 
-    if job['type'] == PredictiveModelTypes.CLASSIFICATION:
+    if job.type == PredictiveModelTypes.CLASSIFICATION:
         save_result(results, job, start_time)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))
@@ -142,7 +137,7 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
     return results
 
 
-def get_run(job: dict) -> str:
+def get_run(job: Job) -> str:
     """defines the job's identity
 
     returns a string indicating the job configuration in an unique way
@@ -150,9 +145,9 @@ def get_run(job: dict) -> str:
     :param job: job configuration
     :return: job's identity string
     """
-    if job['type'] == JobTypes.LABELLING:
-        return job['encoding'].method + '_' + job['label'].type
-    return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type
+    if job.type == JobTypes.LABELLING:
+        return job.encoding.method + '_' + job.labelling.type
+    return job.method + '_' + job.encoding.method + '_' + job.clustering + '_' + job.labelling.type
 
 
 def _label_task(input_dataframe: DataFrame) -> dict:

@@ -1,5 +1,7 @@
 from django.db import models
 
+from src.predictive_model.models import PredictiveModelTypes
+
 
 class Evaluation(models.Model):
     """Container of Classification to be shown in frontend"""
@@ -10,31 +12,33 @@ class Evaluation(models.Model):
             'metrics': self.metrics
         }
 
-    # @staticmethod
-    # def init(prediction, labels, results):
-    #     if prediction == CLASSIFICATION:
-    #         if labels == BINARY:
-    #             BinaryClassificationMetrics.objects.get_or_create(
-    #                 metrics='',
-    #
-    #                 true_positive=results['true_positive'],
-    #                 true_negative=results['true_negative'],
-    #                 false_negative=results['false_negative'],
-    #                 false_positive=results['false_positive'],
-    #                 auc=results['auc']
-    #             )
-    #         elif labels == MUTLICLASS:
-    #             MulticlassClassificationMetrics.objects.get_or_create(metrics='')
-    #     elif prediction == REGRESSION:
-    #         RegressionMetrics.objects.get_or_create(
-    #             metrics='',
-    #
-    #             rmse=results['rmse'],
-    #             mae=results['mae'],
-    #             mape=results['mape']
-    #         )
-    #     elif prediction == TIME_SERIES_PREDICTION:
-    #         TimeSeriesPredictionMetrics.objects.get_or_create(metrics='')
+    @staticmethod
+    def init(prediction_type, results):
+        if prediction_type == PredictiveModelTypes.CLASSIFICATION:
+            pass #TODO fixme
+            # if labels == BINARY:
+            #     BinaryClassificationMetrics.objects.get_or_create(
+            #         metrics='',
+            #
+            #         true_positive=results['true_positive'],
+            #         true_negative=results['true_negative'],
+            #         false_negative=results['false_negative'],
+            #         false_positive=results['false_positive'],
+            #         auc=results['auc']
+            #     )
+            # elif labels == MUTLICLASS:
+            #     MulticlassClassificationMetrics.objects.get_or_create(metrics='')
+        elif prediction_type == PredictiveModelTypes.REGRESSION:
+            RegressionMetrics.objects.get_or_create(
+                metrics='',
+
+                rmse=results['rmse'],
+                mae=results['mae'],
+                mape=results['mape']
+            )
+        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION:
+            TimeSeriesPredictionMetrics.objects.get_or_create(metrics='')
+
 
 class Metrics(models.Model):
     elapsed_time = models.FloatField()

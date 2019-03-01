@@ -18,6 +18,8 @@ PREDICTIVE_MODEL_TYPE_MAPPINGS = (
 
 class PredictiveModel(models.Model):
     """Container of Classification to be shown in frontend"""
+    model_path = models.FilePathField(path='cache/model_cache/')
+    type = models.CharField(choices=PREDICTIVE_MODEL_TYPE_MAPPINGS, default='uniform', max_length=20)
 
     @staticmethod
     def init(prediction_type: str = PredictiveModelTypes.CLASSIFICATION, configuration: dict = None):

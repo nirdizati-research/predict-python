@@ -5,7 +5,8 @@ common methods and functionalities for the core tests
 import os
 import sys
 
-from src.core.default_configuration import CONF_MAP, clustering_kmeans
+from src.clustering.methods_default_config import clustering_kmeans
+from src.core.common import CONF_MAP
 from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
     general_example_train_filepath
 

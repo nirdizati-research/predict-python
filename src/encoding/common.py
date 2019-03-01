@@ -13,7 +13,7 @@ from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
-def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: str,
+def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: JobTypes,
                       label: LabelContainer, additional_columns=None, split_id=None):
     """encodes and labels test set and training set as data frames
 
@@ -30,18 +30,18 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
     # TODO pass the columns of the training log
     test_log, _ = _encode_log(test_log, encoding, label, additional_columns=additional_columns, cols=cols)
 
-    if (label.threshold_type in [ThresholdTypes.THRESHOLD_MEAN, ThresholdTypes.THRESHOLD_CUSTOM]) and (
-        label.type in [LabelTypes.ATTRIBUTE_NUMBER, LabelTypes.DURATION]):
+    if (label.threshold_type in [ThresholdTypes.THRESHOLD_MEAN, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
+        label.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value]):
         if label.threshold_type == ThresholdTypes.THRESHOLD_MEAN:
             threshold = training_log['label'].mean()
-        elif label.threshold_type == ThresholdTypes.THRESHOLD_CUSTOM:
+        elif label.threshold_type == ThresholdTypes.THRESHOLD_CUSTOM.value:
             threshold = label.threshold
         else:
             threshold = -1
         training_log['label'] = training_log['label'] < threshold
         test_log['label'] = test_log['label'] < threshold
 
-    if job_type != JobTypes.LABELLING and encoding.method != ValueEncodings.BOOLEAN:
+    if job_type != JobTypes.LABELLING.value and encoding.method != ValueEncodings.BOOLEAN.value:
         # init nominal encode
         encoding.init_label_encoder(training_log)
         # encode data
@@ -70,25 +70,25 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     encoded_log, _ = _encode_log(run_log, encoding, label, additional_columns)
 
     # Convert strings to number
-    if label.type == LabelTypes.ATTRIBUTE_NUMBER:
+    if label.type == LabelTypes.ATTRIBUTE_NUMBER.value:
         try:
             encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
         except:
             encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
 
     # converts string values to in
-    if job_type != JobTypes.LABELLING:
+    if job_type != JobTypes.LABELLING.value:
         # Labelling has no need for this encoding
         _categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
-    if job_type == PredictiveModelTypes.REGRESSION:
+    if job_type == PredictiveModelTypes.REGRESSION.value:
         # Remove last events as worse for prediction
         # TODO filter out 0 labels. Doing it here means runtime errors for regression
         # if label.type == REMAINING_TIME:
         #     encoded_log = encoded_log.loc[encoded_log['label'] != 0.0]
         return encoded_log
     # Post processing
-    if label.type == LabelTypes.REMAINING_TIME or label.type == LabelTypes.ATTRIBUTE_NUMBER or label.type == LabelTypes.DURATION:
+    if label.type == LabelTypes.REMAINING_TIME.value or label.type == LabelTypes.ATTRIBUTE_NUMBER.value or label.type == LabelTypes.DURATION.value:
         return _label_boolean(encoded_log, label)
     return encoded_log
 
@@ -96,19 +96,19 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
 def _encode_log(log: list, encoding: EncodingContainer, label: LabelContainer, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    if encoding.method == ValueEncodings.SIMPLE_INDEX:
+    if encoding.method == ValueEncodings.SIMPLE_INDEX.value:
         run_df = simple_index(log, label, encoding)
-    elif encoding.method == ValueEncodings.BOOLEAN:
+    elif encoding.method == ValueEncodings.BOOLEAN.value:
         if cols is None:
             cols = unique_events(log)
         run_df = boolean(log, cols, label, encoding)
-    elif encoding.method == ValueEncodings.FREQUENCY:
+    elif encoding.method == ValueEncodings.FREQUENCY.value:
         if cols is None:
             cols = unique_events(log)
         run_df = frequency(log, cols, label, encoding)
-    elif encoding.method == ValueEncodings.COMPLEX:
+    elif encoding.method == ValueEncodings.COMPLEX.value:
         run_df = complex(log, label, encoding, additional_columns)
-    elif encoding.method == ValueEncodings.LAST_PAYLOAD:
+    elif encoding.method == ValueEncodings.LAST_PAYLOAD.value:
         run_df = last_payload(log, label, encoding, additional_columns)
     else:
         raise ValueError("Unknown encoding method {}".format(encoding.method))
@@ -126,7 +126,7 @@ def _label_boolean(df: DataFrame, label: LabelContainer) -> DataFrame:
     """
     if df['label'].dtype == bool:
         return df
-    if label.threshold_type == ThresholdTypes.THRESHOLD_MEAN:
+    if label.threshold_type == ThresholdTypes.THRESHOLD_MEAN.value:
         threshold = df['label'].mean()
     else:
         threshold = float(label.threshold)

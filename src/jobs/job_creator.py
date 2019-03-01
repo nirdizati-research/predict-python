@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from src.clustering.methods_default_config import clustering_kmeans
 from src.clustering.models import ClusteringMethods
+from src.core.common import CONF_MAP, ALL_CONFIGS
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import DataEncodings
 from src.jobs.models import Job, JobStatuses, JobTypes
@@ -90,20 +91,19 @@ def create_config(payload: dict, enc_method: str, clustering: str, method: str, 
     # Extract and merge configurations
     method_conf_name = "{}.{}".format(payload['type'], method)
 
-    # TODO: fix this
-    # method_conf = {**CONF_MAP[method_conf_name](), **payload['config'].get(method_conf_name, dict())}
-    # # Remove configs that are not needed for this method
-    # for any_conf_name in ALL_CONFIGS:
-    #     try:
-    #         del config[any_conf_name]
-    #     except KeyError:
-    #         pass
+    method_conf = {**CONF_MAP[method_conf_name](), **payload['config'].get(method_conf_name, dict())}
+    # Remove configs that are not needed for this method
+    for any_conf_name in ALL_CONFIGS:
+        try:
+            del config[any_conf_name]
+        except KeyError:
+            pass
 
     if clustering == ClusteringMethods.KMEANS:
         config['kmeans'] = {**clustering_kmeans(), **payload['config'].get('kmeans', dict())}
     elif 'kmeans' in config:
         del config['kmeans']
-    # config[method_conf_name] = method_conf TODO: restore
+    config[method_conf_name] = method_conf
     config['clustering'] = clustering
     config['method'] = method
     # Encoding stuff rewrite

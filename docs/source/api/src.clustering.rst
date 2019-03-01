@@ -27,6 +27,14 @@ src.clustering.clustering module
     :undoc-members:
     :show-inheritance:
 
+src.clustering.methods\_default\_config module
+----------------------------------------------
+
+.. automodule:: src.clustering.methods_default_config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.clustering.models module
 ----------------------------
 

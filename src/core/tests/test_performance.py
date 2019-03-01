@@ -10,8 +10,10 @@ from django.test import TestCase
 from src.core.core import calculate
 from src.core.hyperopt_wrapper import calculate_hyperopt
 from src.core.tests.common import split_single, add_default_config
-from src.encoding.encoding_container import EncodingContainer, BOOLEAN
-from src.labelling.label_container import LabelContainer, DURATION, REMAINING_TIME, NEXT_ACTIVITY
+from src.encoding.encoding_container import EncodingContainer
+from src.encoding.models import ValueEncodings
+from src.labelling.label_container import LabelContainer
+from src.labelling.models import LabelTypes
 from src.utils.tests_utils import bpi_log_filepath
 
 
@@ -24,9 +26,9 @@ class TestClassPerf(TestCase):
         json['split'] = split_single()
         json['split']['original_log_path'] = bpi_log_filepath
         json['method'] = 'randomForest'
-        json['encoding'] = EncodingContainer(BOOLEAN, prefix_length=20)
+        json['encoding'] = EncodingContainer(ValueEncodings.BOOLEAN, prefix_length=20)
         json['type'] = 'classification'
-        json['label'] = LabelContainer(DURATION)
+        json['label'] = LabelContainer(LabelTypes.DURATION)
         json['incremental_train'] = {'base_model': None}
         return json
 
@@ -49,7 +51,7 @@ class TestClassPerf(TestCase):
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
         add_default_config(job)
         self.calculate_helper(job)
 
@@ -67,7 +69,7 @@ class TestClassPerf(TestCase):
 
     def test_class_hyperopt(self):
         job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
         job['hyperopt'] = {'use_hyperopt': True, 'max_evals': 10, 'performance_metric': 'f1score'}
         add_default_config(job)
         self.calculate_helper_hyperopt(job)
@@ -82,11 +84,11 @@ class RegPerf(TestCase):
         json['split'] = split_single()
         json['split']['original_log_path'] = bpi_log_filepath
         json['method'] = 'randomForest'
-        json['encoding'] = EncodingContainer(BOOLEAN, prefix_length=20)
+        json['encoding'] = EncodingContainer(ValueEncodings.BOOLEAN, prefix_length=20)
         json['prefix_length'] = 20
         json['type'] = 'regression'
         json['padding'] = 'no_padding'
-        json['label'] = LabelContainer(REMAINING_TIME)
+        json['label'] = LabelContainer(LabelTypes.REMAINING_TIME)
         return json
 
     @staticmethod

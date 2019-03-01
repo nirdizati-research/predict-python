@@ -12,7 +12,7 @@ from sklearn.externals import joblib
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.predictive_model.nn_models import RNNTimeSeriesPredictor
+from src.predictive_model.time_series_prediction.custom_time_series_prediction_models import RNNTimeSeriesPredictor
 from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
 from src.utils.result_metrics import calculate_results_time_series_prediction, \
     calculate_nlevenshtein

@@ -13,8 +13,8 @@ class LabelContainer(namedtuple('LabelContainer', ['type', 'attribute_name', 'th
     what to add to the encoded log.
     """
 
-    def __new__(cls, type: LabelTypes = LabelTypes.REMAINING_TIME, attribute_name: str = None,
-                threshold_type: ThresholdTypes = ThresholdTypes.THRESHOLD_MEAN,
+    def __new__(cls, type: str = LabelTypes.REMAINING_TIME.value, attribute_name: str = None,
+                threshold_type: str = ThresholdTypes.THRESHOLD_MEAN.value,
                 threshold: int = 0, add_remaining_time: bool = False, add_elapsed_time: bool = False,
                 add_executed_events: bool = False, add_resources_used: bool = False, add_new_traces: bool = False):
         # noinspection PyArgumentList

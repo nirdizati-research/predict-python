@@ -31,14 +31,6 @@ src.predictive\_model.models module
     :undoc-members:
     :show-inheritance:
 
-src.predictive\_model.nn\_models module
----------------------------------------
-
-.. automodule:: src.predictive_model.nn_models
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

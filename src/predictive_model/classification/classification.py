@@ -17,8 +17,8 @@ from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
 from src.jobs.models import JobTypes
 from src.labelling.models import LabelTypes
+from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.nn_models import NNClassifier
 from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None

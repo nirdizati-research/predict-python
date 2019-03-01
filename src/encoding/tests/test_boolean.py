@@ -1,9 +1,10 @@
 from django.test import TestCase
 
-from src.core.constants import CLASSIFICATION
 from src.encoding.boolean_frequency import boolean
-from src.encoding.common import encode_label_logs, LabelContainer, NO_LABEL
-from src.encoding.encoding_container import EncodingContainer, BOOLEAN, ZERO_PADDING, ALL_IN_ONE
+from src.encoding.common import encode_label_logs, LabelContainer, LabelTypes
+from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
+from src.encoding.models import ValueEncodings
+from src.jobs.models import JobTypes
 from src.utils.event_attributes import unique_events
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath, general_example_train_filepath
@@ -13,8 +14,10 @@ class TestBooleanSplit(TestCase):
     def setUp(self):
         test_log = get_log(general_example_test_filepath)
         training_log = get_log(general_example_train_filepath)
-        self.training_df, self.test_df = encode_label_logs(training_log, test_log, EncodingContainer(BOOLEAN),
-                                                           CLASSIFICATION, LabelContainer(add_elapsed_time=True))
+        self.training_df, self.test_df = encode_label_logs(training_log, test_log,
+                                                           EncodingContainer(ValueEncodings.BOOLEAN.value),
+                                                           JobTypes.PREDICTION.value,
+                                                           LabelContainer(add_elapsed_time=True))
 
     def test_shape(self):
         self.assert_shape(self.training_df, (4, 11))
@@ -36,7 +39,7 @@ class TestGeneralTest(TestCase):
         self.log = get_log(general_example_test_filepath)
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
-        self.encoding = EncodingContainer(BOOLEAN)
+        self.encoding = EncodingContainer(ValueEncodings.BOOLEAN.value)
 
     def test_header(self):
         df = boolean(self.log, self.event_names, self.label, self.encoding)
@@ -60,7 +63,7 @@ class TestGeneralTest(TestCase):
         self.assertEqual(520920.0, row2.label)
 
     def test_prefix1_no_label(self):
-        df = boolean(self.log, self.event_names, LabelContainer(NO_LABEL), self.encoding)
+        df = boolean(self.log, self.event_names, LabelContainer(LabelTypes.NO_LABEL.value), self.encoding)
 
         self.assertEqual(df.shape, (2, 8))
         self.assertNotIn('label', df.columns.values.tolist())
@@ -73,7 +76,7 @@ class TestGeneralTest(TestCase):
         self.assertNotIn('elapsed_time', df.columns.values.tolist())
 
     def test_prefix2(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=2)
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=2)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
@@ -88,7 +91,7 @@ class TestGeneralTest(TestCase):
         self.assertEqual(445080.0, row2.label)
 
     def test_prefix5(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=5)
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=5)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
@@ -97,7 +100,7 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=10)
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (1, 10))
@@ -106,7 +109,7 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10_padding(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=10, padding=ZERO_PADDING)
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, padding=ZERO_PADDING)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (2, 10))
@@ -114,7 +117,7 @@ class TestGeneralTest(TestCase):
         self.assertListEqual(['4', True, False, True, True, False, True, True, 520920.0, 0.0], row1.values.tolist())
 
     def test_prefix10_all_in_one(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=10, generation_type=ALL_IN_ONE)
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, generation_type=ALL_IN_ONE)
         df = boolean(self.log, self.event_names, self.label, encoding)
 
         self.assertEqual(df.shape, (10, 10))
@@ -124,7 +127,7 @@ class TestGeneralTest(TestCase):
         self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_padding_all_in_one(self):
-        encoding = EncodingContainer(BOOLEAN, prefix_length=10, padding=ZERO_PADDING,
+        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, padding=ZERO_PADDING,
                                      generation_type=ALL_IN_ONE)
         df = boolean(self.log, self.event_names, self.label, encoding)
 

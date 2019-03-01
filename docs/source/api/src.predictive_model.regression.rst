@@ -20,6 +20,22 @@ src.predictive\_model.regression.apps module
     :undoc-members:
     :show-inheritance:
 
+src.predictive\_model.regression.custom\_regression\_models module
+------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.regression.custom_regression_models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.predictive\_model.regression.methods\_default\_config module
+----------------------------------------------------------------
+
+.. automodule:: src.predictive_model.regression.methods_default_config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.predictive\_model.regression.models module
 ----------------------------------------------
 

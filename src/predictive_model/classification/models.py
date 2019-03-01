@@ -23,51 +23,57 @@ class ClassificationMethods(Enum):
     NN = 'nn'
 
 
-CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.RANDOM_FOREST)
-CLASSIFICATION_KNN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.KNN)
-CLASSIFICATION_DECISION_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.DECISION_TREE)
-CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION,
-                                                        ClassificationMethods.MULTINOMIAL_NAIVE_BAYES)
-CLASSIFICATION_ADAPTIVE_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.ADAPTIVE_TREE)
-CLASSIFICATION_HOEFFDING_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION,
-                                               ClassificationMethods.HOEFFDING_TREE)
-CLASSIFICATION_SGDC = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.SGDCLASSIFIER)
-CLASSIFICATION_PERCEPTRON = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.PERCEPTRON)
-CLASSIFICATION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.XGBOOST)
-CLASSIFICATION_NN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.NN)
+CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                              ClassificationMethods.RANDOM_FOREST.value)
+CLASSIFICATION_KNN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value, ClassificationMethods.KNN.value)
+CLASSIFICATION_DECISION_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                              ClassificationMethods.DECISION_TREE.value)
+CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                                        ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
+CLASSIFICATION_ADAPTIVE_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                              ClassificationMethods.ADAPTIVE_TREE.value)
+CLASSIFICATION_HOEFFDING_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                               ClassificationMethods.HOEFFDING_TREE.value)
+CLASSIFICATION_SGDC = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                     ClassificationMethods.SGDCLASSIFIER.value)
+CLASSIFICATION_PERCEPTRON = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value,
+                                           ClassificationMethods.PERCEPTRON.value)
+CLASSIFICATION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value, ClassificationMethods.XGBOOST.value)
+CLASSIFICATION_NN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION.value, ClassificationMethods.NN.value)
 
-UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.MULTINOMIAL_NAIVE_BAYES)
-UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.ADAPTIVE_TREE)
-UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.HOEFFDING_TREE)
+UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(JobTypes.UPDATE.value,
+                                                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
+UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.ADAPTIVE_TREE.value)
+UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.HOEFFDING_TREE.value)
 
 
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(configuration: dict = {ClassificationMethods.DECISION_TREE}):
+    def init(configuration: dict = {'type': ClassificationMethods.DECISION_TREE.value}):
         classifier_type = configuration['type']
-        if classifier_type == ClassificationMethods.DECISION_TREE:
+        if classifier_type == ClassificationMethods.DECISION_TREE.value:
             default_configuration = classification_decision_tree()
             return DecisionTree.objects.get_or_create(
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
                 min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])
             )
-        elif classifier_type == ClassificationMethods.KNN:
+        elif classifier_type == ClassificationMethods.KNN.value:
             default_configuration = classification_knn()
             return Knn.objects.get_or_create(
                 n_neighbors=configuration.get('n_neighbors', default_configuration['n_neighbors']),
                 weights=configuration.get('weights', default_configuration['weights'])
             )
-        elif classifier_type == ClassificationMethods.RANDOM_FOREST:
+        elif classifier_type == ClassificationMethods.RANDOM_FOREST.value:
             default_configuration = classification_random_forest()
             return RandomForest.objects.get_or_create(
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 max_features=configuration.get('max_features', default_configuration['max_features'])
             )
-        elif classifier_type == ClassificationMethods.XGBOOST:
+        elif classifier_type == ClassificationMethods.XGBOOST.value:
             default_configuration = classification_xgboost()
             return XGBoost.objects.get_or_create(
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
@@ -79,7 +85,7 @@ class Classification(PredictiveModel):
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_prior=configuration.get('fit_prior', default_configuration['fit_prior'])
             )
-        elif classifier_type == ClassificationMethods.HOEFFDING_TREE:
+        elif classifier_type == ClassificationMethods.HOEFFDING_TREE.value:
             default_configuration = classification_incremental_hoeffding_tree()
             return HoeffdingTree.objects.get_or_create(
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
@@ -101,7 +107,7 @@ class Classification(PredictiveModel):
                 leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
                 nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
             )
-        elif classifier_type == ClassificationMethods.SGDCLASSIFIER:
+        elif classifier_type == ClassificationMethods.SGDCLASSIFIER.value:
             default_configuration = classification_incremental_sgd_classifier()
             return SGDClassifier.objects.get_or_create(
                 loss=configuration.get('loss', default_configuration['loss ']),
@@ -118,7 +124,7 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction ']),
                 average=configuration.get('average', default_configuration['average '])
             )
-        elif classifier_type == ClassificationMethods.PERCEPTRON:
+        elif classifier_type == ClassificationMethods.PERCEPTRON.value:
             default_configuration = classification_incremental_perceptron()
             return Perceptron.objects.get_or_create(
                 penalty=configuration.get('penalty', default_configuration['penalty']),
@@ -130,7 +136,7 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change'])
             )
-        elif classifier_type == ClassificationMethods.NN:
+        elif classifier_type == ClassificationMethods.NN.value:
             default_configuration = classification_nn()
             return Perceptron.objects.get_or_create(
                 hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),

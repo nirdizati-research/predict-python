@@ -12,11 +12,11 @@ class Clustering(models.Model):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(clustering: str = ClusteringMethods.NO_CLUSTER, configuration: dict = None):
-        if clustering == ClusteringMethods.NO_CLUSTER:
+    def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
+        if clustering == ClusteringMethods.NO_CLUSTER.value:
             return NoClustering.objects.get_or_create(id=1)
-        elif clustering == ClusteringMethods.KMEANS:
-            from src.core.default_configuration import clustering_kmeans
+        elif clustering == ClusteringMethods.KMEANS.value:
+            from src.clustering.methods_default_config import clustering_kmeans
             default_configuration = clustering_kmeans()
             return KMeans.objects.get_or_create(
                 n_clusters=configuration.get('n_clusters', default_configuration['n_clusters']),

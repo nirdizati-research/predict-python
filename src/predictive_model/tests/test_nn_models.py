@@ -7,13 +7,15 @@ import pandas as pd
 from django.test import TestCase
 
 from src.core.tests.common import HidePrints
-from src.encoding.encoding_container import SIMPLE_INDEX
-from src.predictive_model.nn_models import NNClassifier, NNRegressor, RNNTimeSeriesPredictor
+from src.encoding.models import ValueEncodings
+from src.predictive_model.classification.custom_classification_models import NNClassifier
+from src.predictive_model.regression.custom_regression_models import NNRegressor
+from src.predictive_model.time_series_prediction.custom_time_series_prediction_models import RNNTimeSeriesPredictor
 
 
 class TestNNModels(TestCase):
     @staticmethod
-    def _get_nn_default_config(encoding=SIMPLE_INDEX, binary=False):
+    def _get_nn_default_config(encoding=ValueEncodings.SIMPLE_INDEX.value, binary=False):
         config = dict()
         config['n_hidden_layers'] = 2
         config['n_hidden_units'] = 10
@@ -69,7 +71,7 @@ class TestNNModels(TestCase):
 
 class TestRNNModels(TestCase):
     @staticmethod
-    def _get_rnn_default_config(encoding=SIMPLE_INDEX):
+    def _get_rnn_default_config(encoding=ValueEncodings.SIMPLE_INDEX.value):
         config = dict()
         config['n_units'] = 16
         config['rnn_type'] = 'lstm'

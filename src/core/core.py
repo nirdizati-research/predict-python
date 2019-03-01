@@ -145,6 +145,7 @@ def get_run(job: Job) -> str:
     :param job: job configuration
     :return: job's identity string
     """
+
     if job.type == JobTypes.LABELLING.value:
         return job.encoding.method + '_' + job.labelling.type
     return job.method + '_' + job.encoding.method + '_' + job.clustering + '_' + job.labelling.type

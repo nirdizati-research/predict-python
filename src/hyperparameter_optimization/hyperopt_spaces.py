@@ -20,9 +20,6 @@ def _get_space(job: dict) -> dict:
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 
-# TODO this will change when using more than one type of cluster
-
-
 def _classification_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),

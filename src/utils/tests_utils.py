@@ -1,5 +1,6 @@
 from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.models import Encoding, DataEncodings
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling, LabelTypes
 from src.logs.models import Log
@@ -15,12 +16,12 @@ financial_log_filepath = 'cache/log_cache/test_logs/financial_log.xes.gz'
 repair_example_filepath = 'cache/log_cache/test_logs/repair_example.xes'
 
 
-def create_test_log(log_name: str = 'general_example.xes', log_filepath: str = general_example_filepath) -> Log:
-    log = Log.objects.get_or_create(name=log_name, path=log_filepath)
+def create_test_log(log_name: str = 'general_example.xes') -> Log:
+    log = Log.objects.get_or_create(name=log_name)
     return log[0]
 
 
-def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE, log: Log = create_test_log()):
+def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value, log: Log = create_test_log()):
     split = Split.objects.get_or_create(type=split_type, original_log=log)
     return split[0]
 
@@ -51,19 +52,28 @@ def create_test_predictive_model(prediction_type: str = PredictiveModelTypes.CLA
     return predictive_model[0]
 
 
-def create_test_job_prediction(split: Split = create_test_split(),
-                               encoding: Encoding = create_test_encoding(),
-                               labelling: Labelling = create_test_labelling(),
-                               clustering: Clustering = create_test_clustering(),
-                               predictive_model: PredictiveModel = create_test_predictive_model()):
+def create_test_hyperparameter_optimizer(
+    hyperparameter_optimizer_type: str = HyperparameterOptimizationMethods.HYPEROPT.value):
+    hyperparameter_optimization = HyperparameterOptimization.init({'type': hyperparameter_optimizer_type})
+    return hyperparameter_optimization[0]
+
+
+def create_test_job(job_type: str = JobTypes.PREDICTION.value,
+                    split: Split = create_test_split(),
+                    encoding: Encoding = create_test_encoding(),
+                    labelling: Labelling = create_test_labelling(),
+                    clustering: Clustering = create_test_clustering(),
+                    predictive_model: PredictiveModel = create_test_predictive_model(),
+                    hyperparameter_optimizer: HyperparameterOptimization = None):
     job = Job.objects.create(
         status=JobStatuses.CREATED.value,
-        type=JobTypes.PREDICTION.value,
+        type=job_type,
         split=split,
         encoding=encoding,
         labelling=labelling,
         clustering=clustering,
         predictive_model=predictive_model,
-        evaluation=None
+        evaluation=None,
+        hyperparameter_optimizer=hyperparameter_optimizer
     )
     return job

@@ -8,10 +8,10 @@ import unittest
 from django.test import TestCase
 
 from src.core.core import calculate
-from src.core.hyperopt_wrapper import calculate_hyperopt
 from src.core.tests.common import split_single, add_default_config
 from src.encoding.encoding_container import EncodingContainer
 from src.encoding.models import ValueEncodings
+from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
 from src.utils.tests_utils import bpi_log_filepath

@@ -6,10 +6,10 @@ from sklearn.externals import joblib
 from pred_models.models import ModelSplit, PredModels
 from src.clustering.clustering import Clustering
 from src.core.core import calculate
-from src.core.hyperopt_wrapper import calculate_hyperopt
+from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.ws_publisher import publish
-from src.predictive_model.models import PredictiveModelTypes, PredictiveModel
+from src.predictive_model.models import PredictiveModelTypes
 
 
 @job("default", timeout='1h')

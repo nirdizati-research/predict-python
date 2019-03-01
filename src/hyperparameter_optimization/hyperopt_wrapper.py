@@ -5,24 +5,26 @@ hyperopt methods and functionalities
 from hyperopt import Trials, STATUS_OK, tpe, fmin, STATUS_FAIL
 
 from src.core.core import get_encoded_logs, get_run, run_by_type
-from src.core.hyperopt_spaces import _get_space
+from src.hyperparameter_optimization.hyperopt_spaces import _get_space
+from src.jobs.models import Job
 
 trial_number = 0
 
 
-def calculate_hyperopt(job: dict) -> (dict, dict, dict):
+def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     """main entry method for hyperopt calculations
     returns the predictive_model for the best trial
 
     :param job: job configuration
     :return: tuple containing the results, config and predictive_model split from the search
-
     """
-    print("Start hyperopt job {} with {}, performance_metric {}".format(job['type'], get_run(job),
-                                                                        job['hyperopt']['performance_metric']))
+
+    # print("Start hyperopt job {} with {}, performance_metric {}".format(job.type, get_run(job),
+    #                                                                     job['hyperopt']['performance_metric']))
+
     global training_df, test_df, global_job
     global_job = job
-    training_df, test_df = get_encoded_logs(job)
+    training_df, test_df = get_encoded_logs(job, use_cache=False)  # TODO:restore to true
 
     space = _get_space(job)
 

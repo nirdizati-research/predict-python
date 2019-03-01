@@ -5,6 +5,7 @@ from django.db import models
 from src.clustering.models import Clustering
 from src.encoding.models import Encoding
 from src.evaluation.models import Evaluation
+from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel
 from src.split.models import Split
@@ -51,8 +52,10 @@ class Job(models.Model):
     clustering = models.ForeignKey(Clustering, on_delete=models.DO_NOTHING, null=True)
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.DO_NOTHING, null=True)
+    hyperparameter_optimizer = models.ForeignKey(HyperparameterOptimization, on_delete=models.DO_NOTHING, null=True)
 
-    def to_dict(self) -> dict:
+    @staticmethod
+    def to_dict() -> dict:
         return {
             # **self.config,
             # 'type': self.type,

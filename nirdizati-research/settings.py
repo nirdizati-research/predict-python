@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig',
     'src.evaluation.apps.EvaluationConfig',
     'src.jobs.apps.JobsConfig',
+    'src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig',
     'src.runtime.apps.RuntimeConfig',
 
     'pred_models.apps.PredictionModelsConfig',

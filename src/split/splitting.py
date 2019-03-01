@@ -3,6 +3,7 @@ from typing import Union
 
 from sklearn.model_selection import train_test_split
 
+from src.split.models import Split, SplitTypes
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 
@@ -12,16 +13,20 @@ SPLIT_RANDOM = 'split_random'
 SPLIT_STRICT_TEMPORAL = 'split_strict_temporal'
 
 
-def prepare_logs(split: dict):
+def prepare_logs(split: Split):
     """Returns training_log and test_log"""
-    if split['type'] == 'single':
-        log = get_log(split['original_log_path'])
+    print(split.to_dict())
+
+    if split.type == SplitTypes.SPLIT_SINGLE.value:
+        print(split.to_dict())
+        log = get_log(split.original_log)
+        raise NotImplementedError
         additional_columns = get_additional_columns(log)
         training_log, test_log = _split_single_log(split, log)
         print("Loaded single log from {}".format(split['original_log_path']))
     else:
-        # Have to use sklearn to convert some internal data types
-        training_log = get_log(split['training_log_path'])
+        training_log = get_log(split.training_log)
+        print('whololo')
         additional_columns = get_additional_columns(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
         test_log, _ = train_test_split(get_log(split['test_log_path']), test_size=0, shuffle=False)

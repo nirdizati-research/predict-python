@@ -3,16 +3,17 @@ import time
 
 from pm4py.objects.log.importer.xes import factory as xes_importer
 
-# from src.jobs.models import Job
+from src.logs.models import Log
 
 
-def get_log(file_path: str):
+def get_log(log: Log):
     """Read in event log from disk
 
     Uses xes_importer to parse log.
     """
-    print("Reading in log from {}".format(file_path))
-    return xes_importer.import_log(file_path)
+    filepath = log.path
+    print("Reading in log from {}".format(filepath))
+    return xes_importer.import_log(filepath)
 
 
 def save_file(file, path):

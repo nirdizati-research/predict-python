@@ -21,21 +21,6 @@ from src.utils.tests_utils import general_example_filepath, create_test_job_pred
 class JobModelTest(TestCase):
     def setUp(self):
         create_test_job_prediction()
-        # self.config = {'key': 123,
-        #                'method': 'randomForest',
-        #                'encoding': {'method': 'simpleIndex', 'prefix_length': 1,
-        #                             'padding': 'no_padding', 'generation_type': 'only'},
-        #                'clustering': 'noCluster',
-        #                'create_models': False,
-        #                'label': {'type': 'remaining_time'},
-        #                'incremental_train': {'base_model': None}
-        #                }
-        # log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
-        # split = Split.objects.create(original_log=log)
-        # Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
-        #                    type=CLASSIFICATION)
-        # Job.objects.create(config=self.config, split=split, type='asdsd')
-        # Job.objects.create(config={}, split=split, type=REGRESSION)
 
     def test_default(self):
         job = Job.objects.get(id=1)

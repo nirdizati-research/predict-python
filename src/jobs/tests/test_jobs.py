@@ -134,11 +134,21 @@ class CreateJobsTests(APITestCase):
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']
         config['methods'] = ['knn']
-        config['label'] = {'type': 'remaining_time', 'attribute_name': None, 'threshold_type': THRESHOLD_MEAN,
-                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
+        config['label'] = {
+            'type': 'remaining_time',
+            'attribute_name': None,
+            'threshold_type': THRESHOLD_MEAN,
+            'threshold': 0,
+            'add_remaining_time': False,
+            'add_elapsed_time': False,
+            'add_executed_events': False,
+            'add_new_traces': False,
+            'add_resources_used': False
+        }
         config['random'] = 123
         config['kmeans'] = {}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
+        # config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': True}
         obj = dict()
         obj['type'] = 'classification'
         obj['config'] = config

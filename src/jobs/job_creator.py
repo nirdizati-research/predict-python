@@ -2,14 +2,15 @@ from copy import deepcopy
 
 from src.clustering.models import Clustering
 from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION, PREDICTION
-from src.core.default_configuration import CONF_MAP, kmeans
+from src.core.default_configuration import CONF_MAP, clustering_kmeans
 from src.encoding.encoding_container import UP_TO, SIMPLE_INDEX
 from src.encoding.models import Encoding
 from src.jobs.models import Job, CREATED
 from src.labelling.models import Labelling
+from src.predictive_model.models import PredictiveModel
 
 
-def generate(split, payload, generation_type=CLASSIFICATION):
+def generate(split, payload, generation_type=PREDICTION):
     jobs = []
 
     for method in payload['config']['methods']:
@@ -19,17 +20,68 @@ def generate(split, payload, generation_type=CLASSIFICATION):
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
-                            split=split,
                             status=CREATED,
                             type=generation_type,
-                            config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
+
+                            split=split,
+                            encoding=Encoding.objects.get_or_create(
+                                data_encoding='label_encoder',
+                                # TODO: @HitLuca [value_encoding=,]
+                                additional_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
+                                    'add_elapsed_time'] or
+                                                    payload['config']['label']['add_executed_events'] or payload['config']['label'][
+                                                        'add_resources_used'] or
+                                                    payload['config']['label']['add_new_traces'],
+                                temporal_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
+                                    'add_elapsed_time'],
+                                intercase_features=payload['config']['label']['add_executed_events'] or payload['config']['label'][
+                                    'add_resources_used'] or
+                                                   payload['config']['label']['add_new_traces'],
+                                prefix_len=payload['config']['encoding']['prefix_length'],
+                                padding=payload['config']['encoding']['padding']
+                            ),
+                            labelling=Labelling.objects.get_or_create(
+                                type=payload['config']['label']['type'],
+                                attribute_name=payload['config']['label']['attribute_name'],
+                                threshold_type=payload['config']['label']['threshold_type'],
+                                threshold=payload['config']['label']['threshold']
+                            ),
+                            clustering=Clustering.init(clustering, configuration=None),
+                            predictive_model=PredictiveModel.init(prediction, configuration=payload)
+
+                        )
+                            # config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
-                        split=split,
                         status=CREATED,
                         type=generation_type,
-                        config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
+
+                        split=split,
+                        encoding=Encoding.objects.get_or_create(
+                            data_encoding='label_encoder',
+                            # TODO: @HitLuca [value_encoding=,]
+                            additional_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
+                                'add_elapsed_time'] or
+                                                payload['config']['label']['add_executed_events'] or payload['config']['label'][
+                                                    'add_resources_used'] or
+                                                payload['config']['label']['add_new_traces'],
+                            temporal_features=payload['config']['label']['add_remaining_time'] or payload['config']['label'][
+                                'add_elapsed_time'],
+                            intercase_features=payload['config']['label']['add_executed_events'] or payload['config']['label'][
+                                'add_resources_used'] or
+                                               payload['config']['label']['add_new_traces'],
+                            prefix_len=payload['config']['encoding']['prefix_length'],
+                            padding=payload['config']['encoding']['padding']
+                        ),
+                        labelling=Labelling.objects.get_or_create(
+                            type=payload['config']['label']['type'],
+                            attribute_name=payload['config']['label']['attribute_name'],
+                            threshold_type=payload['config']['label']['threshold_type'],
+                            threshold=payload['config']['label']['threshold']
+                        )
+                    )
+                        # config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
 
     return jobs
@@ -41,17 +93,55 @@ def generate_labelling(split, payload):
     if encoding['generation_type'] == UP_TO:
         for i in range(1, encoding['prefix_length'] + 1):
             item = Job.objects.create(
-                split=split,
                 status=CREATED,
                 type=LABELLING,
-                config=deepcopy(create_config_labelling(payload, i)))
+
+                split=split,
+                encoding=Encoding.objects.get_or_create(
+                    data_encoding='label_encoder',
+                    #TODO: @HitLuca [value_encoding=,]
+                    additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
+                                        payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
+                                        payload['label']['add_new_traces'],
+                    temporal_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'],
+                    intercase_features= payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
+                                        payload['label']['add_new_traces'],
+                    prefix_len=i,
+                    padding=payload['encoding']['padding']
+                ),
+                labelling=Labelling.objects.get_or_create(
+                    type=payload['label']['type'],
+                    attribute_name=payload['label']['attribute_name'],
+                    threshold_type=payload['label']['threshold_type'],
+                    threshold=payload['label']['threshold']
+                )
+            )
             jobs.append(item)
     else:
         item = Job.objects.create(
-            split=split,
             status=CREATED,
             type=LABELLING,
-            config=create_config_labelling(payload, encoding['prefix_length']))
+
+            split=split,
+            encoding=Encoding.objects.get_or_create(
+                data_encoding='label_encoder',
+                # TODO: @HitLuca [value_encoding=,]
+                additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
+                                    payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
+                                    payload['label']['add_new_traces'],
+                temporal_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'],
+                intercase_features=payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
+                                   payload['label']['add_new_traces'],
+                prefix_len=payload['encoding']['prefix_length'],
+                padding=payload['encoding']['padding']
+            ),
+            labelling=Labelling.objects.get_or_create(
+                type=payload['label']['type'],
+                attribute_name=payload['label']['attribute_name'],
+                threshold_type=payload['label']['threshold_type'],
+                threshold=payload['label']['threshold']
+            )
+        )
         jobs.append(item)
 
     return jobs
@@ -106,16 +196,5 @@ def create_config(payload: dict, enc_method: str, clustering: str, method: str, 
     config['method'] = method
     # Encoding stuff rewrite
     config['encoding']['method'] = enc_method
-    config['encoding']['prefix_length'] = prefix_length
-    return config
-
-
-def create_config_labelling(payload: dict, prefix_length: int):
-    """For labelling job"""
-    config = dict(payload['config'])
-
-    # All methods are the same, so defaulting to SIMPLE_INDEX
-    # Remove when encoding and labelling are separated
-    config['encoding']['method'] = SIMPLE_INDEX
     config['encoding']['prefix_length'] = prefix_length
     return config

@@ -8,7 +8,7 @@ class Clustering(models.Model):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(clustering, configuration=None):
+    def init(clustering: str = NO_CLUSTER, configuration: dict = None):
         if clustering == NO_CLUSTER:
             return NoClustering.objects.get_or_create(id=1)
         elif clustering == KMEANS:

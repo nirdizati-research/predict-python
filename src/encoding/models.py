@@ -1,26 +1,39 @@
+from enum import Enum
+
 from django.db import models
 from jsonfield.fields import JSONField
 
-from src.encoding.encoding_container import LABEL_ENCODER, ONE_HOT_ENCODER, SIMPLE_INDEX, BOOLEAN, FREQUENCY, COMPLEX, \
-    LAST_PAYLOAD
 
-DATA_ENCODING = (
-    (LABEL_ENCODER, 'label_encoder'),
-    (ONE_HOT_ENCODER, 'one_hot')
+class DataEncodings(Enum):
+    LABEL_ENCODER = 'label_encoder'
+    ONE_HOT_ENCODER = 'one_hot'
+
+
+class ValueEncodings(Enum):
+    SIMPLE_INDEX = 'simpleIndex'
+    BOOLEAN = 'boolean'
+    FREQUENCY = 'frequency'
+    COMPLEX = 'complex'
+    LAST_PAYLOAD = 'lastPayload'
+
+
+DATA_ENCODING_MAPPINGS = (
+    (DataEncodings.LABEL_ENCODER, 'label_encoder'),
+    (DataEncodings.ONE_HOT_ENCODER, 'one_hot')
 )
 
-VALUE_ENCODING = (
-    (SIMPLE_INDEX, 'simpleIndex'),
-    (BOOLEAN, 'boolean'),
-    (FREQUENCY, 'frequency'),
-    (COMPLEX, 'complex'),
-    (LAST_PAYLOAD, 'lastPayload')
+VALUE_ENCODING_MAPPINGS = (
+    (ValueEncodings.SIMPLE_INDEX, 'simpleIndex'),
+    (ValueEncodings.BOOLEAN, 'boolean'),
+    (ValueEncodings.FREQUENCY, 'frequency'),
+    (ValueEncodings.COMPLEX, 'complex'),
+    (ValueEncodings.LAST_PAYLOAD, 'lastPayload')
 )
 
 
 class Encoding(models.Model):
-    data_encoding = models.CharField(choices=DATA_ENCODING, default='label_encoder', max_length=20)
-    value_encoding = models.CharField(choices=VALUE_ENCODING, default='label_encoder', max_length=20)
+    data_encoding = models.CharField(choices=DATA_ENCODING_MAPPINGS, default='label_encoder', max_length=20)
+    value_encoding = models.CharField(choices=VALUE_ENCODING_MAPPINGS, default='label_encoder', max_length=20)
     additional_features = models.BooleanField(default=False)
     temporal_features = models.BooleanField(default=False)
     intercase_features = models.BooleanField(default=False)

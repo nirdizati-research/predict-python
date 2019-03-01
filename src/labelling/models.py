@@ -24,7 +24,7 @@ class Labelling(models.Model):
     type = models.CharField(choices=LABELLING_TYPES, default='attribute_string', max_length=20)
     attribute_name = models.CharField(default='label', max_length=20)
     threshold_type = models.CharField(choices=THRESHOLD_TYPES, default='threshold_mean', max_length=20)
-    threshold = models.IntegerField()
+    threshold = models.IntegerField(default=0)
 
     def to_dict(self):
         return {

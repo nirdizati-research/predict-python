@@ -68,8 +68,7 @@ class Clustering:
     def _choose_clusterer(self, job):  # TODO this will change when using more than one type of cluster
         if job['clustering'] == self.KMEANS:
             #TODO: retrieve entry from db or create new one
-            # Clustering.objects.filter()
-            # Clustering.objects.create(split=, encoding=, labelling=, config= )
+            # Clustering.objects.get_or_create(split=, encoding=, labelling=, config= )
             self.clusterer = KMeans(**self.config)
         elif job['clustering'] == self.NO_CLUSTER:
             self.clusterer = None

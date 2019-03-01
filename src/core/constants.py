@@ -2,27 +2,6 @@
 constants used in the project to allow easy modifications
 """
 
-from sklearn.linear_model import SGDClassifier, Perceptron
-from sklearn.naive_bayes import MultinomialNB
-
-from skmultiflow.trees import HoeffdingTree, HAT
-
-# Classification methods
-KNN = 'knn'
-RANDOM_FOREST = 'randomForest'
-DECISION_TREE = 'decisionTree'
-MULTINOMIAL_NAIVE_BAYES = MultinomialNB().__class__.__name__
-ADAPTIVE_TREE = HAT().__class__.__name__
-HOEFFDING_TREE = HoeffdingTree().__class__.__name__
-SGDCLASSIFIER = SGDClassifier().__class__.__name__
-PERCEPTRON = Perceptron().__class__.__name__
-NN = 'nn'
-
-# Regression methods
-LINEAR = 'linear'
-LASSO = 'lasso'
-XGBOOST = 'xgboost'
-
 # Time Series Prediction methods
 RNN = 'rnn'
 
@@ -31,12 +10,7 @@ KMEANS = 'kmeans'
 NO_CLUSTER = 'noCluster'
 
 # Job types
-CLASSIFICATION = 'classification'
-REGRESSION = 'regression'
-PREDICTION = 'prediction'
-LABELLING = 'labelling'
-TIME_SERIES_PREDICTION = 'timeSeriesPrediction'
-UPDATE = 'update'
+
 
 # classification/regressor method confs
 CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(CLASSIFICATION, RANDOM_FOREST)

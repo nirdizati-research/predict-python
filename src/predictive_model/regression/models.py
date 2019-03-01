@@ -1,10 +1,63 @@
+from enum import Enum
+
 from django.db import models
 
+from src.core.default_configuration import regression_random_forest, regression_lasso, regression_linear, \
+    regression_xgboost, regression_nn
 from src.predictive_model.models import PredictiveModel
+
+
+class RegressionMethods(Enum):
+    LINEAR = 'linear'
+    LASSO = 'lasso'
+    XGBOOST = 'xgboost'
+    NN = 'nn'
 
 
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
+
+    @staticmethod
+    def init(configuration: dict = {RegressionMethods.RANDOM_FOREST}):
+        regressor_type = configuration['type']
+        if regressor_type == RegressionMethods.RANDOM_FOREST:
+            default_configuration = regression_random_forest()
+            return RandomForest.objects.get_or_create(
+                n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
+                max_features=configuration.get('max_features', default_configuration['max_features']),
+                max_depth=configuration.get('max_depth', default_configuration['max_depth'])
+            )
+        elif regressor_type == RegressionMethods.LASSO:
+            default_configuration = regression_lasso()
+            return Lasso.objects.get_or_create(
+                alpha=configuration.get('alpha', default_configuration['alpha']),
+                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
+                normalize=configuration.get('normalize', default_configuration['normalize'])
+            )
+        elif regressor_type == RegressionMethods.LINEAR:
+            default_configuration = regression_linear()
+            return Linear.objects.get_or_create(
+                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
+                normalize=configuration.get('normalize', default_configuration['normalize']),
+            )
+        elif regressor_type == RegressionMethods.XGBOOST:
+            default_configuration = regression_xgboost()
+            return XGBoost.objects.get_or_create(
+                max_depth=configuration.get('max_depth', default_configuration['max_depth']),
+                n_estimators=configuration.get('n_estimators', default_configuration['n_estimators'])
+            )
+        elif regressor_type == RegressionMethods.NN:
+            default_configuration = regression_nn()
+            return NeuralNetwork.objects.get_or_create(
+                hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
+                hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
+                activation_function=configuration.get('activation_function',
+                                                      default_configuration['activation_function']),
+                epochs=configuration.get('epochs', default_configuration['epochs']),
+                dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate'])
+            )
+        else:
+            raise ValueError('regressor type ' + regressor_type + ' not recognized')
 
     def to_dict(self):
         return {}
@@ -65,7 +118,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 )
 
 
-class NeuralNetworks(Regression):
+class NeuralNetwork(Regression):
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',

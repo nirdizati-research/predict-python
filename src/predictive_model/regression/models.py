@@ -2,16 +2,24 @@ from enum import Enum
 
 from django.db import models
 
-from src.core.default_configuration import regression_random_forest, regression_lasso, regression_linear, \
-    regression_xgboost, regression_nn
-from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
+from src.predictive_model.regression.methods_default_config import regression_random_forest, regression_lasso, \
+    regression_linear, regression_xgboost, regression_nn
 
 
 class RegressionMethods(Enum):
     LINEAR = 'linear'
+    RANDOM_FOREST = 'randomForest'
     LASSO = 'lasso'
     XGBOOST = 'xgboost'
     NN = 'nn'
+
+
+REGRESSION_LASSO = '{}.{}'.format(PredictiveModelTypes.REGRESSION, RegressionMethods.LASSO)
+REGRESSION_LINEAR = '{}.{}'.format(PredictiveModelTypes.REGRESSION, RegressionMethods.LINEAR)
+REGRESSION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.REGRESSION, RegressionMethods.XGBOOST)
+REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.REGRESSION, RegressionMethods.RANDOM_FOREST)
+REGRESSION_NN = '{}.{}'.format(PredictiveModelTypes.REGRESSION, RegressionMethods.NN)
 
 
 class Regression(PredictiveModel):

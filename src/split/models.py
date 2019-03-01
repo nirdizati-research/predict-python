@@ -1,19 +1,24 @@
+from enum import Enum
+
 from django.db import models
 
 from src.logs.models import Log
 
-SPLIT_SINGLE = 'single'
-SPLIT_DOUBLE = 'double'
 
-SPLIT_TYPES = (
-    (SPLIT_SINGLE, 'single'),
-    (SPLIT_DOUBLE, 'double'),
+class SplitTypes(Enum):
+    SPLIT_SINGLE = 'single'
+    SPLIT_DOUBLE = 'double'
+
+
+SPLIT_TYPE_MAPPINGS = (
+    (SplitTypes.SPLIT_SINGLE, 'single'),
+    (SplitTypes.SPLIT_DOUBLE, 'double'),
 )
 
 
 class Split(models.Model):
     """Container of Split to be shown in frontend"""
-    type = models.CharField(choices=SPLIT_TYPES, default='single', max_length=20)
+    type = models.CharField(choices=SPLIT_TYPE_MAPPINGS, default='single', max_length=20)
     original_log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='original_log', blank=True,
                                      null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)

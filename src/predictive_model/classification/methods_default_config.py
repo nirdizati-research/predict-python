@@ -1,27 +1,3 @@
-"""
-default configurations for the prediction methods
-"""
-from src.core.constants import CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN, CLASSIFICATION_DECISION_TREE, \
-    CLASSIFICATION_XGBOOST, CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES, CLASSIFICATION_NN, CLASSIFICATION_ADAPTIVE_TREE, \
-    CLASSIFICATION_HOEFFDING_TREE, CLASSIFICATION_SGDC, CLASSIFICATION_PERCEPTRON, REGRESSION_RANDOM_FOREST, \
-    REGRESSION_XGBOOST, REGRESSION_LASSO, REGRESSION_LINEAR, REGRESSION_NN, TIME_SERIES_PREDICTION_RNN, \
-    UPDATE_INCREMENTAL_NAIVE_BAYES, UPDATE_INCREMENTAL_ADAPTIVE_TREE, UPDATE_INCREMENTAL_HOEFFDING_TREE
-
-
-def clustering_kmeans():
-    return {
-        'n_clusters': 8,
-        'init': 'k-means++',
-        'n_init': 10,
-        'max_iter': 300,
-        'tol': 1e-4,
-        'precompute_distances': 'auto',
-        'random_state': None,
-        'copy_x': None,
-        'algorithm': None
-    }
-
-
 def classification_random_forest():
     return {
         'n_estimators': 10,
@@ -143,58 +119,6 @@ def classification_nn():
     }
 
 
-def regression_random_forest():
-    return {
-        'n_estimators': 10,
-        'max_depth': None,
-        'max_features': 'auto',
-        'n_jobs': -1,
-        'random_state': 21
-    }
-
-
-def regression_lasso():
-    return {
-        'alpha': 1.0,
-        'fit_intercept': True,
-        'normalize': False,
-        'random_state': 21
-    }
-
-
-def regression_linear():
-    return {
-        'fit_intercept': True,
-        'n_jobs': -1,
-        'normalize': False
-    }
-
-
-def regression_xgboost():
-    return {
-        'n_estimators': 100,
-        'max_depth': 3
-    }
-
-
-def regression_nn():
-    return {
-        'n_hidden_layers': 1,
-        'n_hidden_units': 10,
-        'activation': 'sigmoid',
-        'n_epochs': 10,
-        'dropout_rate': 0.0
-    }
-
-
-def time_series_prediction_rnn():
-    return {
-        'n_units': 16,
-        'rnn_type': 'lstm',
-        'n_epochs': 10,
-    }
-
-
 def _update_incremental_naive_bayes():
     return {
         'alpha': 1.0,
@@ -237,30 +161,3 @@ def _update_incremental_hoeffding_tree():
         'nb_threshold': 0.3,
         'nominal_attributes': []  # <-- TODO: if this is empty assume all attributes are numerical
     }
-
-
-# Map method config to a dict
-CONF_MAP = {
-    CLASSIFICATION_RANDOM_FOREST: classification_random_forest,
-    CLASSIFICATION_KNN: classification_knn,
-    CLASSIFICATION_DECISION_TREE: classification_decision_tree,
-    CLASSIFICATION_XGBOOST: classification_xgboost,
-    CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES: classification_incremental_naive_bayes,
-    CLASSIFICATION_ADAPTIVE_TREE: classification_incremental_adaptive_tree,
-    CLASSIFICATION_HOEFFDING_TREE: classification_incremental_hoeffding_tree,
-    CLASSIFICATION_SGDC: classification_incremental_sgd_classifier,
-    CLASSIFICATION_PERCEPTRON: classification_incremental_perceptron,
-    CLASSIFICATION_NN: classification_nn,
-
-    REGRESSION_RANDOM_FOREST: regression_random_forest,
-    REGRESSION_XGBOOST: regression_xgboost,
-    REGRESSION_LASSO: regression_lasso,
-    REGRESSION_LINEAR: regression_linear,
-    REGRESSION_NN: regression_nn,
-
-    TIME_SERIES_PREDICTION_RNN: time_series_prediction_rnn,
-
-    UPDATE_INCREMENTAL_NAIVE_BAYES: _update_incremental_naive_bayes,
-    UPDATE_INCREMENTAL_ADAPTIVE_TREE: _update_incremental_adaptive_tree,
-    UPDATE_INCREMENTAL_HOEFFDING_TREE: _update_incremental_hoeffding_tree
-}

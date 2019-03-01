@@ -4,10 +4,11 @@ import time
 
 from pandas import DataFrame
 
-from src.core.constants import TIME_SERIES_PREDICTION, REGRESSION, CLASSIFICATION, LABELLING, UPDATE
 from src.encoding.common import encode_label_log, encode_label_logs
+from src.jobs.models import JobTypes
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
+from src.predictive_model.models import PredictiveModelTypes
 from src.predictive_model.regression.regression import regression, regression_single_log
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
@@ -87,18 +88,18 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     model_split = None
 
     if job['incremental_train']['base_model'] is not None:
-        job['type'] = UPDATE
+        job['type'] = JobTypes.UPDATE
 
     start_time = time.time()
-    if job['type'] == CLASSIFICATION:
+    if job['type'] == PredictiveModelTypes.CLASSIFICATION:
         results, model_split = classification(training_df, test_df, job)
-    elif job['type'] == REGRESSION:
+    elif job['type'] == PredictiveModelTypes.REGRESSION:
         results, model_split = regression(training_df, test_df, job)
-    elif job['type'] == TIME_SERIES_PREDICTION:
+    elif job['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION:
         results, model_split = time_series_prediction(training_df, test_df, job)
-    elif job['type'] == LABELLING:
+    elif job['type'] == JobTypes.LABELLING:
         results = _label_task(training_df)
-    elif job['type'] == UPDATE:
+    elif job['type'] == JobTypes.UPDATE:
         results, model_split = update_and_test(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])
@@ -112,7 +113,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict,
     #                           metrics=
     #                           )
 
-    if job['type'] == CLASSIFICATION:
+    if job['type'] == PredictiveModelTypes.CLASSIFICATION:
         save_result(results, job, start_time)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))
@@ -129,11 +130,11 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
 
     """
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
-    if model['type'] == CLASSIFICATION:
+    if model['type'] == PredictiveModelTypes.CLASSIFICATION:
         results = classification_single_log(run_df, model)
-    elif model['type'] == REGRESSION:
+    elif model['type'] == PredictiveModelTypes.REGRESSION:
         results = regression_single_log(run_df, model)
-    elif model['type'] == TIME_SERIES_PREDICTION:
+    elif model['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION:
         results = time_series_prediction_single_log(run_df, model)
     else:
         raise ValueError("Type not supported", model['type'])
@@ -149,7 +150,7 @@ def get_run(job: dict) -> str:
     :param job: job configuration
     :return: job's identity string
     """
-    if job['type'] == LABELLING:
+    if job['type'] == JobTypes.LABELLING:
         return job['encoding'].method + '_' + job['label'].type
     return job['method'] + '_' + job['encoding'].method + '_' + job['clustering'] + '_' + job['label'].type
 

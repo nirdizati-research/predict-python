@@ -14,8 +14,8 @@ from xgboost import XGBRegressor
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.core.constants import LINEAR, RANDOM_FOREST, LASSO, XGBOOST, NN
 from src.predictive_model.nn_models import NNRegressor
+from src.predictive_model.regression.models import RegressionMethods
 from src.utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
@@ -118,15 +118,15 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_regressor(job: dict) -> RegressorMixin:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
-    if method == LINEAR:
+    if method == RegressionMethods.LINEAR:
         regressor = LinearRegression(**config)
-    elif method == RANDOM_FOREST:
+    elif method == RegressionMethods.RANDOM_FOREST:
         regressor = RandomForestRegressor(**config)
-    elif method == LASSO:
+    elif method == RegressionMethods.LASSO:
         regressor = Lasso(**config)
-    elif method == XGBOOST:
+    elif method == RegressionMethods.XGBOOST:
         regressor = XGBRegressor(**config)
-    elif method == NN:
+    elif method == RegressionMethods.NN:
         config['encoding'] = job['encoding'][0]
         regressor = NNRegressor(**config)
     else:

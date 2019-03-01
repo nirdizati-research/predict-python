@@ -2,16 +2,18 @@ from enum import Enum
 
 from django.db import models
 
-from src.core.default_configuration import classification_knn, classification_random_forest, \
+from src.jobs.models import JobTypes
+from src.predictive_model.classification.methods_default_config import classification_knn, classification_random_forest, \
     classification_decision_tree, classification_xgboost, classification_incremental_naive_bayes, \
     classification_incremental_hoeffding_tree, classification_incremental_adaptive_tree, \
     classification_incremental_sgd_classifier, classification_incremental_perceptron, classification_nn
-from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
 
 
 class ClassificationMethods(Enum):
     KNN = 'knn'
     RANDOM_FOREST = 'randomForest'
+    XGBOOST = 'xgboost'
     DECISION_TREE = 'decisionTree'
     MULTINOMIAL_NAIVE_BAYES = 'multinomialNB'
     ADAPTIVE_TREE = 'adaptiveTree'
@@ -19,6 +21,24 @@ class ClassificationMethods(Enum):
     SGDCLASSIFIER = 'SGDClassifier'
     PERCEPTRON = 'perceptron'
     NN = 'nn'
+
+
+CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.RANDOM_FOREST)
+CLASSIFICATION_KNN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.KNN)
+CLASSIFICATION_DECISION_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.DECISION_TREE)
+CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION,
+                                                        ClassificationMethods.MULTINOMIAL_NAIVE_BAYES)
+CLASSIFICATION_ADAPTIVE_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.ADAPTIVE_TREE)
+CLASSIFICATION_HOEFFDING_TREE = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION,
+                                               ClassificationMethods.HOEFFDING_TREE)
+CLASSIFICATION_SGDC = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.SGDCLASSIFIER)
+CLASSIFICATION_PERCEPTRON = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.PERCEPTRON)
+CLASSIFICATION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.XGBOOST)
+CLASSIFICATION_NN = '{}.{}'.format(PredictiveModelTypes.CLASSIFICATION, ClassificationMethods.NN)
+
+UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.MULTINOMIAL_NAIVE_BAYES)
+UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.ADAPTIVE_TREE)
+UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE, ClassificationMethods.HOEFFDING_TREE)
 
 
 class Classification(PredictiveModel):

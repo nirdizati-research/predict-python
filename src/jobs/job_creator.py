@@ -1,12 +1,14 @@
 from copy import deepcopy
 
-from src.core.constants import KMEANS, ALL_CONFIGS, LABELLING, CLASSIFICATION
-from src.core.default_configuration import CONF_MAP, clustering_kmeans
-from src.encoding.encoding_container import UP_TO, SIMPLE_INDEX
-from src.jobs.models import Job, CREATED
+from src.clustering.methods_default_config import clustering_kmeans
+from src.clustering.models import ClusteringMethods
+from src.encoding.encoding_container import UP_TO
+from src.encoding.models import DataEncodings
+from src.jobs.models import Job, JobStatuses, JobTypes
+from src.predictive_model.models import PredictiveModelTypes
 
 
-def generate(split, payload, generation_type=CLASSIFICATION):
+def generate(split, payload, generation_type=PredictiveModelTypes.CLASSIFICATION):
     jobs = []
 
     for method in payload['config']['methods']:
@@ -17,14 +19,14 @@ def generate(split, payload, generation_type=CLASSIFICATION):
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
                             split=split,
-                            status=CREATED,
+                            status=JobStatuses.CREATED,
                             type=generation_type,
                             config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
                         split=split,
-                        status=CREATED,
+                        status=JobStatuses.CREATED,
                         type=generation_type,
                         config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
@@ -39,15 +41,15 @@ def generate_labelling(split, payload):
         for i in range(1, encoding['prefix_length'] + 1):
             item = Job.objects.create(
                 split=split,
-                status=CREATED,
-                type=LABELLING,
+                status=JobStatuses.CREATED,
+                type=JobTypes.LABELLING,
                 config=deepcopy(create_config_labelling(payload, i)))
             jobs.append(item)
     else:
         item = Job.objects.create(
             split=split,
-            status=CREATED,
-            type=LABELLING,
+            status=JobStatuses.CREATED,
+            type=JobTypes.LABELLING,
             config=create_config_labelling(payload, encoding['prefix_length']))
         jobs.append(item)
 
@@ -64,14 +66,14 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                     for i in range(1, encoding['prefix_length'] + 1):
                         item = Job.objects.create(
                             split=split,
-                            status=CREATED,
+                            status=JobStatuses.CREATED,
                             type=payload['type'],
                             config=deepcopy(create_config(payload, encMethod, clustering, method, i)))
                         jobs.append(item)
                 else:
                     item = Job.objects.create(
                         split=split,
-                        status=CREATED,
+                        status=JobStatuses.CREATED,
                         type=payload['type'],
                         config=create_config(payload, encMethod, clustering, method, encoding['prefix_length']))
                     jobs.append(item)
@@ -87,18 +89,21 @@ def create_config(payload: dict, enc_method: str, clustering: str, method: str, 
 
     # Extract and merge configurations
     method_conf_name = "{}.{}".format(payload['type'], method)
-    method_conf = {**CONF_MAP[method_conf_name](), **payload['config'].get(method_conf_name, dict())}
-    # Remove configs that are not needed for this method
-    for any_conf_name in ALL_CONFIGS:
-        try:
-            del config[any_conf_name]
-        except KeyError:
-            pass
-    if clustering == KMEANS:
+
+    # TODO: fix this
+    # method_conf = {**CONF_MAP[method_conf_name](), **payload['config'].get(method_conf_name, dict())}
+    # # Remove configs that are not needed for this method
+    # for any_conf_name in ALL_CONFIGS:
+    #     try:
+    #         del config[any_conf_name]
+    #     except KeyError:
+    #         pass
+
+    if clustering == ClusteringMethods.KMEANS:
         config['kmeans'] = {**clustering_kmeans(), **payload['config'].get('kmeans', dict())}
     elif 'kmeans' in config:
         del config['kmeans']
-    config[method_conf_name] = method_conf
+    # config[method_conf_name] = method_conf TODO: restore
     config['clustering'] = clustering
     config['method'] = method
     # Encoding stuff rewrite
@@ -113,6 +118,6 @@ def create_config_labelling(payload: dict, prefix_length: int):
 
     # All methods are the same, so defaulting to SIMPLE_INDEX
     # Remove when encoding and labelling are separated
-    config['encoding']['method'] = SIMPLE_INDEX
+    config['encoding']['method'] = DataEncodings.SIMPLE_INDEX
     config['encoding']['prefix_length'] = prefix_length
     return config

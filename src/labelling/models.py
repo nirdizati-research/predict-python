@@ -1,29 +1,49 @@
+from enum import Enum
+
 from django.db import models
 
-from src.labelling.label_container import NEXT_ACTIVITY, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER, THRESHOLD_MEAN, \
-    THRESHOLD_CUSTOM, REMAINING_TIME, NO_LABEL, DURATION
 
-LABELLING_TYPES = (
-    (NEXT_ACTIVITY, 'next_activity'),
-    (ATTRIBUTE_STRING, 'attribute_string'),
-    (ATTRIBUTE_NUMBER, 'attribute_number'),
-    (THRESHOLD_MEAN, 'threshold_mean'),
-    (THRESHOLD_CUSTOM, 'threshold_custom'),
-    (REMAINING_TIME, 'remaining_time'),
-    (DURATION, 'duration'),
-    (NO_LABEL, 'no_label')
+class LabelTypes(Enum):
+    NEXT_ACTIVITY = 'next_activity'
+    ATTRIBUTE_STRING = 'attribute_string'
+    ATTRIBUTE_NUMBER = 'attribute_number'
+    REMAINING_TIME = 'remaining_time'
+    DURATION = 'duration'
+    NO_LABEL = 'no_label'
+
+
+class ThresholdTypes(Enum):
+    THRESHOLD_MEAN = 'threshold_mean'
+    THRESHOLD_CUSTOM = 'threshold_custom'
+
+
+#
+# CLASSIFICATION_LABELS = [NEXT_ACTIVITY, ATTRIBUTE_STRING, ATTRIBUTE_NUMBER, THRESHOLD_MEAN, THRESHOLD_CUSTOM]
+#
+# REGRESSION_LABELS = [REMAINING_TIME, ATTRIBUTE_NUMBER]
+#
+# TIME_SERIES_PREDICTION_LABELS = [NEXT_ACTIVITY]  # TODO: check for using NO_LABEL
+
+
+LABELLING_TYPE_MAPPINGS = (
+    (LabelTypes.NEXT_ACTIVITY, 'next_activity'),
+    (LabelTypes.ATTRIBUTE_STRING, 'attribute_string'),
+    (LabelTypes.ATTRIBUTE_NUMBER, 'attribute_number'),
+    (LabelTypes.REMAINING_TIME, 'remaining_time'),
+    (LabelTypes.DURATION, 'duration'),
+    (LabelTypes.NO_LABEL, 'no_label')
 )
 
-THRESHOLD_TYPES = (
-    (THRESHOLD_MEAN, 'threshold_mean'),
-    (THRESHOLD_CUSTOM, 'threshold_custom')
+THRESHOLD_TYPE_MAPPINGS = (
+    (ThresholdTypes.THRESHOLD_MEAN, 'threshold_mean'),
+    (ThresholdTypes.THRESHOLD_CUSTOM, 'threshold_custom')
 )
 
 
 class Labelling(models.Model):
-    type = models.CharField(choices=LABELLING_TYPES, default='attribute_string', max_length=20)
+    type = models.CharField(choices=LABELLING_TYPE_MAPPINGS, default='attribute_string', max_length=20)
     attribute_name = models.CharField(default='label', max_length=20)
-    threshold_type = models.CharField(choices=THRESHOLD_TYPES, default='threshold_mean', max_length=20)
+    threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='threshold_mean', max_length=20)
     threshold = models.IntegerField(default=0)
 
     def to_dict(self):

@@ -9,6 +9,13 @@ class PredictiveModelTypes(Enum):
     TIME_SERIES_PREDICTION = 'timeSeriesPrediction'
 
 
+PREDICTIVE_MODEL_TYPE_MAPPINGS = (
+    (PredictiveModelTypes.CLASSIFICATION, 'classification'),
+    (PredictiveModelTypes.REGRESSION, 'regression'),
+    (PredictiveModelTypes.TIME_SERIES_PREDICTION, 'timeSeriesPrediction')
+)
+
+
 class PredictiveModel(models.Model):
     """Container of Classification to be shown in frontend"""
 

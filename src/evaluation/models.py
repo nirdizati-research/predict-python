@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Evaluation(models.Model):
     """Container of Classification to be shown in frontend"""
     metrics = models.ForeignKey('Metrics', on_delete=models.DO_NOTHING, blank=True, null=True)

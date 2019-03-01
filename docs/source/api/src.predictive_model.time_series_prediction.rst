@@ -20,6 +20,22 @@ src.predictive\_model.time\_series\_prediction.apps module
     :undoc-members:
     :show-inheritance:
 
+src.predictive\_model.time\_series\_prediction.custom\_time\_series\_prediction\_models module
+----------------------------------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.time_series_prediction.custom_time_series_prediction_models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.predictive\_model.time\_series\_prediction.methods\_default\_config module
+------------------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.time_series_prediction.methods_default_config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.predictive\_model.time\_series\_prediction.models module
 ------------------------------------------------------------
 

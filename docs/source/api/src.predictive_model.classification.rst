@@ -28,6 +28,22 @@ src.predictive\_model.classification.classification module
     :undoc-members:
     :show-inheritance:
 
+src.predictive\_model.classification.custom\_classification\_models module
+--------------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.classification.custom_classification_models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.predictive\_model.classification.methods\_default\_config module
+--------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.classification.methods_default_config
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.predictive\_model.classification.models module
 --------------------------------------------------
 

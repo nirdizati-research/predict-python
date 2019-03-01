@@ -9,7 +9,8 @@ from django.test import TestCase
 from src.core.core import calculate
 from src.core.tests.common import repair_example, add_default_config
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
-from src.labelling.label_container import LabelContainer, NEXT_ACTIVITY
+from src.labelling.label_container import LabelContainer
+from src.labelling.models import LabelTypes
 
 
 @unittest.skip('needs refactoring')
@@ -58,7 +59,7 @@ class RefactorProof(TestCase):
     def test_next_activity_kmeans(self):
         self.max_diff = None
         job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
         job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)
         result, _ = calculate(job)
@@ -72,7 +73,7 @@ class RefactorProof(TestCase):
     def test_next_activity_no_cluster(self):
         self.max_diff = None
         job = self.get_job()
-        job['label'] = LabelContainer(NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
         job['clustering'] = 'noCluster'
         job['encoding'] = EncodingContainer(prefix_length=8, padding=ZERO_PADDING)
         add_default_config(job)

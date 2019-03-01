@@ -10,9 +10,9 @@ class PredictiveModelTypes(Enum):
 
 
 PREDICTIVE_MODEL_TYPE_MAPPINGS = (
-    (PredictiveModelTypes.CLASSIFICATION, 'classification'),
-    (PredictiveModelTypes.REGRESSION, 'regression'),
-    (PredictiveModelTypes.TIME_SERIES_PREDICTION, 'timeSeriesPrediction')
+    (PredictiveModelTypes.CLASSIFICATION.value, 'classification'),
+    (PredictiveModelTypes.REGRESSION.value, 'regression'),
+    (PredictiveModelTypes.TIME_SERIES_PREDICTION.value, 'timeSeriesPrediction')
 )
 
 
@@ -23,13 +23,13 @@ class PredictiveModel(models.Model):
 
     @staticmethod
     def init(prediction_type: str = PredictiveModelTypes.CLASSIFICATION, configuration: dict = None):
-        if prediction_type == PredictiveModelTypes.CLASSIFICATION:
+        if prediction_type == PredictiveModelTypes.CLASSIFICATION.value:
             from src.predictive_model.classification.models import Classification
             return Classification.init(configuration)
-        elif prediction_type == PredictiveModelTypes.REGRESSION:
+        elif prediction_type == PredictiveModelTypes.REGRESSION.value:
             from src.predictive_model.regression.models import Regression
             return Regression.init(configuration)
-        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION:
+        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
             from src.predictive_model.time_series_prediction.models import TimeSeriesPrediction
             return TimeSeriesPrediction.init(configuration)
         else:

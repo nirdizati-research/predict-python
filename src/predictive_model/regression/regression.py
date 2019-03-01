@@ -14,7 +14,7 @@ from xgboost import XGBRegressor
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.predictive_model.nn_models import NNRegressor
+from src.predictive_model.regression.custom_regression_models import NNRegressor
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.result_metrics import calculate_results_regression
 

@@ -33,20 +33,20 @@ def create_test_encoding(prefix_length: int = 1, padding: bool = False) -> Encod
     return encoding[0]
 
 
-def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY) -> Labelling:
+def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value) -> Labelling:
     labelling = Labelling.objects.get_or_create(
         type=label_type)
     return labelling[0]
 
 
-def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER,
+def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.value,
                            configuration: dict = None) -> Clustering:
     clustering = Clustering.init(clustering_type, configuration)
     return clustering[0]
 
 
-def create_test_predictive_model(prediction_type: str = PredictiveModelTypes.CLASSIFICATION,
-                                 predictive_model_type: str = ClassificationMethods.RANDOM_FOREST) -> PredictiveModel:
+def create_test_predictive_model(prediction_type: str = PredictiveModelTypes.CLASSIFICATION.value,
+                                 predictive_model_type: str = ClassificationMethods.RANDOM_FOREST.value) -> PredictiveModel:
     predictive_model = PredictiveModel.init(prediction_type, {'type': predictive_model_type})
     return predictive_model[0]
 
@@ -57,8 +57,8 @@ def create_test_job_prediction(split: Split = create_test_split(),
                                clustering: Clustering = create_test_clustering(),
                                predictive_model: PredictiveModel = create_test_predictive_model()):
     job = Job.objects.create(
-        status=JobStatuses.CREATED,
-        type=JobTypes.PREDICTION,
+        status=JobStatuses.CREATED.value,
+        type=JobTypes.PREDICTION.value,
         split=split,
         encoding=encoding,
         labelling=labelling,

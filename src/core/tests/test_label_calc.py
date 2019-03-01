@@ -32,7 +32,7 @@ class Labelling(TestCase):
 
     def test_next_activity(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY)
+        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         result, _ = calculate(job)
         self.assertEqual(result, {'0': 2, 'Repair (Complex)': 306, 'Test Repair': 432, 'Inform User': 5,
                                   'Repair (Simple)': 138})
@@ -40,20 +40,20 @@ class Labelling(TestCase):
     @unittest.skip('needs refactoring')
     def test_remaining_custom_threshold(self):
         job = self.get_job()
-        job['label'] = LabelContainer(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM, threshold=1600)
+        job['label'] = LabelContainer(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value, threshold=1600)
         result, _ = calculate(job)
         self.assertEqual(result, {'true': 444, 'false': 439})
 
     def test_atr_string(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.ATTRIBUTE_STRING, attribute_name='description')
+        job['label'] = LabelContainer(LabelTypes.ATTRIBUTE_STRING.value, attribute_name='description')
         result, _ = calculate(job)
         self.assertEqual(result, {'Simulated process instance': 883})
 
     def test_duration(self):
         """Trace atr, zero padding means prefix length has no effect"""
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.DURATION)
+        job['label'] = LabelContainer(LabelTypes.DURATION.value)
         result1, _ = calculate(job)
         job['encoding'] = EncodingContainer(prefix_length=22, padding=ZERO_PADDING)
         result2, _ = calculate(job)

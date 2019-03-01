@@ -5,14 +5,15 @@ from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from src.core.constants import CLASSIFICATION
-from src.core.default_configuration import classification_random_forest
 from src.core.tests.common import add_default_config
 from src.jobs.job_creator import create_config
-from src.jobs.models import Job, JobStatus
+from src.jobs.models import Job, JobStatuses
 from src.jobs.tasks import prediction_task
-from src.labelling.label_container import LabelContainer, THRESHOLD_MEAN
+from src.labelling.label_container import LabelContainer
+from src.labelling.models import ThresholdTypes
 from src.logs.models import Log
+from src.predictive_model.classification.methods_default_config import classification_random_forest
+from src.predictive_model.models import PredictiveModelTypes
 from src.split.models import Split
 from src.utils.tests_utils import general_example_filepath, create_test_job_prediction
 
@@ -46,14 +47,14 @@ class JobModelTest(TestCase):
 
     def test_modified(self):
         job = Job.objects.get(id=1)
-        job.status = JobStatus.COMPLETED
+        job.status = JobStatuses.COMPLETED.value
 
         self.assertNotEquals(job.created_date, job.modified_date)
 
     def test_to_dict(self):
         job = Job.objects.get(id=1).to_dict()
 
-        self.assertEquals(CLASSIFICATION, job['type'])
+        self.assertEquals(PredictiveModelTypes.CLASSIFICATION.value, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
                               'config': {},
@@ -110,8 +111,9 @@ class Hyperopt(TestCase):
         }
         log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
         split = Split.objects.create(original_log=log)
-        Job.objects.create(config=add_default_config(self.config, prediction_method=CLASSIFICATION), split=split,
-                           type=CLASSIFICATION)
+        Job.objects.create(
+            config=add_default_config(self.config, prediction_method=PredictiveModelTypes.CLASSIFICATION), split=split,
+            type=PredictiveModelTypes.CLASSIFICATION)
 
     @unittest.skip('needs refactoring')
     def test_hyperopt(self):
@@ -134,21 +136,12 @@ class CreateJobsTests(APITestCase):
         config['encodings'] = ['simpleIndex']
         config['clusterings'] = ['noCluster']
         config['methods'] = ['knn']
-        config['label'] = {
-            'type': 'remaining_time',
-            'attribute_name': None,
-            'threshold_type': THRESHOLD_MEAN,
-            'threshold': 0,
-            'add_remaining_time': False,
-            'add_elapsed_time': False,
-            'add_executed_events': False,
-            'add_new_traces': False,
-            'add_resources_used': False
-        }
+        config['label'] = {'type': 'remaining_time', 'attribute_name': None,
+                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
+                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
         config['random'] = 123
         config['kmeans'] = {}
-        # config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': True}
+        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
         obj['type'] = 'classification'
         obj['config'] = config
@@ -170,7 +163,8 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertEqual(response.data[0]['config']['label'],
-                         {'type': 'remaining_time', 'attribute_name': None, 'threshold_type': THRESHOLD_MEAN,
+                         {'type': 'remaining_time', 'attribute_name': None,
+                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
         self.assertEqual(response.data[0]['status'], 'created')
 
@@ -211,7 +205,8 @@ class CreateJobsTests(APITestCase):
     @staticmethod
     def job_label():
         config = dict()
-        config['label'] = {'type': 'remaining_time', 'attribute_name': None, 'threshold_type': THRESHOLD_MEAN,
+        config['label'] = {'type': 'remaining_time', 'attribute_name': None,
+                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
                            'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
         config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
@@ -230,7 +225,8 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['encoding']['method'], 'simpleIndex')
         self.assertEqual(response.data[0]['config']['encoding']['prefix_length'], 3)
         self.assertEqual(response.data[0]['config']['label'],
-                         {'type': 'remaining_time', 'attribute_name': None, 'threshold_type': THRESHOLD_MEAN,
+                         {'type': 'remaining_time', 'attribute_name': None,
+                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
         self.assertEqual(response.data[0]['config']['encoding']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')

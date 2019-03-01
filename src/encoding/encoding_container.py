@@ -33,7 +33,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
     """Inner object describing encoding configuration.
     """
 
-    def __new__(cls, method: ValueEncodings = ValueEncodings.SIMPLE_INDEX, prefix_length: int = 1,
+    def __new__(cls, method: str = ValueEncodings.SIMPLE_INDEX.value, prefix_length: int = 1,
                 padding: str = NO_PADDING,
                 generation_type: str = ONLY_THIS):
         # noinspection PyArgumentList
@@ -46,18 +46,18 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
         return self.generation_type == ALL_IN_ONE
 
     def is_boolean(self) -> bool:
-        return self.method == ValueEncodings.BOOLEAN
+        return self.method == ValueEncodings.BOOLEAN.value
 
     def is_complex(self) -> bool:
-        return self.method == ValueEncodings.COMPLEX
+        return self.method == ValueEncodings.COMPLEX.value
 
     @staticmethod
     def encode(df: DataFrame) -> None:
         for column in df:
             if column in encoder:
-                if ENCODING == DataEncodings.LABEL_ENCODER:
+                if ENCODING == DataEncodings.LABEL_ENCODER.value:
                     df[column] = df[column].apply(lambda x: label_dict[column].get(x, PADDING_VALUE))
-                elif ENCODING == DataEncodings.ONE_HOT_ENCODER:
+                elif ENCODING == DataEncodings.ONE_HOT_ENCODER.value:
                     raise NotImplementedError('Onehot encoder not yet implemented')
                     # values = np.array([ label_dict[column].get(x, label_dict[column][PADDING_VALUE]) for
                     # x in df[column] ])
@@ -70,13 +70,13 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
         for column in df:
             if column != 'trace_id':
                 if df[column].dtype != int or (df[column].dtype == int and pd.np.any(df[column] < 0)):
-                    if ENCODING == DataEncodings.LABEL_ENCODER:
+                    if ENCODING == DataEncodings.LABEL_ENCODER.value:
                         encoder[column] = LabelEncoder().fit(
                             sorted(pd.concat([pd.Series([str(PADDING_VALUE)]), df[column].apply(lambda x: str(x))])))
                         classes = encoder[column].classes_
                         transforms = encoder[column].transform(classes)
                         label_dict[column] = dict(zip(classes, transforms))
-                    elif ENCODING == DataEncodings.ONE_HOT_ENCODER:
+                    elif ENCODING == DataEncodings.ONE_HOT_ENCODER.value:
                         raise NotImplementedError('Onehot encoder not yet implemented')
                         # label_encoder[column] = LabelEncoder().fit(df[column])
                         # classes = label_encoder[column].classes_

@@ -14,14 +14,8 @@ TIME_SERIES_PREDICTION_RNN = '{}.{}'.format(PredictiveModelTypes.TIME_SERIES_PRE
                                             TimeSeriesPredictionMethods.RNN.value)
 
 
-TIME_SERIES_PREDICTION_METHODS = (
-    (TimeSeriesPredictionMethods.RNN.value, 'rnn')
-)
-
-
 class TimeSeriesPrediction(PredictiveModel):
     """Container of Classification to be shown in frontend"""
-    method = models.CharField(choices=TIME_SERIES_PREDICTION_METHODS, default='uniform', max_length=20)
 
     @staticmethod
     def init(configuration: dict = {'type': TimeSeriesPredictionMethods.RNN.value}):
@@ -30,7 +24,6 @@ class TimeSeriesPrediction(PredictiveModel):
             default_configuration = time_series_prediction_rnn()
             return RecurrentNeuralNetwork.objects.get_or_create(
                 type=PredictiveModelTypes.TIME_SERIES_PREDICTION.value,
-                method=TimeSeriesPredictionMethods.RNN.value,
                 n_units=configuration.get('n_units', default_configuration['n_units']),
                 rnn_type=configuration.get('rnn_type', default_configuration['rnn_type']),
                 n_epochs=configuration.get('n_epochs', default_configuration['n_epochs'])
@@ -49,6 +42,8 @@ RNN_TYPES = (
 
 
 class RecurrentNeuralNetwork(TimeSeriesPrediction):
+    __name__ = TimeSeriesPredictionMethods.RNN.value
+
     n_units = models.PositiveIntegerField()
     rnn_type = models.CharField(choices=RNN_TYPES, default='lstm', max_length=10)
     n_epochs = models.PositiveIntegerField()

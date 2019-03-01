@@ -27,9 +27,8 @@ def get_method_config(job: Job) -> (str, dict):
     :return: method string and method configuration dict
 
     """
-    method = job.method
-    method_conf_name = "{}.{}".format(job.type, method)
-    config = job[method_conf_name]
+    method = job.predictive_model.__class__.__name__
+    config = job.predictive_model
     return method, config
 
 

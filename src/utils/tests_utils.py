@@ -1,7 +1,7 @@
 from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.models import Encoding, DataEncodings
 from src.jobs.models import Job, JobStatuses, JobTypes
-from src.labelling.models import Labelling, LabelTypes
+from src.labelling.models import Labelling, LabelTypes, ThresholdTypes
 from src.logs.models import Log
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
@@ -33,9 +33,16 @@ def create_test_encoding(prefix_length: int = 1, padding: bool = False) -> Encod
     return encoding[0]
 
 
-def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value) -> Labelling:
+def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
+                          attribute_name: str = 'label',
+                          threshold_type: str = ThresholdTypes.THRESHOLD_MEAN.value,
+                          threshold: float = 0.0) -> Labelling:
     labelling = Labelling.objects.get_or_create(
-        type=label_type)
+        type=label_type,
+        attribute_name=attribute_name,
+        threshold_type=threshold_type,
+        threshold=threshold
+    )
     return labelling[0]
 
 
@@ -51,14 +58,15 @@ def create_test_predictive_model(prediction_type: str = PredictiveModelTypes.CLA
     return predictive_model[0]
 
 
-def create_test_job_prediction(split: Split = create_test_split(),
-                               encoding: Encoding = create_test_encoding(),
-                               labelling: Labelling = create_test_labelling(),
-                               clustering: Clustering = create_test_clustering(),
-                               predictive_model: PredictiveModel = create_test_predictive_model()):
+def create_test_job(split: Split = create_test_split(),
+                    encoding: Encoding = create_test_encoding(),
+                    labelling: Labelling = create_test_labelling(),
+                    clustering: Clustering = create_test_clustering(),
+                    predictive_model: PredictiveModel = create_test_predictive_model(),
+                    job_type=JobTypes.PREDICTION.value):
     job = Job.objects.create(
         status=JobStatuses.CREATED.value,
-        type=JobTypes.PREDICTION.value,
+        type=job_type,
         split=split,
         encoding=encoding,
         labelling=labelling,

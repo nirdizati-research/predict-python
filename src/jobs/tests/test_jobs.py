@@ -15,12 +15,12 @@ from src.logs.models import Log
 from src.predictive_model.classification.methods_default_config import classification_random_forest
 from src.predictive_model.models import PredictiveModelTypes
 from src.split.models import Split
-from src.utils.tests_utils import general_example_filepath, create_test_job_prediction
+from src.utils.tests_utils import general_example_filepath, create_test_job
 
 
 class JobModelTest(TestCase):
     def setUp(self):
-        create_test_job_prediction()
+        create_test_job()
         # self.config = {'key': 123,
         #                'method': 'randomForest',
         #                'encoding': {'method': 'simpleIndex', 'prefix_length': 1,

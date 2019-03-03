@@ -58,9 +58,9 @@ def split_double():
 
 def repair_example():
     return create_test_split(split_type=SplitTypes.SPLIT_SINGLE.value,
-                              log=create_test_log(log_name='repair_example.xes',
-                                                  log_filepath=repair_example_filepath
-                                                  )
+                             log=create_test_log(log_name='repair_example.xes',
+                                                 log_filepath=repair_example_filepath
+                                                 )
                              )
 
 

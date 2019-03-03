@@ -11,6 +11,7 @@ from src.core.tests.common import repair_example
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes, ThresholdTypes
+from src.utils.tests_utils import create_test_job_prediction
 
 
 class Labelling(TestCase):

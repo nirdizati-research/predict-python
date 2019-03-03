@@ -199,9 +199,6 @@ def _choose_classifier(job: Job):
         method, config = get_method_config(job)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN.value:
-            # TODO: integrateme
-            # Classifier.objects.filter()
-            # Classifier.objects.create(clustering=, config=)
             classifier = KNeighborsClassifier(**config)
         elif method == ClassificationMethods.RANDOM_FOREST.value:
             classifier = RandomForestClassifier(**config)

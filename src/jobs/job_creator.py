@@ -1,17 +1,13 @@
 from src.clustering.models import Clustering
-
-from src.clustering.methods_default_config import clustering_kmeans
-from src.clustering.models import ClusteringMethods
-from src.core.common import CONF_MAP, ALL_CONFIGS
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
+from src.predictive_model.models import PredictionTypes
 from src.predictive_model.models import PredictiveModel
-from src.predictive_model.models import PredictiveModelTypes
 
 
-def generate(split, payload, generation_type=PredictiveModelTypes.CLASSIFICATION):
+def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION):
     jobs = []
 
     config = payload['config']

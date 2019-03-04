@@ -12,7 +12,7 @@ class ClusteringMethods(Enum):
 
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
-
+    clustering_method = model
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
         if clustering == ClusteringMethods.NO_CLUSTER.value:

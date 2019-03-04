@@ -1,7 +1,7 @@
 from django.db import models
 
 from src.common.models import CommonModel
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 
 
 class Evaluation(CommonModel):
@@ -15,7 +15,7 @@ class Evaluation(CommonModel):
 
     @staticmethod
     def init(prediction_type, results):
-        if prediction_type == PredictiveModelTypes.CLASSIFICATION.value:
+        if prediction_type == PredictionTypes.CLASSIFICATION.value:
             pass #TODO fixme
             # if labels == BINARY:
             #     BinaryClassificationMetrics.objects.get_or_create(
@@ -29,7 +29,7 @@ class Evaluation(CommonModel):
             #     )
             # elif labels == MUTLICLASS:
             #     MulticlassClassificationMetrics.objects.get_or_create(metrics='')
-        elif prediction_type == PredictiveModelTypes.REGRESSION.value:
+        elif prediction_type == PredictionTypes.REGRESSION.value:
             RegressionMetrics.objects.get_or_create(
                 metrics='',
 
@@ -37,7 +37,7 @@ class Evaluation(CommonModel):
                 mae=results['mae'],
                 mape=results['mape']
             )
-        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
+        elif prediction_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
             TimeSeriesPredictionMetrics.objects.get_or_create(metrics='')
 
 

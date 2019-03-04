@@ -48,9 +48,9 @@ class FileUploadTests(APITestCase):
         Log.objects.all().delete()
         # I hate that Python can't just delete
         with contextlib.suppress(FileNotFoundError):
-            remove('cache/log_cache/test_upload.xes')
-        with contextlib.suppress(FileNotFoundError):
-            remove('cache/log_cache/file1.xes')
+            remove('cache/log_cache/test_upload.xes')  # TODO: fixme a file is not uploaded with only its name,
+        with contextlib.suppress(FileNotFoundError):  # it is its name + the time.time() in order to avoid
+            remove('cache/log_cache/file1.xes')  # shadowing and it is also sha265 encoded
         with contextlib.suppress(FileNotFoundError):
             remove('cache/log_cache/file2.xes')
 

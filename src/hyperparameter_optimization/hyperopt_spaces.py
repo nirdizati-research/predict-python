@@ -17,9 +17,7 @@ from src.predictive_model.time_series_prediction.models import TIME_SERIES_PREDI
 
 
 def _get_space(job: Job) -> dict:
-    method_conf_name = "{}.{}".format(job.predictive_model.type, job.predictive_model.__class__.__name__)
-    print(job.predictive_model.type)
-    print(job.predictive_model.__class__.__name__)
+    method_conf_name = "{}.{}".format(job.predictive_model.predictive_model, job.predictive_model.prediction_method)
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 

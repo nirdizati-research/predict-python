@@ -16,7 +16,7 @@ from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 
 
 class TestClassification(TestCase):
@@ -39,7 +39,7 @@ class TestClassification(TestCase):
         else:
             json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
-        json['type'] = PredictiveModelTypes.CLASSIFICATION.value
+        json['type'] = PredictionTypes.CLASSIFICATION.value
 
         if method != ClassificationMethods.KNN.value:
             add_default_config(json)

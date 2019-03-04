@@ -7,7 +7,7 @@ from src.encoding.common import encode_label_log
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import *
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
 
@@ -23,7 +23,7 @@ class TestEncoding(TestCase):
         start_time = time.time()
         # log = get_logs("log_cache/repairExample.xes")[0]
         event_names = unique_events(self.log)
-        encode_label_log(self.log, encoding, PredictiveModelTypes.REGRESSION.value, self.label, event_names=event_names,
+        encode_label_log(self.log, encoding, PredictionTypes.REGRESSION.value, self.label, event_names=event_names,
                          additional_columns=self.add_col)
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
@@ -48,7 +48,7 @@ class TestAgainstNirdizatiTraining(TestCase):
         encoding = EncodingContainer(encoding, prefix_length=185, generation_type=ALL_IN_ONE,
                                      padding=ZERO_PADDING)
         event_names = unique_events(log)
-        log = encode_label_log(log, encoding, PredictiveModelTypes.REGRESSION.value, label, event_names=event_names)
+        log = encode_label_log(log, encoding, PredictionTypes.REGRESSION.value, label, event_names=event_names)
         print(log.shape)
         print("Total for %s %s seconds" % (encoding, time.time() - start_time))
 
@@ -80,7 +80,7 @@ class TestTraceLengthTime(TestCase):
         add_col = get_additional_columns(log)
         event_names = unique_events(log)
         encoding = EncodingContainer(encoding, prefix_length=20, padding=ZERO_PADDING)
-        log = encode_label_log(log, encoding, PredictiveModelTypes.REGRESSION.value, self.label,
+        log = encode_label_log(log, encoding, PredictionTypes.REGRESSION.value, self.label,
                                event_names=event_names,
                                additional_columns=add_col)
         print(log.shape)

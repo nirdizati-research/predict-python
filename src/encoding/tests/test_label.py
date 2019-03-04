@@ -6,7 +6,7 @@ from src.encoding.common import encode_label_log
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import *
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath
@@ -24,7 +24,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_no_label(self):
         label = LabelContainer(type=LabelTypes.NO_LABEL.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 3))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -37,7 +37,7 @@ class TestLabelSimpleIndex(TestCase):
         label = LabelContainer(type=LabelTypes.NO_LABEL.value, add_elapsed_time=True, add_remaining_time=True)
         encoding = EncodingContainer(prefix_length=10, padding=ZERO_PADDING)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -48,7 +48,7 @@ class TestLabelSimpleIndex(TestCase):
 
     def test_remaining_time(self):
         label = LabelContainer()
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -62,7 +62,7 @@ class TestLabelSimpleIndex(TestCase):
                                threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value,
                                threshold=40000)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 5))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'elapsed_time', 'label'])
@@ -75,7 +75,7 @@ class TestLabelSimpleIndex(TestCase):
         label = LabelContainer(type=LabelTypes.REMAINING_TIME.value, add_elapsed_time=True)
         encoding = EncodingContainer(prefix_length=10, padding=ZERO_PADDING)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -89,7 +89,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_next_activity(self):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -102,7 +102,7 @@ class TestLabelSimpleIndex(TestCase):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value, add_elapsed_time=True)
         encoding = EncodingContainer(prefix_length=10, padding=ZERO_PADDING)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 13))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
@@ -117,7 +117,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_attribute_string(self):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -129,7 +129,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_attribute_number(self):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -141,7 +141,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_duration(self):
         label = LabelContainer(type=LabelTypes.DURATION.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -153,7 +153,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_add_executed_events(self):
         label = LabelContainer(add_executed_events=True)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('executed_events' in df.columns.values.tolist())
@@ -162,7 +162,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_add_resources_used(self):
         label = LabelContainer(add_resources_used=True)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('resources_used' in df.columns.values.tolist())
@@ -171,7 +171,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_add_new_traces(self):
         label = LabelContainer(add_new_traces=True)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('new_traces' in df.columns.values.tolist())
@@ -189,7 +189,7 @@ class TestLabelComplex(TestCase):
     def test_no_label(self):
         label = LabelContainer(type=LabelTypes.NO_LABEL.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual((2, 13), df.shape)
@@ -198,7 +198,7 @@ class TestLabelComplex(TestCase):
         # add things have no effect
         label = LabelContainer(type=LabelTypes.NO_LABEL.value, add_elapsed_time=True, add_remaining_time=True)
 
-        df = encode_label_log(self.log, self.encodingPadding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encodingPadding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 53))
@@ -206,7 +206,7 @@ class TestLabelComplex(TestCase):
     def test_remaining_time(self):
         label = LabelContainer()
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 14))
@@ -216,7 +216,7 @@ class TestLabelComplex(TestCase):
                                threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value,
                                threshold=40000)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 15))
@@ -224,7 +224,7 @@ class TestLabelComplex(TestCase):
     def test_remaining_time_zero_padding(self):
         label = LabelContainer(type=LabelTypes.REMAINING_TIME.value, add_elapsed_time=True)
 
-        df = encode_label_log(self.log, self.encodingPadding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encodingPadding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 55))
@@ -233,7 +233,7 @@ class TestLabelComplex(TestCase):
         label = LabelContainer(add_executed_events=True)
         encoding = EncodingContainer(ValueEncodings.COMPLEX.value, prefix_length=2, padding=ZERO_PADDING)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 15))
@@ -244,7 +244,7 @@ class TestLabelComplex(TestCase):
         label = LabelContainer(add_resources_used=True)
         encoding = EncodingContainer(ValueEncodings.COMPLEX.value, prefix_length=2, padding=ZERO_PADDING)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 15))
@@ -254,7 +254,7 @@ class TestLabelComplex(TestCase):
     def test_add_new_traces(self):
         label = LabelContainer(add_new_traces=True)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 15))
@@ -264,7 +264,7 @@ class TestLabelComplex(TestCase):
     def test_next_activity(self):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 14))
@@ -272,7 +272,7 @@ class TestLabelComplex(TestCase):
     def test_next_activity_zero_padding_elapsed_time(self):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value, add_elapsed_time=True)
 
-        df = encode_label_log(self.log, self.encodingPadding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encodingPadding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 55))
@@ -281,7 +281,7 @@ class TestLabelComplex(TestCase):
     def test_attribute_string(self):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 14))
@@ -289,7 +289,7 @@ class TestLabelComplex(TestCase):
     def test_attribute_number(self):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names,
                               additional_columns=self.add_col)
         self.assertEqual(df.shape, (2, 14))
@@ -304,14 +304,14 @@ class TestLabelBoolean(TestCase):
     def test_no_label(self):
         label = LabelContainer(type=LabelTypes.NO_LABEL.value)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 8))
 
     def test_remaining_time(self):
         label = LabelContainer()
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 9))
 
@@ -321,7 +321,7 @@ class TestLabelBoolean(TestCase):
                                threshold=40000)
         encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=4)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 10))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -334,7 +334,7 @@ class TestLabelBoolean(TestCase):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value)
 
         df = encode_label_log(self.log, EncodingContainer(ValueEncodings.BOOLEAN.value),
-                              PredictiveModelTypes.CLASSIFICATION.value, label, event_names=self.event_names)
+                              PredictionTypes.CLASSIFICATION.value, label, event_names=self.event_names)
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5, ['5', True, False, False, False, False, False, False, 34856381])
@@ -346,7 +346,7 @@ class TestLabelBoolean(TestCase):
         label = LabelContainer(type=LabelTypes.NEXT_ACTIVITY.value, add_elapsed_time=True)
         encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=3)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
@@ -360,7 +360,7 @@ class TestLabelBoolean(TestCase):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
         encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=3)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -371,7 +371,7 @@ class TestLabelBoolean(TestCase):
     def test_attribute_number(self):
         label = LabelContainer(type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -383,7 +383,7 @@ class TestLabelBoolean(TestCase):
         label = LabelContainer(add_executed_events=True)
         encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=3)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('executed_events' in df.columns.values.tolist())
@@ -393,7 +393,7 @@ class TestLabelBoolean(TestCase):
         label = LabelContainer(add_resources_used=True)
         encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=3)
 
-        df = encode_label_log(self.log, encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('resources_used' in df.columns.values.tolist())
@@ -402,7 +402,7 @@ class TestLabelBoolean(TestCase):
     def test_add_new_traces(self):
         label = LabelContainer(add_new_traces=True)
 
-        df = encode_label_log(self.log, self.encoding, PredictiveModelTypes.CLASSIFICATION.value, label,
+        df = encode_label_log(self.log, self.encoding, PredictionTypes.CLASSIFICATION.value, label,
                               event_names=self.event_names)
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('new_traces' in df.columns.values.tolist())

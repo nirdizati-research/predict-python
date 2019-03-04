@@ -13,7 +13,7 @@ from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
 
 
@@ -37,7 +37,7 @@ class TestTimeSeriesPrediction(TestCase):
         else:
             json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
-        json['type'] = PredictiveModelTypes.TIME_SERIES_PREDICTION.value
+        json['type'] = PredictionTypes.TIME_SERIES_PREDICTION.value
 
         if method != ClassificationMethods.KNN.value:
             add_default_config(json)

@@ -110,26 +110,27 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:
-        if job.predictive_model.predictive_model_type == PredictionTypes.CLASSIFICATION.value:
+        if job.predictive_model.predictive_model == PredictionTypes.CLASSIFICATION.value:
             results, model_split = classification(training_df, test_df, job)
-        elif job.predictive_model.predictive_model_type == PredictionTypes.REGRESSION.value:
+        elif job.predictive_model.predictive_model == PredictionTypes.REGRESSION.value:
             results, model_split = regression(training_df, test_df, job)
-        elif job.predictive_model.predictive_model_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
+        elif job.predictive_model.predictive_model == PredictionTypes.TIME_SERIES_PREDICTION.value:
             results, model_split = time_series_prediction(training_df, test_df, job)
     elif job.type == JobTypes.LABELLING.value:
         results = _label_task(training_df)
     elif job.type == JobTypes.UPDATE.value:
         results, model_split = update_and_test(training_df, test_df, job)
     else:
-        raise ValueError("Type not supported", job['type'])
+        raise ValueError("Type not supported", job.type)
 
     # TODO: integrateme
-    Job.evaluation = Evaluation.init(job.predictive_model.predictive_model_type, results)
+    job.evaluation = Evaluation.init(job.predictive_model.predictive_model, results)
+    job.save()
 
     if job.type == PredictionTypes.CLASSIFICATION.value:
         save_result(results, job, start_time)
 
-    print("End job {}, {} .".format(job['type'], get_run(job)))
+    print("End job {}, {} .".format(job.type, get_run(job)))
     print("\tResults {} .".format(results))
     return results, model_split
 

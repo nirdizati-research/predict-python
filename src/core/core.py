@@ -66,14 +66,12 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                     job.split = duplicate_orm_row(job.split)
                     job.split.type = SplitTypes.SPLIT_DOUBLE.value
                     job.split.train_log = create_log(
-                        create_unique_name(
-                            '0-' + str(100 - (job.split.test_size * 100)) + '.xes'
-                        )
+                        training_log,
+                        create_unique_name('0-' + str(int(100 - (job.split.test_size * 100))))
                     )
                     job.split.test_log = create_log(
-                        create_unique_name(
-                            str(100 - (job.split.test_size * 100)) + '-100.xes'
-                        )
+                        test_log,
+                        create_unique_name(str(int(100 - (job.split.test_size * 100))) + '-100')
                     )
                     job.save()
 

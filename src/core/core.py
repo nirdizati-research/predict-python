@@ -92,15 +92,16 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
         job['type'] = JobTypes.UPDATE.value
 
     start_time = time.time()
-    if job['type'] == PredictiveModelTypes.CLASSIFICATION.value:
-        results, model_split = classification(training_df, test_df, job)
-    elif job['type'] == PredictiveModelTypes.REGRESSION.value:
-        results, model_split = regression(training_df, test_df, job)
-    elif job['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
-        results, model_split = time_series_prediction(training_df, test_df, job)
-    elif job['type'] == JobTypes.LABELLING.value:
+    if job.type == JobTypes.PREDICTION.value:
+        if job.predictive_model.type == PredictiveModelTypes.CLASSIFICATION.value:
+            results, model_split = classification(training_df, test_df, job)
+        elif job.predictive_model.type == PredictiveModelTypes.REGRESSION.value:
+            results, model_split = regression(training_df, test_df, job)
+        elif job.predictive_model.type == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
+            results, model_split = time_series_prediction(training_df, test_df, job)
+    elif job.type == JobTypes.LABELLING.value:
         results = _label_task(training_df)
-    elif job['type'] == JobTypes.UPDATE.value:
+    elif job.type == JobTypes.UPDATE.value:
         results, model_split = update_and_test(training_df, test_df, job)
     else:
         raise ValueError("Type not supported", job['type'])

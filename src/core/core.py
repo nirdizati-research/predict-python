@@ -8,16 +8,19 @@ from src.cache.models import LabelledLogs, LoadedLog
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
 from src.jobs.models import JobTypes, Job
+from src.logs.log_service import create_log
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
 from src.predictive_model.models import PredictiveModelTypes
 from src.predictive_model.regression.regression import regression, regression_single_log
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
+from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
 from src.cache.cache import load_from_cache, dump_to_cache, get_digested, get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
-from src.utils.file_service import save_result
+from src.utils.django_orm import duplicate_orm_row
+from src.utils.file_service import save_result, create_unique_name
 
 
 def calculate(job: Job) -> (dict, dict):
@@ -59,6 +62,21 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
 
             else:
                 training_log, test_log, additional_columns = prepare_logs(job.split)
+                if job.split.type == SplitTypes.SPLIT_SINGLE.value:
+                    job.split = duplicate_orm_row(job.split)
+                    job.split.type = SplitTypes.SPLIT_DOUBLE.value
+                    job.split.train_log = create_log(
+                        create_unique_name(
+                            '0-' + str(100 - (job.split.test_size * 100)) + '.xes'
+                        )
+                    )
+                    job.split.test_log = create_log(
+                        create_unique_name(
+                            str(100 - (job.split.test_size * 100)) + '-100.xes'
+                        )
+                    )
+                    job.save()
+
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
 
             training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,

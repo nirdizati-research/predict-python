@@ -17,10 +17,10 @@ def prepare_logs(split: Split):
         print("\t\tLoaded single log from {}".format(split.original_log.path))
     else:
         # Have to use sklearn to convert some internal data types
-        training_log = get_log(split.train_log.path)
+        training_log = get_log(split.train_log)
         additional_columns = get_additional_columns(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
-        test_log, _ = train_test_split(get_log(split.test_log.path), test_size=0, shuffle=False)
+        test_log, _ = train_test_split(get_log(split.test_log), test_size=0, shuffle=False)
         print("\t\tLoaded double logs from {} and {}.".format(split.train_log.path, split.test_log.path))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")

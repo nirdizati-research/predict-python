@@ -17,6 +17,10 @@ def get_log(log: Log) -> EventLog:
     return xes_importer.import_log(filepath)
 
 
+def create_unique_name(name: str) -> str:
+    return name.replace('.', '_' + str(time.time()).replace('.', '') + '.')
+
+
 def save_file(file, path):
     print("Saving uploaded file to {} ".format(path))
     with open(path, 'wb+') as destination:

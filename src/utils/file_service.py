@@ -13,7 +13,7 @@ def get_log(log: Log) -> EventLog:
     Uses xes_importer to parse log.
     """
     filepath = log.path
-    print("Reading in log from {}".format(filepath))
+    print("\t\tReading in log from {}".format(filepath))
     return xes_importer.import_log(filepath)
 
 

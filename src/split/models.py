@@ -40,7 +40,7 @@ class Split(CommonModel):
                                      null=True)
     test_size = models.FloatField(default=0.2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True,
                                   null=True)
-    splitting_method = models.CharField(choices=SPLITTING_METHOD_MAPPINGS, default='split_sequential', max_length=20)
+    splitting_method = models.CharField(choices=SPLITTING_METHOD_MAPPINGS, default='sequential', max_length=20)
     train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
 

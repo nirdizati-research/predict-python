@@ -16,8 +16,8 @@ financial_log_filepath = 'cache/log_cache/test_logs/financial_log.xes.gz'
 repair_example_filepath = 'cache/log_cache/test_logs/repair_example.xes'
 
 
-def create_test_log(log_name: str = 'general_example.xes', log_path: str = 'cache/log_cache/test_logs/') -> Log:
-    log = Log.objects.get_or_create(name=log_name, path=log_path + log_name)
+def create_test_log(log_name: str = 'general_example.xes', log_path: str = 'cache/log_cache/test_logs/general_example.xes') -> Log:
+    log = Log.objects.get_or_create(name=log_name, path=log_path)
     print(log[0])
     return log[0]
 

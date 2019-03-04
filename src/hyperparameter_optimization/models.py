@@ -2,6 +2,7 @@ from enum import Enum
 
 from django.db import models
 
+from src.common.models import CommonModel
 from src.hyperparameter_optimization.methods_default_config import hyperparameter_optimization_hyperopt
 
 
@@ -9,7 +10,7 @@ class HyperparameterOptimizationMethods(Enum):
     HYPEROPT = 'hyperopt'
 
 
-class HyperparameterOptimization(models.Model):
+class HyperparameterOptimization(CommonModel):
     @staticmethod
     def init(configuration: dict = {'type': HyperparameterOptimizationMethods.HYPEROPT.value}):
         hyperparameter_optimizer_type = configuration['type']

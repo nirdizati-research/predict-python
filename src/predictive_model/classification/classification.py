@@ -234,6 +234,7 @@ def _load_model(incremental_base_model: int):
     classifier = classifier[0]
     classifier = joblib.load(classifier.model_path)
     return classifier
+    return None
 
 
 def _check_is_binary_classifier(label_type: str) -> bool:

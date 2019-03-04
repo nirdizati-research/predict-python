@@ -7,7 +7,7 @@ from src.common.models import CommonModel
 class Log(CommonModel):
     """A XES log file on disk"""
     name = models.CharField(max_length=200)
-    path = models.FilePathField()
+    path = models.FilePathField(path='cache/log_cache/')
     properties = JSONField(default={})
 
     def to_dict(self):

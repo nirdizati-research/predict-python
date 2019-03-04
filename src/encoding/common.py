@@ -19,6 +19,7 @@ def encode_label_logs(training_log: list, test_log: list, job: Job, additional_c
     training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
                                      cols=None)
     # TODO pass the columns of the training log
+    print('\tDataset not found in cache, building..')
     test_log, _ = _encode_log(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
 
     labelling = job.labelling
@@ -40,19 +41,6 @@ def encode_label_logs(training_log: list, test_log: list, job: Job, additional_c
         encoder = Encoder(training_log, job.encoding)
         encoder.encode(training_log, job.encoding)
         encoder.encode(test_log, job.encoding)
-
-    # #TODO: check proper usage
-    # Encoding.objects.create(
-    #     data_encoding=encoding.method, #TODO: @Hitluca check which is the proper whay to handle this
-    #     value_encoding=encoding.generation_type,
-    #     additional_features=label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or
-    #                         label.add_resources_used or label.add_new_traces,
-    #     temporal_features=label.add_remaining_time or label.add_elapsed_time,
-    #     intercase_features=label.add_executed_events or label.add_resources_used or label.add_new_traces,
-    #     features={'features': list(training_log.columns.values)},
-    #     prefix_len=encoding.prefix_length,
-    #     padding=encoding.is_zero_padding()
-    # )
 
     return training_log, test_log
 

@@ -79,6 +79,7 @@ class Clustering:
     @classmethod
     def load_model(cls, job):
         if job['clustering'] == cls.KMEANS:
+            # TODO fixme
             classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
             assert len(classifier) == 1  # asserting that the used id is unique
             classifier_details = classifier[0]

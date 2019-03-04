@@ -1,10 +1,8 @@
 import json
-import os
 import time
 
 from pandas import DataFrame
 
-from src.cache.cache import load_from_cache, dump_to_cache, get_digested
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
 from src.jobs.models import JobTypes, Job
@@ -41,35 +39,27 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
     :return: training and testing DataFrame
 
     """
+    print('\tGetting Dataset')
     if use_cache:
-        processed_df_cache = ('split-%s_encoding-%s_type-%s_label-%s' % (json.dumps(job.split),
-                                                                         json.dumps(job.encoding),
-                                                                         json.dumps(job.type),
-                                                                         json.dumps(job.labelling)))
-
-        if os.path.isfile("cache/labeled_log_cache/" + get_digested(processed_df_cache) + '.pickle'):
-
-            print('Found Labeled Dataset in cache, loading...')
-            training_df, test_df = load_from_cache(processed_df_cache, prefix="cache/labeled_log_cache/")
-            print('Done.')
+        if LabelledLogs.objects.filter(split=job.split,
+                                       encoding=job.encoding,
+                                       labelling=job.labelling).exists():
+            training_df, test_df = get_labelled_logs(job)
 
         else:
-            df_cache = ('split-%s' % (json.dumps(job.split)))
-
-            if os.path.isfile("cache/labeled_log_cache/" + get_digested(df_cache) + '.pickle'):
-
-                print('Found Dataset in cache, loading..')
-                training_log, test_log, additional_columns = load_from_cache(df_cache,
-                                                                             prefix="cache/labeled_log_cache/")
-                print('Dataset loaded.')
+            if job.split.train_log is not None and \
+                job.split.test_log is not None and \
+                LoadedLog.objects.filter(train_log=job.split.train_log.path,
+                                         test_log=job.split.test_log.path).exists():
+                training_log, test_log, additional_columns = get_loaded_logs(job.split)
 
             else:
                 training_log, test_log, additional_columns = prepare_logs(job.split)
-                dump_to_cache(df_cache, (training_log, test_log, additional_columns), prefix="cache/labeled_log_cache/")
+                put_loaded_logs(job.split, training_log, test_log, additional_columns)
 
             training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,
                                                      additional_columns=additional_columns, split_id=job.split.id)
-            dump_to_cache(processed_df_cache, (training_df, test_df), prefix="cache/labeled_log_cache/")
+            put_labelled_logs(job, training_df, test_df)
     else:
         training_log, test_log, additional_columns = prepare_logs(job.split)
         training_df, test_df = encode_label_logs(training_log, test_log, job, additional_columns=additional_columns)

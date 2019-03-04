@@ -41,8 +41,11 @@ class Split(CommonModel):
     test_size = models.FloatField(default=0.2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True,
                                   null=True)
     splitting_method = models.CharField(choices=SPLITTING_METHOD_MAPPINGS, default='split_sequential', max_length=20)
+    train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
-    training_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
+
+    additional_columns = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='additional_columns', blank=True,
+                                           null=True)
 
     def to_dict(self) -> dict:
         split = {
@@ -53,6 +56,6 @@ class Split(CommonModel):
         if self.type == 'single':
             split['original_log_path'] = self.original_log.path
         else:
-            split['training_log_path'] = self.training_log.path
             split['test_log_path'] = self.test_log.path
+            split['train_log_path'] = self.train_log.path
         return split

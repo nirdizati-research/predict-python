@@ -31,9 +31,6 @@ class TimeSeriesPrediction(PredictiveModel):
         else:
             raise ValueError('time series predictor type ' + time_series_predictor_type + ' not recognized')
 
-    def to_dict(self):
-        return {}
-
 
 RNN_TYPES = (
     ('lstm', 'lstm'),

@@ -36,9 +36,7 @@ class Clustering(CommonModel):
 
 
 class NoClustering(Clustering):
-
-    def to_dict(self) -> dict:
-        return {}
+    pass
 
 
 KMEANS_INIT_MAPPINGS = (

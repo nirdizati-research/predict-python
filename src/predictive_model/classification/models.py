@@ -159,9 +159,6 @@ class Classification(PredictiveModel):
         else:
             raise ValueError('classifier type ' + classifier_type + ' not recognized')
 
-    def to_dict(self):
-        return {}
-
 
 class DecisionTree(Classification):
     __name__ = ClassificationMethods.DECISION_TREE.value

@@ -20,6 +20,3 @@ class LabelledLogs(Cache):
     labelling = models.ForeignKey(Labelling, on_delete=models.DO_NOTHING, null=True)
     clustering = models.ForeignKey(Clustering, on_delete=models.DO_NOTHING, null=True)
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)
-
-    def to_dict(self) -> dict:
-        return {}

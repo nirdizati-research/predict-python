@@ -20,9 +20,6 @@ class HyperparameterOptimization(models.Model):
                 performance_metric=configuration.get('performance_metric', default_configuration['performance_metric']),
             )
 
-    def to_dict(self):
-        return {}
-
 
 class HyperOpt(HyperparameterOptimization):
     max_evaluations = models.PositiveIntegerField()

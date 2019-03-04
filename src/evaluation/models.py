@@ -83,8 +83,7 @@ class BinaryClassificationMetrics(ClassificationMetrics):
 
 
 class MulticlassClassificationMetrics(ClassificationMetrics):
-    def to_dict(self) -> dict:
-        return {}
+    pass
 
 
 class RegressionMetrics(Metrics):

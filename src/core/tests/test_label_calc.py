@@ -19,11 +19,11 @@ class Labelling(TestCase):
     @staticmethod
     def get_job():
         return create_test_job(split=repair_example(),
-                              encoding=create_test_encoding(prefix_length=5,
-                                                            padding=True
-                                                            ),
-                              job_type=JobTypes.LABELLING.value
-                              )
+                               encoding=create_test_encoding(prefix_length=5,
+                                                             padding=True
+                                                             ),
+                               job_type=JobTypes.LABELLING.value
+                               )
 
     @unittest.skip('needs refactoring')
     def test_remaining_time(self):

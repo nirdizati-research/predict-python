@@ -2,6 +2,7 @@ import hashlib
 
 from pandas import DataFrame
 
+from src.labelling.models import Labelling
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
 from src.encoding.encoding_container import EncodingContainer
@@ -13,8 +14,8 @@ from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
-def encode_label_logs(training_log: list, test_log: list, encoding: EncodingContainer, job_type: JobTypes,
-                      label: LabelContainer, additional_columns=None, split_id=None):
+def encode_label_logs(training_log: list, test_log: list, encoding: Encoding, job_type: str,
+                      label: Labelling, additional_columns=None, split_id=None):
     """encodes and labels test set and training set as data frames
 
     :param training_log: 
@@ -25,6 +26,7 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
     :param additional_columns: Global trace attributes for complex and last payload encoding
     :return: training_df, test_df
     """  # TODO: complete documentation
+    print('\tDataset not found in cache, building..')
     training_log, cols = _encode_log(training_log, encoding, label, additional_columns=additional_columns,
                                      cols=None)
     # TODO pass the columns of the training log
@@ -49,7 +51,7 @@ def encode_label_logs(training_log: list, test_log: list, encoding: EncodingCont
         encoding.encode(test_log)
 
     #TODO: check proper usage
-    Encoding.objects.create(
+    Encoding.objects.get_or_create(
         data_encoding=encoding.method, #TODO: @Hitluca check which is the proper whay to handle this
         value_encoding=encoding.generation_type,
         additional_features=label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or

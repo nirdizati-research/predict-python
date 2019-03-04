@@ -21,8 +21,10 @@ class Split(models.Model):
     type = models.CharField(choices=SPLIT_TYPE_MAPPINGS, default='single', max_length=20)
     original_log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='original_log', blank=True,
                                      null=True)
+    train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
-    training_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
+
+    additional_columns = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='additional_columns', blank=True, null=True)
 
     def to_dict(self) -> dict:
         split = {
@@ -33,5 +35,5 @@ class Split(models.Model):
             split['original_log_path'] = self.original_log.path
         else:
             split['test_log_path'] = self.test_log.path
-            split['training_log_path'] = self.training_log.path
+            split['training_log_path'] = self.train_log.path
         return split

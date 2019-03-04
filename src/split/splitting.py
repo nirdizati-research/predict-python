@@ -3,6 +3,7 @@ from typing import Union
 
 from sklearn.model_selection import train_test_split
 
+from src.split.models import Split
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 
@@ -12,26 +13,26 @@ SPLIT_RANDOM = 'split_random'
 SPLIT_STRICT_TEMPORAL = 'split_strict_temporal'
 
 
-def prepare_logs(split: dict):
+def prepare_logs(split: Split):
     """Returns training_log and test_log"""
-    if split['type'] == 'single':
-        log = get_log(split['original_log_path'])
+    if split.type == 'single':
+        log = get_log(split.original_log.path)
         additional_columns = get_additional_columns(log)
         training_log, test_log = _split_single_log(split, log)
-        print("Loaded single log from {}".format(split['original_log_path']))
+        print("Loaded single log from {}".format(split.original_log.path))
     else:
         # Have to use sklearn to convert some internal data types
-        training_log = get_log(split['training_log_path'])
+        training_log = get_log(split.train_log.path)
         additional_columns = get_additional_columns(training_log)
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
-        test_log, _ = train_test_split(get_log(split['test_log_path']), test_size=0, shuffle=False)
-        print("Loaded double logs from {} and {}.".format(split['training_log_path'], split['test_log_path']))
+        test_log, _ = train_test_split(get_log(split.test_log.path), test_size=0, shuffle=False)
+        print("Loaded double logs from {} and {}.".format(split.train_log.path, split.test_log.path))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")
     return training_log, test_log, additional_columns
 
 
-def _split_single_log(split: dict, log: list):
+def _split_single_log(split: Split, log: list):
     test_size = split['config'].get('test_size', 0.2)
     if test_size <= 0 or test_size >= 1:
         print("Using out of bound split test_size {}. Reverting to default 0.2.".format(test_size))

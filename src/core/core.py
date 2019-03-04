@@ -4,7 +4,6 @@ import time
 
 from pandas import DataFrame
 
-from src.cache.models import LabelledLogs, LoadedLog
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
 from src.jobs.models import JobTypes, Job
@@ -15,8 +14,7 @@ from src.predictive_model.regression.regression import regression, regression_si
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
 from src.split.splitting import prepare_logs
-from src.cache.cache import load_from_cache, dump_to_cache, get_labelled_logs, get_loaded_logs, put_loaded_logs, \
-    put_labelled_logs
+from src.cache.cache import load_from_cache, dump_to_cache, get_digested
 from src.utils.file_service import save_result
 
 
@@ -66,8 +64,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
             put_labelled_logs(job, training_df, test_df)
     else:
         training_log, test_log, additional_columns = prepare_logs(job.split)
-        training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,
-                                                 additional_columns=additional_columns, split_id=job.split.id)
+        training_df, test_df = encode_label_logs(training_log, test_log, job, additional_columns=additional_columns)
     return training_df, test_df
 
 

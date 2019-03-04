@@ -2,49 +2,47 @@ import pandas as pd
 from pandas import DataFrame
 from pm4py.objects.log.log import Trace
 
-from src.encoding.encoding_container import EncodingContainer
-from src.labelling.label_container import *
-from src.utils.log_metrics import events_by_date, resources_by_date, new_trace_start
-from src.utils.time_metrics import duration, elapsed_time_id, remaining_time_id, count_on_event_day
+from src.encoding.models import Encoding, TaskGenerationTypes
+from src.labelling.common import compute_label_columns, get_intercase_attributes, add_labels
+from src.labelling.models import Labelling
 
 ATTRIBUTE_CLASSIFIER = None
 
 
-def simple_index(log: list, label: LabelContainer, encoding: EncodingContainer) -> DataFrame:
-    columns = compute_columns(encoding.prefix_length)
+def simple_index(log: list, labelling: Labelling, encoding: Encoding) -> DataFrame:
+    columns = _compute_columns(encoding.prefix_length)
     normal_columns_number = len(columns)
-    columns = compute_label_columns(columns, label)
+    columns = compute_label_columns(columns, encoding, labelling)
     encoded_data = []
-    kwargs = get_intercase_attributes(log, label)
+    kwargs = get_intercase_attributes(log, encoding)
     for trace in log:
-        if len(trace) <= encoding.prefix_length - 1 and not encoding.is_zero_padding():
+        if len(trace) <= encoding.prefix_length - 1 and not encoding.padding:
             # trace too short and no zero padding
             continue
-        if encoding.is_all_in_one():
-            for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
-                encoded_data.append(add_trace_row(trace, encoding, i, normal_columns_number, label.attribute_name,
-                                                  **kwargs))
+        if encoding.task_generation_type == TaskGenerationTypes.ALL_IN_ONE.value:
+            for event_index in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
+                encoded_data.append(add_trace_row(trace, encoding, labelling, event_index, normal_columns_number,
+                                                  labelling.attribute_name, **kwargs))
         else:
-            encoded_data.append(add_trace_row(trace, encoding, encoding.prefix_length, normal_columns_number,
-                                              label.attribute_name, **kwargs))
+            encoded_data.append(add_trace_row(trace, encoding, labelling, encoding.prefix_length, normal_columns_number,
+                                              labelling.attribute_name, **kwargs))
 
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def add_trace_row(trace: Trace, encoding: EncodingContainer, event_index: int, column_len: int, atr_classifier=None,
-                  label=None,
-                  executed_events=None, resources_used=None, new_traces=None):
+def add_trace_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_index: int, column_len: int,
+                  attribute_classifier=None, executed_events=None, resources_used=None, new_traces=None):
     """Row in data frame"""
     trace_row = [trace.attributes['concept:name']]
-    trace_row += trace_prefixes(trace, event_index)
-    if encoding.is_zero_padding() or encoding.is_all_in_one():
+    trace_row += _trace_prefixes(trace, event_index)
+    if encoding.padding or encoding.task_generation_type == TaskGenerationTypes.ALL_IN_ONE.value:
         trace_row += [0 for _ in range(len(trace_row), column_len)]
-    trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
+    trace_row += add_labels(encoding, labelling, event_index, trace, attribute_classifier=attribute_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row
 
 
-def trace_prefixes(trace: Trace, prefix_length: int) -> list:
+def _trace_prefixes(trace: Trace, prefix_length: int) -> list:
     """List of indexes of the position they are in event_names
 
     """
@@ -57,81 +55,8 @@ def trace_prefixes(trace: Trace, prefix_length: int) -> list:
     return prefixes
 
 
-def next_event_name(trace: list, prefix_length: int):
-    """Return the event event name at prefix length or 0 if out of range.
-
-    """
-    if prefix_length < len(trace):
-        next_event = trace[prefix_length]
-        name = next_event['concept:name']
-        return name
-    else:
-        return 0
-
-
-def compute_columns(prefix_length: int):
+def _compute_columns(prefix_length: int) -> list:
     """trace_id, prefixes, any other columns, label
 
     """
     return ["trace_id"] + ["prefix_" + str(i + 1) for i in range(0, prefix_length)]
-
-
-def get_intercase_attributes(log: list, label: LabelContainer):
-    """Dict of kwargs
-    These intercase attributes are expensive operations!!!
-    """
-    # Expensive operations
-    executed_events = events_by_date(log) if label.add_executed_events else None
-    resources_used = resources_by_date(log) if label.add_resources_used else None
-    new_traces = new_trace_start(log) if label.add_new_traces else None
-    kwargs = {'executed_events': executed_events, 'resources_used': resources_used, 'new_traces': new_traces,
-              'label': label}
-    return kwargs
-
-
-def compute_label_columns(columns: list, label: LabelContainer) -> list:
-    if label.type == LabelTypes.NO_LABEL.value:
-        return columns
-    if label.add_elapsed_time:
-        columns.append('elapsed_time')
-    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME.value:
-        columns.append('remaining_time')
-    if label.add_executed_events:
-        columns.append('executed_events')
-    if label.add_resources_used:
-        columns.append('resources_used')
-    if label.add_new_traces:
-        columns.append('new_traces')
-    columns.append('label')
-    return columns
-
-
-def add_labels(label: LabelContainer, prefix_length: int, trace,
-               atr_classifier=None, executed_events=None, resources_used=None, new_traces=None):
-    """
-    Adds any number of label cells with last as label
-    """
-    labels = []
-    if label.type == LabelTypes.NO_LABEL.value:
-        return labels
-    # Values that can just be there
-    if label.add_elapsed_time:
-        labels.append(elapsed_time_id(trace, prefix_length - 1))
-    if label.add_remaining_time and label.type != LabelTypes.REMAINING_TIME.value:
-        labels.append(remaining_time_id(trace, prefix_length - 1))
-    if label.add_executed_events:
-        labels.append(count_on_event_day(trace, executed_events, prefix_length - 1))
-    if label.add_resources_used:
-        labels.append(count_on_event_day(trace, resources_used, prefix_length - 1))
-    if label.add_new_traces:
-        labels.append(count_on_event_day(trace, new_traces, prefix_length - 1))
-    # Label
-    if label.type == LabelTypes.REMAINING_TIME.value:
-        labels.append(remaining_time_id(trace, prefix_length - 1))
-    elif label.type == LabelTypes.NEXT_ACTIVITY.value:
-        labels.append(next_event_name(trace, prefix_length))
-    elif label.type == LabelTypes.ATTRIBUTE_STRING.value or label.type == LabelTypes.ATTRIBUTE_NUMBER.value:
-        labels.append(trace.attributes[atr_classifier])
-    elif label.type == LabelTypes.DURATION.value:
-        labels.append(duration(trace))
-    return labels

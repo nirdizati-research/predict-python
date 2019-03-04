@@ -2,66 +2,45 @@ import hashlib
 
 from pandas import DataFrame
 
-from src.labelling.models import Labelling
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
+from src.encoding.encoder import Encoder
 from src.encoding.encoding_container import EncodingContainer
 from src.encoding.models import Encoding, ValueEncodings
-from src.jobs.models import JobTypes
+from src.jobs.models import JobTypes, Job
 from src.labelling.label_container import *
+from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModelTypes
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
-def encode_label_logs(training_log: list, test_log: list, encoding: Encoding, job_type: str,
-                      label: Labelling, additional_columns=None, split_id=None):
-    """encodes and labels test set and training set as data frames
-
-    :param training_log: 
-    :param test_log: 
-    :param encoding: 
-    :param job_type: 
-    :param label: 
-    :param additional_columns: Global trace attributes for complex and last payload encoding
-    :return: training_df, test_df
-    """  # TODO: complete documentation
-    print('\tDataset not found in cache, building..')
-    training_log, cols = _encode_log(training_log, encoding, label, additional_columns=additional_columns,
+def encode_label_logs(training_log: list, test_log: list, job: Job, additional_columns=None):
+    training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
                                      cols=None)
     # TODO pass the columns of the training log
-    test_log, _ = _encode_log(test_log, encoding, label, additional_columns=additional_columns, cols=cols)
+    print('\tDataset not found in cache, building..')
+    test_log, _ = _encode_log(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
 
-    if (label.threshold_type in [ThresholdTypes.THRESHOLD_MEAN, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
-        label.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value]):
-        if label.threshold_type == ThresholdTypes.THRESHOLD_MEAN:
+    labelling = job.labelling
+    if (labelling.threshold_type in [ThresholdTypes.THRESHOLD_MEAN.value, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
+        labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value]):
+        if labelling.threshold_type == ThresholdTypes.THRESHOLD_MEAN.value:
             threshold = training_log['label'].mean()
-        elif label.threshold_type == ThresholdTypes.THRESHOLD_CUSTOM.value:
-            threshold = label.threshold
+        elif labelling.threshold_type == ThresholdTypes.THRESHOLD_CUSTOM.value:
+            threshold = labelling.threshold
         else:
             threshold = -1
         training_log['label'] = training_log['label'] < threshold
         test_log['label'] = test_log['label'] < threshold
 
-    if job_type != JobTypes.LABELLING.value and encoding.method != ValueEncodings.BOOLEAN.value:
+    if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value:
         # init nominal encode
-        encoding.init_label_encoder(training_log)
-        # encode data
-        encoding.encode(training_log)
-        encoding.encode(test_log)
-
-    #TODO: check proper usage
-    Encoding.objects.get_or_create(
-        data_encoding=encoding.method, #TODO: @Hitluca check which is the proper whay to handle this
-        value_encoding=encoding.generation_type,
-        additional_features=label.add_remaining_time or label.add_elapsed_time or label.add_executed_events or
-                            label.add_resources_used or label.add_new_traces,
-        temporal_features=label.add_remaining_time or label.add_elapsed_time,
-        intercase_features=label.add_executed_events or label.add_resources_used or label.add_new_traces,
-        features={'features': list(training_log.columns.values)},
-        prefix_len=encoding.prefix_length,
-        padding=encoding.is_zero_padding()
-    )
+        print(job.to_dict())
+        print(job.encoding.to_dict())
+        encoder = Encoder(training_log, job.encoding)
+        encoder.encode(training_log, job.encoding)
+        encoder.encode(test_log, job.encoding)
 
     return training_log, test_log
 
@@ -95,25 +74,25 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
     return encoded_log
 
 
-def _encode_log(log: list, encoding: EncodingContainer, label: LabelContainer, additional_columns=None, cols=None):
+def _encode_log(log: list, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
-    if encoding.method == ValueEncodings.SIMPLE_INDEX.value:
-        run_df = simple_index(log, label, encoding)
-    elif encoding.method == ValueEncodings.BOOLEAN.value:
+    if encoding.value_encoding == ValueEncodings.SIMPLE_INDEX.value:
+        run_df = simple_index(log, labelling, encoding)
+    elif encoding.value_encoding == ValueEncodings.BOOLEAN.value:
         if cols is None:
             cols = unique_events(log)
-        run_df = boolean(log, cols, label, encoding)
-    elif encoding.method == ValueEncodings.FREQUENCY.value:
+        run_df = boolean(log, cols, labelling, encoding)
+    elif encoding.value_encoding == ValueEncodings.FREQUENCY.value:
         if cols is None:
             cols = unique_events(log)
-        run_df = frequency(log, cols, label, encoding)
-    elif encoding.method == ValueEncodings.COMPLEX.value:
-        run_df = complex(log, label, encoding, additional_columns)
-    elif encoding.method == ValueEncodings.LAST_PAYLOAD.value:
-        run_df = last_payload(log, label, encoding, additional_columns)
+        run_df = frequency(log, cols, labelling, encoding)
+    elif encoding.value_encoding == ValueEncodings.COMPLEX.value:
+        run_df = complex(log, labelling, encoding, additional_columns)
+    elif encoding.value_encoding == ValueEncodings.LAST_PAYLOAD.value:
+        run_df = last_payload(log, labelling, encoding, additional_columns)
     else:
-        raise ValueError("Unknown encoding method {}".format(encoding.method))
+        raise ValueError("Unknown value encoding method {}".format(encoding.value_encoding))
     return run_df, cols
 
 

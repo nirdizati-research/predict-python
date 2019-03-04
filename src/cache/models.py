@@ -1,6 +1,7 @@
 from django.db import models
 
 from src.clustering.models import Clustering
+from src.common.models import CommonModel
 from src.encoding.models import Encoding
 from src.labelling.models import Labelling
 from src.logs.models import Log
@@ -8,10 +9,8 @@ from src.predictive_model.models import PredictiveModel
 from src.split.models import Split
 
 
-class Cache(models.Model):
-
-    def to_dict(self) -> dict:
-        return {}
+class Cache(CommonModel):
+    pass
 
 
 class LoadedLog(Cache):

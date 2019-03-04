@@ -1,9 +1,10 @@
 from django.db import models
 
+from src.common.models import CommonModel
 from src.predictive_model.models import PredictiveModelTypes
 
 
-class Evaluation(models.Model):
+class Evaluation(CommonModel):
     """Container of Classification to be shown in frontend"""
     metrics = models.ForeignKey('Metrics', on_delete=models.DO_NOTHING, blank=True, null=True)
 
@@ -14,7 +15,7 @@ class Evaluation(models.Model):
 
     @staticmethod
     def init(prediction_type, results):
-        if prediction_type == PredictiveModelTypes.CLASSIFICATION:
+        if prediction_type == PredictiveModelTypes.CLASSIFICATION.value:
             pass #TODO fixme
             # if labels == BINARY:
             #     BinaryClassificationMetrics.objects.get_or_create(
@@ -28,7 +29,7 @@ class Evaluation(models.Model):
             #     )
             # elif labels == MUTLICLASS:
             #     MulticlassClassificationMetrics.objects.get_or_create(metrics='')
-        elif prediction_type == PredictiveModelTypes.REGRESSION:
+        elif prediction_type == PredictiveModelTypes.REGRESSION.value:
             RegressionMetrics.objects.get_or_create(
                 metrics='',
 
@@ -36,11 +37,11 @@ class Evaluation(models.Model):
                 mae=results['mae'],
                 mape=results['mape']
             )
-        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION:
+        elif prediction_type == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
             TimeSeriesPredictionMetrics.objects.get_or_create(metrics='')
 
 
-class Metrics(models.Model):
+class Metrics(CommonModel):
     elapsed_time = models.FloatField()
 
     def to_dict(self) -> dict:
@@ -100,5 +101,4 @@ class RegressionMetrics(Metrics):
 
 
 class TimeSeriesPredictionMetrics(Metrics):
-    def to_dict(self) -> dict:
-        return {}
+    pass

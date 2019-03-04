@@ -21,7 +21,6 @@ REGRESSION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, Regre
 REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value)
 REGRESSION_NN = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.NN.value)
 
-
 REGRESSION_METHODS = (
     (RegressionMethods.LINEAR.value, 'linear'),
     (RegressionMethods.RANDOM_FOREST.value, 'randomForest'),
@@ -29,6 +28,7 @@ REGRESSION_METHODS = (
     (RegressionMethods.XGBOOST.value, 'xgboost'),
     (RegressionMethods.NN.value, 'nn')
 )
+
 
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
@@ -86,11 +86,9 @@ class Regression(PredictiveModel):
         else:
             raise ValueError('regressor type ' + regressor_type + ' not recognized')
 
-    def to_dict(self):
-        return {}
-
 
 class RandomForest(Regression):
+    __name__ = RegressionMethods.RANDOM_FOREST.value
     n_estimators = models.PositiveIntegerField()
     max_features = models.FloatField()
     max_depth = models.PositiveIntegerField()
@@ -104,6 +102,7 @@ class RandomForest(Regression):
 
 
 class Lasso(Regression):
+    __name__ = RegressionMethods.LASSO.value
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
@@ -117,6 +116,7 @@ class Lasso(Regression):
 
 
 class Linear(Regression):
+    __name__ = RegressionMethods.LINEAR.value
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
 
@@ -128,6 +128,7 @@ class Linear(Regression):
 
 
 class XGBoost(Regression):
+    __name__ = RegressionMethods.XGBOOST.value
     max_depth = models.PositiveIntegerField()
     n_estimators = models.PositiveIntegerField()
 
@@ -146,6 +147,7 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 
 
 class NeuralNetwork(Regression):
+    __name__ = RegressionMethods.NN.value
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',

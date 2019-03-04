@@ -56,7 +56,7 @@ class Classification(PredictiveModel):
         if classifier_type == ClassificationMethods.DECISION_TREE.value:
             default_configuration = classification_decision_tree()
             return DecisionTree.objects.get_or_create(
-                type=PredictiveModelTypes.CLASSIFICATION,
+                type=PredictiveModelTypes.CLASSIFICATION.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
                 min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])

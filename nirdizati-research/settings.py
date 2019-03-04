@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'src.common.apps.CommonConfig',
     'src.logs.apps.LogsConfig',
     'src.split.apps.SplitConfig',
     'src.encoding.apps.EncodingConfig',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig',
     'src.evaluation.apps.EvaluationConfig',
     'src.jobs.apps.JobsConfig',
+    'src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig',
     'src.runtime.apps.RuntimeConfig',
 
     'pred_models.apps.PredictionModelsConfig',

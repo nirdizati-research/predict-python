@@ -1,5 +1,7 @@
 from functools import reduce
 
+from pm4py.objects.log.log import EventLog
+
 
 def unique_events(log: list):
     """List of unique events using event concept:name
@@ -34,7 +36,7 @@ def get_event_attributes(log: list):
     return sorted(event_attributes)
 
 
-def get_additional_columns(log):
+def get_additional_columns(log: EventLog):
     return {'trace_attributes': get_global_trace_attributes(log),
             'event_attributes': get_global_event_attributes(log)}
 

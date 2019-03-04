@@ -1,24 +1,19 @@
 import functools
 from typing import Union
 
+from pm4py.objects.log.log import EventLog
 from sklearn.model_selection import train_test_split
 
-from src.split.models import Split
+from src.split.models import Split, SplitTypes, SplittingMethods
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
-
-SPLIT_SEQUENTIAL = 'split_sequential'
-SPLIT_TEMPORAL = 'split_temporal'
-SPLIT_RANDOM = 'split_random'
-SPLIT_STRICT_TEMPORAL = 'split_strict_temporal'
 
 
 def prepare_logs(split: Split):
     """Returns training_log and test_log"""
-    if split.type == 'single':
-        log = get_log(split.original_log.path)
-        additional_columns = get_additional_columns(log)
-        training_log, test_log = _split_single_log(split, log)
+    if split.type == SplitTypes.SPLIT_SINGLE.value:
+        additional_columns = get_additional_columns(get_log(split.original_log))
+        training_log, test_log = _split_single_log(split)
         print("Loaded single log from {}".format(split.original_log.path))
     else:
         # Have to use sklearn to convert some internal data types
@@ -32,33 +27,29 @@ def prepare_logs(split: Split):
     return training_log, test_log, additional_columns
 
 
-def _split_single_log(split: Split, log: list):
-    test_size = split['config'].get('test_size', 0.2)
-    if test_size <= 0 or test_size >= 1:
-        print("Using out of bound split test_size {}. Reverting to default 0.2.".format(test_size))
-        test_size = 0.2
-    split_type = split['config'].get('split_type', SPLIT_SEQUENTIAL)
-    print("Execute single split ID {}, split_type {}, test_size {}".format(split['id'], split_type, test_size))
-    if split_type == SPLIT_TEMPORAL:
-        return _temporal_split(log, test_size)
-    elif split_type == SPLIT_STRICT_TEMPORAL:
-        return _temporal_split_strict(log, test_size)
-    elif split_type == SPLIT_SEQUENTIAL:
-        return _split_log(log, test_size=test_size, shuffle=False)
-    elif split_type == SPLIT_RANDOM:
-        return _split_log(log, test_size=test_size, random_state=None)
+def _split_single_log(split: Split):
+    log = get_log(split.original_log)
+    print("Execute single split ID {}, split_type {}, test_size {}".format(split.id, split.type, split.test_size))
+    if split.splitting_method == SplittingMethods.SPLIT_TEMPORAL.value:
+        return _temporal_split(log, split.test_size)
+    elif split.splitting_method == SplittingMethods.SPLIT_STRICT_TEMPORAL.value:
+        return _temporal_split_strict(log, split.test_size)
+    elif split.splitting_method == SplittingMethods.SPLIT_SEQUENTIAL.value:
+        return _split_log(log, split.test_size, shuffle=False)
+    elif split.splitting_method == SplittingMethods.SPLIT_RANDOM.value:
+        return _split_log(log, split.test_size, random_state=None)
     else:
-        raise ValueError("Unknown split type", split_type)
+        raise ValueError("Unknown splitting method", split.splitting_method)
 
 
-def _temporal_split(log: list, test_size: float):
+def _temporal_split(log: EventLog, test_size: float):
     """sort log by first event timestamp to enforce temporal order"""
     log = sorted(log, key=functools.cmp_to_key(_compare_trace_starts))
     training_log, test_log = train_test_split(log, test_size=test_size, shuffle=False)
     return training_log, test_log
 
 
-def _temporal_split_strict(log: list, test_size: float):
+def _temporal_split_strict(log: EventLog, test_size: float):
     """Includes only training traces where it's last event ends before the first in test trace"""
     training_log, test_log = _temporal_split(log, test_size)
     test_first_time = _trace_event_time(test_log[0])
@@ -66,7 +57,7 @@ def _temporal_split_strict(log: list, test_size: float):
     return list(training_log), test_log
 
 
-def _split_log(log: list, test_size=0.2, random_state: Union[int, None] = 4, shuffle=True):
+def _split_log(log: EventLog, test_size: float, random_state: Union[int, None] = 4, shuffle=True):
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state, shuffle=shuffle)
     return training_log, test_log
 

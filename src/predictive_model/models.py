@@ -2,6 +2,8 @@ from enum import Enum
 
 from django.db import models
 
+from src.common.models import CommonModel
+
 
 class PredictiveModelTypes(Enum):
     CLASSIFICATION = 'classification'
@@ -16,13 +18,13 @@ PREDICTIVE_MODEL_TYPE_MAPPINGS = (
 )
 
 
-class PredictiveModel(models.Model):
+class PredictiveModel(CommonModel):
     """Container of Classification to be shown in frontend"""
     model_path = models.FilePathField(path='cache/model_cache/')
     type = models.CharField(choices=PREDICTIVE_MODEL_TYPE_MAPPINGS, default='uniform', max_length=20)
 
     @staticmethod
-    def init(prediction_type: str = PredictiveModelTypes.CLASSIFICATION, configuration: dict = None):
+    def init(prediction_type: str = PredictiveModelTypes.CLASSIFICATION.value, configuration: dict = None):
         if prediction_type == PredictiveModelTypes.CLASSIFICATION.value:
             from src.predictive_model.classification.models import Classification
             return Classification.init(configuration)
@@ -37,3 +39,6 @@ class PredictiveModel(models.Model):
 
     def to_dict(self):
         return {}
+
+    def __str__(self):
+        return self.to_dict()

@@ -12,7 +12,6 @@ from sklearn.tree import DecisionTreeClassifier
 from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
-from pred_models.models import PredModels, ModelSplit
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
 from src.jobs.models import JobTypes, Job
@@ -226,14 +225,15 @@ def _choose_classifier(job: Job):
 
 
 def _load_model(incremental_base_model: int):
-    classifier = PredModels.objects.filter(id=incremental_base_model)
-    assert len(classifier) == 1  # asserting that the used id is unique
-    classifier_details = classifier[0]
-    classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
-    assert len(classifier) == 1
-    classifier = classifier[0]
-    classifier = joblib.load(classifier.model_path)
-    return classifier
+    # classifier = PredModels.objects.filter(id=incremental_base_model)
+    # assert len(classifier) == 1  # asserting that the used id is unique
+    # classifier_details = classifier[0]
+    # classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
+    # assert len(classifier) == 1
+    # classifier = classifier[0]
+    # classifier = joblib.load(classifier.model_path)
+    # return classifier
+    return None
 
 
 def _check_is_binary_classifier(label_type: str) -> bool:

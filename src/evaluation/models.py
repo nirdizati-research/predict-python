@@ -4,7 +4,7 @@ from src.common.models import CommonModel
 from src.predictive_model.models import PredictiveModelTypes
 
 
-class Evaluation(CommonModel):
+class Evaluation(models.Model):
     """Container of Classification to be shown in frontend"""
     metrics = models.ForeignKey('Metrics', on_delete=models.DO_NOTHING, blank=True, null=True)
 

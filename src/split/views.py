@@ -1,9 +1,8 @@
 from rest_framework import mixins, generics, status
 from rest_framework.response import Response
 
-from pred_models.serializers import SplitSerializer
 from src.split.models import Split
-from src.split.serializers import CreateSplitSerializer
+from src.split.serializers import CreateSplitSerializer, SplitSerializer
 
 
 class SplitList(mixins.ListModelMixin, generics.GenericAPIView):

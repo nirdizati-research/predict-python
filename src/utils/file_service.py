@@ -21,11 +21,11 @@ def create_unique_name(name: str) -> str:
     return name.replace('.', '_' + str(time.time()).replace('.', '') + '.')
 
 
-def save_file(file, path):
-    print("Saving uploaded file to {} ".format(path))
-    with open(path, 'wb+') as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
+# def save_file(file, path):
+#     print("Saving uploaded file to {} ".format(path))
+#     with open(path, 'wb+') as destination:
+#         for chunk in file.chunks():
+#             destination.write(chunk)
 
 
 def save_result(results: dict, job, start_time: float):

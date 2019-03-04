@@ -43,8 +43,7 @@ class Split(CommonModel):
     splitting_method = models.CharField(choices=SPLITTING_METHOD_MAPPINGS, default='sequential', max_length=20)
     train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
-    additional_columns = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='additional_columns', blank=True,
-                                           null=True)
+    additional_columns = models.CharField(max_length=30, blank=True, null=True)
 
     def to_dict(self) -> dict:
         split = {

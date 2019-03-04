@@ -24,18 +24,18 @@ def dump_to_cache(path: str, obj, prefix: str = ''):
 
 
 def put_loaded_logs(split: Split, train_df, test_df, additional_columns):
-    [dump_to_cache(path, data) for (path, data) in [
-        (split.train_log.path, train_df),
-        (split.test_log.path, test_df),
-        (split.additional_columns.path, additional_columns)
+    [dump_to_cache(path, data, 'cache/labeled_log_cache/') for (path, data) in [
+        (split.train_log.name, train_df),
+        (split.test_log.name, test_df),
+        (split.additional_columns, additional_columns)
     ]]
     LoadedLog.objects.create(train_log=split.train_log.path,
                              test_log=split.test_log.path,
-                             additional_columns=split.additional_columns.path)
+                             additional_columns=split.additional_columns)
 
 
 def put_labelled_logs(job: Job, train_df, test_df):
-    [dump_to_cache(path, data) for (path, data) in [
+    [dump_to_cache(path, data, 'cache/labeled_log_cache/') for (path, data) in [
         (job.split.train_log.path, train_df),
         (job.split.test_log.path, test_df),
     ]]

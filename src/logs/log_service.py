@@ -1,26 +1,27 @@
+from pm4py.objects.log.exporter.xes.factory import export_log
+from pm4py.objects.log.log import EventLog
+
 from src.logs.models import Log
-from src.utils.file_service import get_log, save_file, create_unique_name
+from src.utils.file_service import get_log, create_unique_name
 from src.utils.log_metrics import events_by_date, resources_by_date, max_events_in_log, trace_attributes, \
     new_trace_start
 
 
-def create_log(file, name: str, folder='cache/log_cache/'):
+def create_log(log, name: str, folder='cache/log_cache/'):
     # just a way to avoid two files with same name shadow each other
     name = create_unique_name(name)
     path = folder + name
-    save_file(file, path)
-    properties = create_properties(path)
+    export_log(log, path)
+    properties = create_properties(log)
     return Log.objects.create(name=name, path=path, properties=properties)
 
 
-def create_properties(path: str) -> dict:
+def create_properties(log: EventLog) -> dict:
     """Create read-only dict with methods in this class"""
-    print("Creating properties for log {}".format(path))
-    logs = get_log(path)
     return {
-        'events': events_by_date(logs),
-        'resources': resources_by_date(logs),
-        'maxEventsInLog': max_events_in_log(logs),
-        'traceAttributes': trace_attributes(logs),
-        'newTraces': new_trace_start(logs)
+        'events': events_by_date(log),
+        'resources': resources_by_date(log),
+        'maxEventsInLog': max_events_in_log(log),
+        'traceAttributes': trace_attributes(log),
+        'newTraces': new_trace_start(log)
     }

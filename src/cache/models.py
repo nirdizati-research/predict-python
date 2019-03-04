@@ -16,6 +16,7 @@ class Cache(CommonModel):
 class LoadedLog(Cache):
     train_log = models.FilePathField(path='cache/labeled_log_cache/')
     test_log = models.FilePathField(path='cache/labeled_log_cache/')
+    additional_columns = models.FilePathField(path='cache/labeled_log_cache/')
 
 
 class LabelledLogs(LoadedLog):

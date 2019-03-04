@@ -2,6 +2,8 @@ import json
 import time
 
 from pandas import DataFrame
+from pm4py.objects.log.exporter.xes.factory import export_log
+from pm4py.objects.log.log import EventLog
 
 from src.cache.cache import get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
@@ -64,20 +66,26 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                 if job.split.type == SplitTypes.SPLIT_SINGLE.value:
                     job.split = duplicate_orm_row(job.split)
                     job.split.type = SplitTypes.SPLIT_DOUBLE.value
+                    train_name = '0-' + str(int(100 - (job.split.test_size * 100)))
                     job.split.train_log = create_log(
-                        training_log,
-                        create_unique_name('0-' + str(int(100 - (job.split.test_size * 100))))
+                        EventLog(training_log),
+                        train_name + '.xes'
                     )
+                    test_name = str(int(100 - (job.split.test_size * 100))) + '-100'
                     job.split.test_log = create_log(
-                        test_log,
-                        create_unique_name(str(int(100 - (job.split.test_size * 100))) + '-100')
+                        EventLog(test_log),
+                        test_name + '.xes'
                     )
+                    job.split.additional_columns = str(train_name + test_name) #TODO: find better naming policy
                     job.save()
 
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
 
-            training_df, test_df = encode_label_logs(training_log, test_log, job.encoding, job.type, job.labelling,
-                                                     additional_columns=additional_columns, split_id=job.split.id)
+            training_df, test_df = encode_label_logs(
+                training_log,
+                test_log,
+                job,
+                additional_columns=additional_columns)
             put_labelled_logs(job, training_df, test_df)
     else:
         training_log, test_log, additional_columns = prepare_logs(job.split)
@@ -96,8 +104,9 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     """
     model_split = None
 
-    if job['incremental_train']['base_model'] is not None:
-        job['type'] = JobTypes.UPDATE.value
+    #TODO fixme this needs to be fixed in the interface
+    # if job['incremental_train']['base_model'] is not None:
+    #     job['type'] = JobTypes.UPDATE.value
 
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:

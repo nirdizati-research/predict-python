@@ -1,5 +1,3 @@
-import time
-
 from src.logs.models import Log
 from src.utils.file_service import get_log, save_file, create_unique_name
 from src.utils.log_metrics import events_by_date, resources_by_date, max_events_in_log, trace_attributes, \

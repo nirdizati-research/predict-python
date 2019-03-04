@@ -12,7 +12,7 @@ class ClusteringMethods(Enum):
 
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
-
+    clustering_method = model
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
         if clustering == ClusteringMethods.NO_CLUSTER.value:
@@ -36,9 +36,7 @@ class Clustering(CommonModel):
 
 
 class NoClustering(Clustering):
-
-    def to_dict(self) -> dict:
-        return {}
+    pass
 
 
 KMEANS_INIT_MAPPINGS = (

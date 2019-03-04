@@ -6,7 +6,7 @@ from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from src.encoding.simple_index import simple_index
 from src.labelling.label_container import LabelContainer
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
     general_example_test_filepath
@@ -21,7 +21,7 @@ class TestSplitLogExample(TestCase):
 
     def test_shape_training(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.encoding,
-                                                 PredictiveModelTypes.CLASSIFICATION.value, self.label)
+                                                 PredictionTypes.CLASSIFICATION.value, self.label)
         self.assert_shape(training_df, (4, 4))
         self.assert_shape(test_df, (2, 4))
 
@@ -35,7 +35,7 @@ class TestSplitLogExample(TestCase):
     def test_prefix_length_training(self):
         encoding = EncodingContainer(prefix_length=3)
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, encoding,
-                                                 PredictiveModelTypes.CLASSIFICATION.value, self.label)
+                                                 PredictionTypes.CLASSIFICATION.value, self.label)
         self.assertIn("prefix_1", training_df.columns.values)
         self.assertIn("prefix_2", training_df.columns.values)
         self.assertIn("prefix_3", training_df.columns.values)
@@ -52,7 +52,7 @@ class TestSplitLogExample(TestCase):
     @unittest.skip('needs refactoring')
     def test_row_test(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, self.encoding,
-                                                 PredictiveModelTypes.CLASSIFICATION.value, self.label)
+                                                 PredictionTypes.CLASSIFICATION.value, self.label)
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(1, row.prefix_1)
@@ -63,7 +63,7 @@ class TestSplitLogExample(TestCase):
         encoding = EncodingContainer(prefix_length=0)
         self.assertRaises(ValueError,
                           encode_label_logs, self.training_log, self.test_log, encoding,
-                          PredictiveModelTypes.CLASSIFICATION.value, self.label)
+                          PredictionTypes.CLASSIFICATION.value, self.label)
 
 
 class TestGeneralTest(TestCase):

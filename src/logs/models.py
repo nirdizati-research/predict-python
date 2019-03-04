@@ -4,7 +4,7 @@ from jsonfield.fields import JSONField
 from src.common.models import CommonModel
 
 
-class Log(models.Model):
+class Log(CommonModel):
     """A XES log file on disk"""
     name = models.CharField(max_length=200)
     path = models.FilePathField(path='cache/log_cache/')

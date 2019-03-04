@@ -3,6 +3,7 @@ from enum import Enum
 from django.db import models
 
 from src.clustering.models import Clustering
+from src.common.models import CommonModel
 from src.encoding.models import Encoding
 from src.evaluation.models import Evaluation
 from src.hyperparameter_optimization.models import HyperparameterOptimization
@@ -38,7 +39,7 @@ JOB_TYPE_MAPPINGS = (
 )
 
 
-class Job(models.Model):
+class Job(CommonModel):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 

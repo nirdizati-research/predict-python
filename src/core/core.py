@@ -1,9 +1,10 @@
 import json
-import os
 import time
 
 from pandas import DataFrame
 
+from src.cache.cache import get_labelled_logs, get_loaded_logs, \
+    put_loaded_logs, put_labelled_logs
 from src.cache.models import LabelledLogs, LoadedLog
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
@@ -11,14 +12,12 @@ from src.jobs.models import JobTypes, Job
 from src.logs.log_service import create_log
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.predictive_model.regression.regression import regression, regression_single_log
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
 from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
-from src.cache.cache import load_from_cache, dump_to_cache, get_digested, get_labelled_logs, get_loaded_logs, \
-    put_loaded_logs, put_labelled_logs
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.file_service import save_result, create_unique_name
 
@@ -102,11 +101,11 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:
-        if job.predictive_model.type == PredictiveModelTypes.CLASSIFICATION.value:
+        if job.predictive_model.predictive_model_type == PredictionTypes.CLASSIFICATION.value:
             results, model_split = classification(training_df, test_df, job)
-        elif job.predictive_model.type == PredictiveModelTypes.REGRESSION.value:
+        elif job.predictive_model.predictive_model_type == PredictionTypes.REGRESSION.value:
             results, model_split = regression(training_df, test_df, job)
-        elif job.predictive_model.type == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
+        elif job.predictive_model.predictive_model_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
             results, model_split = time_series_prediction(training_df, test_df, job)
     elif job.type == JobTypes.LABELLING.value:
         results = _label_task(training_df)
@@ -115,10 +114,10 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     else:
         raise ValueError("Type not supported", job['type'])
 
-    #TODO: integrateme
-    Job.evaluation = Evaluation.init(job.predictive_model.type, results)
+    # TODO: integrateme
+    Job.evaluation = Evaluation.init(job.predictive_model.predictive_model_type, results)
 
-    if job.type == PredictiveModelTypes.CLASSIFICATION.value:
+    if job.type == PredictionTypes.CLASSIFICATION.value:
         save_result(results, job, start_time)
 
     print("End job {}, {} .".format(job['type'], get_run(job)))
@@ -135,11 +134,11 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
 
     """
     run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
-    if model['type'] == PredictiveModelTypes.CLASSIFICATION.value:
+    if model['type'] == PredictionTypes.CLASSIFICATION.value:
         results = classification_single_log(run_df, model)
-    elif model['type'] == PredictiveModelTypes.REGRESSION.value:
+    elif model['type'] == PredictionTypes.REGRESSION.value:
         results = regression_single_log(run_df, model)
-    elif model['type'] == PredictiveModelTypes.TIME_SERIES_PREDICTION.value:
+    elif model['type'] == PredictionTypes.TIME_SERIES_PREDICTION.value:
         results = time_series_prediction_single_log(run_df, model)
     else:
         raise ValueError("Type not supported", model['type'])
@@ -157,10 +156,7 @@ def get_run(job: Job) -> str:
     """
     if job.labelling.type == JobTypes.LABELLING.value:
         return job.encoding.data_encoding + '_' + job.labelling.type
-    return job.type + '_' + \
-           job.encoding.data_encoding + '_' + \
-           job.clustering.__class__.__name__ + '_' + \
-           job.labelling.type
+    return '_'.join([job.type, job.encoding.data_encoding, job.clustering.__class__.__name__, job.labelling.type])
 
 
 def _label_task(input_dataframe: DataFrame) -> dict:

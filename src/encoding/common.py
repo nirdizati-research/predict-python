@@ -10,7 +10,7 @@ from src.encoding.models import Encoding, ValueEncodings
 from src.jobs.models import JobTypes, Job
 from src.labelling.label_container import *
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
@@ -36,8 +36,6 @@ def encode_label_logs(training_log: list, test_log: list, job: Job, additional_c
 
     if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value:
         # init nominal encode
-        print(job.to_dict())
-        print(job.encoding.to_dict())
         encoder = Encoder(training_log, job.encoding)
         encoder.encode(training_log, job.encoding)
         encoder.encode(test_log, job.encoding)
@@ -62,7 +60,7 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
         # Labelling has no need for this encoding
         _categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
-    if job_type == PredictiveModelTypes.REGRESSION.value:
+    if job_type == PredictionTypes.REGRESSION.value:
         # Remove last events as worse for prediction
         # TODO filter out 0 labels. Doing it here means runtime errors for regression
         # if label.type == REMAINING_TIME:

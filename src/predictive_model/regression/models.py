@@ -2,7 +2,7 @@ from enum import Enum
 
 from django.db import models
 
-from src.predictive_model.models import PredictiveModel, PredictiveModelTypes
+from src.predictive_model.models import PredictiveModel, PredictionTypes
 from src.predictive_model.regression.methods_default_config import regression_random_forest, regression_lasso, \
     regression_linear, regression_xgboost, regression_nn
 
@@ -15,11 +15,11 @@ class RegressionMethods(Enum):
     NN = 'nn'
 
 
-REGRESSION_LASSO = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.LASSO.value)
-REGRESSION_LINEAR = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.LINEAR.value)
-REGRESSION_XGBOOST = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.XGBOOST.value)
-REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value)
-REGRESSION_NN = '{}.{}'.format(PredictiveModelTypes.REGRESSION.value, RegressionMethods.NN.value)
+REGRESSION_LASSO = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.LASSO.value)
+REGRESSION_LINEAR = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.LINEAR.value)
+REGRESSION_XGBOOST = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.XGBOOST.value)
+REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value)
+REGRESSION_NN = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.NN.value)
 
 REGRESSION_METHODS = (
     (RegressionMethods.LINEAR.value, 'linear'),
@@ -32,16 +32,16 @@ REGRESSION_METHODS = (
 
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
-    method = models.CharField(choices=REGRESSION_METHODS, default='uniform', max_length=20)
+    predictive_model_type = PredictionTypes.REGRESSION.value
 
+    # noinspection PyDefaultArgument
     @staticmethod
     def init(configuration: dict = {'type': RegressionMethods.RANDOM_FOREST.value}):
         regressor_type = configuration['type']
         if regressor_type == RegressionMethods.RANDOM_FOREST.value:
             default_configuration = regression_random_forest()
             return RandomForest.objects.get_or_create(
-                type=PredictiveModelTypes.REGRESSION,
-                method=RegressionMethods.RANDOM_FOREST.value,
+                prediction_method=RegressionMethods.RANDOM_FOREST.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_features=configuration.get('max_features', default_configuration['max_features']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
@@ -49,8 +49,7 @@ class Regression(PredictiveModel):
         elif regressor_type == RegressionMethods.LASSO.value:
             default_configuration = regression_lasso()
             return Lasso.objects.get_or_create(
-                type=PredictiveModelTypes.REGRESSION,
-                method=RegressionMethods.LASSO.value,
+                prediction_method=RegressionMethods.LASSO.value,
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize'])
@@ -58,24 +57,21 @@ class Regression(PredictiveModel):
         elif regressor_type == RegressionMethods.LINEAR.value:
             default_configuration = regression_linear()
             return Linear.objects.get_or_create(
-                type=PredictiveModelTypes.REGRESSION,
-                method=RegressionMethods.LINEAR.value,
+                prediction_method=RegressionMethods.LINEAR.value,
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize']),
             )
         elif regressor_type == RegressionMethods.XGBOOST.value:
             default_configuration = regression_xgboost()
             return XGBoost.objects.get_or_create(
-                type=PredictiveModelTypes.REGRESSION,
-                method=RegressionMethods.XGBOOST.value,
+                prediction_method=RegressionMethods.XGBOOST.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators'])
             )
         elif regressor_type == RegressionMethods.NN.value:
             default_configuration = regression_nn()
             return NeuralNetwork.objects.get_or_create(
-                type=PredictiveModelTypes.REGRESSION,
-                method=RegressionMethods.NN.value,
+                prediction_method=RegressionMethods.NN.value,
                 hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
                 hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
                 activation_function=configuration.get('activation_function',
@@ -88,7 +84,6 @@ class Regression(PredictiveModel):
 
 
 class RandomForest(Regression):
-    __name__ = RegressionMethods.RANDOM_FOREST.value
     n_estimators = models.PositiveIntegerField()
     max_features = models.FloatField()
     max_depth = models.PositiveIntegerField()
@@ -102,7 +97,6 @@ class RandomForest(Regression):
 
 
 class Lasso(Regression):
-    __name__ = RegressionMethods.LASSO.value
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
@@ -116,7 +110,6 @@ class Lasso(Regression):
 
 
 class Linear(Regression):
-    __name__ = RegressionMethods.LINEAR.value
     fit_intercept = models.BooleanField()
     normalize = models.BooleanField()
 
@@ -128,7 +121,6 @@ class Linear(Regression):
 
 
 class XGBoost(Regression):
-    __name__ = RegressionMethods.XGBOOST.value
     max_depth = models.PositiveIntegerField()
     n_estimators = models.PositiveIntegerField()
 
@@ -147,7 +139,6 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 
 
 class NeuralNetwork(Regression):
-    __name__ = RegressionMethods.NN.value
     hidden_layers = models.PositiveIntegerField()
     hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',

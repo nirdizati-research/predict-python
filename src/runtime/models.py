@@ -2,14 +2,20 @@ from django.db import models
 from jsonfield.fields import JSONField
 
 from pred_models.models import PredModels
+from src.common.models import CommonModel
 from src.logs.models import Log
 
 
-class DemoReplayer(models.Model):
+class DemoReplayer(CommonModel):
     running = models.BooleanField(default=False)
 
+    def to_dict(self):
+        return {
+            'running': self.running
+        }
 
-class XLog(models.Model):
+
+class XLog(CommonModel):
     config = models.CharField(default="", null=True, max_length=500)
     real_log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='real_log')
 
@@ -19,7 +25,7 @@ class XLog(models.Model):
         return xlog
 
 
-class XTrace(models.Model):
+class XTrace(CommonModel):
     config = models.CharField(default="", null=True, max_length=500)
     name = models.CharField(default="", null=True, max_length=30)
     xlog = models.ForeignKey('XLog', on_delete=models.DO_NOTHING, related_name='xlog')
@@ -58,7 +64,7 @@ class XTrace(models.Model):
         return trace
 
 
-class XEvent(models.Model):
+class XEvent(CommonModel):
     config = models.CharField(default="", null=True, max_length=500)
     xid = models.CharField(default="", max_length=200)
     trace = models.ForeignKey("XTrace", on_delete=models.DO_NOTHING, related_name='xtrace', blank=True, null=True)

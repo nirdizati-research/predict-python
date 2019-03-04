@@ -9,7 +9,7 @@ from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.labelling.label_container import LabelContainer
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictiveModelTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.tests_utils import create_test_predictive_model, create_test_job, create_test_hyperparameter_optimizer, \
     create_test_encoding
 
@@ -32,8 +32,8 @@ class TestHyperopt(TestCase):
 
     def test_class_randomForest(self):
         encoding = create_test_encoding(prefix_length=8, padding=True)
-        predictive_model = create_test_predictive_model(prediction_type=PredictiveModelTypes.CLASSIFICATION.value,
-                                                        predictive_model_type=ClassificationMethods.RANDOM_FOREST.value)
+        predictive_model = create_test_predictive_model(predictive_model=PredictionTypes.CLASSIFICATION.value,
+                                                        prediction_method=ClassificationMethods.RANDOM_FOREST.value)
         hyperparameter_optimizer = create_test_hyperparameter_optimizer()
 
         job = create_test_job(predictive_model=predictive_model,

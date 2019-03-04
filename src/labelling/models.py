@@ -2,6 +2,8 @@ from enum import Enum
 
 from django.db import models
 
+from src.common.models import CommonModel
+
 
 class LabelTypes(Enum):
     NEXT_ACTIVITY = 'next_activity'
@@ -40,7 +42,7 @@ THRESHOLD_TYPE_MAPPINGS = (
 )
 
 
-class Labelling(models.Model):
+class Labelling(CommonModel):
     type = models.CharField(choices=LABELLING_TYPE_MAPPINGS, default='attribute_string', max_length=20)
     attribute_name = models.CharField(default='label', max_length=20)
     threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='threshold_mean', max_length=20)

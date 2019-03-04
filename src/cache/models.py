@@ -9,7 +9,7 @@ from src.predictive_model.models import PredictiveModel
 from src.split.models import Split
 
 
-class Cache(models.Model):
+class Cache(CommonModel):
     pass
 
 

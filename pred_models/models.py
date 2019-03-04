@@ -29,7 +29,7 @@ class ModelSplit(CommonModel):
         return split
 
 
-class PredModels(models.Model):
+class PredModels(CommonModel):
     split = models.ForeignKey('ModelSplit', on_delete=models.DO_NOTHING, related_name='split', blank=True, null=True)
     type = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20)
     log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='log', blank=True, null=True)

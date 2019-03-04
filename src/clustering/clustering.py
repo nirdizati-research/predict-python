@@ -7,6 +7,7 @@ from pandas import Series, DataFrame
 from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
+from pred_models.models import PredModels, ModelSplit
 from src.jobs.models import Job
 
 
@@ -78,17 +79,16 @@ class Clustering:
     @classmethod
     def load_model(cls, job):
         if job['clustering'] == cls.KMEANS:
-            pass
             # TODO fixme
-            # classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
-            # assert len(classifier) == 1  # asserting that the used id is unique
-            # classifier_details = classifier[0]
-            # classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
-            # assert len(classifier) == 1
-            # classifier = classifier[0]
+            classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
+            assert len(classifier) == 1  # asserting that the used id is unique
+            classifier_details = classifier[0]
+            classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
+            assert len(classifier) == 1
+            classifier = classifier[0]
             # TODO this is a bad workaround
-            # clusterer = joblib.load(
-            #     classifier.model_path[:11] + classifier.model_path[11:].replace('predictive_model', 'clusterer'))
+            clusterer = joblib.load(
+                classifier.model_path[:11] + classifier.model_path[11:].replace('predictive_model', 'clusterer'))
         elif job['clustering'] == cls.NO_CLUSTER:
             clusterer = Clustering(job)
         else:

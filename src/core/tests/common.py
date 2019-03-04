@@ -7,8 +7,9 @@ import sys
 
 from src.clustering.methods_default_config import clustering_kmeans
 from src.core.common import CONF_MAP
+from src.split.models import SplitTypes
 from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
-    general_example_train_filepath
+    general_example_train_filepath, create_test_log, create_test_split
 
 
 class HidePrints:
@@ -56,12 +57,11 @@ def split_double():
 
 
 def repair_example():
-    split = dict()
-    split['id'] = 1
-    split['config'] = dict()
-    split['type'] = 'single'
-    split['original_log_path'] = repair_example_filepath
-    return split
+    return create_test_split(split_type=SplitTypes.SPLIT_SINGLE.value,
+                             log=create_test_log(log_name='repair_example.xes',
+                                                 log_filepath=repair_example_filepath
+                                                 )
+                             )
 
 
 def add_default_config(job: dict, prediction_method=""):

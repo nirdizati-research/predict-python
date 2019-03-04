@@ -5,25 +5,21 @@ common tests
 from django.test import TestCase
 
 from src.core.common import get_method_config
+from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModelTypes
+from src.utils.tests_utils import create_test_job, create_test_predictive_model
 
 
 class TestCommon(TestCase):
     def test_get_method_config(self):
-        job = dict()
-        job['method'] = 'nn'
-        job['type'] = PredictiveModelTypes.REGRESSION.value
-        job['regression.nn'] = 'TEST'
-        job['incremental_train'] = {'base_model': None}
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(
+                prediction_type=PredictiveModelTypes.CLASSIFICATION.value,
+                predictive_model_type=ClassificationMethods.RANDOM_FOREST.value
+            )
+        )
 
         method, config = get_method_config(job)
 
-        self.assertEqual(job['method'], method)
-        self.assertEqual('TEST', config)
-
-    def test_get_method_config_exception(self):
-        job = dict()
-        job['method'] = 'nn'
-        job['type'] = PredictiveModelTypes.REGRESSION.value
-
-        self.assertRaises(KeyError, get_method_config, job)
+        self.assertEqual(ClassificationMethods.RANDOM_FOREST.value, method)
+        self.assertEqual(create_test_predictive_model(), config)

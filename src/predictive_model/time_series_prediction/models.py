@@ -42,6 +42,7 @@ RNN_TYPES = (
 
 
 class RecurrentNeuralNetwork(TimeSeriesPrediction):
+    __name__ = TimeSeriesPredictionMethods.RNN.value
     n_units = models.PositiveIntegerField()
     rnn_type = models.CharField(choices=RNN_TYPES, default='lstm', max_length=10)
     n_epochs = models.PositiveIntegerField()

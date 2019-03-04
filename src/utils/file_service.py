@@ -2,11 +2,12 @@ import csv
 import time
 
 from pm4py.objects.log.importer.xes import factory as xes_importer
+from pm4py.objects.log.log import EventLog
 
 from src.logs.models import Log
 
 
-def get_log(log: Log):
+def get_log(log: Log) -> EventLog:
     """Read in event log from disk
 
     Uses xes_importer to parse log.

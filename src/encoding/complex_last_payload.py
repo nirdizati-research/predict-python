@@ -12,15 +12,15 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def complex(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict) -> DataFrame:
-    return encode_complex_latest(log, label, encoding, additional_columns, columns_complex, data_complex)
+    return _encode_complex_latest(log, label, encoding, additional_columns, _columns_complex, _data_complex)
 
 
 def last_payload(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict) -> DataFrame:
-    return encode_complex_latest(log, label, encoding, additional_columns, columns_last_payload, data_last_payload)
+    return _encode_complex_latest(log, label, encoding, additional_columns, _columns_last_payload, _data_last_payload)
 
 
-def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict,
-                          column_fun: Callable, data_fun: Callable) -> DataFrame:
+def _encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingContainer, additional_columns: dict,
+                           column_fun: Callable, data_fun: Callable) -> DataFrame:
     columns = column_fun(encoding.prefix_length, additional_columns)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, label)
@@ -34,18 +34,18 @@ def encode_complex_latest(log: list, label: LabelContainer, encoding: EncodingCo
         if encoding.is_all_in_one():
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    trace_to_row(trace, encoding, i, data_fun, normal_columns_number,
-                                 additional_columns=additional_columns,
-                                 atr_classifier=label.attribute_name, **kwargs))
+                    _trace_to_row(trace, encoding, i, data_fun, normal_columns_number,
+                                  additional_columns=additional_columns,
+                                  atr_classifier=label.attribute_name, **kwargs))
         else:
             encoded_data.append(
-                trace_to_row(trace, encoding, encoding.prefix_length, data_fun, normal_columns_number,
-                             additional_columns=additional_columns,
-                             atr_classifier=label.attribute_name, **kwargs))
+                _trace_to_row(trace, encoding, encoding.prefix_length, data_fun, normal_columns_number,
+                              additional_columns=additional_columns,
+                              atr_classifier=label.attribute_name, **kwargs))
     return pd.DataFrame(columns=columns, data=encoded_data)
 
 
-def columns_complex(prefix_length: int, additional_columns: dict) -> list:
+def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
@@ -55,7 +55,7 @@ def columns_complex(prefix_length: int, additional_columns: dict) -> list:
     return columns
 
 
-def columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
+def _columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
     i = 0
     for i in range(1, prefix_length + 1):
@@ -65,7 +65,7 @@ def columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
     return columns
 
 
-def data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> list:
+def _data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> list:
     """Creates list in form [1, value1, value2, 2, ...]
 
     Appends values in additional_columns
@@ -83,7 +83,7 @@ def data_complex(trace: Trace, prefix_length: int, additional_columns: dict) -> 
     return data
 
 
-def data_last_payload(trace: list, prefix_length: int, additional_columns: dict) -> list:
+def _data_last_payload(trace: list, prefix_length: int, additional_columns: dict) -> list:
     """Creates list in form [1, 2, value1, value2,]
 
     Event name index of the position they are in event_names
@@ -106,14 +106,14 @@ def data_last_payload(trace: list, prefix_length: int, additional_columns: dict)
     return data
 
 
-def trace_to_row(trace: Trace, encoding: EncodingContainer, event_index: int, data_fun: Callable, columns_len: int,
-                 atr_classifier=None, label=None, executed_events=None, resources_used=None, new_traces=None,
-                 additional_columns: dict = None) -> list:
+def _trace_to_row(trace: Trace, encoding: EncodingContainer, event_index: int, data_fun: Callable, columns_len: int,
+                  atr_classifier=None, label=None, executed_events=None, resources_used=None, new_traces=None,
+                  additional_columns: dict = None) -> list:
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)
     if encoding.is_zero_padding() or encoding.is_all_in_one():
         trace_row += [0 for _ in range(len(trace_row), columns_len)]
-    trace_row += add_labels(label, event_index, trace, atr_classifier=atr_classifier,
+    trace_row += add_labels(label, event_index, trace, attribute_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
     return trace_row

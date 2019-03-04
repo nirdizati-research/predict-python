@@ -29,10 +29,12 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'src.common.apps.CommonConfig',
     'src.logs.apps.LogsConfig',
     'src.split.apps.SplitConfig',
     'src.encoding.apps.EncodingConfig',
     'src.labelling.apps.LabellingConfig',
+    'src.cache.apps.CacheConfig',
     'src.clustering.apps.ClusteringConfig',
     'src.predictive_model.apps.PredictiveModelConfig',
     'src.predictive_model.classification.apps.ClassificationConfig',

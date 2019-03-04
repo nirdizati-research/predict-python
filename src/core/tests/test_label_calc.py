@@ -9,20 +9,21 @@ from django.test import TestCase
 from src.core.core import calculate
 from src.core.tests.common import repair_example
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
+from src.jobs.models import JobTypes
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes, ThresholdTypes
+from src.utils.tests_utils import create_test_job, create_test_encoding, create_test_labelling
 
 
 class Labelling(TestCase):
     @staticmethod
     def get_job():
-        json = dict()
-        json['split'] = repair_example()
-        json['encoding'] = EncodingContainer(prefix_length=5, padding=ZERO_PADDING)
-        json['type'] = 'labelling'
-        json['label'] = LabelContainer()
-        json['incremental_train'] = {'base_model': None}
-        return json
+        return create_test_job(split=repair_example(),
+                               encoding=create_test_encoding(prefix_length=5,
+                                                             padding=True
+                                                             ),
+                               job_type=JobTypes.LABELLING.value
+                               )
 
     @unittest.skip('needs refactoring')
     def test_remaining_time(self):
@@ -46,7 +47,9 @@ class Labelling(TestCase):
 
     def test_atr_string(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.ATTRIBUTE_STRING.value, attribute_name='description')
+        job.labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                              attribute_name='description')
+        job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'Simulated process instance': 883})
 

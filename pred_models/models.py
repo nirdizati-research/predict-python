@@ -2,7 +2,7 @@ from django.db import models
 from jsonfield.fields import JSONField
 
 from src.clustering.models import ClusteringMethods
-from src.encoding.encoding_container import EncodingContainer
+from src.common.models import CommonModel
 from src.jobs.models import JOB_TYPE_MAPPINGS
 from src.labelling.label_container import LabelContainer
 from src.logs.models import Log
@@ -13,7 +13,7 @@ ENC_TYPES = (
 )
 
 
-class ModelSplit(models.Model):
+class ModelSplit(CommonModel):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     clusterer_path = models.CharField(blank=True, null=True, max_length=200)
@@ -29,7 +29,7 @@ class ModelSplit(models.Model):
         return split
 
 
-class PredModels(models.Model):
+class PredModels(CommonModel):
     split = models.ForeignKey('ModelSplit', on_delete=models.DO_NOTHING, related_name='split', blank=True, null=True)
     type = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20)
     log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='log', blank=True, null=True)
@@ -42,5 +42,5 @@ class PredModels(models.Model):
         model['log_name'] = self.log.name
         model['split'] = self.split.to_dict()
         model['label'] = LabelContainer(**self.config['label'])
-        model['encoding'] = EncodingContainer(**self.config['encoding'])
+        # model['encoding'] = EncodingContainer(**self.config['encoding'])
         return model

@@ -2,13 +2,15 @@ from enum import Enum
 
 from django.db import models
 
+from src.common.models import CommonModel
+
 
 class ClusteringMethods(Enum):
     KMEANS = 'kmeans'
     NO_CLUSTER = 'noCluster'
 
 
-class Clustering(models.Model):
+class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
@@ -31,9 +33,6 @@ class Clustering(models.Model):
             )
         else:
             raise ValueError('configuration ', clustering, 'not recognized')
-
-    def to_dict(self) -> dict:
-        return {}
 
 
 class NoClustering(Clustering):

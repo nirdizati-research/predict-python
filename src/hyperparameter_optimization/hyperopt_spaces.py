@@ -6,6 +6,7 @@ import numpy as np
 from hyperopt import hp
 from hyperopt.pyll.base import scope
 
+from src.jobs.models import Job
 from src.predictive_model.classification.models import CLASSIFICATION_RANDOM_FOREST, CLASSIFICATION_KNN, \
     CLASSIFICATION_XGBOOST, CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES, CLASSIFICATION_DECISION_TREE, \
     CLASSIFICATION_ADAPTIVE_TREE, \
@@ -15,8 +16,10 @@ from src.predictive_model.regression.models import REGRESSION_RANDOM_FOREST, REG
 from src.predictive_model.time_series_prediction.models import TIME_SERIES_PREDICTION_RNN
 
 
-def _get_space(job: dict) -> dict:
-    method_conf_name = "{}.{}".format(job['type'], job['method'])
+def _get_space(job: Job) -> dict:
+    method_conf_name = "{}.{}".format(job.predictive_model.type, job.predictive_model.__class__.__name__)
+    print(job.predictive_model.type)
+    print(job.predictive_model.__class__.__name__)
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 

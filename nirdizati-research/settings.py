@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'src.split.apps.SplitConfig',
     'src.encoding.apps.EncodingConfig',
     'src.labelling.apps.LabellingConfig',
+    'src.cache.apps.CacheConfig',
     'src.clustering.apps.ClusteringConfig',
     'src.predictive_model.apps.PredictiveModelConfig',
     'src.predictive_model.classification.apps.ClassificationConfig',

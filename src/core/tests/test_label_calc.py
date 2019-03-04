@@ -49,6 +49,7 @@ class Labelling(TestCase):
         job = self.get_job()
         job.labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
                                               attribute_name='description')
+        job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'Simulated process instance': 883})
 

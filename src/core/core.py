@@ -14,7 +14,7 @@ from src.predictive_model.regression.regression import regression, regression_si
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
 from src.split.splitting import prepare_logs
-from src.utils.cache import load_from_cache, dump_to_cache, get_digested
+from src.cache.cache import load_from_cache, dump_to_cache, get_digested
 from src.utils.file_service import save_result
 
 
@@ -145,9 +145,12 @@ def get_run(job: Job) -> str:
     :param job: job configuration
     :return: job's identity string
     """
-    if job.type == JobTypes.LABELLING.value:
-        return job.encoding.method + '_' + job.labelling.type
-    return job.method + '_' + job.encoding.method + '_' + job.clustering + '_' + job.labelling.type
+    if job.labelling.type == JobTypes.LABELLING.value:
+        return job.encoding.data_encoding + '_' + job.labelling.type
+    return job.type + '_' + \
+           job.encoding.data_encoding + '_' + \
+           job.clustering.__class__.__name__ + '_' + \
+           job.labelling.type
 
 
 def _label_task(input_dataframe: DataFrame) -> dict:

@@ -27,7 +27,7 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE, log: Log = crea
 
 def create_test_encoding(prefix_length: int = 1, padding: bool = False) -> Encoding:
     encoding = Encoding.objects.get_or_create(
-        data_encoding=DataEncodings.LABEL_ENCODER,
+        data_encoding=DataEncodings.LABEL_ENCODER.value,
         prefix_len=prefix_length,
         padding=padding)
     return encoding[0]

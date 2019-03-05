@@ -3,10 +3,8 @@ import pandas as pd
 from pandas import DataFrame
 from pm4py.objects.log.log import Trace
 
-from src.encoding.encoding_container import EncodingContainer
 from src.encoding.models import Encoding, TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import compute_label_columns, add_labels, get_intercase_attributes
-from src.labelling.label_container import LabelContainer
 from src.labelling.models import Labelling
 
 

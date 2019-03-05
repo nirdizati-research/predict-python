@@ -1,6 +1,7 @@
 import hashlib
 
 from pandas import DataFrame
+from pm4py.objects.log.log import EventLog
 
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
@@ -44,12 +45,12 @@ def encode_label_logs(training_log: list, test_log: list, job: Job, additional_c
 
 
 #TODO deprecate this function
-def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, label: LabelContainer, event_names=None,
+def encode_label_log(run_log: EventLog, encoding: Encoding, job_type: str, labelling: Labelling, event_names=None,
                      additional_columns=None, fit_encoder=False):
-    encoded_log, _ = _encode_log(run_log, encoding, label, additional_columns)
+    encoded_log, _ = _encode_log(run_log, encoding, labelling, additional_columns)
 
     # Convert strings to number
-    if label.type == LabelTypes.ATTRIBUTE_NUMBER.value:
+    if labelling.type == LabelTypes.ATTRIBUTE_NUMBER.value:
         try:
             encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
         except:
@@ -67,8 +68,8 @@ def encode_label_log(run_log: list, encoding: EncodingContainer, job_type: str, 
         #     encoded_log = encoded_log.loc[encoded_log['label'] != 0.0]
         return encoded_log
     # Post processing
-    if label.type == LabelTypes.REMAINING_TIME.value or label.type == LabelTypes.ATTRIBUTE_NUMBER.value or label.type == LabelTypes.DURATION.value:
-        return _label_boolean(encoded_log, label)
+    if labelling.type == LabelTypes.REMAINING_TIME.value or labelling.type == LabelTypes.ATTRIBUTE_NUMBER.value or labelling.type == LabelTypes.DURATION.value:
+        return _label_boolean(encoded_log, labelling)
     return encoded_log
 
 

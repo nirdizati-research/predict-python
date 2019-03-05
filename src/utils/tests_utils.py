@@ -38,6 +38,10 @@ def create_test_encoding(prefix_length: int = 1,
                          padding: bool = False,
                          value_encoding: str = ValueEncodings.SIMPLE_INDEX.value,
                          add_elapsed_time: bool = False,
+                         add_remaining_time: bool = False,
+                         add_resources_used: bool = False,
+                         add_new_traces: bool = False,
+                         add_executed_events: bool = False,
                          task_generation_type: str = TaskGenerationTypes.ONLY_THIS.value) -> Encoding:
     encoding = Encoding.objects.get_or_create(
         data_encoding=DataEncodings.LABEL_ENCODER.value,
@@ -45,6 +49,10 @@ def create_test_encoding(prefix_length: int = 1,
         prefix_length=prefix_length,
         padding=padding,
         add_elapsed_time=add_elapsed_time,
+        add_executed_events=add_executed_events,
+        add_remaining_time=add_remaining_time,
+        add_new_traces=add_new_traces,
+        add_resources_used=add_resources_used,
         task_generation_type=task_generation_type)[0]
     print('encoding:', encoding)
     return encoding

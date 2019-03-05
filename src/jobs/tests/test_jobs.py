@@ -38,7 +38,7 @@ class JobModelTest(TestCase):
     def test_to_dict(self):
         job = Job.objects.get(id=1).to_dict()
 
-        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['type'])
+        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job.type)
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
                               'config': {},

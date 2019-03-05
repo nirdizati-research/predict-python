@@ -119,14 +119,13 @@ class TestLabelSimpleIndex(TestCase):
     def test_remaining_time_zero_padding(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(
-            value_encoding=ValueEncodings.FREQUENCY.value,
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
             add_elapsed_time=True,
-            add_remaining_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=10,
             padding=True)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -135,8 +134,7 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381, 1149821,
-                              70355923, 34856381, 1296240.0, False])
+                             ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 34856381, 1296240.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
                              ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, True])

@@ -37,7 +37,7 @@ class Replayer:
             self.execute(replayer.id)
 
     def execute(self, id):
-        xlog = get_log(self.log.path)
+        xlog = get_log(self.log)
         # t=threading.Thread(target=self.events_list, args=(xlog, id))
         self.events_list(xlog, id)
 

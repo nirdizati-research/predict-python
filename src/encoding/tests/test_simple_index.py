@@ -11,7 +11,7 @@ from src.predictive_model.models import PredictiveModels
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
     general_example_test_filepath, general_example_test_filename, create_test_log, general_example_train_filename, \
-    create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling
+    create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling, general_example_filename
 
 
 class TestSplitLogExample(TestCase):
@@ -104,7 +104,11 @@ class TestGeneralTest(TestCase):
         self.log = get_log(create_test_log(log_name=general_example_test_filename,
                                            log_path=general_example_test_filepath))
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
-        self.encoding = EncodingContainer()
+        self.encoding = create_test_encoding(
+                       value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            add_elapsed_time=True,
+                       prefix_length=1)
 
     def test_header(self):
         df = simple_index(self.log, self.labelling, self.encoding)
@@ -137,7 +141,7 @@ class TestGeneralTest(TestCase):
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.FREQUENCY.value,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=5)
+            prefix_length=1)
         df = simple_index(self.log, label, encoding)
 
         self.assertEqual(df.shape, (2, 3))
@@ -192,7 +196,7 @@ class TestGeneralTest(TestCase):
             value_encoding=ValueEncodings.FREQUENCY.value,
             add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=10, padding=ZERO_PADDING))
+            prefix_length=10, padding=True))
 
         self.assertEqual(df.shape, (2, 13))
         row1 = df[df.trace_id == '4'].iloc[0]
@@ -237,9 +241,10 @@ class TestGeneralTest(TestCase):
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.FREQUENCY.value,
             task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,
+            add_elapsed_time=True,
             prefix_length=12,
             padding=True)
-        df = simple_index(get_log(general_example_filepath),
+        df = simple_index(get_log(create_test_log(log_path=general_example_filepath, log_name=general_example_filename)),
                           create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value), encoding)
 
         self.assertEqual(df.shape, (41, 15))

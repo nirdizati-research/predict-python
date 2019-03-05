@@ -28,8 +28,23 @@ def create_test_log(log_name: str = 'general_example.xes',
     return log
 
 
-def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value, log: Log = create_test_log()):
-    split = Split.objects.get_or_create(type=split_type, original_log=log)[0]
+def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
+                      original_log: Log = None,
+                      train_log: Log = None,
+                      test_log: Log = None):
+    if split_type == SplitTypes.SPLIT_SINGLE.value:
+        if original_log is None:
+            original_log = create_test_log()
+        split = Split.objects.get_or_create(type=split_type,
+                                        original_log=original_log)[0]
+    elif split_type == SplitTypes.SPLIT_DOUBLE.value:
+        if train_log is None:
+            train_log = create_test_log()
+        if test_log is None:
+            test_log = create_test_log()
+        split = Split.objects.get_or_create(type=split_type, train_log=train_log, test_log=test_log)[0]
+    else:
+        raise ValueError('split_type', split_type, 'not recognised')
     print('split:', split)
     return split
 

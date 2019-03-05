@@ -1,8 +1,10 @@
 from django.test import TestCase
 
+from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
 from src.utils.tests_utils import general_example_filepath, general_example_test_filepath, \
-    general_example_train_filepath
+    general_example_train_filepath, create_test_split, create_test_log, general_example_filename, \
+    general_example_train_filename, general_example_test_filename
 
 
 class Split(TestCase):
@@ -75,19 +77,19 @@ def trace_names(log):
 
 
 def split_single():
-    split = dict()
-    split['id'] = 1
-    split['config'] = dict()
-    split['type'] = 'single'
-    split['original_log_path'] = general_example_filepath
-    return split
+    return create_test_split(
+        split_type=SplitTypes.SPLIT_SINGLE.value,
+        original_log=create_test_log(
+            log_name=general_example_filename,
+            log_path=general_example_filepath))
 
 
 def split_double():
-    split = dict()
-    split['id'] = 1
-    split['config'] = dict()
-    split['type'] = 'double'
-    split['test_log_path'] = general_example_test_filepath
-    split['training_log_path'] = general_example_train_filepath
-    return split
+    return create_test_split(
+        split_type=SplitTypes.SPLIT_DOUBLE.value,
+        train_log=create_test_log(
+            log_name=general_example_train_filename,
+            log_path=general_example_train_filepath),
+        test_log=create_test_log(
+            log_name=general_example_test_filename,
+            log_path=general_example_test_filepath))

@@ -533,7 +533,6 @@ class TestLabelBoolean(TestCase):
         self.assertListEqual(trace_5, ['5', True, True, True, True, False, False, False, 361560.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, True, False, False, True, 248400.0, False])
-
     
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -555,7 +554,6 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, False, False, False, False, False, 32171502])
 
-    
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
         encoding = create_test_encoding(
@@ -577,12 +575,10 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 1149821])
 
-    
     def test_attribute_string(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=3)
 
@@ -617,9 +613,8 @@ class TestLabelBoolean(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=3,
+            prefix_length=2,
             add_executed_events=True)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
@@ -636,9 +631,8 @@ class TestLabelBoolean(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=3,
+            prefix_length=2,
             add_resources_used=True)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
@@ -655,9 +649,8 @@ class TestLabelBoolean(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=3,
+            prefix_length=2,
             add_new_traces=True)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(

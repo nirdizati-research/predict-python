@@ -31,7 +31,7 @@ class TestLabelBoolean(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 8))
+        self.assertEqual(df.shape, (2, 9))
 
     def test_remaining_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -42,7 +42,7 @@ class TestLabelBoolean(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 9))
+        self.assertEqual(df.shape, (2, 11))
 
     def test_label_remaining_time_with_elapsed_time_custom_threshold(self):
         labelling = create_test_labelling(
@@ -51,12 +51,12 @@ class TestLabelBoolean(TestCase):
             threshold=40000)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            prefix_length=4,
+            prefix_length=3,
             add_elapsed_time=True,
             add_remaining_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -72,11 +72,10 @@ class TestLabelBoolean(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            prefix_length=4,
-            add_elapsed_time=True,
+            prefix_length=3,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -84,9 +83,9 @@ class TestLabelBoolean(TestCase):
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, False, False, False, False, False, False, 34856381])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 3])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, False, False, False, False, False, 32171502])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 3])
 
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -94,9 +93,9 @@ class TestLabelBoolean(TestCase):
             value_encoding=ValueEncodings.BOOLEAN.value,
             add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-            prefix_length=4)
+            prefix_length=3)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -105,19 +104,18 @@ class TestLabelBoolean(TestCase):
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 1149821])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 3])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 1149821])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 3])
 
     def test_attribute_string(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
-            add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=3)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -125,9 +123,9 @@ class TestLabelBoolean(TestCase):
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 73510641])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 'Fluxicon Nitro'])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 73510641])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 'Fluxicon Nitro'])
 
     def test_attribute_number(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
@@ -159,7 +157,7 @@ class TestLabelBoolean(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 10))
+        self.assertEqual(df.shape, (2, 12))
         self.assertTrue('executed_events' in df.columns.values.tolist())
         self.assertListEqual(df['executed_events'].tolist(), [2, 2])
 
@@ -178,7 +176,7 @@ class TestLabelBoolean(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 10))
+        self.assertEqual(df.shape, (2, 12))
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [2, 2])
 
@@ -197,7 +195,7 @@ class TestLabelBoolean(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 10))
+        self.assertEqual(df.shape, (2, 12))
         self.assertTrue('new_traces' in df.columns.values.tolist())
         self.assertListEqual(df['new_traces'].tolist(), [0, 0])
         self.assertFalse(df.isnull().values.any())

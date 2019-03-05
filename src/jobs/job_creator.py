@@ -7,7 +7,7 @@ from src.predictive_model.models import PredictionTypes
 from src.predictive_model.models import PredictiveModel
 
 
-def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION):
+def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION.value):
     jobs = []
 
     config = payload['config']
@@ -40,36 +40,69 @@ def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION):
                                 threshold=label['threshold']
                             ),
                             clustering=Clustering.init(clustering, configuration=None),
-                            predictive_model=PredictiveModel.init(payload['type'], configuration=payload),
+                            predictive_model=PredictiveModel.init(configuration={
+                                **payload,
+                                'predictive_model': payload['type'],
+                                'prediction_method': method
+                            })
                         )
                         jobs.append(item)
                 else:
                     item = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
                         type=generation_type,
-
                         split=split,
                         encoding=Encoding.objects.get_or_create(
-                            data_encoding=encMethod,
-                            # TODO: @HitLuca [value_encoding=,]
-                            additional_features=label['add_remaining_time'] or label['add_elapsed_time'] or label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
-                            temporal_features=label['add_remaining_time'] or label['add_elapsed_time'],
-                            intercase_features=label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
-                            prefix_len=config['encoding']['prefix_length'],
-                            padding=config['encoding']['padding']
+                            data_encoding='label_encoder',
+                            value_encoding=encMethod,
+                            add_elapsed_time=config['label'].get('add_elapsed_time', False),
+                            add_remaining_time=config['label'].get('add_remaining_time', False),
+                            add_executed_events=config['label'].get('add_executed_events', False),
+                            add_resources_used=config['label'].get('add_resources_used', False),
+                            add_new_traces=config['label'].get('add_new_traces', False),
+                            prefix_length=config['encoding']['prefix_length'],
+                            # TODO static check?
+                            padding=True if config['encoding']['padding'] == 'zero_padding' else False,
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
                         ),
                         labelling=Labelling.objects.get_or_create(
                             type=label['type'],
-                            attribute_name=label['attribute_name'],
+                            # TODO static check?
+                            attribute_name=label['attribute_name'] if label['attribute_name'] is not None else 'label',
                             threshold_type=label['threshold_type'],
                             threshold=label['threshold']
                         ),
                         clustering=Clustering.init(clustering, configuration=None),
-                        predictive_model=PredictiveModel.init(payload['type'], configuration=payload)
+                        predictive_model=PredictiveModel.init(
+                            get_prediction_method_config(generation_type, method, payload)
+                        )
                     )
                     jobs.append(item)
 
     return jobs
+
+
+def get_prediction_method_config(generation_type, method, payload):
+    if generation_type == PredictionTypes.CLASSIFICATION.value:
+        return {
+            'predictive_model': generation_type,
+            'prediction_method': method,
+            **payload.get('classification', None)
+        }
+    elif generation_type == PredictionTypes.REGRESSION.value:
+        return {
+            'predictive_model': generation_type,
+            'prediction_method': method,
+            **payload.get('regression', None)
+        }
+    elif generation_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
+        return {
+            'predictive_model': generation_type,
+            'prediction_method': method,
+            **payload.get('time_series_prediction', None)
+        }
+    else:
+        raise ValueError('generation_type ', generation_type, 'not recognized')
 
 
 def generate_labelling(split, payload):
@@ -82,7 +115,7 @@ def generate_labelling(split, payload):
                 type=JobTypes.LABELLING.value,
 
                 split=split,
-                encoding=Encoding.objects.get_or_create(
+                encoding=Encoding.objects.get_or_create( #TODO fixme
                     data_encoding='label_encoder',
                     #TODO: @HitLuca [value_encoding=,]
                     additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
@@ -108,7 +141,7 @@ def generate_labelling(split, payload):
             type=JobTypes.LABELLING.value,
 
             split=split,
-            encoding=Encoding.objects.get_or_create(
+            encoding=Encoding.objects.get_or_create( #TODO fixme
                 data_encoding='label_encoder',
                 # TODO: @HitLuca [value_encoding=,]
                 additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
@@ -143,9 +176,8 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                         item = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=payload['type'],
-
                             split=split,
-                            encoding=Encoding.objects.get_or_create(
+                            encoding=Encoding.objects.get_or_create( #TODO fixme
                                 data_encoding=encMethod,
                                 # TODO: @HitLuca [value_encoding=,]
                                 additional_features=payload['label']['add_remaining_time'] or payload['label'][
@@ -168,7 +200,11 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                                 threshold=payload['label']['threshold']
                             ),
                             clustering=Clustering.init(clustering, configuration=None),
-                            predictive_model=PredictiveModel.init(payload['type'], configuration=payload)
+                            predictive_model=PredictiveModel.init(configuration={
+                                **payload,
+                                'predictive_model': payload['type'],
+                                'prediction_method': method
+                            })
                         )
                         jobs.append(item)
                 else:
@@ -177,7 +213,7 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                         type=payload['type'],
 
                         split=split,
-                        encoding=Encoding.objects.get_or_create(
+                        encoding=Encoding.objects.get_or_create( #TODO fixme
                             data_encoding='label_encoder',
                             # TODO: @HitLuca [value_encoding=,]
                             additional_features=payload['label']['add_remaining_time'] or payload['label'][
@@ -200,7 +236,11 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                             threshold=payload['label']['threshold']
                         ),
                         clustering=Clustering.init(clustering, configuration=None),
-                        predictive_model=PredictiveModel.init(payload['type'], configuration=payload)
+                        predictive_model=PredictiveModel.init(configuration={
+                            **payload,
+                            'predictive_model': payload['type'],
+                            'prediction_method': method
+                        })
                     )
                     jobs.append(item)
     return jobs

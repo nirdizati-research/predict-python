@@ -16,7 +16,7 @@ class Clustering(CommonModel):
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
         if clustering == ClusteringMethods.NO_CLUSTER.value:
-            return NoClustering.objects.get_or_create(id=1)
+            return NoClustering.objects.get_or_create(pk=1)
         elif clustering == ClusteringMethods.KMEANS.value:
             from src.clustering.methods_default_config import clustering_kmeans #TODO fixme
             default_configuration = clustering_kmeans()

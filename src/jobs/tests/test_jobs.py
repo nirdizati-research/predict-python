@@ -121,7 +121,7 @@ class CreateJobsTests(APITestCase):
         config['clusterings'] = ['noCluster']
         config['methods'] = ['knn']
         config['label'] = {'type': 'remaining_time', 'attribute_name': None,
-                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
+                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                            'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
         config['random'] = 123
         config['kmeans'] = {}
@@ -148,7 +148,7 @@ class CreateJobsTests(APITestCase):
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', 'attribute_name': None,
-                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
+                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
         self.assertEqual(response.data[0]['status'], 'created')
 

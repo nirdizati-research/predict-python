@@ -63,8 +63,10 @@ def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.v
 
 def create_test_predictive_model(predictive_model: str = PredictionTypes.CLASSIFICATION.value,
                                  prediction_method: str = ClassificationMethods.RANDOM_FOREST.value) -> PredictiveModel:
-    predictive_model = \
-    PredictiveModel.init({'predictive_model': predictive_model, 'prediction_method': prediction_method})[0]
+    predictive_model = PredictiveModel.init({
+        'predictive_model': predictive_model,
+        'prediction_method': prediction_method
+    })[0]
     print('predictive_model:', predictive_model)
     return predictive_model
 

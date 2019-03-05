@@ -12,7 +12,7 @@ from src.predictive_model.models import PredictiveModel, PredictionTypes
 
 class ClassificationMethods(Enum):
     KNN = 'knn'
-    RANDOM_FOREST = 'randomForest'
+    RANDOM_FOREST = 'RandomForest'
     XGBOOST = 'xgboost'
     DECISION_TREE = 'decisionTree'
     MULTINOMIAL_NAIVE_BAYES = 'multinomialNB'

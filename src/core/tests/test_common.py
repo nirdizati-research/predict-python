@@ -14,8 +14,8 @@ class TestCommon(TestCase):
     def test_get_method_config(self):
         job = create_test_job(
             predictive_model=create_test_predictive_model(
-                prediction_type=PredictionTypes.CLASSIFICATION.value,
-                predictive_model_type=ClassificationMethods.RANDOM_FOREST.value
+                predictive_model=PredictionTypes.CLASSIFICATION.value,
+                prediction_method=ClassificationMethods.RANDOM_FOREST.value
             )
         )
 

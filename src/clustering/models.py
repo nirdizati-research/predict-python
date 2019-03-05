@@ -12,15 +12,20 @@ class ClusteringMethods(Enum):
 
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
-    # clustering_method = model
+    clustering_method = models.CharField(max_length=20)
+
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
         if clustering == ClusteringMethods.NO_CLUSTER.value:
-            return NoClustering.objects.get_or_create(pk=1)
+            return NoClustering.objects.get_or_create(
+                pk=1,
+                clustering_method=clustering
+            )
         elif clustering == ClusteringMethods.KMEANS.value:
             from src.clustering.methods_default_config import clustering_kmeans #TODO fixme
             default_configuration = clustering_kmeans()
             return KMeans.objects.get_or_create(
+                clustering_method=clustering,
                 n_clusters=configuration.get('n_clusters', default_configuration['n_clusters']),
                 init=configuration.get('init', default_configuration['init']),
                 n_init=configuration.get('n_init', default_configuration['n_init']),

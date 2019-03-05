@@ -8,6 +8,7 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
 from pred_models.models import PredModels, ModelSplit
+from src.clustering.models import ClusteringMethods
 from src.jobs.models import Job
 
 
@@ -27,7 +28,7 @@ class Clustering:
         :param job: job configuration
 
         """
-        self.config = job[self.KMEANS] if self.KMEANS in job else dict()
+        self.config = job.clustering.to_dict()
         self._choose_clusterer(job)
         self.n_clusters = 1
         self.labels = [0]
@@ -66,10 +67,9 @@ class Clustering:
             for cluster in range(self.n_clusters)
         }
 
-    def _choose_clusterer(self, job):  # TODO this will change when using more than one type of cluster
-        if job['clustering'] == self.KMEANS:
-            #TODO: retrieve entry from db or create new one
-            # Clustering.objects.get_or_create(split=, encoding=, labelling=, config= )
+    def _choose_clusterer(self, job):
+        print(job.clustering.name)
+        if job.clustering.name == ClusteringMethods.KMEANS.value:
             self.clusterer = KMeans(**self.config)
         elif job['clustering'] == self.NO_CLUSTER:
             self.clusterer = None

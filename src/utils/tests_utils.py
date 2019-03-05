@@ -66,7 +66,7 @@ def create_test_predictive_model(predictive_model: str = PredictionTypes.CLASSIF
     predictive_model = PredictiveModel.init({
         'predictive_model': predictive_model,
         'prediction_method': prediction_method
-    })[0]
+    })
     print('predictive_model:', predictive_model)
     return predictive_model
 

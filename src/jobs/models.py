@@ -54,9 +54,10 @@ class Job(CommonModel):
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)
     evaluation = models.ForeignKey(Evaluation, on_delete=models.DO_NOTHING, null=True)
     hyperparameter_optimizer = models.ForeignKey(HyperparameterOptimization, on_delete=models.DO_NOTHING, null=True)
+    incremental_train = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, related_name='base_model',
+                                          null=True)
 
-    @staticmethod
-    def to_dict() -> dict:
+    def to_dict(self) -> dict:
         return {
             # **self.config,
             # 'type': self.type,

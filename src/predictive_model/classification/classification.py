@@ -12,13 +12,12 @@ from sklearn.tree import DecisionTreeClassifier
 from skmultiflow.trees import HoeffdingTree, HAT
 from xgboost import XGBClassifier
 
-from pred_models.models import PredModels, ModelSplit
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
 from src.jobs.models import JobTypes, Job
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
-from src.predictive_model.classification.models import ClassificationMethods
+from src.predictive_model.classification.models import ClassificationMethods, Classification
 from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
@@ -193,7 +192,8 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 
 def _choose_classifier(job: Job):
     if job.type == JobTypes.UPDATE.value:
-        classifier = _load_model(job['incremental_train']['base_model'])
+        classifier = _load_model(job.incremental_train)
+        # TODO: check if this instruction still makes sense
         assert classifier[0].__class__.__name__ == job.method # are we updating a predictive_model with its own methods?
     else:
         method, config = get_method_config(job)
@@ -217,23 +217,25 @@ def _choose_classifier(job: Job):
         elif method == ClassificationMethods.PERCEPTRON.value:
             classifier = Perceptron(**config)
         elif method == ClassificationMethods.NN.value:
-            config['encoding'] = job['encoding'][0]
-            config['is_binary_classifier'] = _check_is_binary_classifier(job['label'].type)
+            config['encoding'] = job.encoding.value_encoding
+            config['is_binary_classifier'] = _check_is_binary_classifier(job.labelling.type)
             classifier = NNClassifier(**config)
         else:
             raise ValueError("Unexpected classification method {}".format(method))
     return classifier
 
 
-def _load_model(incremental_base_model: int):
-    classifier = PredModels.objects.filter(id=incremental_base_model)
-    assert len(classifier) == 1  # asserting that the used id is unique
-    classifier_details = classifier[0]
-    classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
-    assert len(classifier) == 1
-    classifier = classifier[0]
-    classifier = joblib.load(classifier.model_path)
-    return classifier
+def _load_model(base_model: Classification):
+    # classifier = PredModels.objects.filter(id=incremental_base_model)
+    # assert len(classifier) == 1  # asserting that the used id is unique
+    # classifier_details = classifier[0]
+    # classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
+    # assert len(classifier) == 1
+    # classifier = classifier[0]
+    # classifier = joblib.load(classifier.model_path)
+    # return classifier
+    #     TODO: fix this
+    return None
 
 
 def _check_is_binary_classifier(label_type: str) -> bool:

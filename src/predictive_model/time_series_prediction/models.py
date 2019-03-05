@@ -25,11 +25,11 @@ class TimeSeriesPrediction(PredictiveModel):
         if time_series_predictor_type == TimeSeriesPredictionMethods.RNN.value:
             default_configuration = time_series_prediction_rnn()
             return RecurrentNeuralNetwork.objects.get_or_create(
-                prediction_method=TimeSeriesPredictionMethods.RNN.value,
+                prediction_method=time_series_predictor_type,
                 n_units=configuration.get('n_units', default_configuration['n_units']),
                 rnn_type=configuration.get('rnn_type', default_configuration['rnn_type']),
                 n_epochs=configuration.get('n_epochs', default_configuration['n_epochs'])
-            )
+            )[0]
         else:
             raise ValueError('time series predictor type ' + time_series_predictor_type + ' not recognized')
 

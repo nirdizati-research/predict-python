@@ -8,6 +8,8 @@ from src.core.core import get_encoded_logs, get_run, run_by_type
 from src.hyperparameter_optimization.hyperopt_spaces import _get_space
 from src.hyperparameter_optimization.models import HyperOptAlgorithms, HyperOptLosses
 from src.jobs.models import Job
+from src.predictive_model.models import PredictiveModel
+from src.utils.django_orm import duplicate_orm_row
 
 trial_number = 0
 
@@ -91,13 +93,16 @@ def _calculate_and_evaluate(args) -> dict:
 
     model_config = {'predictive_model': predictive_model, 'prediction_method': prediction_method, **args}
 
-    print(model_config)
+    new_predictive_model = PredictiveModel.init(model_config)
+    local_job.predictive_model = duplicate_orm_row(new_predictive_model)
+    local_job = duplicate_orm_row(local_job)
 
     performance_metric = local_job.hyperparameter_optimizer.performance_metric
-
-    method_conf_name = "{}.{}".format(local_job.type, local_job.predictive_model.__class__.__name__)
-    local_job[method_conf_name] = {**local_job[method_conf_name], **args}
     multiplier = _get_metric_multiplier(performance_metric)
+
+    results, model_split = run_by_type(training_df.copy(), test_df.copy(),
+                                       local_job)  # TODO: remove, used only to avoid try-catch
+
     try:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
         return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results}

@@ -1,6 +1,6 @@
 import pandas as pd
 from pandas import DataFrame
-from pm4py.objects.log.log import Trace
+from pm4py.objects.log.log import Trace, EventLog
 
 from src.encoding.models import Encoding, TaskGenerationTypes
 from src.labelling.common import compute_label_columns, get_intercase_attributes, add_labels
@@ -9,7 +9,7 @@ from src.labelling.models import Labelling
 ATTRIBUTE_CLASSIFIER = None
 
 
-def simple_index(log: list, labelling: Labelling, encoding: Encoding) -> DataFrame:
+def simple_index(log: EventLog, labelling: Labelling, encoding: Encoding) -> DataFrame:
     columns = _compute_columns(encoding.prefix_length)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, encoding, labelling)

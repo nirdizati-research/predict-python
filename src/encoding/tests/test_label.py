@@ -1,12 +1,9 @@
-import unittest
-
 from django.test import TestCase
 
 from src.encoding.common import encode_label_logs
-from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.labelling.label_container import *
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath, create_test_log, general_example_test_filename, \
@@ -36,7 +33,7 @@ class TestLabelSimpleIndex(TestCase):
             self.train_log,
             self.test_log,
             self.encoding,
-            PredictionTypes.CLASSIFICATION.value,
+            PredictiveModels.CLASSIFICATION.value,
             labelling)
         self.assertEqual(df.shape, (2, 3))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -61,7 +58,7 @@ class TestLabelSimpleIndex(TestCase):
                                       encoding=encoding,
                                       labelling=labelling,
                                       predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictionTypes.CLASSIFICATION.value)
+                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
                                   ))
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -77,7 +74,7 @@ class TestLabelSimpleIndex(TestCase):
                                       encoding=self.encoding,
                                       labelling=labelling,
                                       predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictionTypes.CLASSIFICATION.value)
+                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
                                   ))
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -102,7 +99,7 @@ class TestLabelSimpleIndex(TestCase):
                                       encoding=encoding,
                                       labelling=labelling,
                                       predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictionTypes.CLASSIFICATION.value)
+                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
                                   ))
         self.assertEqual(df.shape, (2, 5))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'elapsed_time', 'label'])
@@ -124,7 +121,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -142,7 +139,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -165,7 +162,7 @@ class TestLabelSimpleIndex(TestCase):
                                       encoding=encoding,
                                       labelling=labelling,
                                       predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictionTypes.CLASSIFICATION.value)
+                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
                                   ))
         self.assertEqual(df.shape, (2, 13))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
@@ -184,7 +181,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -200,7 +197,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -216,7 +213,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
@@ -238,7 +235,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('executed_events' in df.columns.values.tolist())
@@ -257,7 +254,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('resources_used' in df.columns.values.tolist())
@@ -276,7 +273,7 @@ class TestLabelSimpleIndex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('new_traces' in df.columns.values.tolist())
@@ -309,7 +306,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual((2, 13), df.shape)
 
@@ -328,7 +325,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 53))
 
@@ -339,7 +336,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 14))
 
@@ -357,7 +354,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 15))
 
@@ -368,7 +365,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encodingPadding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 55))
 
@@ -384,7 +381,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('executed_events' in df.columns.values.tolist())
@@ -402,7 +399,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('resources_used' in df.columns.values.tolist())
@@ -418,7 +415,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('new_traces' in df.columns.values.tolist())
@@ -431,7 +428,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 14))
 
@@ -448,7 +445,7 @@ class TestLabelComplex(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 55))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
@@ -460,7 +457,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 14))
 
@@ -471,7 +468,7 @@ class TestLabelComplex(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 14))
 
@@ -495,7 +492,7 @@ class TestLabelBoolean(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 8))
 
@@ -506,7 +503,7 @@ class TestLabelBoolean(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 9))
 
@@ -526,7 +523,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 10))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -534,7 +531,7 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, True, False, False, True, 248400.0, False])
 
-    
+
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
         encoding = create_test_encoding(
@@ -547,7 +544,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -555,7 +552,7 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, False, False, False, False, False, 32171502])
 
-    
+
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
         encoding = create_test_encoding(
@@ -568,7 +565,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
@@ -577,7 +574,7 @@ class TestLabelBoolean(TestCase):
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 1149821])
 
-    
+
     def test_attribute_string(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
         encoding = create_test_encoding(
@@ -590,7 +587,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -605,7 +602,7 @@ class TestLabelBoolean(TestCase):
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
@@ -626,7 +623,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('executed_events' in df.columns.values.tolist())
@@ -645,7 +642,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('resources_used' in df.columns.values.tolist())
@@ -664,7 +661,7 @@ class TestLabelBoolean(TestCase):
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value)
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('new_traces' in df.columns.values.tolist())

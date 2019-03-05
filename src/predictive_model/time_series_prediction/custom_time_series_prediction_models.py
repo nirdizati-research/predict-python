@@ -8,9 +8,10 @@ from numpy import ndarray
 from pandas import DataFrame
 
 from src.encoding.encoding_parser import EncodingParser, Tasks
+from src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin import TimeSeriesPredictorMixin
 
 
-class RNNTimeSeriesPredictor:
+class RNNTimeSeriesPredictor(TimeSeriesPredictorMixin):
     """
     Recurrent Neural Network Time Series predictor, implements the same methods as the sklearn models to make it simple
     to add.

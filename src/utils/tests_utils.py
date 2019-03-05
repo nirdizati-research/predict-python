@@ -1,12 +1,14 @@
 from src.clustering.models import Clustering, ClusteringMethods
-from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes, ValueEncodings
-from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
+from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes
+from src.encoding.models import ValueEncodings
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization, \
+    HyperOptLosses
 from src.jobs.job_creator import get_prediction_method_config
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling, LabelTypes, ThresholdTypes
 from src.logs.models import Log
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictiveModel, PredictionTypes
+from src.predictive_model.models import PredictiveModel, PredictiveModels
 from src.split.models import Split, SplitTypes
 
 bpi_log_filepath = "cache/log_cache/test_logs/BPI Challenge 2017.xes.gz"
@@ -24,13 +26,12 @@ repair_example_filepath = 'cache/log_cache/test_logs/repair_example.xes'
 def create_test_log(log_name: str = 'general_example.xes',
                     log_path: str = 'cache/log_cache/test_logs/general_example.xes') -> Log:
     log = Log.objects.get_or_create(name=log_name, path=log_path)[0]
-    print('log:', log)
     return log
 
 
 def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value, log: Log = create_test_log()):
     split = Split.objects.get_or_create(type=split_type, original_log=log)[0]
-    print('split:', split)
+    print(split)
     return split
 
 
@@ -54,7 +55,6 @@ def create_test_encoding(prefix_length: int = 1,
         add_new_traces=add_new_traces,
         add_resources_used=add_resources_used,
         task_generation_type=task_generation_type)[0]
-    print('encoding:', encoding)
     return encoding
 
 
@@ -68,27 +68,25 @@ def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
         threshold_type=threshold_type,
         threshold=threshold
     )[0]
-    print('labelling:', labelling)
     return labelling
 
 
 def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.value,
                            configuration: dict = None) -> Clustering:
     clustering = Clustering.init(clustering_type, configuration)[0]
-    print('clustering:', clustering)
     return clustering
 
 
-def create_test_predictive_model(predictive_model: str = PredictionTypes.CLASSIFICATION.value,
+def create_test_predictive_model(predictive_model: str = PredictiveModels.CLASSIFICATION.value,
                                  prediction_method: str = ClassificationMethods.RANDOM_FOREST.value) -> PredictiveModel:
-    predictive_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, {}))
-    print('predictive_model:', predictive_model)
-    return predictive_model
+    pred_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, {}))
+    return pred_model
 
 
-def create_test_hyperparameter_optimizer(hyperoptim_type: str = HyperparameterOptimizationMethods.HYPEROPT.value):
-    hyperparameter_optimization = HyperparameterOptimization.init({'type': hyperoptim_type})[0]
-    print('hyperparameter_optimization:', hyperparameter_optimization)
+def create_test_hyperparameter_optimizer(hyperoptim_type: str = HyperparameterOptimizationMethods.HYPEROPT.value,
+                                         performance_metric: HyperOptLosses = HyperOptLosses.ACC.value):
+    hyperparameter_optimization = HyperparameterOptimization.init({'type': hyperoptim_type,
+                                                                   'performance_metric': performance_metric})
     return hyperparameter_optimization
 
 
@@ -99,7 +97,7 @@ def create_test_job(split: Split = create_test_split(),
                     predictive_model: PredictiveModel = create_test_predictive_model(),
                     job_type=JobTypes.PREDICTION.value,
                     hyperparameter_optimizer: HyperparameterOptimization = None):
-    job = Job.objects.create(
+    job = Job.objects.get_or_create(
         status=JobStatuses.CREATED.value,
         type=job_type,
         split=split,
@@ -108,7 +106,7 @@ def create_test_job(split: Split = create_test_split(),
         clustering=clustering,
         predictive_model=predictive_model,
         evaluation=None,
-        hyperparameter_optimizer=hyperparameter_optimizer
-    )
-    print('job:', job)
+        hyperparameter_optimizer=hyperparameter_optimizer,
+        incremental_train=None
+    )[0]
     return job

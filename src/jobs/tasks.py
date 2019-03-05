@@ -9,7 +9,7 @@ from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.ws_publisher import publish
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 
 
 @job("default", timeout='1h')
@@ -49,7 +49,7 @@ def save_models(to_model_split, job):
     else:
         log = job_split.training_log
     if job.type == JobTypes.UPDATE.value or job.config['incremental_train']['base_model'] is not None:
-        job.type = PredictionTypes.CLASSIFICATION.value
+        job.type = PredictiveModels.CLASSIFICATION.value
         filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(job.id, job.split.id,
                                                                                           job.type,
                                                                                           str(time.time()))

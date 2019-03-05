@@ -8,7 +8,7 @@ from src.encoding.models import Encoding
 from src.evaluation.models import Evaluation
 from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModel, PredictiveModel
 from src.split.models import Split
 
 
@@ -58,10 +58,4 @@ class Job(CommonModel):
                                           null=True)
 
     def to_dict(self) -> dict:
-        return {
-            # **self.config,
-            # 'type': self.type,
-            # 'split': self.split.to_dict(),
-            # 'label': LabelContainer(**self.config['label']),
-            # 'encoding': EncodingContainer(**self.config['encoding'])
-        }
+        return {}

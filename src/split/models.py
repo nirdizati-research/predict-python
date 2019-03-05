@@ -46,14 +46,14 @@ class Split(CommonModel):
     additional_columns = models.CharField(max_length=30, blank=True, null=True)
 
     def to_dict(self) -> dict:
-        split = {
+        temp = {
             'type': self.type,
             'test_size': self.test_size,
             'splitting_method': self.splitting_method
         }
         if self.type == 'single':
-            split['original_log_path'] = self.original_log.path
+            temp['original_log_path'] = self.original_log.path
         else:
-            split['test_log_path'] = self.test_log.path
-            split['train_log_path'] = self.train_log.path
-        return split
+            temp['test_log_path'] = self.test_log.path
+            temp['train_log_path'] = self.train_log.path
+        return temp

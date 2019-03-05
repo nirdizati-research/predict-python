@@ -12,7 +12,7 @@ from src.labelling.label_container import LabelContainer
 from src.labelling.models import ThresholdTypes
 from src.logs.models import Log
 from src.predictive_model.classification.methods_default_config import classification_random_forest
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.split.models import Split
 from src.utils.tests_utils import general_example_filepath, create_test_job
 
@@ -38,7 +38,7 @@ class JobModelTest(TestCase):
     def test_to_dict(self):
         job = Job.objects.get(id=1).to_dict()
 
-        self.assertEquals(PredictionTypes.CLASSIFICATION.value, job['type'])
+        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
                               'config': {},
@@ -96,8 +96,8 @@ class Hyperopt(TestCase):
         log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
         split = Split.objects.create(original_log=log)
         Job.objects.create(
-            config=add_default_config(self.config, prediction_method=PredictionTypes.CLASSIFICATION), split=split,
-            type=PredictionTypes.CLASSIFICATION)
+            config=add_default_config(self.config, prediction_method=PredictiveModels.CLASSIFICATION), split=split,
+            type=PredictiveModels.CLASSIFICATION)
 
     @unittest.skip('needs refactoring')
     def test_hyperopt(self):

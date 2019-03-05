@@ -11,7 +11,7 @@ from src.jobs import tasks
 from src.jobs.job_creator import generate, generate_labelling, update
 from src.jobs.models import Job, JobTypes
 from src.jobs.serializers import JobSerializer
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.split.models import Split
 
 
@@ -67,12 +67,12 @@ def create_multiple(request):
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
         jobs = update(split, payload)
-    elif payload['type'] == PredictionTypes.CLASSIFICATION.value:
+    elif payload['type'] == PredictiveModels.CLASSIFICATION.value:
         jobs = generate(split, payload)
-    elif payload['type'] == PredictionTypes.REGRESSION.value:
-        jobs = generate(split, payload, PredictionTypes.REGRESSION)
-    elif payload['type'] == PredictionTypes.TIME_SERIES_PREDICTION.value:
-        jobs = generate(split, payload, PredictionTypes.TIME_SERIES_PREDICTION)
+    elif payload['type'] == PredictiveModels.REGRESSION.value:
+        jobs = generate(split, payload, PredictiveModels.REGRESSION)
+    elif payload['type'] == PredictiveModels.TIME_SERIES_PREDICTION.value:
+        jobs = generate(split, payload, PredictiveModels.TIME_SERIES_PREDICTION)
     elif payload['type'] == JobTypes.LABELLING.value:
         jobs = generate_labelling(split, payload)
     else:

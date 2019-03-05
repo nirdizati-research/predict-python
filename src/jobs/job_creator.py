@@ -3,11 +3,11 @@ from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictionTypes
 from src.predictive_model.models import PredictiveModel
+from src.predictive_model.models import PredictiveModels
 
 
-def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION.value):
+def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value):
     jobs = []
 
     config = payload['config']
@@ -82,27 +82,27 @@ def generate(split, payload, generation_type=PredictionTypes.CLASSIFICATION.valu
     return jobs
 
 
-def get_prediction_method_config(generation_type, method, payload):
-    if generation_type == PredictionTypes.CLASSIFICATION.value:
+def get_prediction_method_config(prediction_type, method, payload):
+    if prediction_type == PredictiveModels.CLASSIFICATION.value:
         return {
-            'predictive_model': generation_type,
+            'predictive_model': prediction_type,
             'prediction_method': method,
             **payload.get('classification', {})
         }
-    elif generation_type == PredictionTypes.REGRESSION.value:
+    elif prediction_type == PredictiveModels.REGRESSION.value:
         return {
-            'predictive_model': generation_type,
+            'predictive_model': prediction_type,
             'prediction_method': method,
             **payload.get('regression', {})
         }
-    elif generation_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
+    elif prediction_type == PredictiveModels.TIME_SERIES_PREDICTION.value:
         return {
-            'predictive_model': generation_type,
+            'predictive_model': prediction_type,
             'prediction_method': method,
             **payload.get('time_series_prediction', {})
         }
     else:
-        raise ValueError('generation_type ', generation_type, 'not recognized')
+        raise ValueError('prediction_type ', prediction_type, 'not recognized')
 
 
 def generate_labelling(split, payload):

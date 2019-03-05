@@ -7,8 +7,7 @@ from pandas import DataFrame
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, \
     mean_squared_error, mean_absolute_error, r2_score, roc_auc_score
 
-from src.labelling.label_container import LabelContainer
-from src.labelling.models import LabelTypes
+from src.labelling.models import LabelTypes, Labelling
 
 
 def calculate_results_classification(actual: list, predicted: list) -> dict:
@@ -93,7 +92,7 @@ def calculate_auc(actual, scores, auc: int) -> float:
     return auc
 
 
-def calculate_results_regression(input_df: DataFrame, label: LabelContainer) -> dict:
+def calculate_results_regression(input_df: DataFrame, label: Labelling) -> dict:
     if label.type == LabelTypes.REMAINING_TIME.value:
         # TODO is the remaining time in seconds or hours?
         input_df['label'] = input_df['label'] / 3600

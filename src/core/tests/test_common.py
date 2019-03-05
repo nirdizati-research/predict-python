@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from src.core.common import get_method_config
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.utils.tests_utils import create_test_job, create_test_predictive_model
 
 
@@ -14,7 +14,7 @@ class TestCommon(TestCase):
     def test_get_method_config(self):
         job = create_test_job(
             predictive_model=create_test_predictive_model(
-                predictive_model=PredictionTypes.CLASSIFICATION.value,
+                predictive_model=PredictiveModels.CLASSIFICATION.value,
                 prediction_method=ClassificationMethods.RANDOM_FOREST.value
             )
         )

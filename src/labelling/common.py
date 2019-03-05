@@ -1,10 +1,12 @@
+from pm4py.objects.log.log import EventLog
+
 from src.encoding.models import Encoding
 from src.labelling.models import LabelTypes, Labelling
 from src.utils.log_metrics import events_by_date, resources_by_date, new_trace_start
 from src.utils.time_metrics import elapsed_time_id, remaining_time_id, count_on_event_day, duration
 
 
-def get_intercase_attributes(log: list, encoding: Encoding):
+def get_intercase_attributes(log: EventLog, encoding: Encoding):
     """Dict of kwargs
     These intercase attributes are expensive operations!!!
     """

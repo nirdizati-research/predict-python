@@ -22,8 +22,10 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     :return: tuple containing the results, config and predictive_model split from the search
     """
 
-    print("Start hyperopt job {} with {}, performance_metric {}".format(job.type, get_run(job),
-                                                                        job.hyperparameter_optimizer.performance_metric))
+    print("Start hyperopt job {} with {}, performance_metric {}".format(
+        job.type, get_run(job),
+        job.hyperparameter_optimizer.performance_metric)
+    )
 
     global training_df, test_df, global_job
     global_job = job
@@ -47,7 +49,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
             current_best = a
 
     print("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
-    return current_best['results'], current_best['config'], current_best['model_split']
+    return current_best['results'], current_best['model_split']
 
 
 def _get_metric_multiplier(performance_metric: int) -> int:
@@ -100,11 +102,11 @@ def _calculate_and_evaluate(args) -> dict:
     performance_metric = local_job.hyperparameter_optimizer.performance_metric
     multiplier = _get_metric_multiplier(performance_metric)
 
-    results, model_split = run_by_type(training_df.copy(), test_df.copy(),
-                                       local_job)  # TODO: remove, used only to avoid try-catch
+    results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
 
     try:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
-        return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results}
+        return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,
+                'model_split': model_split}
     except:
         return {'loss': 100, 'status': STATUS_FAIL, 'results': {}}

@@ -1,11 +1,10 @@
 from django.test import TestCase
 
 from src.encoding.boolean_frequency import boolean
-from src.encoding.common import encode_label_logs, LabelContainer, LabelTypes
-from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
+from src.encoding.common import encode_label_logs, LabelTypes
+from src.encoding.encoding_container import ALL_IN_ONE
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
-from src.jobs.models import JobTypes
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath, general_example_train_filepath, create_test_log, \
@@ -27,7 +26,7 @@ class TestBooleanSplit(TestCase):
                                                                    add_elapsed_time=True
                                                                ),
                                                                predictive_model=create_test_predictive_model(
-                                                                   predictive_model=PredictionTypes.CLASSIFICATION.value
+                                                                   predictive_model=PredictiveModels.CLASSIFICATION.value
                                                                )
                                                            ))
     def test_shape(self):

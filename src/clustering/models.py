@@ -10,9 +10,15 @@ class ClusteringMethods(Enum):
     NO_CLUSTER = 'noCluster'
 
 
+CLUSTERING_METHOD_MAPPINGS = (
+    (ClusteringMethods.KMEANS.value, 'kmeans'),
+    (ClusteringMethods.NO_CLUSTER.value, 'noCluster')
+)
+
+
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
-    clustering_method = models.CharField(max_length=20)
+    clustering_method = models.CharField(choices=CLUSTERING_METHOD_MAPPINGS, max_length=20)
 
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):

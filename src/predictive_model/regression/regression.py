@@ -14,6 +14,7 @@ from xgboost import XGBRegressor
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
+from src.jobs.models import Job
 from src.predictive_model.regression.custom_regression_models import NNRegressor
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.result_metrics import calculate_results_regression
@@ -21,11 +22,12 @@ from src.utils.result_metrics import calculate_results_regression
 pd.options.mode.chained_assignment = None
 
 
-def regression(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main regression entry point
 
     train and tests the regressor using the provided data
 
+    :param clusterer:
     :param training_df: training DataFrame
     :param test_df: testing DataFrame
     :param job: job configuration
@@ -34,13 +36,10 @@ def regression(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, 
     """
     train_data, test_data = _prep_data(training_df, test_df)
 
-    model_split = _train(job, train_data, _choose_regressor(job))
+    model_split = _train(train_data, _choose_regressor(job), clusterer)
     results_df = _test(model_split, test_data)
 
-    results = calculate_results_regression(results_df, job['label'])
-
-    # TODO save predictive_model more wisely
-    model_split['type'] = job['clustering']
+    results = calculate_results_regression(results_df, job.labelling)
 
     return results, model_split
 
@@ -66,11 +65,8 @@ def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
     return results_df
 
 
-def _train(job: dict, train_data: DataFrame, regressor: RegressorMixin) -> dict:
-    clusterer = Clustering(job)
+def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clustering) -> dict:
     models = dict()
-
-    clusterer.fit(train_data.drop('label', 1))
 
     train_data = clusterer.cluster_data(train_data)
 
@@ -115,19 +111,19 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_data, test_data
 
 
-def _choose_regressor(job: dict) -> RegressorMixin:
+def _choose_regressor(job: Job) -> RegressorMixin:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
-    if method == RegressionMethods.LINEAR:
+    if method == RegressionMethods.LINEAR.value:
         regressor = LinearRegression(**config)
-    elif method == RegressionMethods.RANDOM_FOREST:
+    elif method == RegressionMethods.RANDOM_FOREST.value:
         regressor = RandomForestRegressor(**config)
-    elif method == RegressionMethods.LASSO:
+    elif method == RegressionMethods.LASSO.value:
         regressor = Lasso(**config)
-    elif method == RegressionMethods.XGBOOST:
+    elif method == RegressionMethods.XGBOOST.value:
         regressor = XGBRegressor(**config)
-    elif method == RegressionMethods.NN:
-        config['encoding'] = job['encoding'][0]
+    elif method == RegressionMethods.NN.value:
+        config['encoding'] = job.encoding.value_encoding
         regressor = NNRegressor(**config)
     else:
         raise ValueError("Unexpected regression method {}".format(method))

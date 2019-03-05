@@ -12,7 +12,7 @@ from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.models import RegressionMethods
 
 
@@ -28,7 +28,7 @@ class TestRegression(TestCase):
         json['encoding'] = EncodingContainer(encoding_method, padding=padding, prefix_length=4)
         json['label'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
-        json['type'] = PredictionTypes.REGRESSION.value
+        json['type'] = PredictiveModels.REGRESSION.value
         json['incremental_train'] = {'base_model': None}
 
         add_default_config(json)

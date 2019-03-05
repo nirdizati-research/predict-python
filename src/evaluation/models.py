@@ -1,21 +1,13 @@
 from django.db import models
 
 from src.common.models import CommonModel
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 
 
 class Evaluation(CommonModel):
-    """Container of Classification to be shown in frontend"""
-    metrics = models.ForeignKey('Metrics', on_delete=models.DO_NOTHING, blank=True, null=True)
-
-    def to_dict(self) -> dict:
-        return {
-            'metrics': self.metrics
-        }
-
     @staticmethod
     def init(prediction_type, results):
-        if prediction_type == PredictionTypes.CLASSIFICATION.value:
+        if prediction_type == PredictiveModels.CLASSIFICATION.value:
             pass #TODO fixme
             # if labels == BINARY:
             #     BinaryClassificationMetrics.objects.get_or_create(
@@ -29,28 +21,18 @@ class Evaluation(CommonModel):
             #     )
             # elif labels == MUTLICLASS:
             #     MulticlassClassificationMetrics.objects.get_or_create(metrics='')
-        elif prediction_type == PredictionTypes.REGRESSION.value:
-            RegressionMetrics.objects.get_or_create(
-                metrics='',
-
+        elif prediction_type == PredictiveModels.REGRESSION.value:
+            return RegressionMetrics.objects.get_or_create(
                 rmse=results['rmse'],
+                rscore=results['rscore'],
                 mae=results['mae'],
                 mape=results['mape']
-            )
-        elif prediction_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
-            TimeSeriesPredictionMetrics.objects.get_or_create(metrics='')
+            )[0]
+        elif prediction_type == PredictiveModels.TIME_SERIES_PREDICTION.value:
+            TimeSeriesPredictionMetrics.objects.get_or_create()
 
 
-class Metrics(CommonModel):
-    elapsed_time = models.FloatField()
-
-    def to_dict(self) -> dict:
-        return {
-            'elapsed_time': self.elapsed_time
-        }
-
-
-class ClassificationMetrics(Metrics):
+class ClassificationMetrics(Evaluation):
     f1_score = models.FloatField()
     accuracy = models.FloatField()
     precision = models.FloatField()
@@ -65,7 +47,7 @@ class ClassificationMetrics(Metrics):
         }
 
 
-class BinaryClassificationMetrics(ClassificationMetrics):
+class BinaryClassificationMetrics(Evaluation):
     true_positive = models.FloatField()
     true_negative = models.FloatField()
     false_negative = models.FloatField()
@@ -86,18 +68,20 @@ class MulticlassClassificationMetrics(ClassificationMetrics):
     pass
 
 
-class RegressionMetrics(Metrics):
+class RegressionMetrics(Evaluation):
     rmse = models.FloatField()
     mae = models.FloatField()
+    rscore = models.FloatField()
     mape = models.FloatField()
 
     def to_dict(self) -> dict:
         return {
             'rmse': self.rmse,
             'mae': self.mae,
-            'mape': self.mape
+            'mape': self.mape,
+            'rscore': self.rscore
         }
 
 
-class TimeSeriesPredictionMetrics(Metrics):
+class TimeSeriesPredictionMetrics(Evaluation):
     pass

@@ -23,11 +23,12 @@ from src.utils.result_metrics import calculate_results_classification, get_auc
 pd.options.mode.chained_assignment = None
 
 
-def classification(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, dict):
+def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main classification entry point
 
     train and tests the classifier using the provided data
 
+    :param clusterer:
     :param training_df: training DataFrame
     :param test_df: testing DataFrame
     :param job: job configuration
@@ -36,14 +37,14 @@ def classification(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dic
     """
     train_data, test_data = _drop_columns(training_df, test_df)
 
-    model_split = _train(job, train_data, _choose_classifier(job))
-    results_df, auc = _test(model_split, test_data, evaluation=True,
-                            is_binary_classifier=_check_is_binary_classifier(job.labelling.type))
+    model_split = _train(train_data, _choose_classifier(job), clusterer)
+    results_df, auc = _test(
+        model_split, test_data,
+        evaluation=True,
+        is_binary_classifier=_check_is_binary_classifier(job.labelling.type)
+    )
 
     results = _prepare_results(results_df, auc)
-
-    # TODO save predictive_model more wisely
-    model_split['type'] = job['clustering']
 
     return results, model_split
 
@@ -93,16 +94,12 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     return results, model_split
 
 
-def _train(job: Job, train_data: DataFrame, classifier: ClassifierMixin) -> dict:
-    clusterer = Clustering(job)
+def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Clustering) -> dict:
     models = dict()
-
-    clusterer.fit(train_data.drop('label', 1))
 
     train_data = clusterer.cluster_data(train_data)
 
     for cluster in range(clusterer.n_clusters):
-
         cluster_train_df = train_data[cluster]
         if not cluster_train_df.empty:
             cluster_targets_df = DataFrame(cluster_train_df['label'])
@@ -124,7 +121,7 @@ def _train(job: Job, train_data: DataFrame, classifier: ClassifierMixin) -> dict
 
 
 def _update(job: Job, data: DataFrame, models) -> dict:
-    clusterer = Clustering.load_model(job)
+    clusterer = Clustering.load_model(job.clustering)
 
     update_data = clusterer.cluster_data(data)
 

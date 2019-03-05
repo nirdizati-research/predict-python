@@ -2,7 +2,7 @@ from typing import Callable
 
 import pandas as pd
 from pandas import DataFrame
-from pm4py.objects.log.log import Trace
+from pm4py.objects.log.log import Trace, EventLog
 
 from src.encoding.models import Encoding, TaskGenerationTypes
 from src.encoding.simple_index import compute_label_columns, add_labels, get_intercase_attributes
@@ -11,15 +11,15 @@ from src.labelling.models import Labelling
 ATTRIBUTE_CLASSIFIER = None
 
 
-def complex(log: list, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
+def complex(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
     return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_complex, _data_complex)
 
 
-def last_payload(log: list, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
+def last_payload(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
     return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_last_payload, _data_last_payload)
 
 
-def _encode_complex_latest(log: list, labelling: Labelling, encoding: Encoding, additional_columns: dict,
+def _encode_complex_latest(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict,
                            column_fun: Callable, data_fun: Callable) -> DataFrame:
     columns = column_fun(encoding.prefix_length, additional_columns)
     normal_columns_number = len(columns)

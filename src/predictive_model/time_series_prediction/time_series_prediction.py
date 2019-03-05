@@ -12,6 +12,8 @@ from sklearn.externals import joblib
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
+from src.jobs.models import Job
+from src.predictive_model.time_series_prediction import TimeSeriesPredictorMixin
 from src.predictive_model.time_series_prediction.custom_time_series_prediction_models import RNNTimeSeriesPredictor
 from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
 from src.utils.result_metrics import calculate_results_time_series_prediction, \
@@ -20,11 +22,12 @@ from src.utils.result_metrics import calculate_results_time_series_prediction, \
 pd.options.mode.chained_assignment = None
 
 
-def time_series_prediction(training_df: DataFrame, test_df: DataFrame, job: dict) -> (dict, dict):
+def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main time series prediction entry point
 
     train and tests the time series predictor using the provided data
 
+    :param clusterer:
     :param training_df: training DataFrame
     :param test_df: testing DataFrame
     :param job: job configuration
@@ -33,7 +36,7 @@ def time_series_prediction(training_df: DataFrame, test_df: DataFrame, job: dict
     """
     train_data, test_data = _drop_columns(training_df, test_df)
 
-    model_split = _train(job, train_data, _choose_time_series_predictor(job))
+    model_split = _train(train_data, _choose_time_series_predictor(job), clusterer)
     results_df, nlevenshtein = _test(model_split, test_data, evaluation=True)
 
     results = _prepare_results(results_df, nlevenshtein)
@@ -67,11 +70,8 @@ def time_series_prediction_single_log(input_df: DataFrame, model: dict) -> dict:
     return results
 
 
-def _train(job: dict, train_data: DataFrame, time_series_predictor: Any) -> dict:
-    clusterer = Clustering(job)
+def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Clustering) -> dict:
     models = dict()
-
-    clusterer.fit(train_data)
 
     train_data = clusterer.cluster_data(train_data)
 
@@ -133,11 +133,11 @@ def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
     return train_df, test_df
 
 
-def _choose_time_series_predictor(job: dict) -> Any:
+def _choose_time_series_predictor(job: Job) -> TimeSeriesPredictorMixin:
     method, config = get_method_config(job)
     print("Using method {} with config {}".format(method, config))
     if method == TimeSeriesPredictionMethods.RNN.value:
-        config['encoding'] = job['encoding'][0]
+        config['encoding'] = job.encoding.value_encoding
         time_series_predictor = RNNTimeSeriesPredictor(**config)
     else:
         raise ValueError("Unexpected time series prediction method {}".format(method))

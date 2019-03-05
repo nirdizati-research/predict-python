@@ -1,22 +1,22 @@
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
-from pm4py.objects.log.log import Trace
+from pm4py.objects.log.log import Trace, EventLog
 
 from src.encoding.models import Encoding, TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import compute_label_columns, add_labels, get_intercase_attributes
 from src.labelling.models import Labelling
 
 
-def boolean(log: list, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
+def boolean(log: EventLog, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
     return _encode_boolean_frequency(log, event_names, label, encoding)
 
 
-def frequency(log: list, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
+def frequency(log: EventLog, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
     return _encode_boolean_frequency(log, event_names, label, encoding)
 
 
-def _encode_boolean_frequency(log: list, event_names: list, labelling: Labelling,
+def _encode_boolean_frequency(log: EventLog, event_names: list, labelling: Labelling,
                               encoding: Encoding) -> DataFrame:
     """Encodes the log by boolean or frequency
 

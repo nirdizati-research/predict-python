@@ -2,7 +2,7 @@ from enum import Enum
 
 from django.db import models
 
-from src.predictive_model.models import PredictiveModel, PredictionTypes
+from src.predictive_model.models import PredictiveModel, PredictiveModels
 from src.predictive_model.regression.methods_default_config import regression_random_forest, regression_lasso, \
     regression_linear, regression_xgboost, regression_nn
 
@@ -15,13 +15,13 @@ class RegressionMethods(Enum):
     NN = 'nn'
 
 
-REGRESSION_LASSO = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.LASSO.value)
-REGRESSION_LINEAR = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.LINEAR.value)
-REGRESSION_XGBOOST = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.XGBOOST.value)
-REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value)
-REGRESSION_NN = '{}.{}'.format(PredictionTypes.REGRESSION.value, RegressionMethods.NN.value)
+REGRESSION_LASSO = '{}.{}'.format(PredictiveModels.REGRESSION.value, RegressionMethods.LASSO.value)
+REGRESSION_LINEAR = '{}.{}'.format(PredictiveModels.REGRESSION.value, RegressionMethods.LINEAR.value)
+REGRESSION_XGBOOST = '{}.{}'.format(PredictiveModels.REGRESSION.value, RegressionMethods.XGBOOST.value)
+REGRESSION_RANDOM_FOREST = '{}.{}'.format(PredictiveModels.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value)
+REGRESSION_NN = '{}.{}'.format(PredictiveModels.REGRESSION.value, RegressionMethods.NN.value)
 
-REGRESSION_METHODS = (
+REGRESSION_METHOD_MAPPINGS = (
     (RegressionMethods.LINEAR.value, 'linear'),
     (RegressionMethods.RANDOM_FOREST.value, 'randomForest'),
     (RegressionMethods.LASSO.value, 'lasso'),
@@ -32,16 +32,15 @@ REGRESSION_METHODS = (
 
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
-    predictive_model_type = PredictionTypes.REGRESSION.value
 
-    # noinspection PyDefaultArgument
     @staticmethod
-    def init(configuration: dict = {'type': RegressionMethods.RANDOM_FOREST.value}):
-        regressor_type = configuration['type']
+    def init(configuration: dict):
+        regressor_type = configuration['prediction_method']
         if regressor_type == RegressionMethods.RANDOM_FOREST.value:
             default_configuration = regression_random_forest()
             return RandomForest.objects.get_or_create(
                 prediction_method=regressor_type,
+                predictive_model=PredictiveModels.REGRESSION.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_features=configuration.get('max_features', default_configuration['max_features']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
@@ -50,6 +49,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_lasso()
             return Lasso.objects.get_or_create(
                 prediction_method=regressor_type,
+                predictive_model=PredictiveModels.REGRESSION.value,
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize'])
@@ -58,6 +58,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_linear()
             return Linear.objects.get_or_create(
                 prediction_method=regressor_type,
+                predictive_model=PredictiveModels.REGRESSION.value,
                 fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
                 normalize=configuration.get('normalize', default_configuration['normalize']),
             )[0]
@@ -65,6 +66,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_xgboost()
             return XGBoost.objects.get_or_create(
                 prediction_method=regressor_type,
+                predictive_model=PredictiveModels.REGRESSION.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators'])
             )[0]
@@ -72,6 +74,7 @@ class Regression(PredictiveModel):
             default_configuration = regression_nn()
             return NeuralNetwork.objects.get_or_create(
                 prediction_method=regressor_type,
+                predictive_model=PredictiveModels.REGRESSION.value,
                 hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
                 hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
                 activation_function=configuration.get('activation_function',
@@ -85,8 +88,8 @@ class Regression(PredictiveModel):
 
 class RandomForest(Regression):
     n_estimators = models.PositiveIntegerField()
-    max_features = models.FloatField()
-    max_depth = models.PositiveIntegerField()
+    max_features = models.CharField(max_length=10)
+    max_depth = models.CharField(max_length=10, null=True)
 
     def to_dict(self):
         return {

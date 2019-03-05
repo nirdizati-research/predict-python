@@ -6,17 +6,16 @@ from pm4py.objects.log.log import EventLog
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
 from src.encoding.encoder import Encoder
-from src.encoding.encoding_container import EncodingContainer
 from src.encoding.models import Encoding, ValueEncodings
 from src.jobs.models import JobTypes, Job
 from src.labelling.label_container import *
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictionTypes
+from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 
-def encode_label_logs(training_log: list, test_log: list, job: Job, additional_columns=None):
+def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None):
     training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
                                      cols=None)
     # TODO pass the columns of the training log
@@ -61,7 +60,7 @@ def encode_label_log(run_log: EventLog, encoding: Encoding, job_type: str, label
         # Labelling has no need for this encoding
         _categorical_encode(encoded_log)
     # Regression only has remaining_time or number atr as label
-    if job_type == PredictionTypes.REGRESSION.value:
+    if job_type == PredictiveModels.REGRESSION.value:
         # Remove last events as worse for prediction
         # TODO filter out 0 labels. Doing it here means runtime errors for regression
         # if label.type == REMAINING_TIME:
@@ -73,7 +72,7 @@ def encode_label_log(run_log: EventLog, encoding: Encoding, job_type: str, label
     return encoded_log
 
 
-def _encode_log(log: list, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
+def _encode_log(log: EventLog, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if encoding.value_encoding == ValueEncodings.SIMPLE_INDEX.value:

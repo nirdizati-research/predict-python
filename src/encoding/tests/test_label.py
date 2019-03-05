@@ -35,9 +35,12 @@ class TestLabelSimpleIndex(TestCase):
         _, df = encode_label_logs(
             self.train_log,
             self.test_log,
-            self.encoding,
-            PredictiveModels.CLASSIFICATION.value,
-            labelling)
+            create_test_job(
+                encoding=self.encoding,
+                labelling=labelling,
+                predictive_model=create_test_predictive_model(
+                    predictive_model=PredictiveModels.CLASSIFICATION.value)
+            ))
         self.assertEqual(df.shape, (2, 3))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5, ['5', 52903968, 34856381, ])
@@ -115,6 +118,7 @@ class TestLabelSimpleIndex(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(
             value_encoding=ValueEncodings.FREQUENCY.value,
+            add_elapsed_time=True,
             add_remaining_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=10,
@@ -412,7 +416,8 @@ class TestLabelComplex(TestCase):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         encoding = create_test_encoding(value_encoding=ValueEncodings.COMPLEX.value,
                                         prefix_length=2,
-                                        add_new_traces=True)
+                                        add_new_traces=True,
+                                        add_elapsed_time=True)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
             encoding=encoding,

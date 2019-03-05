@@ -22,4 +22,4 @@ class TestCommon(TestCase):
         method, config = get_method_config(job)
 
         self.assertEqual(ClassificationMethods.RANDOM_FOREST.value, method)
-        self.assertEqual(create_test_predictive_model(), config)
+        self.assertEqual(create_test_predictive_model().to_dict(), config)

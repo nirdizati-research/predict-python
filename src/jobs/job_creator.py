@@ -87,19 +87,19 @@ def get_prediction_method_config(generation_type, method, payload):
         return {
             'predictive_model': generation_type,
             'prediction_method': method,
-            **payload.get('classification', None)
+            **payload.get('classification', {})
         }
     elif generation_type == PredictionTypes.REGRESSION.value:
         return {
             'predictive_model': generation_type,
             'prediction_method': method,
-            **payload.get('regression', None)
+            **payload.get('regression', {})
         }
     elif generation_type == PredictionTypes.TIME_SERIES_PREDICTION.value:
         return {
             'predictive_model': generation_type,
             'prediction_method': method,
-            **payload.get('time_series_prediction', None)
+            **payload.get('time_series_prediction', {})
         }
     else:
         raise ValueError('generation_type ', generation_type, 'not recognized')

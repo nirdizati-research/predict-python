@@ -1,6 +1,7 @@
 from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
+from src.jobs.job_creator import get_prediction_method_config
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling, LabelTypes, ThresholdTypes
 from src.logs.models import Log
@@ -63,10 +64,7 @@ def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.v
 
 def create_test_predictive_model(predictive_model: str = PredictionTypes.CLASSIFICATION.value,
                                  prediction_method: str = ClassificationMethods.RANDOM_FOREST.value) -> PredictiveModel:
-    predictive_model = PredictiveModel.init({
-        'predictive_model': predictive_model,
-        'prediction_method': prediction_method
-    })
+    predictive_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, {}))
     print('predictive_model:', predictive_model)
     return predictive_model
 

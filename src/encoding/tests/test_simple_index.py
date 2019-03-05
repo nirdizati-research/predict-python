@@ -20,8 +20,12 @@ class TestSplitLogExample(TestCase):
                                            log_path=general_example_test_filepath))
         self.training_log = get_log(create_test_log(log_name=general_example_train_filename,
                                            log_path=general_example_train_filepath))
-        self.labelling = LabelContainer(add_elapsed_time=True)
-        self.encoding = EncodingContainer()
+        self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
+        self.encoding = create_test_encoding(
+                       value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+                       add_elapsed_time=True,
+                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+                       prefix_length=1)
 
     def test_shape_training(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, create_test_job(
@@ -42,7 +46,7 @@ class TestSplitLogExample(TestCase):
 
     def test_prefix_length_training(self):
         encoding = create_test_encoding(
-            value_encoding=ValueEncodings.FREQUENCY.value,
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
             add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=3)
@@ -76,7 +80,7 @@ class TestSplitLogExample(TestCase):
 
         self.assertEqual(1, row.prefix_1)
         self.assertEqual(0, row.elapsed_time)
-        self.assertEqual(True, row.label)
+        self.assertEqual(0, row.label)
 
     def test_prefix0(self):
         encoding = create_test_encoding(

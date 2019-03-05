@@ -32,16 +32,15 @@ class SplitModelTest(TestCase):
     def test_can_find_split_original_file(self):
         """Split file can be found by id"""
         split = Split.objects.get(id=1)
-        log_file = split.original_log.get_file()
+        log_file = get_log(split.original_log)
 
         self.assertEqual(6, len(log_file))
-        self.assertEqual({}, split.config)
 
     def test_to_dict(self):
         split = Split.objects.get(id=1).to_dict()
-        self.assertEqual('single', split['type'])
-        self.assertEqual(general_example_filepath, split['original_log_path'])
-        self.assertEqual({}, split['config'])
+        self.assertEqual('single', split.type)
+        self.assertEqual(general_example_filepath, split.original_log.path)
+        self.assertEqual({}, split.to_dict())
 
 
 class FileUploadTests(APITestCase):

@@ -15,6 +15,8 @@ media
 # End of https://www.gitignore.io/api/django
 
 cache/log_cache/*
+cache/loaded_log_cache/*
+cache/labeled_log_cache/*
 !cache/log_cache/test_logs/
 dump.rdb
 

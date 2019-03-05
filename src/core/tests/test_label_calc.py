@@ -20,10 +20,8 @@ class Labelling(TestCase):
     def get_job():
         return create_test_job(split=repair_example(),
                                encoding=create_test_encoding(prefix_length=5,
-                                                             padding=True
-                                                             ),
-                               job_type=JobTypes.LABELLING.value
-                               )
+                                                             padding=True),
+                               job_type=JobTypes.LABELLING.value)
 
     @unittest.skip('needs refactoring')
     def test_remaining_time(self):
@@ -33,7 +31,8 @@ class Labelling(TestCase):
 
     def test_next_activity(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
+        job.labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
+        job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'0': 2, 'Repair (Complex)': 306, 'Test Repair': 432, 'Inform User': 5,
                                   'Repair (Simple)': 138})
@@ -41,7 +40,8 @@ class Labelling(TestCase):
     @unittest.skip('needs refactoring')
     def test_remaining_custom_threshold(self):
         job = self.get_job()
-        job['label'] = LabelContainer(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value, threshold=1600)
+        job.labelling = create_test_labelling(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value, threshold=1600)
+        job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'true': 444, 'false': 439})
 
@@ -56,8 +56,10 @@ class Labelling(TestCase):
     def test_duration(self):
         """Trace atr, zero padding means prefix length has no effect"""
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.DURATION.value)
+        job.labelling = create_test_labelling(label_type=LabelTypes.DURATION.value)
+        job.save()
         result1, _ = calculate(job)
-        job['encoding'] = EncodingContainer(prefix_length=22, padding=ZERO_PADDING)
+        job.encoding = create_test_encoding(prefix_length=22, padding=True)
+        job.save()
         result2, _ = calculate(job)
         self.assertEqual(result1, result2)

@@ -2,7 +2,6 @@ import json
 import time
 
 from pandas import DataFrame
-from pm4py.objects.log.exporter.xes.factory import export_log
 from pm4py.objects.log.log import EventLog
 
 from src.cache.cache import get_labelled_logs, get_loaded_logs, \

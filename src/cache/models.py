@@ -14,12 +14,14 @@ class Cache(CommonModel):
 
 
 class LoadedLog(Cache):
+    train_log = models.FilePathField(path='cache/loaded_log_cache/')
+    test_log = models.FilePathField(path='cache/loaded_log_cache/')
+    additional_columns = models.FilePathField(path='cache/loaded_log_cache/')
+
+
+class LabelledLogs(Cache):
     train_log = models.FilePathField(path='cache/labeled_log_cache/')
     test_log = models.FilePathField(path='cache/labeled_log_cache/')
-    additional_columns = models.FilePathField(path='cache/labeled_log_cache/')
-
-
-class LabelledLogs(LoadedLog):
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     encoding = models.ForeignKey(Encoding, on_delete=models.DO_NOTHING, null=True)
     labelling = models.ForeignKey(Labelling, on_delete=models.DO_NOTHING, null=True)

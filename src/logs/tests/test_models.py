@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from src.logs.models import Log
 from src.split.models import Split
+from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_test_filepath
 
 
@@ -18,7 +19,7 @@ class LogModelTest(TestCase):
     def test_can_find_log_file(self):
         """Log file can be found by id"""
         log = Log.objects.get(id=1)
-        log_file = log.get_file()
+        log_file = get_log(log)
 
         self.assertEqual(6, len(log_file))
 

@@ -1,5 +1,5 @@
 from src.clustering.models import Clustering, ClusteringMethods
-from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes
+from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes, ValueEncodings
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
 from src.jobs.job_creator import get_prediction_method_config
 from src.jobs.models import Job, JobStatuses, JobTypes
@@ -34,12 +34,17 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value, log: Log 
     return split
 
 
-def create_test_encoding(prefix_length: int = 1, padding: bool = False,
+def create_test_encoding(prefix_length: int = 1,
+                         padding: bool = False,
+                         value_encoding: str = ValueEncodings.SIMPLE_INDEX.value,
+                         add_elapsed_time: bool = False,
                          task_generation_type: str = TaskGenerationTypes.ONLY_THIS.value) -> Encoding:
     encoding = Encoding.objects.get_or_create(
         data_encoding=DataEncodings.LABEL_ENCODER.value,
+        value_encoding=value_encoding,
         prefix_length=prefix_length,
         padding=padding,
+        add_elapsed_time=add_elapsed_time,
         task_generation_type=task_generation_type)[0]
     print('encoding:', encoding)
     return encoding

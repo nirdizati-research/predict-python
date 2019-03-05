@@ -3,12 +3,14 @@ from django.test import TestCase
 from src.encoding.boolean_frequency import boolean
 from src.encoding.common import encode_label_logs, LabelContainer, LabelTypes
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
-from src.encoding.models import ValueEncodings
+from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.jobs.models import JobTypes
+from src.predictive_model.models import PredictionTypes
 from src.utils.event_attributes import unique_events
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath, general_example_train_filepath, create_test_log, \
-    general_example_test_filename, general_example_train_filename
+    general_example_test_filename, general_example_train_filename, create_test_job, create_test_encoding, \
+    create_test_predictive_model, create_test_labelling
 
 
 class TestBooleanSplit(TestCase):
@@ -17,11 +19,17 @@ class TestBooleanSplit(TestCase):
                                            log_path=general_example_test_filepath))
         training_log = get_log(create_test_log(log_name=general_example_train_filename,
                                            log_path=general_example_train_filepath))
-        self.training_df, self.test_df = encode_label_logs(training_log, test_log,
-                                                           EncodingContainer(ValueEncodings.BOOLEAN.value),
-                                                           JobTypes.PREDICTION.value,
-                                                           LabelContainer(add_elapsed_time=True))
-
+        self.training_df, self.test_df = encode_label_logs(training_log,
+                                                           test_log,
+                                                           create_test_job(
+                                                               encoding=create_test_encoding(
+                                                                   value_encoding=ValueEncodings.BOOLEAN.value,
+                                                                   add_elapsed_time=True
+                                                               ),
+                                                               predictive_model=create_test_predictive_model(
+                                                                   predictive_model=PredictionTypes.CLASSIFICATION.value
+                                                               )
+                                                           ))
     def test_shape(self):
         self.assert_shape(self.training_df, (4, 11))
         self.assert_shape(self.test_df, (2, 11))
@@ -39,14 +47,19 @@ class TestGeneralTest(TestCase):
     """Making sure it actually works"""
 
     def setUp(self):
-        self.log = get_log(create_test_log(log_name=general_example_train_filename,
-                                           log_path=general_example_train_filepath))
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
-        self.label = LabelContainer(add_elapsed_time=True)
-        self.encoding = EncodingContainer(ValueEncodings.BOOLEAN.value)
+        self.encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1
+        )
+        self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
 
     def test_header(self):
-        df = boolean(self.log, self.event_names, self.label, self.encoding)
+        df = boolean(self.log, self.event_names, self.labelling, self.encoding)
         names = ['register request', 'examine casually', 'check ticket', 'decide',
                  'reinitiate request', 'examine thoroughly',
                  'reject request', 'trace_id', 'label', 'elapsed_time']
@@ -54,7 +67,7 @@ class TestGeneralTest(TestCase):
             self.assertIn(name, df.columns.values.tolist())
 
     def test_prefix1(self):
-        df = boolean(self.log, self.event_names, self.label, self.encoding)
+        df = boolean(self.log, self.event_names, self.labelling, self.encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -67,21 +80,30 @@ class TestGeneralTest(TestCase):
         self.assertEqual(520920.0, row2.label)
 
     def test_prefix1_no_label(self):
-        df = boolean(self.log, self.event_names, LabelContainer(LabelTypes.NO_LABEL.value), self.encoding)
+        labelling = create_test_labelling(label_type=LabelTypes.NO_LABEL.value)
+        df = boolean(self.log, self.event_names, labelling, self.encoding)
 
         self.assertEqual(df.shape, (2, 8))
         self.assertNotIn('label', df.columns.values.tolist())
 
     def test_prefix1_no_elapsed_time(self):
-        label = LabelContainer()
-        df = boolean(self.log, self.event_names, label, self.encoding)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1
+        )
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (2, 9))
         self.assertNotIn('elapsed_time', df.columns.values.tolist())
 
     def test_prefix2(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=2)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -95,8 +117,12 @@ class TestGeneralTest(TestCase):
         self.assertEqual(445080.0, row2.label)
 
     def test_prefix5(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=5)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=5)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -104,8 +130,12 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=10)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (1, 10))
         row1 = df[df.trace_id == '5'].iloc[0]
@@ -113,16 +143,24 @@ class TestGeneralTest(TestCase):
                              row1.values.tolist())
 
     def test_prefix10_padding(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, padding=ZERO_PADDING)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.BOOLEAN.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=10,
+            padding=True)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (2, 10))
         row1 = df[df.trace_id == '4'].iloc[0]
         self.assertListEqual(['4', True, False, True, True, False, True, True, 520920.0, 0.0], row1.values.tolist())
 
     def test_prefix10_all_in_one(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, generation_type=ALL_IN_ONE)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(value_encoding=ValueEncodings.BOOLEAN.value,
+                                        prefix_length=10,
+                                        add_elapsed_time=True,
+                                        task_generation_type=ALL_IN_ONE)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (10, 10))
         row1 = df[df.trace_id == '5'].iloc[9]
@@ -131,9 +169,12 @@ class TestGeneralTest(TestCase):
         self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_padding_all_in_one(self):
-        encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=10, padding=ZERO_PADDING,
-                                     generation_type=ALL_IN_ONE)
-        df = boolean(self.log, self.event_names, self.label, encoding)
+        encoding = create_test_encoding(value_encoding=ValueEncodings.BOOLEAN.value,
+                                        prefix_length=10,
+                                        add_elapsed_time=True,
+                                        padding=True,
+                                        task_generation_type=ALL_IN_ONE)
+        df = boolean(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (15, 10))
         row1 = df[df.trace_id == '4'].iloc[4]

@@ -7,7 +7,7 @@ from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_test_filepath
+from src.utils.tests_utils import general_example_test_filepath, create_test_log, general_example_test_filename
 
 
 class Complex(TestCase):

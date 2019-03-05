@@ -4,7 +4,7 @@ from src.utils.file_service import get_log
 from src.utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
     trace_attributes, events_in_trace, max_events_in_log
 from src.utils.tests_utils import general_example_filepath, financial_log_filepath, general_example_filename, \
-    create_test_log
+    create_test_log, financial_log_filename
 
 
 class LogTest(TestCase):
@@ -38,7 +38,8 @@ class LogTest(TestCase):
         self.assertEqual(3, result['2011-01-06'])
 
     def test_trace_attributes(self):
-        self.log = get_log(financial_log_filepath)
+        self.log = get_log(create_test_log(log_name=financial_log_filename,
+                                           log_path=financial_log_filepath))
         result = trace_attributes(self.log)
         self.assertEqual(2, len(result))
         self.assertDictEqual({'name': 'AMOUNT_REQ', 'type': 'number', 'example': '20000'},

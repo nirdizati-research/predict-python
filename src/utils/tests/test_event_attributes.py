@@ -17,17 +17,20 @@ class EventAttributes(TestCase):
         self.assertEqual(8, len(events))
 
     def test_multiple_unique_events(self):
-        test_log = get_log(general_example_test_filepath)
+        test_log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         training_log = get_log(general_example_train_filepath)
         events = unique_events2(training_log, test_log)
         self.assertEqual(8, len(events))
 
     def test_event_attributes(self):
-        log = get_log(general_example_test_filepath)
+        log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         attributes = get_event_attributes(log)
         self.assertListEqual(attributes, ['Activity', 'Costs', 'Resource', 'org:resource'])
 
     def test_global_event_attributes(self):
-        log = get_log(general_example_test_filepath)
+        log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         attributes = get_additional_columns(log)
         self.assertListEqual(attributes['event_attributes'], ['Activity', 'Costs', 'Resource', 'org:resource'])

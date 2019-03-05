@@ -3,12 +3,13 @@ from django.test import TestCase
 from src.encoding.boolean_frequency import frequency
 from src.encoding.common import encode_label_logs, LabelContainer, LabelTypes
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
-from src.encoding.models import ValueEncodings
+from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.jobs.models import JobTypes
 from src.utils.event_attributes import unique_events
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_test_filepath, general_example_train_filepath, create_test_log, \
-    general_example_test_filename, general_example_train_filename
+    general_example_test_filename, general_example_train_filename, create_test_encoding, create_test_labelling, \
+    create_test_job
 
 
 class TestFrequencySplit(TestCase):
@@ -17,10 +18,19 @@ class TestFrequencySplit(TestCase):
                                            log_path=general_example_test_filepath))
         training_log = get_log(create_test_log(log_name=general_example_train_filename,
                                            log_path=general_example_train_filepath))
-        self.training_df, self.test_df = encode_label_logs(training_log, test_log,
-                                                           EncodingContainer(ValueEncodings.FREQUENCY.value),
-                                                           JobTypes.PREDICTION.value,
-                                                           LabelContainer(add_elapsed_time=True))
+        self.encoding = create_test_encoding(
+                       value_encoding=ValueEncodings.FREQUENCY.value,
+                       add_elapsed_time=True,
+                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+                       prefix_length=1)
+        self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
+
+        self.training_df, self.test_df = encode_label_logs(training_log,
+                                                           test_log,
+                                                           create_test_job(
+                                                               encoding=self.encoding,
+                                                               labelling=self.labelling
+                                                           ))
 
     def test_shape(self):
         self.assert_shape(self.training_df, (4, 11))

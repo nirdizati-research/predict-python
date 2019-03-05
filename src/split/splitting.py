@@ -4,7 +4,7 @@ from typing import Union
 from pm4py.objects.log.log import EventLog
 from sklearn.model_selection import train_test_split
 
-from src.split.models import Split, SplitTypes, SplittingMethods
+from src.split.models import Split, SplitTypes, SplitOrderingMethods
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 
@@ -30,13 +30,13 @@ def prepare_logs(split: Split):
 def _split_single_log(split: Split):
     log = get_log(split.original_log)
     print("\t\tExecute single split ID {}, split_type {}, test_size {}".format(split.id, split.type, split.test_size))
-    if split.splitting_method == SplittingMethods.SPLIT_TEMPORAL.value:
+    if split.splitting_method == SplitOrderingMethods.SPLIT_TEMPORAL.value:
         return _temporal_split(log, split.test_size)
-    elif split.splitting_method == SplittingMethods.SPLIT_STRICT_TEMPORAL.value:
+    elif split.splitting_method == SplitOrderingMethods.SPLIT_STRICT_TEMPORAL.value:
         return _temporal_split_strict(log, split.test_size)
-    elif split.splitting_method == SplittingMethods.SPLIT_SEQUENTIAL.value:
+    elif split.splitting_method == SplitOrderingMethods.SPLIT_SEQUENTIAL.value:
         return _split_log(log, split.test_size, shuffle=False)
-    elif split.splitting_method == SplittingMethods.SPLIT_RANDOM.value:
+    elif split.splitting_method == SplitOrderingMethods.SPLIT_RANDOM.value:
         return _split_log(log, split.test_size, random_state=None)
     else:
         raise ValueError("Unknown splitting method", split.splitting_method)

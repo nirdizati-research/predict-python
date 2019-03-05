@@ -68,16 +68,21 @@ class TestLabelSimpleIndex(TestCase):
                                   ))
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 52903968, 34856381, 32171502, 1149821, 70355923, 32171502, 34856381,
-                                       1149821, 70355923, 34856381])
+        self.assertListEqual(trace_5, ['5', 1, 2, 1, 1, 2, 0, 0, 1, 0, 'examine casually'])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4, ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0])
 
     def test_remaining_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
+
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
+
         _, df = encode_label_logs(self.train_log, self.test_log,
                                   create_test_job(
-                                      encoding=self.encoding,
+                                      encoding=encoding,
                                       labelling=labelling,
                                       predictive_model=create_test_predictive_model(
                                           predictive_model=PredictiveModels.CLASSIFICATION.value)
@@ -141,9 +146,13 @@ class TestLabelSimpleIndex(TestCase):
 
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
-            encoding=self.encoding,
+            encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
@@ -215,9 +224,13 @@ class TestLabelSimpleIndex(TestCase):
 
     def test_duration(self):
         labelling = create_test_labelling(label_type=LabelTypes.DURATION.value)
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
-            encoding=self.encoding,
+            encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
@@ -604,7 +617,7 @@ class TestLabelBoolean(TestCase):
     def test_attribute_number(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(

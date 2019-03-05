@@ -18,18 +18,18 @@ SPLIT_TYPE_MAPPINGS = (
 )
 
 
-class SplittingMethods(Enum):
+class SplitOrderingMethods(Enum):
     SPLIT_SEQUENTIAL = 'sequential'
     SPLIT_TEMPORAL = 'temporal'
     SPLIT_RANDOM = 'random'
     SPLIT_STRICT_TEMPORAL = 'strict_temporal'
 
 
-SPLITTING_METHOD_MAPPINGS = (
-    (SplittingMethods.SPLIT_SEQUENTIAL.value, 'sequential'),
-    (SplittingMethods.SPLIT_TEMPORAL.value, 'temporal'),
-    (SplittingMethods.SPLIT_RANDOM.value, 'random'),
-    (SplittingMethods.SPLIT_STRICT_TEMPORAL.value, 'strict_temporal')
+SPLIT_ORDERING_METHOD_MAPPINGS = (
+    (SplitOrderingMethods.SPLIT_SEQUENTIAL.value, 'sequential'),
+    (SplitOrderingMethods.SPLIT_TEMPORAL.value, 'temporal'),
+    (SplitOrderingMethods.SPLIT_RANDOM.value, 'random'),
+    (SplitOrderingMethods.SPLIT_STRICT_TEMPORAL.value, 'strict_temporal')
 )
 
 
@@ -40,7 +40,7 @@ class Split(CommonModel):
                                      null=True)
     test_size = models.FloatField(default=0.2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True,
                                   null=True)
-    splitting_method = models.CharField(choices=SPLITTING_METHOD_MAPPINGS, default='sequential', max_length=20)
+    splitting_method = models.CharField(choices=SPLIT_ORDERING_METHOD_MAPPINGS, default='sequential', max_length=20)
     train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
     additional_columns = models.CharField(max_length=30, blank=True, null=True)

@@ -9,7 +9,7 @@ from src.labelling.models import Labelling, LabelTypes, ThresholdTypes
 from src.logs.models import Log
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModel, PredictiveModels
-from src.split.models import Split, SplitTypes
+from src.split.models import Split, SplitTypes, SplitOrderingMethods
 
 bpi_log_filepath = "cache/log_cache/test_logs/BPI Challenge 2017.xes.gz"
 general_example_filepath = 'cache/log_cache/test_logs/general_example.xes'
@@ -30,6 +30,8 @@ def create_test_log(log_name: str = 'general_example.xes',
 
 
 def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
+                      split_ordering_method: str = SplitOrderingMethods.SPLIT_SEQUENTIAL.value,
+                      test_size: float = 0.2,
                       original_log: Log = None,
                       train_log: Log = None,
                       test_log: Log = None):
@@ -37,13 +39,17 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
         if original_log is None:
             original_log = create_test_log()
         split = Split.objects.get_or_create(type=split_type,
-                                        original_log=original_log)[0]
+                                            original_log=original_log,
+                                            test_size=test_size,
+                                            splitting_method=split_ordering_method)[0]
     elif split_type == SplitTypes.SPLIT_DOUBLE.value:
         if train_log is None:
             train_log = create_test_log()
         if test_log is None:
             test_log = create_test_log()
-        split = Split.objects.get_or_create(type=split_type, train_log=train_log, test_log=test_log)[0]
+        split = Split.objects.get_or_create(type=split_type,
+                                            train_log=train_log,
+                                            test_log=test_log)[0]
     else:
         raise ValueError('split_type', split_type, 'not recognised')
     print('split:', split)

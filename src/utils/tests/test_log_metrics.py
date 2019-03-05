@@ -3,13 +3,15 @@ from django.test import TestCase
 from src.utils.file_service import get_log
 from src.utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
     trace_attributes, events_in_trace, max_events_in_log
-from src.utils.tests_utils import general_example_filepath, financial_log_filepath
+from src.utils.tests_utils import general_example_filepath, financial_log_filepath, general_example_filename, \
+    create_test_log
 
 
 class LogTest(TestCase):
 
     def setUp(self):
-        self.log = get_log(general_example_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_filename,
+                                           log_path=general_example_filepath))
 
     def test_events_by_date(self):
         result = events_by_date(self.log)

@@ -9,7 +9,7 @@ from src.labelling.label_container import *
 from src.predictive_model.models import PredictionTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_test_filepath
+from src.utils.tests_utils import general_example_test_filepath, create_test_log, general_example_test_filename
 
 
 # TODO: refactor tests
@@ -17,7 +17,8 @@ from src.utils.tests_utils import general_example_test_filepath
 
 class TestLabelSimpleIndex(TestCase):
     def setUp(self):
-        self.log = get_log(general_example_test_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(prefix_length=2)
 
@@ -297,7 +298,8 @@ class TestLabelComplex(TestCase):
 
 class TestLabelBoolean(TestCase):
     def setUp(self):
-        self.log = get_log(general_example_test_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
         self.encoding = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=2)
 

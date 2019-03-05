@@ -2,13 +2,14 @@ from django.test import TestCase
 
 from src.utils import log_metrics
 from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_filepath
+from src.utils.tests_utils import general_example_filepath, create_test_log, general_example_filename
 from src.utils.time_metrics import *
 
 
 class TimeMetrics(TestCase):
     def setUp(self):
-        self.log = get_log(general_example_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_filename,
+                                           log_path=general_example_filepath))
 
     def test_calculate_remaining_time(self):
         trace = self.log[0]

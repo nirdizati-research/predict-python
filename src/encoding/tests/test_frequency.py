@@ -12,7 +12,8 @@ from src.utils.tests_utils import general_example_test_filepath, general_example
 
 class TestFrequencySplit(TestCase):
     def setUp(self):
-        test_log = get_log(general_example_test_filepath)
+        test_log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         training_log = get_log(general_example_train_filepath)
         self.training_df, self.test_df = encode_label_logs(training_log, test_log,
                                                            EncodingContainer(ValueEncodings.FREQUENCY.value),
@@ -36,7 +37,8 @@ class TestGeneralTest(TestCase):
     """Making sure it actually works"""
 
     def setUp(self):
-        self.log = get_log(general_example_test_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer(ValueEncodings.FREQUENCY.value)

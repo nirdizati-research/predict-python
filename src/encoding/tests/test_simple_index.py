@@ -9,12 +9,13 @@ from src.labelling.label_container import LabelContainer
 from src.predictive_model.models import PredictionTypes
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
-    general_example_test_filepath
+    general_example_test_filepath, general_example_test_filename, create_test_log
 
 
 class TestSplitLogExample(TestCase):
     def setUp(self):
-        self.test_log = get_log(general_example_test_filepath)
+        self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.training_log = get_log(general_example_train_filepath)
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer()
@@ -70,7 +71,8 @@ class TestGeneralTest(TestCase):
     """Making sure it actually works"""
 
     def setUp(self):
-        self.log = get_log(general_example_test_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.label = LabelContainer(add_elapsed_time=True)
         self.encoding = EncodingContainer()
 

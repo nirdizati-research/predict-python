@@ -12,7 +12,8 @@ from src.utils.tests_utils import general_example_test_filepath
 
 class Complex(TestCase):
     def setUp(self):
-        self.log = get_log(general_example_test_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
         self.label = LabelContainer(add_elapsed_time=True)
         self.add_col = get_additional_columns(self.log)

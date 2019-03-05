@@ -4,12 +4,13 @@ from src.utils.event_attributes import unique_events, unique_events2, get_event_
     get_additional_columns
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_test_filepath, \
-    general_example_train_filepath
+    general_example_train_filepath, general_example_test_filename, create_test_log
 
 
 class EventAttributes(TestCase):
     def setUp(self):
-        self.log = get_log(general_example_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_test_filename,
+                                           log_path=general_example_test_filepath))
 
     def test_unique_events(self):
         events = unique_events(self.log)

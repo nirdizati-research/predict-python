@@ -21,7 +21,8 @@ from src.predictive_model.models import PredictiveModels
 
 class TestClassification(TestCase):
     @staticmethod
-    def get_job(method=ClassificationMethods.KNN.value, encoding_method=ValueEncodings.SIMPLE_INDEX.value, padding=ZERO_PADDING,
+    def get_job(method=ClassificationMethods.KNN.value, encoding_method=ValueEncodings.SIMPLE_INDEX.value,
+                padding=ZERO_PADDING,
                 label=LabelTypes.DURATION.value,
                 add_elapsed_time=False):
         json = dict()

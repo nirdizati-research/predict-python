@@ -94,7 +94,7 @@ def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
 
 def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.value,
                            configuration: dict = None) -> Clustering:
-    clustering = Clustering.init(clustering_type, configuration)[0]
+    clustering = Clustering.init(clustering_type, configuration)
     return clustering
 
 

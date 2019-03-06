@@ -1,9 +1,7 @@
 from django.test import TestCase
 
 from src.encoding.complex_last_payload import last_payload
-from src.encoding.encoding_container import EncodingContainer, ALL_IN_ONE, ZERO_PADDING
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
-from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
@@ -19,17 +17,17 @@ class LastPayload(TestCase):
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         self.add_col = get_additional_columns(self.log)
         self.encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=1)
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1)
 
     def test_shape(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=2)
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         self.assertEqual((2, 9), df.shape)
@@ -48,7 +46,8 @@ class LastPayload(TestCase):
                              ["4", 'register request', "register request", "50", 'Pete', "Pete", 0.0, 520920.0])
 
     def test_prefix1_no_label(self):
-        df = last_payload(self.log, create_test_labelling(label_type=LabelTypes.NO_LABEL.value), self.encoding, self.add_col)
+        df = last_payload(self.log, create_test_labelling(label_type=LabelTypes.NO_LABEL.value), self.encoding,
+                          self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -59,10 +58,11 @@ class LastPayload(TestCase):
 
     def test_prefix1_no_elapsed_time(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=1)
-        df = last_payload(self.log, create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value), encoding, self.add_col)
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1)
+        df = last_payload(self.log, create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value), encoding,
+                          self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
         self.assertListEqual(row1,
@@ -73,10 +73,10 @@ class LastPayload(TestCase):
 
     def test_prefix2(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             add_elapsed_time=True,
-                       prefix_length=2)
+            prefix_length=2)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         row1 = df[(df.trace_id == '5')].iloc[0].tolist()
@@ -90,10 +90,10 @@ class LastPayload(TestCase):
 
     def test_prefix5(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             add_elapsed_time=True,
-                       prefix_length=5)
+            prefix_length=5)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         self.assertEqual(df.shape, (2, 12))
@@ -101,10 +101,10 @@ class LastPayload(TestCase):
 
     def test_prefix10(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             add_elapsed_time=True,
-                       prefix_length=10)
+            prefix_length=10)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         self.assertEqual(df.shape, (1, 17))
@@ -112,10 +112,10 @@ class LastPayload(TestCase):
 
     def test_prefix10_zero_padding(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             add_elapsed_time=True,
-                       prefix_length=10,
+            prefix_length=10,
             padding=True)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
@@ -124,10 +124,10 @@ class LastPayload(TestCase):
 
     def test_prefix10_all_in_one(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,
             add_elapsed_time=True,
-                       prefix_length=10)
+            prefix_length=10)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         self.assertEqual(df.shape, (10, 17))
@@ -135,10 +135,10 @@ class LastPayload(TestCase):
 
     def test_prefix10_zero_padding_all_in_one(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.LAST_PAYLOAD.value,
-                       task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,
+            value_encoding=ValueEncodings.LAST_PAYLOAD.value,
+            task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,
             add_elapsed_time=True,
-                       prefix_length=10, padding=True)
+            prefix_length=10, padding=True)
         df = last_payload(self.log, self.labelling, encoding, self.add_col)
 
         self.assertEqual(df.shape, (15, 17))

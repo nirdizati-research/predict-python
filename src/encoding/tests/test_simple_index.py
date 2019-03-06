@@ -1,12 +1,18 @@
-import unittest
-
 from django.test import TestCase
 
 from src.encoding.common import encode_label_logs, LabelTypes
-from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, ALL_IN_ONE
 from src.encoding.models import TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import simple_index
-from src.labelling.label_container import LabelContainer
+from src.predictive_model.models import PredictiveModels
+from src.utils.file_service import get_log
+from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
+    general_example_test_filepath, general_example_test_filename, create_test_log, general_example_train_filename, \
+    create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling, general_example_filename
+from django.test import TestCase
+
+from src.encoding.common import encode_label_logs, LabelTypes
+from src.encoding.models import TaskGenerationTypes, ValueEncodings
+from src.encoding.simple_index import simple_index
 from src.predictive_model.models import PredictiveModels
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
@@ -17,23 +23,23 @@ from src.utils.tests_utils import general_example_filepath, general_example_trai
 class TestSplitLogExample(TestCase):
     def setUp(self):
         self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                           log_path=general_example_test_filepath))
+                                                log_path=general_example_test_filepath))
         self.training_log = get_log(create_test_log(log_name=general_example_train_filename,
-                                           log_path=general_example_train_filepath))
+                                                    log_path=general_example_train_filepath))
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         self.encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.SIMPLE_INDEX.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=1)
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1)
 
     def test_shape_training(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, create_test_job(
-                                      encoding=self.encoding,
-                                      labelling=self.labelling,
-                                      predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
-                                  ))
+            encoding=self.encoding,
+            labelling=self.labelling,
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
+        ))
         self.assert_shape(training_df, (4, 4))
         self.assert_shape(test_df, (2, 4))
 
@@ -51,11 +57,11 @@ class TestSplitLogExample(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=3)
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, create_test_job(
-                                      encoding=encoding,
-                                      labelling=self.labelling,
-                                      predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
-                                  ))
+            encoding=encoding,
+            labelling=self.labelling,
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
+        ))
         self.assertIn("prefix_1", training_df.columns.values)
         self.assertIn("prefix_2", training_df.columns.values)
         self.assertIn("prefix_3", training_df.columns.values)
@@ -71,11 +77,11 @@ class TestSplitLogExample(TestCase):
 
     def test_row_test(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, create_test_job(
-                                      encoding=self.encoding,
-                                      labelling=self.labelling,
-                                      predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
-                                  ))
+            encoding=self.encoding,
+            labelling=self.labelling,
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.CLASSIFICATION.value)
+        ))
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(1, row.prefix_1)
@@ -90,11 +96,11 @@ class TestSplitLogExample(TestCase):
             prefix_length=0)
         self.assertRaises(ValueError,
                           encode_label_logs, self.training_log, self.test_log, create_test_job(
-                                      encoding=encoding,
-                                      labelling=self.labelling,
-                                      predictive_model=create_test_predictive_model(
-                                          predictive_model=PredictiveModels.CLASSIFICATION.value)
-                                  ))
+                encoding=encoding,
+                labelling=self.labelling,
+                predictive_model=create_test_predictive_model(
+                    predictive_model=PredictiveModels.CLASSIFICATION.value)
+            ))
 
 
 class TestGeneralTest(TestCase):
@@ -105,10 +111,10 @@ class TestGeneralTest(TestCase):
                                            log_path=general_example_test_filepath))
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         self.encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.SIMPLE_INDEX.value,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             add_elapsed_time=True,
-                       prefix_length=1)
+            prefix_length=1)
 
     def test_header(self):
         df = simple_index(self.log, self.labelling, self.encoding)
@@ -244,8 +250,9 @@ class TestGeneralTest(TestCase):
             add_elapsed_time=True,
             prefix_length=12,
             padding=True)
-        df = simple_index(get_log(create_test_log(log_path=general_example_filepath, log_name=general_example_filename)),
-                          create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value), encoding)
+        df = simple_index(
+            get_log(create_test_log(log_path=general_example_filepath, log_name=general_example_filename)),
+            create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value), encoding)
 
         self.assertEqual(df.shape, (41, 15))
         row1 = df[df.trace_id == '4'].iloc[4]

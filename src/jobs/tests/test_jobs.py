@@ -57,7 +57,7 @@ class JobModelTest(TestCase):
 
     def test_create_models_config_missing(self):
         job = Job.objects.get(id=1)
-        del job.config['create_models']
+        del job.config['create_models']  # TODO fixme should we add this field?
         job.save()
         prediction_task(1)
 

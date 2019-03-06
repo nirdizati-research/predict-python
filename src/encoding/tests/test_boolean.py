@@ -17,7 +17,7 @@ class TestBooleanSplit(TestCase):
         test_log = get_log(create_test_log(log_name=general_example_test_filename,
                                            log_path=general_example_test_filepath))
         training_log = get_log(create_test_log(log_name=general_example_train_filename,
-                                           log_path=general_example_train_filepath))
+                                               log_path=general_example_train_filepath))
         self.training_df, self.test_df = encode_label_logs(training_log,
                                                            test_log,
                                                            create_test_job(
@@ -29,6 +29,7 @@ class TestBooleanSplit(TestCase):
                                                                    predictive_model=PredictiveModels.CLASSIFICATION.value
                                                                )
                                                            ))
+
     def test_shape(self):
         self.assert_shape(self.training_df, (4, 11))
         self.assert_shape(self.test_df, (2, 11))

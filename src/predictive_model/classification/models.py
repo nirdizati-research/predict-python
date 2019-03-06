@@ -64,7 +64,7 @@ class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
 
     @staticmethod
-    def init(configuration: dict):
+    def init(configuration: dict) -> PredictiveModel:
         classifier_type = configuration['prediction_method']
         if classifier_type == ClassificationMethods.DECISION_TREE.value:
             default_configuration = classification_decision_tree()
@@ -150,7 +150,8 @@ class Classification(PredictiveModel):
                 eta0=configuration.get('eta0', default_configuration['eta0 ']),
                 power_t=configuration.get('power_t', default_configuration['power_t ']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change ']),
-                validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction ']),
+                validation_fraction=configuration.get('validation_fraction',
+                                                      default_configuration['validation_fraction ']),
                 average=configuration.get('average', default_configuration['average '])
             )[0]
         elif classifier_type == ClassificationMethods.PERCEPTRON.value:
@@ -164,7 +165,8 @@ class Classification(PredictiveModel):
                 tol=configuration.get('tol', default_configuration['tol']),
                 shuffle=configuration.get('shuffle', default_configuration['shuffle']),
                 eta0=configuration.get('eta0', default_configuration['eta0']),
-                validation_fraction=configuration.get('validation_fraction', default_configuration['validation_fraction']),
+                validation_fraction=configuration.get('validation_fraction',
+                                                      default_configuration['validation_fraction']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change'])
             )[0]
         elif classifier_type == ClassificationMethods.NN.value:

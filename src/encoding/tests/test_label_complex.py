@@ -38,7 +38,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual((2, 13), df.shape)
 
     def test_no_label_zero_padding(self):
@@ -57,7 +58,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 53))
 
     def test_remaining_time(self):
@@ -68,7 +70,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 14))
 
     def test_label_remaining_time_with_elapsed_time_custom_threshold(self):
@@ -86,7 +89,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.test_log))
         self.assertEqual(df.shape, (2, 15))
 
     def test_remaining_time_zero_padding(self):
@@ -97,7 +101,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 55))
 
     def test_add_executed_events(self):
@@ -108,12 +113,17 @@ class TestLabelComplex(TestCase):
                                         add_executed_events=True,
                                         add_elapsed_time=True)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
-            encoding=encoding,
-            labelling=labelling,
-            predictive_model=create_test_predictive_model(
-                predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        _, df = encode_label_logs(
+            self.train_log,
+            self.test_log,
+            create_test_job(
+                encoding=encoding,
+                labelling=labelling,
+                predictive_model=create_test_predictive_model(
+                    predictive_model=PredictiveModels.CLASSIFICATION.value)
+            ),
+            get_additional_columns(self.train_log)
+        )
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('executed_events' in df.columns.values.tolist())
         self.assertListEqual(df['executed_events'].tolist(), [2, 2])
@@ -131,7 +141,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('resources_used' in df.columns.values.tolist())
         self.assertListEqual(df['resources_used'].tolist(), [1, 1])
@@ -148,7 +159,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 15))
         self.assertTrue('new_traces' in df.columns.values.tolist())
         self.assertListEqual(df['new_traces'].tolist(), [0, 0])
@@ -161,7 +173,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 14))
 
     def test_next_activity_zero_padding_elapsed_time(self):
@@ -178,7 +191,8 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 55))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
 
@@ -190,16 +204,18 @@ class TestLabelComplex(TestCase):
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.train_log))
         self.assertEqual(df.shape, (2, 14))
 
     def test_attribute_number(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=self.encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
-        ))
+        ),
+                                  get_additional_columns(self.test_log))
         self.assertEqual(df.shape, (2, 14))

@@ -131,7 +131,7 @@ class TestLabelSimpleIndex(TestCase):
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ))
-        self.assertEqual(df.shape, (2, 11))
+        self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
                              ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 34856381, 1296240.0, False])
@@ -162,7 +162,7 @@ class TestLabelSimpleIndex(TestCase):
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
         encoding = create_test_encoding(
-            value_encoding=ValueEncodings.FREQUENCY.value,
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
             add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=10,
@@ -175,7 +175,7 @@ class TestLabelSimpleIndex(TestCase):
                                       predictive_model=create_test_predictive_model(
                                           predictive_model=PredictiveModels.CLASSIFICATION.value)
                                   ))
-        self.assertEqual(df.shape, (2, 11))
+        self.assertEqual(df.shape, (2, 13))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
@@ -268,7 +268,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=1)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -287,7 +287,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=1)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(

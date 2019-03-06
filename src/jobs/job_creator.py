@@ -22,30 +22,33 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                         item = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=generation_type,
-
                             split=split,
                             encoding=Encoding.objects.get_or_create(
-                                data_encoding=encMethod,
-                                # TODO: @HitLuca [value_encoding=,]
-                                additional_features=label['add_remaining_time'] or label['add_elapsed_time'] or label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
-                                temporal_features=label['add_remaining_time'] or label['add_elapsed_time'],
-                                intercase_features=label['add_executed_events'] or label['add_resources_used'] or label['add_new_traces'],
-                                prefix_len=i,
-                                padding=config['encoding']['padding']
-                            ),
+                                data_encoding='label_encoder',
+                                value_encoding=encMethod,
+                                add_elapsed_time=config['label'].get('add_elapsed_time', False),
+                                add_remaining_time=config['label'].get('add_remaining_time', False),
+                                add_executed_events=config['label'].get('add_executed_events', False),
+                                add_resources_used=config['label'].get('add_resources_used', False),
+                                add_new_traces=config['label'].get('add_new_traces', False),
+                                prefix_length=i,
+                                # TODO static check?
+                                padding=True if config['encoding']['padding'] == 'zero_padding' else False,
+                                task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            )[0],
                             labelling=Labelling.objects.get_or_create(
                                 type=label['type'],
-                                attribute_name=label['attribute_name'],
+                                # TODO static check?
+                                attribute_name=label['attribute_name'] if label[
+                                                                              'attribute_name'] is not None else 'label',
                                 threshold_type=label['threshold_type'],
                                 threshold=label['threshold']
-                            ),
+                            )[0],
                             clustering=Clustering.init(clustering, configuration=None),
-                            predictive_model=PredictiveModel.init(configuration={
-                                **payload,
-                                'predictive_model': payload['type'],
-                                'prediction_method': method
-                            })
-                        )
+                            predictive_model=PredictiveModel.init(
+                                get_prediction_method_config(generation_type, method, payload)
+                            )
+                        )[0]
                         jobs.append(item)
                 else:
                     item = Job.objects.get_or_create(
@@ -64,19 +67,19 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                             task_generation_type=config['encoding'].get('generation_type', 'only_this')
-                        ),
+                        )[0],
                         labelling=Labelling.objects.get_or_create(
                             type=label['type'],
                             # TODO static check?
                             attribute_name=label['attribute_name'] if label['attribute_name'] is not None else 'label',
                             threshold_type=label['threshold_type'],
                             threshold=label['threshold']
-                        ),
+                        )[0],
                         clustering=Clustering.init(clustering, configuration=None),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )
-                    )
+                    )[0]
                     jobs.append(item)
 
     return jobs
@@ -115,24 +118,27 @@ def generate_labelling(split, payload):
                 type=JobTypes.LABELLING.value,
 
                 split=split,
-                encoding=Encoding.objects.get_or_create( #TODO fixme
+                encoding=Encoding.objects.get_or_create(  # TODO fixme
                     data_encoding='label_encoder',
-                    #TODO: @HitLuca [value_encoding=,]
-                    additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
-                                        payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
+                    # TODO: @HitLuca [value_encoding=,]
+                    additional_features=payload['label']['add_remaining_time'] or payload['label'][
+                        'add_elapsed_time'] or
+                                        payload['label']['add_executed_events'] or payload['label'][
+                                            'add_resources_used'] or
                                         payload['label']['add_new_traces'],
                     temporal_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'],
-                    intercase_features= payload['label']['add_executed_events'] or payload['label']['add_resources_used'] or
-                                        payload['label']['add_new_traces'],
+                    intercase_features=payload['label']['add_executed_events'] or payload['label'][
+                        'add_resources_used'] or
+                                       payload['label']['add_new_traces'],
                     prefix_len=i,
                     padding=payload['encoding']['padding']
-                ),
+                )[0],
                 labelling=Labelling.objects.get_or_create(
                     type=payload['label']['type'],
                     attribute_name=payload['label']['attribute_name'],
                     threshold_type=payload['label']['threshold_type'],
                     threshold=payload['label']['threshold']
-                )
+                )[0]
             )
             jobs.append(item)
     else:
@@ -141,7 +147,7 @@ def generate_labelling(split, payload):
             type=JobTypes.LABELLING.value,
 
             split=split,
-            encoding=Encoding.objects.get_or_create( #TODO fixme
+            encoding=Encoding.objects.get_or_create(  # TODO fixme
                 data_encoding='label_encoder',
                 # TODO: @HitLuca [value_encoding=,]
                 additional_features=payload['label']['add_remaining_time'] or payload['label']['add_elapsed_time'] or
@@ -152,13 +158,13 @@ def generate_labelling(split, payload):
                                    payload['label']['add_new_traces'],
                 prefix_len=payload['encoding']['prefix_length'],
                 padding=payload['encoding']['padding']
-            ),
+            )[0],
             labelling=Labelling.objects.get_or_create(
                 type=payload['label']['type'],
                 attribute_name=payload['label']['attribute_name'],
                 threshold_type=payload['label']['threshold_type'],
                 threshold=payload['label']['threshold']
-            )
+            )[0]
         )
         jobs.append(item)
 
@@ -177,7 +183,7 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                             status=JobStatuses.CREATED.value,
                             type=payload['type'],
                             split=split,
-                            encoding=Encoding.objects.get_or_create( #TODO fixme
+                            encoding=Encoding.objects.get_or_create(  # TODO fixme
                                 data_encoding=encMethod,
                                 # TODO: @HitLuca [value_encoding=,]
                                 additional_features=payload['label']['add_remaining_time'] or payload['label'][
@@ -213,7 +219,7 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                         type=payload['type'],
 
                         split=split,
-                        encoding=Encoding.objects.get_or_create( #TODO fixme
+                        encoding=Encoding.objects.get_or_create(  # TODO fixme
                             data_encoding='label_encoder',
                             # TODO: @HitLuca [value_encoding=,]
                             additional_features=payload['label']['add_remaining_time'] or payload['label'][
@@ -244,7 +250,6 @@ def update(split, payload):  # TODO adapt to allow selecting the predictive_mode
                     )
                     jobs.append(item)
     return jobs
-
 
 # def create_config(payload: dict, enc_method: str, clustering: str, method: str, prefix_length: int):
 #     """Turn lists to single values"""

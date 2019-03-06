@@ -143,7 +143,7 @@ class Complex(TestCase):
         self.assertFalse(df.isnull().values.any())
 
     def test_prefix10_zero_padding_all_in_one(self):
-        encoding =create_test_encoding(
+        encoding = create_test_encoding(
             value_encoding=ValueEncodings.COMPLEX.value,
             add_elapsed_time=True,
             task_generation_type=TaskGenerationTypes.ALL_IN_ONE.value,

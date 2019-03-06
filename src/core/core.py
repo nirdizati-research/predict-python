@@ -76,7 +76,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                         EventLog(test_log),
                         test_name + '.xes'
                     )
-                    job.split.additional_columns = str(train_name + test_name) #TODO: find better naming policy
+                    job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
                     job.save()
 
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
@@ -104,7 +104,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     """
     model_split = None
 
-    #TODO fixme this needs to be fixed in the interface
+    # TODO fixme this needs to be fixed in the interface
     # if job['incremental_train']['base_model'] is not None:
     #     job['type'] = JobTypes.UPDATE.value
 
@@ -140,6 +140,7 @@ def _init_clusterer(clustering: Clustering, train_data: DataFrame):
     clusterer = Clustering(clustering)
     clusterer.fit(train_data.drop(['trace_id', 'label'], 1))
     return clusterer
+
 
 def runtime_calculate(run_log: list, model: dict) -> dict:
     """calculate the predictive_model's score for runtime tasks

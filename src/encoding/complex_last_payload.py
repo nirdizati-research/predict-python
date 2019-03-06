@@ -16,7 +16,8 @@ def complex(log: EventLog, labelling: Labelling, encoding: Encoding, additional_
 
 
 def last_payload(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
-    return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_last_payload, _data_last_payload)
+    return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_last_payload,
+                                  _data_last_payload)
 
 
 def _encode_complex_latest(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict,
@@ -106,7 +107,8 @@ def _data_last_payload(trace: list, prefix_length: int, additional_columns: dict
     return data
 
 
-def _trace_to_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_index: int, data_fun: Callable, columns_len: int,
+def _trace_to_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_index: int, data_fun: Callable,
+                  columns_len: int,
                   atr_classifier=None, executed_events=None, resources_used=None, new_traces=None,
                   additional_columns: dict = None) -> list:
     trace_row = [trace.attributes["concept:name"]]

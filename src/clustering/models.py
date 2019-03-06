@@ -26,9 +26,9 @@ class Clustering(CommonModel):
             return NoClustering.objects.get_or_create(
                 pk=1,
                 clustering_method=clustering
-            )
+            )[0]
         elif clustering == ClusteringMethods.KMEANS.value:
-            from src.clustering.methods_default_config import clustering_kmeans #TODO fixme
+            from src.clustering.methods_default_config import clustering_kmeans  # TODO fixme
             default_configuration = clustering_kmeans()
             return KMeans.objects.get_or_create(
                 clustering_method=clustering,
@@ -37,11 +37,12 @@ class Clustering(CommonModel):
                 n_init=configuration.get('n_init', default_configuration['n_init']),
                 max_iter=configuration.get('max_iter', default_configuration['max_iter']),
                 tol=configuration.get('tol', default_configuration['tol']),
-                precompute_distances=configuration.get('precompute_distances', default_configuration['precompute_distances']),
+                precompute_distances=configuration.get('precompute_distances',
+                                                       default_configuration['precompute_distances']),
                 random_state=configuration.get('random_state', default_configuration['random_state']),
                 copy_x=configuration.get('copy_x', default_configuration['copy_x']),
                 algorithm=configuration.get('algorithm', default_configuration['algorithm'])
-            )
+            )[0]
         else:
             raise ValueError('configuration ', clustering, 'not recognized')
 

@@ -8,7 +8,7 @@ class Evaluation(CommonModel):
     @staticmethod
     def init(prediction_type, results):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
-            pass #TODO fixme
+            pass  # TODO fixme
             # if labels == BINARY:
             #     BinaryClassificationMetrics.objects.get_or_create(
             #         metrics='',

@@ -43,7 +43,7 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
     return training_log, test_log
 
 
-#TODO deprecate this function
+# TODO deprecate this function
 def encode_label_log(run_log: EventLog, encoding: Encoding, job_type: str, labelling: Labelling, event_names=None,
                      additional_columns=None, fit_encoder=False):
     encoded_log, _ = _encode_log(run_log, encoding, labelling, additional_columns)

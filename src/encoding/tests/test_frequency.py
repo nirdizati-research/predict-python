@@ -15,12 +15,12 @@ class TestFrequencySplit(TestCase):
         test_log = get_log(create_test_log(log_name=general_example_test_filename,
                                            log_path=general_example_test_filepath))
         training_log = get_log(create_test_log(log_name=general_example_train_filename,
-                                           log_path=general_example_train_filepath))
+                                               log_path=general_example_train_filepath))
         self.encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.FREQUENCY.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=1)
+            value_encoding=ValueEncodings.FREQUENCY.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1)
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
 
         self.training_df, self.test_df = encode_label_logs(training_log,
@@ -51,10 +51,10 @@ class TestGeneralTest(TestCase):
                                            log_path=general_example_test_filepath))
         self.event_names = unique_events(self.log)
         self.encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.FREQUENCY.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=1)
+            value_encoding=ValueEncodings.FREQUENCY.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=1)
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
 
     def test_header(self):
@@ -97,10 +97,10 @@ class TestGeneralTest(TestCase):
 
     def test_prefix2(self):
         encoding = create_test_encoding(
-                       value_encoding=ValueEncodings.FREQUENCY.value,
-                       add_elapsed_time=True,
-                       task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                       prefix_length=2)
+            value_encoding=ValueEncodings.FREQUENCY.value,
+            add_elapsed_time=True,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
         df = frequency(self.log, self.event_names, self.labelling, encoding)
 
         self.assertEqual(df.shape, (2, 10))

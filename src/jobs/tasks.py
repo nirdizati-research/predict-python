@@ -51,19 +51,22 @@ def save_models(to_model_split, job):
     if job.type == JobTypes.UPDATE.value or job.config['incremental_train']['base_model'] is not None:
         job.type = PredictiveModels.CLASSIFICATION.value
         filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(job.id, job.split.id,
-                                                                                          job.type,
-                                                                                          str(time.time()))
+                                                                                                job.type,
+                                                                                                str(time.time()))
     else:
-        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(job.id, job.split.id, job.type)
+        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(job.id, job.split.id,
+                                                                                               job.type)
     joblib.dump(to_model_split['classifier'], filename_model)
-    model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model, predtype=job.type)
+    model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
+                                                            predtype=job.type)
     if to_model_split['type'] == Clustering.KMEANS:  # TODO this will change when using more than one type of cluster
-        filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id, job.type)
+        filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id,
+                                                                                            job.type)
         joblib.dump(to_model_split['clusterer'], filename_clusterer)
         model_split.clusterer_path = filename_clusterer
         model_split.save()
     PredModels.objects.create(pk=job.id, split=model_split, type=job.type, log=log, config=job.config)
-    #TODO: integrateme
+    # TODO: integrateme
     # Job.predictive_model.model_path = filename_model
 
 

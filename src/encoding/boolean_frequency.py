@@ -34,7 +34,8 @@ def _encode_boolean_frequency(log: EventLog, event_names: list, labelling: Label
         if encoding.task_generation_type == TaskGenerationTypes.ALL_IN_ONE.value:
             for i in range(1, min(encoding.prefix_length + 1, len(trace) + 1)):
                 encoded_data.append(
-                    _trace_to_row(trace, encoding, i, labelling, event_names=event_names, atr_classifier=labelling.attribute_name,
+                    _trace_to_row(trace, encoding, i, labelling, event_names=event_names,
+                                  atr_classifier=labelling.attribute_name,
                                   **kwargs))
         else:
             encoded_data.append(

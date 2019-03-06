@@ -70,9 +70,9 @@ def create_multiple(request):
     elif payload['type'] == PredictiveModels.CLASSIFICATION.value:
         jobs = generate(split, payload)
     elif payload['type'] == PredictiveModels.REGRESSION.value:
-        jobs = generate(split, payload, PredictiveModels.REGRESSION)
+        jobs = generate(split, payload, PredictiveModels.REGRESSION.value)
     elif payload['type'] == PredictiveModels.TIME_SERIES_PREDICTION.value:
-        jobs = generate(split, payload, PredictiveModels.TIME_SERIES_PREDICTION)
+        jobs = generate(split, payload, PredictiveModels.TIME_SERIES_PREDICTION.value)
     elif payload['type'] == JobTypes.LABELLING.value:
         jobs = generate_labelling(split, payload)
     else:
@@ -80,5 +80,6 @@ def create_multiple(request):
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
         django_rq.enqueue(tasks.prediction_task, job.id)
+
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)

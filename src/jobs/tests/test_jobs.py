@@ -1,4 +1,5 @@
 import unittest
+from pprint import pprint
 
 from django.test import TestCase
 from django_rq.queues import get_queue
@@ -7,6 +8,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from src.core.tests.common import add_default_config
 from src.jobs.models import Job, JobStatuses
+from src.jobs.serializers import JobSerializer
 from src.jobs.tasks import prediction_task
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import ThresholdTypes
@@ -20,6 +22,10 @@ from src.utils.tests_utils import general_example_filepath, create_test_job
 class JobModelTest(TestCase):
     def setUp(self):
         create_test_job()
+
+    def test_serializer(self):
+        job = Job.objects.get(pk=1)
+        print(JobSerializer(job).data)
 
     def test_default(self):
         job = Job.objects.get(pk=1)
@@ -127,7 +133,7 @@ class CreateJobsTests(APITestCase):
         config['kmeans'] = {}
         config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
-        obj['type'] = 'classification'
+        obj['type'] = PredictiveModels.CLASSIFICATION.value
         obj['config'] = config
         obj['split_id'] = 1
         return obj
@@ -135,7 +141,7 @@ class CreateJobsTests(APITestCase):
     def test_class_job_creation(self):
         client = APIClient()
         response = client.post('/jobs/multiple', self.job_obj(), format='json')
-
+        pprint(response.data[0])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')

@@ -69,7 +69,8 @@ class Job(CommonModel):
             'labelling': self.labelling.to_dict(),
             'clustering': self.clustering.to_dict(),
             'predictive_model': self.predictive_model.to_dict(),
-            'evaluation': self.evaluation.to_dict(),
-            'hyperparameter_optimizer': self.hyperparameter_optimizer.to_dict(),
-            'incremental_train': self.incremental_train.to_dict()
+            'evaluation': [self.evaluation.to_dict() if self.evaluation is not None else None],
+            'hyperparameter_optimizer': [
+                self.hyperparameter_optimizer.to_dict() if self.hyperparameter_optimizer is not None else None],
+            'incremental_train': [self.incremental_train.to_dict() if self.incremental_train is not None else None]
         }

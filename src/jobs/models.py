@@ -58,4 +58,18 @@ class Job(CommonModel):
                                           null=True)
 
     def to_dict(self) -> dict:
-        return {}
+        return {
+            'created_date': self.created_date,
+            'modified_date': self.modified_date,
+            'error': self.error,
+            'status': self.status,
+            'type': self.type,
+            'split': self.split.to_dict(),
+            'encoding': self.encoding.to_dict(),
+            'labelling': self.labelling.to_dict(),
+            'clustering': self.clustering.to_dict(),
+            'predictive_model': self.predictive_model.to_dict(),
+            'evaluation': self.evaluation.to_dict(),
+            'hyperparameter_optimizer': self.hyperparameter_optimizer.to_dict(),
+            'incremental_train': self.incremental_train.to_dict()
+        }

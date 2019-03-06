@@ -39,7 +39,7 @@ class SplitModelTest(TestCase):
     def test_to_dict(self):
         split = Split.objects.get(id=1).to_dict()
         self.assertEqual('single', split['type'])
-        self.assertEqual(general_example_filepath, split['original_log']['path'])
+        self.assertEqual(general_example_filepath, split['original_log_path'])
         self.assertEqual({}, split.to_dict())
 
 

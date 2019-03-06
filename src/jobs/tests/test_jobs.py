@@ -22,7 +22,7 @@ class JobModelTest(TestCase):
         create_test_job()
 
     def test_default(self):
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
 
         self.assertEqual('created', job.status)
         self.assertIsNotNone(job.created_date)
@@ -30,15 +30,15 @@ class JobModelTest(TestCase):
         self.assertIsNone(job.evaluation)
 
     def test_modified(self):
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
         job.status = JobStatuses.COMPLETED.value
 
         self.assertNotEquals(job.created_date, job.modified_date)
 
     def test_to_dict(self):
-        job = Job.objects.get(id=1).to_dict()
+        job = Job.objects.get(pk=1).to_dict()
 
-        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job.type)
+        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['type'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
                               'config': {},
@@ -50,18 +50,18 @@ class JobModelTest(TestCase):
     def test_prediction_task(self):
         prediction_task(1)
 
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
 
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.result)
 
     def test_create_models_config_missing(self):
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
         del job.config['create_models']  # TODO fixme should we add this field?
         job.save()
         prediction_task(1)
 
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
 
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.result)
@@ -96,13 +96,13 @@ class Hyperopt(TestCase):
         log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
         split = Split.objects.create(original_log=log)
         Job.objects.create(
-            config=add_default_config(self.config, prediction_method=PredictiveModels.CLASSIFICATION), split=split,
-            type=PredictiveModels.CLASSIFICATION)
+            config=add_default_config(self.config, prediction_method=PredictiveModels.CLASSIFICATION.value), split=split,
+            type=PredictiveModels.CLASSIFICATION.value)
 
     @unittest.skip('needs refactoring')
     def test_hyperopt(self):
         prediction_task(1)
-        job = Job.objects.get(id=1)
+        job = Job.objects.get(pk=1)
         self.assertFalse(classification_random_forest() == job.config['classification.randomForest'])
 
 
@@ -190,7 +190,7 @@ class CreateJobsTests(APITestCase):
     def job_label():
         config = dict()
         config['label'] = {'type': 'remaining_time', 'attribute_name': None,
-                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
+                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                            'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
         config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
         obj = dict()
@@ -210,7 +210,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['encoding']['prefix_length'], 3)
         self.assertEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', 'attribute_name': None,
-                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN,
+                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
         self.assertEqual(response.data[0]['config']['encoding']['padding'], 'zero_padding')
         self.assertEqual(response.data[0]['status'], 'created')

@@ -111,21 +111,21 @@ def create_test_hyperparameter_optimizer(hyperoptim_type: str = HyperparameterOp
     return hyperparameter_optimization
 
 
-def create_test_job(split: Split = create_test_split(),
-                    encoding: Encoding = create_test_encoding(),
-                    labelling: Labelling = create_test_labelling(),
-                    clustering: Clustering = create_test_clustering(),
-                    predictive_model: PredictiveModel = create_test_predictive_model(),
+def create_test_job(split: Split = None,
+                    encoding: Encoding = None,
+                    labelling: Labelling = None,
+                    clustering: Clustering = None,
+                    predictive_model: PredictiveModel = None,
                     job_type=JobTypes.PREDICTION.value,
                     hyperparameter_optimizer: HyperparameterOptimization = None):
     job = Job.objects.get_or_create(
         status=JobStatuses.CREATED.value,
         type=job_type,
-        split=split,
-        encoding=encoding,
-        labelling=labelling,
-        clustering=clustering,
-        predictive_model=predictive_model,
+        split=split if split is not None else create_test_split(),
+        encoding=encoding if encoding is not None else create_test_encoding(),
+        labelling=labelling if labelling is not None else create_test_labelling(),
+        clustering=clustering if clustering is not None else create_test_clustering(),
+        predictive_model=predictive_model if predictive_model is not None else create_test_predictive_model(),
         evaluation=None,
         hyperparameter_optimizer=hyperparameter_optimizer,
         incremental_train=None

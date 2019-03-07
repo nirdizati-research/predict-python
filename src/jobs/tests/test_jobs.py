@@ -57,7 +57,7 @@ class JobModelTest(TestCase):
 
     def test_create_models_config_missing(self):
         job = Job.objects.get(pk=1)
-        del job.config['create_models']  # TODO fixme should we add this field?
+        del job.create_models  # TODO fixme should we add this field?
         job.save()
         prediction_task(1)
 
@@ -68,7 +68,7 @@ class JobModelTest(TestCase):
 
     def test_prediction_task_error(self):
         self.assertRaises(ValueError, prediction_task, 2)
-        job = Job.objects.get(id=2)
+        job = Job.objects.get(pk=2)
 
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)
@@ -76,7 +76,7 @@ class JobModelTest(TestCase):
 
     def test_missing_attributes(self):
         self.assertRaises(KeyError, prediction_task, 3)
-        job = Job.objects.get(id=3)
+        job = Job.objects.get(pk=3)
 
         self.assertEqual('error', job.status)
         self.assertEqual({}, job.result)

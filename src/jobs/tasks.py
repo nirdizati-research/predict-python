@@ -21,13 +21,13 @@ def prediction_task(job_id):
             job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()
-            if job.config.get('hyperopt', {}).get('use_hyperopt', False):
+            if job.hyperparameter_optimizer is not None:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
             elapsed_time = time.time() - start_time
             print('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
-            if job.config.get('create_models', False):
+            if job.create_models:
                 save_models(model_split, job)
             job.result = result
             job.status = JobStatuses.COMPLETED.value

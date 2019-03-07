@@ -6,21 +6,19 @@ from src.predictive_model.models import PredictiveModels
 
 class Evaluation(CommonModel):
     @staticmethod
-    def init(prediction_type, results):
+    def init(prediction_type, results, binary):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
-            pass  # TODO fixme
-            # if labels == BINARY:
-            #     BinaryClassificationMetrics.objects.get_or_create(
-            #         metrics='',
-            #
-            #         true_positive=results['true_positive'],
-            #         true_negative=results['true_negative'],
-            #         false_negative=results['false_negative'],
-            #         false_positive=results['false_positive'],
-            #         auc=results['auc']
-            #     )
-            # elif labels == MUTLICLASS:
-            #     MulticlassClassificationMetrics.objects.get_or_create(metrics='')
+            if binary:
+                return BinaryClassificationMetrics.objects.get_or_create(
+                    true_positive=results['true_positive'],
+                    true_negative=results['true_negative'],
+                    false_negative=results['false_negative'],
+                    false_positive=results['false_positive'],
+                    auc=results['auc']
+                )[0]
+            else:
+                return MulticlassClassificationMetrics.objects.get_or_create(
+                )[0]
         elif prediction_type == PredictiveModels.REGRESSION.value:
             return RegressionMetrics.objects.get_or_create(
                 rmse=results['rmse'],
@@ -29,7 +27,10 @@ class Evaluation(CommonModel):
                 mape=results['mape']
             )[0]
         elif prediction_type == PredictiveModels.TIME_SERIES_PREDICTION.value:
-            TimeSeriesPredictionMetrics.objects.get_or_create()
+            return TimeSeriesPredictionMetrics.objects.get_or_create(
+            )[0]
+        else:
+            raise ValueError('evaluation model type ' + prediction_type + ' not recognized')
 
 
 class ClassificationMetrics(Evaluation):

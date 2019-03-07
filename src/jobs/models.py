@@ -46,6 +46,7 @@ class Job(CommonModel):
     error = models.CharField(default='', max_length=200)
     status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED.value, max_length=20)
     type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION.value, max_length=20)
+    create_models = models.BooleanField(default=False)
 
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     encoding = models.ForeignKey(Encoding, on_delete=models.DO_NOTHING, null=True)
@@ -64,6 +65,7 @@ class Job(CommonModel):
             'error': self.error,
             'status': self.status,
             'type': self.type,
+            'create_models': self.create_models,
             'split': self.split.to_dict(),
             'encoding': self.encoding.to_dict(),
             'labelling': self.labelling.to_dict(),

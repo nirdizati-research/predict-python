@@ -36,7 +36,9 @@ class Labelling(TestCase):
 
     def test_remaining_custom_threshold(self):
         job = self.get_job()
-        job.labelling = create_test_labelling(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value, threshold=1600)
+        job.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value,
+                                              threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value,
+                                              threshold=1600)
         job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'true': 444, 'false': 439})

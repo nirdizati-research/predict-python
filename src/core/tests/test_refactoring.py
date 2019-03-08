@@ -107,7 +107,7 @@ class RefactorProof(TestCase):
                                                           prediction_method=RegressionMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.00012752)
+        self.assertAlmostEqual(result['rmse'], 0.03057088)
         self.assertAlmostEqual(result['mae'], 0.00011685)
         self.assertAlmostEqual(result['rscore'], 0.13776124)
         self.assertAlmostEqual(result['mape'], float('inf'))

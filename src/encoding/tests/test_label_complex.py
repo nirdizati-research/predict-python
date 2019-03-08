@@ -40,7 +40,7 @@ class TestLabelComplex(TestCase):
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ),
                                   get_additional_columns(self.train_log))
-        self.assertEqual((2, 13), df.shape)
+        self.assertEqual((2, 12), df.shape)
 
     def test_no_label_zero_padding(self):
         # add things have no effect
@@ -60,7 +60,7 @@ class TestLabelComplex(TestCase):
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ),
                                   get_additional_columns(self.train_log))
-        self.assertEqual(df.shape, (2, 53))
+        self.assertEqual(df.shape, (2, 52))
 
     def test_remaining_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -82,7 +82,8 @@ class TestLabelComplex(TestCase):
                                         add_elapsed_time=True,
                                         add_remaining_time=True,
                                         task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
-                                        prefix_length=10)
+                                        prefix_length=10,
+                                        padding=True)
 
         _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
             encoding=encoding,
@@ -91,7 +92,7 @@ class TestLabelComplex(TestCase):
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ),
                                   get_additional_columns(self.test_log))
-        self.assertEqual(df.shape, (2, 15))
+        self.assertEqual(df.shape, (2, 55))
 
     def test_remaining_time_zero_padding(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -103,7 +104,7 @@ class TestLabelComplex(TestCase):
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ),
                                   get_additional_columns(self.train_log))
-        self.assertEqual(df.shape, (2, 55))
+        self.assertEqual(df.shape, (2, 54))
 
     def test_add_executed_events(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -218,4 +219,4 @@ class TestLabelComplex(TestCase):
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
         ),
                                   get_additional_columns(self.test_log))
-        self.assertEqual(df.shape, (2, 14))
+        self.assertEqual(df.shape, (2, 15))

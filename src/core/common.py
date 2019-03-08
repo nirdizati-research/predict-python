@@ -29,9 +29,7 @@ def get_method_config(job: Job) -> (str, dict):
     """
     method = job.predictive_model.prediction_method
     config = job.predictive_model.to_dict()
-    return method, job.predictive_model\
-        .__getattribute__(config['predictive_model'])\
-        .__getattribute__(config['prediction_method'].lower()).to_dict()
+    return method, config
 
 
 ALL_CONFIGS = [

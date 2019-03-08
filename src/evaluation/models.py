@@ -6,7 +6,7 @@ from src.predictive_model.models import PredictiveModels
 
 class Evaluation(CommonModel):
     @staticmethod
-    def init(prediction_type, results, binary):
+    def init(prediction_type, results, binary=False):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
             if binary:
                 return BinaryClassificationMetrics.objects.get_or_create(

@@ -26,13 +26,14 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
     if (labelling.threshold_type in [ThresholdTypes.THRESHOLD_MEAN.value, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
         labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value]):
         if labelling.threshold_type == ThresholdTypes.THRESHOLD_MEAN.value:
-            threshold = training_log['label'].mean()
+            threshold = training_log['label'].astype(float).mean()
+
         elif labelling.threshold_type == ThresholdTypes.THRESHOLD_CUSTOM.value:
-            threshold = labelling.threshold
+            threshold = labelling.threshold.astype(float)
         else:
             threshold = -1
-        training_log['label'] = training_log['label'] < threshold
-        test_log['label'] = test_log['label'] < threshold
+        training_log['label'] = training_log['label'].astype(float) < threshold
+        test_log['label'] = test_log['label'].astype(float) < threshold
 
     if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value:
         # init nominal encode

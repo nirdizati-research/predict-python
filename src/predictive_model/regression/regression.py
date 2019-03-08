@@ -15,6 +15,7 @@ from xgboost import XGBRegressor
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
 from src.jobs.models import Job
+from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.custom_regression_models import NNRegressor
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.result_metrics import calculate_results_regression
@@ -83,12 +84,12 @@ def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clusteri
             except TypeError:
                 regressor = clone(regressor, safe=False)
 
-    return {'clusterer': clusterer, 'regressor': models}
+    return {'clusterer': clusterer, PredictiveModels.REGRESSION.value: models}
 
 
 def _test(model_split: dict, data: DataFrame) -> DataFrame:
     clusterer = model_split['clusterer']
-    regressor = model_split['regressor']
+    regressor = model_split[PredictiveModels.REGRESSION.value]
 
     test_data = clusterer.cluster_data(data)
 

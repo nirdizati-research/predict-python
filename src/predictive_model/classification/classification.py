@@ -18,6 +18,7 @@ from src.jobs.models import JobTypes, Job
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.predictive_model.classification.models import ClassificationMethods, Classification
+from src.predictive_model.models import PredictiveModels
 from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
@@ -117,7 +118,7 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
                 classifier = clone(classifier, safe=False)
                 classifier.reset()
 
-    return {'clusterer': clusterer, 'classifier': models}
+    return {'clusterer': clusterer, PredictiveModels.CLASSIFICATION.value: models}
 
 
 def _update(job: Job, data: DataFrame, models) -> dict:
@@ -137,7 +138,7 @@ def _update(job: Job, data: DataFrame, models) -> dict:
 
 def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (DataFrame, float):
     clusterer = model_split['clusterer']
-    classifier = model_split['classifier']
+    classifier = model_split[PredictiveModels.CLASSIFICATION.value]
 
     test_data = clusterer.cluster_data(test_data)
 

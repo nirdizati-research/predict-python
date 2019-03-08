@@ -40,7 +40,6 @@ class SplitModelTest(TestCase):
         split = Split.objects.get(id=1).to_dict()
         self.assertEqual('single', split['type'])
         self.assertEqual(general_example_filepath, split['original_log_path'])
-        self.assertEqual({}, split.to_dict())
 
 
 class FileUploadTests(APITestCase):

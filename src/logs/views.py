@@ -81,11 +81,11 @@ def get_log_stats(request, pk, stat):
 @api_view(['POST'])
 def upload_multiple(request):
     test_log = create_log(request.FILES['testSet'], request.FILES['testSet'].name)
-    training_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
+    train_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
 
     item = Split.objects.create(
         type='double',
-        training_log=training_log,
+        train_log=train_log,
         test_log=test_log)
     serializer = SplitSerializer(item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)

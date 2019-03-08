@@ -125,12 +125,19 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
         raise ValueError("Type not supported", job.type)
 
     # TODO: integrateme
-    job.evaluation = Evaluation.init(
-        job.predictive_model.predictive_model,
-        results,
-        len(model_split['classifier'][0].classes_)<=2
-    )
-    job.save()
+    if job.type != JobTypes.LABELLING.value:
+        if job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
+            job.evaluation = Evaluation.init(
+                job.predictive_model.predictive_model,
+                results
+            )
+        elif job.predictive_model.predictive_model == PredictiveModels.CLASSIFICATION.value:
+            job.evaluation = Evaluation.init(
+                job.predictive_model.predictive_model,
+                results,
+                len(model_split[job.predictive_model.predictive_model][0].classes_) <= 2
+            )
+        job.save()
 
     if job.type == PredictiveModels.CLASSIFICATION.value:
         save_result(results, job, start_time)

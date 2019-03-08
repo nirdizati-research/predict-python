@@ -205,10 +205,14 @@ class TestLabelSimpleIndex(TestCase):
         self.assertListEqual(trace_4, ['4', 1, 1, 1])
 
     def test_attribute_number(self):
+        encoding = create_test_encoding(
+            value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+            task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
+            prefix_length=2)
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
         _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
-            encoding=self.encoding,
+            encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
                 predictive_model=PredictiveModels.CLASSIFICATION.value)
@@ -216,9 +220,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 52903968, 34856381, False])
+        self.assertListEqual(trace_5, ['5', 1, 2, 0])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 52903968, 32171502, True])
+        self.assertListEqual(trace_4, ['4', 1, 1, 0])
 
     def test_duration(self):
         labelling = create_test_labelling(label_type=LabelTypes.DURATION.value)

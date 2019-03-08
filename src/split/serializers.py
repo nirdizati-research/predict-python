@@ -12,7 +12,10 @@ class CreateSplitSerializer(serializers.ModelSerializer):
 
 
 class SplitSerializer(serializers.ModelSerializer):
-    config = serializers.JSONField()
+    training_log = serializers.SerializerMethodField()
+
+    def get_training_log(self, split):
+        return split.train_log.to_dict() if split.train_log is not None else None
 
     class Meta:
         model = Split

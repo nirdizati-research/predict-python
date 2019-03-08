@@ -122,15 +122,15 @@ class Hyperopt(TestCase):
                 max_evals=2
             )
         )
-        prediction_task(job)
+        prediction_task(job.pk)
         job = Job.objects.get(pk=1)
         self.assertFalse(classification_random_forest() == job.config['classification.randomForest'])
 
 
 class CreateJobsTests(APITestCase):
     def setUp(self):
-        log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
-        Split.objects.create(original_log=log)
+        log = create_test_log(log_name=general_example_filepath, log_path=general_example_filepath)
+        create_test_split(split_type=SplitTypes.SPLIT_SINGLE.value, original_log=log)
 
     def tearDown(self):
         get_queue().empty()
@@ -173,14 +173,16 @@ class CreateJobsTests(APITestCase):
             'features': {},
             'padding': True,
         })
-        self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
-        self.assertEqual(response.data[0]['config']['method'], 'knn')
-        self.assertEqual(response.data[0]['config']['random'], 123)
+        self.assertEqual(response.data[0]['config']['clustering'], {
+            'clustering_method': ClusteringMethods.NO_CLUSTER.value
+        })
+        self.assertEqual(response.data[0]['config']['predictive_model']['classification_method'],
+                         ClassificationMethods.KNN.value)
         self.assertFalse('kmeans' in response.data[0]['config'])
-        self.assertDictEqual(response.data[0]['config']['label'],
-                         {'type': 'remaining_time', 'attribute_name': None,
+        self.assertDictEqual(response.data[0]['config']['labelling'],
+                         {'type': 'remaining_time', 'attribute_name': 'label',
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
+                          'threshold': 0})
         self.assertEqual(response.data[0]['status'], 'created')
 
     @staticmethod

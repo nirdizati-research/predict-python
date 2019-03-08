@@ -114,6 +114,7 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 
 def _choose_regressor(job: Job) -> RegressorMixin:
     method, config = get_method_config(job)
+    config.pop('regression_method', None)
     print("Using method {} with config {}".format(method, config))
     if method == RegressionMethods.LINEAR.value:
         regressor = LinearRegression(**config)

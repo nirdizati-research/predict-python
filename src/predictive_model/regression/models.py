@@ -32,6 +32,7 @@ REGRESSION_METHOD_MAPPINGS = (
 
 class Regression(PredictiveModel):
     """Container of Regression to be shown in frontend"""
+    regression_method = models.CharField(choices=REGRESSION_METHOD_MAPPINGS, max_length=20)
 
     @staticmethod
     def init(configuration: dict):
@@ -93,6 +94,7 @@ class RandomForest(Regression):
 
     def to_dict(self):
         return {
+            'regression_method': RegressionMethods.RANDOM_FOREST.value,
             'n_estimators': self.n_estimators,
             'max_features': self.max_features,
             'max_depth': self.max_depth
@@ -106,6 +108,7 @@ class Lasso(Regression):
 
     def to_dict(self):
         return {
+            'regression_method': RegressionMethods.LASSO.value,
             'alpha': self.alpha,
             'fit_intercept': self.fit_intercept,
             'normalize': self.normalize
@@ -118,6 +121,7 @@ class Linear(Regression):
 
     def to_dict(self):
         return {
+            'regression_method': RegressionMethods.LINEAR.value,
             'fit_intercept': self.fit_intercept,
             'normalize': self.normalize
         }
@@ -129,6 +133,7 @@ class XGBoost(Regression):
 
     def to_dict(self):
         return {
+            'regression_method': RegressionMethods.XGBOOST.value,
             'max_depth': self.max_depth,
             'n_estimators': self.n_estimators
         }
@@ -151,6 +156,7 @@ class NeuralNetwork(Regression):
 
     def to_dict(self):
         return {
+            'regression_method': RegressionMethods.NN.value,
             'hidden_layers': self.hidden_layers,
             'hidden_units': self.hidden_units,
             'activation_function': self.activation_function,

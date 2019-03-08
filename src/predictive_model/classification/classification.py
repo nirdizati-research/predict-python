@@ -199,6 +199,7 @@ def _choose_classifier(job: Job):
         config.pop('model_path', None)
         config.pop('predictive_model', None)
         config.pop('prediction_method', None)
+        config.pop('classification_method', None)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN.value:
             classifier = KNeighborsClassifier(**config)

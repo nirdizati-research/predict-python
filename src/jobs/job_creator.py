@@ -19,7 +19,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                 encoding = config['encoding']
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
-                        item = Job.objects.get_or_create(
+                        item, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=generation_type,
                             split=split,
@@ -43,15 +43,15 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                                 label['attribute_name'] if label['attribute_name'] is not None else 'label',
                                 threshold_type=label['threshold_type'],
                                 threshold=label['threshold']
-                            )[0],
+                            )[0] if label is not None else None,
                             clustering=Clustering.init(clustering, configuration={}),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             )
-                        )[0]
+                        )
                         jobs.append(item)
                 else:
-                    item = Job.objects.get_or_create(
+                    item, _ = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
                         type=generation_type,
                         split=split,
@@ -79,7 +79,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )
-                    )[0]
+                    )
                     jobs.append(item)
 
     return jobs
@@ -117,7 +117,7 @@ def generate_labelling(split, payload):
 
     if encoding['generation_type'] == UP_TO:
         for i in range(1, encoding['prefix_length'] + 1):
-            item = Job.objects.get_or_create(
+            item, _ = Job.objects.get_or_create(
                 status=JobStatuses.CREATED.value,
                 type=JobTypes.LABELLING.value,
 
@@ -141,11 +141,11 @@ def generate_labelling(split, payload):
                     attribute_name=label['attribute_name'] if label['attribute_name'] is not None else 'label',
                     threshold_type=label['threshold_type'],
                     threshold=label['threshold']
-                )[0]
+                )
             )
             jobs.append(item)
     else:
-        item = Job.objects.get_or_create(
+        item, _ = Job.objects.get_or_create(
             status=JobStatuses.CREATED.value,
             type=JobTypes.LABELLING.value,
 
@@ -188,7 +188,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                 encoding = payload['config']['encoding']
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
-                        item = Job.objects.get_or_create(
+                        item, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=payload['type'],
                             split=split,
@@ -220,7 +220,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         )
                         jobs.append(item)
                 else:
-                    item = Job.objects.get_or_create(
+                    item, _ = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
                         type=payload['type'],
 

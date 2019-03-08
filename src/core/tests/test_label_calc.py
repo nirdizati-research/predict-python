@@ -23,6 +23,8 @@ class Labelling(TestCase):
 
     def test_remaining_time(self):
         job = self.get_job()
+        job.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
+        job.save()
         result, _ = calculate(job)
         self.assertEqual(result, {'true': 529, 'false': 354})
 

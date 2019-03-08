@@ -46,6 +46,11 @@ class Clustering(CommonModel):
         else:
             raise ValueError('configuration ', clustering, 'not recognized')
 
+    def to_dict(self):
+        return {
+            'clustering_method': self.clustering_method
+        }
+
 
 class NoClustering(Clustering):
     pass
@@ -72,12 +77,12 @@ KMEANS_ALGORITHM_MAPPINGS = (
 class KMeans(Clustering):
     n_clusters = models.PositiveIntegerField()
     init = models.CharField(choices=KMEANS_INIT_MAPPINGS, default='k-means++', max_length=20)
-    n_init = models.PositiveIntegerField()
-    max_iter = models.PositiveIntegerField()
-    tol = models.FloatField()
+    n_init = models.PositiveIntegerField(blank=True, null=True)
+    max_iter = models.PositiveIntegerField(blank=True, null=True)
+    tol = models.FloatField(blank=True, null=True)
     precompute_distances = models.CharField(choices=KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS, default='auto', max_length=20)
-    random_state = models.PositiveIntegerField()
-    copy_x = models.BooleanField()
+    random_state = models.PositiveIntegerField(blank=True, null=True)
+    copy_x = models.BooleanField(blank=True, null=True)
     algorithm = models.CharField(choices=KMEANS_ALGORITHM_MAPPINGS, default='auto', max_length=20)
 
     def to_dict(self) -> dict:

@@ -10,7 +10,7 @@ def classification_random_forest():
 
 def classification_knn():
     return {
-        'n_neighbors': 5,
+        'n_neighbors': 3,
         'n_jobs': -1,
         'weights': 'uniform'
     }

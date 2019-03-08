@@ -1,6 +1,6 @@
 def clustering_kmeans():
     return {
-        'n_clusters': 8,
+        'n_clusters': 3,
         'init': 'k-means++',
         'n_init': 10,
         'max_iter': 300,
@@ -8,5 +8,5 @@ def clustering_kmeans():
         'precompute_distances': 'auto',
         'random_state': None,
         'copy_x': None,
-        'algorithm': None
+        'algorithm': 'auto'
     }

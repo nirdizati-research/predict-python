@@ -34,10 +34,10 @@ class Evaluation(CommonModel):
 
 
 class ClassificationMetrics(Evaluation):
-    f1_score = models.FloatField()
-    accuracy = models.FloatField()
-    precision = models.FloatField()
-    recall = models.FloatField()
+    f1_score = models.FloatField(blank=True, null=True)
+    accuracy = models.FloatField(blank=True, null=True)
+    precision = models.FloatField(blank=True, null=True)
+    recall = models.FloatField(blank=True, null=True)
 
     def to_dict(self) -> dict:
         return {
@@ -49,11 +49,11 @@ class ClassificationMetrics(Evaluation):
 
 
 class BinaryClassificationMetrics(Evaluation):
-    true_positive = models.FloatField()
-    true_negative = models.FloatField()
-    false_negative = models.FloatField()
-    false_positive = models.FloatField()
-    auc = models.FloatField()
+    true_positive = models.FloatField(blank=True, null=True)
+    true_negative = models.FloatField(blank=True, null=True)
+    false_negative = models.FloatField(blank=True, null=True)
+    false_positive = models.FloatField(blank=True, null=True)
+    auc = models.FloatField(blank=True, null=True)
 
     def to_dict(self) -> dict:
         return {
@@ -70,10 +70,10 @@ class MulticlassClassificationMetrics(ClassificationMetrics):
 
 
 class RegressionMetrics(Evaluation):
-    rmse = models.FloatField()
-    mae = models.FloatField()
-    rscore = models.FloatField()
-    mape = models.FloatField()
+    rmse = models.FloatField(blank=True, null=True)
+    mae = models.FloatField(blank=True, null=True)
+    rscore = models.FloatField(blank=True, null=True)
+    mape = models.FloatField(blank=True, null=True)
 
     def to_dict(self) -> dict:
         return {

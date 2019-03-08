@@ -14,11 +14,8 @@ class CreateSplitSerializer(serializers.ModelSerializer):
 class SplitSerializer(serializers.ModelSerializer):
     training_log = serializers.SerializerMethodField()
 
-    def get_test_log(self, split):
-        return split.test_log.to_dict() if split.test_log is not None else None
-
     def get_training_log(self, split):
-        return split.train_log.to_dict() if split.train_log is not None else None
+        return split.train_log.pk if split.train_log is not None else None
 
     class Meta:
         model = Split

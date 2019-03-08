@@ -71,7 +71,7 @@ def trace_names(log):
     return [trace.attributes['concept:name'] for trace in log]
 
 
-def split_single(split_ordering: str = SplitOrderingMethods.SPLIT_STRICT_TEMPORAL.value, test_size: float = 0.2):
+def split_single(split_ordering: str = SplitOrderingMethods.SPLIT_SEQUENTIAL.value, test_size: float = 0.2):
     return create_test_split(
         split_type=SplitTypes.SPLIT_SINGLE.value,
         split_ordering_method=split_ordering,

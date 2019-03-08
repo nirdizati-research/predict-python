@@ -10,14 +10,22 @@ class Evaluation(CommonModel):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
             if binary:
                 return BinaryClassificationMetrics.objects.get_or_create(
+                    f1_score=results['f1_score'],
+                    auc=results['auc'],
+                    accuracy=results['accuracy'],
+                    precision=results['precision'],
+                    recall=results['recall'],
                     true_positive=results['true_positive'],
                     true_negative=results['true_negative'],
                     false_negative=results['false_negative'],
                     false_positive=results['false_positive'],
-                    auc=results['auc']
                 )[0]
             else:
                 return MulticlassClassificationMetrics.objects.get_or_create(
+                    f1_score=results['f1_score'],
+                    accuracy=results['accuracy'],
+                    precision=results['precision'],
+                    recall=results['recall']
                 )[0]
         elif prediction_type == PredictiveModels.REGRESSION.value:
             return RegressionMetrics.objects.get_or_create(
@@ -57,6 +65,10 @@ class BinaryClassificationMetrics(Evaluation):
 
     def to_dict(self) -> dict:
         return {
+            'f1_score': self.f1_score,
+            'accuracy': self.accuracy,
+            'precision': self.precision,
+            'recall': self.recall,
             'true_positive': self.true_positive,
             'true_negative': self.true_negative,
             'false_negative': self.false_negative,
@@ -66,7 +78,14 @@ class BinaryClassificationMetrics(Evaluation):
 
 
 class MulticlassClassificationMetrics(ClassificationMetrics):
-    pass
+
+    def to_dict(self) -> dict:
+        return {
+            'f1_score': self.f1_score,
+            'accuracy': self.accuracy,
+            'precision': self.precision,
+            'recall': self.recall
+        }
 
 
 class RegressionMetrics(Evaluation):

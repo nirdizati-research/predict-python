@@ -23,10 +23,6 @@ class JobModelTest(TestCase):
     def setUp(self):
         create_test_job()
 
-    def test_serializer(self):
-        job = Job.objects.get(pk=1)
-        print(JobSerializer(job).data)
-
     def test_default(self):
         job = Job.objects.get(pk=1)
 

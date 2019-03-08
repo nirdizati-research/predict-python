@@ -44,7 +44,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                                 threshold_type=label['threshold_type'],
                                 threshold=label['threshold']
                             )[0],
-                            clustering=Clustering.init(clustering, configuration=None),
+                            clustering=Clustering.init(clustering, configuration={}),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             )
@@ -75,7 +75,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                             threshold_type=label['threshold_type'],
                             threshold=label['threshold']
                         )[0],
-                        clustering=Clustering.init(clustering, configuration=None),
+                        clustering=Clustering.init(clustering, configuration={}),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )
@@ -213,7 +213,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 threshold_type=label['threshold_type'],
                                 threshold=label['threshold']
                             ),
-                            clustering=Clustering.init(clustering, configuration=None),
+                            clustering=Clustering.init(clustering, configuration={}),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             )
@@ -245,7 +245,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             threshold_type=label['threshold_type'],
                             threshold=label['threshold']
                         ),
-                        clustering=Clustering.init(clustering, configuration=None),
+                        clustering=Clustering.init(clustering, configuration={}),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )

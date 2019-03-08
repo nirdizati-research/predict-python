@@ -47,6 +47,7 @@ class Split(CommonModel):
 
     def to_dict(self) -> dict:
         temp = {
+            'id': self.pk,
             'type': self.type,
             'test_size': self.test_size,
             'splitting_method': self.splitting_method

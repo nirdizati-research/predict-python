@@ -6,17 +6,21 @@ from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
+from src.clustering.models import ClusteringMethods
 from src.core.tests.common import add_default_config
-from src.jobs.models import Job, JobStatuses
-from src.jobs.serializers import JobSerializer
+from src.encoding.models import ValueEncodings
+from src.hyperparameter_optimization.models import HyperOptLosses, HyperparameterOptimizationMethods
+from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.tasks import prediction_task
-from src.labelling.label_container import LabelContainer
-from src.labelling.models import ThresholdTypes
+from src.labelling.models import ThresholdTypes, LabelTypes
 from src.logs.models import Log
 from src.predictive_model.classification.methods_default_config import classification_random_forest
+from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
-from src.split.models import Split
-from src.utils.tests_utils import general_example_filepath, create_test_job
+from src.split.models import Split, SplitTypes
+from src.utils.tests_utils import general_example_filepath, create_test_job, create_test_log, general_example_filename, \
+    create_test_split, create_test_predictive_model, create_test_hyperparameter_optimizer, create_test_clustering, \
+    create_test_encoding, create_test_labelling
 
 
 class JobModelTest(TestCase):
@@ -40,14 +44,20 @@ class JobModelTest(TestCase):
     def test_to_dict(self):
         job = Job.objects.get(pk=1).to_dict()
 
-        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['type'])
+        self.assertEquals(JobTypes.PREDICTION.value, job['type'])
+        self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['predictive_model']['predictive_model'])
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
-                              'config': {},
+                              'splitting_method': 'sequential',
+                              'test_size': 0.2,
                               'id': 1},
                              job['split'])
-        self.assertEquals(123, job['key'])
-        self.assertEquals(job['label'], LabelContainer())
+        self.assertEquals(job['labelling'], {
+            'attribute_name': 'label',
+            'threshold': 0,
+            'threshold_type': 'threshold_mean',
+            'type': 'next_activity'
+        })
 
     def test_prediction_task(self):
         prediction_task(1)
@@ -86,24 +96,33 @@ class JobModelTest(TestCase):
 
 
 class Hyperopt(TestCase):
-    def setUp(self):
-        self.config = {
-            'method': 'randomForest',
-            'encoding': {'method': 'simpleIndex', 'prefix_length': 3, 'padding': 'no_padding'},
-            'clustering': 'noCluster',
-            'create_models': False,
-            'label': {'type': 'remaining_time'},
-            'hyperopt': {'use_hyperopt': True, 'max_evals': 2, 'performance_metric': 'acc'}
-        }
-        log = Log.objects.create(name='general_example.xes', path=general_example_filepath)
-        split = Split.objects.create(original_log=log)
-        Job.objects.create(
-            config=add_default_config(self.config, prediction_method=PredictiveModels.CLASSIFICATION.value), split=split,
-            type=PredictiveModels.CLASSIFICATION.value)
 
-    @unittest.skip('needs refactoring')
     def test_hyperopt(self):
-        prediction_task(1)
+        job = Job.objects.create(
+            split=create_test_split(
+                split_type=SplitTypes.SPLIT_SINGLE.value,
+                original_log=create_test_log(log_name=general_example_filename, log_path=general_example_filepath)
+            ),
+            encoding=create_test_encoding(
+                value_encoding=ValueEncodings.SIMPLE_INDEX.value,
+                prefix_length=3,
+                padding=False
+            ),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(
+                clustering_type=ClusteringMethods.KMEANS.value
+            ),
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.CLASSIFICATION.value,
+                prediction_method=ClassificationMethods.RANDOM_FOREST.value
+            ),
+            hyperparameter_optimizer=create_test_hyperparameter_optimizer(
+                hyperoptim_type=HyperparameterOptimizationMethods.HYPEROPT.value,
+                performance_metric=HyperOptLosses.ACC.value,
+                max_evals=2
+            )
+        )
+        prediction_task(job)
         job = Job.objects.get(pk=1)
         self.assertFalse(classification_random_forest() == job.config['classification.randomForest'])
 
@@ -141,14 +160,24 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'classification')
-        self.assertEqual(response.data[0]['config']['encoding'],
-                         {'method': 'simpleIndex', 'padding': 'zero_padding', 'prefix_length': 3,
-                          'generation_type': 'only'})
+        self.assertDictEqual(response.data[0]['config']['encoding'], {
+            'prefix_length': 3,
+            'task_generation_type': 'only',
+            'value_encoding': 'simpleIndex',
+            'add_elapsed_time': False,
+            'add_executed_events': False,
+            'add_new_traces': False,
+            'add_remaining_time': False,
+            'add_resources_used': False,
+            'data_encoding': 'label_encoder',
+            'features': {},
+            'padding': True,
+        })
         self.assertEqual(response.data[0]['config']['clustering'], 'noCluster')
         self.assertEqual(response.data[0]['config']['method'], 'knn')
         self.assertEqual(response.data[0]['config']['random'], 123)
         self.assertFalse('kmeans' in response.data[0]['config'])
-        self.assertEqual(response.data[0]['config']['label'],
+        self.assertDictEqual(response.data[0]['config']['label'],
                          {'type': 'remaining_time', 'attribute_name': None,
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})

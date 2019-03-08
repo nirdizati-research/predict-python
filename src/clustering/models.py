@@ -21,7 +21,7 @@ class Clustering(CommonModel):
     clustering_method = models.CharField(choices=CLUSTERING_METHOD_MAPPINGS, max_length=20)
 
     @staticmethod
-    def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = None):
+    def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = {}):
         if clustering == ClusteringMethods.NO_CLUSTER.value:
             return NoClustering.objects.get_or_create(
                 pk=1,

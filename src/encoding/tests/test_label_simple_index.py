@@ -134,7 +134,7 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 34856381, 1296240.0, False])
+                             ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1296240.0, 0])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
                              ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, True])

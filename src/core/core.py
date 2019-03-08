@@ -24,7 +24,7 @@ from src.utils.django_orm import duplicate_orm_row
 from src.utils.file_service import save_result
 
 
-def calculate(job: Job) -> (dict, dict):
+def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurations
     """main entry point for calculations
 
     encodes the logs based on the given configuration and runs the selected task

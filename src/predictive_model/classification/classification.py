@@ -192,10 +192,13 @@ def _choose_classifier(job: Job):
     if job.type == JobTypes.UPDATE.value:
         classifier = _load_model(job.incremental_train)
         # TODO: check if this instruction still makes sense
-        assert classifier[
-                   0].__class__.__name__ == job.method  # are we updating a predictive_model with its own methods?
+        # are we updating a predictive_model with its own methods?
+        assert classifier[0].__class__.__name__ == job.method
     else:
         method, config = get_method_config(job)
+        config.pop('model_path', None)
+        config.pop('predictive_model', None)
+        config.pop('prediction_method', None)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN.value:
             classifier = KNeighborsClassifier(**config)

@@ -9,21 +9,22 @@ from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_train_filepath
+from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \
+    create_test_labelling, create_test_encoding
 
 
-@unittest.skip('needs refactoring')
 class TestEncodingParser(TestCase):
     @staticmethod
     def _get_parser(encoding=ValueEncodings.COMPLEX.value, binary_target=False, task=Tasks.CLASSIFICATION.value):
         return EncodingParser(encoding, binary_target, task)
 
     def setUp(self):
-        self.log = get_log(general_example_train_filepath)
+        self.log = get_log(create_test_log(log_name=general_example_train_filename,
+                                           log_path=general_example_train_filepath))
         self.event_names = unique_events(self.log)
-        self.label = LabelContainer()
+        self.label = create_test_labelling()
         self.add_col = get_additional_columns(self.log)
-        self.encoding = EncodingContainer(ValueEncodings.COMPLEX.value)
+        self.encoding = create_test_encoding(value_encoding=ValueEncodings.COMPLEX.value)
 
     def test_simple_index(self):
         parser = self._get_parser(encoding=ValueEncodings.SIMPLE_INDEX.value)

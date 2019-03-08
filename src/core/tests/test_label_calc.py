@@ -21,7 +21,6 @@ class Labelling(TestCase):
                                                              padding=True),
                                job_type=JobTypes.LABELLING.value)
 
-    @unittest.skip('needs refactoring')
     def test_remaining_time(self):
         job = self.get_job()
         result, _ = calculate(job)
@@ -35,7 +34,6 @@ class Labelling(TestCase):
         self.assertEqual(result, {'0': 2, 'Repair (Complex)': 306, 'Test Repair': 432, 'Inform User': 5,
                                   'Repair (Simple)': 138})
 
-    @unittest.skip('needs refactoring')
     def test_remaining_custom_threshold(self):
         job = self.get_job()
         job.labelling = create_test_labelling(threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value, threshold=1600)

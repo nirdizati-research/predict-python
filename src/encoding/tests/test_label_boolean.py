@@ -64,9 +64,9 @@ class TestLabelBoolean(TestCase):
         ))
         self.assertEqual(df.shape, (2, 10))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, True, False, False, False, 361560.0, False])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, False])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, True, False, False, True, 248400.0, False])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, False])
 
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)

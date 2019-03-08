@@ -82,7 +82,7 @@ class FileUploadTests(APITestCase):
         self.assertEqual(response.data['type'], 'double')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['test_log'], 1)
-        self.assertEqual(response.data['training_log'], 2)
+        self.assertDictEqual(response.data['test_log'], {})
+        self.assertDictEqual(response.data['training_log'], {})
         self.assertEqual(response.data['original_log'], None)
-        self.assertEqual(response.data['config'], {})
+        self.assertDictEqual(response.data['config'], {})

@@ -7,9 +7,11 @@ import sys
 
 from src.clustering.methods_default_config import clustering_kmeans
 from src.core.common import CONF_MAP
+from src.jobs.models import Job
 from src.split.models import SplitTypes
 from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
-    general_example_train_filepath, create_test_log, create_test_split
+    general_example_train_filepath, create_test_log, create_test_split, general_example_test_filename, \
+    general_example_train_filename, general_example_filename
 
 
 class HidePrints:
@@ -38,22 +40,18 @@ class HidePrints:
 
 
 def split_single():
-    split = dict()
-    split['id'] = 1
-    split['config'] = dict()
-    split['type'] = 'single'
-    split['original_log_path'] = general_example_filepath
-    return split
+    return create_test_split(
+        split_type=SplitTypes.SPLIT_SINGLE.value,
+        original_log=create_test_log(log_name=general_example_filename, log_path=general_example_filepath)
+    )
 
 
 def split_double():
-    split = dict()
-    split['id'] = 1
-    split['config'] = dict()
-    split['type'] = 'double'
-    split['training_log_path'] = general_example_train_filepath
-    split['test_log_path'] = general_example_test_filepath
-    return split
+    return create_test_split(
+        split_type=SplitTypes.SPLIT_DOUBLE.value,
+        train_log=create_test_log(log_name=general_example_train_filename, log_path=general_example_train_filepath),
+        test_log=create_test_log(log_name=general_example_test_filename, log_path=general_example_test_filepath)
+    )
 
 
 def repair_example():
@@ -64,11 +62,11 @@ def repair_example():
                              )
 
 
-def add_default_config(job: dict, prediction_method=""):
+def add_default_config(job: Job, prediction_method=""): #TODO is this needed?
     """Map to job method default config"""
     if prediction_method == "":
-        prediction_method = job['type']
-    method_conf_name = "{}.{}".format(prediction_method, job['method'])
+        prediction_method = job.predictive_model.prediction_method
+    method_conf_name = "{}.{}".format(job.predictive_model.predictive_model, prediction_method)
     method_conf = CONF_MAP[method_conf_name]()
     job[method_conf_name] = method_conf
     job['kmeans'] = clustering_kmeans()

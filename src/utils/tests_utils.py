@@ -93,7 +93,7 @@ def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
 
 
 def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.value,
-                           configuration: dict = None) -> Clustering:
+                           configuration: dict = {}) -> Clustering:
     clustering = Clustering.init(clustering_type, configuration)
     return clustering
 
@@ -105,9 +105,11 @@ def create_test_predictive_model(predictive_model: str = PredictiveModels.CLASSI
 
 
 def create_test_hyperparameter_optimizer(hyperoptim_type: str = HyperparameterOptimizationMethods.HYPEROPT.value,
-                                         performance_metric: HyperOptLosses = HyperOptLosses.ACC.value):
+                                         performance_metric: HyperOptLosses = HyperOptLosses.ACC.value,
+                                         max_evals: int = 10):
     hyperparameter_optimization = HyperparameterOptimization.init({'type': hyperoptim_type,
-                                                                   'performance_metric': performance_metric})
+                                                                   'performance_metric': performance_metric,
+                                                                   'max_evals': max_evals})
     return hyperparameter_optimization
 
 

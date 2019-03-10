@@ -2,7 +2,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 from matplotlib import pyplot as plt
-import seaborn as sns
 import numpy as np
 import pandas as pd
 
@@ -10,14 +9,19 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import roc_auc_score, accuracy_score, precision_score, recall_score, \
     f1_score, roc_curve, confusion_matrix
 
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.svm import SVC
-
 from IPython.display import display
 
 def tune_model(model, param_grid, X_train, y_train, cv=5, max_rows=10):
+    """
+    Tune model
+
+    :param model: model to be tuned
+    :param param_grid: dictionary with parameters names
+    :param X_train: train dataset features
+    :param y_train: train dataset labels
+    :param cv: cross-validation generator
+    :param max_rows: number of rows
+    """
     grid_search = GridSearchCV(model, param_grid, cv=cv, return_train_score=True, scoring=['accuracy','f1','roc_auc'],refit='accuracy')
     grid_search.fit(X_train, y_train)
     cv_results = pd.DataFrame(grid_search.cv_results_)
@@ -28,8 +32,9 @@ def tune_model(model, param_grid, X_train, y_train, cv=5, max_rows=10):
     pd.reset_option('max_rows')
     return(grid_search)
 
-##make plots (???)
 def roc_plot(models, thresholded_models, X, y):
+    """ Create ROC plot"""
+
     fig = plt.figure(figsize=(8,8))
     for model in models:
         probs = model.predict_proba(X)[:,1]

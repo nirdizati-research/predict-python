@@ -2,8 +2,9 @@ import numpy as np
 from pandas import Series, DataFrame
 from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
+from sklearn.cluster import AgglomerativeClustering
 
-from core.constants import KMEANS, DBSCAN, NO_CLUSTER
+from core.constants import KMEANS, DBSCAN, AGGLOMERATIVE, NO_CLUSTER
 
 config = None
 clusterer = None
@@ -16,6 +17,7 @@ class Clustering:
     def __init__(self, job: dict):
         self.config = job[KMEANS] if KMEANS in job \
                 else job[DBSCAN] if DBSCAN in job \
+                else job[AGGLOMERATIVE] if AGGLOMERATIVE in job \
                 else dict()
         self._choose_clusterer(job)
         self.n_clusters = 1
@@ -41,6 +43,8 @@ class Clustering:
             self.clusterer = KMeans(**self.config)
         elif job['clustering'] == DBSCAN:
             self.clusterer = DBSCAN(**self.config)
+        elif job['clustering'] == AGGLOMERATIVE:
+            self.clusterer = AgglomerativeClustering(**self.config)
         elif job['clustering'] == NO_CLUSTER:
             self.clusterer = None
         else:

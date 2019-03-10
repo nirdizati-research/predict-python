@@ -184,6 +184,20 @@ def kmeans():
         'random_state': 21
     }
 
+def dbscan():
+    return{
+        'eps': 0.5,
+        'min_samples': 5,
+        'metric': 'euclidean'
+    }
+
+def agglomerative():
+    return{
+        'n_clusters': 3,
+        'affinity': 'euclidean',
+        'compute_full_tree': 'auto',
+        'linkage': 'average'
+    }
 
 def _update_incremental_naive_bayes():
     return {

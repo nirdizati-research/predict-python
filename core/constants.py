@@ -25,6 +25,7 @@ RNN = 'rnn'
 # Clustering
 KMEANS = 'kmeans'
 DBSCAN = 'dbscan'
+AGGLOMERATIVE = 'agglomerative'
 NO_CLUSTER = 'noCluster'
 
 # Job types

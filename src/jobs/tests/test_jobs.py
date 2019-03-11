@@ -53,7 +53,7 @@ class JobModelTest(TestCase):
                               'id': 1},
                              job['split'])
         self.assertEquals(job['labelling'], {
-            'attribute_name': 'label',
+            'attribute_name': None,
             'threshold': 0,
             'threshold_type': 'threshold_mean',
             'type': 'next_activity'
@@ -65,7 +65,7 @@ class JobModelTest(TestCase):
         job = Job.objects.get(pk=1)
 
         self.assertEqual('completed', job.status)
-        self.assertNotEqual({}, job.result)
+        self.assertNotEqual({}, job.evaluation)
 
     def test_create_models_config_missing(self):
         job = Job.objects.get(pk=1)
@@ -76,7 +76,7 @@ class JobModelTest(TestCase):
         job = Job.objects.get(pk=1)
 
         self.assertEqual('completed', job.status)
-        self.assertNotEqual({}, job.result)
+        self.assertNotEqual({}, job.evaluation)
 
     def test_prediction_task_error(self):
         self.assertRaises(ValueError, prediction_task, 2)
@@ -239,13 +239,13 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'labelling')
-        self.assertEqual(response.data[0]['config']['encoding']['method'], 'simpleIndex')
+        self.assertEqual(response.data[0]['config']['encoding']['value_encoding'], 'simpleIndex')
         self.assertEqual(response.data[0]['config']['encoding']['prefix_length'], 3)
-        self.assertEqual(response.data[0]['config']['label'],
+        self.assertEqual(response.data[0]['config']['labelling'],
                          {'type': 'remaining_time', 'attribute_name': None,
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False})
-        self.assertEqual(response.data[0]['config']['encoding']['padding'], 'zero_padding')
+                          'threshold': 0})
+        self.assertEqual(response.data[0]['config']['encoding']['padding'], True)
         self.assertEqual(response.data[0]['status'], 'created')
 
 

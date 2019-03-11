@@ -10,9 +10,9 @@ class Evaluation(CommonModel):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
             if binary:
                 return BinaryClassificationMetrics.objects.get_or_create(
-                    f1_score=results['f1_score'],
+                    f1_score=results['f1score'],
                     auc=results['auc'],
-                    accuracy=results['accuracy'],
+                    accuracy=results['acc'],
                     precision=results['precision'],
                     recall=results['recall'],
                     true_positive=results['true_positive'],
@@ -22,8 +22,8 @@ class Evaluation(CommonModel):
                 )[0]
             else:
                 return MulticlassClassificationMetrics.objects.get_or_create(
-                    f1_score=results['f1_score'],
-                    accuracy=results['accuracy'],
+                    f1_score=results['f1score'],
+                    accuracy=results['acc'],
                     precision=results['precision'],
                     recall=results['recall']
                 )[0]
@@ -56,7 +56,7 @@ class ClassificationMetrics(Evaluation):
         }
 
 
-class BinaryClassificationMetrics(Evaluation):
+class BinaryClassificationMetrics(ClassificationMetrics):
     true_positive = models.FloatField(blank=True, null=True)
     true_negative = models.FloatField(blank=True, null=True)
     false_negative = models.FloatField(blank=True, null=True)

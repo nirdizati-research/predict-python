@@ -80,7 +80,7 @@ def create_test_encoding(prefix_length: int = 1,
 
 
 def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
-                          attribute_name: str = 'label',
+                          attribute_name: str = None,
                           threshold_type: str = ThresholdTypes.THRESHOLD_MEAN.value,
                           threshold: float = 0.0) -> Labelling:
     labelling = Labelling.objects.get_or_create(

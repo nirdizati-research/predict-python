@@ -8,5 +8,5 @@ def clustering_kmeans():
         'precompute_distances': 'auto',
         'random_state': None,
         'copy_x': None,
-        'algorithm': 'auto'
+        'algorithm': 'full'
     }

@@ -62,7 +62,7 @@ class RefactorProof(TestCase):
         self.assertDictEqual(result, {'f1score': 0.54239884582595577, 'acc': 0.80995475113122173, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
                                       'precision': 0.62344720496894401, 'recall': 0.5224945442336747,
-                                      'auc': 0.19638554216867468})
+                                      'auc': 0.4730604801339352})
 
     def test_next_activity_no_cluster(self):
         self.max_diff = None

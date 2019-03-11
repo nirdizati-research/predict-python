@@ -1,10 +1,12 @@
 from collections import defaultdict, OrderedDict
 
+from pm4py.objects.log.log import EventLog
+
 TIMESTAMP_CLASSIFIER = "time:timestamp"
 NAME_CLASSIFIER = "concept:name"
 
 
-def events_by_date(log) -> OrderedDict:
+def events_by_date(log: EventLog) -> OrderedDict:
     """Creates dict of events by date ordered by date
 
     :return {'2010-12-30': 7, '2011-01-06': 8}
@@ -19,7 +21,7 @@ def events_by_date(log) -> OrderedDict:
     return OrderedDict(sorted(stamp_dict.items()))
 
 
-def resources_by_date(log) -> OrderedDict:
+def resources_by_date(log: EventLog) -> OrderedDict:
     """Creates dict of used unique resources ordered by date
 
     Resource and timestamp delimited by &&. If this is in resources name, bad stuff will happen.
@@ -39,7 +41,7 @@ def resources_by_date(log) -> OrderedDict:
     return OrderedDict(sorted(stamp_dict.items()))
 
 
-def event_executions(log) -> OrderedDict:
+def event_executions(log: EventLog) -> OrderedDict:
     """Creates dict of event execution count
 
     :return {'Event A': 7, '2011-01-06': 8}
@@ -51,7 +53,7 @@ def event_executions(log) -> OrderedDict:
     return OrderedDict(sorted(executions.items()))
 
 
-def new_trace_start(log) -> OrderedDict:
+def new_trace_start(log: EventLog) -> OrderedDict:
     """Creates dict of new traces by date
 
     :return {'2010-12-30': 1, '2011-01-06': 2}
@@ -63,7 +65,7 @@ def new_trace_start(log) -> OrderedDict:
     return OrderedDict(sorted(executions.items()))
 
 
-def trace_attributes(log) -> list:
+def trace_attributes(log: EventLog) -> list:
     """Creates an array of dicts that describe trace attributes.
     Only looks at first trace. Filters out `concept:name`.
 
@@ -73,20 +75,20 @@ def trace_attributes(log) -> list:
     trace = log[0]  # TODO: this might be a bug if first trace has different events then others
     for attribute in trace.attributes:
         if attribute != "concept:name":
-            atr_type = is_number(trace.attributes[attribute])
+            atr_type = _is_number(trace.attributes[attribute])
             atr = {'name': attribute, 'type': atr_type, 'example': str(trace.attributes[attribute])}
             values.append(atr)
     values = sorted(values, key=lambda k: k['name'])
     return values
 
 
-def is_number(s) -> str:
+def _is_number(s) -> str:
     if (isinstance(s, (float, int)) or (s.isdigit() if hasattr(s, 'isdigit') else False)) and not isinstance(s, bool):
         return 'number'
     return 'string'
 
 
-def events_in_trace(log) -> OrderedDict:
+def events_in_trace(log: EventLog) -> OrderedDict:
     """Creates dict of number of events in trace
 
     :return {'4': 11, '3': 8}
@@ -97,7 +99,7 @@ def events_in_trace(log) -> OrderedDict:
     return OrderedDict(sorted(stamp_dict.items()))
 
 
-def max_events_in_log(log) -> int:
+def max_events_in_log(log: EventLog) -> int:
     """Returns the maximum number of events in any trace
 
     :return 3

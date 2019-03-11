@@ -1,6 +1,7 @@
 import unittest
 from pprint import pprint
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from django_rq.queues import get_queue
 from rest_framework import status
@@ -26,6 +27,9 @@ from src.utils.tests_utils import general_example_filepath, create_test_job, cre
 class JobModelTest(TestCase):
     def setUp(self):
         create_test_job()
+        create_test_job(job_type='asdf')
+        Job.objects.create(type=JobTypes.PREDICTION.value, split=create_test_split(), encoding=None, labelling=None)
+
 
     def test_default(self):
         job = Job.objects.get(pk=1)
@@ -83,16 +87,16 @@ class JobModelTest(TestCase):
         job = Job.objects.get(pk=2)
 
         self.assertEqual('error', job.status)
-        self.assertEqual({}, job.result)
-        self.assertEqual("ValueError('Type not supported', 'asdsd')", job.error)
+        self.assertEqual(None, job.evaluation)
+        self.assertEqual("ValueError('Type not supported', 'asdf')", job.error)
 
     def test_missing_attributes(self):
-        self.assertRaises(KeyError, prediction_task, 3)
+        self.assertRaises(AttributeError, prediction_task, 3)
         job = Job.objects.get(pk=3)
 
         self.assertEqual('error', job.status)
-        self.assertEqual({}, job.result)
-        self.assertEqual("KeyError('label',)", job.error)
+        self.assertEqual(None, job.evaluation)
+        self.assertEqual("AttributeError(\"'NoneType' object has no attribute 'type'\",)", job.error)
 
 
 class Hyperopt(TestCase):
@@ -124,7 +128,9 @@ class Hyperopt(TestCase):
         )
         prediction_task(job.pk)
         job = Job.objects.get(pk=1)
-        self.assertFalse(classification_random_forest() == job.config['classification.randomForest'])
+        self.assertFalse(classification_random_forest() ==
+                         job.predictive_model.classification
+                         .__getattribute__(ClassificationMethods.RANDOM_FOREST.value.lower()).to_dict())
 
 
 class CreateJobsTests(APITestCase):
@@ -137,21 +143,26 @@ class CreateJobsTests(APITestCase):
 
     @staticmethod
     def job_obj():
-        config = dict()
-        config['encodings'] = ['simpleIndex']
-        config['clusterings'] = ['noCluster']
-        config['methods'] = ['knn']
-        config['label'] = {'type': 'remaining_time', 'attribute_name': None,
-                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
-        config['random'] = 123
-        config['kmeans'] = {}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
-        obj = dict()
-        obj['type'] = PredictiveModels.CLASSIFICATION.value
-        obj['config'] = config
-        obj['split_id'] = 1
-        return obj
+        return {
+            'type': PredictiveModels.CLASSIFICATION.value,
+            'split_id': 1,
+            'config': {
+                'encodings': ['simpleIndex'],
+                'clusterings': ['noClustering'],
+                'methods': ['knn'],
+                'label': {
+                    'type': 'remaining_time',
+                    'attribute_name': None,
+                    'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
+                    'threshold': 0,
+                    'add_remaining_time': False,
+                    'add_elapsed_time': False
+                },
+                'random': 123,
+                'kmeans': {},
+                'encoding': {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
+            }
+        }
 
     def test_class_job_creation(self):
         client = APIClient()
@@ -180,25 +191,26 @@ class CreateJobsTests(APITestCase):
                          ClassificationMethods.KNN.value)
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertDictEqual(response.data[0]['config']['labelling'],
-                         {'type': 'remaining_time', 'attribute_name': 'label',
+                         {'type': 'remaining_time', 'attribute_name': None,
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                           'threshold': 0})
         self.assertEqual(response.data[0]['status'], 'created')
 
     @staticmethod
     def job_obj2():
-        config = dict()
-        config['encodings'] = ['simpleIndex', 'boolean', 'complex']
-        config['clusterings'] = ['kmeans']
-        config['methods'] = ['linear', 'lasso']
-        config['random'] = 123
-        config['kmeans'] = {'max_iter': 100}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'}
-        obj = dict()
-        obj['type'] = 'regression'
-        obj['config'] = config
-        obj['split_id'] = 1
-        return obj
+        return {
+            'type': 'regression',
+            'split_id': 1,
+            'config': {
+                'encodings': ['simpleIndex', 'boolean', 'complex'],
+                'clusterings': ['kmeans'],
+                'methods': ['linear', 'lasso'],
+                'random': 123,
+                'kmeans': {'max_iter': 100},
+                'encoding': {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'},
+                'label': {'type': LabelTypes.REMAINING_TIME.value}
+            }
+        }
 
     def test_reg_job_creation(self):
         client = APIClient()
@@ -221,16 +233,25 @@ class CreateJobsTests(APITestCase):
 
     @staticmethod
     def job_label():
-        config = dict()
-        config['label'] = {'type': 'remaining_time', 'attribute_name': None,
-                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                           'threshold': 0, 'add_remaining_time': False, 'add_elapsed_time': False}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
-        obj = dict()
-        obj['type'] = 'labelling'
-        obj['config'] = config
-        obj['split_id'] = 1
-        return obj
+        return{
+            'type': 'labelling',
+            'split_id': 1,
+            'config': {
+                'label': {
+                    'type': 'remaining_time',
+                    'attribute_name': None,
+                    'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
+                    'threshold': 0,
+                    'add_remaining_time': False,
+                    'add_elapsed_time': False
+                },
+                'encoding': {
+                    'prefix_length': 3,
+                    'generation_type': 'only',
+                    'padding': 'zero_padding'
+                }
+            }
+        }
 
     def test_labelling_job_creation(self):
         client = APIClient()
@@ -253,18 +274,22 @@ class MethodConfiguration(TestCase):
 
     @staticmethod
     def job_obj():
-        config = dict()
-        config['encodings'] = ['simpleIndex']
-        config['clusterings'] = ['noCluster']
-        config['methods'] = ['randomForest']
-        config['regression.randomForest'] = {'n_estimators': 15}
-        config['regression.lasso'] = {'n_estimators': 15}
-        config['encoding'] = {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'}
-        obj = dict()
-        obj['type'] = 'regression'
-        obj['config'] = config
-        obj['split_id'] = 1
-        return obj
+        return {
+            'type': 'regression',
+            'split_id': 1,
+            'config': {
+                'encodings': ['simpleIndex'],
+                'clusterings': ['noClustering'],
+                'methods': ['randomForest'],
+                'regression.:randomForest': {'n_estimators': 15},
+                'regression.:lasso': {'n_estimators': 15},
+                'encoding': {
+                    'prefix_length': 3,
+                    'generation_type': 'up_to',
+                    'padding': 'no_padding'
+                }
+            }
+        }
 
     # def test_regression_random_forest(self):
     #     job = self.job_obj()

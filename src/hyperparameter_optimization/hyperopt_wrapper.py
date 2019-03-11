@@ -24,7 +24,9 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
 
     print("Start hyperopt job {} with {}, performance_metric {}".format(
         job.type, get_run(job),
-        job.hyperparameter_optimizer.performance_metric)
+        job.hyperparameter_optimizer.__getattribute__(
+            job.hyperparameter_optimizer.optimization_method.lower()
+        ).performance_metric) #Todo: WHY DO I NEED TO GET HYPEROPT?
     )
 
     global training_df, test_df, global_job
@@ -33,7 +35,9 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
 
     space = _get_space(job)
 
-    max_evaluations = job.hyperparameter_optimizer.max_evaluations
+    max_evaluations = job.hyperparameter_optimizer.__getattribute__(
+            job.hyperparameter_optimizer.optimization_method.lower()
+        ).max_evaluations #Todo: WHY DO I NEED TO GET HYPEROPT?
     trials = Trials()
 
     algorithm = _choose_algorithm(job)
@@ -49,7 +53,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
             current_best = a
 
     print("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
-    return current_best['results'], current_best['model_split']
+    return current_best['results'], current_best['config'], current_best['model_split']
 
 
 def _get_metric_multiplier(performance_metric: int) -> int:
@@ -75,7 +79,9 @@ def _get_metric_multiplier(performance_metric: int) -> int:
 
 
 def _choose_algorithm(job: Job):
-    job_algorithm = job.hyperparameter_optimizer.algorithm_type
+    job_algorithm = job.hyperparameter_optimizer.__getattribute__(
+            job.hyperparameter_optimizer.optimization_method.lower()
+        ).algorithm_type
 
     if job_algorithm == HyperOptAlgorithms.RANDOM_SEARCH.value:
         return hyperopt.rand
@@ -99,7 +105,9 @@ def _calculate_and_evaluate(args) -> dict:
     local_job.predictive_model = duplicate_orm_row(new_predictive_model)
     local_job = duplicate_orm_row(local_job)
 
-    performance_metric = local_job.hyperparameter_optimizer.performance_metric
+    performance_metric = local_job.hyperparameter_optimizer.__getattribute__(
+        local_job.hyperparameter_optimizer.optimization_method.lower()
+    ).performance_metric
     multiplier = _get_metric_multiplier(performance_metric)
 
     results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
@@ -107,6 +115,6 @@ def _calculate_and_evaluate(args) -> dict:
     try:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
         return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,
-                'model_split': model_split}
+                'model_split': model_split, 'config': model_config}
     except:
-        return {'loss': 100, 'status': STATUS_FAIL, 'results': {}}
+        return {'loss': 100, 'status': STATUS_FAIL, 'results': {}, 'config': {}}

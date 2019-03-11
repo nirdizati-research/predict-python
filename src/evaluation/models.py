@@ -10,29 +10,29 @@ class Evaluation(CommonModel):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
             if binary:
                 return BinaryClassificationMetrics.objects.get_or_create(
-                    f1_score=results['f1score'],
-                    auc=results['auc'],
-                    accuracy=results['acc'],
-                    precision=results['precision'],
-                    recall=results['recall'],
-                    true_positive=results['true_positive'],
-                    true_negative=results['true_negative'],
-                    false_negative=results['false_negative'],
-                    false_positive=results['false_positive'],
+                    f1_score=results['f1score'] if results['f1score'] != '--' else None,
+                    auc=results['auc'] if results['auc'] != '--' else None,
+                    accuracy=results['acc'] if results['acc'] != '--' else None,
+                    precision=results['precision'] if results['precision'] != '--' else None,
+                    recall=results['recall'] if results['recall'] != '--' else None,
+                    true_positive=results['true_positive'] if results['true_positive'] != '--' else None,
+                    true_negative=results['true_negative'] if results['true_negative'] != '--' else None,
+                    false_negative=results['false_negative'] if results['false_negative'] != '--' else None,
+                    false_positive=results['false_positive'] if results['false_positive'] != '--' else None,
                 )[0]
             else:
                 return MulticlassClassificationMetrics.objects.get_or_create(
-                    f1_score=results['f1score'],
-                    accuracy=results['acc'],
-                    precision=results['precision'],
-                    recall=results['recall']
+                    f1_score=results['f1score'] if results['f1score'] != '--' else None,
+                    accuracy=results['acc'] if results['acc'] != '--' else None,
+                    precision=results['precision'] if results['precision'] != '--' else None,
+                    recall=results['recall'] if results['recall'] != '--' else None
                 )[0]
         elif prediction_type == PredictiveModels.REGRESSION.value:
             return RegressionMetrics.objects.get_or_create(
-                rmse=results['rmse'],
-                rscore=results['rscore'],
-                mae=results['mae'],
-                mape=results['mape']
+                rmse=results['rmse'] if results['rmse'] != '--' else None,
+                rscore=results['rscore'] if results['rscore'] != '--' else None,
+                mae=results['mae'] if results['mae'] != '--' else None,
+                mape=results['mape'] if results['mape'] != '--' else None
             )[0]
         elif prediction_type == PredictiveModels.TIME_SERIES_PREDICTION.value:
             return TimeSeriesPredictionMetrics.objects.get_or_create(

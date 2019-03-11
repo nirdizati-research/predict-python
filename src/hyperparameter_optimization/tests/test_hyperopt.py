@@ -30,7 +30,7 @@ class TestHyperopt(TestCase):
 
     def test_class_randomForest(self):
         job = self.get_job(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.RANDOM_FOREST.value)
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     # def test_class_knn(self):
@@ -42,39 +42,39 @@ class TestHyperopt(TestCase):
     def test_class_xgboost(self):
         job = self.get_job(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.XGBOOST.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     def test_class_decision_tree(self):
         job = self.get_job(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.DECISION_TREE.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     def test_regression_random_forest(self):
         job = self.get_job(PredictiveModels.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value,
                            HyperOptLosses.RMSE.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     def test_regression_linear(self):
         job = self.get_job(PredictiveModels.REGRESSION.value, RegressionMethods.LINEAR.value,
                            HyperOptLosses.RMSE.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     def test_regression_lasso(self):
         job = self.get_job(PredictiveModels.REGRESSION.value, RegressionMethods.LASSO.value,
                            HyperOptLosses.RMSE.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
     def test_regression_xgboost(self):
         job = self.get_job(PredictiveModels.REGRESSION.value, RegressionMethods.XGBOOST.value,
                            HyperOptLosses.RMSE.value)
 
-        results, _ = calculate_hyperopt(job)
+        results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)

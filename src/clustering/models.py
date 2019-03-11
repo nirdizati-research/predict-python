@@ -7,12 +7,12 @@ from src.common.models import CommonModel
 
 class ClusteringMethods(Enum):
     KMEANS = 'kmeans'
-    NO_CLUSTER = 'noCluster'
+    NO_CLUSTER = 'noClustering'
 
 
 CLUSTERING_METHOD_MAPPINGS = (
     (ClusteringMethods.KMEANS.value, 'kmeans'),
-    (ClusteringMethods.NO_CLUSTER.value, 'noCluster')
+    (ClusteringMethods.NO_CLUSTER.value, 'noClustering')
 )
 
 

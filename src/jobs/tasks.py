@@ -71,8 +71,8 @@ def save_models(to_model_split, job):
 
 
 def hyperopt_task(job):
-    job_dict = job.to_dict()
+    # job_dict = job.to_dict()
     results, config, model_split = calculate_hyperopt(job)
-    method_conf_name = "{}.{}".format(job_dict['type'], job_dict['method'])
-    job.config[method_conf_name] = config
+    # method_conf_name = "{}.{}".format(job_dict['type'], job_dict['method'])
+    # job.config[method_conf_name] = config
     return results, model_split

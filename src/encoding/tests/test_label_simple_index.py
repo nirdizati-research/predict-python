@@ -30,8 +30,8 @@ class TestLabelSimpleIndex(TestCase):
             prefix_length=2)
         labelling = create_test_labelling(label_type=LabelTypes.NO_LABEL.value)
 
-        _, df = encode_label_logs(
-            self.train_log,
+        df, _ = encode_label_logs(
+            self.test_log,
             self.test_log,
             create_test_job(
                 encoding=encoding,
@@ -55,7 +55,7 @@ class TestLabelSimpleIndex(TestCase):
             padding=True,
             add_remaining_time=True)
 
-        _, df = encode_label_logs(self.train_log,
+        df, _ = encode_label_logs(self.test_log,
                                   self.test_log,
                                   create_test_job(
                                       encoding=encoding,
@@ -77,7 +77,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=2)
 
-        _, df = encode_label_logs(self.train_log, self.test_log,
+        df, _ = encode_label_logs(self.test_log, self.test_log,
                                   create_test_job(
                                       encoding=encoding,
                                       labelling=labelling,
@@ -102,7 +102,7 @@ class TestLabelSimpleIndex(TestCase):
                                           threshold_type=ThresholdTypes.THRESHOLD_CUSTOM.value,
                                           threshold=40000)
 
-        _, df = encode_label_logs(self.train_log, self.test_log,
+        df, _ = encode_label_logs(self.test_log, self.test_log,
                                   create_test_job(
                                       encoding=encoding,
                                       labelling=labelling,
@@ -125,7 +125,7 @@ class TestLabelSimpleIndex(TestCase):
             prefix_length=10,
             padding=True)
 
-        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -146,7 +146,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=2)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -157,7 +157,7 @@ class TestLabelSimpleIndex(TestCase):
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5, ['5', 1, 2, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 2])
 
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -168,7 +168,7 @@ class TestLabelSimpleIndex(TestCase):
             prefix_length=10,
             padding=True)
 
-        _, df = encode_label_logs(self.train_log, self.test_log,
+        df, _ = encode_label_logs(self.test_log, self.test_log,
                                   create_test_job(
                                       encoding=encoding,
                                       labelling=labelling,
@@ -191,7 +191,7 @@ class TestLabelSimpleIndex(TestCase):
             prefix_length=2)
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -211,7 +211,7 @@ class TestLabelSimpleIndex(TestCase):
             prefix_length=2)
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_NUMBER.value, attribute_name='AMOUNT')
 
-        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -231,7 +231,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=2)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -253,7 +253,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=1)
 
-        _, df = encode_label_logs(self.train_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -272,7 +272,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=1)
 
-        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(
@@ -291,7 +291,7 @@ class TestLabelSimpleIndex(TestCase):
             task_generation_type=TaskGenerationTypes.ONLY_THIS.value,
             prefix_length=1)
 
-        _, df = encode_label_logs(self.test_log, self.test_log, create_test_job(
+        df, _ = encode_label_logs(self.test_log, self.test_log, create_test_job(
             encoding=encoding,
             labelling=labelling,
             predictive_model=create_test_predictive_model(

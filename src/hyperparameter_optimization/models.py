@@ -10,13 +10,23 @@ class HyperparameterOptimizationMethods(Enum):
     HYPEROPT = 'hyperopt'
 
 
+HYPERPARAMETER_OPTIMIZATION_METHOD = (
+    (HyperparameterOptimizationMethods.HYPEROPT.value, 'hyperopt'),
+)
+
+
 class HyperparameterOptimization(CommonModel):
+    optimization_method = models.CharField(choices=HYPERPARAMETER_OPTIMIZATION_METHOD,
+                                           default='hyperopt',
+                                           max_length=20)
+
     @staticmethod
     def init(configuration: dict = {'type': HyperparameterOptimizationMethods.HYPEROPT.value}):
         hyperparameter_optimizer_type = configuration['type']
         if hyperparameter_optimizer_type == HyperparameterOptimizationMethods.HYPEROPT.value:
             default_configuration = hyperparameter_optimization_hyperopt()
             return HyperOpt.objects.get_or_create(
+                optimization_method=hyperparameter_optimizer_type,
                 max_evaluations=configuration.get('max_evaluations', default_configuration['max_evaluations']),
                 performance_metric=configuration.get('performance_metric', default_configuration['performance_metric']),
                 algorithm_type=configuration.get('algorithm_type', default_configuration['algorithm_type'])
@@ -69,7 +79,6 @@ HYPEROPT_LOSS_MAPPINGS = (
 
 
 class HyperOpt(HyperparameterOptimization):
-    __name__ = HyperparameterOptimizationMethods.HYPEROPT.value
     max_evaluations = models.PositiveIntegerField()
     performance_metric = models.CharField(choices=HYPEROPT_LOSS_MAPPINGS, default='acc', max_length=20)
     algorithm_type = models.CharField(choices=HYPEROPT_ALGORITHM_MAPPINGS, default='random_search', max_length=20)

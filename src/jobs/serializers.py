@@ -8,9 +8,9 @@ class JobSerializer(serializers.ModelSerializer):
 
     def get_config(self, job):
         return {
-            'split': job.split.to_dict(),
-            'encoding': job.encoding.to_dict(),
-            'labelling': job.labelling.to_dict(),
+            'split': job.split.to_dict() if job.split is not None else None,
+            'encoding': job.encoding.to_dict() if job.encoding is not None else None,
+            'labelling': job.labelling.to_dict() if job.labelling is not None else None,
             'clustering': job.clustering.to_dict() if job.clustering is not None else None,
             'predictive_model': job.predictive_model.to_dict() if job.predictive_model is not None else None,
             'evaluation': job.evaluation.to_dict() if job.evaluation is not None else None,

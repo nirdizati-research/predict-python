@@ -25,8 +25,12 @@ class Clustering:
         :param job: job configuration
 
         """
-        self.config = clustering.to_dict()
-        self._choose_clusterer(clustering)
+        self.config = clustering.__getattribute__(
+            clustering.clustering_method.lower()
+        ).to_dict()
+        self._choose_clusterer(
+            clustering.__getattribute__(clustering.clustering_method.lower())
+        )
         self.n_clusters = 1
         self.labels = [0]
 
@@ -65,6 +69,7 @@ class Clustering:
         }
 
     def _choose_clusterer(self, clustering: src.clustering.models.Clustering):
+        self.config.pop('clustering_method', None)
         if clustering.clustering_method == ClusteringMethods.KMEANS.value:
             self.clusterer = KMeans(**self.config)
         elif clustering.clustering_method == ClusteringMethods.NO_CLUSTER.value:

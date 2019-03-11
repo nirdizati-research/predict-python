@@ -6,7 +6,7 @@ def clustering_kmeans():
         'max_iter': 300,
         'tol': 1e-4,
         'precompute_distances': 'auto',
-        'random_state': None,
+        'random_state': 1, #use a fixed int to make the init deterministic
         'copy_x': None,
         'algorithm': 'full'
     }

@@ -87,6 +87,7 @@ class KMeans(Clustering):
 
     def to_dict(self) -> dict:
         return {
+            'clustering_method': ClusteringMethods.KMEANS.value,
             'n_clusters': self.n_clusters,
             'init': self.init,
             'n_init': self.n_init,

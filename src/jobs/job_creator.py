@@ -39,12 +39,11 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                             labelling=Labelling.objects.get_or_create(
                                 type=label.get('type', None),
                                 # TODO static check?
-                                attribute_name=
-                                label['attribute_name'],
-                                threshold_type=label['threshold_type'],
-                                threshold=label['threshold']
-                            )[0] if label == {} else None,
-                            clustering=Clustering.init(clustering, configuration={}),
+                                attribute_name=label.get('attribute_name', None),
+                                threshold_type=label.get('threshold_type', None),
+                                threshold=label.get('threshold', None)
+                            )[0] if label != {} else None,
+                            clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             )
@@ -71,11 +70,11 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                         labelling=Labelling.objects.get_or_create(
                             type=label.get('type', None),
                             # TODO static check?
-                            attribute_name=label['attribute_name'],
-                            threshold_type=label['threshold_type'],
-                            threshold=label['threshold']
-                        )[0] if label == {} else None,
-                        clustering=Clustering.init(clustering, configuration={}),
+                            attribute_name=label.get('attribute_name', None),
+                            threshold_type=label.get('threshold_type', None),
+                            threshold=label.get('threshold', None)
+                        )[0] if label != {} else None,
+                        clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )
@@ -136,12 +135,12 @@ def generate_labelling(split, payload):
                     task_generation_type=config['encoding'].get('generation_type', 'only_this')
                 )[0],
                 labelling=Labelling.objects.get_or_create(
-                    type=label['type'],
+                    type=label.get('type', None),
                     # TODO static check?
-                    attribute_name=label['attribute_name'],
-                    threshold_type=label['threshold_type'],
-                    threshold=label['threshold']
-                )[0] if label == {} else None
+                    attribute_name=label.get('attribute_name', None),
+                    threshold_type=label.get('threshold_type', None),
+                    threshold=label.get('threshold', None)
+                )[0] if label != {} else None
             )
             jobs.append(item)
     else:
@@ -164,12 +163,12 @@ def generate_labelling(split, payload):
                 task_generation_type=config['encoding'].get('generation_type', 'only_this')
             )[0],
             labelling=Labelling.objects.get_or_create(
-                type=label['type'],
+                type=label.get('type', None),
                 # TODO static check?
-                attribute_name=label['attribute_name'],
-                threshold_type=label['threshold_type'],
-                threshold=label['threshold']
-            )[0] if label == {} else None
+                attribute_name=label.get('attribute_name', None),
+                threshold_type=label.get('threshold_type', None),
+                threshold=label.get('threshold', None)
+            )[0] if label != {} else None
         )
         jobs.append(item)
 
@@ -206,14 +205,13 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 task_generation_type=config['encoding'].get('generation_type', 'only_this')
                             )[0],
                             labelling=Labelling.objects.get_or_create(
-                                type=label['type'],
+                                type=label.get('type', None),
                                 # TODO static check?
-                                attribute_name=
-                                label['attribute_name'],
-                                threshold_type=label['threshold_type'],
-                                threshold=label['threshold']
-                            )[0] if label == {} else None,
-                            clustering=Clustering.init(clustering, configuration={}),
+                                attribute_name=label.get('attribute_name', None),
+                                threshold_type=label.get('threshold_type', None),
+                                threshold=label.get('threshold', None)
+                            )[0] if label != {} else None,
+                            clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             )
@@ -239,13 +237,13 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             task_generation_type=config['encoding'].get('generation_type', 'only_this')
                         )[0],
                         labelling=Labelling.objects.get_or_create(
-                            type=label['type'],
+                            type=label.get('type', None),
                             # TODO static check?
-                            attribute_name=label['attribute_name'],
-                            threshold_type=label['threshold_type'],
-                            threshold=label['threshold']
-                        )[0] if label == {} else None,
-                        clustering=Clustering.init(clustering, configuration={}),
+                            attribute_name=label.get('attribute_name', None),
+                            threshold_type=label.get('threshold_type', None),
+                            threshold=label.get('threshold', None)
+                        )[0] if label != {} else None,
+                        clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         )

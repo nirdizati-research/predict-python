@@ -140,6 +140,19 @@ def _regression_xgboost() -> dict:
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
     }
 
+def _clusterisation_dbscan() -> dict:
+    return {
+        'eps': hp.uniform('eps', 0.0, 1.0),
+        'min_samples': hp.choice('min_samples', np.arange(2, 7, dtype=int)),
+        'metric': hp.choice('metric', ['euclidean', 'manhattan', 'precomputed'])
+    }
+
+def _clusterisation_agglomerative() -> dict:
+    return {
+        'n_clusters': hp.choice('n_clusters', np.arange(3, 5, dtype=int)),
+        'affinity': hp.choice('affinity', ['euclidean', 'l1', 'l2', 'manhattan', 'cosine', 'precomputed']),
+        'linkage': hp.choice('linkage' ['ward', 'complete', 'average', 'single'])
+    }
 
 HYPEROPT_SPACE_MAP = {
     CLASSIFICATION_RANDOM_FOREST: _classification_random_forest,
@@ -154,5 +167,7 @@ HYPEROPT_SPACE_MAP = {
     REGRESSION_RANDOM_FOREST: _regression_random_forest,
     REGRESSION_XGBOOST: _regression_xgboost,
     REGRESSION_LASSO: _regression_lasso,
-    REGRESSION_LINEAR: _regression_linear
+    REGRESSION_LINEAR: _regression_linear,
+    CLUSTERISATION_DBSCAN: _clusterisation_dbscan,
+    CLUSTERISATION_AGGLOMERATIVE: _clusterisation_agglomerative
 }

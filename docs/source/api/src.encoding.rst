@@ -44,6 +44,14 @@ src.encoding.complex\_last\_payload module
     :undoc-members:
     :show-inheritance:
 
+src.encoding.encoder module
+---------------------------
+
+.. automodule:: src.encoding.encoder
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.encoding.encoding\_container module
 ---------------------------------------
 

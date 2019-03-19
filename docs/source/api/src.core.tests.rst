@@ -20,14 +20,6 @@ src.core.tests.test\_common module
     :undoc-members:
     :show-inheritance:
 
-src.core.tests.test\_hyperopt module
-------------------------------------
-
-.. automodule:: src.core.tests.test_hyperopt
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 src.core.tests.test\_label\_calc module
 ---------------------------------------
 

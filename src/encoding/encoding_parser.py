@@ -13,13 +13,26 @@ from src.predictive_model.models import PredictiveModels
 
 
 class DataEncoder:
+    """
+    support class for EncodingParser, tasked with actual parsing/one-hot encoding
+    """
+
     class DataTypes(Enum):
+        """
+        possible data types for each column
+        """
         CATEGORICAL = 0
         NUMERIC = 1
 
     _unknown_token = '<unknown>'
 
     def __init__(self, task: PredictiveModels, is_targets_dataset: bool = False):
+        """initializes the DataEncoder
+
+        :param task: task type (class, reg, time_series_pred.)
+        :param is_targets_dataset: flag that indicates wether this DataEncoder is working with the targets dataset
+
+        """
         self._data_encoders = {}
         self._task = task
         self._is_targets_dataset = is_targets_dataset
@@ -28,6 +41,14 @@ class DataEncoder:
         self._categorical_headers = []
 
     def build_encoders(self, data: DataFrame) -> None:
+        """builds an encoder for each column
+
+        first the base headers are extracted (prefix_1 -> prefix, org:resources:Amount_1 -> org_resources:Amount) and
+        then a dictionary of LabelEncoders is built. Numerical data stores min and max instead of a LabelEncoder.
+
+        :param data: input dataframe
+
+        """
         self._base_headers = self._extract_base_headers(data)
 
         for base_header in self._base_headers:
@@ -57,6 +78,15 @@ class DataEncoder:
                                                     'label_encoder': label_encoder}
 
     def encode_data(self, data: DataFrame, train: bool = True) -> None:
+        """encodes the input data
+
+        actual data encoding, using the built encoders. For each column type the right encoding is done
+        (to class/normalization)
+
+        :param data: input dataframe
+        :param train: flag indicating whether the input is a train dataframe or a test one
+
+        """
         for base_header in self._base_headers:
             relevant_data = self._get_relevant_columns(data, base_header)
             for column in relevant_data:
@@ -79,6 +109,14 @@ class DataEncoder:
                     data[column] = label_encoder.transform(data[column].values.tolist())
 
     def to_one_hot(self, data: DataFrame) -> ndarray:
+        """one hot encoding
+
+        transforms the encoded data into the one-hot representation
+
+        :param data: input dataframe
+        :return: one-hot encoded array
+
+        """
         n_classes = self._get_highest_class_number()
 
         if not self._is_targets_dataset:
@@ -96,6 +134,13 @@ class DataEncoder:
         return dataset
 
     def _get_highest_class_number(self):
+        """returns the highest class number for the used dataframe
+
+        returns the highest class number from all the stored LabelEncoders
+
+        :return: highest class number
+
+        """
         n_classes_max = 0
 
         for header in self._categorical_headers:
@@ -106,6 +151,15 @@ class DataEncoder:
         return n_classes_max
 
     def get_n_classes_x(self):
+        """returns the number of training/test classes
+
+        returns the highest number of classes for the encoded dataframe, adding 1 if there are numerical values.
+        The structure is [one-hot encoding, normalized_value] for each variable, such that a categorical variable
+        becomes [0 0 0 1 0.0] where a numerical value becomes [0 0 0 0 0 0.263]
+
+        :return: number of training/test classes + 1 (for numerical values)
+
+        """
         n_classes = self._get_highest_class_number()
 
         if not self._is_targets_dataset:
@@ -113,6 +167,15 @@ class DataEncoder:
         return n_classes
 
     def _get_data_type(self, data: DataFrame) -> DataTypes:
+        """returns the type for the input dataframe
+
+        tries to cast the dataframe to float, to decide wether the input contains a string or a number. Returns the
+        appropriate type
+
+        :param data: selected columns of the dataframe
+        :return: data type
+
+        """
         if len(data.columns) == 1 and 'label' in data:
             if self._task == PredictiveModels.CLASSIFICATION.value:
                 return DataEncoder.DataTypes.CATEGORICAL
@@ -127,22 +190,56 @@ class DataEncoder:
             return DataEncoder.DataTypes.CATEGORICAL
 
     def get_numerical_limits(self, header='label'):
+        """returns the numerical limits for the input header
+
+        returns the min and max value from the stored LabelEncoders, using header as index
+
+        :param header: label associated with the data we want to extract min and max from
+        :return: min and max values associated with the column _header_
+
+        """
         min_value = self._data_encoders[header]['label_encoder']['min']
         max_value = self._data_encoders[header]['label_encoder']['max']
         return min_value, max_value
 
     @staticmethod
     def _get_relevant_columns(data: DataFrame, header: str) -> DataFrame:
+        """returns the columns associated with the base header
+
+        filters the input dataframe in order to extract all the columns matching the regex "header + (_[0-9])*"
+
+        :param data: input dataframe
+        :param header: base header to match
+        :return: matched columns
+
+        """
         return data.filter(regex=header + '(\_[0-9])*$')
 
     @staticmethod
     def _extract_base_headers(data: DataFrame) -> set:
+        """extract the base headers
+
+        extract the base headers from the headers of the input dataframe
+        (prefix_1, prefix_2, org:resource_2 -> [prefix, org:resource])
+
+        :param data: input dataframe
+        :return: base headers
+
+        """
         headers = data.columns.tolist()
         base_headers = set([DataEncoder._extract_base_header(header) for header in headers])
         return base_headers
 
     @staticmethod
     def _extract_base_header(header: str) -> str:
+        """extracts the base header
+
+        applies a regex expression to remove trailing _[0-9]* values from the input header
+
+        :param header: header to extract base header from
+        :return: base header
+
+        """
         return re.sub(r'\_[0-9]+$', '', header)
 
 
@@ -153,13 +250,14 @@ class EncodingParser:
     """
 
     def __init__(self, encoding: str, binary_target: bool, task: PredictiveModels):
-        """Initializes the EncodingParser
+        """initializes the EncodingParser
 
         :param encoding: encoding type
         :param binary_target: if the target is True/False or categorical
         :param task: the task type
 
         """
+
         self._encoding = encoding
         self._task = task
         self._binary_target = binary_target

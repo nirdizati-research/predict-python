@@ -6,10 +6,13 @@ Subpackages
 
 .. toctree::
 
+    src.cache
     src.clustering
+    src.common
     src.core
     src.encoding
     src.evaluation
+    src.hyperparameter_optimization
     src.jobs
     src.labelling
     src.logs

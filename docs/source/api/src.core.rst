@@ -27,22 +27,6 @@ src.core.core module
     :undoc-members:
     :show-inheritance:
 
-src.core.hyperopt\_spaces module
---------------------------------
-
-.. automodule:: src.core.hyperopt_spaces
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-src.core.hyperopt\_wrapper module
----------------------------------
-
-.. automodule:: src.core.hyperopt_wrapper
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
 Module contents
 ---------------

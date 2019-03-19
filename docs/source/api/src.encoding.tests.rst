@@ -36,10 +36,26 @@ src.encoding.tests.test\_frequency module
     :undoc-members:
     :show-inheritance:
 
-src.encoding.tests.test\_label module
--------------------------------------
+src.encoding.tests.test\_label\_boolean module
+----------------------------------------------
 
-.. automodule:: src.encoding.tests.test_label
+.. automodule:: src.encoding.tests.test_label_boolean
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.encoding.tests.test\_label\_complex module
+----------------------------------------------
+
+.. automodule:: src.encoding.tests.test_label_complex
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+src.encoding.tests.test\_label\_simple\_index module
+----------------------------------------------------
+
+.. automodule:: src.encoding.tests.test_label_simple_index
     :members:
     :undoc-members:
     :show-inheritance:

@@ -3,25 +3,19 @@ classification tests
 """
 
 import itertools
-import unittest
 
 from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
-from src.core.tests.common import split_double, add_default_config
-from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING, PADDINGS, \
-    NO_PADDING
-from src.encoding.models import ValueEncodings, TaskGenerationTypes
-from src.labelling.models import LabelTypes, ThresholdTypes
+from src.encoding.models import ValueEncodings
+from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
-from src.predictive_model.models import PredictiveModels
 from src.utils.tests_utils import create_test_job, create_test_encoding, create_test_labelling, \
     create_test_predictive_model, create_test_clustering
 
 
 class TestClassification(TestCase):
-
     def test_no_exceptions(self):
         filtered_labels = [enum.value for enum in LabelTypes]
 

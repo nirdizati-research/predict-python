@@ -83,9 +83,9 @@ class TestLabelBoolean(TestCase):
         ))
         self.assertEqual(df.shape, (2, 9))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 3])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 'decide'])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 3])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 'decide'])
 
     def test_next_activity_zero_padding_elapsed_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -104,9 +104,9 @@ class TestLabelBoolean(TestCase):
         self.assertEqual(df.shape, (2, 10))
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 3])
+        self.assertListEqual(trace_5, ['5', True, True, True, False, False, False, False, 181200.0, 'decide'])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 3])
+        self.assertListEqual(trace_4, ['4', True, False, True, False, False, False, True, 171660.0, 'decide'])
 
     def test_attribute_string(self):
         labelling = create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value, attribute_name='creator')

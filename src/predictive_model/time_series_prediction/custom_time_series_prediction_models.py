@@ -7,7 +7,8 @@ from keras.layers import LSTM, GRU, Reshape
 from numpy import ndarray
 from pandas import DataFrame
 
-from src.encoding.encoding_parser import EncodingParser, Tasks
+from src.encoding.encoding_parser import EncodingParser
+from src.predictive_model.models import PredictiveModels
 from src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin import TimeSeriesPredictorMixin
 
 
@@ -32,7 +33,7 @@ class RNNTimeSeriesPredictor(TimeSeriesPredictorMixin):
         self._encoding = str(kwargs['encoding'])
         self._prefix_length = 0.25  # n x dataset length
         self._prediction_limit = 1.5  # n x dataset length
-        self._encoding_parser = EncodingParser(self._encoding, None, task=Tasks.TIME_SERIES_PREDICTION)
+        self._encoding_parser = EncodingParser(self._encoding, None, task=PredictiveModels.TIME_SERIES_PREDICTION.value)
         self._model = None
 
     def fit(self, train_data: DataFrame) -> None:
@@ -58,12 +59,13 @@ class RNNTimeSeriesPredictor(TimeSeriesPredictorMixin):
         elif self._rnn_type == 'gru':
             predicted = GRU(self._n_units, activation='relu', return_sequences=True)(predicted)
 
-        predicted = Dense((self._encoding_parser.n_classes_x + 1) * self._encoding_parser.n_event_features)(predicted)
+        predicted = Dense((self._encoding_parser.get_n_classes_x()) * self._encoding_parser.n_event_features)(predicted)
         predicted = Reshape((train_data.shape[1], train_data.shape[2], train_data.shape[3]))(predicted)
 
         predicted = Dense(train_data.shape[3], activation='softmax')(predicted)
 
         self._model = Model(model_inputs, predicted)
+
         self._model.compile(loss='categorical_crossentropy', optimizer='adam')
         self._model.fit(train_data, targets, epochs=self._n_epochs)
 

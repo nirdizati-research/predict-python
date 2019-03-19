@@ -36,7 +36,8 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     :return: predictive_model scores and split
 
     """
-    train_data, test_data = _drop_columns(training_df, test_df)
+    train_data = _drop_columns(training_df)
+    test_data = _drop_columns(test_df)
 
     model_split = _train(train_data, _choose_classifier(job), clusterer)
     results_df, auc = _test(
@@ -182,10 +183,9 @@ def _prepare_results(results_df: DataFrame, auc: int) -> dict:
     return row
 
 
-def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
-    train_df = train_df.drop('trace_id', 1)
-    test_df = test_df.drop('trace_id', 1)
-    return train_df, test_df
+def _drop_columns(df: DataFrame) -> DataFrame:
+    df = df.drop('trace_id', 1)
+    return df
 
 
 def _choose_classifier(job: Job):

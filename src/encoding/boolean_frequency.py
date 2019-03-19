@@ -88,6 +88,6 @@ def _trace_to_row(trace: Trace, encoding: Encoding, event_index: int, labelling:
     trace_row += event_happened
     trace_row += add_labels(encoding, labelling, event_index, trace, attribute_classifier=atr_classifier,
                             executed_events=executed_events, resources_used=resources_used, new_traces=new_traces)
-    if trace_row[-1] in event_names:
-        trace_row[-1] = event_names.index(trace_row[-1])
+    # if trace_row[-1] in event_names:
+    #     trace_row[-1] = event_names.index(trace_row[-1])
     return trace_row

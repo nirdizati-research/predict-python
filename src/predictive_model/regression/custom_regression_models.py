@@ -6,7 +6,8 @@ from numpy import ndarray
 from pandas import DataFrame
 from sklearn.base import RegressorMixin
 
-from src.encoding.encoding_parser import EncodingParser, Tasks
+from src.encoding.encoding_parser import EncodingParser
+from src.predictive_model.models import PredictiveModels
 
 
 class NNRegressor(RegressorMixin):
@@ -28,7 +29,7 @@ class NNRegressor(RegressorMixin):
         self._n_epochs = int(kwargs['n_epochs'])
         self._encoding = str(kwargs['encoding'])
         self._dropout_rate = float(kwargs['dropout_rate'])
-        self._encoding_parser = EncodingParser(self._encoding, None, task=Tasks.REGRESSION)
+        self._encoding_parser = EncodingParser(self._encoding, None, task=PredictiveModels.REGRESSION.value)
         self._model = None
 
     def fit(self, train_data: DataFrame, targets: ndarray) -> None:
@@ -40,6 +41,8 @@ class NNRegressor(RegressorMixin):
         :param targets: encoded target dataset
 
         """
+        targets = DataFrame(targets, columns=['label'])
+
         train_data = self._encoding_parser.parse_training_dataset(train_data)
         targets = self._encoding_parser.parse_targets(targets)
 

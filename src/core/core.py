@@ -6,7 +6,7 @@ from pm4py.objects.log.log import EventLog
 
 from src.cache.cache import get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
-from src.cache.models import LabelledLogs, LoadedLog
+from src.cache.models import LabelledLog, LoadedLog
 from src.clustering.clustering import Clustering
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
@@ -49,9 +49,9 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
     """
     print('\tGetting Dataset')
     if use_cache:
-        if LabelledLogs.objects.filter(split=job.split,
-                                       encoding=job.encoding,
-                                       labelling=job.labelling).exists():
+        if LabelledLog.objects.filter(split=job.split,
+                                      encoding=job.encoding,
+                                      labelling=job.labelling).exists():
             training_df, test_df = get_labelled_logs(job)
 
         else:
@@ -122,7 +122,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     elif job.type == JobTypes.UPDATE.value:
         results, model_split = update_and_test(training_df, test_df, job)
     else:
-        raise ValueError("Type not supported", job.type)
+        raise ValueError("Type {} not supported".format(job.type))
 
     # TODO: integrateme
     if job.type != JobTypes.LABELLING.value:
@@ -169,7 +169,7 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
     elif model['type'] == PredictiveModels.TIME_SERIES_PREDICTION.value:
         results = time_series_prediction_single_log(run_df, model)
     else:
-        raise ValueError("Type not supported", model['type'])
+        raise ValueError("Type {} not supported".format(model['type']))
     print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
     return results
 

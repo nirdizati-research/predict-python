@@ -16,6 +16,7 @@ from src.predictive_model.models import PredictiveModels
 def prediction_task(job_id):
     print("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
+
     try:
         if job.status == JobStatuses.CREATED.value:
             job.status = JobStatuses.RUNNING.value

@@ -2,16 +2,18 @@ from src.clustering.models import Clustering
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding, ValueEncodings
 from src.jobs.models import Job, JobStatuses, JobTypes
-from src.labelling.models import Labelling, LabelTypes
+from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel
 from src.predictive_model.models import PredictiveModels
 
 
-def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value):
+def generate(split, payload):
     jobs = []
 
     config = payload['config']
     label = config['label'] if 'label' in config else {}
+    job_type = JobTypes.PREDICTION.value
+    prediction_type = payload['type']
 
     for method in config['methods']:
         for clustering in config['clusterings']:
@@ -21,7 +23,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                     for i in range(1, encoding['prefix_length'] + 1):
                         item, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
-                            type=generation_type,
+                            type=job_type,
                             split=split,
                             encoding=Encoding.objects.get_or_create(
                                 data_encoding='label_encoder',
@@ -45,14 +47,14 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                             )[0] if label != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             predictive_model=PredictiveModel.init(
-                                get_prediction_method_config(generation_type, method, payload)
+                                get_prediction_method_config(prediction_type, method, payload)
                             )
                         )
                         jobs.append(item)
                 else:
                     item, _ = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
-                        type=generation_type,
+                        type=job_type,
                         split=split,
                         encoding=Encoding.objects.get_or_create(
                             data_encoding='label_encoder',
@@ -76,7 +78,7 @@ def generate(split, payload, generation_type=PredictiveModels.CLASSIFICATION.val
                         )[0] if label != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                         predictive_model=PredictiveModel.init(
-                            get_prediction_method_config(generation_type, method, payload)
+                            get_prediction_method_config(prediction_type, method, payload)
                         )
                     )
                     jobs.append(item)
@@ -104,7 +106,7 @@ def get_prediction_method_config(prediction_type, method, payload):
             **payload.get('time_series_prediction', {})
         }
     else:
-        raise ValueError('prediction_type ', prediction_type, 'not recognized')
+        raise ValueError('prediction_type {} not recognized'.format(prediction_type))
 
 
 def generate_labelling(split, payload):

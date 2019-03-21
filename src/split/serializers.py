@@ -4,11 +4,9 @@ from src.split.models import Split
 
 
 class CreateSplitSerializer(serializers.ModelSerializer):
-    config = serializers.JSONField(required=False)
-
     class Meta:
         model = Split
-        fields = ('id', 'config', 'original_log')
+        fields = ('original_log', 'splitting_method', 'test_size')
 
 
 class SplitSerializer(serializers.ModelSerializer):
@@ -19,4 +17,4 @@ class SplitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Split
-        fields = ('id', 'original_log', 'type', 'test_log', 'training_log')
+        fields = ('id', 'original_log', 'type', 'splitting_method', 'test_log', 'training_log', 'test_size')

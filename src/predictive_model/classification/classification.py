@@ -246,4 +246,4 @@ def _check_is_binary_classifier(label_type: str) -> bool:
         return True
     if label_type in [LabelTypes.NEXT_ACTIVITY.value, LabelTypes.ATTRIBUTE_STRING.value]:
         return False
-    raise ValueError("Label type not supported", label_type)
+    raise ValueError("Label type {} not supported".format(label_type))

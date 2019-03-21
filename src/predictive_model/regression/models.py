@@ -76,15 +76,15 @@ class Regression(PredictiveModel):
             return NeuralNetwork.objects.get_or_create(
                 prediction_method=regressor_type,
                 predictive_model=PredictiveModels.REGRESSION.value,
-                hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
-                hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
+                hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
+                hidden_units=configuration.get('n_hidden_units', default_configuration['n_hidden_units']),
                 activation_function=configuration.get('activation_function',
                                                       default_configuration['activation_function']),
                 epochs=configuration.get('epochs', default_configuration['epochs']),
                 dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate'])
             )[0]
         else:
-            raise ValueError('regressor type ' + regressor_type + ' not recognized')
+            raise ValueError('regressor type {} not recognized'.format(regressor_type))
 
 
 class RandomForest(Regression):
@@ -147,8 +147,8 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 
 
 class NeuralNetwork(Regression):
-    hidden_layers = models.PositiveIntegerField()
-    hidden_units = models.PositiveIntegerField()
+    n_hidden_layers = models.PositiveIntegerField()
+    n_hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',
                                            max_length=20)
     epochs = models.PositiveIntegerField()
@@ -157,8 +157,8 @@ class NeuralNetwork(Regression):
     def to_dict(self):
         return {
             'regression_method': RegressionMethods.NN.value,
-            'hidden_layers': self.hidden_layers,
-            'hidden_units': self.hidden_units,
+            'n_hidden_layers': self.n_hidden_layers,
+            'n_hidden_units': self.n_hidden_units,
             'activation_function': self.activation_function,
             'epochs': self.epochs,
             'dropout_rate': self.dropout_rate

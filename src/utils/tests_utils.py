@@ -51,7 +51,7 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
                                             train_log=train_log,
                                             test_log=test_log)[0]
     else:
-        raise ValueError('split_type', split_type, 'not recognised')
+        raise ValueError('split_type {} not recognized'.format(split_type))
     print('split:', split)
     return split
 

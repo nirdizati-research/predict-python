@@ -175,15 +175,15 @@ class Classification(PredictiveModel):
             return NeuralNetwork.objects.get_or_create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
-                hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
-                hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
+                hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
+                hidden_units=configuration.get('n_hidden_units', default_configuration['n_hidden_units']),
                 activation_function=configuration.get('activation_function',
                                                       default_configuration['activation_function']),
-                epochs=configuration.get('epochs', default_configuration['epochs']),
+                epochs=configuration.get('n_epochs', default_configuration['n_epochs']),
                 dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate']),
             )[0]
         else:
-            raise ValueError('classifier type ' + classifier_type + ' not recognized')
+            raise ValueError('classifier type {} not recognized'.format(classifier_type))
 
 
 class DecisionTree(Classification):
@@ -411,18 +411,18 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 
 
 class NeuralNetwork(Classification):
-    hidden_layers = models.PositiveIntegerField()
-    hidden_units = models.PositiveIntegerField()
+    n_hidden_layers = models.PositiveIntegerField()
+    n_hidden_units = models.PositiveIntegerField()
     activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu', max_length=20)
-    epochs = models.PositiveIntegerField()
+    n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 
     def to_dict(self):
         return {
             'classification_method': ClassificationMethods.NN.value,
-            'hidden_layers': self.hidden_layers,
-            'hidden_units': self.hidden_units,
+            'n_hidden_layers': self.n_hidden_layers,
+            'n_hidden_units': self.n_hidden_units,
             'activation_function': self.activation_function,
-            'epochs': self.epochs,
+            'n_epochs': self.n_epochs,
             'dropout_rate': self.dropout_rate
         }

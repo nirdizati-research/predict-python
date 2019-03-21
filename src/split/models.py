@@ -13,8 +13,8 @@ class SplitTypes(Enum):
 
 
 SPLIT_TYPE_MAPPINGS = (
-    (SplitTypes.SPLIT_SINGLE, 'single'),
-    (SplitTypes.SPLIT_DOUBLE, 'double'),
+    (SplitTypes.SPLIT_SINGLE.value, 'single'),
+    (SplitTypes.SPLIT_DOUBLE.value, 'double'),
 )
 
 
@@ -50,7 +50,7 @@ class Split(CommonModel):
             'id': self.pk,
             'type': self.type,
             'test_size': self.test_size,
-            'splitting_method': self.splitting_method
+            'splitting_method': self.splitting_method,
         }
         if self.type == 'single':
             temp['original_log_path'] = self.original_log.path

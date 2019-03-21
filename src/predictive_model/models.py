@@ -37,7 +37,7 @@ class PredictiveModel(CommonModel):
             from src.predictive_model.time_series_prediction.models import TimeSeriesPrediction
             return TimeSeriesPrediction.init(configuration)
         else:
-            raise ValueError('predictive model type ' + prediction_type + ' not recognized')
+            raise ValueError('predictive model type {} not recognized'.format(prediction_type))
 
     def to_dict(self):
         return {

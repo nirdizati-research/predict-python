@@ -32,7 +32,7 @@ class HyperparameterOptimization(CommonModel):
                 algorithm_type=configuration.get('algorithm_type', default_configuration['algorithm_type'])
             )[0]
         else:
-            raise ValueError('hyperparameter optimizer type ' + hyperparameter_optimizer_type + ' not recognized')
+            raise ValueError('hyperparameter optimizer type {} not recognized'.format(hyperparameter_optimizer_type))
 
 
 class HyperOptAlgorithms(Enum):

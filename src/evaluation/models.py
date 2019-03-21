@@ -38,7 +38,7 @@ class Evaluation(CommonModel):
             return TimeSeriesPredictionMetrics.objects.get_or_create(
             )[0]
         else:
-            raise ValueError('evaluation model type ' + prediction_type + ' not recognized')
+            raise ValueError('evaluation model type {} not recognized'.format(prediction_type))
 
 
 class ClassificationMetrics(Evaluation):

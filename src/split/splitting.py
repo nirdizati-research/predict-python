@@ -39,7 +39,7 @@ def _split_single_log(split: Split):
     elif split.splitting_method == SplitOrderingMethods.SPLIT_RANDOM.value:
         return _split_log(log, split.test_size, random_state=None)
     else:
-        raise ValueError("Unknown splitting method", split.splitting_method)
+        raise ValueError('splitting method {} not recognized'.format(split.splitting_method))
 
 
 def _temporal_split(log: EventLog, test_size: float):

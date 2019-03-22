@@ -41,7 +41,7 @@ def save_result(results: dict, job, start_time: float):
         results['auc']
     ]
     result += [job['encoding'][index] for index in range(len(job['encoding']))]
-    result += [job['label'][index] for index in range(len(job['label']))]
+    result += [job['labelling'][index] for index in range(len(job['labelling']))]
     if 'incremental_train' in job:
         result += [job['incremental_train'][index] for index in job['incremental_train'].keys()]
     if 'hyperopt' in job:
@@ -65,7 +65,7 @@ def save_result(results: dict, job, start_time: float):
                              'recall',
                              'auc'] +
                             list(job['encoding']._fields) +
-                            list(job['label']._fields) +
+                            list(job['labelling']._fields) +
                             (list(job['incremental_train'].keys()) if 'incremental_train' in job else []) +
                             (list(job['hyperopt'].keys()) if 'hyperopt' in job else []) +
                             ['clustering'] +

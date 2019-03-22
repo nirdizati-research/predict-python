@@ -196,9 +196,6 @@ def _choose_classifier(job: Job):
         assert classifier[0].__class__.__name__ == job.method
     else:
         method, config = get_method_config(job)
-        config.pop('model_path', None)
-        config.pop('predictive_model', None)
-        config.pop('prediction_method', None)
         config.pop('classification_method', None)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN.value:

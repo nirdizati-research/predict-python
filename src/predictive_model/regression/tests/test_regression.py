@@ -26,7 +26,7 @@ class TestRegression(TestCase):
         json['split'] = split_double()
         json['method'] = method
         json['encoding'] = EncodingContainer(encoding_method, padding=padding, prefix_length=4)
-        json['label'] = LabelContainer(label)
+        json['labelling'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
         json['type'] = PredictiveModels.REGRESSION.value
         json['incremental_train'] = {'base_model': None}

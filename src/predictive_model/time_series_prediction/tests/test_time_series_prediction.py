@@ -29,13 +29,13 @@ class TestTimeSeriesPrediction(TestCase):
         json['encoding'] = EncodingContainer(encoding_method, padding=padding, prefix_length=4)
         json['incremental_train'] = {'base_model': None}
         if label == LabelTypes.ATTRIBUTE_STRING.value:
-            json['label'] = LabelContainer(label, attribute_name='creator')
+            json['labelling'] = LabelContainer(label, attribute_name='creator')
         elif label == ThresholdTypes.THRESHOLD_CUSTOM.value:
-            json['label'] = LabelContainer(threshold_type=label, threshold=50)
+            json['labelling'] = LabelContainer(threshold_type=label, threshold=50)
         elif label == ThresholdTypes.THRESHOLD_MEAN.value:
-            json['label'] = LabelContainer(threshold_type=label, threshold=50)
+            json['labelling'] = LabelContainer(threshold_type=label, threshold=50)
         else:
-            json['label'] = LabelContainer(label)
+            json['labelling'] = LabelContainer(label)
         json['add_elapsed_time'] = add_elapsed_time
         json['type'] = PredictiveModels.TIME_SERIES_PREDICTION.value
 

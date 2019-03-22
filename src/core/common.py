@@ -27,8 +27,11 @@ def get_method_config(job: Job) -> (str, dict):
     :return: method string and method configuration dict
 
     """
-    method = job.predictive_model.prediction_method
-    config = job.predictive_model.to_dict()
+    config = job.predictive_model.get_full_dict()  # pretty cash money method https://i.imgur.com/vKam04R.png
+    config.pop('model_path')
+    config.pop('predictive_model')
+    method = config['prediction_method']
+    config.pop('prediction_method')
     return method, config
 
 
@@ -48,12 +51,13 @@ ALL_CONFIGS = [
     REGRESSION_LASSO,
     REGRESSION_LINEAR,
     REGRESSION_XGBOOST,
-    UPDATE_INCREMENTAL_NAIVE_BAYES,
-    UPDATE_INCREMENTAL_ADAPTIVE_TREE,
-    UPDATE_INCREMENTAL_HOEFFDING_TREE,
     REGRESSION_NN,
 
-    TIME_SERIES_PREDICTION_RNN
+    TIME_SERIES_PREDICTION_RNN,
+
+    UPDATE_INCREMENTAL_NAIVE_BAYES,
+    UPDATE_INCREMENTAL_ADAPTIVE_TREE,
+    UPDATE_INCREMENTAL_HOEFFDING_TREE
 ]
 
 CONF_MAP = {

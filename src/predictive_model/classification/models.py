@@ -62,7 +62,6 @@ UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE.value, Classi
 
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
-    classification_method = models.CharField(choices=CLASSIFICATION_METHOD_MAPPINGS, max_length=20)
 
     @staticmethod
     def init(configuration: dict) -> PredictiveModel:
@@ -193,7 +192,6 @@ class DecisionTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.DECISION_TREE.value,
             'max_depth': self.max_depth,
             'min_samples_split': self.min_samples_split,
             'min_samples_leaf': self.min_samples_leaf
@@ -212,7 +210,6 @@ class Knn(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.KNN.value,
             'n_neighbors': self.n_neighbors,
             'weights': self.weights
         }
@@ -225,7 +222,6 @@ class RandomForest(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.RANDOM_FOREST.value,
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth,
             'max_features': self.max_features
@@ -238,7 +234,6 @@ class XGBoost(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.XGBOOST.value,
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth
         }
@@ -250,7 +245,6 @@ class NaiveBayes(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
             'alpha': self.alpha,
             'fit_prior': self.fit_prior
         }
@@ -279,7 +273,6 @@ class HoeffdingTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.HOEFFDING_TREE.value,
             'grace_period': self.grace_period,
             'split_criterion': self.split_criterion,
             'split_confidence': self.split_confidence,
@@ -301,7 +294,6 @@ class AdaptiveHoeffdingTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.ADAPTIVE_TREE.value,
             'grace_period': self.grace_period,
             'split_criterion': self.split_criterion,
             'split_confidence': self.split_confidence,
@@ -355,7 +347,6 @@ class SGDClassifier(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.SGDCLASSIFIER.value,
             'loss': self.loss,
             'penalty': self.penalty,
             'alpha': self.alpha,
@@ -391,7 +382,6 @@ class Perceptron(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.PERCEPTRON.value,
             'penalty': self.penalty,
             'alpha': self.alpha,
             'fit_intercept': self.fit_intercept,
@@ -419,7 +409,6 @@ class NeuralNetwork(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.NN.value,
             'n_hidden_layers': self.n_hidden_layers,
             'n_hidden_units': self.n_hidden_units,
             'activation_function': self.activation_function,

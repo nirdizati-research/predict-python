@@ -28,7 +28,7 @@ class TestClassPerf(TestCase):
         json['method'] = 'randomForest'
         json['encoding'] = EncodingContainer(ValueEncodings.BOOLEAN.value, prefix_length=20)
         json['type'] = 'classification'
-        json['label'] = LabelContainer(LabelTypes.DURATION.value)
+        json['labelling'] = LabelContainer(LabelTypes.DURATION.value)
         json['incremental_train'] = {'base_model': None}
         return json
 
@@ -51,7 +51,7 @@ class TestClassPerf(TestCase):
 
     def test_next_activity_randomForest(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
+        job['labelling'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         add_default_config(job)
         self.calculate_helper(job)
 
@@ -69,7 +69,7 @@ class TestClassPerf(TestCase):
 
     def test_class_hyperopt(self):
         job = self.get_job()
-        job['label'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
+        job['labelling'] = LabelContainer(LabelTypes.NEXT_ACTIVITY.value)
         job['hyperopt'] = {'use_hyperopt': True, 'max_evals': 10, 'performance_metric': 'f1score'}
         add_default_config(job)
         self.calculate_helper_hyperopt(job)
@@ -88,7 +88,7 @@ class RegPerf(TestCase):
         json['prefix_length'] = 20
         json['type'] = 'regression'
         json['padding'] = 'no_padding'
-        json['label'] = LabelContainer(LabelTypes.REMAINING_TIME.value)
+        json['labelling'] = LabelContainer(LabelTypes.REMAINING_TIME.value)
         return json
 
     @staticmethod

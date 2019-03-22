@@ -33,7 +33,6 @@ def prediction_task(job_id):
             job.result = result
             job.status = JobStatuses.COMPLETED.value
     except Exception as e:
-        print("error " + str(e.__repr__()))
         job.status = JobStatuses.ERROR.value
         job.error = str(e.__repr__())
         raise e

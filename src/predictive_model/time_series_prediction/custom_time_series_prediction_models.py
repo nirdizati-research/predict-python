@@ -45,7 +45,6 @@ class RNNTimeSeriesPredictor(TimeSeriesPredictorMixin):
 
         """
         train_data = self._encoding_parser.parse_training_dataset(train_data)
-
         targets = train_data[:, 1:]
         train_data = train_data[:, :-1]
 

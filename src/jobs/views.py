@@ -75,6 +75,5 @@ def create_multiple(request):
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
         django_rq.enqueue(tasks.prediction_task, job.id)
-
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)

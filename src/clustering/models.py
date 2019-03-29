@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from src.common.models import CommonModel
 
@@ -19,6 +20,7 @@ CLUSTERING_METHOD_MAPPINGS = (
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
     clustering_method = models.CharField(choices=CLUSTERING_METHOD_MAPPINGS, max_length=20)
+    objects = InheritanceManager()
 
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = {}):

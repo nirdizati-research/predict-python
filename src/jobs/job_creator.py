@@ -36,7 +36,7 @@ def generate(split, payload):
                         )[0]
 
                         predictive_model = PredictiveModel.init(
-                            get_prediction_method_config(prediction_type, method, payload))
+                            get_prediction_method_config(prediction_type, method, config))
 
                         job = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
@@ -57,7 +57,7 @@ def generate(split, payload):
                         jobs.append(job)
                 else:
                     predictive_model = PredictiveModel.init(
-                        get_prediction_method_config(prediction_type, method, payload))
+                        get_prediction_method_config(prediction_type, method, config))
 
                     job = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
@@ -92,26 +92,11 @@ def generate(split, payload):
 
 
 def get_prediction_method_config(predictive_model, prediction_method, payload):
-    if predictive_model == PredictiveModels.CLASSIFICATION.value:
-        return {
-            'predictive_model': predictive_model,
-            'prediction_method': prediction_method,
-            **payload.get('classification', {})
-        }
-    elif predictive_model == PredictiveModels.REGRESSION.value:
-        return {
-            'predictive_model': predictive_model,
-            'prediction_method': prediction_method,
-            **payload.get(predictive_model + '.' + prediction_method, {})
-        }
-    elif predictive_model == PredictiveModels.TIME_SERIES_PREDICTION.value:
-        return {
-            'predictive_model': predictive_model,
-            'prediction_method': prediction_method,
-            **payload.get('time_series_prediction', {})
-        }
-    else:
-        raise ValueError('prediction_type {} not recognized'.format(predictive_model))
+    return {
+        'predictive_model': predictive_model,
+        'prediction_method': prediction_method,
+        **payload.get(predictive_model + '.' + prediction_method, {})
+    }
 
 
 def generate_labelling(split, payload):

@@ -1,10 +1,13 @@
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from src.common.models import CommonModel
 from src.predictive_model.models import PredictiveModels
 
 
 class Evaluation(CommonModel):
+    objects = InheritanceManager()
+
     @staticmethod
     def init(prediction_type, results, binary=False):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:

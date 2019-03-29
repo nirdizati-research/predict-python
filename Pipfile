@@ -40,6 +40,5 @@ Keras = "==2.2.4"
 scikit-multiflow = "==0.1.2"
 django-extensions = "*"
 
-
 [requires]
 python_version = "3.6"

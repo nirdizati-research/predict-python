@@ -75,11 +75,10 @@ class Regression(PredictiveModel):
             return NeuralNetwork.objects.get_or_create(
                 prediction_method=regressor_type,
                 predictive_model=PredictiveModels.REGRESSION.value,
-                hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
-                hidden_units=configuration.get('n_hidden_units', default_configuration['n_hidden_units']),
-                activation_function=configuration.get('activation_function',
-                                                      default_configuration['activation_function']),
-                epochs=configuration.get('epochs', default_configuration['epochs']),
+                n_hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
+                n_hidden_units=configuration.get('n_hidden_units', default_configuration['n_hidden_units']),
+                activation=configuration.get('activation', default_configuration['activation']),
+                n_epochs=configuration.get('n_epochs', default_configuration['n_epochs']),
                 dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate'])
             )[0]
         else:
@@ -134,7 +133,7 @@ class XGBoost(Regression):
         }
 
 
-NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
+NEURAL_NETWORKS_ACTIVATION = (
     ('sigmoid', 'sigmoid'),
     ('tanh', 'tanh'),
     ('relu', 'relu')
@@ -144,17 +143,16 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 class NeuralNetwork(Regression):
     n_hidden_layers = models.PositiveIntegerField()
     n_hidden_units = models.PositiveIntegerField()
-    activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu',
-                                           max_length=20)
-    epochs = models.PositiveIntegerField()
+    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=20)
+    n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 
     def to_dict(self):
         return {
             'n_hidden_layers': self.n_hidden_layers,
             'n_hidden_units': self.n_hidden_units,
-            'activation_function': self.activation_function,
-            'epochs': self.epochs,
+            'activation': self.activation,
+            'n_epochs': self.n_epochs,
             'dropout_rate': self.dropout_rate
 
         }

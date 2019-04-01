@@ -30,3 +30,4 @@ pylint ==2.2.2
 scikit-multiflow==0.1.2
 django-extensions
 django-model-utils
+django-polymorphic

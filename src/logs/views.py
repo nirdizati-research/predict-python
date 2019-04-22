@@ -80,6 +80,7 @@ def get_log_stats(request, pk, stat):
 
 @api_view(['POST'])
 def upload_multiple(request):
+    print('Double upload request received.')
     test_log = create_log(request.FILES['testSet'], request.FILES['testSet'].name)
     train_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
 

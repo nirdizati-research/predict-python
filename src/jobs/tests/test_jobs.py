@@ -1,24 +1,20 @@
-import unittest
 from pprint import pprint
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from src.clustering.models import ClusteringMethods
-from src.core.tests.common import add_default_config
 from src.encoding.models import ValueEncodings
 from src.hyperparameter_optimization.models import HyperOptLosses, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.tasks import prediction_task
 from src.labelling.models import ThresholdTypes, LabelTypes
-from src.logs.models import Log
 from src.predictive_model.classification.methods_default_config import classification_random_forest
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
-from src.split.models import Split, SplitTypes
+from src.split.models import SplitTypes
 from src.utils.tests_utils import general_example_filepath, create_test_job, create_test_log, general_example_filename, \
     create_test_split, create_test_predictive_model, create_test_hyperparameter_optimizer, create_test_clustering, \
     create_test_encoding, create_test_labelling

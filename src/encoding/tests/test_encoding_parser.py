@@ -1,12 +1,17 @@
-import unittest
-
 from django.test import TestCase
 
 from src.encoding.complex_last_payload import complex
-from src.encoding.encoding_container import EncodingContainer
 from src.encoding.encoding_parser import EncodingParser, Tasks
 from src.encoding.models import ValueEncodings
-from src.labelling.label_container import LabelContainer
+from src.utils.event_attributes import unique_events, get_additional_columns
+from src.utils.file_service import get_log
+from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \
+    create_test_labelling, create_test_encoding
+from django.test import TestCase
+
+from src.encoding.complex_last_payload import complex
+from src.encoding.encoding_parser import EncodingParser, Tasks
+from src.encoding.models import ValueEncodings
 from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \

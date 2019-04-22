@@ -2,7 +2,7 @@ from src.clustering.models import Clustering
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding, ValueEncodings
 from src.jobs.models import Job, JobStatuses, JobTypes
-from src.labelling.models import Labelling, LabelTypes
+from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel
 from src.predictive_model.models import PredictiveModels
 

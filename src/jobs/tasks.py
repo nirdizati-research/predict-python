@@ -5,9 +5,10 @@ from sklearn.externals import joblib
 
 from pred_models.models import ModelSplit, PredModels
 from src.clustering.clustering import Clustering
+from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
-from src.jobs.models import Job, JobStatuses, JobTypes
+from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 from src.predictive_model.models import PredictiveModels
 
@@ -41,33 +42,33 @@ def prediction_task(job_id):
         publish(job)
 
 
-def save_models(to_model_split, job):
-    print("Start saving models of JOB {}".format(job.id))
-    job_split = job.split
-    if job_split.type == 'single':
-        log = job_split.original_log
-    else:
-        log = job_split.training_log
-    if job.type == JobTypes.UPDATE.value or job.config['incremental_train']['base_model'] is not None:
+def save_models(models: dict, job: Job):
+    print("\tStart saving models of JOB {}".format(job.id))
+    if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
+        clusterer_filename = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(
+            job.id,
+            job.split.id,
+            job.type)
+        joblib.dump(models[ModelType.CLUSTERER.value], clusterer_filename)
+        job.clustering.model_path = clusterer_filename
+        job.save()
+
+    if job.type == JobTypes.UPDATE.value:
         job.type = PredictiveModels.CLASSIFICATION.value
-        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(job.id, job.split.id,
-                                                                                                job.type,
-                                                                                                str(time.time()))
+        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
+            job.id,
+            job.split.id,
+            job.type,
+            str(time.time()))
     else:
-        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(job.id, job.split.id,
-                                                                                               job.type)
-    joblib.dump(to_model_split['classifier'], filename_model)
-    model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
-                                                            predtype=job.type)
-    if to_model_split['type'] == Clustering.KMEANS:  # TODO this will change when using more than one type of cluster
-        filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id,
-                                                                                            job.type)
-        joblib.dump(to_model_split['clusterer'], filename_clusterer)
-        model_split.clusterer_path = filename_clusterer
-        model_split.save()
-    PredModels.objects.create(pk=job.id, split=model_split, type=job.type, log=log, config=job.config)
-    # TODO: integrateme
-    # Job.predictive_model.model_path = filename_model
+        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
+            job.id,
+            job.split.id,
+            job.type)
+    joblib.dump(models[ModelType.CLASSIFIER.value], classifier_filename)
+    job.predictive_model.model_path = classifier_filename
+    job.save()
+
 
 
 def hyperopt_task(job):

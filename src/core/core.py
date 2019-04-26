@@ -10,7 +10,7 @@ from src.cache.models import LabelledLog, LoadedLog
 from src.clustering.clustering import Clustering
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
-from src.jobs.models import JobTypes, Job
+from src.jobs.models import JobTypes, Job, ModelType
 from src.logs.log_service import create_log
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
@@ -135,7 +135,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
             job.evaluation = Evaluation.init(
                 job.predictive_model.predictive_model,
                 results,
-                len(model_split[job.predictive_model.predictive_model][0].classes_) <= 2
+                len(model_split[ModelType.CLASSIFIER.value][0].classes_) <= 2
             )
         job.save()
 

@@ -34,7 +34,7 @@ class TimeSeriesPrediction(PredictiveModel):
                 n_epochs=configuration.get('n_epochs', default_configuration['n_epochs'])
             )[0]
         else:
-            raise ValueError('time series predictor type ' + time_series_predictor_type + ' not recognized')
+            raise ValueError('time series predictor type {} not recognized'.format(time_series_predictor_type))
 
 
 RNN_TYPES = (

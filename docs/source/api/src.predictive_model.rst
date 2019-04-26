@@ -9,7 +9,6 @@ Subpackages
     src.predictive_model.classification
     src.predictive_model.migrations
     src.predictive_model.regression
-    src.predictive_model.tests
     src.predictive_model.time_series_prediction
 
 Submodules

@@ -1,12 +1,10 @@
-from pprint import pprint
-
 from django.test import TestCase
 from django_rq.queues import get_queue
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from src.clustering.models import ClusteringMethods
-from src.encoding.models import ValueEncodings
+from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.hyperparameter_optimization.models import HyperOptLosses, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.tasks import prediction_task
@@ -14,6 +12,7 @@ from src.labelling.models import ThresholdTypes, LabelTypes
 from src.predictive_model.classification.methods_default_config import classification_random_forest
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
+from src.predictive_model.regression.models import RegressionMethods
 from src.split.models import SplitTypes
 from src.utils.tests_utils import general_example_filepath, create_test_job, create_test_log, general_example_filename, \
     create_test_split, create_test_predictive_model, create_test_hyperparameter_optimizer, create_test_clustering, \
@@ -25,7 +24,6 @@ class JobModelTest(TestCase):
         create_test_job()
         create_test_job(job_type='asdf')
         Job.objects.create(type=JobTypes.PREDICTION.value, split=create_test_split(), encoding=None, labelling=None)
-
 
     def test_default(self):
         job = Job.objects.get(pk=1)
@@ -84,7 +82,7 @@ class JobModelTest(TestCase):
 
         self.assertEqual('error', job.status)
         self.assertEqual(None, job.evaluation)
-        self.assertEqual("ValueError('Type not supported', 'asdf')", job.error)
+        self.assertEqual("ValueError('Type asdf not supported',)", job.error)
 
     def test_missing_attributes(self):
         self.assertRaises(AttributeError, prediction_task, 3)
@@ -96,7 +94,6 @@ class JobModelTest(TestCase):
 
 
 class Hyperopt(TestCase):
-
     def test_hyperopt(self):
         job = Job.objects.create(
             split=create_test_split(
@@ -143,11 +140,11 @@ class CreateJobsTests(APITestCase):
             'type': PredictiveModels.CLASSIFICATION.value,
             'split_id': 1,
             'config': {
-                'encodings': ['simpleIndex'],
-                'clusterings': ['noClustering'],
+                'encodings': [ValueEncodings.SIMPLE_INDEX.value],
+                'clusterings': [ClusteringMethods.NO_CLUSTER.value],
                 'methods': ['knn'],
-                'label': {
-                    'type': 'remaining_time',
+                'labelling': {
+                    'type': LabelTypes.REMAINING_TIME.value,
                     'attribute_name': None,
                     'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
                     'threshold': 0,
@@ -156,17 +153,22 @@ class CreateJobsTests(APITestCase):
                 },
                 'random': 123,
                 'kmeans': {},
-                'encoding': {'prefix_length': 3, 'generation_type': 'only', 'padding': 'zero_padding'}
+                'encoding': {
+                    'prefix_length': 3,
+                    'generation_type': 'only',
+                    'padding': 'zero_padding'
+                }
             }
         }
 
     def test_class_job_creation(self):
         client = APIClient()
         response = client.post('/jobs/multiple', self.job_obj(), format='json')
-        pprint(response.data[0])
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['type'], 'classification')
+        self.assertEqual(response.data[0]['type'], 'prediction')
+        self.assertEqual(response.data[0]['config']['predictive_model']['predictive_model'], 'classification')
         self.assertDictEqual(response.data[0]['config']['encoding'], {
             'prefix_length': 3,
             'task_generation_type': 'only',
@@ -183,7 +185,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['clustering'], {
             'clustering_method': ClusteringMethods.NO_CLUSTER.value
         })
-        self.assertEqual(response.data[0]['config']['predictive_model']['classification_method'],
+        self.assertEqual(response.data[0]['config']['predictive_model']['prediction_method'],
                          ClassificationMethods.KNN.value)
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertDictEqual(response.data[0]['config']['labelling'],
@@ -198,13 +200,15 @@ class CreateJobsTests(APITestCase):
             'type': 'regression',
             'split_id': 1,
             'config': {
-                'encodings': ['simpleIndex', 'boolean', 'complex'],
-                'clusterings': ['kmeans'],
-                'methods': ['linear', 'lasso'],
+                'encodings': [ValueEncodings.SIMPLE_INDEX.value, ValueEncodings.BOOLEAN.value,
+                              ValueEncodings.COMPLEX.value],
+                'clusterings': [ClusteringMethods.KMEANS.value],
+                'methods': [RegressionMethods.LINEAR.value, RegressionMethods.LASSO.value],
                 'random': 123,
                 'kmeans': {'max_iter': 100},
-                'encoding': {'prefix_length': 3, 'generation_type': 'up_to', 'padding': 'no_padding'},
-                'label': {'type': LabelTypes.REMAINING_TIME.value}
+                'encoding': {'prefix_length': 3, 'generation_type': TaskGenerationTypes.UP_TO.value,
+                             'padding': 'no_padding'},
+                'labelling': {'type': LabelTypes.REMAINING_TIME.value}
             }
         }
 
@@ -214,14 +218,16 @@ class CreateJobsTests(APITestCase):
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(18, len(response.data))
-        self.assertEqual('regression', response.data[0]['type'])
-        self.assertEqual('simpleIndex', response.data[0]['config']['encoding']['value_encoding'])
-        self.assertEqual('kmeans', response.data[0]['config']['clustering']['clustering_method'])
-        self.assertEqual('linear', response.data[0]['config']['predictive_model']['regression_method'])
+        self.assertEqual(response.data[0]['type'], 'prediction')
+        self.assertEqual(response.data[0]['config']['predictive_model']['predictive_model'], 'regression')
+        self.assertEqual(ValueEncodings.SIMPLE_INDEX.value, response.data[0]['config']['encoding']['value_encoding'])
+        self.assertEqual(ClusteringMethods.KMEANS.value, response.data[0]['config']['clustering']['clustering_method'])
+        self.assertEqual(RegressionMethods.LINEAR.value,
+                         response.data[0]['config']['predictive_model']['prediction_method'])
         self.assertEqual(1, response.data[0]['config']['encoding']['prefix_length'])
         self.assertEqual(False, response.data[0]['config']['encoding']['padding'])
         self.assertEqual(100, response.data[0]['config']['clustering']['max_iter'])
-        self.assertEqual('created', response.data[0]['status'])
+        self.assertEqual(JobStatuses.CREATED.value, response.data[0]['status'])
         self.assertEqual(1, response.data[0]['config']['split']['id'])
 
         self.assertEqual(3, response.data[17]['config']['encoding']['prefix_length'])
@@ -232,7 +238,7 @@ class CreateJobsTests(APITestCase):
             'type': 'labelling',
             'split_id': 1,
             'config': {
-                'label': {
+                'labelling': {
                     'type': 'remaining_time',
                     'attribute_name': None,
                     'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
@@ -251,7 +257,6 @@ class CreateJobsTests(APITestCase):
     def test_labelling_job_creation(self):
         client = APIClient()
         response = client.post('/jobs/multiple', self.job_label(), format='json')
-
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'labelling')

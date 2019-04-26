@@ -11,10 +11,10 @@ Subpackages
 Submodules
 ----------
 
-src.utils.cache module
-----------------------
+src.utils.django\_orm module
+----------------------------
 
-.. automodule:: src.utils.cache
+.. automodule:: src.utils.django_orm
     :members:
     :undoc-members:
     :show-inheritance:

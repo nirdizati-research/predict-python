@@ -1,29 +1,31 @@
 from enum import Enum
 
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from src.common.models import CommonModel
 
 
 class ClusteringMethods(Enum):
     KMEANS = 'kmeans'
-    NO_CLUSTER = 'noClustering'
+    NO_CLUSTER = 'noCluster'
 
 
 CLUSTERING_METHOD_MAPPINGS = (
     (ClusteringMethods.KMEANS.value, 'kmeans'),
-    (ClusteringMethods.NO_CLUSTER.value, 'noClustering')
+    (ClusteringMethods.NO_CLUSTER.value, 'noCluster')
 )
 
 
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
     clustering_method = models.CharField(choices=CLUSTERING_METHOD_MAPPINGS, max_length=20)
+    objects = InheritanceManager()
 
     @staticmethod
     def init(clustering: str = ClusteringMethods.NO_CLUSTER.value, configuration: dict = {}):
         if clustering == ClusteringMethods.NO_CLUSTER.value:
-            return NoClustering.objects.get_or_create(
+            return NoCluster.objects.get_or_create(
                 pk=1,
                 clustering_method=clustering
             )[0]
@@ -44,7 +46,7 @@ class Clustering(CommonModel):
                 algorithm=configuration.get('algorithm', default_configuration['algorithm'])
             )[0]
         else:
-            raise ValueError('configuration ', clustering, 'not recognized')
+            raise ValueError('configuration {} not recognized'.format(clustering))
 
     def to_dict(self):
         return {
@@ -52,7 +54,7 @@ class Clustering(CommonModel):
         }
 
 
-class NoClustering(Clustering):
+class NoCluster(Clustering):
     pass
 
 

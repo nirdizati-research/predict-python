@@ -12,6 +12,14 @@ Subpackages
 Submodules
 ----------
 
+src.predictive\_model.time\_series\_prediction.TimeSeriesPredictorMixin module
+------------------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.predictive\_model.time\_series\_prediction.apps module
 ----------------------------------------------------------
 

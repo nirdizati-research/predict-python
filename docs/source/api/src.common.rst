@@ -1,28 +1,28 @@
-src.core package
-================
+src.common package
+==================
 
 Subpackages
 -----------
 
 .. toctree::
 
-    src.core.tests
+    src.common.migrations
 
 Submodules
 ----------
 
-src.core.common module
+src.common.apps module
 ----------------------
 
-.. automodule:: src.core.common
+.. automodule:: src.common.apps
     :members:
     :undoc-members:
     :show-inheritance:
 
-src.core.core module
---------------------
+src.common.models module
+------------------------
 
-.. automodule:: src.core.core
+.. automodule:: src.common.models
     :members:
     :undoc-members:
     :show-inheritance:
@@ -31,7 +31,7 @@ src.core.core module
 Module contents
 ---------------
 
-.. automodule:: src.core
+.. automodule:: src.common
     :members:
     :undoc-members:
     :show-inheritance:

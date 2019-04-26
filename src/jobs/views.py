@@ -58,7 +58,6 @@ class JobDetail(RetrieveModelMixin, GenericAPIView):
 def create_multiple(request):
     """No request validation"""
     payload = json.loads(request.body.decode('utf-8'))
-
     try:
         split = Split.objects.get(pk=payload['split_id'])
     except Split.DoesNotExist:
@@ -67,12 +66,8 @@ def create_multiple(request):
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
         jobs = update(split, payload)
-    elif payload['type'] == PredictiveModels.CLASSIFICATION.value:
+    elif payload['type'] in [e.value for e in PredictiveModels]:
         jobs = generate(split, payload)
-    elif payload['type'] == PredictiveModels.REGRESSION.value:
-        jobs = generate(split, payload, PredictiveModels.REGRESSION.value)
-    elif payload['type'] == PredictiveModels.TIME_SERIES_PREDICTION.value:
-        jobs = generate(split, payload, PredictiveModels.TIME_SERIES_PREDICTION.value)
     elif payload['type'] == JobTypes.LABELLING.value:
         jobs = generate_labelling(split, payload)
     else:
@@ -80,6 +75,5 @@ def create_multiple(request):
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
         django_rq.enqueue(tasks.prediction_task, job.id)
-
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)

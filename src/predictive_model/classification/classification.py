@@ -36,7 +36,8 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     :return: predictive_model scores and split
 
     """
-    train_data, test_data = _drop_columns(training_df, test_df)
+    train_data = _drop_columns(training_df)
+    test_data = _drop_columns(test_df)
 
     model_split = _train(train_data, _choose_classifier(job), clusterer)
     results_df, auc = _test(
@@ -182,10 +183,9 @@ def _prepare_results(results_df: DataFrame, auc: int) -> dict:
     return row
 
 
-def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
-    train_df = train_df.drop('trace_id', 1)
-    test_df = test_df.drop('trace_id', 1)
-    return train_df, test_df
+def _drop_columns(df: DataFrame) -> DataFrame:
+    df = df.drop('trace_id', 1)
+    return df
 
 
 def _choose_classifier(job: Job):
@@ -196,9 +196,6 @@ def _choose_classifier(job: Job):
         assert classifier[0].__class__.__name__ == job.method
     else:
         method, config = get_method_config(job)
-        config.pop('model_path', None)
-        config.pop('predictive_model', None)
-        config.pop('prediction_method', None)
         config.pop('classification_method', None)
         print("Using method {} with config {}".format(method, config))
         if method == ClassificationMethods.KNN.value:
@@ -246,4 +243,4 @@ def _check_is_binary_classifier(label_type: str) -> bool:
         return True
     if label_type in [LabelTypes.NEXT_ACTIVITY.value, LabelTypes.ATTRIBUTE_STRING.value]:
         return False
-    raise ValueError("Label type not supported", label_type)
+    raise ValueError("Label type {} not supported".format(label_type))

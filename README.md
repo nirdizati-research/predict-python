@@ -146,6 +146,55 @@ curl --request POST \
 http://localhost:8000/jobs/multiple
 ```
 
+## Documentation
+This project allows documentation to be built automatically using [sphinx](http://www.sphinx-doc.org/en/master/). All
+the documentation-related files are in the [docs/](docs) folder, structured as:
+
+```bash
+└── docs/
+    ├── build/
+    │   ├── doctrees/
+    │   └── html/
+    ├── source
+    │    ├── _static/
+    │    ├── _templates/
+    │    ├── api/
+    │    ├── readme/
+    │    ├── conf.py
+    │    └── index.rst
+    ├── generate_modules.sh
+    └── Makefile
+``` 
+
+in the [html/](docs/html) the built html files are placed, whereas in the [source/](docs/source) there are all the source
+files. The [_static/](docs/source/_static) contains the images used in the final html files, as the logo: place eventual 
+screenshots etc. here. The [api/](docs/source/api) contains all the files used for automatically fetching docstrings in
+the project, you shouldn't edit them as they are all replaced when re-building the documentation. The [readme/](docs/source/readme)
+folder contains the .rst copies of the readmes used, when updating the project's readme, please also update those accordingly.
+The [conf.py](docs/source/conf.py) contains all the sphinx settings, along with the theme used (sphinx-rtd-theme).
+
+The [index.rst](docs/source/index.rst) file is the documentation entry point, change this file to change the main documentation
+structure as needed. After updating the docstrings in the project, please re-run the [generate_modules.sh](docs/generate_modules.sh) script,
+that simply uses the ```sphinx-apidoc``` command to re-create the api .rst files.
+
+Finally, the [Makefile](docs/Makefile) is used when building the entire documentation, please run a ```make clean```
+```make html``` when you want updated docs.
+
+To summarize, after changing docstrings or the readme.rst files, simply run:
+
+```bash
+sh generate_modules.sh
+make clean
+make html
+```
+
+Documentation is also hosted on [readthedocs.com](https://nirdizati-research.readthedocs.io/en/development/) and built
+automatically after each commit on the master or development branch, make sure to have the api files updated in advance.
+### Note on CUDA enabled systems
+As this project detects when a compatible GPU is present in the system and tries to use it, please add a 
+```CUDA_VISIBLE_DEVICES=0``` flag as an environment variable if you encounter problems.
+
+
 ## Contributors
 - [@stebranchi](https://github.com/stebranchi) Stefano Branchi
 - [@dfmchiara](https://github.com/dfmchiara) Chiara Di Francescomarino 

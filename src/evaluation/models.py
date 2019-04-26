@@ -1,10 +1,13 @@
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from src.common.models import CommonModel
 from src.predictive_model.models import PredictiveModels
 
 
 class Evaluation(CommonModel):
+    objects = InheritanceManager()
+
     @staticmethod
     def init(prediction_type, results, binary=False):
         if prediction_type == PredictiveModels.CLASSIFICATION.value:
@@ -38,7 +41,7 @@ class Evaluation(CommonModel):
             return TimeSeriesPredictionMetrics.objects.get_or_create(
             )[0]
         else:
-            raise ValueError('evaluation model type ' + prediction_type + ' not recognized')
+            raise ValueError('evaluation model type {} not recognized'.format(prediction_type))
 
 
 class ClassificationMetrics(Evaluation):

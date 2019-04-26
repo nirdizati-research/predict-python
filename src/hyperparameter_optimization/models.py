@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 from src.common.models import CommonModel
 from src.hyperparameter_optimization.methods_default_config import hyperparameter_optimization_hyperopt
@@ -19,6 +20,7 @@ class HyperparameterOptimization(CommonModel):
     optimization_method = models.CharField(choices=HYPERPARAMETER_OPTIMIZATION_METHOD,
                                            default='hyperopt',
                                            max_length=20)
+    objects = InheritanceManager()
 
     @staticmethod
     def init(configuration: dict = {'type': HyperparameterOptimizationMethods.HYPEROPT.value}):
@@ -32,7 +34,7 @@ class HyperparameterOptimization(CommonModel):
                 algorithm_type=configuration.get('algorithm_type', default_configuration['algorithm_type'])
             )[0]
         else:
-            raise ValueError('hyperparameter optimizer type ' + hyperparameter_optimizer_type + ' not recognized')
+            raise ValueError('hyperparameter optimizer type {} not recognized'.format(hyperparameter_optimizer_type))
 
 
 class HyperOptAlgorithms(Enum):

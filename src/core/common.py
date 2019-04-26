@@ -12,6 +12,7 @@ from src.predictive_model.classification.models import CLASSIFICATION_RANDOM_FOR
     CLASSIFICATION_ADAPTIVE_TREE, CLASSIFICATION_HOEFFDING_TREE, CLASSIFICATION_SGDC, CLASSIFICATION_PERCEPTRON, \
     CLASSIFICATION_NN, UPDATE_INCREMENTAL_NAIVE_BAYES, UPDATE_INCREMENTAL_ADAPTIVE_TREE, \
     UPDATE_INCREMENTAL_HOEFFDING_TREE
+from src.predictive_model.models import PredictiveModel
 from src.predictive_model.regression.methods_default_config import regression_random_forest, regression_xgboost, \
     regression_lasso, regression_linear, regression_nn
 from src.predictive_model.regression.models import REGRESSION_RANDOM_FOREST, REGRESSION_XGBOOST, REGRESSION_LASSO, \
@@ -27,8 +28,12 @@ def get_method_config(job: Job) -> (str, dict):
     :return: method string and method configuration dict
 
     """
-    method = job.predictive_model.prediction_method
-    config = job.predictive_model.to_dict()
+    method = PredictiveModel.objects.filter(pk=job.predictive_model.pk).select_subclasses()[0]
+    config = method.get_full_dict()  # pretty cash money method https://i.imgur.com/vKam04R.png
+    config.pop('model_path')
+    config.pop('predictive_model')
+    method = config['prediction_method']
+    config.pop('prediction_method')
     return method, config
 
 
@@ -48,12 +53,13 @@ ALL_CONFIGS = [
     REGRESSION_LASSO,
     REGRESSION_LINEAR,
     REGRESSION_XGBOOST,
-    UPDATE_INCREMENTAL_NAIVE_BAYES,
-    UPDATE_INCREMENTAL_ADAPTIVE_TREE,
-    UPDATE_INCREMENTAL_HOEFFDING_TREE,
     REGRESSION_NN,
 
-    TIME_SERIES_PREDICTION_RNN
+    TIME_SERIES_PREDICTION_RNN,
+
+    UPDATE_INCREMENTAL_NAIVE_BAYES,
+    UPDATE_INCREMENTAL_ADAPTIVE_TREE,
+    UPDATE_INCREMENTAL_HOEFFDING_TREE
 ]
 
 CONF_MAP = {

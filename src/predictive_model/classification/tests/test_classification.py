@@ -16,7 +16,6 @@ from src.utils.tests_utils import create_test_job, create_test_encoding, create_
 
 
 class TestClassification(TestCase):
-
     def test_no_exceptions(self):
         filtered_labels = [enum.value for enum in LabelTypes]
 
@@ -62,7 +61,7 @@ class TestClassification(TestCase):
         job = create_test_job(
             predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.RANDOM_FOREST.value),
             labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
-                                            attribute_name='label'),
+                                            attribute_name='concept:name'),
             clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
         )
         result, _ = calculate(job)

@@ -12,6 +12,14 @@ src.predictive\_model.classification.tests.test\_classification module
     :undoc-members:
     :show-inheritance:
 
+src.predictive\_model.classification.tests.test\_nn\_models module
+------------------------------------------------------------------
+
+.. automodule:: src.predictive_model.classification.tests.test_nn_models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

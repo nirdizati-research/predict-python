@@ -7,7 +7,8 @@ from numpy import ndarray
 from pandas import DataFrame
 from sklearn.base import ClassifierMixin
 
-from src.encoding.encoding_parser import EncodingParser, Tasks
+from src.encoding.encoding_parser import EncodingParser
+from src.predictive_model.models import PredictiveModels
 
 
 class NNClassifier(ClassifierMixin):
@@ -29,7 +30,8 @@ class NNClassifier(ClassifierMixin):
         self._encoding = str(kwargs['encoding'])
         self._dropout_rate = float(kwargs['dropout_rate'])
         self._is_binary_classifier = bool(kwargs['is_binary_classifier'])
-        self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier, task=Tasks.CLASSIFICATION)
+        self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier,
+                                               task=PredictiveModels.CLASSIFICATION.value)
         self._model = None
 
     def fit(self, train_data: DataFrame, targets: ndarray) -> None:
@@ -41,8 +43,8 @@ class NNClassifier(ClassifierMixin):
         :param targets: encoded target dataset
 
         """
+        targets = DataFrame(targets, columns=['label'])
         train_data = self._encoding_parser.parse_training_dataset(train_data)
-
         targets = self._encoding_parser.parse_targets(targets)
 
         model_inputs = Input(train_data.shape[1:])
@@ -58,7 +60,7 @@ class NNClassifier(ClassifierMixin):
         if self._is_binary_classifier:
             predicted = Dense(1, activation='sigmoid')(predicted)
         else:
-            predicted = Dense(self._encoding_parser.n_classes_y + 1, activation='softmax')(predicted)
+            predicted = Dense(targets.shape[1], activation='softmax')(predicted)
         self._model = Model(model_inputs, predicted)
 
         if self._is_binary_classifier:

@@ -19,6 +19,14 @@ src.labelling.apps module
     :undoc-members:
     :show-inheritance:
 
+src.labelling.common module
+---------------------------
+
+.. automodule:: src.labelling.common
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 src.labelling.label\_container module
 -------------------------------------
 

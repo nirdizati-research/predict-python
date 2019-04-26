@@ -16,6 +16,7 @@ from src.predictive_model.models import PredictiveModels
 def prediction_task(job_id):
     print("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
+
     try:
         if job.status == JobStatuses.CREATED.value:
             job.status = JobStatuses.RUNNING.value
@@ -32,7 +33,6 @@ def prediction_task(job_id):
             job.result = result
             job.status = JobStatuses.COMPLETED.value
     except Exception as e:
-        print("error " + str(e.__repr__()))
         job.status = JobStatuses.ERROR.value
         job.error = str(e.__repr__())
         raise e
@@ -50,18 +50,23 @@ def save_models(to_model_split, job):
         log = job_split.training_log
     if job.type == JobTypes.UPDATE.value or job.config['incremental_train']['base_model'] is not None:
         job.type = PredictiveModels.CLASSIFICATION.value
-        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(job.id, job.split.id,
-                                                                                                job.type,
-                                                                                                str(time.time()))
+        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
+            job.id, job.split.id,
+            job.type,
+            str(time.time()))
     else:
-        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(job.id, job.split.id,
-                                                                                               job.type)
+        filename_model = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
+            job.id,
+            job.split.id,
+            job.type)
     joblib.dump(to_model_split['classifier'], filename_model)
     model_split, created = ModelSplit.objects.get_or_create(type=to_model_split['type'], model_path=filename_model,
                                                             predtype=job.type)
     if to_model_split['type'] == Clustering.KMEANS:  # TODO this will change when using more than one type of cluster
-        filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(job.id, job.split.id,
-                                                                                            job.type)
+        filename_clusterer = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(
+            job.id,
+            job.split.id,
+            job.type)
         joblib.dump(to_model_split['clusterer'], filename_clusterer)
         model_split.clusterer_path = filename_clusterer
         model_split.save()

@@ -12,7 +12,7 @@ from src.predictive_model.models import PredictiveModel, PredictiveModels
 
 class ClassificationMethods(Enum):
     KNN = 'knn'
-    RANDOM_FOREST = 'RandomForest'
+    RANDOM_FOREST = 'randomForest'
     XGBOOST = 'xgboost'
     DECISION_TREE = 'decisionTree'
     MULTINOMIAL_NAIVE_BAYES = 'multinomialNB'
@@ -25,7 +25,7 @@ class ClassificationMethods(Enum):
 
 CLASSIFICATION_METHOD_MAPPINGS = (
     (ClassificationMethods.KNN.value, 'knn'),
-    (ClassificationMethods.RANDOM_FOREST.value, 'RandomForest'),
+    (ClassificationMethods.RANDOM_FOREST.value, 'randomForest'),
     (ClassificationMethods.XGBOOST.value, 'xgboost'),
     (ClassificationMethods.DECISION_TREE.value, 'decisionTree'),
     (ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value, 'multinomialNB'),
@@ -62,7 +62,6 @@ UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE.value, Classi
 
 class Classification(PredictiveModel):
     """Container of Classification to be shown in frontend"""
-    classification_method = models.CharField(choices=CLASSIFICATION_METHOD_MAPPINGS, max_length=20)
 
     @staticmethod
     def init(configuration: dict) -> PredictiveModel:
@@ -175,15 +174,14 @@ class Classification(PredictiveModel):
             return NeuralNetwork.objects.get_or_create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
-                hidden_layers=configuration.get('hidden_layers', default_configuration['hidden_layers']),
-                hidden_units=configuration.get('hidden_units', default_configuration['hidden_units']),
-                activation_function=configuration.get('activation_function',
-                                                      default_configuration['activation_function']),
-                epochs=configuration.get('epochs', default_configuration['epochs']),
+                n_hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
+                n_hidden_units=configuration.get('n_hidden_units', default_configuration['n_hidden_units']),
+                activation=configuration.get('activation', default_configuration['activation']),
+                n_epochs=configuration.get('n_epochs', default_configuration['n_epochs']),
                 dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate']),
             )[0]
         else:
-            raise ValueError('classifier type ' + classifier_type + ' not recognized')
+            raise ValueError('classifier type {} not recognized'.format(classifier_type))
 
 
 class DecisionTree(Classification):
@@ -193,7 +191,6 @@ class DecisionTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.DECISION_TREE.value,
             'max_depth': self.max_depth,
             'min_samples_split': self.min_samples_split,
             'min_samples_leaf': self.min_samples_leaf
@@ -212,7 +209,6 @@ class Knn(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.KNN.value,
             'n_neighbors': self.n_neighbors,
             'weights': self.weights
         }
@@ -225,7 +221,6 @@ class RandomForest(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.RANDOM_FOREST.value,
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth,
             'max_features': self.max_features
@@ -238,7 +233,6 @@ class XGBoost(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.XGBOOST.value,
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth
         }
@@ -250,7 +244,6 @@ class NaiveBayes(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
             'alpha': self.alpha,
             'fit_prior': self.fit_prior
         }
@@ -279,7 +272,6 @@ class HoeffdingTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.HOEFFDING_TREE.value,
             'grace_period': self.grace_period,
             'split_criterion': self.split_criterion,
             'split_confidence': self.split_confidence,
@@ -301,7 +293,6 @@ class AdaptiveHoeffdingTree(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.ADAPTIVE_TREE.value,
             'grace_period': self.grace_period,
             'split_criterion': self.split_criterion,
             'split_confidence': self.split_confidence,
@@ -355,7 +346,6 @@ class SGDClassifier(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.SGDCLASSIFIER.value,
             'loss': self.loss,
             'penalty': self.penalty,
             'alpha': self.alpha,
@@ -391,7 +381,6 @@ class Perceptron(Classification):
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.PERCEPTRON.value,
             'penalty': self.penalty,
             'alpha': self.alpha,
             'fit_intercept': self.fit_intercept,
@@ -403,7 +392,7 @@ class Perceptron(Classification):
         }
 
 
-NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
+NEURAL_NETWORKS_ACTIVATION = (
     ('sigmoid', 'sigmoid'),
     ('tanh', 'tanh'),
     ('relu', 'relu')
@@ -411,18 +400,17 @@ NEURAL_NETWORKS_ACTIVATION_FUNCTION = (
 
 
 class NeuralNetwork(Classification):
-    hidden_layers = models.PositiveIntegerField()
-    hidden_units = models.PositiveIntegerField()
-    activation_function = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION_FUNCTION, default='relu', max_length=20)
-    epochs = models.PositiveIntegerField()
+    n_hidden_layers = models.PositiveIntegerField()
+    n_hidden_units = models.PositiveIntegerField()
+    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=20)
+    n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 
     def to_dict(self):
         return {
-            'classification_method': ClassificationMethods.NN.value,
-            'hidden_layers': self.hidden_layers,
-            'hidden_units': self.hidden_units,
-            'activation_function': self.activation_function,
-            'epochs': self.epochs,
+            'n_hidden_layers': self.n_hidden_layers,
+            'n_hidden_units': self.n_hidden_units,
+            'activation_function': self.activation,
+            'n_epochs': self.n_epochs,
             'dropout_rate': self.dropout_rate
         }

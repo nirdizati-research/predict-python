@@ -1,6 +1,8 @@
 from enum import Enum
 
 from django.db import models
+from model_utils.managers import InheritanceManager
+from polymorphic.models import PolymorphicModel
 
 from src.common.models import CommonModel
 
@@ -23,6 +25,7 @@ class PredictiveModel(CommonModel):
     model_path = models.FilePathField(path='cache/model_cache/')
     predictive_model = models.CharField(choices=PREDICTIVE_MODEL_MAPPINGS, max_length=20)
     prediction_method = models.CharField(max_length=20)
+    objects = InheritanceManager()
 
     @staticmethod
     def init(configuration: dict):
@@ -37,7 +40,7 @@ class PredictiveModel(CommonModel):
             from src.predictive_model.time_series_prediction.models import TimeSeriesPrediction
             return TimeSeriesPrediction.init(configuration)
         else:
-            raise ValueError('predictive model type ' + prediction_type + ' not recognized')
+            raise ValueError('predictive model type {} not recognized'.format(prediction_type))
 
     def to_dict(self):
         return {

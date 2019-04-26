@@ -14,11 +14,10 @@ from xgboost import XGBClassifier
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.jobs.models import JobTypes, Job
+from src.jobs.models import JobTypes, Job, ModelType
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.predictive_model.classification.models import ClassificationMethods, Classification
-from src.predictive_model.models import PredictiveModels
 from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
@@ -41,7 +40,8 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
 
     model_split = _train(train_data, _choose_classifier(job), clusterer)
     results_df, auc = _test(
-        model_split, test_data,
+        model_split,
+        test_data,
         evaluation=True,
         is_binary_classifier=_check_is_binary_classifier(job.labelling.type)
     )
@@ -67,8 +67,8 @@ def classification_single_log(input_df: DataFrame, model: dict) -> dict:
 
     # TODO load predictive_model more wisely
     model_split = dict()
-    model_split['clusterer'] = joblib.load(split['clusterer_path'])
-    model_split['classifier'] = joblib.load(split['model_path'])
+    model_split[ModelType.CLUSTERER.value] = joblib.load(split['clusterer_path'])
+    model_split[ModelType.CLASSIFIER.value] = joblib.load(split['model_path'])
     result, _ = _test(model_split, input_df, evaluation=False,
                       is_binary_classifier=_check_is_binary_classifier(model['label'].type))
     results['prediction'] = result['predicted']
@@ -119,7 +119,7 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
                 classifier = clone(classifier, safe=False)
                 classifier.reset()
 
-    return {'clusterer': clusterer, PredictiveModels.CLASSIFICATION.value: models}
+    return {ModelType.CLUSTERER.value: clusterer, ModelType.CLASSIFIER.value: models}
 
 
 def _update(job: Job, data: DataFrame, models) -> dict:
@@ -134,12 +134,12 @@ def _update(job: Job, data: DataFrame, models) -> dict:
 
             models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
 
-    return {'clusterer': clusterer, 'classifier': models}
+    return {ModelType.CLUSTERER.value: clusterer, ModelType.CLASSIFIER.value: models}
 
 
 def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (DataFrame, float):
-    clusterer = model_split['clusterer']
-    classifier = model_split[PredictiveModels.CLASSIFICATION.value]
+    clusterer = model_split[ModelType.CLUSTERER.value]
+    classifier = model_split[ModelType.CLASSIFIER.value]
 
     test_data = clusterer.cluster_data(test_data)
 

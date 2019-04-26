@@ -51,7 +51,8 @@ def generate(split, payload):
                                 threshold=labelling_config.get('threshold', None)
                             )[0] if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
-                            predictive_model=predictive_model
+                            predictive_model=predictive_model,
+                            create_models=config.get('create_models', False)
                         )[0]
 
                         jobs.append(job)
@@ -84,7 +85,8 @@ def generate(split, payload):
                             threshold=labelling_config.get('threshold', None)
                         )[0] if labelling_config != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
-                        predictive_model=predictive_model
+                        predictive_model=predictive_model,
+                        create_models=config.get('create_models', False)
                     )[0]
                     jobs.append(job)
 
@@ -206,7 +208,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
-                            )
+                            ),
+                            create_models=config.get('create_models', False)
                         )
                         jobs.append(item)
                 else:
@@ -238,7 +241,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
-                        )
+                        ),
+                        create_models=config.get('create_models', False)
                     )
                     jobs.append(item)
     return jobs

@@ -13,7 +13,7 @@ def get_digested(candidate_path: str) -> str:
 
 
 def load_from_cache(path: str, prefix: str = ''):
-    if path is not None:
+    if path is not None: #TODO: what if the file is not there?
         with open(prefix + get_digested(path) + '.pickle', 'rb') as f:
             return pickle.load(f)
 

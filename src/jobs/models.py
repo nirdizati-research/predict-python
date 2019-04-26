@@ -12,6 +12,13 @@ from src.predictive_model.models import PredictiveModel, PredictiveModel
 from src.split.models import Split
 
 
+class ModelType(Enum):
+    CLUSTERER = 'clusterer'
+    CLASSIFIER = 'classifier'
+    REGRESSOR = 'regressor'
+    TIME_SERIES_PREDICTOR = 'time_series_predictor'
+
+
 class JobStatuses(Enum):
     CREATED = 'created'
     COMPLETED = 'completed'

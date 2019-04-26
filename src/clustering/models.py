@@ -19,6 +19,7 @@ CLUSTERING_METHOD_MAPPINGS = (
 
 class Clustering(CommonModel):
     """Container of Classification to be shown in frontend"""
+    model_path = models.FilePathField(path='cache/model_cache/')
     clustering_method = models.CharField(choices=CLUSTERING_METHOD_MAPPINGS, max_length=20)
     objects = InheritanceManager()
 

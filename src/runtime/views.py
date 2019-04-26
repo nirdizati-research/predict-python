@@ -4,8 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from pred_models.models import PredModels
-from pred_models.serializers import ModelSerializer
-from src.jobs.models import Job, JobStatuses
+from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.serializers import JobSerializer
 from src.logs.models import Log
 from src.split.models import Split
@@ -24,8 +23,12 @@ def tracesList(request):  # TODO: changed self to request, check if correct or n
 
 @api_view(['GET'])
 def modelList(request):
-    models = PredModels.objects.all()
-    serializer = ModelSerializer(models, many=True)
+    completed_jobs = Job.objects.filter(
+        status=JobStatuses.COMPLETED.value,
+        type=JobTypes.PREDICTION.value,
+        create_models=True
+    )
+    serializer = JobSerializer(completed_jobs, many=True)
     return Response(serializer.data, status=200)
 
 

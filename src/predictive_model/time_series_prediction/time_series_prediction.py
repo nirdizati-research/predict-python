@@ -12,7 +12,7 @@ from sklearn.externals import joblib
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.jobs.models import Job
+from src.jobs.models import Job, ModelType
 from src.predictive_model.time_series_prediction import TimeSeriesPredictorMixin
 from src.predictive_model.time_series_prediction.custom_time_series_prediction_models import RNNTimeSeriesPredictor
 from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
@@ -63,8 +63,8 @@ def time_series_prediction_single_log(input_df: DataFrame, model: dict) -> dict:
 
     # TODO load predictive_model more wisely
     model_split = dict()
-    model_split['clusterer'] = joblib.load(split['clusterer_path'])
-    model_split['time_series_predictor'] = joblib.load(split['model_path'])
+    model_split[ModelType.CLUSTERER.value] = joblib.load(split['clusterer_path'])
+    model_split[ModelType.TIME_SERIES_PREDICTOR.value] = joblib.load(split['model_path'])
     result, _ = _test(model_split, input_df, evaluation=False)
     results['prediction'] = result['predicted']
     return results
@@ -83,12 +83,12 @@ def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Cluster
 
             models[cluster] = time_series_predictor
             time_series_predictor = clone(time_series_predictor, safe=False)
-    return {'clusterer': clusterer, 'time_series_predictor': models}
+    return {ModelType.CLUSTERER.value: clusterer, ModelType.TIME_SERIES_PREDICTOR.value: models}
 
 
 def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, float):
-    clusterer = model_split['clusterer']
-    time_series_predictor = model_split['time_series_predictor']
+    clusterer = model_split[ModelType.CLUSTERER.value]
+    time_series_predictor = model_split[ModelType.TIME_SERIES_PREDICTOR.value]
 
     test_data = clusterer.cluster_data(data)
 

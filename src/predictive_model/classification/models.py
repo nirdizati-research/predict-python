@@ -12,7 +12,7 @@ from src.predictive_model.models import PredictiveModel, PredictiveModels
 
 class ClassificationMethods(Enum):
     KNN = 'knn'
-    RANDOM_FOREST = 'RandomForest'
+    RANDOM_FOREST = 'randomForest'
     XGBOOST = 'xgboost'
     DECISION_TREE = 'decisionTree'
     MULTINOMIAL_NAIVE_BAYES = 'multinomialNB'
@@ -25,7 +25,7 @@ class ClassificationMethods(Enum):
 
 CLASSIFICATION_METHOD_MAPPINGS = (
     (ClassificationMethods.KNN.value, 'knn'),
-    (ClassificationMethods.RANDOM_FOREST.value, 'RandomForest'),
+    (ClassificationMethods.RANDOM_FOREST.value, 'randomForest'),
     (ClassificationMethods.XGBOOST.value, 'xgboost'),
     (ClassificationMethods.DECISION_TREE.value, 'decisionTree'),
     (ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value, 'multinomialNB'),

@@ -52,8 +52,13 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
         if LabelledLog.objects.filter(split=job.split,
                                       encoding=job.encoding,
                                       labelling=job.labelling).exists():
-            training_df, test_df = get_labelled_logs(job)
-
+            try:
+                training_df, test_df = get_labelled_logs(job)
+            except FileNotFoundError:  # cache invalidation
+                LabelledLog.objects.filter(split=job.split,
+                                           encoding=job.encoding,
+                                           labelling=job.labelling).delete()
+                return get_encoded_logs(job, use_cache)
         else:
             if job.split.train_log is not None and \
                 job.split.test_log is not None and \

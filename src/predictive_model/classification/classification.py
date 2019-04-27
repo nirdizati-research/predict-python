@@ -76,7 +76,8 @@ def classification_single_log(input_df: DataFrame, model: dict) -> dict:
 
 
 def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
-    train_data, test_data = _drop_columns(training_df, test_df)
+    train_data = _drop_columns(training_df)
+    test_data = _drop_columns(test_df)
 
     # TODO load previously used data structure to check input conformance
     # Encoding.objects.filter()
@@ -193,7 +194,7 @@ def _choose_classifier(job: Job):
         classifier = _load_model(job.incremental_train)
         # TODO: check if this instruction still makes sense
         # are we updating a predictive_model with its own methods?
-        assert classifier[0].__class__.__name__ == job.method
+        assert classifier[0].__class__.__name__ == job.predictive_model.prediction_method
     else:
         method, config = get_method_config(job)
         config.pop('classification_method', None)

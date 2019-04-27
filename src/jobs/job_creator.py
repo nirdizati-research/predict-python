@@ -183,7 +183,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                     for i in range(1, encoding['prefix_length'] + 1):
                         item, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
-                            type=payload['type'],
+                            type=JobTypes.UPDATE.value,
                             split=split,
                             encoding=Encoding.objects.get_or_create(  # TODO fixme
                                 data_encoding='label_encoder',
@@ -209,13 +209,18 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             ),
-                            create_models=config.get('create_models', False)
+                            create_models=config.get('create_models', False),
+                            incremental_train=PredictiveModel.objects.get(
+                                pk=Job.objects.get(
+                                    pk=config['incremental_train'].get('base_model', None)
+                                )[0].predictive_model.id
+                            )[0]
                         )
                         jobs.append(item)
                 else:
                     item, _ = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
-                        type=payload['type'],
+                        type=JobTypes.UPDATE.value,
 
                         split=split,
                         encoding=Encoding.objects.get_or_create(  # TODO fixme
@@ -242,7 +247,12 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         ),
-                        create_models=config.get('create_models', False)
+                        create_models=config.get('create_models', False),
+                        incremental_train=PredictiveModel.objects.get(
+                            pk=Job.objects.get(
+                                pk=config['incremental_train'].get('base_model', None)
+                            )[0].predictive_model.id
+                        )[0]
                     )
                     jobs.append(item)
     return jobs

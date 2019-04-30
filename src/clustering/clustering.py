@@ -10,6 +10,7 @@ from sklearn.externals import joblib
 import src
 from pred_models.models import PredModels, ModelSplit
 from src.clustering.models import ClusteringMethods
+from src.jobs.models import Job
 
 
 class Clustering:
@@ -78,20 +79,11 @@ class Clustering:
             raise ValueError("Unexpected clustering method {}".format(clustering.clustering_method))
 
     @classmethod
-    def load_model(cls, clustering: src.clustering.models.Clustering):
-        if clustering.clustering_method == ClusteringMethods.KMEANS.value:
-            # TODO fixme
-            classifier = PredModels.objects.filter(id=job['incremental_train']['base_model'])
-            assert len(classifier) == 1  # asserting that the used id is unique
-            classifier_details = classifier[0]
-            classifier = ModelSplit.objects.filter(id=classifier_details.split_id)
-            assert len(classifier) == 1
-            classifier = classifier[0]
-            # TODO this is a bad workaround
-            clusterer = joblib.load(
-                classifier.model_path[:11] + classifier.model_path[11:].replace('predictive_model', 'clusterer'))
+    def load_model(cls, job : Job):
+        if job.clustering.clustering_method == ClusteringMethods.KMEANS.value:
+            clusterer = joblib.load(job.clustering.model_path)
         elif job.clustering.clustering_method == ClusteringMethods.NO_CLUSTER.value:
-            clusterer = Clustering(job)
+            clusterer = Clustering(job.clustering)
         else:
             raise ValueError("Unexpected clustering method {}".format(job.clustering.clustering_method))
         return clusterer

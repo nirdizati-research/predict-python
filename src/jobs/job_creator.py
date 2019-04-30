@@ -210,10 +210,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 get_prediction_method_config(generation_type, method, payload)
                             ),
                             create_models=config.get('create_models', False),
-                            incremental_train=PredictiveModel.objects.get(
-                                pk=Job.objects.get(
-                                    pk=config['incremental_train'].get('base_model', None)
-                                )[0].predictive_model.id
+                            incremental_train=Job.objects.filter(
+                                pk=config['incremental_train'].get('base_model', None)
                             )[0]
                         )
                         jobs.append(item)
@@ -248,10 +246,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             get_prediction_method_config(generation_type, method, payload)
                         ),
                         create_models=config.get('create_models', False),
-                        incremental_train=PredictiveModel.objects.get(
-                            pk=Job.objects.get(
+                        incremental_train=Job.objects.filter(
                                 pk=config['incremental_train'].get('base_model', None)
-                            )[0].predictive_model.id
                         )[0]
                     )
                     jobs.append(item)

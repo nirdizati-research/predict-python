@@ -83,7 +83,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                         test_name + '.xes'
                     )
                     job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
-                    job.save()
+                    job.split.save()
 
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
 
@@ -143,7 +143,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
                 results,
                 len(model_split[ModelType.CLASSIFIER.value][0].classes_) <= 2
             )
-        job.save()
+        job.evaluation.save()
 
     if job.type == PredictiveModels.CLASSIFICATION.value:
         save_result(results, job, start_time)

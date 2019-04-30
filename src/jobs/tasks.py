@@ -51,7 +51,7 @@ def save_models(models: dict, job: Job):
             job.type)
         joblib.dump(models[ModelType.CLUSTERER.value], clusterer_filename)
         job.clustering.model_path = clusterer_filename
-        job.save()
+        job.clustering.save()
 
     if job.type == JobTypes.UPDATE.value:
         job.type = PredictiveModels.CLASSIFICATION.value
@@ -67,8 +67,8 @@ def save_models(models: dict, job: Job):
             job.type)
     joblib.dump(models[ModelType.CLASSIFIER.value], classifier_filename)
     job.predictive_model.model_path = classifier_filename
+    job.predictive_model.save()
     job.save()
-
 
 
 def hyperopt_task(job):

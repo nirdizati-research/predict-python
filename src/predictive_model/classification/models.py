@@ -139,20 +139,20 @@ class Classification(PredictiveModel):
             return SGDClassifier.objects.get_or_create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
-                loss=configuration.get('loss', default_configuration['loss ']),
-                penalty=configuration.get('penalty', default_configuration['penalty ']),
-                alpha=configuration.get('alpha', default_configuration['alpha ']),
-                l1_ratio=configuration.get('l1_ratio', default_configuration['l1_ratio ']),
-                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept ']),
-                tol=configuration.get('tol', default_configuration['tol ']),
-                epsilon=configuration.get('epsilon', default_configuration['epsilon ']),
-                learning_rate=configuration.get('learning_rate', default_configuration['learning_rate ']),
-                eta0=configuration.get('eta0', default_configuration['eta0 ']),
-                power_t=configuration.get('power_t', default_configuration['power_t ']),
-                n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change ']),
+                loss=configuration.get('loss', default_configuration['loss']),
+                penalty=configuration.get('penalty', default_configuration['penalty']),
+                alpha=configuration.get('alpha', default_configuration['alpha']),
+                l1_ratio=configuration.get('l1_ratio', default_configuration['l1_ratio']),
+                fit_intercept=configuration.get('fit_intercept', default_configuration['fit_intercept']),
+                tol=configuration.get('tol', default_configuration['tol']),
+                epsilon=configuration.get('epsilon', default_configuration['epsilon']),
+                learning_rate=configuration.get('learning_rate', default_configuration['learning_rate']),
+                eta0=configuration.get('eta0', default_configuration['eta0']),
+                power_t=configuration.get('power_t', default_configuration['power_t']),
+                n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change']),
                 validation_fraction=configuration.get('validation_fraction',
-                                                      default_configuration['validation_fraction ']),
-                average=configuration.get('average', default_configuration['average '])
+                                                      default_configuration['validation_fraction']),
+                average=configuration.get('average', default_configuration['averag '])
             )[0]
         elif classifier_type == ClassificationMethods.PERCEPTRON.value:
             default_configuration = classification_incremental_perceptron()

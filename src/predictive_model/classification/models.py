@@ -152,7 +152,7 @@ class Classification(PredictiveModel):
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change']),
                 validation_fraction=configuration.get('validation_fraction',
                                                       default_configuration['validation_fraction']),
-                average=configuration.get('average', default_configuration['averag '])
+                average=configuration.get('average', default_configuration['average'])
             )[0]
         elif classifier_type == ClassificationMethods.PERCEPTRON.value:
             default_configuration = classification_incremental_perceptron()

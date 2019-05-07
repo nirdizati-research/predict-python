@@ -83,6 +83,9 @@ def classification_incremental_sgd_classifier():
         'early_stopping': False,
         'n_iter_no_change': 5,
         'validation_fraction': 0.1,
+        'epsilon': 0.1,
+        'learning_rate': 'optimal',
+        'average': False
     }
 
 

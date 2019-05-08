@@ -52,6 +52,7 @@ def save_models(models: dict, job: Job):
         joblib.dump(models[ModelType.CLUSTERER.value], clusterer_filename)
         job.clustering.model_path = clusterer_filename
         job.clustering.save()
+        job.save()
 
     if job.type == JobTypes.UPDATE.value:
         job.type = PredictiveModels.CLASSIFICATION.value

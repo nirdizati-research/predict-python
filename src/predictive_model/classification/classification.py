@@ -83,6 +83,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     test_data = _drop_columns(test_df)
 
     if list(train_data.columns.values) != job.incremental_train.encoding.features:
+        #TODO: how do I align the two feature vectors?
         print('helo')
 
     model_split = _update(job, train_data)

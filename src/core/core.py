@@ -59,7 +59,6 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                                            encoding=job.encoding,
                                            labelling=job.labelling).delete()
                 return get_encoded_logs(job, use_cache)
-
         else:
             if job.split.train_log is not None and \
                 job.split.test_log is not None and \

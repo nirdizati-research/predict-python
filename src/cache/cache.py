@@ -29,11 +29,11 @@ def put_loaded_logs(split: Split, train_df, test_df, additional_columns):
         (split.train_log.name, train_df),
         (split.test_log.name, test_df),
         (split.additional_columns, additional_columns)
-        # FIXME: if additional_columns is None, dump_to_cache doesn't have a path to digest
     ]]
-    LoadedLog.objects.create(train_log='cache/loaded_log_cache/' + split.train_log.name,
-                             test_log='cache/loaded_log_cache/' + split.test_log.name,
-                             additional_columns=split.additional_columns)
+    LoadedLog.objects.create(train_log_path=split.train_log.name,
+                             test_log_path=split.test_log.name,
+                             additional_columns_path=split.additional_columns,
+                             split=split)
 
 
 def put_labelled_logs(job: Job, train_df, test_df):
@@ -44,26 +44,26 @@ def put_labelled_logs(job: Job, train_df, test_df):
     LabelledLog.objects.create(split=job.split,
                                encoding=job.encoding,
                                labelling=job.labelling,
-                               train_log='cache/labeled_log_cache/' + job.split.train_log.name,
-                               test_log='cache/labeled_log_cache/' + job.split.test_log.name)
+                               train_log_path=job.split.train_log.name,
+                               test_log_path=job.split.test_log.name)
 
 
-def get_loaded_logs(split: Split) -> (DataFrame, DataFrame):
-    print('\t\tFound Dataset in cache, loading..')
-    cache = LoadedLog.objects.filter(train_log=split.train_log.path,
-                                     test_log=split.test_log.path)[0]
+def get_loaded_logs(split: Split) -> (DataFrame, DataFrame, DataFrame):
+    print('\t\tFound pre-loaded Dataset in cache, loading..')
+    cache = LoadedLog.objects.filter(split=split)[0]
     return (
-        load_from_cache(cache.train_log),
-        load_from_cache(cache.test_log)
+        load_from_cache(path=cache.train_log_path, prefix='cache/loaded_log_cache/'),
+        load_from_cache(path=cache.test_log_path, prefix='cache/loaded_log_cache/'),
+        load_from_cache(path=cache.additional_columns_path, prefix='cache/loaded_log_cache/')
     )
 
 
 def get_labelled_logs(job: Job) -> (DataFrame, DataFrame):
-    print('\t\tFound Dataset in cache, loading..')
+    print('\t\tFound pre-labeled Dataset in cache, loading..')
     cache = LabelledLog.objects.filter(split=job.split,
                                        encoding=job.encoding,
                                        labelling=job.labelling)[0]
     return (
-        load_from_cache(cache.train_log),
-        load_from_cache(cache.test_log)
+        load_from_cache(path=cache.train_log_path, prefix='cache/labeled_log_cache/'),
+        load_from_cache(path=cache.test_log_path, prefix='cache/labeled_log_cache/')
     )

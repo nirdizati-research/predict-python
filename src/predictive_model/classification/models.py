@@ -370,7 +370,7 @@ PERCEPTRON_PENALTY = (
 
 
 class Perceptron(Classification):
-    penalty = models.CharField(choices=PERCEPTRON_PENALTY, default='l1', max_length=20)
+    penalty = models.CharField(choices=PERCEPTRON_PENALTY, default='l1', max_length=20, null=True)
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
     tol = models.FloatField()

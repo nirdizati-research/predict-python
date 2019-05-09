@@ -1,5 +1,6 @@
 import json
 import time
+from datetime import timedelta
 
 from pandas import DataFrame
 from pm4py.objects.log.log import EventLog
@@ -58,12 +59,12 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                 LabelledLog.objects.filter(split=job.split,
                                            encoding=job.encoding,
                                            labelling=job.labelling).delete()
+                print('\t\tError pre-labeled cache invalidated!')
                 return get_encoded_logs(job, use_cache)
         else:
             if job.split.train_log is not None and \
-                job.split.test_log is not None and \
-                LoadedLog.objects.filter(train_log=job.split.train_log.path,
-                                         test_log=job.split.test_log.path).exists():
+               job.split.test_log is not None and \
+               LoadedLog.objects.filter(split=job.split).exists():
                 training_log, test_log, additional_columns = get_loaded_logs(job.split)
 
             else:
@@ -131,6 +132,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 
     # TODO: integrateme
     if job.type != JobTypes.LABELLING.value:
+        results['elapsed_time'] = timedelta(seconds=time.time() - start_time) #todo find better place for this
         if job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
             job.evaluation = Evaluation.init(
                 job.predictive_model.predictive_model,
@@ -144,7 +146,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
             )
         job.evaluation.save()
 
-    if job.type == PredictiveModels.CLASSIFICATION.value:
+    if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
         save_result(results, job, start_time)
 
     print("End job {}, {} .".format(job.type, get_run(job)))

@@ -217,7 +217,7 @@ class Knn(Classification):
 class RandomForest(Classification):
     n_estimators = models.PositiveIntegerField()
     max_depth = models.PositiveIntegerField(null=True)
-    max_features = models.CharField(default='auto', max_length=10)
+    max_features = models.CharField(null=True, default='auto', max_length=10)
 
     def to_dict(self):
         return {

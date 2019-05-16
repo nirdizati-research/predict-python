@@ -9,10 +9,12 @@ from src.hyperparameter_optimization.methods_default_config import hyperparamete
 
 class HyperparameterOptimizationMethods(Enum):
     HYPEROPT = 'hyperopt'
+    NONE = 'none'
 
 
 HYPERPARAMETER_OPTIMIZATION_METHOD = (
     (HyperparameterOptimizationMethods.HYPEROPT.value, 'hyperopt'),
+    (HyperparameterOptimizationMethods.NONE.value, 'none'),
 )
 
 
@@ -33,6 +35,9 @@ class HyperparameterOptimization(CommonModel):
                 performance_metric=configuration.get('performance_metric', default_configuration['performance_metric']),
                 algorithm_type=configuration.get('algorithm_type', default_configuration['algorithm_type'])
             )[0]
+        elif hyperparameter_optimizer_type == HyperparameterOptimizationMethods.NONE.value:
+            return HyperparameterOptimization.objects.get_or_create(
+                optimization_method=HyperparameterOptimizationMethods.NONE.value)[0]
         else:
             raise ValueError('hyperparameter optimizer type {} not recognized'.format(hyperparameter_optimizer_type))
 

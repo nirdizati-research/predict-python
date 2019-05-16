@@ -3,11 +3,10 @@ import time
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
-from pred_models.models import ModelSplit, PredModels
-from src.clustering.clustering import Clustering
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 from src.predictive_model.models import PredictiveModels
@@ -23,7 +22,7 @@ def prediction_task(job_id):
             job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()
-            if job.hyperparameter_optimizer is not None:
+            if job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)

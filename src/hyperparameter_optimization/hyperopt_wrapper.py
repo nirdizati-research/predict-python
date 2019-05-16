@@ -110,8 +110,6 @@ def _calculate_and_evaluate(args) -> dict:
     ).performance_metric
     multiplier = _get_metric_multiplier(performance_metric)
 
-    results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
-
     try:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
         return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,

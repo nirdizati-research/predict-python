@@ -1,6 +1,7 @@
 from src.clustering.models import Clustering
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding, ValueEncodings
+from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel
@@ -51,6 +52,8 @@ def generate(split, payload):
                                 threshold=labelling_config.get('threshold', None)
                             )[0] if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
+                            hyperparameter_optimizer=HyperparameterOptimization.init(
+                                config.get('hyperparameter_optimizer', None)),
                             predictive_model=predictive_model,
                             create_models=config.get('create_models', False)
                         )[0]
@@ -85,6 +88,7 @@ def generate(split, payload):
                             threshold=labelling_config.get('threshold', None)
                         )[0] if labelling_config != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
+                        hyperparameter_optimizer=HyperparameterOptimization.init(config.get('hyperparameter_optimizer', None)),
                         predictive_model=predictive_model,
                         create_models=config.get('create_models', False)
                     )[0]

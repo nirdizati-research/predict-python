@@ -110,10 +110,6 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     """
     model_split = None
 
-    # TODO fixme this needs to be fixed in the interface
-    # if job['incremental_train']['base_model'] is not None:
-    #     job['type'] = JobTypes.UPDATE.value
-
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:
         clusterer = _init_clusterer(job.clustering, training_df)

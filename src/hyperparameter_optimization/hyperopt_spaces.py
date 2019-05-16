@@ -25,7 +25,7 @@ def _classification_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
-        'max_features': hp.choice('max_features', ['sqrt', 'log2', 0.3, 0.5, 0.7, 0.8, 1, None])
+        'max_features': hp.choice('max_features', ['sqrt', 'log2', 'auto', None])
     }
 
 
@@ -135,7 +135,7 @@ def _classification_nn() -> dict:
 def _regression_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
-        'max_features': hp.choice('max_features', ['sqrt', 'log2', 0.3, 0.5, 0.7, 0.8, 1, None]),
+        'max_features': hp.choice('max_features', ['sqrt', 'log2', 'auto', None]),
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
     }
 

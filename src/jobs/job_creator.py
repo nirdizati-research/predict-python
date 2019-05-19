@@ -213,6 +213,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             ),
+                            hyperparameter_optimizer=HyperparameterOptimization.init(
+                                config.get('hyperparameter_optimizer', None)),
                             create_models=config.get('create_models', False),
                             incremental_train=Job.objects.filter(
                                 pk=config['incremental_train'].get('base_model', None)
@@ -249,6 +251,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         ),
+                        hyperparameter_optimizer=HyperparameterOptimization.init(
+                                config.get('hyperparameter_optimizer', None)),
                         create_models=config.get('create_models', False),
                         incremental_train=Job.objects.filter(
                                 pk=config['incremental_train'].get('base_model', None)

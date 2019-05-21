@@ -18,6 +18,7 @@ from src.jobs.models import JobTypes, Job, ModelType
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.predictive_model.classification.models import ClassificationMethods
+from src.utils.django_orm import duplicate_orm_row
 from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
@@ -38,8 +39,10 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
+    job.encoding = duplicate_orm_row(job.encoding) #TODO: maybe here would be better an intelligent get_or_create...
     job.encoding.features = list(train_data.columns.values)
     job.encoding.save()
+    job.save()
 
     model_split = _train(train_data, _choose_classifier(job), clusterer)
     results_df, auc = _test(
@@ -82,9 +85,18 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
+    job.encoding = job.incremental_train.encoding
+    job.encoding.save()
+    job.save()
+
     if list(train_data.columns.values) != job.incremental_train.encoding.features:
         #TODO: how do I align the two feature vectors?
-        print('helo')
+        train_data, _ = train_data.align(
+            pd.DataFrame(columns=job.incremental_train.encoding.features), axis=1, join='right')
+        train_data = train_data.fillna(0)
+        test_data, _ = test_data.align(
+            pd.DataFrame(columns=job.incremental_train.encoding.features), axis=1, join='right')
+        test_data = test_data.fillna(0)
 
     model_split = _update(job, train_data)
 

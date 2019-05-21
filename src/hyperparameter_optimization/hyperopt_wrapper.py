@@ -46,11 +46,14 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         fmin(_calculate_and_evaluate, space, algo=algorithm.suggest, max_evals=max_evaluations, trials=trials)
     except ValueError:
         raise ValueError("All jobs failed, cannot find best configuration")
-    current_best = {'loss': 100, 'results': {}, 'config': {}}
+    current_best = {'loss': 100, 'results': {}, 'predictive_model_id': {}, 'model_split': {}, 'config': {}}
     for trial in trials:
         a = trial['result']
         if current_best['loss'] > a['loss']:
             current_best = a
+
+    job.predictive_model = PredictiveModel.objects.filter(pk=current_best['predictive_model_id'])[0]
+    job.save()
 
     print("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
     return current_best['results'], current_best['config'], current_best['model_split']
@@ -103,7 +106,9 @@ def _calculate_and_evaluate(args) -> dict:
 
     new_predictive_model = PredictiveModel.init(model_config)
     local_job.predictive_model = duplicate_orm_row(new_predictive_model)
-    local_job = duplicate_orm_row(local_job)
+    local_job.predictive_model.save()
+    local_job.save()
+    # local_job = duplicate_orm_row(local_job) #TODO not sure it is ok to have this here.
 
     performance_metric = local_job.hyperparameter_optimizer.__getattribute__(
         local_job.hyperparameter_optimizer.optimization_method.lower()
@@ -112,7 +117,18 @@ def _calculate_and_evaluate(args) -> dict:
 
     try:
         results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
-        return {'loss': -results[performance_metric] * multiplier, 'status': STATUS_OK, 'results': results,
-                'model_split': model_split, 'config': model_config}
+        return {
+            'loss': -results[performance_metric] * multiplier,
+            'status': STATUS_OK,
+            'results': results,
+            'predictive_model_id': local_job.predictive_model.pk,
+            'model_split': model_split,
+            'config': model_config}
     except:
-        return {'loss': 100, 'status': STATUS_FAIL, 'results': {}, 'config': {}}
+        return {
+            'loss': 100,
+            'status': STATUS_FAIL,
+            'results': {},
+            'predictive_model_id': {},
+            'model_split': {},
+            'config': {}}

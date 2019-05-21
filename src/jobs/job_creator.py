@@ -33,7 +33,8 @@ def generate(split, payload):
                             prefix_length=i,
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0]
 
                         predictive_model = PredictiveModel.init(
@@ -78,7 +79,8 @@ def generate(split, payload):
                             prefix_length=config['encoding']['prefix_length'],
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0],
                         labelling=Labelling.objects.get_or_create(
                             type=labelling_config.get('type', None),
@@ -130,7 +132,8 @@ def generate_labelling(split, payload):
                     prefix_length=i,
                     # TODO static check?
                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                    task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                    task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                    features=config['encoding'].get('features', [])
                 )[0],
                 labelling=Labelling.objects.get_or_create(
                     type=labelling_config.get('type', None),
@@ -158,7 +161,8 @@ def generate_labelling(split, payload):
                 prefix_length=config['encoding']['prefix_length'],
                 # TODO static check?
                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                features=config['encoding'].get('features', [])
             )[0],
             labelling=Labelling.objects.get_or_create(
                 type=labelling_config.get('type', None),
@@ -200,7 +204,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 prefix_length=i,
                                 # TODO static check?
                                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                                task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                                task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                                features=config['encoding'].get('features', [])
                             )[0],
                             labelling=Labelling.objects.get_or_create(
                                 type=labelling_config.get('type', None),
@@ -238,7 +243,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             prefix_length=config['encoding']['prefix_length'],
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0],
                         labelling=Labelling.objects.get_or_create(
                             type=labelling_config.get('type', None),

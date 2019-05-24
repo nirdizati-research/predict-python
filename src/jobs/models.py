@@ -14,9 +14,9 @@ from src.split.models import Split
 
 class ModelType(Enum):
     CLUSTERER = 'clusterer'
-    CLASSIFIER = 'classifier'
-    REGRESSOR = 'regressor'
-    TIME_SERIES_PREDICTOR = 'time_series_predictor'
+    CLASSIFIER = 'classification'
+    REGRESSOR = 'regression'
+    TIME_SERIES_PREDICTOR = 'time_series_prediction'
 
 
 class JobStatuses(Enum):

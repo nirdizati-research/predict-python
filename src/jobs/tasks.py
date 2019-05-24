@@ -58,18 +58,18 @@ def save_models(models: dict, job: Job):
 
     if job.type == JobTypes.UPDATE.value:
         job.type = PredictiveModels.CLASSIFICATION.value
-        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
+        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
             job.id,
             job.split.id,
             job.type,
             str(time.time()))
     else:
-        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
+        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
             job.id,
             job.split.id,
             job.type)
-    joblib.dump(models[ModelType.CLASSIFIER.value], classifier_filename)
-    job.predictive_model.model_path = classifier_filename
+    joblib.dump(models[job.predictive_model.predictive_model], predictive_model_filename)
+    job.predictive_model.model_path = predictive_model_filename
     job.predictive_model.save()
     job.save()
 

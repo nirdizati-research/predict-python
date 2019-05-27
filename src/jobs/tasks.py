@@ -57,7 +57,7 @@ def save_models(models: dict, job: Job):
         job.save()
 
     if job.type == JobTypes.UPDATE.value:
-        job.type = PredictiveModels.CLASSIFICATION.value
+        job.type = JobTypes.PREDICTION.value #TODO: Y am I doing this?
         predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
             job.id,
             job.split.id,

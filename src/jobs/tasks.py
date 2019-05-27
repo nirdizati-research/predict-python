@@ -18,10 +18,10 @@ def prediction_task(job_id):
     job = Job.objects.get(id=job_id)
 
     try:
-        if job.status == JobStatuses.CREATED.value or \
-            (job.status == JobStatuses.CREATED.value and
-             job.type == JobTypes.UPDATE.value and
-             job.incremental_train.status == JobStatuses.COMPLETED.value):
+        if (job.status == JobStatuses.CREATED.value and job.type != JobTypes.UPDATE.value) or \
+           (job.status == JobStatuses.CREATED.value and job.type == JobTypes.UPDATE.value and
+            job.incremental_train.status == JobStatuses.COMPLETED.value):
+
             job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()

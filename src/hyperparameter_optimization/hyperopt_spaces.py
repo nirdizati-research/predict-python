@@ -92,7 +92,7 @@ def _classification_incremental_sgd_classifier() -> dict:
     return {
         'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss',
                                    'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive']),
-        'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
+        'penalty': hp.choice('penalty', ['l1', 'l2', 'elasticnet']),
         'alpha': hp.uniform('alpha', 0.0001, 0.5),
         'l1_ratio': hp.uniform('l1_ratio', 0.15, 1.0),
         'fit_intercept': hp.choice('fit_intercept', [True, False]),

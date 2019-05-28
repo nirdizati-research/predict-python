@@ -22,7 +22,7 @@ def create_payload(
     LABELING={"type": "attribute_string","attribute_name": "creator","threshold_type": "threshold_mean","threshold": 0,"add_remaining_time": False,"add_elapsed_time": False,"add_executed_events": False,"add_resources_used": False,"add_new_traces": False},
     CLUSTERING=["noCluster"],
     CLASSIFICATION=["multinomialNB"],
-    HYPERPARAMETER_OPTIMIZATION={"type": 'hyperopt',"max_evaluations": 10,"performance_metric": "auc"},
+    HYPERPARAMETER_OPTIMIZATION={"type": 'hyperopt',"max_evaluations": 10,"performance_metric": "auc", "algorithm_type": "tpe"},
     INCREMENTAL_TRAIN={"base_model": None}):
 
     CONFIG = {

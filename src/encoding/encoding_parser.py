@@ -21,8 +21,8 @@ class DataEncoder:
         """
         possible data types for each column
         """
-        CATEGORICAL = 0
-        NUMERIC = 1
+        CATEGORICAL = 'categorical'
+        NUMERIC = 'numeric'
 
     _unknown_token = '<unknown>'
 
@@ -53,9 +53,9 @@ class DataEncoder:
 
         for base_header in self._base_headers:
             relevant_data = self._get_relevant_columns(data, base_header)
-            data_type = self._get_data_type(relevant_data)
+            data_type = self.   _get_data_type(relevant_data)
 
-            if data_type == DataEncoder.DataTypes.NUMERIC:
+            if data_type == DataEncoder.DataTypes.NUMERIC.value:
                 self._numerical_headers.append(base_header)
 
                 data_min = np.min(relevant_data.values.astype(np.float32))
@@ -90,7 +90,7 @@ class DataEncoder:
         for base_header in self._base_headers:
             relevant_data = self._get_relevant_columns(data, base_header)
             for column in relevant_data:
-                if self._data_encoders[base_header]['data_type'] == DataEncoder.DataTypes.NUMERIC:
+                if self._data_encoders[base_header]['data_type'] == DataEncoder.DataTypes.NUMERIC.value:
                     data_min = self._data_encoders[base_header]['label_encoder']['min']
                     data_max = self._data_encoders[base_header]['label_encoder']['max']
                     if data_min != data_max:
@@ -127,9 +127,9 @@ class DataEncoder:
         for index, header in enumerate(data):
             base_header = self._extract_base_header(header)
             data_type = self._data_encoders[base_header]['data_type']
-            if data_type == DataEncoder.DataTypes.CATEGORICAL:
+            if data_type == DataEncoder.DataTypes.CATEGORICAL.value:
                 dataset[:, index, :] = to_categorical(data[header], n_classes)
-            elif data_type == DataEncoder.DataTypes.NUMERIC:
+            elif data_type == DataEncoder.DataTypes.NUMERIC.value:
                 dataset[:, index, -1] = data[header]
         return dataset
 
@@ -166,7 +166,7 @@ class DataEncoder:
             n_classes += 1
         return n_classes
 
-    def _get_data_type(self, data: DataFrame) -> DataTypes:
+    def _get_data_type(self, data: DataFrame) -> str:
         """returns the type for the input dataframe
 
         tries to cast the dataframe to float, to decide wether the input contains a string or a number. Returns the
@@ -178,16 +178,16 @@ class DataEncoder:
         """
         if len(data.columns) == 1 and 'label' in data:
             if self._task == PredictiveModels.CLASSIFICATION.value:
-                return DataEncoder.DataTypes.CATEGORICAL
+                return DataEncoder.DataTypes.CATEGORICAL.value
 
             if self._task == PredictiveModels.REGRESSION.value:
-                return DataEncoder.DataTypes.NUMERIC
+                return DataEncoder.DataTypes.NUMERIC.value
 
         try:
             data.values.astype(np.float32)
-            return DataEncoder.DataTypes.NUMERIC
+            return DataEncoder.DataTypes.NUMERIC.value
         except:
-            return DataEncoder.DataTypes.CATEGORICAL
+            return DataEncoder.DataTypes.CATEGORICAL.value
 
     def get_numerical_limits(self, header='label'):
         """returns the numerical limits for the input header
@@ -206,14 +206,14 @@ class DataEncoder:
     def _get_relevant_columns(data: DataFrame, header: str) -> DataFrame:
         """returns the columns associated with the base header
 
-        filters the input dataframe in order to extract all the columns matching the regex "header + (_[0-9])*"
+        filters the input dataframe in order to extract all the columns matching the regex "header + (_[0-9]+)*"
 
         :param data: input dataframe
         :param header: base header to match
         :return: matched columns
 
         """
-        return data.filter(regex=header + '(\_[0-9])*$')
+        return data.filter(regex=header + '(\_[0-9]+)?$')
 
     @staticmethod
     def _extract_base_headers(data: DataFrame) -> set:

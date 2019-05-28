@@ -49,7 +49,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
 
     """
     print('\tGetting Dataset')
-    if use_cache:
+    if use_cache and job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
         if LabelledLog.objects.filter(split=job.split,
                                       encoding=job.encoding,
                                       labelling=job.labelling).exists():

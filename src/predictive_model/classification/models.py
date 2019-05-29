@@ -331,7 +331,7 @@ SGDCLASSIFIER_LEARNING_RATE = (
 
 class SGDClassifier(Classification):
     loss = models.CharField(choices=SGDCLASSIFIER_LOSS, default='uniform', max_length=20)
-    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20)
+    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20, null=True)
     alpha = models.FloatField()
     l1_ratio = models.FloatField()
     fit_intercept = models.BooleanField()

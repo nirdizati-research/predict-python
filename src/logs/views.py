@@ -3,6 +3,7 @@ import logging
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from pm4py.algo.discovery.alpha import factory as alpha_miner
 
 from src.logs.log_service import create_log
 from src.split.models import Split
@@ -72,6 +73,8 @@ def get_log_stats(request, pk, stat):
         data = event_executions(log_file)
     elif stat == 'newTraces':
         data = new_trace_start(log_file)
+    elif stat == 'alpha_miner':
+        data = alpha_miner.apply(log)
     else:
         print('stats error in get_log_stats, setting data to None')
         data = None

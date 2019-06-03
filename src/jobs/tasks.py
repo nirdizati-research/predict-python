@@ -9,7 +9,6 @@ from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
-from src.predictive_model.models import PredictiveModels
 
 
 @job("default", timeout='1h')
@@ -25,7 +24,8 @@ def prediction_task(job_id):
             job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()
-            if job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
+            if job.hyperparameter_optimizer is not None and \
+                job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)

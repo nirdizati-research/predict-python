@@ -49,7 +49,9 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
 
     """
     print('\tGetting Dataset')
-    if use_cache and job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
+    if use_cache and \
+        (job.predictive_model is not None and
+         job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value):
         if LabelledLog.objects.filter(split=job.split,
                                       encoding=job.encoding,
                                       labelling=job.labelling).exists():
@@ -141,6 +143,9 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
                 len(model_split[ModelType.CLASSIFIER.value][0].classes_) <= 2
             )
         job.evaluation.save()
+    elif job.type == JobTypes.LABELLING.value:
+        job.labelling.results = results
+        job.labelling.save()
 
     if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
         save_result(results, job, start_time)

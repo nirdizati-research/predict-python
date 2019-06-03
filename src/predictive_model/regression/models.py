@@ -43,7 +43,7 @@ class Regression(PredictiveModel):
                 predictive_model=PredictiveModels.REGRESSION.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_features=configuration.get('max_features', default_configuration['max_features']),
-                max_depth=configuration.get('max_depth', default_configuration['max_depth'])
+                max_depth=configuration.get('max_depth', default_configuration['max_depth']),
             )[0]
         elif regressor_type == RegressionMethods.LASSO.value:
             default_configuration = regression_lasso()
@@ -87,14 +87,16 @@ class Regression(PredictiveModel):
 
 class RandomForest(Regression):
     n_estimators = models.PositiveIntegerField()
-    max_features = models.CharField(max_length=10)
+    max_features = models.CharField(max_length=10, null=True)
     max_depth = models.CharField(max_length=10, null=True)
+    random_state = 21
 
     def to_dict(self):
         return {
             'n_estimators': self.n_estimators,
             'max_features': self.max_features,
-            'max_depth': self.max_depth
+            'max_depth': self.max_depth,
+            'random_state': self.random_state
         }
 
 

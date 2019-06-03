@@ -65,9 +65,9 @@ class TestLabelSimpleIndex(TestCase):
                                   ))
         self.assertEqual(df.shape, (2, 11))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 1, 1, 2, 0, 0, 1, 0, 'examine casually'])
+        self.assertListEqual(trace_5, ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0, 1, 3, 0, 0, 0, 0, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0])
 
     def test_remaining_time(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -134,10 +134,10 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1296240.0, 0])
+                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, True])
+                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0])
 
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -179,10 +179,10 @@ class TestLabelSimpleIndex(TestCase):
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 1, 3, 2, 2, 2, 0, 0, 0, 0, 1296240.0, 2])
+                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 52903968, 32171502, 17803069, 1149821, 72523760, 0, 0, 0, 0, 0, 520920.0, 0])
+                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0])
 
     def test_attribute_string(self):
         encoding = create_test_encoding(
@@ -280,7 +280,7 @@ class TestLabelSimpleIndex(TestCase):
         ))
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('resources_used' in df.columns.values.tolist())
-        self.assertListEqual(df['resources_used'].tolist(), [1, 1])
+        self.assertListEqual(df['resources_used'].tolist(), [2, 2])
 
     def test_add_new_traces(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -299,4 +299,4 @@ class TestLabelSimpleIndex(TestCase):
         ))
         self.assertEqual(df.shape, (2, 5))
         self.assertTrue('new_traces' in df.columns.values.tolist())
-        self.assertListEqual(df['new_traces'].tolist(), [0, 0])
+        self.assertListEqual(df['new_traces'].tolist(), [2, 2])

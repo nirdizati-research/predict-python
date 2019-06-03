@@ -182,7 +182,7 @@ class TestLabelBoolean(TestCase):
         ))
         self.assertEqual(df.shape, (2, 12))
         self.assertTrue('resources_used' in df.columns.values.tolist())
-        self.assertListEqual(df['resources_used'].tolist(), [2, 2])
+        self.assertListEqual(df['resources_used'].tolist(), [1, 1])
 
     def test_add_new_traces(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)

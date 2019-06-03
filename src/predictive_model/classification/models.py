@@ -410,7 +410,7 @@ class NeuralNetwork(Classification):
         return {
             'n_hidden_layers': self.n_hidden_layers,
             'n_hidden_units': self.n_hidden_units,
-            'activation_function': self.activation,
+            'activation': self.activation,
             'n_epochs': self.n_epochs,
             'dropout_rate': self.dropout_rate
         }

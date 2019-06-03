@@ -54,7 +54,7 @@ class JobModelTest(TestCase):
             'attribute_name': None,
             'threshold': 0,
             'threshold_type': 'threshold_mean',
-            'type': 'next_activity'
+            'type': 'next_activity', 'results': {}
         })
 
     def test_prediction_task(self):
@@ -157,7 +157,8 @@ class CreateJobsTests(APITestCase):
                     'prefix_length': 3,
                     'generation_type': 'only',
                     'padding': 'zero_padding'
-                }
+                },
+                'hyperparameter_optimizer': {}
             }
         }
 
@@ -179,7 +180,7 @@ class CreateJobsTests(APITestCase):
             'add_remaining_time': False,
             'add_resources_used': False,
             'data_encoding': 'label_encoder',
-            'features': {},
+            'features': [],
             'padding': True,
         })
         self.assertEqual(response.data[0]['config']['clustering'], {
@@ -191,7 +192,7 @@ class CreateJobsTests(APITestCase):
         self.assertDictEqual(response.data[0]['config']['labelling'],
                          {'type': 'remaining_time', 'attribute_name': None,
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0})
+                          'threshold': 0, 'results': {}})
         self.assertEqual(response.data[0]['status'], 'created')
 
     @staticmethod
@@ -208,7 +209,8 @@ class CreateJobsTests(APITestCase):
                 'kmeans': {'max_iter': 100},
                 'encoding': {'prefix_length': 3, 'generation_type': TaskGenerationTypes.UP_TO.value,
                              'padding': 'no_padding'},
-                'labelling': {'type': LabelTypes.REMAINING_TIME.value}
+                'labelling': {'type': LabelTypes.REMAINING_TIME.value},
+                'hyperparameter_optimizer': {}
             }
         }
 
@@ -265,7 +267,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(response.data[0]['config']['labelling'],
                          {'type': 'remaining_time', 'attribute_name': None,
                           'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0})
+                          'threshold': 0, 'results': {}})
         self.assertEqual(response.data[0]['config']['encoding']['padding'], True)
         self.assertEqual(response.data[0]['status'], 'created')
 
@@ -287,7 +289,8 @@ class MethodConfiguration(TestCase):
                     'prefix_length': 3,
                     'generation_type': 'up_to',
                     'padding': 'no_padding'
-                }
+                },
+                'hyperparameter_optimizer': {}
             }
         }
 

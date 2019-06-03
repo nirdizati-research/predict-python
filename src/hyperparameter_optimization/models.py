@@ -26,7 +26,7 @@ class HyperparameterOptimization(CommonModel):
 
     @staticmethod
     def init(configuration: dict = {'type': HyperparameterOptimizationMethods.HYPEROPT.value}):
-        hyperparameter_optimizer_type = configuration['type']
+        hyperparameter_optimizer_type = configuration.get('type', HyperparameterOptimizationMethods.NONE.value)
         if hyperparameter_optimizer_type == HyperparameterOptimizationMethods.HYPEROPT.value:
             default_configuration = hyperparameter_optimization_hyperopt()
             return HyperOpt.objects.get_or_create(

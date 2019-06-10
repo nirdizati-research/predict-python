@@ -331,7 +331,7 @@ SGDCLASSIFIER_LEARNING_RATE = (
 
 class SGDClassifier(Classification):
     loss = models.CharField(choices=SGDCLASSIFIER_LOSS, default='uniform', max_length=20)
-    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20)
+    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20, null=True)
     alpha = models.FloatField()
     l1_ratio = models.FloatField()
     fit_intercept = models.BooleanField()
@@ -410,7 +410,7 @@ class NeuralNetwork(Classification):
         return {
             'n_hidden_layers': self.n_hidden_layers,
             'n_hidden_units': self.n_hidden_units,
-            'activation_function': self.activation,
+            'activation': self.activation,
             'n_epochs': self.n_epochs,
             'dropout_rate': self.dropout_rate
         }

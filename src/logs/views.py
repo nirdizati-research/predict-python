@@ -3,6 +3,7 @@ import logging
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from pm4py.algo.discovery.alpha import factory as alpha_miner
 
 from src.logs.log_service import create_log
 from src.split.models import Split
@@ -72,6 +73,8 @@ def get_log_stats(request, pk, stat):
         data = event_executions(log_file)
     elif stat == 'newTraces':
         data = new_trace_start(log_file)
+    elif stat == 'alpha_miner':
+        data = alpha_miner.apply(log)
     else:
         print('stats error in get_log_stats, setting data to None')
         data = None
@@ -80,6 +83,7 @@ def get_log_stats(request, pk, stat):
 
 @api_view(['POST'])
 def upload_multiple(request):
+    print('Double upload request received.')
     test_log = create_log(request.FILES['testSet'], request.FILES['testSet'].name)
     train_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
 

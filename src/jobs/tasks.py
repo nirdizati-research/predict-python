@@ -9,7 +9,6 @@ from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
-from src.predictive_model.models import PredictiveModels
 
 
 @job("default", timeout='1h')
@@ -18,11 +17,15 @@ def prediction_task(job_id):
     job = Job.objects.get(id=job_id)
 
     try:
-        if job.status == JobStatuses.CREATED.value:
+        if (job.status == JobStatuses.CREATED.value and job.type != JobTypes.UPDATE.value) or \
+           (job.status == JobStatuses.CREATED.value and job.type == JobTypes.UPDATE.value and
+            job.incremental_train.status == JobStatuses.COMPLETED.value):
+
             job.status = JobStatuses.RUNNING.value
             job.save()
             start_time = time.time()
-            if job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
+            if job.hyperparameter_optimizer is not None and \
+                job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
@@ -50,24 +53,25 @@ def save_models(models: dict, job: Job):
             job.type)
         joblib.dump(models[ModelType.CLUSTERER.value], clusterer_filename)
         job.clustering.model_path = clusterer_filename
+        job.clustering.save()
         job.save()
 
     if job.type == JobTypes.UPDATE.value:
-        job.type = PredictiveModels.CLASSIFICATION.value
-        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
+        job.type = JobTypes.PREDICTION.value #TODO: Y am I doing this?
+        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
             job.id,
             job.split.id,
             job.type,
             str(time.time()))
     else:
-        classifier_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
+        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
             job.id,
             job.split.id,
             job.type)
-    joblib.dump(models[ModelType.CLASSIFIER.value], classifier_filename)
-    job.predictive_model.model_path = classifier_filename
+    joblib.dump(models[job.predictive_model.predictive_model], predictive_model_filename)
+    job.predictive_model.model_path = predictive_model_filename
+    job.predictive_model.save()
     job.save()
-
 
 
 def hyperopt_task(job):

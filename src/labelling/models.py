@@ -1,6 +1,7 @@
 from enum import Enum
 
 from django.db import models
+from jsonfield.fields import JSONField
 
 from src.common.models import CommonModel
 
@@ -47,6 +48,7 @@ class Labelling(CommonModel):
     attribute_name = models.CharField(default=None, max_length=20, null=True, blank=True)
     threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='threshold_mean', max_length=20, null=True, blank=True)
     threshold = models.IntegerField(default=0, null=True, blank=True)
+    results = JSONField(default={})
 
     def to_dict(self):
         return {
@@ -54,4 +56,5 @@ class Labelling(CommonModel):
             'attribute_name': self.attribute_name,
             'threshold_type': self.threshold_type,
             'threshold': self.threshold,
+            'results': self.results
         }

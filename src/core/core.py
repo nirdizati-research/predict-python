@@ -49,13 +49,15 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
 
     """
     print('\tGetting Dataset')
-    if use_cache:
+    if use_cache and \
+        (job.predictive_model is not None and
+         job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value):
         if LabelledLog.objects.filter(split=job.split,
                                       encoding=job.encoding,
                                       labelling=job.labelling).exists():
             try:
                 training_df, test_df = get_labelled_logs(job)
-            except FileNotFoundError:  # cache invalidation
+            except FileNotFoundError: #cache invalidation
                 LabelledLog.objects.filter(split=job.split,
                                            encoding=job.encoding,
                                            labelling=job.labelling).delete()
@@ -83,7 +85,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                         test_name + '.xes'
                     )
                     job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
-                    job.save()
+                    job.split.save()
 
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
 
@@ -140,7 +142,10 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
                 results,
                 len(model_split[ModelType.CLASSIFIER.value][0].classes_) <= 2
             )
-        job.save()
+        job.evaluation.save()
+    elif job.type == JobTypes.LABELLING.value:
+        job.labelling.results = results
+        job.labelling.save()
 
     if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
         save_result(results, job, start_time)

@@ -27,10 +27,11 @@ class RefactorProof(TestCase):
                                                           prediction_method=ClassificationMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
+        del result['elapsed_time']
         self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
                                       'precision': 1.0, 'recall': 1.0,
-                                      'auc': 0})
+                                      'auc': 0.0})
  # self.assertDictEqual(result, {'f1score': 0.67690058479532156, 'acc': 0.68325791855203621, 'true_positive': 91,
  #                                      'true_negative': 60, 'false_negative': 36, 'false_positive': 34,
  #                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577,
@@ -46,10 +47,11 @@ class RefactorProof(TestCase):
                                                           prediction_method=ClassificationMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
+        del result['elapsed_time']
         self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
                                       'precision': 1.0, 'recall': 1.0,
-                                      'auc': 0})
+                                      'auc': 0.0})
 # self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': 91,
 #                                       'true_negative': 60, 'false_negative': 36, 'false_positive': '--',
 #                                       'precision': 1.0, 'recall': 0.67741665270564577,
@@ -66,7 +68,7 @@ class RefactorProof(TestCase):
                                                           prediction_method=ClassificationMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-
+        del result['elapsed_time']
         self.assertDictEqual(result, {'f1score': 0.54239884582595577, 'acc': 0.80995475113122173, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
                                       'precision': 0.62344720496894401, 'recall': 0.5224945442336747,
@@ -100,10 +102,10 @@ class RefactorProof(TestCase):
                                                           prediction_method=RegressionMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.0325738)
-        self.assertAlmostEqual(result['mae'], 0.00014269)
-        self.assertAlmostEqual(result['rscore'], -0.11336870)
-        self.assertAlmostEqual(result['mape'], float('inf'))
+        self.assertAlmostEqual(result['rmse'], 0.036930128)
+        self.assertAlmostEqual(result['mae'], 0.023046561975)
+        self.assertAlmostEqual(result['rscore'], 0.99830687)
+        self.assertAlmostEqual(result['mape'], 0.5761640)
 
     def test_regression_no_cluster(self):
         self.max_diff = None
@@ -115,7 +117,7 @@ class RefactorProof(TestCase):
                                                           prediction_method=RegressionMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.03263757)
-        self.assertAlmostEqual(result['mae'], 0.00011685)
-        self.assertAlmostEqual(result['rscore'], 0.13776124)
-        self.assertAlmostEqual(result['mape'], float('inf'))
+        self.assertAlmostEqual(result['rmse'], 0.03571834)
+        self.assertAlmostEqual(result['mae'], 0.023598078)
+        self.assertAlmostEqual(result['rscore'], 0.99841616)
+        self.assertAlmostEqual(result['mape'], 0.5899519598)

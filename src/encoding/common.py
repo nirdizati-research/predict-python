@@ -35,7 +35,8 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
         training_log['label'] = training_log['label'].astype(float) < threshold
         test_log['label'] = test_log['label'].astype(float) < threshold
 
-    if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value:
+    if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
+        job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
         # init nominal encode
         encoder = Encoder(training_log, job.encoding)
         encoder.encode(training_log, job.encoding)

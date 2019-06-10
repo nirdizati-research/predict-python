@@ -2,8 +2,6 @@
 label calculation tests
 """
 
-import unittest
-
 from django.test import TestCase
 
 from src.core.core import calculate

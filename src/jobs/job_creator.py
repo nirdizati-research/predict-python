@@ -33,7 +33,8 @@ def generate(split, payload):
                             prefix_length=i,
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0]
 
                         predictive_model = PredictiveModel.init(
@@ -78,7 +79,8 @@ def generate(split, payload):
                             prefix_length=config['encoding']['prefix_length'],
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0],
                         labelling=Labelling.objects.get_or_create(
                             type=labelling_config.get('type', None),
@@ -130,7 +132,8 @@ def generate_labelling(split, payload):
                     prefix_length=i,
                     # TODO static check?
                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                    task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                    task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                    features=config['encoding'].get('features', [])
                 )[0],
                 labelling=Labelling.objects.get_or_create(
                     type=labelling_config.get('type', None),
@@ -158,7 +161,8 @@ def generate_labelling(split, payload):
                 prefix_length=config['encoding']['prefix_length'],
                 # TODO static check?
                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                features=config['encoding'].get('features', [])
             )[0],
             labelling=Labelling.objects.get_or_create(
                 type=labelling_config.get('type', None),
@@ -187,7 +191,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                     for i in range(1, encoding['prefix_length'] + 1):
                         item, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
-                            type=payload['type'],
+                            type=JobTypes.UPDATE.value,
                             split=split,
                             encoding=Encoding.objects.get_or_create(  # TODO fixme
                                 data_encoding='label_encoder',
@@ -200,7 +204,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 prefix_length=i,
                                 # TODO static check?
                                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                                task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                                task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                                features=config['encoding'].get('features', [])
                             )[0],
                             labelling=Labelling.objects.get_or_create(
                                 type=labelling_config.get('type', None),
@@ -213,13 +218,18 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
                             ),
-                            create_models=config.get('create_models', False)
+                            hyperparameter_optimizer=HyperparameterOptimization.init(
+                                config.get('hyperparameter_optimizer', None)),
+                            create_models=config.get('create_models', False),
+                            incremental_train=Job.objects.filter(
+                                pk=config['incremental_train'].get('base_model', None)
+                            )[0]
                         )
                         jobs.append(item)
                 else:
                     item, _ = Job.objects.get_or_create(
                         status=JobStatuses.CREATED.value,
-                        type=payload['type'],
+                        type=JobTypes.UPDATE.value,
 
                         split=split,
                         encoding=Encoding.objects.get_or_create(  # TODO fixme
@@ -233,7 +243,8 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             prefix_length=config['encoding']['prefix_length'],
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this')
+                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                            features=config['encoding'].get('features', [])
                         )[0],
                         labelling=Labelling.objects.get_or_create(
                             type=labelling_config.get('type', None),
@@ -246,7 +257,12 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         predictive_model=PredictiveModel.init(
                             get_prediction_method_config(generation_type, method, payload)
                         ),
-                        create_models=config.get('create_models', False)
+                        hyperparameter_optimizer=HyperparameterOptimization.init(
+                                config.get('hyperparameter_optimizer', None)),
+                        create_models=config.get('create_models', False),
+                        incremental_train=Job.objects.filter(
+                                pk=config['incremental_train'].get('base_model', None)
+                        )[0]
                     )
                     jobs.append(item)
     return jobs

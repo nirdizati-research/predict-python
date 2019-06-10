@@ -1,3 +1,4 @@
+import statistics
 from collections import defaultdict, OrderedDict
 
 from pm4py.objects.log.log import EventLog
@@ -105,3 +106,19 @@ def max_events_in_log(log: EventLog) -> int:
     :return 3
     """
     return max([len(trace) for trace in log])
+
+
+def avg_events_in_log(log: EventLog) -> int:
+    """Returns the average number of events in any trace
+
+    :return 3
+    """
+    return statistics.mean([len(trace) for trace in log])
+
+
+def std_var_events_in_log(log: EventLog) -> int:
+    """Returns the standard variation of the average number of events in any trace
+
+    :return 3
+    """
+    return statistics.stdev([len(trace) for trace in log])

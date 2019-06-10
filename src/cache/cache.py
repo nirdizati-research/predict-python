@@ -37,15 +37,17 @@ def put_loaded_logs(split: Split, train_df, test_df, additional_columns):
 
 
 def put_labelled_logs(job: Job, train_df, test_df):
+    train_df_path = "encoding{}-label{}-splitTR{}".format(job.encoding.id, job.labelling.id, job.split.train_log.name)
+    test_df_path = "encoding{}-label{}-splitTE{}".format(job.encoding.id, job.labelling.id, job.split.train_log.name)
     [dump_to_cache(path, data, 'cache/labeled_log_cache/') for (path, data) in [
-        (job.split.train_log.name, train_df),
-        (job.split.test_log.name, test_df)
+        (train_df_path, train_df),
+        (test_df_path, test_df)
     ]]
     LabelledLog.objects.create(split=job.split,
                                encoding=job.encoding,
                                labelling=job.labelling,
-                               train_log_path=job.split.train_log.name,
-                               test_log_path=job.split.test_log.name)
+                               train_log_path=train_df_path,
+                               test_log_path=test_df_path)
 
 
 def get_loaded_logs(split: Split) -> (DataFrame, DataFrame, DataFrame):

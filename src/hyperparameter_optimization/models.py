@@ -26,7 +26,7 @@ class HyperparameterOptimization(CommonModel):
 
     @staticmethod
     def init(configuration: dict = {'type': HyperparameterOptimizationMethods.HYPEROPT.value}):
-        hyperparameter_optimizer_type = configuration['type']
+        hyperparameter_optimizer_type = configuration.get('type', HyperparameterOptimizationMethods.NONE.value)
         if hyperparameter_optimizer_type == HyperparameterOptimizationMethods.HYPEROPT.value:
             default_configuration = hyperparameter_optimization_hyperopt()
             return HyperOpt.objects.get_or_create(
@@ -88,7 +88,7 @@ HYPEROPT_LOSS_MAPPINGS = (
 class HyperOpt(HyperparameterOptimization):
     max_evaluations = models.PositiveIntegerField()
     performance_metric = models.CharField(choices=HYPEROPT_LOSS_MAPPINGS, default='acc', max_length=20)
-    algorithm_type = models.CharField(choices=HYPEROPT_ALGORITHM_MAPPINGS, default='random_search', max_length=20)
+    algorithm_type = models.CharField(choices=HYPEROPT_ALGORITHM_MAPPINGS, default='tpe', max_length=20)
 
     def to_dict(self):
         return {

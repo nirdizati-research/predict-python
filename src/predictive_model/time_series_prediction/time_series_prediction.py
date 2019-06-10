@@ -41,8 +41,8 @@ def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer
 
     results = _prepare_results(results_df, nlevenshtein)
 
-    # TODO save predictive_model more wisely
-    model_split['type'] = job['clustering']
+    # TODO how do I save the predictive_model?
+    # model_split['type'] = job['clustering']
 
     return results, model_split
 

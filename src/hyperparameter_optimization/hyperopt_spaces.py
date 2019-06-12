@@ -124,10 +124,10 @@ def _classification_incremental_perceptron() -> dict:
 
 def _classification_nn() -> dict:
     return {
-        'hidden_layers': hp.quniform('hidden_layers', 1, 10),
-        'hidden_units': hp.quniform('hidden_units', 1, 100),
+        'hidden_layers': hp.quniform('hidden_layers', 1, 10, 1),
+        'hidden_units': hp.quniform('hidden_units', 1, 100, 1),
         'activation_function': hp.choice('activation_function', ['sigmoid', 'tanh', 'relu']),
-        'epochs': hp.quniform('epochs', 1, 50),
+        'epochs': hp.quniform('epochs', 1, 50, 1),
         'dropout_rate': hp.uniform('dropout_rate', 0, 1)
     }
 
@@ -164,10 +164,10 @@ def _regression_xgboost() -> dict:
 
 def _regression_nn() -> dict:
     return {
-        'hidden_layers': hp.quniform('hidden_layers', 1, 10),
-        'hidden_units': hp.quniform('hidden_units', 1, 100),
+        'hidden_layers': hp.quniform('hidden_layers', 1, 10, 1),
+        'hidden_units': hp.quniform('hidden_units', 1, 100, 1),
         'activation_function': hp.choice('activation_function', ['sigmoid', 'tanh', 'relu']),
-        'epochs': hp.quniform('epochs', 1, 50),
+        'epochs': hp.quniform('epochs', 1, 50, 1),
         'dropout_rate': hp.uniform('dropout_rate', 0, 1)
     }
 

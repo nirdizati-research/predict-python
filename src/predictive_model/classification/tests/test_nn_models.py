@@ -35,7 +35,7 @@ class TestNNClassifier(TestCase):
         config = dict()
         config['n_hidden_layers'] = 2
         config['n_hidden_units'] = 10
-        config['activation'] = 'relu'
+        config['activation_function'] = 'relu'
         config['n_epochs'] = 1
         config['encoding'] = encoding
         config['dropout_rate'] = 0.1

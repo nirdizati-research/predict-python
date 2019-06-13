@@ -147,7 +147,7 @@ class Classification(PredictiveModel):
                 tol=configuration.get('tol', default_configuration['tol']),
                 epsilon=configuration.get('epsilon', default_configuration['epsilon']),
                 learning_rate=configuration.get('learning_rate', default_configuration['learning_rate']),
-                eta0=configuration.get('eta0', default_configuration['eta0']),
+                eta0=1 if configuration.get('eta0', default_configuration['eta0']) <= 0 and configuration.get('learning_rate', default_configuration['learning_rate']) in ("constant", "invscaling", "adaptive") else configuration.get('eta0', default_configuration['eta0']),
                 power_t=configuration.get('power_t', default_configuration['power_t']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change']),
                 validation_fraction=configuration.get('validation_fraction',

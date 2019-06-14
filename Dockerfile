@@ -1,4 +1,8 @@
-FROM python:3.6-stretch
+FROM tensorflow/tensorflow:latest-py3
+
+#Install git
+RUN apt-get update \
+    && apt-get install -y git
 
 # Add requirements file used by pip install
 ADD ./requirements.txt /predict-python/

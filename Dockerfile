@@ -1,4 +1,5 @@
-FROM tensorflow/tensorflow:latest-py3
+FROM tensorflow/tensorflow:latest
+FROM python:3.6-stretch
 
 #Install git
 RUN apt-get update \

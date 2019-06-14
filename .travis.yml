@@ -1,5 +1,5 @@
 git:
-  depth: 300
+  depth: 1
 env:
   global:
     - REDIS_HOST=localhost REDIS_PORT=6379

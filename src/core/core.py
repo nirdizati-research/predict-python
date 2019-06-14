@@ -142,6 +142,11 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
                 results,
                 len(set(test_df['label'])) <= 2
             )
+        elif job.predictive_model.predictive_model == PredictiveModels.TIME_SERIES_PREDICTION.value:
+            job.evaluation = Evaluation.init(
+                job.predictive_model.predictive_model,
+                results
+            )
         job.evaluation.save()
     elif job.type == JobTypes.LABELLING.value:
         job.labelling.results = results

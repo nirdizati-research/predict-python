@@ -25,7 +25,7 @@ class NNClassifier(ClassifierMixin):
         """
         self._n_hidden_layers = int(kwargs['n_hidden_layers'])
         self._n_hidden_units = int(kwargs['n_hidden_units'])
-        self._activation = str(kwargs['activation_function'])
+        self._activation = str(kwargs['activation'])
         self._n_epochs = int(kwargs['n_epochs'])
         self._encoding = str(kwargs['encoding'])
         self._dropout_rate = float(kwargs['dropout_rate'])

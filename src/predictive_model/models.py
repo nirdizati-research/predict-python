@@ -10,13 +10,13 @@ from src.common.models import CommonModel
 class PredictiveModels(Enum):
     CLASSIFICATION = 'classification'
     REGRESSION = 'regression'
-    TIME_SERIES_PREDICTION = 'timeSeriesPrediction'
+    TIME_SERIES_PREDICTION = 'time_series_prediction'
 
 
 PREDICTIVE_MODEL_MAPPINGS = (
     (PredictiveModels.CLASSIFICATION.value, 'classification'),
     (PredictiveModels.REGRESSION.value, 'regression'),
-    (PredictiveModels.TIME_SERIES_PREDICTION.value, 'timeSeriesPrediction')
+    (PredictiveModels.TIME_SERIES_PREDICTION.value, 'time_series_prediction')
 )
 
 

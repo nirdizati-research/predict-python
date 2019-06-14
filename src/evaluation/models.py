@@ -43,7 +43,8 @@ class Evaluation(CommonModel):
             )[0]
         elif prediction_type == PredictiveModels.TIME_SERIES_PREDICTION.value:
             return TimeSeriesPredictionMetrics.objects.get_or_create(
-                elapsed_time=results['elapsed_time'] if results['elapsed_time'] != '--' else None
+                elapsed_time=results['elapsed_time'] if results['elapsed_time'] != '--' else None,
+                nlevenshtein=results['nlevenshtein'] if results['nlevenshtein'] != '--' else None
             )[0]
         else:
             raise ValueError('evaluation model type {} not recognized'.format(prediction_type))
@@ -107,4 +108,9 @@ class RegressionMetrics(Evaluation):
 
 
 class TimeSeriesPredictionMetrics(Evaluation):
-    pass
+    nlevenshtein = models.FloatField(blank=True, null=True)
+
+    def to_dict(self) -> dict:
+        return {
+            'nlevenshtein': self.nlevenshtein
+        }

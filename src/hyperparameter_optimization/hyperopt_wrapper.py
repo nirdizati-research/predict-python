@@ -31,7 +31,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
 
     global training_df, test_df, global_job
     global_job = job
-    training_df, test_df = get_encoded_logs(job, use_cache=False)  # TODO:restore to true
+    training_df, test_df = get_encoded_logs(job)
 
     space = _get_space(job)
 

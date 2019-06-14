@@ -119,8 +119,11 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
             cluster_targets_df = DataFrame(cluster_train_df['label'])
             try:
                 classifier.fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
-            except NotImplementedError:
-                classifier.partial_fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
+            except (NotImplementedError, KeyError):
+                try:
+                    classifier.partial_fit(cluster_train_df.drop('label', 1).T, cluster_targets_df.values.ravel())
+                except KeyError:
+                    classifier.partial_fit(cluster_train_df.drop('label', 1).values, cluster_targets_df.values.ravel())
             except Exception as exception:
                 raise exception
 
@@ -171,14 +174,37 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
         else:
             cluster_targets_df = cluster_test_df['label']
             if evaluation:
-                if hasattr(classifier[cluster], 'decision_function'):
-                    scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1))
-                else:
-                    scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1))
-                    if np.size(scores, 1) >= 2:  # checks number of columns
-                        scores = scores[:, 1]
+                try:
+                    if hasattr(classifier[cluster], 'decision_function'):
+                        scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1))
+                    else:
+                        scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1))
+                        if np.size(scores, 1) >= 2:  # checks number of columns
+                            scores = scores[:, 1]
+                except (NotImplementedError, KeyError):
+                    try:
+                        if hasattr(classifier[cluster], 'decision_function'):
+                            scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1).T)
+                        else:
+                            scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).T)
+                            if np.size(scores, 1) >= 2:  # checks number of columns
+                                scores = scores[:, 1]
+                    except KeyError:
+                        if hasattr(classifier[cluster], 'decision_function'):
+                            scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1).values)
+                        else:
+                            scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).values)
+                            if np.size(scores, 1) >= 2:  # checks number of columns
+                                scores = scores[:, 1]
                 auc += get_auc(cluster_targets_df, scores)
-            cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1))
+            try:
+                cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1))
+            except (NotImplementedError, KeyError):
+                try:
+                    cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).T)
+                except (KeyError, ValueError):
+                    cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
+
 
             results_df = results_df.append(cluster_test_df)
 

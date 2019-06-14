@@ -432,7 +432,7 @@ class EncodingParser:
         """
         test_data = self._remove_trace_attributes(test_data)
 
-        self._training_data_encoder.encode_data(test_data)
+        self._training_data_encoder.encode_data(test_data, train=False)
         test_data = self._training_data_encoder.to_one_hot(test_data)
 
         if self._task == PredictiveModels.TIME_SERIES_PREDICTION.value:

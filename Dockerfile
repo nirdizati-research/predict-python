@@ -1,5 +1,4 @@
-FROM tensorflow/tensorflow:latest
-FROM python:3.6-stretch
+FROM asukakenji/tensorflow-py36
 
 #Install git
 RUN apt-get update \

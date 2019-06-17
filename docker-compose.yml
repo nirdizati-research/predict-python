@@ -20,11 +20,17 @@ services:
         source: /home/ubuntu/Willo/nirdizati-research/db/
         target: /predict-python/db/
       - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/loaded_log_cache/
+        target: /predict-python/cache/loaded_log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/labeled_log_cache/
+        target: /predict-python/cache/labeled_log_cache/
+      - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
-        target: /predict-python/log_cache/
+        target: /predict-python/cache/log_cache/
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/model_cache/
-        target: /predict-python/model_cache/
+        target: /predict-python/cache/model_cache/
 
   scheduler:
     image: nirdizatiresearch/predict-python
@@ -40,11 +46,17 @@ services:
         source: /home/ubuntu/Willo/nirdizati-research/db/
         target: /predict-python/db/
       - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/loaded_log_cache/
+        target: /predict-python/cache/loaded_log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/labeled_log_cache/
+        target: /predict-python/cache/labeled_log_cache/
+      - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
-        target: /predict-python/log_cache/
+        target: /predict-python/cache/log_cache/
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/model_cache/
-        target: /predict-python/model_cache/
+        target: /predict-python/cache/model_cache/
 
   worker:
     image: nirdizatiresearch/predict-python
@@ -58,8 +70,14 @@ services:
         source: /home/ubuntu/Willo/nirdizati-research/db/
         target: /predict-python/db/
       - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/loaded_log_cache/
+        target: /predict-python/cache/loaded_log_cache/
+      - type: bind
+        source: /home/ubuntu/Willo/nirdizati-research/labeled_log_cache/
+        target: /predict-python/cache/labeled_log_cache/
+      - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/log_cache/
-        target: /predict-python/log_cache/
+        target: /predict-python/cache/log_cache/
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/model_cache/
-        target: /predict-python/model_cache/
+        target: /predict-python/cache/model_cache/

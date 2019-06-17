@@ -7,6 +7,8 @@ from src.cache.models import LabelledLog, LoadedLog
 from src.jobs.models import Job
 from src.split.models import Split
 
+import logging
+logger = logging.getLogger(__name__)
 
 def get_digested(candidate_path: str) -> str:
     return hashlib.sha256(candidate_path.encode('utf-8')).hexdigest()
@@ -51,7 +53,7 @@ def put_labelled_logs(job: Job, train_df, test_df):
 
 
 def get_loaded_logs(split: Split) -> (DataFrame, DataFrame, DataFrame):
-    print('\t\tFound pre-loaded Dataset in cache, loading..')
+    logger.info('\t\tFound pre-loaded Dataset in cache, loading..')
     cache = LoadedLog.objects.filter(split=split)[0]
     return (
         load_from_cache(path=cache.train_log_path, prefix='cache/loaded_log_cache/'),
@@ -61,7 +63,7 @@ def get_loaded_logs(split: Split) -> (DataFrame, DataFrame, DataFrame):
 
 
 def get_labelled_logs(job: Job) -> (DataFrame, DataFrame):
-    print('\t\tFound pre-labeled Dataset in cache, loading..')
+    logger.info('\t\tFound pre-labeled Dataset in cache, loading..')
     cache = LabelledLog.objects.filter(split=job.split,
                                        encoding=job.encoding,
                                        labelling=job.labelling)[0]

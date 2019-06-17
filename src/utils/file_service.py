@@ -6,6 +6,9 @@ from pm4py.objects.log.log import EventLog
 
 from src.logs.models import Log
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def get_log(log: Log) -> EventLog:
     """Read in event log from disk
@@ -13,7 +16,7 @@ def get_log(log: Log) -> EventLog:
     Uses xes_importer to parse log.
     """
     filepath = log.path
-    print("\t\tReading in log from {}".format(filepath))
+    logger.info("\t\tReading in log from {}".format(filepath))
     return xes_importer.import_log(filepath)
 
 

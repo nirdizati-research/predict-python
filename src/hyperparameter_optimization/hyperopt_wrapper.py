@@ -11,6 +11,9 @@ from src.jobs.models import Job
 from src.predictive_model.models import PredictiveModel
 from src.utils.django_orm import duplicate_orm_row
 
+import logging
+logger = logging.getLogger(__name__)
+
 trial_number = 0
 
 
@@ -22,7 +25,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     :return: tuple containing the results, config and predictive_model split from the search
     """
 
-    print("Start hyperopt job {} with {}, performance_metric {}".format(
+    logger.info("Start hyperopt job {} with {}, performance_metric {}".format(
         job.type, get_run(job),
         job.hyperparameter_optimizer.__getattribute__(
             job.hyperparameter_optimizer.optimization_method.lower()
@@ -55,7 +58,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     job.predictive_model = PredictiveModel.objects.filter(pk=current_best['predictive_model_id'])[0]
     job.save()
 
-    print("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
+    logger.info("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
     return current_best['results'], current_best['config'], current_best['model_split']
 
 

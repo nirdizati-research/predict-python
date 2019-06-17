@@ -8,13 +8,15 @@ from src.split.models import Split, SplitTypes, SplitOrderingMethods
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 
+import logging
+logger = logging.getLogger(__name__)
 
 def prepare_logs(split: Split):
     """Returns training_log and test_log"""
     if split.type == SplitTypes.SPLIT_SINGLE.value:
         additional_columns = get_additional_columns(get_log(split.original_log))
         training_log, test_log = _split_single_log(split)
-        print("\t\tLoaded single log from {}".format(split.original_log.path))
+        logger.info("\t\tLoaded single log from {}".format(split.original_log.path))
     else:
         # Have to use sklearn to convert some internal data types
         training_log = get_log(split.train_log)
@@ -24,7 +26,7 @@ def prepare_logs(split: Split):
             split.save()
         training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
         test_log, _ = train_test_split(get_log(split.test_log), test_size=0, shuffle=False)
-        print("\t\tLoaded double logs from {} and {}.".format(split.train_log.path, split.test_log.path))
+        logger.info("\t\tLoaded double logs from {} and {}.".format(split.train_log.path, split.test_log.path))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")
     return training_log, test_log, additional_columns
@@ -32,7 +34,7 @@ def prepare_logs(split: Split):
 
 def _split_single_log(split: Split):
     log = get_log(split.original_log)
-    print("\t\tExecute single split ID {}, split_type {}, test_size {}".format(split.id, split.type, split.test_size))
+    logger.info("\t\tExecute single split ID {}, split_type {}, test_size {}".format(split.id, split.type, split.test_size))
     if split.splitting_method == SplitOrderingMethods.SPLIT_TEMPORAL.value:
         return _temporal_split(log, split.test_size)
     elif split.splitting_method == SplitOrderingMethods.SPLIT_STRICT_TEMPORAL.value:

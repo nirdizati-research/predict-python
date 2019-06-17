@@ -23,6 +23,8 @@ from src.utils.result_metrics import calculate_results_classification, get_auc
 
 pd.options.mode.chained_assignment = None
 
+import logging
+logger = logging.getLogger(__name__)
 
 def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main classification entry point
@@ -233,7 +235,7 @@ def _drop_columns(df: DataFrame) -> DataFrame:
 def _choose_classifier(job: Job):
     method, config = get_method_config(job)
     config.pop('classification_method', None)
-    print("Using method {} with config {}".format(method, config))
+    logger.info("Using method {} with config {}".format(method, config))
     if method == ClassificationMethods.KNN.value:
         classifier = KNeighborsClassifier(**config)
     elif method == ClassificationMethods.RANDOM_FOREST.value:

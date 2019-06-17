@@ -24,6 +24,8 @@ from src.split.splitting import prepare_logs
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.file_service import save_result
 
+import logging
+logger = logging.getLogger(__name__)
 
 def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurations
     """main entry point for calculations
@@ -33,7 +35,7 @@ def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurati
     :return: results and predictive_model split
 
     """
-    print("Start job {} with {}".format(job.type, get_run(job)))
+    logger.info("Start job {} with {}".format(job.type, get_run(job)))
     training_df, test_df = get_encoded_logs(job)
     results, model_split = run_by_type(training_df, test_df, job)
     return results, model_split
@@ -48,7 +50,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
     :return: training and testing DataFrame
 
     """
-    print('\tGetting Dataset')
+    logger.info('\tGetting Dataset')
     if use_cache and \
         (job.predictive_model is not None and
          job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value):
@@ -61,14 +63,18 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                 LabelledLog.objects.filter(split=job.split,
                                            encoding=job.encoding,
                                            labelling=job.labelling).delete()
-                print('\t\tError pre-labeled cache invalidated!')
+                logger.info('\t\tError pre-labeled cache invalidated!')
                 return get_encoded_logs(job, use_cache)
         else:
             if job.split.train_log is not None and \
                job.split.test_log is not None and \
                LoadedLog.objects.filter(split=job.split).exists():
-                training_log, test_log, additional_columns = get_loaded_logs(job.split)
-
+                try:
+                    training_log, test_log, additional_columns = get_loaded_logs(job.split)
+                except FileNotFoundError:  # cache invalidation
+                    LoadedLog.objects.filter(split=job.split).delete()
+                    logger.info('\t\tError pre-loaded cache invalidated!')
+                    return get_encoded_logs(job, use_cache)
             else:
                 training_log, test_log, additional_columns = prepare_logs(job.split)
                 if job.split.type == SplitTypes.SPLIT_SINGLE.value:
@@ -155,8 +161,8 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
         save_result(results, job, start_time)
 
-    print("End job {}, {} .".format(job.type, get_run(job)))
-    print("\tResults {} .".format(results))
+    logger.info("End job {}, {} .".format(job.type, get_run(job)))
+    logger.info("\tResults {} .".format(results))
     return results, model_split
 
 

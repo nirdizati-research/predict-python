@@ -10,10 +10,12 @@ from src.hyperparameter_optimization.models import HyperparameterOptimizationMet
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 
+import logging
+logger = logging.getLogger(__name__)
 
 @job("default", timeout='1h')
 def prediction_task(job_id):
-    print("Start prediction task ID {}".format(job_id))
+    logger.info("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
 
     try:
@@ -30,7 +32,7 @@ def prediction_task(job_id):
             else:
                 result, model_split = calculate(job)
             elapsed_time = time.time() - start_time
-            print('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
+            logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
             if job.create_models:
                 save_models(model_split, job)
             job.result = result
@@ -45,7 +47,7 @@ def prediction_task(job_id):
 
 
 def save_models(models: dict, job: Job):
-    print("\tStart saving models of JOB {}".format(job.id))
+    logger.info("\tStart saving models of JOB {}".format(job.id))
     if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
         clusterer_filename = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(
             job.id,

@@ -11,9 +11,12 @@ from src.utils.file_service import create_unique_name
 from src.utils.log_metrics import events_by_date, resources_by_date, max_events_in_log, trace_attributes, \
     new_trace_start, avg_events_in_log, std_var_events_in_log
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 def create_log(log, name: str, folder='cache/log_cache/'):
-    print('\tCreating new file (', name, ') in memory')
+    logger.info('\tCreating new file (', name, ') in memory')
     name = create_unique_name(name)
     path = folder + name
     if isinstance(log, EventLog):

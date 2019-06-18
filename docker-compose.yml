@@ -28,7 +28,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_HOST: 'postgres'
+#      DB_HOST: 'postgres'
       DB_PORT: 5432
     ports:
       - 80:8000
@@ -58,7 +58,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_HOST: 'postgres'
+#      DB_HOST: 'postgres'
       DB_PORT: 5432
     volumes:
       - type: bind
@@ -84,7 +84,7 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
-      DB_HOST: 'postgres'
+#      DB_HOST: 'postgres'
       DB_PORT: 5432
     volumes:
       - type: bind

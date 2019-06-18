@@ -21,6 +21,8 @@ from src.utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
 
+import logging
+logger = logging.getLogger(__name__)
 
 def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main regression entry point
@@ -114,7 +116,7 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 def _choose_regressor(job: Job) -> RegressorMixin:
     method, config = get_method_config(job)
     config.pop('regression_method', None)
-    print("Using method {} with config {}".format(method, config))
+    logger.info("Using method {} with config {}".format(method, config))
     if method == RegressionMethods.LINEAR.value:
         regressor = LinearRegression(**config)
     elif method == RegressionMethods.RANDOM_FOREST.value:

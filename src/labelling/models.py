@@ -44,9 +44,9 @@ THRESHOLD_TYPE_MAPPINGS = (
 
 
 class Labelling(CommonModel):
-    type = models.CharField(choices=LABELLING_TYPE_MAPPINGS, default='attribute_string', max_length=20, null=True, blank=True)
+    type = models.CharField(choices=LABELLING_TYPE_MAPPINGS, default='attribute_string', max_length=max(len(el[1]) for el in LABELLING_TYPE_MAPPINGS)+1, null=True, blank=True)
     attribute_name = models.CharField(default=None, max_length=20, null=True, blank=True)
-    threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='threshold_mean', max_length=20, null=True, blank=True)
+    threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='threshold_mean', max_length=max(len(el[1]) for el in THRESHOLD_TYPE_MAPPINGS)+1, null=True, blank=True)
     threshold = models.IntegerField(default=0, null=True, blank=True)
     results = JSONField(default={})
 

@@ -189,7 +189,7 @@ def runtime_calculate(run_log: list, model: dict) -> dict:
         results = time_series_prediction_single_log(run_df, model)
     else:
         raise ValueError("Type {} not supported".format(model['type']))
-    print("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
+    logger.info("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
     return results
 
 

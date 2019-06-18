@@ -76,14 +76,14 @@ def get_log_stats(request, pk, stat):
     elif stat == 'alpha_miner':
         data = alpha_miner.apply(log)
     else:
-        print('stats error in get_log_stats, setting data to None')
+        logger.info('stats error in get_log_stats, setting data to None')
         data = None
     return Response(data)
 
 
 @api_view(['POST'])
 def upload_multiple(request):
-    print('Double upload request received.')
+    logger.info('Double upload request received.')
     test_log = create_log(request.FILES['testSet'], request.FILES['testSet'].name)
     train_log = create_log(request.FILES['trainingSet'], request.FILES['trainingSet'].name)
 

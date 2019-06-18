@@ -14,12 +14,14 @@ from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
+import logging
+logger = logging.getLogger(__name__)
 
 def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None):
     training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
                                      cols=None)
     # TODO pass the columns of the training log
-    print('\tDataset not found in cache, building..')
+    logger.info('\tDataset not found in cache, building..')
     test_log, _ = _encode_log(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
 
     labelling = job.labelling

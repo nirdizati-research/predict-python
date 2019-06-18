@@ -85,10 +85,17 @@ class Regression(PredictiveModel):
             raise ValueError('regressor type {} not recognized'.format(regressor_type))
 
 
+RANDOM_FOREST_MAX_FEATURES_MAPPINGS = (
+    ('auto', 'auto'),
+    ('sqrt', 'sqrt'),
+    ('log2', 'log2')
+)
+
+
 class RandomForest(Regression):
     n_estimators = models.PositiveIntegerField()
-    max_features = models.CharField(max_length=10, null=True)
-    max_depth = models.CharField(max_length=10, null=True)
+    max_features = models.CharField(choices=RANDOM_FOREST_MAX_FEATURES_MAPPINGS, null=True, default=None, max_length=max(len(el[1]) for el in RANDOM_FOREST_MAX_FEATURES_MAPPINGS) + 1)
+    max_depth = models.PositiveIntegerField(null=True)
     random_state = 21
 
     def to_dict(self):
@@ -145,7 +152,7 @@ NEURAL_NETWORKS_ACTIVATION = (
 class NeuralNetwork(Regression):
     n_hidden_layers = models.PositiveIntegerField()
     n_hidden_units = models.PositiveIntegerField()
-    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=20)
+    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=max(len(el[1]) for el in NEURAL_NETWORKS_ACTIVATION)+1)
     n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 

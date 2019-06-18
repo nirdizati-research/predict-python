@@ -54,7 +54,7 @@ def generate(split, payload):
                             )[0] if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             hyperparameter_optimizer=HyperparameterOptimization.init(
-                                config.get('hyperparameter_optimizer', None)),
+                                config.get('hyperparameter_optimizer', {'type': None}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': None}), #TODO TEMPORARY workaround
                             predictive_model=predictive_model,
                             create_models=config.get('create_models', False)
                         )[0]
@@ -90,7 +90,8 @@ def generate(split, payload):
                             threshold=labelling_config.get('threshold', None)
                         )[0] if labelling_config != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
-                        hyperparameter_optimizer=HyperparameterOptimization.init(config.get('hyperparameter_optimizer', None)),
+                        hyperparameter_optimizer=HyperparameterOptimization.init(
+                            config.get('hyperparameter_optimizer', {'type': 'none'}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': 'none'}), #TODO TEMPORARY workaround
                         predictive_model=predictive_model,
                         create_models=config.get('create_models', False)
                     )[0]

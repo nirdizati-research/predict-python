@@ -17,7 +17,7 @@ class ModelSplit(CommonModel):
     type = models.CharField(choices=ENC_TYPES, default='noCluster', max_length=20)
     model_path = models.CharField(default='error', max_length=200)
     clusterer_path = models.CharField(blank=True, null=True, max_length=200)
-    predtype = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20, default='Prediction')
+    predtype = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=max(len(el[1]) for el in JOB_TYPE_MAPPINGS)+1, default='Prediction')
 
     def to_dict(self):
         split = dict()
@@ -31,7 +31,7 @@ class ModelSplit(CommonModel):
 
 class PredModels(CommonModel):
     split = models.ForeignKey('ModelSplit', on_delete=models.DO_NOTHING, related_name='split', blank=True, null=True)
-    type = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=20)
+    type = models.CharField(choices=JOB_TYPE_MAPPINGS, max_length=max(len(el[1]) for el in JOB_TYPE_MAPPINGS)+1)
     log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='log', blank=True, null=True)
     config = JSONField(default={})
 

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_log(log, name: str, folder='cache/log_cache/'):
-    logger.info('\tCreating new file (', name, ') in memory')
+    logger.info('\tCreating new file (' + name + ') in memory')
     name = create_unique_name(name)
     path = folder + name
     if isinstance(log, EventLog):

@@ -11,6 +11,7 @@ from src.utils.file_service import get_log
 import logging
 logger = logging.getLogger(__name__)
 
+
 def prepare_logs(split: Split):
     """Returns training_log and test_log"""
     if split.type == SplitTypes.SPLIT_SINGLE.value:

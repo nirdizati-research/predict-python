@@ -87,8 +87,8 @@ HYPEROPT_LOSS_MAPPINGS = (
 
 class HyperOpt(HyperparameterOptimization):
     max_evaluations = models.PositiveIntegerField()
-    performance_metric = models.CharField(choices=HYPEROPT_LOSS_MAPPINGS, default='acc', max_length=20)
-    algorithm_type = models.CharField(choices=HYPEROPT_ALGORITHM_MAPPINGS, default='tpe', max_length=20)
+    performance_metric = models.CharField(choices=HYPEROPT_LOSS_MAPPINGS, default='acc', max_length=max(len(el[1]) for el in HYPEROPT_LOSS_MAPPINGS)+1)
+    algorithm_type = models.CharField(choices=HYPEROPT_ALGORITHM_MAPPINGS, default='tpe', max_length=max(len(el[1]) for el in HYPEROPT_ALGORITHM_MAPPINGS)+1)
 
     def to_dict(self):
         return {

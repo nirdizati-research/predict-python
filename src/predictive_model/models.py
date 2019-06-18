@@ -23,8 +23,8 @@ PREDICTIVE_MODEL_MAPPINGS = (
 class PredictiveModel(CommonModel):
     """Container of Classification to be shown in frontend"""
     model_path = models.FilePathField(path='cache/model_cache/')
-    predictive_model = models.CharField(choices=PREDICTIVE_MODEL_MAPPINGS, max_length=20)
-    prediction_method = models.CharField(max_length=20)
+    predictive_model = models.CharField(choices=PREDICTIVE_MODEL_MAPPINGS, max_length=max(len(el[1]) for el in PREDICTIVE_MODEL_MAPPINGS)+1)
+    prediction_method = models.CharField(max_length=50)
     objects = InheritanceManager()
 
     @staticmethod

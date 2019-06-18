@@ -50,9 +50,9 @@ class Job(CommonModel):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
-    error = models.CharField(default='', max_length=200)
-    status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED.value, max_length=20)
-    type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION.value, max_length=20)
+    error = models.CharField(default='', max_length=500)
+    status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED.value, max_length=max(len(el[1]) for el in JOB_STATUS_MAPPINGS)+1)
+    type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION.value, max_length=max(len(el[1]) for el in JOB_TYPE_MAPPINGS)+1)
     create_models = models.BooleanField(default=False)
 
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)

@@ -35,15 +35,13 @@ SPLIT_ORDERING_METHOD_MAPPINGS = (
 
 class Split(CommonModel):
     """Container of Split to be shown in frontend"""
-    type = models.CharField(choices=SPLIT_TYPE_MAPPINGS, default='single', max_length=20)
-    original_log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='original_log', blank=True,
-                                     null=True)
-    test_size = models.FloatField(default=0.2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True,
-                                  null=True)
-    splitting_method = models.CharField(choices=SPLIT_ORDERING_METHOD_MAPPINGS, default='sequential', max_length=20)
+    type = models.CharField(choices=SPLIT_TYPE_MAPPINGS, default='single', max_length=max(len(el[1]) for el in SPLIT_TYPE_MAPPINGS)+1)
+    original_log = models.ForeignKey(Log, on_delete=models.DO_NOTHING, related_name='original_log', blank=True, null=True)
+    test_size = models.FloatField(default=0.2, validators=[MinValueValidator(0.0), MaxValueValidator(1.0)], blank=True, null=True)
+    splitting_method = models.CharField(choices=SPLIT_ORDERING_METHOD_MAPPINGS, default='sequential', max_length=max(len(el[1]) for el in SPLIT_ORDERING_METHOD_MAPPINGS)+1)
     train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
-    additional_columns = models.CharField(max_length=30, blank=True, null=True)
+    additional_columns = models.FilePathField(path='cache/loaded_log_cache/',  blank=True, null=True)
 
     def to_dict(self) -> dict:
         temp = {

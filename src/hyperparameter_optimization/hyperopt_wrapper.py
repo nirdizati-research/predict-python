@@ -98,7 +98,7 @@ def _choose_algorithm(job: Job):
 def _calculate_and_evaluate(args) -> dict:
     global trial_number
     if trial_number % 20 == 0:
-        print("Trial {}".format(trial_number))
+        logger.info("Trial {}".format(trial_number))
     trial_number += 1
     local_job = global_job
 

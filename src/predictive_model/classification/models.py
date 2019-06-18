@@ -205,7 +205,7 @@ KNN_WEIGHTS = (
 
 class Knn(Classification):
     n_neighbors = models.PositiveIntegerField()
-    weights = models.CharField(choices=KNN_WEIGHTS, default='uniform', max_length=20)
+    weights = models.CharField(choices=KNN_WEIGHTS, default='uniform', max_length=max(len(el[1]) for el in KNN_WEIGHTS)+1)
 
     def to_dict(self):
         return {
@@ -263,11 +263,11 @@ HOEFFDING_TREE_LEAF_PREDICTION = (
 
 class HoeffdingTree(Classification):
     grace_period = models.PositiveIntegerField()
-    split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=20)
+    split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=max(len(el[1]) for el in HOEFFDING_TREE_SPLIT_CRITERION)+1)
     split_confidence = models.FloatField()
     tie_threshold = models.FloatField()
     remove_poor_atts = models.BooleanField()
-    leaf_prediction = models.CharField(choices=HOEFFDING_TREE_LEAF_PREDICTION, default='uniform', max_length=20)
+    leaf_prediction = models.CharField(choices=HOEFFDING_TREE_LEAF_PREDICTION, default='uniform', max_length=max(len(el[1]) for el in HOEFFDING_TREE_LEAF_PREDICTION)+1)
     nb_threshold = models.FloatField()
 
     def to_dict(self):
@@ -284,11 +284,11 @@ class HoeffdingTree(Classification):
 
 class AdaptiveHoeffdingTree(Classification):
     grace_period = models.PositiveIntegerField()
-    split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=20)
+    split_criterion = models.CharField(choices=HOEFFDING_TREE_SPLIT_CRITERION, default='uniform', max_length=max(len(el[1]) for el in HOEFFDING_TREE_SPLIT_CRITERION)+1)
     split_confidence = models.FloatField()
     tie_threshold = models.FloatField()
     remove_poor_atts = models.BooleanField()
-    leaf_prediction = models.CharField(choices=HOEFFDING_TREE_LEAF_PREDICTION, default='uniform', max_length=20)
+    leaf_prediction = models.CharField(choices=HOEFFDING_TREE_LEAF_PREDICTION, default='uniform', max_length=max(len(el[1]) for el in HOEFFDING_TREE_LEAF_PREDICTION)+1)
     nb_threshold = models.FloatField()
 
     def to_dict(self):
@@ -330,14 +330,14 @@ SGDCLASSIFIER_LEARNING_RATE = (
 
 
 class SGDClassifier(Classification):
-    loss = models.CharField(choices=SGDCLASSIFIER_LOSS, default='uniform', max_length=20)
-    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=20, null=True)
+    loss = models.CharField(choices=SGDCLASSIFIER_LOSS, default='uniform', max_length=max(len(el[1]) for el in SGDCLASSIFIER_LOSS)+1)
+    penalty = models.CharField(choices=SGDCLASSIFIER_PENALTY, default='l1', max_length=max(len(el[1]) for el in SGDCLASSIFIER_PENALTY)+1, null=True)
     alpha = models.FloatField()
     l1_ratio = models.FloatField()
     fit_intercept = models.BooleanField()
     tol = models.FloatField()
     epsilon = models.FloatField()
-    learning_rate = models.CharField(choices=SGDCLASSIFIER_LEARNING_RATE, default='constant', max_length=20)
+    learning_rate = models.CharField(choices=SGDCLASSIFIER_LEARNING_RATE, default='constant', max_length=max(len(el[1]) for el in SGDCLASSIFIER_LEARNING_RATE)+1)
     eta0 = models.PositiveIntegerField()
     power_t = models.FloatField()
     n_iter_no_change = models.PositiveIntegerField()
@@ -370,7 +370,7 @@ PERCEPTRON_PENALTY = (
 
 
 class Perceptron(Classification):
-    penalty = models.CharField(choices=PERCEPTRON_PENALTY, default='l1', max_length=20, null=True)
+    penalty = models.CharField(choices=PERCEPTRON_PENALTY, default='l1', max_length=max(len(el[1]) for el in PERCEPTRON_PENALTY)+1, null=True)
     alpha = models.FloatField()
     fit_intercept = models.BooleanField()
     tol = models.FloatField()
@@ -402,7 +402,7 @@ NEURAL_NETWORKS_ACTIVATION = (
 class NeuralNetwork(Classification):
     n_hidden_layers = models.PositiveIntegerField()
     n_hidden_units = models.PositiveIntegerField()
-    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=20)
+    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=max(len(el[1]) for el in NEURAL_NETWORKS_ACTIVATION)+1)
     n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 

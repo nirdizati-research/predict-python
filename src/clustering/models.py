@@ -79,14 +79,14 @@ KMEANS_ALGORITHM_MAPPINGS = (
 
 class KMeans(Clustering):
     n_clusters = models.PositiveIntegerField()
-    init = models.CharField(choices=KMEANS_INIT_MAPPINGS, default='k-means++', max_length=20)
+    init = models.CharField(choices=KMEANS_INIT_MAPPINGS, default='k-means++', max_length=max(len(el[1]) for el in KMEANS_INIT_MAPPINGS)+1)
     n_init = models.PositiveIntegerField(blank=True, null=True)
     max_iter = models.PositiveIntegerField(blank=True, null=True)
     tol = models.FloatField(blank=True, null=True)
-    precompute_distances = models.CharField(choices=KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS, default='auto', max_length=20)
+    precompute_distances = models.CharField(choices=KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS, default='auto', max_length=max(len(el[1]) for el in KMEANS_PRECOMPUTE_DISTANCES_MAPPINGS)+1)
     random_state = models.PositiveIntegerField(blank=True, null=True)
     copy_x = models.BooleanField(blank=True, null=True)
-    algorithm = models.CharField(choices=KMEANS_ALGORITHM_MAPPINGS, default='auto', max_length=20)
+    algorithm = models.CharField(choices=KMEANS_ALGORITHM_MAPPINGS, default='auto', max_length=max(len(el[1]) for el in KMEANS_ALGORITHM_MAPPINGS)+1)
 
     def to_dict(self) -> dict:
         return {

@@ -10,6 +10,7 @@ from src.split.models import Split
 import logging
 logger = logging.getLogger(__name__)
 
+
 def get_digested(candidate_path: str) -> str:
     return hashlib.sha256(candidate_path.encode('utf-8')).hexdigest()
 

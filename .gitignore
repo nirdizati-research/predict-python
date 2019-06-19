@@ -14,6 +14,8 @@ media
 
 # End of https://www.gitignore.io/api/django
 
+db/*
+
 cache/log_cache/*
 cache/loaded_log_cache/*
 cache/labeled_log_cache/*

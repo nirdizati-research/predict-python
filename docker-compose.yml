@@ -8,9 +8,9 @@ services:
     image: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/db/
@@ -23,13 +23,13 @@ services:
     tty: true
     stop_signal: SIGINT
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: 'localhost'
-      DB_PORT: 5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=db
+      - DB_PORT=5432
     ports:
       - 80:8000
     volumes:
@@ -53,13 +53,13 @@ services:
     command: python3 manage.py rqscheduler
     restart: unless-stopped
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: 'localhost'
-      DB_PORT: 5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=db
+      - DB_PORT=5432
     volumes:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/loaded_log_cache/
@@ -79,13 +79,13 @@ services:
     command: python3 manage.py rqworker default
     restart: unless-stopped
     environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_HOST: 'localhost'
-      DB_PORT: 5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=db
+      - DB_PORT=5432
     volumes:
       - type: bind
         source: /home/ubuntu/Willo/nirdizati-research/loaded_log_cache/

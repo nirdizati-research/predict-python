@@ -1,4 +1,4 @@
-from src.clustering.models import Clustering
+from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding, ValueEncodings
 from src.hyperparameter_optimization.models import HyperparameterOptimization
@@ -52,7 +52,9 @@ def generate(split, payload):
                                 threshold_type=labelling_config.get('threshold_type', None),
                                 threshold=labelling_config.get('threshold', None)
                             )[0] if labelling_config != {} else None,
-                            clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
+                            clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
+                                if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
+                                else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}), #TODO TEMPORARY workaround,
                             hyperparameter_optimizer=HyperparameterOptimization.init(
                                 config.get('hyperparameter_optimizer', {'type': None}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': None}), #TODO TEMPORARY workaround
                             predictive_model=predictive_model,
@@ -89,7 +91,9 @@ def generate(split, payload):
                             threshold_type=labelling_config.get('threshold_type', None),
                             threshold=labelling_config.get('threshold', None)
                         )[0] if labelling_config != {} else None,
-                        clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
+                        clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
+                            if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
+                            else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
                         hyperparameter_optimizer=HyperparameterOptimization.init(
                             config.get('hyperparameter_optimizer', {'type': 'none'}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': 'none'}), #TODO TEMPORARY workaround
                         predictive_model=predictive_model,

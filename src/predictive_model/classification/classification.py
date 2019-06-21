@@ -153,7 +153,15 @@ def _update(job: Job, data: DataFrame) -> dict:
         if not x.empty:
             y = x['label']
 
-            models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
+            try:
+                models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
+            except (NotImplementedError, KeyError):
+                try:
+                    models[cluster].partial_fit(x.drop('label', 1).T, y.values.ravel())
+                except KeyError:
+                    models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
+            except Exception as exception:
+                raise exception
 
     return {ModelType.CLUSTERER.value: clusterer, ModelType.CLASSIFIER.value: models}
 

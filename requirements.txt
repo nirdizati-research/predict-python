@@ -31,3 +31,4 @@ django-extensions
 django-model-utils
 django-polymorphic
 psycopg2
+mock

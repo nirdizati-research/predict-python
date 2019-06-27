@@ -86,7 +86,7 @@ class RefactorProof(TestCase):
         )
         result, _ = calculate(job)
 
-        self.assertAlmostEqual(result['f1score'], 0.5423988458)
+        self.assertAlmostEqual(result['f1score'], 0.542398845)
         self.assertAlmostEqual(result['acc'], 0.809954751)
         self.assertAlmostEqual(result['precision'], 0.623447204)
         self.assertAlmostEqual(result['recall'], 0.52249454423)

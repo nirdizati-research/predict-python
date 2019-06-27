@@ -50,7 +50,7 @@ class JobModelTest(TestCase):
                               'original_log_path': general_example_filepath,
                               'splitting_method': 'sequential',
                               'test_size': 0.2,
-                              'id': 105},
+                              'id': 97},
                              job['split'])
         self.assertEquals(job['labelling'], {
             'attribute_name': None,
@@ -282,7 +282,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(2, response.data[0]['config']['encoding']['prefix_length'])
         self.assertEqual(False, response.data[0]['config']['encoding']['padding'])
         self.assertEqual(JobStatuses.CREATED.value, response.data[0]['status'])
-        self.assertEqual(96, response.data[0]['config']['split']['id'])
+        self.assertEqual(92, response.data[0]['config']['split']['id'])
 
     @staticmethod
     def job_label(split_id):

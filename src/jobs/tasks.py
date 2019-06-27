@@ -13,6 +13,7 @@ from src.jobs.ws_publisher import publish
 import logging
 logger = logging.getLogger(__name__)
 
+
 @job("default", timeout='1h')
 def prediction_task(job_id):
     logger.info("Start prediction task ID {}".format(job_id))

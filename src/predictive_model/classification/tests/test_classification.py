@@ -17,7 +17,7 @@ from src.utils.tests_utils import create_test_job, create_test_encoding, create_
 
 
 class TestClassification(TestCase):
-    @unittest.skip
+    @unittest.skip('needs refactoring')
     def test_no_exceptions(self):
         filtered_labels = [enum.value for enum in LabelTypes]
 
@@ -59,6 +59,17 @@ class TestClassification(TestCase):
         return {'f1score': 0.3333333333333333, 'acc': 0.5, 'true_positive': 0, 'true_negative': 1, 'false_negative': 1,
                 'false_positive': 0, 'precision': 0.25, 'recall': 0.5, 'auc': 0.5}
 
+    def test_class_knn(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.KNN.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
     def test_class_randomForest(self):
         job = create_test_job(
             predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.RANDOM_FOREST.value),
@@ -69,6 +80,83 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         self.assertDictEqual(result, self.results2())
+
+    def test_class_decisionTree(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.DECISION_TREE.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_xgboost(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.XGBOOST.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_nb(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_hoeff(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.HOEFFDING_TREE.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_ada(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.ADAPTIVE_TREE.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_sgd(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.SGDCLASSIFIER.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_perc(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.PERCEPTRON.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0, 'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
 
     def test_next_activity_DecisionTree(self):
         job = create_test_job(

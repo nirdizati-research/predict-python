@@ -1,5 +1,6 @@
 import time
 
+import django_rq
 from django_rq.decorators import job
 from sklearn.externals import joblib
 
@@ -37,6 +38,8 @@ def prediction_task(job_id):
                 save_models(model_split, job)
             job.result = result
             job.status = JobStatuses.COMPLETED.value
+        else:
+            django_rq.enqueue(prediction_task, job.id)
     except Exception as e:
         logger.error(e)
         job.status = JobStatuses.ERROR.value

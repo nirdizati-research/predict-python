@@ -37,48 +37,48 @@ class LogDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
         return self.retrieve(request, *args, **kwargs)
 
 
-@api_view(['GET'])
-def get_log_stats(request, pk, stat):
-    """Get log statistics
-
-    DEPRECATED ENDPOINT. LOGS HAVE PROPERTIES.
-
-    End URL with
-    * events for event_by_date
-    * resources for resources_by_date
-    * executions for event_executions
-    * traceAttributes for trace_attributes
-    * eventsInTrace for events_in_trace
-    * newTraces for new_trace_start
-    """
-    try:
-        log = Log.objects.get(pk=pk)
-    except Log.DoesNotExist:
-        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
-    try:
-        log_file = log.get_file()
-    except FileNotFoundError:
-        logger.error("Log id: %s, path %s not found", log.id, log.path)
-        return Response({'error': 'log file not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    if stat == 'events':
-        data = events_by_date(log_file)
-    elif stat == 'resources':
-        data = resources_by_date(log_file)
-    elif stat == 'traceAttributes':
-        data = trace_attributes(log_file)
-    elif stat == 'eventsInTrace':
-        data = events_in_trace(log_file)
-    elif stat == 'executions':
-        data = event_executions(log_file)
-    elif stat == 'newTraces':
-        data = new_trace_start(log_file)
-    elif stat == 'alpha_miner':
-        data = alpha_miner.apply(log)
-    else:
-        logger.info('stats error in get_log_stats, setting data to None')
-        data = None
-    return Response(data)
+# @api_view(['GET'])
+# def get_log_stats(request, pk, stat):
+#     """Get log statistics
+#
+#     DEPRECATED ENDPOINT. LOGS HAVE PROPERTIES.
+#
+#     End URL with
+#     * events for event_by_date
+#     * resources for resources_by_date
+#     * executions for event_executions
+#     * traceAttributes for trace_attributes
+#     * eventsInTrace for events_in_trace
+#     * newTraces for new_trace_start
+#     """
+#     try:
+#         log = Log.objects.get(pk=pk)
+#     except Log.DoesNotExist:
+#         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+#     try:
+#         log_file = log.get_file()
+#     except FileNotFoundError:
+#         logger.error("Log id: %s, path %s not found", log.id, log.path)
+#         return Response({'error': 'log file not found'}, status=status.HTTP_404_NOT_FOUND)
+#
+#     if stat == 'events':
+#         data = events_by_date(log_file)
+#     elif stat == 'resources':
+#         data = resources_by_date(log_file)
+#     elif stat == 'traceAttributes':
+#         data = trace_attributes(log_file)
+#     elif stat == 'eventsInTrace':
+#         data = events_in_trace(log_file)
+#     elif stat == 'executions':
+#         data = event_executions(log_file)
+#     elif stat == 'newTraces':
+#         data = new_trace_start(log_file)
+#     elif stat == 'alpha_miner':
+#         data = alpha_miner.apply(log)
+#     else:
+#         logger.info('stats error in get_log_stats, setting data to None')
+#         data = None
+#     return Response(data)
 
 
 @api_view(['POST'])

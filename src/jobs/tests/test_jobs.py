@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from src.clustering.models import ClusteringMethods
-from src.encoding.models import ValueEncodings, TaskGenerationTypes
+from src.encoding.models import ValueEncodings
 from src.hyperparameter_optimization.models import HyperOptLosses, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.tasks import prediction_task

@@ -1,4 +1,4 @@
-import csv
+import logging
 import time
 
 from pm4py.objects.log.importer.xes import factory as xes_importer
@@ -6,7 +6,6 @@ from pm4py.objects.log.log import EventLog
 
 from src.logs.models import Log
 
-import logging
 logger = logging.getLogger(__name__)
 
 

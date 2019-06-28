@@ -1,4 +1,5 @@
 import sys
+
 import mock
 from django.test.testcases import TestCase
 

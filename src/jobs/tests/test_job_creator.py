@@ -1,5 +1,3 @@
-import unittest
-
 from django.test.testcases import TestCase
 
 from src.jobs.job_creator import generate, generate_labelling, update

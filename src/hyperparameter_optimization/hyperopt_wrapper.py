@@ -1,6 +1,8 @@
 """
 hyperopt methods and functionalities
 """
+import logging
+
 import hyperopt
 from hyperopt import Trials, STATUS_OK, fmin, STATUS_FAIL
 
@@ -11,7 +13,6 @@ from src.jobs.models import Job
 from src.predictive_model.models import PredictiveModel
 from src.utils.django_orm import duplicate_orm_row
 
-import logging
 logger = logging.getLogger(__name__)
 
 trial_number = 0

@@ -1,3 +1,4 @@
+import logging
 import time
 
 from django_rq.decorators import job
@@ -10,7 +11,6 @@ from src.hyperparameter_optimization.models import HyperparameterOptimizationMet
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 
-import logging
 logger = logging.getLogger(__name__)
 
 

@@ -1,5 +1,4 @@
 import contextlib
-import unittest
 from os import remove
 from shutil import copyfile
 

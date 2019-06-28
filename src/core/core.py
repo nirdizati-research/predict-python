@@ -1,4 +1,5 @@
 import json
+import logging
 import time
 from datetime import timedelta
 
@@ -11,7 +12,7 @@ from src.cache.models import LabelledLog, LoadedLog
 from src.clustering.clustering import Clustering
 from src.encoding.common import encode_label_log, encode_label_logs
 from src.evaluation.models import Evaluation
-from src.jobs.models import JobTypes, Job, ModelType
+from src.jobs.models import JobTypes, Job
 from src.logs.log_service import create_log
 from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
     classification
@@ -22,9 +23,7 @@ from src.predictive_model.time_series_prediction.time_series_prediction import t
 from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
 from src.utils.django_orm import duplicate_orm_row
-from src.utils.file_service import save_result
 
-import logging
 logger = logging.getLogger(__name__)
 
 def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurations

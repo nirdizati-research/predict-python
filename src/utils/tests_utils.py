@@ -52,7 +52,6 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
                                             test_log=test_log)[0]
     else:
         raise ValueError('split_type {} not recognized'.format(split_type))
-    print('split:', split)
     return split
 
 

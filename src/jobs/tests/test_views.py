@@ -1,6 +1,7 @@
 import unittest
 
 from rest_framework.test import APITestCase, APIClient
+
 from src.jobs.models import Job
 from src.utils.tests_utils import create_test_split, create_test_log
 

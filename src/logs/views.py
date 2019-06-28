@@ -3,13 +3,10 @@ import logging
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from pm4py.algo.discovery.alpha import factory as alpha_miner
 
 from src.logs.log_service import create_log
 from src.split.models import Split
 from src.split.serializers import SplitSerializer
-from src.utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
-    trace_attributes, events_in_trace
 from .models import Log
 from .serializers import LogSerializer
 

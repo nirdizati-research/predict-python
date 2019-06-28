@@ -10,7 +10,7 @@ from django.test import TestCase
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.encoding.models import ValueEncodings
-from src.labelling.models import LabelTypes
+from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.utils.tests_utils import create_test_job, create_test_encoding, create_test_labelling, \
     create_test_predictive_model, create_test_clustering
@@ -167,3 +167,28 @@ class TestClassification(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         self.assertDictEqual(result, self.results3())
+
+    def test_class_nn(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.NN.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'precision': 1.0, 'recall': 1.0, 'true_positive': 2,
+                                      'true_negative': 0, 'false_negative': 0, 'false_positive': 0, 'auc': 0.0})
+
+    def test_class_nn_binary(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.NN.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value,
+                                            threshold_type=ThresholdTypes.THRESHOLD_MEAN.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0,
+                                      'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+

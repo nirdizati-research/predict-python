@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
-from src.core.tests.common import repair_example
+from src.core.tests.test_utils import repair_example
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels

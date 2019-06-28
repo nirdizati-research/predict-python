@@ -5,7 +5,7 @@ label calculation tests
 from django.test import TestCase
 
 from src.core.core import calculate
-from src.core.tests.common import repair_example
+from src.core.tests.test_utils import repair_example
 from src.jobs.models import JobTypes
 from src.labelling.models import LabelTypes, ThresholdTypes
 from src.utils.tests_utils import create_test_job, create_test_encoding, create_test_labelling

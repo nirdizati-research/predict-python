@@ -6,7 +6,7 @@ from django.test import TestCase
 from numpy import ndarray
 from pandas import DataFrame
 
-from src.core.tests.common import HidePrints
+from src.core.tests.test_utils import HidePrints
 from src.encoding.models import ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.labelling.models import LabelTypes, ThresholdTypes

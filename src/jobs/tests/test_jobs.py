@@ -50,7 +50,7 @@ class JobModelTest(TestCase):
                               'original_log_path': general_example_filepath,
                               'splitting_method': 'sequential',
                               'test_size': 0.2,
-                              'id': 97},
+                              'id': 103},
                              job['split'])
         self.assertEquals(job['labelling'], {
             'attribute_name': None,
@@ -59,11 +59,11 @@ class JobModelTest(TestCase):
             'type': 'next_activity', 'results': {}
         })
 
-    @unittest.skip('needs refacotring')
     def test_prediction_task(self):
         job = create_test_job()
         prediction_task(job.id)
 
+        job.refresh_from_db()
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.evaluation)
 
@@ -74,8 +74,7 @@ class JobModelTest(TestCase):
         job.save()
         prediction_task(job.id)
 
-        job = create_test_job()
-
+        job.refresh_from_db()
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.evaluation)
 
@@ -282,7 +281,7 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(2, response.data[0]['config']['encoding']['prefix_length'])
         self.assertEqual(False, response.data[0]['config']['encoding']['padding'])
         self.assertEqual(JobStatuses.CREATED.value, response.data[0]['status'])
-        self.assertEqual(92, response.data[0]['config']['split']['id'])
+        self.assertEqual(96, response.data[0]['config']['split']['id'])
 
     @staticmethod
     def job_label(split_id):

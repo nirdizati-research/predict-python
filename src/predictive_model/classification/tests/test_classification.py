@@ -10,6 +10,7 @@ from django.test import TestCase
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.encoding.models import ValueEncodings
+from src.jobs.tasks import prediction_task
 from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.utils.tests_utils import create_test_job, create_test_encoding, create_test_labelling, \
@@ -43,6 +44,19 @@ class TestClassification(TestCase):
             )
             # with HidePrints():
             calculate(job)
+
+    def test_prediction_task(self):
+        job = create_test_job()
+        prediction_task(job.id)
+        job.refresh_from_db()
+        self.assertEqual('completed', job.status)
+
+    def test_prediction_task_save_model(self):
+        job = create_test_job(create_models=True)
+        prediction_task(job.id)
+        job.refresh_from_db()
+        self.assertEqual('completed', job.status)
+        self.assertIsNotNone(job.predictive_model.model_path)
 
     @staticmethod
     def results():

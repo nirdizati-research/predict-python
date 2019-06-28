@@ -8,7 +8,7 @@ from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
-from src.core.tests.common import split_double, add_default_config
+from src.core.tests.test_utils import split_double, add_default_config
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer

@@ -16,6 +16,18 @@ class TestViews(APITestCase):
         response = client.get('/jobs/')
         self.assertEqual(len(jobs), len(response.data))
 
+    def test_get_jobs_filtered_type(self):
+        jobs = Job.objects.all()
+        client = APIClient()
+        response = client.get('/jobs/', {'type': 'prediction'})
+        self.assertIsNotNone(response.data)
+
+    def test_get_jobs_filtered_status(self):
+        jobs = Job.objects.all()
+        client = APIClient()
+        response = client.get('/jobs/', {'status': 'created'})
+        self.assertIsNotNone(response.data)
+
     def test_delete(self):
         client = APIClient()
         response = client.post('/jobs/', {}, format='json')
@@ -64,23 +76,7 @@ class TestViews(APITestCase):
                     'attribute_name': '',
                     'threshold_type': 'threshold_mean',
                     'threshold': 0,
-                },
-                'classification.decisionTree': {},
-                'classification.knn': {},
-                'classification.randomForest': {},
-                'classification.adaptiveTree': {},
-                'classification.hoeffdingTree': {},
-                'classification.multinomialNB': {},
-                'classification.perceptron': {},
-                'classification.SGDClassifier': {},
-                'classification.xgboost': {},
-                'classification.nn': {},
-                'regression.lasso': {},
-                'regression.linear': {},
-                'regression.randomForest': {},
-                'regression.xgboost': {},
-                'regression.nn': {},
-                'time_series_prediction.rnn': {}
+                }
             }}, format='json')
 
         self.assertEqual(3, len(response.data))

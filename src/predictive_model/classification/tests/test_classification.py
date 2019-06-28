@@ -58,6 +58,15 @@ class TestClassification(TestCase):
         self.assertEqual('completed', job.status)
         self.assertIsNotNone(job.predictive_model.model_path)
 
+    def test_prediction_task_save_model_clustering(self):
+        job = create_test_job(create_models=True,
+                              clustering=create_test_clustering(clustering_type=ClusteringMethods.KMEANS.value))
+        prediction_task(job.id)
+        job.refresh_from_db()
+        self.assertEqual('completed', job.status)
+        self.assertIsNotNone(job.predictive_model.model_path)
+        self.assertIsNotNone(job.clustering.model_path)
+
     @staticmethod
     def results():
         return {'f1score': 0.66666666666666663, 'acc': 0.5, 'auc': 0.16666666666666666, 'false_negative': 0,

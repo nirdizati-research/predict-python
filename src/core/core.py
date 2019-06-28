@@ -158,8 +158,8 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
         job.labelling.results = results
         job.labelling.save()
 
-    if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
-        save_result(results, job, start_time)
+    # if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
+    #     save_result(results, job, start_time)
 
     logger.info("End job {}, {} .".format(job.type, get_run(job)))
     logger.info("\tResults {} .".format(results))

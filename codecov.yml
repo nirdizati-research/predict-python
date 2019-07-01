@@ -7,3 +7,6 @@ ignore:
   - "./results/**"
   - "./db/**"
   - "**/wsgi.py"
+#  TEMPORARY EXCLUSIONS
+  - "src/runtime/**"
+  - "pred_models/**"

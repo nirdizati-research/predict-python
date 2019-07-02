@@ -74,6 +74,7 @@ def create_multiple(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
+        # TODO add support for 'depends_on' parameter
         django_rq.enqueue(tasks.prediction_task, job.id)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)

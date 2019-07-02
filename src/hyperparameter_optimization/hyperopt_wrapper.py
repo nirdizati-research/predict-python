@@ -128,7 +128,8 @@ def _calculate_and_evaluate(args) -> dict:
             'predictive_model_id': local_job.predictive_model.pk,
             'model_split': model_split,
             'config': model_config}
-    except:
+    except Exception as e:
+        logger.error(e)
         return {
             'loss': 100,
             'status': STATUS_FAIL,

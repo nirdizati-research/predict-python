@@ -14,7 +14,7 @@ from src.jobs.ws_publisher import publish
 logger = logging.getLogger(__name__)
 
 
-@job("default", timeout='1h')
+@job("default", timeout='100h')
 def prediction_task(job_id):
     logger.info("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)

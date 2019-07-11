@@ -31,7 +31,7 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
     ports:
-      - 80:8000
+      - 8000:8000
     depends_on:
       - db
     volumes:

@@ -1,5 +1,6 @@
 import logging
 import time
+from datetime import timedelta
 
 from django_rq.decorators import job
 from sklearn.externals import joblib
@@ -26,14 +27,14 @@ def prediction_task(job_id):
 
             job.status = JobStatuses.RUNNING.value
             job.save()
-            start_time = time.time()
+            job_start_time = time.time()
             if job.hyperparameter_optimizer is not None and \
                 job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
-            elapsed_time = time.time() - start_time
-            logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
+            job_elapsed_time = time.time() - job_start_time #todo: this is not stored anywhere
+            logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(job_elapsed_time))))
             if job.create_models:
                 save_models(model_split, job)
             job.result = result

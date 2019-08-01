@@ -60,6 +60,7 @@ class ClassificationMetrics(Evaluation):
     accuracy = models.FloatField(blank=True, null=True)
     precision = models.FloatField(blank=True, null=True)
     recall = models.FloatField(blank=True, null=True)
+    objects = InheritanceManager()
 
     def to_dict(self) -> dict:
         return {

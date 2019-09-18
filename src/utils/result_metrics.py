@@ -96,7 +96,7 @@ def calculate_results_regression(input_df: DataFrame, label: Labelling) -> dict:
     if label.type == LabelTypes.REMAINING_TIME.value:
         # TODO is the remaining time in seconds or hours?
         input_df['label'] = input_df['label'] / 3600
-        input_df['prediction'] = input_df['predicted'] / 3600
+        input_df['predicted'] = input_df['predicted'] / 3600
     rmse = sqrt(mean_squared_error(input_df['label'], input_df['predicted']))
     mae = mean_absolute_error(input_df['label'], input_df['predicted'])
     rscore = r2_score(input_df['label'], input_df['predicted'])

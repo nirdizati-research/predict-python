@@ -1,3 +1,2 @@
-
-def get_explanation(type:str):
+def get_explanation(type: str):
     pass

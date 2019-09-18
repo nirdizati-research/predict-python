@@ -53,7 +53,7 @@ class DataEncoder:
 
         for base_header in self._base_headers:
             relevant_data = self._get_relevant_columns(data, base_header)
-            data_type = self.   _get_data_type(relevant_data)
+            data_type = self._get_data_type(relevant_data)
 
             if data_type == DataEncoder.DataTypes.NUMERIC.value:
                 self._numerical_headers.append(base_header)

@@ -62,7 +62,7 @@ def repair_example():
                              )
 
 
-def add_default_config(job: Job, prediction_method=""): #TODO is this needed?
+def add_default_config(job: Job, prediction_method=""):  # TODO is this needed?
     """Map to job method default config"""
     if prediction_method == "":
         prediction_method = job.predictive_model.prediction_method

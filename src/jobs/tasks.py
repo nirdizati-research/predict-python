@@ -1,3 +1,4 @@
+import logging
 import time
 
 import django_rq
@@ -11,8 +12,8 @@ from src.hyperparameter_optimization.models import HyperparameterOptimizationMet
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 
-import logging
 logger = logging.getLogger(__name__)
+
 
 @job("default", timeout='1h')
 def prediction_task(job_id):
@@ -21,8 +22,8 @@ def prediction_task(job_id):
 
     try:
         if (job.status == JobStatuses.CREATED.value and job.type != JobTypes.UPDATE.value) or \
-           (job.status == JobStatuses.CREATED.value and job.type == JobTypes.UPDATE.value and
-            job.incremental_train.status == JobStatuses.COMPLETED.value):
+            (job.status == JobStatuses.CREATED.value and job.type == JobTypes.UPDATE.value and
+             job.incremental_train.status == JobStatuses.COMPLETED.value):
 
             job.status = JobStatuses.RUNNING.value
             job.save()
@@ -63,7 +64,7 @@ def save_models(models: dict, job: Job):
         job.save()
 
     if job.type == JobTypes.UPDATE.value:
-        job.type = JobTypes.PREDICTION.value #TODO: Y am I doing this?
+        job.type = JobTypes.PREDICTION.value  # TODO: Y am I doing this?
         predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
             job.id,
             job.split.id,

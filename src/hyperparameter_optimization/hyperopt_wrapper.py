@@ -1,6 +1,9 @@
 """
 hyperopt methods and functionalities
 """
+import logging
+import sys
+
 import hyperopt
 from hyperopt import Trials, STATUS_OK, fmin, STATUS_FAIL
 
@@ -29,7 +32,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         job.type, get_run(job),
         job.hyperparameter_optimizer.__getattribute__(
             job.hyperparameter_optimizer.optimization_method.lower()
-        ).performance_metric) #Todo: WHY DO I NEED TO GET HYPEROPT?
+        ).performance_metric)  # Todo: WHY DO I NEED TO GET HYPEROPT?
     )
 
     global training_df, test_df, global_job
@@ -39,8 +42,8 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     space = _get_space(job)
 
     max_evaluations = job.hyperparameter_optimizer.__getattribute__(
-            job.hyperparameter_optimizer.optimization_method.lower()
-        ).max_evaluations #Todo: WHY DO I NEED TO GET HYPEROPT?
+        job.hyperparameter_optimizer.optimization_method.lower()
+    ).max_evaluations  # Todo: WHY DO I NEED TO GET HYPEROPT?
     trials = Trials()
 
     algorithm = _choose_algorithm(job)
@@ -49,7 +52,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         fmin(_calculate_and_evaluate, space, algo=algorithm.suggest, max_evals=max_evaluations, trials=trials)
     except ValueError:
         raise ValueError("All jobs failed, cannot find best configuration")
-    current_best = {'loss': 100, 'results': {}, 'predictive_model_id': {}, 'model_split': {}, 'config': {}}
+    current_best = {'loss': sys.maxsize, 'results': {}, 'predictive_model_id': {}, 'model_split': {}, 'config': {}}
     for trial in trials:
         a = trial['result']
         if current_best['loss'] > a['loss']:
@@ -86,8 +89,8 @@ def _get_metric_multiplier(performance_metric: int) -> int:
 
 def _choose_algorithm(job: Job):
     job_algorithm = job.hyperparameter_optimizer.__getattribute__(
-            job.hyperparameter_optimizer.optimization_method.lower()
-        ).algorithm_type
+        job.hyperparameter_optimizer.optimization_method.lower()
+    ).algorithm_type
 
     if job_algorithm == HyperOptAlgorithms.RANDOM_SEARCH.value:
         return hyperopt.rand

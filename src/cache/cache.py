@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import pickle
 
 from pandas import DataFrame
@@ -7,7 +8,6 @@ from src.cache.models import LabelledLog, LoadedLog
 from src.jobs.models import Job
 from src.split.models import Split
 
-import logging
 logger = logging.getLogger(__name__)
 
 
@@ -16,7 +16,7 @@ def get_digested(candidate_path: str) -> str:
 
 
 def load_from_cache(path: str, prefix: str = ''):
-    if path is not None: #TODO: what if the file is not there?
+    if path is not None:  # TODO: what if the file is not there?
         with open(prefix + get_digested(path) + '.pickle', 'rb') as f:
             return pickle.load(f)
 

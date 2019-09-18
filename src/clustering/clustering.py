@@ -8,7 +8,6 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
 import src
-from pred_models.models import PredModels, ModelSplit
 from src.clustering.models import ClusteringMethods
 from src.jobs.models import Job
 
@@ -79,7 +78,7 @@ class Clustering:
             raise ValueError("Unexpected clustering method {}".format(clustering.clustering_method))
 
     @classmethod
-    def load_model(cls, job : Job):
+    def load_model(cls, job: Job):
         if job.clustering.clustering_method == ClusteringMethods.KMEANS.value:
             clusterer = joblib.load(job.clustering.model_path)
         elif job.clustering.clustering_method == ClusteringMethods.NO_CLUSTER.value:

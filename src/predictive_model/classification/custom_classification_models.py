@@ -33,7 +33,7 @@ class NNClassifier(ClassifierMixin):
         self._encoding_parser = EncodingParser(self._encoding, self._is_binary_classifier,
                                                task=PredictiveModels.CLASSIFICATION.value)
         self._model = None
-        self.classes_ = None #this is set for compatibility reasons
+        self.classes_ = None  # this is set for compatibility reasons
 
     def fit(self, train_data: DataFrame, targets: ndarray) -> None:
         """creates and fits the predictive_model

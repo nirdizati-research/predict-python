@@ -201,9 +201,9 @@ class CreateJobsTests(APITestCase):
                          ClassificationMethods.KNN.value)
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertDictEqual(response.data[0]['config']['labelling'],
-                         {'type': 'remaining_time', 'attribute_name': None,
-                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0, 'results': {}})
+                             {'type': 'remaining_time', 'attribute_name': None,
+                              'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
+                              'threshold': 0, 'results': {}})
         self.assertEqual(response.data[0]['status'], 'created')
 
     @staticmethod
@@ -248,7 +248,7 @@ class CreateJobsTests(APITestCase):
 
     @staticmethod
     def job_label():
-        return{
+        return {
             'type': 'labelling',
             'split_id': 1,
             'config': {

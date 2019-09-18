@@ -18,6 +18,7 @@ class LabelTypes(Enum):
 class ThresholdTypes(Enum):
     THRESHOLD_MEAN = 'threshold_mean'
     THRESHOLD_CUSTOM = 'threshold_custom'
+    NONE = 'none'
 
 
 #

@@ -50,7 +50,7 @@ class Evaluation(CommonModel):
             raise ValueError('evaluation model type {} not recognized'.format(prediction_type))
 
     def to_dict(self) -> dict:
-        return{
+        return {
             'elapsed_time': self.elapsed_time
         }
 

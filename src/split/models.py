@@ -53,6 +53,7 @@ class Split(CommonModel):
         if self.type == 'single':
             temp['original_log_path'] = self.original_log.path
         else:
+            temp['original_log'] = self.original_log.id if self.original_log is not None else None
             temp['test_log_path'] = self.test_log.path
             temp['train_log_path'] = self.train_log.path
         return temp

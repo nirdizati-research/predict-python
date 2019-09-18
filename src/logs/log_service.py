@@ -1,17 +1,16 @@
+import logging
+
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from pm4py.objects.log.exporter.xes.factory import export_log
 from pm4py.objects.log.importer.xes.factory import import_log
 from pm4py.objects.log.log import EventLog
-from pm4py.algo.discovery.alpha import factory as alpha_miner
-from pm4py.visualization.petrinet import factory as vis_factory
 
 from src.logs.models import Log
 from src.utils.file_service import create_unique_name
 from src.utils.log_metrics import events_by_date, resources_by_date, max_events_in_log, trace_attributes, \
     new_trace_start, avg_events_in_log, std_var_events_in_log
 
-import logging
 logger = logging.getLogger(__name__)
 
 

@@ -53,10 +53,14 @@ def generate(split, payload):
                                 threshold=labelling_config.get('threshold', None)
                             )[0] if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
-                                if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
-                                else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}), #TODO TEMPORARY workaround,
+                            if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
+                            else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
+                            # TODO TEMPORARY workaround,
                             hyperparameter_optimizer=HyperparameterOptimization.init(
-                                config.get('hyperparameter_optimizer', {'type': None}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': None}), #TODO TEMPORARY workaround
+                                config.get('hyperparameter_optimizer', {
+                                    'type': None}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {
+                                    'type': None}),
+                            # TODO TEMPORARY workaround
                             predictive_model=predictive_model,
                             create_models=config.get('create_models', False)
                         )[0]
@@ -92,10 +96,13 @@ def generate(split, payload):
                             threshold=labelling_config.get('threshold', None)
                         )[0] if labelling_config != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
-                            if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
-                            else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
+                        if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
+                        else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
                         hyperparameter_optimizer=HyperparameterOptimization.init(
-                            config.get('hyperparameter_optimizer', {'type': 'none'}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {'type': 'none'}), #TODO TEMPORARY workaround
+                            config.get('hyperparameter_optimizer', {
+                                'type': 'none'}) if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value else {
+                                'type': 'none'}),
+                        # TODO TEMPORARY workaround
                         predictive_model=predictive_model,
                         create_models=config.get('create_models', False)
                     )[0]
@@ -263,10 +270,10 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             get_prediction_method_config(generation_type, method, payload)
                         ),
                         hyperparameter_optimizer=HyperparameterOptimization.init(
-                                config.get('hyperparameter_optimizer', None)),
+                            config.get('hyperparameter_optimizer', None)),
                         create_models=config.get('create_models', False),
                         incremental_train=Job.objects.filter(
-                                pk=config['incremental_train'].get('base_model', None)
+                            pk=config['incremental_train'].get('base_model', None)
                         )[0]
                     )
                     jobs.append(item)

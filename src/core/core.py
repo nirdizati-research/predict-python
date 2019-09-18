@@ -1,4 +1,5 @@
 import json
+import logging
 import time
 from datetime import timedelta
 
@@ -24,10 +25,10 @@ from src.split.splitting import prepare_logs
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.file_service import save_result
 
-import logging
 logger = logging.getLogger(__name__)
 
-def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurations
+
+def calculate(job: Job) -> (dict, dict):  # TODO dd filter for 'valid' configurations
     """main entry point for calculations
 
     encodes the logs based on the given configuration and runs the selected task
@@ -59,7 +60,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                                       labelling=job.labelling).exists():
             try:
                 training_df, test_df = get_labelled_logs(job)
-            except FileNotFoundError: #cache invalidation
+            except FileNotFoundError:  # cache invalidation
                 LabelledLog.objects.filter(split=job.split,
                                            encoding=job.encoding,
                                            labelling=job.labelling).delete()
@@ -67,8 +68,8 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                 return get_encoded_logs(job, use_cache)
         else:
             if job.split.train_log is not None and \
-               job.split.test_log is not None and \
-               LoadedLog.objects.filter(split=job.split).exists():
+                job.split.test_log is not None and \
+                LoadedLog.objects.filter(split=job.split).exists():
                 try:
                     training_log, test_log, additional_columns = get_loaded_logs(job.split)
                 except FileNotFoundError:  # cache invalidation
@@ -136,7 +137,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 
     # TODO: integrateme
     if job.type != JobTypes.LABELLING.value:
-        results['elapsed_time'] = timedelta(seconds=time.time() - start_time) #todo find better place for this
+        results['elapsed_time'] = timedelta(seconds=time.time() - start_time)  # todo find better place for this
         if job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
             job.evaluation = Evaluation.init(
                 job.predictive_model.predictive_model,
@@ -158,7 +159,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
         job.labelling.results = results
         job.labelling.save()
 
-    if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
+    if job.type == PredictiveModels.CLASSIFICATION.value:  # todo this is an old workaround I should remove this
         save_result(results, job, start_time)
 
     logger.info("End job {}, {} .".format(job.type, get_run(job)))

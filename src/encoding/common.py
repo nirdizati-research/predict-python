@@ -37,11 +37,25 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
             threshold = -1
         training_log['label'] = training_log['label'].astype(float) < threshold
         test_log['label'] = test_log['label'].astype(float) < threshold
+    elif (labelling.threshold_type == ThresholdTypes.NONE.value) and (
+          labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value,
+                             LabelTypes.REMAINING_TIME.value]):
+        training_log['label'] = training_log['label'].astype(float)
+        test_log['label'] = test_log['label'].astype(float)
 
-    if job.type != JobTypes.LABELLING.value and job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
-        job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
+    # TODO: store and reuse the encoder in order to allow easier explanation through lime.
+    if job.type != JobTypes.LABELLING.value and \
+       job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
+       job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value and \
+       job.predictive_model.predictive_model != PredictiveModels.REGRESSION.value:
         # init nominal encode
         encoder = Encoder(training_log, job.encoding)
+        encoder.encode(training_log, job.encoding)
+        encoder.encode(test_log, job.encoding)
+    elif job.type != JobTypes.LABELLING.value and \
+         job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
+         job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
+        encoder = Encoder(training_log.drop('label', axis=1), job.encoding)
         encoder.encode(training_log, job.encoding)
         encoder.encode(test_log, job.encoding)
 

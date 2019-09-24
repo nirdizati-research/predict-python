@@ -1,4 +1,5 @@
 import functools
+import logging
 from typing import Union
 
 from pm4py.objects.log.log import EventLog
@@ -8,7 +9,6 @@ from src.split.models import Split, SplitTypes, SplitOrderingMethods
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
 
-import logging
 logger = logging.getLogger(__name__)
 
 

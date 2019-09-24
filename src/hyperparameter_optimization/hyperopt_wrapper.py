@@ -1,6 +1,10 @@
 """
 hyperopt methods and functionalities
 """
+import logging
+import time
+from datetime import timedelta
+
 import hyperopt
 from hyperopt import Trials, STATUS_OK, fmin, STATUS_FAIL
 
@@ -11,7 +15,6 @@ from src.jobs.models import Job
 from src.predictive_model.models import PredictiveModel
 from src.utils.django_orm import duplicate_orm_row
 
-import logging
 logger = logging.getLogger(__name__)
 
 trial_number = 0
@@ -36,6 +39,8 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     global_job = job
     training_df, test_df = get_encoded_logs(job)
 
+    train_start_time = time.time()
+
     space = _get_space(job)
 
     max_evaluations = job.hyperparameter_optimizer.__getattribute__(
@@ -56,7 +61,12 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
             current_best = a
 
     job.predictive_model = PredictiveModel.objects.filter(pk=current_best['predictive_model_id'])[0]
+    job.predictive_model.save()
     job.save()
+
+    current_best['results']['elapsed_time'] = timedelta(seconds=time.time() - train_start_time)  # todo find better place for this
+    job.evaluation.elapsed_time = current_best['results']['elapsed_time']
+    job.evaluation.save()
 
     logger.info("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
     return current_best['results'], current_best['config'], current_best['model_split']
@@ -127,7 +137,8 @@ def _calculate_and_evaluate(args) -> dict:
             'predictive_model_id': local_job.predictive_model.pk,
             'model_split': model_split,
             'config': model_config}
-    except:
+    except Exception as e:
+        logger.error(e)
         return {
             'loss': 100,
             'status': STATUS_FAIL,

@@ -8,7 +8,6 @@ from sklearn.cluster import KMeans
 from sklearn.externals import joblib
 
 import src
-from pred_models.models import PredModels, ModelSplit
 from src.clustering.models import ClusteringMethods
 from src.jobs.models import Job
 

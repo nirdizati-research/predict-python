@@ -1,7 +1,6 @@
 """
 hyperopt tests
 """
-import unittest
 
 from django.test import TestCase
 
@@ -52,7 +51,6 @@ class TestHyperopt(TestCase):
         results, _, _ = calculate_hyperopt(job)
         self.assertIsNotNone(results)
 
-    @unittest.skip
     def test_regression_random_forest(self):
         job = self.get_job(PredictiveModels.REGRESSION.value, RegressionMethods.RANDOM_FOREST.value,
                            HyperOptLosses.RMSE.value)

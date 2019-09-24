@@ -2,7 +2,8 @@
 import os
 import sys
 
-if __name__ == "__main__":
+
+def manage(sys_argv=None):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nirdizati-research.settings")
     try:
         from django.core.management import execute_from_command_line
@@ -19,4 +20,10 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
-    execute_from_command_line(sys.argv)
+    if sys_argv is not None:
+        execute_from_command_line(sys_argv)
+
+
+if __name__ == "__main__":
+    manage(sys.argv)
+

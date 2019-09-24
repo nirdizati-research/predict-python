@@ -1,4 +1,5 @@
 import hashlib
+import logging
 
 from pandas import DataFrame
 from pm4py.objects.log.log import EventLog
@@ -14,7 +15,6 @@ from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
-import logging
 logger = logging.getLogger(__name__)
 
 def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None):

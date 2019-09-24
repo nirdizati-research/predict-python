@@ -1,4 +1,6 @@
+import logging
 import time
+from datetime import timedelta
 
 import django_rq
 from django_rq.decorators import job
@@ -11,10 +13,10 @@ from src.hyperparameter_optimization.models import HyperparameterOptimizationMet
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 
-import logging
 logger = logging.getLogger(__name__)
 
-@job("default", timeout='1h')
+
+@job("default", timeout='100h')
 def prediction_task(job_id):
     logger.info("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
@@ -26,14 +28,14 @@ def prediction_task(job_id):
 
             job.status = JobStatuses.RUNNING.value
             job.save()
-            start_time = time.time()
+            job_start_time = time.time()
             if job.hyperparameter_optimizer is not None and \
                 job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
-            elapsed_time = time.time() - start_time
-            logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
+            job_elapsed_time = time.time() - job_start_time #todo: this is not stored anywhere
+            logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(job_elapsed_time))))
             if job.create_models:
                 save_models(model_split, job)
             job.result = result

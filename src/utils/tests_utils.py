@@ -52,7 +52,6 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
                                             test_log=test_log)[0]
     else:
         raise ValueError('split_type {} not recognized'.format(split_type))
-    print('split:', split)
     return split
 
 
@@ -99,8 +98,9 @@ def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.v
 
 
 def create_test_predictive_model(predictive_model: str = PredictiveModels.CLASSIFICATION.value,
-                                 prediction_method: str = ClassificationMethods.RANDOM_FOREST.value) -> PredictiveModel:
-    pred_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, {}))
+                                 prediction_method: str = ClassificationMethods.RANDOM_FOREST.value,
+                                 configuration: dict = {}) -> PredictiveModel:
+    pred_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, configuration))
     return pred_model
 
 
@@ -117,6 +117,7 @@ def create_test_job(split: Split = None,
                     encoding: Encoding = None,
                     labelling: Labelling = None,
                     clustering: Clustering = None,
+                    create_models: bool = False,
                     predictive_model: PredictiveModel = None,
                     job_type=JobTypes.PREDICTION.value,
                     hyperparameter_optimizer: HyperparameterOptimization = None):
@@ -127,6 +128,7 @@ def create_test_job(split: Split = None,
         encoding=encoding if encoding is not None else create_test_encoding(),
         labelling=labelling if labelling is not None else create_test_labelling(),
         clustering=clustering if clustering is not None else create_test_clustering(),
+        create_models=create_models,
         predictive_model=predictive_model if predictive_model is not None else create_test_predictive_model(),
         evaluation=None,
         hyperparameter_optimizer=hyperparameter_optimizer,

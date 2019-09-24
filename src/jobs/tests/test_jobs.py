@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
 from src.clustering.models import ClusteringMethods
-from src.encoding.models import ValueEncodings, TaskGenerationTypes
+from src.encoding.models import ValueEncodings
 from src.hyperparameter_optimization.models import HyperOptLosses, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.tasks import prediction_task
@@ -27,25 +27,22 @@ class JobModelTest(TestCase):
         create_test_job(job_type='asdf')
         Job.objects.create(type=JobTypes.PREDICTION.value, split=create_test_split(), encoding=None, labelling=None)
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_default(self):
-        job = Job.objects.get(pk=1)
+        job = create_test_job()
 
         self.assertEqual('created', job.status)
         self.assertIsNotNone(job.created_date)
         self.assertIsNotNone(job.modified_date)
         self.assertIsNone(job.evaluation)
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_modified(self):
-        job = Job.objects.get(pk=1)
+        job = create_test_job()
         job.status = JobStatuses.COMPLETED.value
 
         self.assertNotEquals(job.created_date, job.modified_date)
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_to_dict(self):
-        job = Job.objects.get(pk=1).to_dict()
+        job = create_test_job().to_dict()
 
         self.assertEquals(JobTypes.PREDICTION.value, job['type'])
         self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['predictive_model']['predictive_model'])
@@ -53,7 +50,7 @@ class JobModelTest(TestCase):
                               'original_log_path': general_example_filepath,
                               'splitting_method': 'sequential',
                               'test_size': 0.2,
-                              'id': 1},
+                              'id': 103},
                              job['split'])
         self.assertEquals(job['labelling'], {
             'attribute_name': None,
@@ -62,48 +59,27 @@ class JobModelTest(TestCase):
             'type': 'next_activity', 'results': {}
         })
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_prediction_task(self):
-        prediction_task(1)
+        job = create_test_job()
+        prediction_task(job.id)
 
-        job = Job.objects.get(pk=1)
-
+        job.refresh_from_db()
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.evaluation)
 
-    @unittest.skip("temporary skipped changed db driver")
+    @unittest.skip('needs refacotring')
     def test_create_models_config_missing(self):
-        job = Job.objects.get(pk=1)
+        job = create_test_job()
         del job.create_models  # TODO fixme should we add this field?
         job.save()
-        prediction_task(1)
+        prediction_task(job.id)
 
-        job = Job.objects.get(pk=1)
-
+        job.refresh_from_db()
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.evaluation)
-
-    @unittest.skip("temporary skipped changed db driver")
-    def test_prediction_task_error(self):
-        self.assertRaises(ValueError, prediction_task, 2)
-        job = Job.objects.get(pk=2)
-
-        self.assertEqual('error', job.status)
-        self.assertEqual(None, job.evaluation)
-        self.assertEqual("ValueError('Type asdf not supported',)", job.error)
-
-    @unittest.skip("temporary skipped changed db driver")
-    def test_missing_attributes(self):
-        self.assertRaises(AttributeError, prediction_task, 3)
-        job = Job.objects.get(pk=3)
-
-        self.assertEqual('error', job.status)
-        self.assertEqual(None, job.evaluation)
-        self.assertEqual("AttributeError(\"'NoneType' object has no attribute 'type'\",)", job.error)
 
 
 class Hyperopt(TestCase):
-    @unittest.skip("temporary skipped changed db driver")
     def test_hyperopt(self):
         job = Job.objects.create(
             split=create_test_split(
@@ -130,7 +106,6 @@ class Hyperopt(TestCase):
             )
         )
         prediction_task(job.pk)
-        job = Job.objects.get(pk=1)
         self.assertFalse(classification_random_forest() ==
                          job.predictive_model.classification
                          .__getattribute__(ClassificationMethods.RANDOM_FOREST.value.lower()).to_dict())
@@ -145,44 +120,72 @@ class CreateJobsTests(APITestCase):
         get_queue().empty()
 
     @staticmethod
-    def job_obj():
+    def job_obj(split_id):
         return {
-            'type': PredictiveModels.CLASSIFICATION.value,
+            'type': 'classification',
             'split_id': 1,
             'config': {
-                'encodings': [ValueEncodings.SIMPLE_INDEX.value],
-                'clusterings': [ClusteringMethods.NO_CLUSTER.value],
-                'methods': ['knn'],
-                'labelling': {
-                    'type': LabelTypes.REMAINING_TIME.value,
-                    'attribute_name': None,
-                    'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                    'threshold': 0,
-                    'add_remaining_time': False,
-                    'add_elapsed_time': False
-                },
-                'random': 123,
-                'kmeans': {},
+                'clusterings': ['noCluster'],
+                'encodings': ['simpleIndex'],
                 'encoding': {
-                    'prefix_length': 3,
+                    'padding': True,
+                    'prefix_length': split_id,
                     'generation_type': 'only',
-                    'padding': 'zero_padding'
+                    'add_remaining_time': False,
+                    'add_elapsed_time': False,
+                    'add_executed_events': False,
+                    'add_resources_used': False,
+                    'add_new_traces': False,
+                    'features': [],
                 },
-                'hyperparameter_optimizer': {}
+                'create_models': False,
+                'methods': ['knn'],
+                'kmeans': {},
+                'incremental_train': {
+                    'base_model': None,
+                },
+                'hyperparameter_optimizer': {
+                    'algorithm_type': 'tpe',
+                    'max_evaluations': 10,
+                    'performance_metric': 'rmse',
+                    'type': 'none',
+                },
+                'labelling': {
+                    'type': 'remaining_time',
+                    'attribute_name': '',
+                    'threshold_type': 'threshold_mean',
+                    'threshold': 0,
+                },
+                'classification.decisionTree': {},
+                'classification.knn': {},
+                'classification.randomForest': {},
+                'classification.adaptiveTree': {},
+                'classification.hoeffdingTree': {},
+                'classification.multinomialNB': {},
+                'classification.perceptron': {},
+                'classification.SGDClassifier': {},
+                'classification.xgboost': {},
+                'classification.nn': {},
+                'regression.lasso': {},
+                'regression.linear': {},
+                'regression.randomForest': {},
+                'regression.xgboost': {},
+                'regression.nn': {},
+                'time_series_prediction.rnn': {}
             }
         }
 
-    @unittest.skip("temporary skipped changed db driver")
+    @unittest.skip('needs refacotring')
     def test_class_job_creation(self):
         client = APIClient()
-        response = client.post('/jobs/multiple', self.job_obj(), format='json')
+        response = client.post('/jobs/multiple', self.job_obj(create_test_split(original_log=create_test_log()).id), format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'prediction')
         self.assertEqual(response.data[0]['config']['predictive_model']['predictive_model'], 'classification')
         self.assertDictEqual(response.data[0]['config']['encoding'], {
-            'prefix_length': 3,
+            'prefix_length': 1,
             'task_generation_type': 'only',
             'value_encoding': 'simpleIndex',
             'add_elapsed_time': False,
@@ -192,7 +195,7 @@ class CreateJobsTests(APITestCase):
             'add_resources_used': False,
             'data_encoding': 'label_encoder',
             'features': [],
-            'padding': True,
+            'padding': False,
         })
         self.assertEqual(response.data[0]['config']['clustering'], {
             'clustering_method': ClusteringMethods.NO_CLUSTER.value
@@ -201,56 +204,90 @@ class CreateJobsTests(APITestCase):
                          ClassificationMethods.KNN.value)
         self.assertFalse('kmeans' in response.data[0]['config'])
         self.assertDictEqual(response.data[0]['config']['labelling'],
-                         {'type': 'remaining_time', 'attribute_name': None,
-                          'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
-                          'threshold': 0, 'results': {}})
+                             {'type': 'remaining_time', 'attribute_name': '',
+                              'threshold_type': ThresholdTypes.THRESHOLD_MEAN.value,
+                              'threshold': 0, 'results': {}})
         self.assertEqual(response.data[0]['status'], 'created')
 
     @staticmethod
-    def job_obj2():
+    def job_obj2(split_id):
         return {
             'type': 'regression',
-            'split_id': 1,
+            'split_id': split_id,
             'config': {
-                'encodings': [ValueEncodings.SIMPLE_INDEX.value, ValueEncodings.BOOLEAN.value,
-                              ValueEncodings.COMPLEX.value],
-                'clusterings': [ClusteringMethods.KMEANS.value],
-                'methods': [RegressionMethods.LINEAR.value, RegressionMethods.LASSO.value],
-                'random': 123,
-                'kmeans': {'max_iter': 100},
-                'encoding': {'prefix_length': 3, 'generation_type': TaskGenerationTypes.UP_TO.value,
-                             'padding': 'no_padding'},
-                'labelling': {'type': LabelTypes.REMAINING_TIME.value},
-                'hyperparameter_optimizer': {}
+                'clusterings': ['noCluster'],
+                'encodings': ['simpleIndex'],
+                'encoding': {
+                    'padding': False,
+                    'prefix_length': 2,
+                    'generation_type': 'only',
+                    'add_remaining_time': False,
+                    'add_elapsed_time': False,
+                    'add_executed_events': False,
+                    'add_resources_used': False,
+                    'add_new_traces': False,
+                    'features': [],
+                },
+                'create_models': False,
+                'methods': ['linear'],
+                'kmeans': {},
+                'incremental_train': {
+                    'base_model': None,
+                },
+                'hyperparameter_optimizer': {
+                    'algorithm_type': 'tpe',
+                    'max_evaluations': 10,
+                    'performance_metric': 'rmse',
+                    'type': 'none',
+                },
+                'labelling': {
+                    'type': 'remaining_time',
+                    'attribute_name': '',
+                    'threshold_type': 'threshold_mean',
+                    'threshold': 0,
+                },
+                'classification.decisionTree': {},
+                'classification.knn': {},
+                'classification.randomForest': {},
+                'classification.adaptiveTree': {},
+                'classification.hoeffdingTree': {},
+                'classification.multinomialNB': {},
+                'classification.perceptron': {},
+                'classification.SGDClassifier': {},
+                'classification.xgboost': {},
+                'classification.nn': {},
+                'regression.lasso': {},
+                'regression.linear': {},
+                'regression.randomForest': {},
+                'regression.xgboost': {},
+                'regression.nn': {},
+                'time_series_prediction.rnn': {}
             }
         }
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_reg_job_creation(self):
+
         client = APIClient()
-        response = client.post('/jobs/multiple', self.job_obj2(), format='json')
+        response = client.post('/jobs/multiple', self.job_obj2(create_test_split(original_log=create_test_log()).id), format='json')
 
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
-        self.assertEqual(18, len(response.data))
+        self.assertEqual(1, len(response.data))
         self.assertEqual(response.data[0]['type'], 'prediction')
         self.assertEqual(response.data[0]['config']['predictive_model']['predictive_model'], 'regression')
         self.assertEqual(ValueEncodings.SIMPLE_INDEX.value, response.data[0]['config']['encoding']['value_encoding'])
-        self.assertEqual(ClusteringMethods.KMEANS.value, response.data[0]['config']['clustering']['clustering_method'])
+        self.assertEqual(ClusteringMethods.NO_CLUSTER.value, response.data[0]['config']['clustering']['clustering_method'])
         self.assertEqual(RegressionMethods.LINEAR.value,
                          response.data[0]['config']['predictive_model']['prediction_method'])
-        self.assertEqual(1, response.data[0]['config']['encoding']['prefix_length'])
+        self.assertEqual(2, response.data[0]['config']['encoding']['prefix_length'])
         self.assertEqual(False, response.data[0]['config']['encoding']['padding'])
-        self.assertEqual(100, response.data[0]['config']['clustering']['max_iter'])
         self.assertEqual(JobStatuses.CREATED.value, response.data[0]['status'])
-        self.assertEqual(1, response.data[0]['config']['split']['id'])
-
-        self.assertEqual(3, response.data[17]['config']['encoding']['prefix_length'])
+        self.assertEqual(96, response.data[0]['config']['split']['id'])
 
     @staticmethod
-    def job_label():
+    def job_label(split_id):
         return{
             'type': 'labelling',
-            'split_id': 1,
+            'split_id': split_id,
             'config': {
                 'labelling': {
                     'type': 'remaining_time',
@@ -268,11 +305,10 @@ class CreateJobsTests(APITestCase):
             }
         }
 
-    @unittest.skip("temporary skipped changed db driver")
     def test_labelling_job_creation(self):
         client = APIClient()
-        response = client.post('/jobs/multiple', self.job_label(), format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = client.post('/jobs/multiple', self.job_label(create_test_split(original_log=create_test_log()).id), format='json')
+        self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['type'], 'labelling')
         self.assertEqual(response.data[0]['config']['encoding']['value_encoding'], 'simpleIndex')

@@ -1,0 +1,12 @@
+ignore:
+  - "**/tests/test_*.py"
+  - "tests/test_*.py"
+  - "**_experiments.py"
+  - "./docs/**"
+  - "./cache/**"
+  - "./results/**"
+  - "./db/**"
+  - "**/wsgi.py"
+#  TEMPORARY EXCLUSIONS
+  - "src/runtime/**"
+  - "pred_models/**"

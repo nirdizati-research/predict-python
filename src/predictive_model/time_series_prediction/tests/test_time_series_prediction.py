@@ -7,7 +7,8 @@ import unittest
 from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
-from src.core.tests.common import split_double, add_default_config
+from src.core.core import calculate
+from src.core.tests.test_utils import split_double, add_default_config
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
@@ -15,6 +16,8 @@ from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
 from src.predictive_model.time_series_prediction.models import TimeSeriesPredictionMethods
+from src.utils.tests_utils import create_test_job, create_test_predictive_model, create_test_labelling, \
+    create_test_clustering, create_test_encoding
 
 
 class TestTimeSeriesPrediction(TestCase):
@@ -59,3 +62,31 @@ class TestTimeSeriesPrediction(TestCase):
         #     with HidePrints():
         #         calculate(job)
         pass
+
+    def test_tsp_lstm(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.TIME_SERIES_PREDICTION.value,
+                prediction_method=TimeSeriesPredictionMethods.RNN.value,
+                configuration={'rnn_type': 'lstm'}),
+            labelling=create_test_labelling(),
+            encoding=create_test_encoding(prefix_length=2, padding=True),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'nlevenshtein': 0.6})
+
+    def test_tsp_gru(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.TIME_SERIES_PREDICTION.value,
+                prediction_method=TimeSeriesPredictionMethods.RNN.value,
+                configuration={'rnn_type': 'gru'}),
+            labelling=create_test_labelling(),
+            encoding=create_test_encoding(prefix_length=2, padding=True),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        self.assertDictEqual(result, {'nlevenshtein': 0.6})

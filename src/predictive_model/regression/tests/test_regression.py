@@ -7,13 +7,16 @@ import unittest
 from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
-from src.core.tests.common import split_double, add_default_config
+from src.core.core import calculate
+from src.core.tests.test_utils import split_double, add_default_config
 from src.encoding.encoding_container import EncodingContainer, ZERO_PADDING
 from src.encoding.models import ValueEncodings
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
 from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.models import RegressionMethods
+from src.utils.tests_utils import create_test_predictive_model, create_test_labelling, create_test_clustering, \
+    create_test_job
 
 
 class TestRegression(TestCase):
@@ -53,3 +56,64 @@ class TestRegression(TestCase):
         #     with HidePrints():
         #         calculate(job)
         pass
+
+    def test_regression_random_forest(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
+                                                          prediction_method=RegressionMethods.RANDOM_FOREST.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        print(result)
+        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+
+    def test_regression_lasso(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
+                                                          prediction_method=RegressionMethods.LASSO.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        print(result)
+        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+
+    def test_regression_linear(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
+                                                          prediction_method=RegressionMethods.LINEAR.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        print(result)
+        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+
+    def test_regression_xgboost(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
+                                                          prediction_method=RegressionMethods.XGBOOST.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        print(result)
+        self.assertDictEqual(result, {'mae': 0.00011968612670898438, 'mape': -1, 'rmse': 0.00011968612670898438,
+                                      'rscore': 0.0})
+
+    def test_regression_nn(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
+                                                          prediction_method=RegressionMethods.NN.value),
+            labelling=create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value)
+        )
+        result, _ = calculate(job)
+        del result['elapsed_time']
+        print(result)
+        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})

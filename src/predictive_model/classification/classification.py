@@ -14,7 +14,7 @@ from xgboost import XGBClassifier
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
-from src.jobs.models import JobTypes, Job, ModelType
+from src.jobs.models import Job, ModelType
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.predictive_model.classification.models import ClassificationMethods

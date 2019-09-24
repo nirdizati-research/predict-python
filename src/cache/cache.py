@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import pickle
 
 from pandas import DataFrame
@@ -7,7 +8,6 @@ from src.cache.models import LabelledLog, LoadedLog
 from src.jobs.models import Job
 from src.split.models import Split
 
-import logging
 logger = logging.getLogger(__name__)
 
 

@@ -8,7 +8,7 @@ import unittest
 from django.test import TestCase
 
 from src.core.core import calculate
-from src.core.tests.common import split_single, add_default_config
+from src.core.tests.test_utils import split_single, add_default_config
 from src.encoding.encoding_container import EncodingContainer
 from src.encoding.models import ValueEncodings
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt

@@ -61,7 +61,7 @@ def create_multiple(request):
     try:
         split = Split.objects.get(pk=payload['split_id'])
     except Split.DoesNotExist:
-        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'split_id ' + str(payload['split_id']) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
     if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
@@ -74,6 +74,7 @@ def create_multiple(request):
         return Response({'error': 'type not supported'.format(payload['type'])},
                         status=status.HTTP_422_UNPROCESSABLE_ENTITY)
     for job in jobs:
+        # TODO add support for 'depends_on' parameter
         django_rq.enqueue(tasks.prediction_task, job.id)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)

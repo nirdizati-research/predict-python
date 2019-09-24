@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
-from src.core.tests.common import repair_example
+from src.core.tests.test_utils import repair_example
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
@@ -86,7 +86,7 @@ class RefactorProof(TestCase):
         )
         result, _ = calculate(job)
 
-        self.assertAlmostEqual(result['f1score'], 0.5423988458)
+        self.assertAlmostEqual(result['f1score'], 0.542398845)
         self.assertAlmostEqual(result['acc'], 0.809954751)
         self.assertAlmostEqual(result['precision'], 0.623447204)
         self.assertAlmostEqual(result['recall'], 0.52249454423)

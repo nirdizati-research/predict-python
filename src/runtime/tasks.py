@@ -7,16 +7,13 @@ from src.logs.models import Log
 from src.utils.file_service import get_log
 
 
-@job("default", timeout='1h')
-def runtime_task(job, model):
+@job("default", timeout='100h')
+def runtime_task(job):
     print("Start runtime task ID {}".format(job.pk))
     try:
         job.status = JobStatuses.RUNNING.value
         job.save()
-        log = Log.objects.get(pk=job.config['log_id'])
-        run_log = get_log(log.path)
-        result_data = runtime_calculate(run_log, model.to_dict())
-        result = result_data['prediction']
+        result = runtime_calculate(job)
         job.result = result
         job.status = JobStatuses.COMPLETED.value
         job.error = ''
@@ -28,3 +25,4 @@ def runtime_task(job, model):
     finally:
         job.save()
         publish(job)
+

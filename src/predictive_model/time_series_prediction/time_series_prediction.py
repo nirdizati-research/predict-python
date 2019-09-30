@@ -49,29 +49,6 @@ def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer
     return results, model_split
 
 
-def time_series_prediction_single_log(input_df: DataFrame, model: dict) -> dict:
-    """single log time series prediction
-
-    time series predicts a single log using the provided TODO: complete
-
-    :param input_df: input DataFrame
-    :param model: TODO: complete
-    :return: predictive_model scores
-
-    """
-    results = dict()
-    split = model['split']
-    results['input'] = input_df
-
-    # TODO load predictive_model more wisely
-    model_split = dict()
-    model_split[ModelType.CLUSTERER.value] = joblib.load(split['clusterer_path'])
-    model_split[ModelType.TIME_SERIES_PREDICTOR.value] = joblib.load(split['model_path'])
-    result, _ = _test(model_split, input_df, evaluation=False)
-    results['prediction'] = result['predicted']
-    return results
-
-
 def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Clustering) -> dict:
     models = dict()
 
@@ -119,6 +96,26 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, f
     nlevenshtein = float(np.mean(nlevenshtein_distances))
 
     return results_df, nlevenshtein
+
+def predict(job: Job, data: DataFrame) -> Any:
+    model_split = joblib.load(job.predictive_model.model_path)
+    clusterer = model_split[ModelType.CLUSTERER.value]
+    time_series_predictor = model_split[ModelType.TIME_SERIES_PREDICTOR.value]
+
+    test_data = clusterer.cluster_data(data)
+
+    result = None
+
+    non_empty_clusters = clusterer.n_clusters
+
+    for cluster in range(clusterer.n_clusters):
+        cluster_test_df = test_data[cluster]
+        if cluster_test_df.empty:
+            non_empty_clusters -= 1
+        else:
+            result = time_series_predictor[cluster].predict(cluster_test_df).tolist()
+
+    return result
 
 
 def _prepare_results(df: DataFrame, nlevenshtein: float) -> dict:

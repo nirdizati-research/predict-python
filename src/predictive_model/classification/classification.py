@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 import pandas as pd
 from pandas import DataFrame
@@ -57,30 +59,6 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     results = _prepare_results(results_df, auc)
 
     return results, model_split
-
-
-def classification_single_log(input_df: DataFrame, model: dict) -> dict:
-    """single log classification
-
-    classifies a single log using the provided TODO: complete
-
-    :param input_df: input DataFrame
-    :param model: TODO: complete
-    :return: predictive_model scores
-
-    """
-    results = dict()
-    split = model['split']
-    results['label'] = input_df['label']
-
-    # TODO load predictive_model more wisely
-    model_split = dict()
-    model_split[ModelType.CLUSTERER.value] = joblib.load(split['clusterer_path'])
-    model_split[ModelType.CLASSIFIER.value] = joblib.load(split['model_path'])
-    result, _ = _test(model_split, input_df, evaluation=False,
-                      is_binary_classifier=_check_is_binary_classifier(model['label'].type))
-    results['prediction'] = result['predicted']
-    return results
 
 
 def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
@@ -224,6 +202,33 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
         pass  # TODO: check if AUC is ok for multiclass, otherwise implement
 
     return results_df, auc
+
+
+def predict(job: Job, test_data: DataFrame) -> Any:
+    model_split = joblib.load(job.predictive_model.model_path)
+    clusterer = model_split[ModelType.CLUSTERER.value]
+    classifier = model_split[ModelType.CLASSIFIER.value]
+
+    test_data = clusterer.cluster_data(test_data)
+
+    non_empty_clusters = clusterer.n_clusters
+
+    result = None
+
+    for cluster in range(clusterer.n_clusters):
+        cluster_test_df = test_data[cluster]
+        if cluster_test_df.empty:
+            non_empty_clusters -= 1
+        else:
+            try:
+                result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1))
+            except (NotImplementedError, KeyError):
+                try:
+                    result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).T)
+                except (KeyError, ValueError):
+                    result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
+
+    return result
 
 
 def _prepare_results(results_df: DataFrame, auc: int) -> dict:

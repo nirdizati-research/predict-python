@@ -1,6 +1,7 @@
 """
 regression methods and functionalities
 """
+from typing import Any
 
 import pandas as pd
 from pandas import DataFrame
@@ -102,6 +103,23 @@ def _test(model_split: dict, data: DataFrame) -> DataFrame:
             cluster_test_df['predicted'] = regressor[cluster].predict(cluster_test_df.drop('label', 1))
             results_df = results_df.append(cluster_test_df)
     return results_df
+
+
+def predict(job: Job, data: DataFrame) -> Any:
+    data = data.drop(['trace_id'], 1)
+    clusterer = Clustering.load_model(job)
+    test_data = clusterer.cluster_data(data)
+
+    regressor = joblib.load(job.predictive_model.model_path)
+
+    result = None
+
+    for cluster in range(clusterer.n_clusters):
+        cluster_test_df = test_data[cluster]
+        if not cluster_test_df.empty:
+            result = regressor[cluster].predict(cluster_test_df.drop('label', 1))
+
+    return result
 
 
 def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):

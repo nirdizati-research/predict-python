@@ -30,6 +30,7 @@ class JobTypes(Enum):
     PREDICTION = 'prediction'
     LABELLING = 'labelling'
     UPDATE = 'update'
+    RUNTIME = 'runtime'
 
 
 JOB_STATUS_MAPPINGS = (
@@ -42,7 +43,8 @@ JOB_STATUS_MAPPINGS = (
 JOB_TYPE_MAPPINGS = (
     (JobTypes.PREDICTION.value, 'prediction'),
     (JobTypes.LABELLING.value, 'labelling'),
-    (JobTypes.UPDATE.value, 'update')
+    (JobTypes.UPDATE.value, 'update'),
+    (JobTypes.RUNTIME.value, 'runtime')
 )
 
 

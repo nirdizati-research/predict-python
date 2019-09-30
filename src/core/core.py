@@ -1,7 +1,9 @@
 import json
 import logging
 import time
+import pandas as pd
 from datetime import timedelta
+from enum import Enum
 
 from pandas import DataFrame
 from pm4py.objects.log.log import EventLog
@@ -10,21 +12,43 @@ from src.cache.cache import get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
 from src.cache.models import LabelledLog, LoadedLog
 from src.clustering.clustering import Clustering
-from src.encoding.common import encode_label_log, encode_label_logs
+from src.encoding.common import encode_label_logs
 from src.evaluation.models import Evaluation
 from src.jobs.models import JobTypes, Job
 from src.logs.log_service import create_log
-from src.predictive_model.classification.classification import classification_single_log, update_and_test, \
-    classification
+from src.predictive_model.classification import classification
 from src.predictive_model.models import PredictiveModels
-from src.predictive_model.regression.regression import regression, regression_single_log
-from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
-    time_series_prediction
+from src.predictive_model.regression import regression
+from src.predictive_model.time_series_prediction import time_series_prediction
 from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
 from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
+
+
+class ModelActions (Enum):
+    PREDICT = 'predict'
+    UPDATE_AND_TEST = 'update_and_test'
+    BUILD_MODEL_AND_TEST = 'build_model_and_test'
+
+
+MODEL = {
+    PredictiveModels.CLASSIFICATION.value: {
+        ModelActions.PREDICT.value: classification.predict,
+        ModelActions.UPDATE_AND_TEST.value: classification.update_and_test,
+        ModelActions.BUILD_MODEL_AND_TEST.value: classification.classification
+    },
+    PredictiveModels.REGRESSION.value: {
+        ModelActions.PREDICT.value: regression.predict,
+        ModelActions.BUILD_MODEL_AND_TEST.value: regression.regression
+    },
+    PredictiveModels.TIME_SERIES_PREDICTION.value: {
+        ModelActions.PREDICT.value: time_series_prediction.predict,
+        ModelActions.BUILD_MODEL_AND_TEST.value: time_series_prediction.time_series_prediction
+    }
+}
+
 
 def calculate(job: Job) -> (dict, dict): #TODO dd filter for 'valid' configurations
     """main entry point for calculations
@@ -120,16 +144,11 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:
         clusterer = _init_clusterer(job.clustering, training_df)
-        if job.predictive_model.predictive_model == PredictiveModels.CLASSIFICATION.value:
-            results, model_split = classification(training_df, test_df, clusterer, job)
-        elif job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
-            results, model_split = regression(training_df, test_df, clusterer, job)
-        elif job.predictive_model.predictive_model == PredictiveModels.TIME_SERIES_PREDICTION.value:
-            results, model_split = time_series_prediction(training_df, test_df, clusterer, job)
+        results, model_split = MODEL[job.predictive_model.predictive_model][ModelActions.BUILD_MODEL_AND_TEST.value](training_df, test_df, clusterer, job)
     elif job.type == JobTypes.LABELLING.value:
         results = _label_task(training_df)
     elif job.type == JobTypes.UPDATE.value:
-        results, model_split = update_and_test(training_df, test_df, job)
+        results, model_split = MODEL[job.predictive_model.predictive_model][ModelActions.UPDATE_AND_TEST.value](training_df, test_df, job)
     else:
         raise ValueError("Type {} not supported".format(job.type))
 
@@ -171,24 +190,17 @@ def _init_clusterer(clustering: Clustering, train_data: DataFrame):
     return clusterer
 
 
-def runtime_calculate(run_log: list, model: dict) -> dict:
+def runtime_calculate(job: Job) -> dict:
     """calculate the predictive_model's score for runtime tasks
 
     :param run_log: run dataset
     :param model: predictive_model dictionary
     :return: runtime results
-
     """
-    run_df = encode_label_log(run_log, model['encoding'], model['type'], model['label'])
-    if model['type'] == PredictiveModels.CLASSIFICATION.value:
-        results = classification_single_log(run_df, model)
-    elif model['type'] == PredictiveModels.REGRESSION.value:
-        results = regression_single_log(run_df, model)
-    elif model['type'] == PredictiveModels.TIME_SERIES_PREDICTION.value:
-        results = time_series_prediction_single_log(run_df, model)
-    else:
-        raise ValueError("Type {} not supported".format(model['type']))
-    logger.info("End job {}, {} . Results {}".format(model['type'], get_run(model), results))
+    training_df, test_df = get_encoded_logs(job)
+    data_df = pd.concat([training_df,test_df])
+    results = MODEL[job.predictive_model.predictive_model][ModelActions.PREDICT.value](job, data_df)
+    logger.info("End {} job {}, {} . Results {}".format('runtime', job.predictive_model.predictive_model, get_run(job), results))
     return results
 
 

@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from pred_models.models import PredModels
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.serializers import JobSerializer
-from src.logs.models import Log
 from src.split.models import Split
 from .models import XTrace
 from .replayer import Replayer
@@ -40,54 +39,49 @@ def get_demo(request, pk, pk1, pk2):
     return Response("Finito")
 
 
-@api_view(['GET'])
-def get_prediction(request, pk1, pk2, pk3):
-    models = []
+@api_view(['POST'])
+def get_prediction(request):
     jobs = []
-    pk1 = int(pk1)
-    pk2 = int(pk2)
-    pk3 = int(pk3)
+    data = request.data
+    splitId = int(data['splitId'])
+    regId = int(data['regId'])
+    classId = int(data['classId'])
+    timeSeriesPredId = int(data['timeSeriesPredId'])
 
-    log = Log.objects.get(pk=pk1)
-    split, created = Split.objects.get_or_create(type='single', original_log=log)
+    split = Split.objects.get(pk=splitId)
 
     try:
-        if pk2 > 0:
-            model = PredModels.objects.get(pk=pk2)
-            models.append(model)
-        if pk3 > 0:
-            model = PredModels.objects.get(pk=pk3)
-            models.append(model)
+        if regId > 0:
+            job = Job.objects.get(pk=regId)
+            jobs.append(job)
+        if classId > 0:
+            job = Job.objects.get(pk=classId)
+            jobs.append(job)
+        if timeSeriesPredId > 0:
+            job = Job.objects.get(pk=timeSeriesPredId)
+            jobs.append(job)
     except PredModels.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
 
-    for model in models:
-        job = generate_run(pk1, model, model.id, split)
+    for job in jobs:
+        jobtoenqueue = generate_run(job, split)
 
         # django_rq.enqueue(training, jobrun, predictive_model)
-        django_rq.enqueue(runtime_task, job, model)
+        django_rq.enqueue(runtime_task, jobtoenqueue)
     # os.system('python3 manage.py rqworker --burst')
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
 
-def generate_run(logid, model, modelid, split):
-    config = create_config_run(model.config, log=logid, model=modelid)
-    try:
-        item = Job.objects.get(split=split, config=config, type=model.type)
-    except Job.DoesNotExist:
-        item = Job.objects.create(
-            status=JobStatuses.CREATED.value,
-            type=model.type,
-            config=config,
-            split=split)
-    return item
+def generate_run(job: Job, split: Split) -> Job:
+    return Job.objects.get_or_create(
+                    status=JobStatuses.CREATED.value,
+                    type=JobTypes.RUNTIME.value,
+                    encoding=job.encoding,
+                    labelling=job.labelling,
+                    clustering=job.clustering,
+                    hyperparameter_optimizer=job.hyperparameter_optimizer,
+                    predictive_model=job.predictive_model,
+                    split=split,
+                    create_models=False)[0]
 
-
-def create_config_run(config, log='', model=''):
-    """Turn lists to single values"""
-    config = config
-    config['add_label'] = False
-    config['log_id'] = log
-    config['model_id'] = model
-    return config

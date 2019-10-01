@@ -215,3 +215,28 @@ class TestClassification(TestCase):
         self.assertDictEqual(result, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0,
                                       'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
 
+    def test_update_nb(self):
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.HOEFFDING_TREE.value),
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value),
+            create_models=True
+        )
+        result1, _ = calculate(job)
+        job = create_test_job(
+            predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.HOEFFDING_TREE.value),
+            encoding=job.encoding,
+            labelling=create_test_labelling(label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                                            attribute_name='concept:name'),
+            clustering=job.clustering,
+            incremental_train=job
+        )
+        result2, _ = calculate(job)
+        del result1['elapsed_time']
+        del result2['elapsed_time']
+        self.assertDictEqual(result1, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0,
+                                       'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+        self.assertDictEqual(result2, {'f1score': 0.0, 'acc': 0.0, 'precision': 0.0, 'recall': 0.0, 'true_positive': 0,
+                                       'true_negative': 0, 'false_negative': 2, 'false_positive': 0, 'auc': 0.0})
+

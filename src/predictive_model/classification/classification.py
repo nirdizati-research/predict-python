@@ -215,7 +215,6 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
                 except (KeyError, ValueError):
                     cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
 
-
             results_df = results_df.append(cluster_test_df)
 
     if is_binary_classifier or max([len(set(t['label'])) for _, t in test_data.items()]) <= 2:

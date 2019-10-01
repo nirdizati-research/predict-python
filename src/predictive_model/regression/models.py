@@ -152,7 +152,7 @@ NEURAL_NETWORKS_ACTIVATION = (
 class NeuralNetwork(Regression):
     n_hidden_layers = models.PositiveIntegerField()
     n_hidden_units = models.PositiveIntegerField()
-    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=max(len(el[1]) for el in NEURAL_NETWORKS_ACTIVATION)+1)
+    activation = models.CharField(choices=NEURAL_NETWORKS_ACTIVATION, default='relu', max_length=max(len(el[1]) for el in NEURAL_NETWORKS_ACTIVATION) + 1)
     n_epochs = models.PositiveIntegerField()
     dropout_rate = models.PositiveIntegerField()
 

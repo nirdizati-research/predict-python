@@ -5,6 +5,7 @@ from typing import Union
 from pm4py.objects.log.log import EventLog
 from sklearn.model_selection import train_test_split
 
+from src.logs.log_service import create_log
 from src.split.models import Split, SplitTypes, SplitOrderingMethods
 from src.utils.event_attributes import get_additional_columns
 from src.utils.file_service import get_log
@@ -12,11 +13,40 @@ from src.utils.file_service import get_log
 logger = logging.getLogger(__name__)
 
 
-def prepare_logs(split: Split):
+def get_train_test_log(split: Split):
     """Returns training_log and test_log"""
-    if split.type == SplitTypes.SPLIT_SINGLE.value:
-        additional_columns = get_additional_columns(get_log(split.original_log))
+    if split.type == SplitTypes.SPLIT_SINGLE.value and Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    ).exists() and split.splitting_method != SplitOrderingMethods.SPLIT_RANDOM.value:
+        return get_train_test_log(Split.objects.filter(
+            type=SplitTypes.SPLIT_DOUBLE.value,
+            original_log=split.original_log,
+            test_size=split.test_size,
+            splitting_method=split.splitting_method
+        )[0])
+    elif split.original_log is not None and (not Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    ).exists() or split.splitting_method == SplitOrderingMethods.SPLIT_RANDOM.value):
         training_log, test_log = _split_single_log(split)
+        additional_columns = get_additional_columns(get_log(split.original_log))
+
+        if split.splitting_method != SplitOrderingMethods.SPLIT_RANDOM.value:
+            _ = Split.objects.get_or_create(
+                type=SplitTypes.SPLIT_DOUBLE.value,
+                original_log=split.original_log,
+                test_size=split.test_size,
+                splitting_method=split.splitting_method,
+                train_log=create_log(EventLog(training_log), '0-' + str(100 - int(split.test_size * 100)) + '.xes'),
+                test_log=create_log(EventLog(test_log), str(100 - int(split.test_size * 100)) + '-100.xes'),
+                additional_columns=split.additional_columns
+            )[0]
+
         logger.info("\t\tLoaded single log from {}".format(split.original_log.path))
     else:
         # Have to use sklearn to convert some internal data types

@@ -26,7 +26,8 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
 
     labelling = job.labelling
     if (labelling.threshold_type in [ThresholdTypes.THRESHOLD_MEAN.value, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
-        labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value, LabelTypes.REMAINING_TIME.value]):
+        labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value,
+                           LabelTypes.REMAINING_TIME.value]):
         if labelling.threshold_type == ThresholdTypes.THRESHOLD_MEAN.value:
             threshold = training_log['label'].astype(float).mean()
 

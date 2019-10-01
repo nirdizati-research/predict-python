@@ -120,7 +120,8 @@ def create_test_job(split: Split = None,
                     create_models: bool = False,
                     predictive_model: PredictiveModel = None,
                     job_type=JobTypes.PREDICTION.value,
-                    hyperparameter_optimizer: HyperparameterOptimization = None):
+                    hyperparameter_optimizer: HyperparameterOptimization = None,
+                    incremental_train : Job = None):
     job, _ = Job.objects.get_or_create(
         status=JobStatuses.CREATED.value,
         type=job_type,
@@ -132,6 +133,6 @@ def create_test_job(split: Split = None,
         predictive_model=predictive_model if predictive_model is not None else create_test_predictive_model(),
         evaluation=None,
         hyperparameter_optimizer=hyperparameter_optimizer,
-        incremental_train=None
+        incremental_train=incremental_train
     )
     return job

@@ -15,7 +15,7 @@ class Cache(CommonModel):
 class LoadedLog(Cache):
     train_log_path = models.FilePathField(path='cache/loaded_log_cache/')
     test_log_path = models.FilePathField(path='cache/loaded_log_cache/')
-    additional_columns_path = models.FilePathField(path='cache/loaded_log_cache/', null=True)
+    additional_columns_path = models.FilePathField(path='cache/loaded_log_cache/', null=True, max_length=500)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
 
 

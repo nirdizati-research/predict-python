@@ -18,7 +18,23 @@ class SplitList(mixins.ListModelMixin, generics.GenericAPIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=400)
 
-        # Other serializer for data
-        item = serializer.save()
-        result = SplitSerializer(item)
+        try:
+            if Split.objects.filter(
+                original_log=serializer.validated_data['original_log'],
+                test_size=serializer.validated_data['test_size'],
+                splitting_method=serializer.validated_data['splitting_method']
+            ).exists():
+                return Response(Split.objects.filter(
+                    original_log=serializer.validated_data['original_log'],
+                    test_size=serializer.validated_data['test_size'],
+                    splitting_method=serializer.validated_data['splitting_method']
+                )[0].to_dict(), status=status.HTTP_200_OK)  # TODO: Use better code, like 304
+            else:
+                # Other serializer for data
+                split = serializer.save()
+        except:
+            # Other serializer for data
+            split = serializer.save()
+
+        result = SplitSerializer(split)
         return Response(result.data, status=status.HTTP_201_CREATED)

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from src.split.models import SplitTypes, SplitOrderingMethods
-from src.split.splitting import prepare_logs
+from src.split.splitting import get_train_test_log
 from src.utils.tests_utils import general_example_filepath, general_example_test_filepath, \
     general_example_train_filepath, create_test_split, create_test_log, general_example_filename, \
     general_example_train_filename, general_example_test_filename
@@ -9,12 +9,12 @@ from src.utils.tests_utils import general_example_filepath, general_example_test
 
 class Split(TestCase):
     def test_split_single(self):
-        training_log, test_log, _ = prepare_logs(split_single())
+        training_log, test_log, _ = get_train_test_log(split_single())
         self.assertEqual(4, len(training_log))
         self.assertEqual(2, len(test_log))
 
     def test_split_double(self):
-        training_log, test_log, _ = prepare_logs(split_double())
+        training_log, test_log, _ = get_train_test_log(split_double())
         self.assertEqual(4, len(training_log))
         self.assertEqual(2, len(test_log))
 
@@ -22,13 +22,13 @@ class Split(TestCase):
 class SplitSingle(TestCase):
     def test_size(self):
         split = split_single(test_size=0.5)
-        training_log, test_log, _ = prepare_logs(split)
+        training_log, test_log, _ = get_train_test_log(split)
         self.assertEqual(3, len(training_log))
         self.assertEqual(3, len(test_log))
 
     def test_sequential(self):
         split = split_single(split_ordering=SplitOrderingMethods.SPLIT_SEQUENTIAL.value)
-        training_log, test_log, _ = prepare_logs(split)
+        training_log, test_log, _ = get_train_test_log(split)
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)
 
@@ -37,8 +37,8 @@ class SplitSingle(TestCase):
 
     def test_random(self):
         split = split_single(split_ordering=SplitOrderingMethods.SPLIT_RANDOM.value)
-        training_log1, _, _ = prepare_logs(split)
-        training_log2, _, _ = prepare_logs(split)
+        training_log1, _, _ = get_train_test_log(split)
+        training_log2, _, _ = get_train_test_log(split)
         training_names1 = trace_names(training_log1)
         training_names2 = trace_names(training_log2)
 
@@ -46,7 +46,7 @@ class SplitSingle(TestCase):
 
     def test_temporal(self):
         split = split_single(split_ordering=SplitOrderingMethods.SPLIT_TEMPORAL.value)
-        training_log, test_log, _ = prepare_logs(split)
+        training_log, test_log, _ = get_train_test_log(split)
 
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)
@@ -56,7 +56,7 @@ class SplitSingle(TestCase):
 
     def test_strict_temporal(self):
         split = split_single(split_ordering=SplitOrderingMethods.SPLIT_STRICT_TEMPORAL.value)
-        training_log, test_log, _ = prepare_logs(split)
+        training_log, test_log, _ = get_train_test_log(split)
 
         training_names = trace_names(training_log)
         test_names = trace_names(test_log)

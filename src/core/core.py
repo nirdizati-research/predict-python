@@ -21,7 +21,7 @@ from src.predictive_model.regression.regression import regression, regression_si
 from src.predictive_model.time_series_prediction.time_series_prediction import time_series_prediction_single_log, \
     time_series_prediction
 from src.split.models import SplitTypes
-from src.split.splitting import prepare_logs
+from src.split.splitting import get_train_test_log
 from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                     logger.info('\t\tError pre-loaded cache invalidated!')
                     return get_encoded_logs(job, use_cache)
             else:
-                training_log, test_log, additional_columns = prepare_logs(job.split)
+                training_log, test_log, additional_columns = get_train_test_log(job.split)
                 if job.split.type == SplitTypes.SPLIT_SINGLE.value:
                     job.split = duplicate_orm_row(job.split)
                     job.split.type = SplitTypes.SPLIT_DOUBLE.value
@@ -101,7 +101,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
                 additional_columns=additional_columns)
             put_labelled_logs(job, training_df, test_df)
     else:
-        training_log, test_log, additional_columns = prepare_logs(job.split)
+        training_log, test_log, additional_columns = get_train_test_log(job.split)
         training_df, test_df = encode_label_logs(training_log, test_log, job, additional_columns=additional_columns)
     return training_df, test_df
 

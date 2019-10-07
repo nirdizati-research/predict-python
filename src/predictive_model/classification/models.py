@@ -36,26 +36,18 @@ CLASSIFICATION_METHOD_MAPPINGS = (
     (ClassificationMethods.NN.value, 'nn')
 )
 
-CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                              ClassificationMethods.RANDOM_FOREST.value)
+CLASSIFICATION_RANDOM_FOREST = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.RANDOM_FOREST.value)
 CLASSIFICATION_KNN = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.KNN.value)
-CLASSIFICATION_DECISION_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                              ClassificationMethods.DECISION_TREE.value)
-CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                                        ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
-CLASSIFICATION_ADAPTIVE_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                              ClassificationMethods.ADAPTIVE_TREE.value)
-CLASSIFICATION_HOEFFDING_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                               ClassificationMethods.HOEFFDING_TREE.value)
-CLASSIFICATION_SGDC = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                     ClassificationMethods.SGDCLASSIFIER.value)
-CLASSIFICATION_PERCEPTRON = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value,
-                                           ClassificationMethods.PERCEPTRON.value)
+CLASSIFICATION_DECISION_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.DECISION_TREE.value)
+CLASSIFICATION_MULTINOMIAL_NAIVE_BAYES = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
+CLASSIFICATION_ADAPTIVE_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.ADAPTIVE_TREE.value)
+CLASSIFICATION_HOEFFDING_TREE = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.HOEFFDING_TREE.value)
+CLASSIFICATION_SGDC = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.SGDCLASSIFIER.value)
+CLASSIFICATION_PERCEPTRON = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.PERCEPTRON.value)
 CLASSIFICATION_XGBOOST = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.XGBOOST.value)
 CLASSIFICATION_NN = '{}.{}'.format(PredictiveModels.CLASSIFICATION.value, ClassificationMethods.NN.value)
 
-UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(JobTypes.UPDATE.value,
-                                                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
+UPDATE_INCREMENTAL_NAIVE_BAYES = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value)
 UPDATE_INCREMENTAL_ADAPTIVE_TREE = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.ADAPTIVE_TREE.value)
 UPDATE_INCREMENTAL_HOEFFDING_TREE = '{}.{}'.format(JobTypes.UPDATE.value, ClassificationMethods.HOEFFDING_TREE.value)
 

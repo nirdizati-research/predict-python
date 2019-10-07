@@ -34,7 +34,7 @@ def create_properties(log: EventLog) -> dict:
         'resources': resources_by_date(log),
         'maxEventsInLog': max_events_in_log(log),
         'avgEventsInLog': avg_events_in_log(log),
-        'stdVarEventsInLog': std_var_events_in_log(log),
+        'stdVarEventsInLog': std_var_events_in_log(log) if len(log) > 1 else -1,
         'traceAttributes': trace_attributes(log),
         'newTraces': new_trace_start(log),
         # 'alpha_miner_result': vis_factory.apply(*alpha_miner.apply(log)) #TODO ADD alpha miner

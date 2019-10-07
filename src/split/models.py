@@ -41,7 +41,7 @@ class Split(CommonModel):
     splitting_method = models.CharField(choices=SPLIT_ORDERING_METHOD_MAPPINGS, default='sequential', max_length=max(len(el[1]) for el in SPLIT_ORDERING_METHOD_MAPPINGS)+1)
     train_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='training_log', blank=True, null=True)
     test_log = models.ForeignKey(Log, on_delete=models.CASCADE, related_name='test_log', blank=True, null=True)
-    additional_columns = models.FilePathField(path='cache/loaded_log_cache/',  blank=True, null=True)
+    additional_columns = models.FilePathField(path='cache/loaded_log_cache/', blank=True, null=True, max_length=500)
 
     def to_dict(self) -> dict:
         temp = {

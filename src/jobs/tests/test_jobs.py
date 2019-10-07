@@ -46,11 +46,11 @@ class JobModelTest(TestCase):
 
         self.assertEquals(JobTypes.PREDICTION.value, job['type'])
         self.assertEquals(PredictiveModels.CLASSIFICATION.value, job['predictive_model']['predictive_model'])
+        del job['split']['id']
         self.assertDictEqual({'type': 'single',
                               'original_log_path': general_example_filepath,
                               'splitting_method': 'sequential',
-                              'test_size': 0.2,
-                              'id': 103},
+                              'test_size': 0.2},
                              job['split'])
         self.assertEquals(job['labelling'], {
             'attribute_name': None,
@@ -281,7 +281,6 @@ class CreateJobsTests(APITestCase):
         self.assertEqual(2, response.data[0]['config']['encoding']['prefix_length'])
         self.assertEqual(False, response.data[0]['config']['encoding']['padding'])
         self.assertEqual(JobStatuses.CREATED.value, response.data[0]['status'])
-        self.assertEqual(96, response.data[0]['config']['split']['id'])
 
     @staticmethod
     def job_label(split_id):

@@ -204,19 +204,19 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
     return results_df, auc
 
 
-def predict(job: Job, test_data: DataFrame) -> Any:
-    model_split = joblib.load(job.predictive_model.model_path)
-    clusterer = model_split[ModelType.CLUSTERER.value]
-    classifier = model_split[ModelType.CLASSIFIER.value]
+def predict(job: Job, data: DataFrame) -> Any:
+    data = data.drop(['trace_id'], 1)
+    clusterer = Clustering.load_model(job)
+    data = clusterer.cluster_data(data)
 
-    test_data = clusterer.cluster_data(test_data)
+    classifier = joblib.load(job.predictive_model.model_path)
 
     non_empty_clusters = clusterer.n_clusters
 
     result = None
 
     for cluster in range(clusterer.n_clusters):
-        cluster_test_df = test_data[cluster]
+        cluster_test_df = data[cluster]
         if cluster_test_df.empty:
             non_empty_clusters -= 1
         else:

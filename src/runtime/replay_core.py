@@ -1,3 +1,4 @@
+'''
 import csv
 import datetime
 import json
@@ -6,7 +7,6 @@ import xml.etree.ElementTree as Et
 
 from dateutil.parser import parse as dateparser
 
-from pred_models.models import PredModels
 from src.core.core import runtime_calculate
 from src.encoding.encoding_container import ZERO_PADDING, ALL_IN_ONE
 from src.jobs.ws_publisher import publish
@@ -171,3 +171,4 @@ def next_activities(events, trace):
     process = subprocess.Popen(py2commandrun.split(), stdout=subprocess.PIPE)
     output, error = process.communicate()
     exitcode = process.wait()
+'''

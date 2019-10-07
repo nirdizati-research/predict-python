@@ -37,4 +37,5 @@ class JobSerializer(serializers.ModelSerializer):
             'error',
             'status',
             'type',
+            'results',
             'config')

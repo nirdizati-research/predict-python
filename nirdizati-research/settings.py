@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig',
     'src.runtime.apps.RuntimeConfig',
 
-    'pred_models.apps.PredictionModelsConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

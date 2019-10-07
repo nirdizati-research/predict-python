@@ -3,7 +3,6 @@ from ws4redis.redis_store import RedisMessage
 
 from src.jobs.serializers import JobSerializer
 from src.logs.serializers import LogSerializer
-from src.runtime.serializers import TraceSerializer
 
 redis_publisher = RedisPublisher(facility='default', broadcast=True)
 from rest_framework.renderers import JSONRenderer  # TODO: check module import not at top level
@@ -26,8 +25,8 @@ def _serializer(object):
         data = LogSerializer(object).data
     elif name == 'Job':
         data = JobSerializer(object).data
-    elif name == 'XTrace':
-        data = TraceSerializer(object).data
+    #elif name == 'XTrace':
+     #   data = TraceSerializer(object).data
     else:
         raise NotImplementedError("Websocket not implemented for class ".format(name))
     return JSONRenderer().render({'type': name, 'data': data})

@@ -47,35 +47,6 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
     return training_log, test_log
 
 
-# TODO deprecate this function
-def encode_label_log(run_log: EventLog, encoding: Encoding, job_type: str, labelling: Labelling, event_names=None,
-                     additional_columns=None, fit_encoder=False):
-    encoded_log, _ = _encode_log(run_log, encoding, labelling, additional_columns)
-
-    # Convert strings to number
-    if labelling.type == LabelTypes.ATTRIBUTE_NUMBER.value:
-        try:
-            encoded_log['label'] = encoded_log['label'].apply(lambda x: float(x))
-        except:
-            encoded_log['label'] = encoded_log['label'].apply(lambda x: x == 'true')
-
-    # converts string values to in
-    if job_type != JobTypes.LABELLING.value:
-        # Labelling has no need for this encoding
-        _categorical_encode(encoded_log)
-    # Regression only has remaining_time or number atr as label
-    if job_type == PredictiveModels.REGRESSION.value:
-        # Remove last events as worse for prediction
-        # TODO filter out 0 labels. Doing it here means runtime errors for regression
-        # if label.type == REMAINING_TIME:
-        #     encoded_log = encoded_log.loc[encoded_log['label'] != 0.0]
-        return encoded_log
-    # Post processing
-    if labelling.type == LabelTypes.REMAINING_TIME.value or labelling.type == LabelTypes.ATTRIBUTE_NUMBER.value or labelling.type == LabelTypes.DURATION.value:
-        return _label_boolean(encoded_log, labelling)
-    return encoded_log
-
-
 def _encode_log(log: EventLog, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")

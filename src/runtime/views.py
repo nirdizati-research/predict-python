@@ -1,18 +1,16 @@
 import django_rq
+from pm4py.objects.log.importer.xes.factory import import_log_from_string
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from pred_models.models import PredModels
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.jobs.serializers import JobSerializer
 from src.split.models import Split
-from .models import XTrace
-from .replayer import Replayer
-from .serializers import TraceSerializer
-from .tasks import runtime_task
+from src.utils.django_orm import duplicate_orm_row
+from .tasks import runtime_task, replay_task, replay_prediction_task
 
-
+'''
 @api_view(['GET'])
 def tracesList(request):  # TODO: changed self to request, check if correct or not
     traces = XTrace.objects.all()
@@ -38,50 +36,69 @@ def get_demo(request, pk, pk1, pk2):
 
     return Response("Finito")
 
-
+'''
 @api_view(['POST'])
-def get_prediction(request):
+def post_prediction(request):
     jobs = []
     data = request.data
+    modelId = int(data['modelId'])
     splitId = int(data['splitId'])
-    regId = int(data['regId'])
-    classId = int(data['classId'])
-    timeSeriesPredId = int(data['timeSeriesPredId'])
-
     split = Split.objects.get(pk=splitId)
 
     try:
-        if regId > 0:
-            job = Job.objects.get(pk=regId)
-            jobs.append(job)
-        if classId > 0:
-            job = Job.objects.get(pk=classId)
-            jobs.append(job)
-        if timeSeriesPredId > 0:
-            job = Job.objects.get(pk=timeSeriesPredId)
-            jobs.append(job)
-    except PredModels.DoesNotExist:
+        job = Job.objects.get(pk=modelId)
+        new_job = duplicate_orm_row(job)
+        new_job.type = JobTypes.RUNTIME.value
+        new_job.spplit = split
+        new_job.save()
+    except Job.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
 
-    for job in jobs:
-        jobtoenqueue = generate_run(job, split)
+    django_rq.enqueue(runtime_task, new_job)
+    serializer = JobSerializer(jobs, many=True)
+    return Response(serializer.data, status=201)
 
-        # django_rq.enqueue(training, jobrun, predictive_model)
-        django_rq.enqueue(runtime_task, jobtoenqueue)
-    # os.system('python3 manage.py rqworker --burst')
+@api_view(['POST'])
+def post_replay_prediction(request):
+    jobs = []
+    data = request.data
+    modelId = int(data['modelId'])
+
+    try:
+        job = Job.objects.get(pk=modelId)
+        new_job = duplicate_orm_row(job)
+        new_job.type = JobTypes.PREDICT.value
+        new_job.save()
+    except Job.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+
+    log = import_log_from_string(data['log'])
+    django_rq.enqueue(replay_prediction_task, job, log)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
 
 
-def generate_run(job: Job, split: Split) -> Job:
-    return Job.objects.get_or_create(
-                    status=JobStatuses.CREATED.value,
-                    type=JobTypes.RUNTIME.value,
-                    encoding=job.encoding,
-                    labelling=job.labelling,
-                    clustering=job.clustering,
-                    hyperparameter_optimizer=job.hyperparameter_optimizer,
-                    predictive_model=job.predictive_model,
-                    split=split,
-                    create_models=False)[0]
+@api_view(['POST'])
+def post_replay(request):
+    jobs = []
+    data = request.data
+    splitId = int(data['splitId'])
+    modelId = int(data['modelId'])
+
+    split = Split.objects.get(pk=splitId)
+
+    try:
+        job = Job.objects.get(pk=modelId)
+        new_job = duplicate_orm_row(job)
+        new_job.type = JobTypes.REPLAY.value
+        new_job.split = split
+        new_job.save()
+    except Job.DoesNotExist:
+        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    django_rq.enqueue(replay_task, new_job)
+    serializer = JobSerializer(jobs, many=True)
+    return Response(serializer.data, status=201)
+
 

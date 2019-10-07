@@ -7,6 +7,7 @@ from enum import Enum
 
 from pandas import DataFrame
 from pm4py.objects.log.log import EventLog
+from sklearn.model_selection import train_test_split
 
 from src.cache.cache import get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
@@ -23,6 +24,7 @@ from src.predictive_model.time_series_prediction import time_series_prediction
 from src.split.models import SplitTypes
 from src.split.splitting import prepare_logs
 from src.utils.django_orm import duplicate_orm_row
+from src.utils.event_attributes import get_additional_columns
 
 logger = logging.getLogger(__name__)
 
@@ -191,14 +193,30 @@ def _init_clusterer(clustering: Clustering, train_data: DataFrame):
 
 
 def runtime_calculate(job: Job) -> dict:
-    """calculate the predictive_model's score for runtime tasks
+    """calculate the prediction for traces in the uncompleted logs
 
-    :param run_log: run dataset
-    :param model: predictive_model dictionary
+    :param job: job idctionary
     :return: runtime results
     """
+
     training_df, test_df = get_encoded_logs(job)
     data_df = pd.concat([training_df,test_df])
+    results = MODEL[job.predictive_model.predictive_model][ModelActions.PREDICT.value](job, data_df)
+    logger.info("End {} job {}, {} . Results {}".format('runtime', job.predictive_model.predictive_model, get_run(job), results))
+    return results
+
+
+def replay_prediction_calculate(job: Job, log) -> dict:
+    """calculate the prediction for the log coming from replayers
+
+    :param job: job idctionary
+    :param log: log model
+    :return: runtime results
+    """
+
+    additional_columns = get_additional_columns(log)
+    data_df, _ = train_test_split(log, test_size=0, shuffle=False)
+    data_df, _ = encode_label_logs(data_df, EventLog(), job, additional_columns)
     results = MODEL[job.predictive_model.predictive_model][ModelActions.PREDICT.value](job, data_df)
     logger.info("End {} job {}, {} . Results {}".format('runtime', job.predictive_model.predictive_model, get_run(job), results))
     return results

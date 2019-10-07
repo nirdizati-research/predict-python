@@ -1,4 +1,4 @@
-import threading
+'''import threading
 from datetime import timedelta
 from random import randint
 
@@ -67,3 +67,4 @@ class Replayer:
                     return
         print("Finito")
         return
+'''

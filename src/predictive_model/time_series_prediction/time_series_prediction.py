@@ -97,12 +97,13 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, f
 
     return results_df, nlevenshtein
 
+
 def predict(job: Job, data: DataFrame) -> Any:
     model_split = joblib.load(job.predictive_model.model_path)
     clusterer = model_split[ModelType.CLUSTERER.value]
-    time_series_predictor = model_split[ModelType.TIME_SERIES_PREDICTOR.value]
-
     test_data = clusterer.cluster_data(data)
+
+    time_series_predictor = joblib.load(job.predictive_model.model_path)
 
     result = None
 

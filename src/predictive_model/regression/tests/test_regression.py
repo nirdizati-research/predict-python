@@ -93,6 +93,7 @@ class TestRegression(TestCase):
         print(result)
         self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
 
+    @unittest.skip('needs refactoring')
     def test_regression_xgboost(self):
         job = create_test_job(
             predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,

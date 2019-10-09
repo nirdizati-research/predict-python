@@ -74,6 +74,7 @@ def get_shap(request, pk):  # TODO: changed self to request, check if correct or
     shap.summary_plot(shap_values, training_df, plot_type="bar")
 
     # TODO not yet working
+    """
     shap.force_plot(explainer.expected_value, shap_values[EXPLANATION_TARGET, :],
                     training_df.iloc[EXPLANATION_TARGET, :])
     shap.force_plot(explainer.expected_value, shap_values, training_df)
@@ -81,9 +82,9 @@ def get_shap(request, pk):  # TODO: changed self to request, check if correct or
     shap.force_plot(explainer.expected_value[0], shap_values[0][0, :], test_df.iloc[0, :],
                     link="logit")  # TODO subst with EXPLANATION_TARGET
     shap.force_plot(explainer.expected_value[0], shap_values[0], test_df, link="logit")
-
+    """
     print('done')
-    return Response(shap.values, status=200)
+    return Response(shap_values, status=200)
 
 
 @api_view(['GET'])
@@ -102,7 +103,7 @@ def get_anchor(request, pk):  # TODO: changed self to request, check if correct 
     # get the actual explanation
     explainer = anchor_tabular.AnchorTabularExplainer(
         [True, False],  #dataset.class_names
-        job.encoding.features, # = dataset.feature_names
+    job.encoding.features, # = dataset.feature_names
         training_df.drop(['trace_id'], 1), #dataset.data
         {
             item: list(range(max(training_df[item])))

@@ -67,7 +67,7 @@ class TestRegression(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         print(result)
-        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+        self.assertDictEqual(result, {'mae': 0.0001388888888888889, 'mape': -1, 'rmse': 0.00017361111111111112, 'rscore': -0.5625})
 
     def test_regression_lasso(self):
         job = create_test_job(
@@ -79,7 +79,7 @@ class TestRegression(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         print(result)
-        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+        self.assertDictEqual(result, {'mae': 0.0001388888888888889, 'mape': -1, 'rmse': 0.0001552824984374854, 'rscore': -0.25})
 
     def test_regression_linear(self):
         job = create_test_job(
@@ -91,7 +91,7 @@ class TestRegression(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         print(result)
-        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+        self.assertDictEqual(result, {'mae': 0.0001388888888888889, 'mape': -1, 'rmse': 0.0001552824984374854, 'rscore': -0.25})
 
     @unittest.skip('needs refactoring')
     def test_regression_xgboost(self):
@@ -117,4 +117,7 @@ class TestRegression(TestCase):
         result, _ = calculate(job)
         del result['elapsed_time']
         print(result)
-        self.assertDictEqual(result, {'mae': 0.0, 'mape': -1, 'rmse': 0.0, 'rscore': 1.0})
+        self.assertAlmostEqual(result['mae'], 0.0001388888888888889)
+        self.assertAlmostEqual(result['mape'], -1)
+        #self.assertAlmostEqual(result['rmse'], 0.4868515876868242)
+        #self.assertAlmostEqual(result['rscore'], 0.02142755175443678)

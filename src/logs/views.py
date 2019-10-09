@@ -1,5 +1,6 @@
 import logging
 
+from pm4py.algo.discovery.alpha import factory as alpha_miner
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response

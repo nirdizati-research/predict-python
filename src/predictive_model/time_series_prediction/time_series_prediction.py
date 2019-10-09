@@ -22,7 +22,9 @@ from src.utils.result_metrics import calculate_results_time_series_prediction, \
 pd.options.mode.chained_assignment = None
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main time series prediction entry point

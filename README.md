@@ -9,12 +9,12 @@ Master
 [![codecov](https://codecov.io/gh/nirdizati-research/predict-python/branch/master/graph/badge.svg)](https://codecov.io/gh/nirdizati-research/predict-python)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/nirdizati-research/predict-python.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nirdizati-research/predict-python/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/nirdizati-research/predict-python.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/nirdizati-research/predict-python/context:python)
+[![Maintainability](https://api.codeclimate.com/v1/badges/98fd94d6a3d53c3f9182/maintainability)](https://codeclimate.com/github/nirdizati-research/predict-python/maintainability)
 
 Development
 
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=development)](https://travis-ci.org/nirdizati-research/predict-python)
 [![codecov](https://codecov.io/gh/nirdizati-research/predict-python/branch/development/graph/badge.svg)](https://codecov.io/gh/nirdizati-research/predict-python)
-
 
 Django backend server for machine learning on event logs.
 

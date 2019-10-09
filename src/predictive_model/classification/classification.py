@@ -26,7 +26,9 @@ from src.utils.result_metrics import calculate_results_classification, get_auc
 pd.options.mode.chained_assignment = None
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main classification entry point
@@ -43,7 +45,7 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
-    job.encoding = duplicate_orm_row(job.encoding) #TODO: maybe here would be better an intelligent get_or_create...
+    job.encoding = duplicate_orm_row(job.encoding)  # TODO: maybe here would be better an intelligent get_or_create...
     job.encoding.features = list(train_data.columns.values)
     job.encoding.save()
     job.save()
@@ -70,7 +72,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
     job.save()
 
     if list(train_data.columns.values) != job.incremental_train.encoding.features:
-        #TODO: how do I align the two feature vectors?
+        # TODO: how do I align the two feature vectors?
         train_data, _ = train_data.align(
             pd.DataFrame(columns=job.incremental_train.encoding.features), axis=1, join='right')
         train_data = train_data.fillna(0)

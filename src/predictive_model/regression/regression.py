@@ -23,7 +23,9 @@ from src.utils.result_metrics import calculate_results_regression
 pd.options.mode.chained_assignment = None
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job) -> (dict, dict):
     """main regression entry point

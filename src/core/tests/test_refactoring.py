@@ -98,14 +98,15 @@ class RefactorProof(TestCase):
             clustering=create_test_clustering(clustering_type=ClusteringMethods.KMEANS.value),
             split=repair_example(),
             encoding=create_test_encoding(prefix_length=5, padding=True),
+            labelling=create_test_labelling(label_type=LabelTypes.DURATION.value),
             predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
                                                           prediction_method=RegressionMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.036930128)
-        self.assertAlmostEqual(result['mae'], 0.023046561975)
-        self.assertAlmostEqual(result['rscore'], 0.99830687)
-        self.assertAlmostEqual(result['mape'], 0.5761640)
+        self.assertAlmostEqual(result['rmse'], 0.48841552839653984)
+        self.assertAlmostEqual(result['mae'], 0.44282462605873457)
+        self.assertAlmostEqual(result['rscore'], 0.015130407121517586)
+        self.assertAlmostEqual(result['mape'], -1)
 
     def test_regression_no_cluster(self):
         self.max_diff = None
@@ -113,11 +114,12 @@ class RefactorProof(TestCase):
             clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value),
             split=repair_example(),
             encoding=create_test_encoding(prefix_length=5, padding=True),
+            labelling=create_test_labelling(label_type=LabelTypes.DURATION.value),
             predictive_model=create_test_predictive_model(predictive_model=PredictiveModels.REGRESSION.value,
                                                           prediction_method=RegressionMethods.RANDOM_FOREST.value)
         )
         result, _ = calculate(job)
-        self.assertAlmostEqual(result['rmse'], 0.03571834)
-        self.assertAlmostEqual(result['mae'], 0.023598078)
-        self.assertAlmostEqual(result['rscore'], 0.99841616)
-        self.assertAlmostEqual(result['mape'], 0.5899519598)
+        self.assertAlmostEqual(result['rmse'], 0.4868515876868242)
+        self.assertAlmostEqual(result['mae'], 0.44340838774645464)
+        self.assertAlmostEqual(result['rscore'], 0.02142755175443678)
+        self.assertAlmostEqual(result['mape'], -1)

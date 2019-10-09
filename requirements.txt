@@ -34,3 +34,4 @@ django-model-utils
 django-polymorphic
 psycopg2
 mock
+anchor_exp

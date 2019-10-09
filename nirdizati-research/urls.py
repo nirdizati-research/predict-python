@@ -6,6 +6,7 @@ from src.split.urls import urlpatterns
 urlpatterns = [
     url(r'^jobs/', include('src.jobs.urls')),
     url(r'^logs/', include('src.logs.urls')),
+    url(r'^explanation/', include('src.explanation.urls')),
     url(r'^splits/', include(urlpatterns)),
     url(r'^admin/', admin.site.urls),
     url(r'^runtime/', include('src.runtime.urls')),

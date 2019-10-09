@@ -17,6 +17,7 @@ from .simple_index import simple_index
 
 logger = logging.getLogger(__name__)
 
+
 def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None):
     training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
                                      cols=None)

@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from src.jobs.models import Job, JobStatuses, JobTypes
+from src.jobs.models import Job, JobTypes
 from src.jobs.serializers import JobSerializer
 from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
@@ -67,7 +67,7 @@ def post_replay_prediction(request):
     try:
         job = Job.objects.get(pk=modelId)
         new_job = duplicate_orm_row(job)
-        new_job.type = JobTypes.PREDICT.value
+        new_job.type = JobTypes.REPLAY_PREDICT.value
         new_job.save()
     except Job.DoesNotExist:
         return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)

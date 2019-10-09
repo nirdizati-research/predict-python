@@ -1,5 +1,6 @@
 import lime
 import lime.lime_tabular
+import matplotlib as plt
 from django.core.management.base import BaseCommand
 from sklearn.externals import joblib
 
@@ -13,7 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         #get model
-        TARGET_MODEL=1090
+        TARGET_MODEL=48
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
 
@@ -39,7 +40,7 @@ class Command(BaseCommand):
         exp.as_list()
 
         #show plot
-        exp.show_in_notebook(show_table=True)
+        #exp.show_in_notebook(show_table=True)
         exp.as_pyplot_figure().show()
         # exp.save_to_file('/tmp/oi.html')
 

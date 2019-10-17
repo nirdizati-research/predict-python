@@ -55,8 +55,8 @@ def get_train_test_log(split: Split):
         if split.additional_columns is None:
             split.additional_columns = split.train_log.name + split.test_log.name + '_ac.xes'
             split.save()
-        training_log, _ = train_test_split(training_log, test_size=0, shuffle=False)
-        test_log, _ = train_test_split(get_log(split.test_log), test_size=0, shuffle=False)
+        training_log, train_log_to_append = train_test_split(training_log, test_size=0, shuffle=False)
+        test_log, test_log_to_append = train_test_split(get_log(split.test_log), test_size=0, shuffle=False)
         logger.info("\t\tLoaded double logs from {} and {}.".format(split.train_log.path, split.test_log.path))
     if len(training_log) == 0:
         raise TypeError("Training log is empty. Create a new Split with better parameters")

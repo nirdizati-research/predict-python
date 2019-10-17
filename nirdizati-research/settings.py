@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'src.common.apps.CommonConfig',
     'src.logs.apps.LogsConfig',
+    'src.explanation.apps.ExplanationConfig',
     'src.split.apps.SplitConfig',
     'src.encoding.apps.EncodingConfig',
     'src.labelling.apps.LabellingConfig',

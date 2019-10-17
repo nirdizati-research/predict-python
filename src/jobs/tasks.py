@@ -40,7 +40,7 @@ def prediction_task(job_id):
                 save_models(model_split, job)
             job.result = result
             job.status = JobStatuses.COMPLETED.value
-        else:
+        elif job.status in [JobStatuses.COMPLETED.value, JobStatuses.ERROR.value, JobStatuses.RUNNING.value]:
             django_rq.enqueue(prediction_task, job.id)
     except Exception as e:
         logger.error(e)

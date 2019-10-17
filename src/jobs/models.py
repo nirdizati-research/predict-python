@@ -33,7 +33,7 @@ class JobTypes(Enum):
     UPDATE = 'update'
     RUNTIME = 'runtime'
     REPLAY = 'replay'
-    REPLAY_PREDICT = 'reaply_predict'
+    REPLAY_PREDICT = 'replay_predict'
 
 
 JOB_STATUS_MAPPINGS = (
@@ -49,7 +49,7 @@ JOB_TYPE_MAPPINGS = (
     (JobTypes.UPDATE.value, 'update'),
     (JobTypes.RUNTIME.value, 'runtime'),
     (JobTypes.REPLAY.value, 'replay'),
-    (JobTypes.REPLAY_PREDICT.value, 'reaply_predict')
+    (JobTypes.REPLAY_PREDICT.value, 'replay_predict')
 )
 
 

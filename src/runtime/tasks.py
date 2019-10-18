@@ -83,8 +83,7 @@ def create_prediction_job(job: Job, max_len: int) -> Job:
     new_job = duplicate_orm_row(job)
     new_job.type = JobTypes.PREDICTION.value
     new_job.status = JobStatuses.CREATED.value
-    old_encoding = Encoding.objects.filter(pk=job.encoding.id)[0]
-    new_encoding = duplicate_orm_row(old_encoding)
+    new_encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.id)[0])
     new_encoding.prefix_length = max_len
     new_encoding.save()
     new_job.encoding = new_encoding

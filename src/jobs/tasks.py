@@ -55,29 +55,11 @@ def prediction_task(job_id):
 def save_models(models: dict, job: Job):
     logger.info("\tStart saving models of JOB {}".format(job.id))
     if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
-        clusterer_filename = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(
-            job.id,
-            job.split.id,
-            job.type)
-        joblib.dump(models[ModelType.CLUSTERER.value], clusterer_filename)
-        job.clustering.model_path = clusterer_filename
+        joblib.dump(models[ModelType.CLUSTERER.value], job.clustering.model_path)
         job.clustering.save()
         job.save()
 
-    if job.type == JobTypes.UPDATE.value:
-        job.type = JobTypes.PREDICTION.value #TODO: Y am I doing this?
-        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
-            job.id,
-            job.split.id,
-            job.type,
-            str(time.time()))
-    else:
-        predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
-            job.id,
-            job.split.id,
-            job.type)
-    joblib.dump(models[job.predictive_model.predictive_model], predictive_model_filename)
-    job.predictive_model.model_path = predictive_model_filename
+    joblib.dump(models[job.predictive_model.predictive_model], job.predictive_model.model_path)
     job.predictive_model.save()
     job.save()
 

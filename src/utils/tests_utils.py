@@ -3,7 +3,7 @@ from src.encoding.models import Encoding, DataEncodings, TaskGenerationTypes
 from src.encoding.models import ValueEncodings
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization, \
     HyperOptLosses
-from src.jobs.job_creator import get_prediction_method_config
+from src.jobs.job_creator import get_prediction_method_config, set_model_name
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling, LabelTypes, ThresholdTypes
 from src.logs.models import Log
@@ -135,4 +135,5 @@ def create_test_job(split: Split = None,
         hyperparameter_optimizer=hyperparameter_optimizer,
         incremental_train=incremental_train
     )
+    set_model_name(job)
     return job

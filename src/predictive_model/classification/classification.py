@@ -16,6 +16,7 @@ from xgboost import XGBClassifier
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
+from src.encoding.models import Encoding
 from src.jobs.models import Job, ModelType
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
@@ -45,7 +46,7 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
-    job.encoding = duplicate_orm_row(job.encoding)  # TODO: maybe here would be better an intelligent get_or_create...
+    job.encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.pk)[0])  # TODO: maybe here would be better an intelligent get_or_create...
     job.encoding.features = list(train_data.columns.values)
     job.encoding.save()
     job.save()

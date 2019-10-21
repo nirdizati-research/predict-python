@@ -3,7 +3,7 @@ from src.explanation.models import Explanation
 
 
 def explain(lime_exp: Explanation, training_df, test_df):
-    EXPLANATION_TARGET = 1
+    explanation_target = 1
     # get the actual explanation
     explainer = lime.lime_tabular.LimeTabularExplainer(
         training_df.drop(['trace_id', 'label'], 1).as_matrix(),
@@ -13,7 +13,7 @@ def explain(lime_exp: Explanation, training_df, test_df):
         mode='classification',
     )
     exp = explainer.explain_instance(
-        test_df.drop(['trace_id', 'label'], 1).iloc[EXPLANATION_TARGET],
+        test_df.drop(['trace_id', 'label'], 1).iloc[explanation_target],
         # TODO probably the opposite would be way less computationally intesive
         lime_exp.predictive_model.predict_proba,
         num_features=5

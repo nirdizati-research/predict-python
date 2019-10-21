@@ -10,33 +10,7 @@ from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
 from .tasks import runtime_task, replay_task, replay_prediction_task
 
-'''
-@api_view(['GET'])
-def tracesList(request):  # TODO: changed self to request, check if correct or not
-    traces = XTrace.objects.all()
-    serializer = TraceSerializer(traces, many=True)
-    return Response(serializer.data, status=200)
 
-
-@api_view(['GET'])
-def modelList(request):
-    completed_jobs = Job.objects.filter(
-        status=JobStatuses.COMPLETED.value,
-        type=JobTypes.PREDICTION.value,
-        create_models=True
-    )
-    serializer = JobSerializer(completed_jobs, many=True)
-    return Response(serializer.data, status=200)
-
-
-@api_view(['GET'])
-def get_demo(request, pk, pk1, pk2):
-    replay = Replayer(pk, pk1, pk2)
-    replay.start()
-
-    return Response("Finito")
-
-'''
 @api_view(['POST'])
 def post_prediction(request):
     jobs = []
@@ -53,7 +27,7 @@ def post_prediction(request):
         new_job.split = split
         new_job.save()
     except Job.DoesNotExist:
-        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Job ' + str(modelId) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     django_rq.enqueue(runtime_task, new_job)
     serializer = JobSerializer(jobs, many=True)
@@ -75,7 +49,7 @@ def post_replay_prediction(request):
         replay_prediction_job.status = JobStatuses.CREATED.value
         replay_prediction_job.save()
     except Job.DoesNotExist:
-        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Job ' + str(modelId) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     log = import_log_from_string(data['log'])
     django_rq.enqueue(replay_prediction_task, replay_prediction_job, training_initial_job,  log)
@@ -100,7 +74,7 @@ def post_replay(request):
         new_job.split = split
         new_job.save()
     except Job.DoesNotExist:
-        return Response({'error': 'not in database'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'Job ' + str(modelId) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     django_rq.enqueue(replay_task, new_job, training_initial_job)
     serializer = JobSerializer(jobs, many=True)

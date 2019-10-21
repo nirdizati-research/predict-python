@@ -47,7 +47,7 @@ class Command(BaseCommand):
         # show plot
         idx = 0
         np.random.seed(1)
-        print('Prediction: ', explainer.class_names[model_fn(test_df.drop(['trace_id', 'label'], 1)[idx].reshape(1, -1))[0]])
+        print('Prediction: ', explainer.class_names[model_fn(test_df.drop(['trace_id', 'label'], 1).as_matrix()[idx].reshape(1, -1))[0]])
         exp = explainer.explain_instance(test_df.drop(['trace_id', 'label'], 1).as_matrix()[idx], model_fn, threshold=0.95)
         print('Anchor: %s' % (' AND '.join(exp.names())))
         print('Precision: %.2f' % exp.precision())

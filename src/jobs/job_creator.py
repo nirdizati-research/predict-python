@@ -1,11 +1,14 @@
+import time
+
 from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.encoding_container import UP_TO
 from src.encoding.models import Encoding, ValueEncodings
-from src.hyperparameter_optimization.models import HyperparameterOptimization
+from src.hyperparameter_optimization.models import HyperparameterOptimization, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModel
 from src.predictive_model.models import PredictiveModels
+from src.utils.django_orm import duplicate_orm_row
 
 
 def generate(split, payload):
@@ -106,9 +109,20 @@ def generate(split, payload):
                         predictive_model=predictive_model,
                         create_models=config.get('create_models', False)
                     )[0]
+
+                    check_predictive_model_not_overwrite(job)
+                    set_model_name(job)
+
                     jobs.append(job)
 
     return jobs
+
+
+def check_predictive_model_not_overwrite(job: Job) -> None:
+    if job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
+        job.predictive_model = duplicate_orm_row(PredictiveModel.objects.filter(pk=job.predictive_model.pk)[0])
+        job.predictive_model.save()
+        job.save()
 
 
 def get_prediction_method_config(predictive_model, prediction_method, payload):
@@ -117,6 +131,37 @@ def get_prediction_method_config(predictive_model, prediction_method, payload):
         'prediction_method': prediction_method,
         **payload.get(predictive_model + '.' + prediction_method, {})
     }
+
+
+def set_model_name(job: Job) -> None:
+    if job.create_models:
+        if job.predictive_model.model_path != '':
+            job.predictive_model = duplicate_orm_row(PredictiveModel.objects.filter(pk=job.predictive_model.pk)[0])
+            job.predictive_model.save()
+            job.save()
+
+        if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
+            job.clustering.model_path = 'cache/model_cache/job_{}-split_{}-clusterer-{}-v0.sav'.format(
+                job.id,
+                job.split.id,
+                job.type)
+            job.clustering.save()
+
+        if job.type == JobTypes.UPDATE.value:
+            job.type = JobTypes.PREDICTION.value #TODO: Y am I doing this?
+            predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v{}.sav'.format(
+                job.id,
+                job.split.id,
+                job.type,
+                str(time.time()))
+        else:
+            predictive_model_filename = 'cache/model_cache/job_{}-split_{}-predictive_model-{}-v0.sav'.format(
+                job.id,
+                job.split.id,
+                job.type)
+        job.predictive_model.model_path = predictive_model_filename
+        job.predictive_model.save()
+        job.save()
 
 
 def generate_labelling(split, payload):

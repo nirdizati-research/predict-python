@@ -21,7 +21,7 @@ from src.predictive_model.classification import classification
 from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression import regression
 from src.predictive_model.time_series_prediction import time_series_prediction
-from src.split.models import SplitTypes
+from src.split.models import SplitTypes, Split
 from src.split.splitting import get_train_test_log
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.event_attributes import get_additional_columns
@@ -103,7 +103,7 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
             else:
                 training_log, test_log, additional_columns = get_train_test_log(job.split)
                 if job.split.type == SplitTypes.SPLIT_SINGLE.value:
-                    job.split = duplicate_orm_row(job.split)
+                    job.split = duplicate_orm_row(Split.objects.filter(pk=job.split.pk)[0])
                     job.split.type = SplitTypes.SPLIT_DOUBLE.value
                     train_name = '0-' + str(int(100 - (job.split.test_size * 100)))
                     job.split.train_log = create_log(

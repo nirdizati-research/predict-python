@@ -23,7 +23,7 @@ def get_lime(request, pk):
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.LIME.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
-    result = explanation(exp)
+    result = explanation(exp.id)
     return Response(result, status=200)
 
 
@@ -33,7 +33,7 @@ def get_shap(request, pk):
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.SHAP.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
-    result = explanation(exp)
+    result = explanation(exp.id)
     return Response(result, status=200)
 
 
@@ -43,5 +43,5 @@ def get_anchor(request, pk):
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.ANCHOR.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
-    result = explanation(exp)
+    result = explanation(exp.id)
     return Response(result, status=200)

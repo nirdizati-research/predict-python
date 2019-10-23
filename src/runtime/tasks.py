@@ -12,7 +12,7 @@ from .replay import replay_core
 
 @job("default", timeout='100h')
 def runtime_task(job):
-    print("Start runtime task ID {}".format(job.pk))
+    print("Start runtime task ID {}".format(job.id))
     try:
         job.status = JobStatuses.RUNNING.value
         job.save()
@@ -30,9 +30,10 @@ def runtime_task(job):
         publish(job)\
 
 
+
 @job("default", timeout='100h')
 def replay_prediction_task(replay_prediction_job, training_initial_job, log):
-    print("Start runtime task ID {}".format(job.pk))
+    print("Start runtime task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
         replay_prediction_job.save()
@@ -41,11 +42,12 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
             prediction_job = create_prediction_job(training_initial_job, max_len)
             prediction_task(prediction_job.id)
             prediction_job.refresh_from_db()
-            replay_predict_job = duplicate_orm_row(prediction_job)
-            replay_predict_job.split = Split.objects.filter(pk=replay_prediction_job.split.id)[0]
-            replay_predict_job.type = JobTypes.REPLAY_PREDICT.value
-            replay_predict_job.status = JobStatuses.CREATED.value
-            replay_prediction_task(replay_predict_job, log)
+            new_replay_prediction_job = duplicate_orm_row(prediction_job)
+            new_replay_prediction_job.split = Split.objects.filter(pk=replay_prediction_job.split.id)[0]
+            new_replay_prediction_job.type = JobTypes.REPLAY_PREDICT.value
+            new_replay_prediction_job.status = JobStatuses.CREATED.value
+            replay_prediction_task(new_replay_prediction_job, prediction_job, log)
+            return
         result = replay_prediction_calculate(replay_prediction_job, log)
         replay_prediction_job.results = {'result': str(result)}
         replay_prediction_job.status = JobStatuses.COMPLETED.value
@@ -62,7 +64,7 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 
 @job("default", timeout='100h')
 def replay_task(replay_job, training_initial_job):
-    print("Start replay task ID {}".format(replay_job.pk))
+    print("Start replay task ID {}".format(replay_job.id))
     try:
         replay_job.status = JobStatuses.RUNNING.value
         replay_job.save()

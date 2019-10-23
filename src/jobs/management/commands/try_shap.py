@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         #get model
-        TARGET_MODEL=48
+        TARGET_MODEL=21
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
         model = model[0]
@@ -22,6 +22,7 @@ class Command(BaseCommand):
 
         #get radom point in evaluation set
         EXPLANATION_TARGET = 1
+        FEATURE_TARGET = 1
 
         #get the actual explanation
         explainer = shap.TreeExplainer(model)
@@ -29,7 +30,8 @@ class Command(BaseCommand):
 
         #show plot
         shap.summary_plot(shap_values, training_df)
-        shap.summary_plot(shap_values, training_df, plot_type="bar")
+        shap.force_plot(explainer.expected_value, shap_values, training_df)
+        shap.embedding_plot(FEATURE_TARGET, shap_values=shap_values[FEATURE_TARGET])
 
         #TODO not yet working
         shap.force_plot(explainer.expected_value, shap_values[EXPLANATION_TARGET, :], training_df.iloc[EXPLANATION_TARGET, :])

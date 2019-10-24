@@ -65,10 +65,11 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 @job("default", timeout='100h')
 def replay_task(replay_job, training_initial_job):
     print("Start replay task ID {}".format(replay_job.id))
+    requests = list()
     try:
         replay_job.status = JobStatuses.RUNNING.value
         replay_job.save()
-        replay_core(replay_job, training_initial_job)
+        requests = replay_core(replay_job, training_initial_job)
         replay_job.status = JobStatuses.COMPLETED.value
         replay_job.error = ''
     except Exception as e:
@@ -79,6 +80,7 @@ def replay_task(replay_job, training_initial_job):
     finally:
         replay_job.save()
         publish(replay_job)
+        return requests
 
 
 def create_prediction_job(job: Job, max_len: int) -> Job:

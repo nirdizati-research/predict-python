@@ -67,7 +67,7 @@ class JobModelTest(TestCase):
         self.assertEqual('completed', job.status)
         self.assertNotEqual({}, job.evaluation)
 
-    @unittest.skip('needs refacotring')
+    @unittest.skip('needs refactoring')
     def test_create_models_config_missing(self):
         job = create_test_job()
         del job.create_models  # TODO fixme should we add this field?
@@ -175,7 +175,7 @@ class CreateJobsTests(APITestCase):
             }
         }
 
-    @unittest.skip('needs refacotring')
+    @unittest.skip('needs refactoring')
     def test_class_job_creation(self):
         client = APIClient()
         response = client.post('/jobs/multiple', self.job_obj(create_test_split(original_log=create_test_log()).id), format='json')

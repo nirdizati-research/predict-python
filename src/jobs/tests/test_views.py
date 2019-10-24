@@ -38,7 +38,7 @@ class TestViews(APITestCase):
         response = client.post('/jobs/', {'id': 1}, format='json')
         self.assertNotEqual(db_id, dict(response.data)['id'])
 
-    @unittest.skip('needs refacotring')
+    @unittest.skip('needs refactoring')
     def test_create_multiple(self):
         create_test_split(original_log=create_test_log())
 

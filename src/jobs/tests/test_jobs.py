@@ -231,9 +231,7 @@ class CreateJobsTests(APITestCase):
                 'create_models': False,
                 'methods': ['linear'],
                 'kmeans': {},
-                'incremental_train': {
-                    'base_model': None,
-                },
+                'incremental_train': [],
                 'hyperparameter_optimizer': {
                     'algorithm_type': 'tpe',
                     'max_evaluations': 10,

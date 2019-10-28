@@ -64,7 +64,7 @@ def create_multiple(request):
         return Response({'error': 'split_id ' + str(payload['split_id']) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     # detect either or not a predictive_model to update has been specified otherwise train a new one.
-    if 'incremental_train' in payload['config'] and payload['config']['incremental_train']['base_model'] is not None:
+    if 'incremental_train' in payload['config'] and len(payload['config']['incremental_train']) > 0:
         jobs = update(split, payload)
     elif payload['type'] in [e.value for e in PredictiveModels]:
         jobs = generate(split, payload)

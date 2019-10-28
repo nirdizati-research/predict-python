@@ -17,13 +17,16 @@ EXPLANATION = {
 }
 
 
-def explanation(exp_id: int):
+def explanation(exp_id: int, explanation_target: int = 0):
     exp = Explanation.objects.filter(pk=exp_id)[0]
     job = exp.job
     # load data
     training_df, test_df = get_encoded_logs(job)
 
-    result = EXPLANATION[exp.type][EXPLAIN](exp, training_df, test_df)
+    if int(explanation_target) > len(test_df):
+        return 'True', len(test_df)
 
-    return result
+    result = EXPLANATION[exp.type][EXPLAIN](exp, training_df, test_df, explanation_target)
+
+    return 'False', result
 

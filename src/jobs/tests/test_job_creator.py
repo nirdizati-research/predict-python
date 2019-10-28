@@ -270,9 +270,7 @@ class TestJobCreator(TestCase):
                 'create_models': False,
                 'methods': ['randomForest'],
                 'kmeans': {},
-                'incremental_train': {
-                    'base_model': job.id,
-                },
+                'incremental_train': [job.id],
                 'hyperparameter_optimizer': {
                     'algorithm_type': 'tpe',
                     'max_evaluations': 10,

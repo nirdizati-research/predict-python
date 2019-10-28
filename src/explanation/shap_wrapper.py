@@ -2,7 +2,7 @@ import shap
 from src.explanation.models import Explanation
 
 
-def explain(shap_exp: Explanation, training_df, test_df):
+def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
     explainer = shap.TreeExplainer(shap_exp.predictive_model)
     shap_values = explainer.shap_values(training_df)
 

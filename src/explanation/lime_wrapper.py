@@ -5,8 +5,7 @@ from sklearn.externals import joblib
 from src.explanation.models import Explanation
 
 
-def explain(lime_exp: Explanation, training_df, test_df):
-    explanation_target = 1
+def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
     model = joblib.load(lime_exp.predictive_model.model_path)
     # get the actual explanation
     explainer = lime.lime_tabular.LimeTabularExplainer(

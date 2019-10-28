@@ -18,13 +18,19 @@ from src.split.splitting import get_train_test_log
 
 
 @api_view(['GET'])
-def get_lime(request, pk):
+def get_lime(request, pk, explanation_target):
     job = Job.objects.filter(pk=pk)[0]
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.LIME.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
-    result = explanation(exp.id)
-    return Response(result, status=200)
+
+    error, result = explanation(exp.id, int(explanation_target))
+
+    if error == 'True':
+        return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
+                        status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+    else:
+        return Response(result, status=200)
 
 
 @api_view(['GET'])

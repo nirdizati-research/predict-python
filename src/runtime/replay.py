@@ -30,7 +30,7 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
         filtered_eventlog = timestamp_filter.apply_events(eventlog, times[0].replace(tzinfo=None),
                                                           t.replace(tzinfo=None))
         try:
-            r = requests.post("http://0.0.0.0:8000/runtime/replay_prediction/",  # TODO: using static address docker mapping
+            r = requests.post("http://localhost:8000/runtime/replay_prediction/",  # TODO: using static address docker mapping
                               data={'log': export_log_as_string(filtered_eventlog),
                                     'modelId': replay_job.id,
                                     'training_job': training_initial_job.id})

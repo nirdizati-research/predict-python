@@ -28,7 +28,7 @@ class Explanation(CommonModel):
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)
     job = models.ForeignKey(Job, on_delete=models.DO_NOTHING, null=True, default=None)
-    results = JSONField(default={})
+    results = JSONField(default=dict)
 
     def to_dict(self):
         return {

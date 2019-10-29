@@ -50,7 +50,7 @@ class Labelling(CommonModel):
     attribute_name = models.CharField(default=None, max_length=20, null=True, blank=True)
     threshold_type = models.CharField(choices=THRESHOLD_TYPE_MAPPINGS, default='none', max_length=max(len(el[1]) for el in THRESHOLD_TYPE_MAPPINGS) + 1, null=True, blank=True)
     threshold = models.IntegerField(default=0, null=True, blank=True)
-    results = JSONField(default={})
+    results = JSONField(default=dict)
 
     def to_dict(self):
         return {

@@ -1,5 +1,5 @@
 from django.db import models
-from jsonfield.fields import JSONField
+from django.contrib.postgres.fields import JSONField
 
 from src.common.models import CommonModel
 

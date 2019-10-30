@@ -1,4 +1,4 @@
-import sys
+import json
 
 import requests
 from pm4py.objects.log.exporter.xes.factory import export_log_as_string
@@ -32,11 +32,11 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
 
         try:
 
-            r = requests.post("http://localhost:8000/runtime/replay_prediction/",
+            r = requests.post("http://localhost:80/runtime/replay_prediction/",
                               # TODO: using static address docker mapping
-                              data={'log': export_log_as_string(filtered_eventlog),
-                                    'jobId': replay_job.id,
-                                    'training_job': training_initial_job.id})
+                              data=json.dumps({'log': export_log_as_string(filtered_eventlog).decode('utf-8'),
+                                               'jobId': replay_job.id,
+                                               'training_job': training_initial_job.id}))
             requests_list.append(str(r))
         except requests.ConnectionError as e:
             requests_list.append(str(e))

@@ -1,7 +1,7 @@
 from enum import Enum
 
 from django.db import models
-from jsonfield.fields import JSONField
+from django.contrib.postgres.fields import JSONField
 
 from src.common.models import CommonModel
 
@@ -53,7 +53,7 @@ class Encoding(CommonModel):
     add_executed_events = models.BooleanField(default=False)
     add_resources_used = models.BooleanField(default=False)
     add_new_traces = models.BooleanField(default=False)
-    features = JSONField(default={})  # TODO is this correct?
+    features = JSONField(default=dict)  # TODO is this correct?
     prefix_length = models.PositiveIntegerField()
     padding = models.BooleanField(default=False)
     task_generation_type = models.CharField(choices=TASK_GENERATION_TYPE_MAPPINGS, default='only_this', max_length=max(len(el[1]) for el in TASK_GENERATION_TYPE_MAPPINGS)+1)

@@ -31,7 +31,8 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
                                                           t.replace(tzinfo=None))
 
         try:
-            r = requests.post("http://localhost:8000git add /runtime/replay_prediction/",
+
+            r = requests.post("http://localhost:8000/runtime/replay_prediction/",
                               # TODO: using static address docker mapping
                               data={'log': export_log_as_string(filtered_eventlog),
                                     'jobId': replay_job.id,

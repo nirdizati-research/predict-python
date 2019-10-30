@@ -1,7 +1,7 @@
 from enum import Enum
 
 from django.db import models
-from jsonfield.fields import JSONField
+from django.contrib.postgres.fields import JSONField
 
 from src.common.models import CommonModel
 from src.jobs.models import Job
@@ -28,7 +28,7 @@ class Explanation(CommonModel):
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)
     job = models.ForeignKey(Job, on_delete=models.DO_NOTHING, null=True, default=None)
-    results = JSONField(default={})
+    results = JSONField(default=dict)
 
     def to_dict(self):
         return {

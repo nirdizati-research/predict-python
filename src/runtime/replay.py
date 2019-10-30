@@ -34,9 +34,10 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
 
             r = requests.post("http://localhost:80/runtime/replay_prediction/",
                               # TODO: using static address docker mapping
-                              data=json.dumps({'log': export_log_as_string(filtered_eventlog).decode('utf-8'),
-                                               'jobId': replay_job.id,
-                                               'training_job': training_initial_job.id}))
+                              data=json.dumps(
+                                  {'log': export_log_as_string(filtered_eventlog).decode('utf-8').replace('\'', '"'),
+                                   'jobId': replay_job.id,
+                                   'training_job': training_initial_job.id}))
             requests_list.append(str(r))
         except requests.ConnectionError as e:
             requests_list.append(str(e))

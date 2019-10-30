@@ -1,4 +1,7 @@
+import logging
+
 from django_rq.decorators import job
+from rest_framework import status
 
 from src.core.core import runtime_calculate, replay_prediction_calculate
 from src.encoding.models import Encoding
@@ -9,10 +12,12 @@ from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
 from .replay import replay_core
 
+logger = logging.getLogger(__name__)
+
 
 @job("default", timeout='100h')
 def runtime_task(job):
-    print("Start runtime task ID {}".format(job.id))
+    logger.info("Start runtime task ID {}".format(job.id))
     try:
         job.status = JobStatuses.RUNNING.value
         job.save()
@@ -21,7 +26,7 @@ def runtime_task(job):
         job.status = JobStatuses.COMPLETED.value
         job.error = ''
     except Exception as e:
-        print("error " + str(e.__repr__()))
+        logger.error(e)
         job.status = JobStatuses.ERROR.value
         job.error = str(e.__repr__())
         raise e
@@ -33,7 +38,7 @@ def runtime_task(job):
 
 @job("default", timeout='100h')
 def replay_prediction_task(replay_prediction_job, training_initial_job, log):
-    print("Start runtime task ID {}".format(replay_prediction_job.id))
+    logger.info("Start runtime task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
         replay_prediction_job.save()
@@ -53,7 +58,7 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
         replay_prediction_job.status = JobStatuses.COMPLETED.value
         replay_prediction_job.error = ''
     except Exception as e:
-        print("error " + str(e.__repr__()))
+        logger.error(e)
         replay_prediction_job.status = JobStatuses.ERROR.value
         replay_prediction_job.error = str(e.__repr__())
         raise e
@@ -64,18 +69,21 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 
 @job("default", timeout='100h')
 def replay_task(replay_job, training_initial_job):
-    print("Start replay task ID {}".format(replay_job.id))
+    logger.info("Start replay task ID {}".format(replay_job.id))
     requests = list()
     try:
         replay_job.status = JobStatuses.RUNNING.value
+        replay_job.error = ''
         replay_job.save()
         requests = replay_core(replay_job, training_initial_job)
         replay_job.status = JobStatuses.COMPLETED.value
-        replay_job.error = ''
+        for r in requests:
+            if r.status_code != status.HTTP_201_CREATED:
+                replay_job.error += [r]
     except Exception as e:
-        print("error " + str(e.__repr__()))
+        logger.error(e)
         replay_job.status = JobStatuses.ERROR.value
-        replay_job.error = str(e.__repr__())
+        replay_job.error += [str(e.__repr__())]
         raise e
     finally:
         replay_job.save()

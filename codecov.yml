@@ -10,5 +10,3 @@ ignore:
   - "./scripts/**"
   - "./src/jobs/management/commands/**.py"
 #  TEMPORARY EXCLUSIONS
-  - "src/runtime/**"
-  - "pred_models/**"

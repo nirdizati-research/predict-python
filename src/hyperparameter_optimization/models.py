@@ -1,6 +1,5 @@
 from enum import Enum
 
-from django.core.validators import MinValueValidator
 from django.db import models
 from model_utils.managers import InheritanceManager
 

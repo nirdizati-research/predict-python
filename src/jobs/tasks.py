@@ -1,6 +1,5 @@
 import logging
 import time
-from datetime import timedelta
 
 import django_rq
 from django_rq.decorators import job

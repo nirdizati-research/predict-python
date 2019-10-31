@@ -4,7 +4,6 @@ from src.clustering.models import Clustering
 from src.common.models import CommonModel
 from src.encoding.models import Encoding
 from src.labelling.models import Labelling
-from src.predictive_model.models import PredictiveModel
 from src.split.models import Split
 
 

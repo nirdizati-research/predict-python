@@ -12,18 +12,17 @@ from src.jobs.models import JobTypes, Job
 from src.labelling.label_container import *
 from src.labelling.models import Labelling
 from src.predictive_model.models import PredictiveModels
+from src.split.splitting import get_train_test_log
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
 
 logger = logging.getLogger(__name__)
 
 
-def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None):
-    training_log, cols = _encode_log(training_log, job.encoding, job.labelling, additional_columns=additional_columns,
-                                     cols=None)
-    # TODO pass the columns of the training log
+def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None, encode=True):
     logger.info('\tDataset not found in cache, building..')
-    test_log, _ = _encode_log(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
+    training_log, cols = _eventlog_to_dataframe(training_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=None)
+    test_log, _ = _eventlog_to_dataframe(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
 
     labelling = job.labelling
     if (labelling.threshold_type in [ThresholdTypes.THRESHOLD_MEAN.value, ThresholdTypes.THRESHOLD_CUSTOM.value]) and (
@@ -44,26 +43,13 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
         training_log['label'] = training_log['label'].astype(float)
         test_log['label'] = test_log['label'].astype(float)
 
-    # TODO: store and reuse the encoder in order to allow easier explanation through lime.
-    if job.type != JobTypes.LABELLING.value and \
-       job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
-       job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value and \
-       job.predictive_model.predictive_model != PredictiveModels.REGRESSION.value:
-        # init nominal encode
-        encoder = Encoder(training_log, job.encoding)
-        encoder.encode(training_log, job.encoding)
-        encoder.encode(test_log, job.encoding)
-    elif job.type != JobTypes.LABELLING.value and \
-         job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
-         job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
-        encoder = Encoder(training_log.drop('label', axis=1), job.encoding)
-        encoder.encode(training_log, job.encoding)
-        encoder.encode(test_log, job.encoding)
+    if encode:
+        _data_encoder_encoder(job, training_log, test_log)
 
     return training_log, test_log
 
 
-def _encode_log(log: EventLog, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
+def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if encoding.value_encoding == ValueEncodings.SIMPLE_INDEX.value:
@@ -81,8 +67,35 @@ def _encode_log(log: EventLog, encoding: Encoding, labelling: Labelling, additio
     elif encoding.value_encoding == ValueEncodings.LAST_PAYLOAD.value:
         run_df = last_payload(log, labelling, encoding, additional_columns)
     else:
-        raise ValueError("Unknown value encoding method {}".format(encoding.value_encoding))
+        raise ValueError("Unknown value encoding method {}".format(encoding.value_encoding.value_encoding))
     return run_df, cols
+
+
+def _data_encoder_encoder(job: Job, training_log, test_log) -> None:
+    if job.type != JobTypes.LABELLING.value and \
+       job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
+       job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
+        if job.incremental_train is not None:
+            encoder = retrieve_proper_encoder(job.incremental_train)
+        else:
+            if job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value and \
+               job.predictive_model.predictive_model != PredictiveModels.REGRESSION.value:
+                encoder = Encoder(training_log, job.encoding)
+            elif job.predictive_model.predictive_model == PredictiveModels.REGRESSION.value:
+                encoder = Encoder(training_log.drop('label', axis=1), job.encoding)
+
+        encoder.encode(training_log, job.encoding)
+        encoder.encode(test_log, job.encoding)
+
+
+def retrieve_proper_encoder(job: Job) -> Encoder:
+    if job.incremental_train is not None:
+        return retrieve_proper_encoder(job.incremental_train)
+    else:
+        training_log, test_log, additional_columns = get_train_test_log(job.split)
+        training_df, _ = encode_label_logs(training_log, test_log, job, additional_columns=additional_columns,
+                                           encode=False)
+    return Encoder(training_df, job.encoding)
 
 
 def _label_boolean(df: DataFrame, label: LabelContainer) -> DataFrame:

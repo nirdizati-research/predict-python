@@ -3,7 +3,11 @@ from enum import Enum
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+from src.clustering.models import Clustering
 from src.common.models import CommonModel
+from src.labelling.models import Labelling
+from src.predictive_model.models import PredictiveModel
+from src.split.models import Split
 
 
 class DataEncodings(Enum):
@@ -53,7 +57,7 @@ class Encoding(CommonModel):
     add_executed_events = models.BooleanField(default=False)
     add_resources_used = models.BooleanField(default=False)
     add_new_traces = models.BooleanField(default=False)
-    features = JSONField(default=dict)  # TODO is this correct?
+    features = JSONField(default=dict)
     prefix_length = models.PositiveIntegerField()
     padding = models.BooleanField(default=False)
     task_generation_type = models.CharField(choices=TASK_GENERATION_TYPE_MAPPINGS, default='only_this', max_length=max(len(el[1]) for el in TASK_GENERATION_TYPE_MAPPINGS)+1)

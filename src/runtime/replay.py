@@ -42,7 +42,11 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
                                    'jobId': replay_job.id,
                                    'training_job': training_initial_job.id}))
             requests_list.append(str(r))
-        except requests.ConnectionError as e:
+        except Exception as e:
             requests_list.append(str(e))
-
+            logger.warning(str(e))
+            try:
+                logger.warning(str(r))
+            except:
+                pass
     return requests_list

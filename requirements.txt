@@ -34,3 +34,4 @@ django-polymorphic
 psycopg2
 mock
 anchor_exp
+Cython

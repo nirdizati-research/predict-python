@@ -1,12 +1,15 @@
 import json
-
+import logging
 import requests
+
 from pm4py.objects.log.exporter.xes.factory import export_log_as_string
 from pm4py.objects.log.log import EventLog, Trace
 from pm4py.algo.filtering.log.timestamp import timestamp_filter
 
 from src.jobs.models import Job
 from src.utils.file_service import get_log
+
+logger = logging.getLogger(__name__)
 
 
 def replay_core(replay_job: Job, training_initial_job: Job) -> list:
@@ -31,7 +34,7 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
                                                           t.replace(tzinfo=None))
 
         try:
-
+            logger.info("Sending request for replay_prediction task.")
             r = requests.post("http://localhost:80/runtime/replay_prediction/",
                               # TODO: using static address docker mapping
                               data=json.dumps(

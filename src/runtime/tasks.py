@@ -38,7 +38,7 @@ def runtime_task(job):
 
 @job("default", timeout='100h')
 def replay_prediction_task(replay_prediction_job, training_initial_job, log):
-    logger.info("Start runtime task ID {}".format(replay_prediction_job.id))
+    logger.info("Start replay_prediction task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
         replay_prediction_job.save()

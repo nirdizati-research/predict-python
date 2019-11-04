@@ -24,6 +24,7 @@ class JobSerializer(serializers.ModelSerializer):
             'clustering': job.clustering.to_dict() if job.clustering is not None else None,
             'predictive_model': predictive_model.get_full_dict() if job.predictive_model is not None else None,
             'evaluation': evaluation.get_full_dict() if job.evaluation is not None else None,
+            'results': job.results if job.results is not None else None,
             'hyperparameter_optimizer': hyperparameter_optimizer.get_full_dict() if job.hyperparameter_optimizer is not None else None,
             'incremental_train': job.incremental_train.to_dict() if job.incremental_train is not None else None
         }

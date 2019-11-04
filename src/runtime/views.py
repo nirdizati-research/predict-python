@@ -1,3 +1,4 @@
+import json
 import logging
 import django_rq
 from pm4py.objects.log.importer.xes.factory import import_log_from_string
@@ -40,7 +41,7 @@ def post_prediction(request):
 @api_view(['POST'])
 def post_replay_prediction(request):
     jobs = []
-    data = request.data
+    data = json.loads(str(list(request._data.keys())[0] + request._data[list(request._data.keys())[0]])) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
     job_id = int(data['jobId'])
     training_initial_job_id = int(data['training_job'])
     logger.info("Creating replay_prediction task")

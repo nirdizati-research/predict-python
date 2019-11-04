@@ -3,6 +3,7 @@ import logging
 
 from pandas import DataFrame
 from pm4py.objects.log.log import EventLog
+from sklearn.externals import joblib
 
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload

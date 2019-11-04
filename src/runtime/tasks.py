@@ -69,7 +69,7 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 
 @job("default", timeout='100h')
 def replay_task(replay_job, training_initial_job):
-    logger.info("Start replay task ID {}".format(replay_job.id))
+    logger.error("Start replay task ID {}".format(replay_job.id))
     requests = list()
     try:
         replay_job.status = JobStatuses.RUNNING.value

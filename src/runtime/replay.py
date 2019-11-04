@@ -34,7 +34,7 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
                                                           t.replace(tzinfo=None))
 
         try:
-            logger.info("Sending request for replay_prediction task.")
+            logger.warning("Sending request for replay_prediction task.")
             r = requests.post("http://localhost:80/runtime/replay_prediction/",
                               # TODO: using static address docker mapping
                               data=json.dumps(

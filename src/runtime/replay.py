@@ -42,7 +42,7 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
                                    'jobId': replay_job.id,
                                    'training_job': training_initial_job.id}))
             requests_list.append(str(r))
-            logger.warning("DEBUG::http://server:8000/runtime/replay_prediction/",
+            logger.warning("DEBUG::http://server:8000/runtime/replay_prediction/ ########" +
                            str(json.dumps({
                                  'log': export_log_as_string(filtered_eventlog).decode('utf-8').replace("'", '"'),
                                  'jobId': replay_job.id,

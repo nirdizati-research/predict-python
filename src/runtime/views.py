@@ -1,15 +1,15 @@
-import json
 import logging
 import django_rq
 from pm4py.objects.log.importer.xes.factory import import_log_from_string
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.response import Response
 
 from src.jobs.models import Job, JobTypes, JobStatuses
 from src.jobs.serializers import JobSerializer
 from src.runtime.tasks import runtime_task, replay_prediction_task, replay_task
 from src.split.models import Split
+from src.utils.custom_parser import CustomXMLParser
 from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
@@ -39,12 +39,11 @@ def post_prediction(request):
 
 
 @api_view(['POST'])
+@parser_classes([CustomXMLParser])
 def post_replay_prediction(request):
     jobs = []
-    asdf = str(list(request.data.keys())[0] + request.data[list(request.data.keys())[0]]) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
-    data = json.loads(asdf) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
-    job_id = int(data['jobId'])
-    training_initial_job_id = int(data['training_job'])
+    job_id = int(request.query_params['jobId'])
+    training_initial_job_id = int(request.query_params['training_job'])
     logger.info("Creating replay_prediction task")
 
     try:
@@ -58,7 +57,7 @@ def post_replay_prediction(request):
         return Response({'error': 'Job ' + str(job_id) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
 
     logger.info("Enqueuing replay_prediction task ID {}".format(replay_prediction_job.id))
-    log = import_log_from_string(data['log'])
+    log = import_log_from_string(request.data.decode('utf-8'))
     django_rq.enqueue(replay_prediction_task, replay_prediction_job, training_initial_job,  log)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=status.HTTP_201_CREATED)

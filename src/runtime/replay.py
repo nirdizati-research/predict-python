@@ -1,4 +1,3 @@
-import json
 import logging
 import requests
 
@@ -33,26 +32,16 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
         filtered_eventlog = timestamp_filter.apply_events(eventlog, times[0].replace(tzinfo=None),
                                                           t.replace(tzinfo=None))
 
-        try:
-            logger.warning("Sending request for replay_prediction task.")
-            r = requests.post("http://server:8000/runtime/replay_prediction/",
-                              # TODO: using static address docker mapping
-                              data=json.dumps(
-                                  {'log': export_log_as_string(filtered_eventlog).decode('utf-8').replace("'", '"'),
-                                   'jobId': replay_job.id,
-                                   'training_job': training_initial_job.id}))
+        try: #TODO check logger usage
+            logger.info("Sending request for replay_prediction task.")
+            r = requests.post(
+                url="http://server:80/runtime/replay_prediction/",
+                data=export_log_as_string(filtered_eventlog),
+                params={'jobId': replay_job.id, 'training_job': training_initial_job.id},
+                headers={'Content-Type': 'text/plain', 'charset': 'UTF-8'}
+            )
             requests_list.append(str(r))
-            logger.warning("DEBUG::http://server:8000/runtime/replay_prediction/ ########" +
-                           str(json.dumps({
-                                 'log': export_log_as_string(filtered_eventlog).decode('utf-8').replace("'", '"'),
-                                 'jobId': replay_job.id,
-                                 'training_job': training_initial_job.id})))
-            logger.warning(str(r))
         except Exception as e:
             requests_list.append(str(e))
             logger.warning(str(e))
-            try:
-                logger.warning(str(r))
-            except:
-                pass
     return requests_list

@@ -41,7 +41,8 @@ def post_prediction(request):
 @api_view(['POST'])
 def post_replay_prediction(request):
     jobs = []
-    data = json.loads(str(list(request.data.keys())[0] + request.data[list(request.data.keys())[0]])) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
+    asdf = str(list(request.data.keys())[0] + request.data[list(request.data.keys())[0]]) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
+    data = json.loads(asdf) # TODO: VERY BAD WORKAROUND SEARCH FIX A$AP!
     job_id = int(data['jobId'])
     training_initial_job_id = int(data['training_job'])
     logger.info("Creating replay_prediction task")

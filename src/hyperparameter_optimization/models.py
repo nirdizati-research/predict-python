@@ -22,6 +22,7 @@ class HyperparameterOptimization(CommonModel):
     optimization_method = models.CharField(choices=HYPERPARAMETER_OPTIMIZATION_METHOD,
                                            default='hyperopt',
                                            max_length=20)
+    elapsed_time = models.DurationField(null=True)
     objects = InheritanceManager()
 
     @staticmethod
@@ -30,6 +31,7 @@ class HyperparameterOptimization(CommonModel):
         if hyperparameter_optimizer_type == HyperparameterOptimizationMethods.HYPEROPT.value:
             default_configuration = hyperparameter_optimization_hyperopt()
             return HyperOpt.objects.get_or_create(
+                elapsed_time=configuration['elapsed_time'] if 'elapsed_time' in configuration and configuration['elapsed_time'] != '--' else None,
                 optimization_method=hyperparameter_optimizer_type,
                 max_evaluations=configuration.get('max_evaluations', default_configuration['max_evaluations']),
                 performance_metric=configuration.get('performance_metric', default_configuration['performance_metric']),
@@ -40,6 +42,11 @@ class HyperparameterOptimization(CommonModel):
                 optimization_method=HyperparameterOptimizationMethods.NONE.value)[0]
         else:
             raise ValueError('hyperparameter optimizer type {} not recognized'.format(hyperparameter_optimizer_type))
+
+    def to_dict(self) -> dict:
+        return {
+            'elapsed_time': self.elapsed_time
+        }
 
 
 class HyperOptAlgorithms(Enum):
@@ -92,6 +99,7 @@ class HyperOpt(HyperparameterOptimization):
 
     def to_dict(self):
         return {
+            'elapsed_time': self.elapsed_time,
             'max_evaluations': self.max_evaluations,
             'performance_metric': self.performance_metric,
             'algorithm_type': self.algorithm_type

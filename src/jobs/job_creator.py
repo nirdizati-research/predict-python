@@ -68,6 +68,9 @@ def generate(split, payload):
                             create_models=config.get('create_models', False)
                         )[0]
 
+                        check_predictive_model_not_overwrite(job)
+                        set_model_name(job)
+
                         jobs.append(job)
                 else:
                     predictive_model = PredictiveModel.init(
@@ -247,7 +250,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                     encoding = payload['config']['encoding']
                     if encoding['generation_type'] == UP_TO:
                         for i in range(1, encoding['prefix_length'] + 1):
-                            item, _ = Job.objects.get_or_create(
+                            job, _ = Job.objects.get_or_create(
                                 status=JobStatuses.CREATED.value,
                                 type=JobTypes.UPDATE.value,
                                 split=split,
@@ -283,9 +286,13 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                     pk=incremental_base_model
                                 )[0]
                             )
-                            jobs.append(item)
+
+                            check_predictive_model_not_overwrite(job)
+                            set_model_name(job)
+
+                            jobs.append(job)
                     else:
-                        item, _ = Job.objects.get_or_create(
+                        job, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=JobTypes.UPDATE.value,
 
@@ -322,5 +329,9 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 pk=incremental_base_model
                             )[0]
                         )
-                        jobs.append(item)
+
+                        check_predictive_model_not_overwrite(job)
+                        set_model_name(job)
+
+                        jobs.append(job)
     return jobs

@@ -1,5 +1,6 @@
 import logging
 import time
+from datetime import timedelta
 
 import django_rq
 from django_rq.decorators import job
@@ -33,7 +34,11 @@ def prediction_task(job_id):
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
-            job_elapsed_time = time.time() - job_start_time #todo: this is not stored anywhere
+            job_elapsed_time = time.time() - job_start_time
+            if job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE:
+                job.hyperparameter_optimizer.elapsed_time = timedelta(seconds=job_elapsed_time)
+                job.hyperparameter_optimizer.save()
+                job.save()
             logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(job_elapsed_time))))
             if job.create_models:
                 save_models(model_split, job)

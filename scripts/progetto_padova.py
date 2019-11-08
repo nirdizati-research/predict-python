@@ -17,6 +17,8 @@ from src.predictive_model.models import PredictiveModel, PredictiveModels
 from src.split.models import Split, SplitTypes
 from src.split.splitting import get_train_test_log
 
+import pandas as pd
+
 BASE_DIR = 'cache/log_cache/'
 RELATIVE_TRAIN_PATH = 'train_set.xes'
 RELATIVE_VALIDATION_PATH = 'validation_set.xes'
@@ -32,12 +34,14 @@ def progetto_padova():
             train_log=create_log(  # this imports the log
                 import_log(BASE_DIR + RELATIVE_TRAIN_PATH),
                 RELATIVE_TRAIN_PATH,
-                BASE_DIR
+                BASE_DIR,
+                import_in_cache=False
             ),
             test_log=create_log(  # this imports the log
                 import_log(BASE_DIR + RELATIVE_VALIDATION_PATH),
                 RELATIVE_VALIDATION_PATH,
-                BASE_DIR
+                BASE_DIR,
+                import_in_cache=False
             )
         )[0],
         encoding=Encoding.objects.get_or_create(  # this defines the encoding method
@@ -80,27 +84,30 @@ def progetto_padova():
         create_models=True
     )[0]
 
-    # encode
+    # load log
     train_log, test_log, additional_columns = get_train_test_log(JOB.split)
+
+    # encode
     train_df, test_df = encode_label_logs(train_log, test_log, JOB)
 
     # train + evaluate
-    clusterer = _init_clusterer(JOB.clustering, train_df)
     results, model_split = MODEL[JOB.predictive_model.predictive_model][ModelActions.BUILD_MODEL_AND_TEST.value](
         train_df,
         test_df,
-        clusterer,
+        _init_clusterer(JOB.clustering, train_df),
         JOB
     )
 
+    # predict
+    data_df = pd.concat([train_df, test_df])
+    results = MODEL[JOB.predictive_model.predictive_model][ModelActions.PREDICT.value](JOB, data_df)
+
     # lime
-    exp, _ = Explanation.objects.get_or_create(
+    exp = Explanation.objects.get_or_create(
         type=ExplanationTypes.LIME.value,
-        split=JOB.split,
+        split=JOB.split,  # this defines the analysed log, you can use a different one from the training one
         predictive_model=JOB.predictive_model,
         job=JOB
-    )
-    exp.save()
-
+    )[0]
     error, result = explanation(exp.id, int(EXPLANATION_TARGET))
 

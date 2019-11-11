@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
     logger.info('\tCreating new file (' + name + ') in memory')
-    name = create_unique_name(name)
+    if import_in_cache:
+        name = create_unique_name(name)
     path = folder + name
     if import_in_cache:
         if isinstance(log, EventLog):
@@ -24,11 +25,8 @@ def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
         else:
             default_storage.save(path, ContentFile(log.read()))
             log = import_log(path)
-    else:
-        if isinstance(log, EventLog):
-            raise NotImplementedError('log import without saving in memory not yet supported, '
-                                      'stand alone should work but will cause waterfall errors')
-        else:
+    else:  # TODO: this might be risky
+        if not isinstance(log, EventLog):
             log = import_log(path)
     properties = create_properties(log)
     return Log.objects.create(name=name, path=path, properties=properties)

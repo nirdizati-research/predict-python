@@ -69,7 +69,7 @@ def generate(split, payload):
                         )[0]
 
                         check_predictive_model_not_overwrite(job)
-                        set_model_name(job)
+
 
                         jobs.append(job)
                 else:
@@ -114,7 +114,6 @@ def generate(split, payload):
                     )[0]
 
                     check_predictive_model_not_overwrite(job)
-                    set_model_name(job)
 
                     jobs.append(job)
 
@@ -288,7 +287,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             )
 
                             check_predictive_model_not_overwrite(job)
-                            set_model_name(job)
+
 
                             jobs.append(job)
                     else:
@@ -331,7 +330,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                         )
 
                         check_predictive_model_not_overwrite(job)
-                        set_model_name(job)
+
 
                         jobs.append(job)
     return jobs

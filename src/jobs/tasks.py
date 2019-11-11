@@ -10,6 +10,7 @@ from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
 from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
+from src.jobs.job_creator import set_model_name
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
 
@@ -58,6 +59,8 @@ def prediction_task(job_id):
 
 
 def save_models(models: dict, job: Job):
+    set_model_name(job)
+
     logger.info("\tStart saving models of JOB {}".format(job.id))
     if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
         joblib.dump(models[ModelType.CLUSTERER.value], job.clustering.model_path)

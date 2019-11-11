@@ -13,7 +13,7 @@ from src.cache.cache import get_labelled_logs, get_loaded_logs, \
     put_loaded_logs, put_labelled_logs
 from src.cache.models import LabelledLog, LoadedLog
 from src.clustering.clustering import Clustering
-from src.encoding.common import encode_label_logs
+from src.encoding.common import encode_label_logs, data_encoder_decoder
 from src.evaluation.models import Evaluation
 from src.jobs.models import JobTypes, Job
 from src.logs.log_service import create_log
@@ -206,20 +206,22 @@ def runtime_calculate(job: Job) -> dict:
     return results
 
 
-def replay_prediction_calculate(job: Job, log) -> dict:
+def replay_prediction_calculate(job: Job, log) -> (dict, dict):
     """calculate the prediction for the log coming from replayers
 
     :param job: job idctionary
     :param log: log model
     :return: runtime results
     """
-
     additional_columns = get_additional_columns(log)
     data_df, _ = train_test_split(log, test_size=0, shuffle=False)
     data_df, _ = encode_label_logs(data_df, EventLog(), job, additional_columns)
     results = MODEL[job.predictive_model.predictive_model][ModelActions.PREDICT.value](job, data_df)
     logger.info("End {} job {}, {} . Results {}".format('runtime', job.predictive_model.predictive_model, get_run(job), results))
-    return results
+    results_dict = dict(zip(data_df['trace_id'], results))
+    events_for_trace = dict()
+    data_encoder_decoder(job, data_df, EventLog())
+    return results_dict, events_for_trace
 
 
 def get_run(job: Job) -> str:

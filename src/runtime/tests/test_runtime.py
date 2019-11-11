@@ -7,7 +7,6 @@ from time import sleep
 from django.test.testcases import TestCase
 from rest_framework.test import APIClient
 
-from src.jobs.models import JobTypes, Job
 from src.jobs.tasks import prediction_task
 from src.runtime.tasks import runtime_task, replay_task, replay_prediction_task
 from src.split.models import SplitTypes, SplitOrderingMethods
@@ -31,7 +30,7 @@ class TestRuntime(TestCase):
                                               test_log=runtime_log)
 
         requests = replay_task(runtime_job, job)
-        self.assertEqual(len(requests), 6)
+        self.assertEqual(len(requests), 2)
 
     def test_create_replay(self):
         job = create_test_job()
@@ -69,7 +68,7 @@ class TestRuntime(TestCase):
 
         runtime_task(job)
 
-    def test_runtime(self):
+    def test_replay_prediction(self):
         job = create_test_job(create_models=True)
         runtime_log = create_test_log(log_name='runtime_example.xes',
                                       log_path='cache/log_cache/test_logs/runtime_test.xes')

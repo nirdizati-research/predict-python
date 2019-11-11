@@ -8,6 +8,7 @@ from src.encoding.models import Encoding
 from src.jobs.models import JobStatuses, JobTypes, Job
 from src.jobs.tasks import prediction_task
 from src.jobs.ws_publisher import publish
+from src.logs.models import Log
 from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
 from .replay import replay_core
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @job("default", timeout='100h')
-def runtime_task(job):
+def runtime_task(job: Job):
     logger.info("Start runtime task ID {}".format(job.id))
     try:
         job.status = JobStatuses.RUNNING.value
@@ -32,12 +33,11 @@ def runtime_task(job):
         raise e
     finally:
         job.save()
-        publish(job)\
-
+        publish(job)
 
 
 @job("default", timeout='100h')
-def replay_prediction_task(replay_prediction_job, training_initial_job, log):
+def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job, log: Log):
     logger.info("Start replay_prediction task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
@@ -53,8 +53,9 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
             new_replay_prediction_job.status = JobStatuses.CREATED.value
             replay_prediction_task(new_replay_prediction_job, prediction_job, log)
             return
-        result = replay_prediction_calculate(replay_prediction_job, log)
-        replay_prediction_job.results = {'result': str(result)}
+        result_dict, events_for_trace = replay_prediction_calculate(replay_prediction_job, log)
+        replay_prediction_job.results = result_dict
+        replay_prediction_job.event_number = events_for_trace
         replay_prediction_job.status = JobStatuses.COMPLETED.value
         replay_prediction_job.error = ''
     except Exception as e:
@@ -68,7 +69,7 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 
 
 @job("default", timeout='100h')
-def replay_task(replay_job, training_initial_job):
+def replay_task(replay_job: Job, training_initial_job: Job) -> list:
     logger.error("Start replay task ID {}".format(replay_job.id))
     requests = list()
     try:
@@ -102,3 +103,8 @@ def create_prediction_job(job: Job, max_len: int) -> Job:
     new_job.create_models = True
     new_job.save()
     return new_job
+
+
+def get_gold_values(get_value_job: Job, log: Log) -> dict:
+    gold_values = dict()
+    return gold_values

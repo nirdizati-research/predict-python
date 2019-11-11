@@ -39,4 +39,7 @@ class JobSerializer(serializers.ModelSerializer):
             'status',
             'type',
             'results',
+            'case_id',
+            'gold_value',
+            'event_number',
             'config')

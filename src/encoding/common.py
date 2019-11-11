@@ -72,7 +72,7 @@ def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelli
     return run_df, cols
 
 
-def _data_encoder_encoder(job: Job, training_log, test_log) -> None:
+def _data_encoder_encoder(job: Job, training_log, test_log) -> Encoder:
     if job.type != JobTypes.LABELLING.value and \
        job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
        job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
@@ -87,6 +87,13 @@ def _data_encoder_encoder(job: Job, training_log, test_log) -> None:
 
         encoder.encode(training_log, job.encoding)
         encoder.encode(test_log, job.encoding)
+
+        return encoder
+
+
+def data_encoder_decoder(job: Job, training_log, test_log) -> None:
+    encoder = retrieve_proper_encoder(job)
+    encoder.decode(training_log, job.encoding), encoder.decode(test_log, job.encoding)
 
 
 def retrieve_proper_encoder(job: Job) -> Encoder:

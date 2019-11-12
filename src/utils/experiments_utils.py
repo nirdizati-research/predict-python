@@ -82,12 +82,13 @@ def send_job_request(
 
 
 def retrieve_job(
-    id,
+    config,
     server_name="0.0.0.0",
     server_port='8000'
 ):
     r = requests.get(
-        'http://' + server_name + ':' + server_port + '/jobs/' + str(id),
-        headers={'Content-type': 'application/json'}
+        'http://' + server_name + ':' + server_port + '/jobs/',
+        headers={'Content-type': 'application/json'},
+        json=config
     )
     return json.loads(r.text)

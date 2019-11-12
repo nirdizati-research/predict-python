@@ -10,6 +10,8 @@ from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.hyperparameter_optimization.models import HyperOptLosses, HyperOptAlgorithms, HyperparameterOptimizationMethods
 from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
+from src.clustering.models import ClusteringMethods
+from src.jobs.models import JobStatuses, JobTypes
 from src.utils.experiments_utils import upload_split, send_job_request, create_payload, retrieve_job
 
 
@@ -21,7 +23,8 @@ def retrieve_predictive_model_configuration(predictive_model_config):
 
 
 def init_database(experimentation_type, splits, dataset, base_folder):
-    splits[dataset] = {}
+    if dataset not in splits:
+        splits[dataset] = {}
 
     if experimentation_type == ExperimentationType.STD.value:
         splits[dataset]['0-40_80-100'] = upload_split(train=base_folder + dataset + '0-40.xes',
@@ -101,6 +104,34 @@ def std_experiments(dataset, prefix_length, models, splits, classification_metho
 
 
 def incremental_experiments(dataset, prefix_length, models, splits, classification_method, encoding_method):
+    pretrained_model_parameters = retrieve_predictive_model_configuration(
+            retrieve_job(config={
+                'type': JobTypes.PREDICTION.value,
+                'status': JobStatuses.COMPLETED.value,
+                'create_models': True,
+                'split': splits[dataset]['0-40_80-100'],
+                'encoding': {"value_encoding": encoding_method,
+                             "padding": True,
+                             "generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
+                             "prefix_length": prefix_length,
+                             "features": []},
+                'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
+                              "attribute_name": "label",
+                              "add_remaining_time": False,
+                              "add_elapsed_time": False,
+                              "add_executed_events": False,
+                              "add_resources_used": False,
+                              "add_new_traces": False},
+                'hyperparameter_optimization': {"optimization_method": HyperparameterOptimizationMethods.HYPEROPT.value},
+                                                # "max_evaluations": 1000, #TODO not yet supported
+                                                # "performance_metric": HyperOptLosses.AUC.value,
+                                                # "algorithm_type": HyperOptAlgorithms.TPE.value},
+                'predictive_model': {'predictive_model': 'classification',
+                                     'prediction_method': [classification_method]},
+                'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
+            })
+        )
+
     payload = create_payload(
         split=splits[dataset]['0-80_80-100'],
         encodings=[encoding_method],
@@ -118,14 +149,13 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
         hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value},
         classification=[classification_method]
     )
-    # TODO THIS IS THE CONFIGURATION FROM PREV MODEL
-    payload.update(retrieve_predictive_model_configuration(
-        retrieve_job(id=models[dataset]['0-40_80-100'])['config']['predictive_model']))
+
+    payload.update(pretrained_model_parameters)
+
     models[dataset]['0-80_80-100'] = send_job_request(payload=payload)[0]['id']
 
-    if classification_method != "randomForest":
-        models[dataset]['40-80_80-100'] = send_job_request(
-            payload=create_payload(
+    if classification_method != ClassificationMethods.RANDOM_FOREST.value:
+        payload = create_payload(
                 split=splits[dataset]['40-80_80-100'],
                 encodings=[encoding_method],
                 encoding={"padding": "zero_padding",
@@ -140,10 +170,12 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                           "add_resources_used": False,
                           "add_new_traces": False},
                 classification=[classification_method],
-                hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value},
-                incremental_train={"base_model": models[dataset]['0-40_80-100']}
-            )
-        )[0]['id']
+                hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value}
+        )
+
+        payload.update(pretrained_model_parameters)
+
+        models[dataset]['40-80_80-100'] = send_job_request(payload=payload)[0]['id']
 
 
 def drift_size_experimentation(dataset, prefix_length, models, splits, classification_method, encoding_method):
@@ -207,7 +239,8 @@ def launch_experimentation(experimentation_type, datasets, splits, base_folder, 
         init_database(experimentation_type, splits, dataset, base_folder)
 
         print(dataset, '[:::] Batch of logs uploaded')
-        models[dataset] = {}
+        if dataset not in models:
+            models[dataset] = {}
 
         for prefix_length in prefixes:  # NB: if you add something the splits and models are overwritten
             for classification_method in classification_methods:  # NB: if you add something the models are overwritten
@@ -229,6 +262,8 @@ if __name__ == '__main__':
 
     base_folder = '/home/wrizzi/Documents/datasets/'
     base_folder = '/Users/Brisingr/Desktop/TEMP/dataset/prom_labeled_data/CAiSE18/'
+
+    experimentation = ExperimentationType.INCREMENTAL.value
 
     datasets1 = [
         'BPI11/f1/',
@@ -316,42 +351,65 @@ if __name__ == '__main__':
     }
 
     models = {}
+    if experimentation == ExperimentationType.STD.value:
+        launch_experimentation(
+            ExperimentationType.STD.value,
+            datasets1,
+            splits,
+            base_folder,
+            models,
+            prefixes=[30, 50, 70],
+            classification_methods=[
+                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                ClassificationMethods.SGDCLASSIFIER.value,
+                ClassificationMethods.PERCEPTRON.value,
+                ClassificationMethods.RANDOM_FOREST.value],
+            encodings=[
+                ValueEncodings.SIMPLE_INDEX.value,
+                ValueEncodings.COMPLEX.value]
+        )
+        json.dump(splits, open("splits.json", 'w'))
+        json.dump(models, open("models.json", 'w'))
+    elif experimentation == ExperimentationType.DRIFT_SIZE.value:
+        launch_experimentation(
+            ExperimentationType.DRIFT_SIZE.value,
+            datasets2,
+            splits,
+            base_folder,
+            models,
+            prefixes=[3, 5, 7],
+            classification_methods=[
+                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                ClassificationMethods.SGDCLASSIFIER.value,
+                ClassificationMethods.PERCEPTRON.value,
+                ClassificationMethods.RANDOM_FOREST.value],
+            encodings=[
+                ValueEncodings.SIMPLE_INDEX.value,
+                ValueEncodings.COMPLEX.value]
+        )
+        json.dump(splits, open("splits.json", 'w'))
+        json.dump(models, open("models.json", 'w'))
+    elif experimentation == ExperimentationType.INCREMENTAL.value:
+        splits = json.load(open("../splits.json", 'r'))
+        models = json.load(open("../models.json", 'r'))
 
-    launch_experimentation(
-        ExperimentationType.STD.value,
-        datasets1,
-        splits,
-        base_folder,
-        models,
-        prefixes=[30, 50, 70],
-        classification_methods=[
-            ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
-            ClassificationMethods.SGDCLASSIFIER.value,
-            ClassificationMethods.PERCEPTRON.value,
-            ClassificationMethods.RANDOM_FOREST.value],
-        encodings=[
-            ValueEncodings.SIMPLE_INDEX.value,
-            ValueEncodings.COMPLEX.value]
-    )
-
-    launch_experimentation(
-        ExperimentationType.STD.value,
-        datasets2,
-        splits,
-        base_folder,
-        models,
-        prefixes=[3, 5, 7],
-        classification_methods=[
-            ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
-            ClassificationMethods.SGDCLASSIFIER.value,
-            ClassificationMethods.PERCEPTRON.value,
-            ClassificationMethods.RANDOM_FOREST.value],
-        encodings=[
-            ValueEncodings.SIMPLE_INDEX.value,
-            ValueEncodings.COMPLEX.value]
-    )
-
-    json.dump(splits, open("splits.json", 'w'))
-    json.dump(models, open("models.json", 'w'))
+        launch_experimentation(
+            ExperimentationType.INCREMENTAL.value,
+            datasets1,
+            splits,
+            base_folder,
+            models,
+            prefixes=[30, 50, 70],
+            classification_methods=[
+                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                ClassificationMethods.SGDCLASSIFIER.value,
+                ClassificationMethods.PERCEPTRON.value,
+                ClassificationMethods.RANDOM_FOREST.value],
+            encodings=[
+                ValueEncodings.SIMPLE_INDEX.value,
+                ValueEncodings.COMPLEX.value]
+        )
+        json.dump(splits, open("splits.json", 'w'))
+        json.dump(models, open("models.json", 'w'))
 
     print("End of the experiments")

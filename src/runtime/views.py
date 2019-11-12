@@ -17,6 +17,11 @@ logger = logging.getLogger(__name__)
 
 @api_view(['POST'])
 def post_prediction(request):
+    """ Post request to have a single static prediction
+
+        :param request: json
+        :return: Response
+    """
     jobs = []
     data = request.data
     job_id = int(data['jobId'])
@@ -41,6 +46,11 @@ def post_prediction(request):
 @api_view(['POST'])
 @parser_classes([CustomXMLParser])
 def post_replay_prediction(request):
+    """ Post request to have a single prediction during the replay of a log
+
+        :param request: json
+        :return: Response
+    """
     jobs = []
     job_id = int(request.query_params['jobId'])
     training_initial_job_id = int(request.query_params['training_job'])
@@ -66,6 +76,11 @@ def post_replay_prediction(request):
 
 @api_view(['POST'])
 def post_replay(request):
+    """ Post request to start a demo of a log arriving to server
+
+        :param request: json
+        :return: Response
+    """
     jobs = []
     data = request.data
     split_id = int(data['splitId'])

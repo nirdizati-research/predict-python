@@ -16,6 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 def replay_core(replay_job: Job, training_initial_job: Job) -> list:
+    """The function create a set with timestamps of events, then create a list of requests
+        simulating the log in the time passing
+
+        :param replay_job: job dictionary
+        :param training_initial_job: job dictionary
+        :return: List of requests
+    """
 
     split = replay_job.split
     log = get_log(split.train_log)

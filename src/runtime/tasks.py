@@ -20,6 +20,10 @@ logger = logging.getLogger(__name__)
 
 @job("default", timeout='100h')
 def runtime_task(job: Job):
+    """ The function create a runtime task to ask a single prediction to the server
+
+        :param job: job dictionary
+    """
     logger.info("Start runtime task ID {}".format(job.id))
     try:
         job.status = JobStatuses.RUNNING.value
@@ -40,6 +44,12 @@ def runtime_task(job: Job):
 
 @job("default", timeout='100h')
 def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job, log: Log):
+    """ The function create a replat prediction task to ask a single prediction to the server for a portion of a trace
+
+        :param replay_prediction_job: job dictionary
+        :param training_initial_job: job dictionary
+        :param log: job dictionary
+    """
     logger.info("Start replay_prediction task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
@@ -73,6 +83,12 @@ def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job
 
 @job("default", timeout='100h')
 def replay_task(replay_job: Job, training_initial_job: Job) -> list:
+    """ The function create a replay task to ask the server to demo the arriving of events
+
+        :param replay_job: job dictionary
+        :param training_initial_job: job dictionary
+        :return: List of requests
+    """
     logger.error("Start replay task ID {}".format(replay_job.id))
     requests = list()
     try:
@@ -96,6 +112,12 @@ def replay_task(replay_job: Job, training_initial_job: Job) -> list:
 
 
 def create_prediction_job(job: Job, max_len: int) -> Job:
+    """ The function create a new prediction job to create a model when it isn't in the database
+
+        :param job: job dictionary
+        :param max_len: job dictionary
+        :return: Job
+    """
     new_job = duplicate_orm_row(job)
     new_job.type = JobTypes.PREDICTION.value
     new_job.status = JobStatuses.CREATED.value
@@ -106,8 +128,3 @@ def create_prediction_job(job: Job, max_len: int) -> Job:
     new_job.create_models = True
     new_job.save()
     return new_job
-
-
-def get_gold_values(get_value_job: Job, log: Log) -> dict:
-    gold_values = dict()
-    return gold_values

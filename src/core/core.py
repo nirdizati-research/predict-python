@@ -209,7 +209,7 @@ def runtime_calculate(job: Job) -> dict:
 def replay_prediction_calculate(job: Job, log) -> (dict, dict):
     """calculate the prediction for the log coming from replayers
 
-    :param job: job idctionary
+    :param job: job dictionary
     :param log: log model
     :return: runtime results
     """

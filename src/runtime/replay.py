@@ -9,6 +9,7 @@ from pm4py.algo.filtering.log.timestamp import timestamp_filter
 from src.encoding.common import encode_label_logs
 from src.jobs.models import Job, JobTypes
 from src.split.splitting import get_train_test_log
+from src.utils.django_orm import duplicate_orm_row
 from src.utils.file_service import get_log
 
 logger = logging.getLogger(__name__)
@@ -39,8 +40,8 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
         for trace in filtered_eventlog:
             trace_list.append(trace.attributes['concept:name'])
             event_number[trace.attributes['concept:name']] = len(trace)
-        replay_job.case_id = json.dumps(trace_list)
-        replay_job.event_number = json.dumps(event_number)
+        replay_job.case_id = trace_list
+        replay_job.event_number = event_number
         replay_job.save()
         try: #TODO check logger usage
             logger.info("Sending request for replay_prediction task.")
@@ -59,7 +60,10 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
     training_df, _ = encode_label_logs(training_log, test_log, replay_job, additional_columns=additional_columns)
 
     gold_values = dict(zip(training_df['trace_id'], training_df['label']))
-    replay_job.gold_value = gold_values
-    replay_job.type = JobTypes.REPLAY_PREDICT.value
-    replay_job.save()
+    parent_id = replay_job.id
+    final_job = duplicate_orm_row(replay_job)
+    final_job.parent_job = Job.objects.filter(pk=parent_id)[0]
+    final_job.gold_value = gold_values
+    final_job.type = JobTypes.REPLAY_PREDICT.value
+    final_job.save()
     return requests_list

@@ -61,7 +61,7 @@ class Job(CommonModel):
     status = models.CharField(choices=JOB_STATUS_MAPPINGS, default=JobStatuses.CREATED.value, max_length=max(len(el[1]) for el in JOB_STATUS_MAPPINGS)+1)
     type = models.CharField(choices=JOB_TYPE_MAPPINGS, default=JobTypes.PREDICTION.value, max_length=max(len(el[1]) for el in JOB_TYPE_MAPPINGS)+1)
     create_models = models.BooleanField(default=False)
-    case_id = models.CharField(default='', max_length=500)
+    case_id = JSONField(default=dict)
     event_number = JSONField(default=dict)
     gold_value = JSONField(default=dict)
     results = JSONField(default=dict)

@@ -1,5 +1,7 @@
+import json
 import logging
 
+import numpy
 from django_rq.decorators import job
 from rest_framework import status
 
@@ -50,12 +52,13 @@ def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job
             new_replay_prediction_job = duplicate_orm_row(prediction_job)
             new_replay_prediction_job.split = Split.objects.filter(pk=replay_prediction_job.split.id)[0]
             new_replay_prediction_job.type = JobTypes.REPLAY_PREDICT.value
+            new_replay_prediction_job.parent_job = replay_prediction_job.parent_job
             new_replay_prediction_job.status = JobStatuses.CREATED.value
             replay_prediction_task(new_replay_prediction_job, prediction_job, log)
             return
         result_dict, events_for_trace = replay_prediction_calculate(replay_prediction_job, log)
-        replay_prediction_job.results = result_dict
-        replay_prediction_job.event_number = events_for_trace
+        replay_prediction_job.results = dict(result_dict)
+        replay_prediction_job.event_number = dict(events_for_trace)
         replay_prediction_job.status = JobStatuses.COMPLETED.value
         replay_prediction_job.error = ''
     except Exception as e:

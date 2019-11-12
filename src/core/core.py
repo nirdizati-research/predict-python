@@ -218,7 +218,7 @@ def replay_prediction_calculate(job: Job, log) -> (dict, dict):
     data_df, _ = encode_label_logs(data_df, EventLog(), job, additional_columns)
     results = MODEL[job.predictive_model.predictive_model][ModelActions.PREDICT.value](job, data_df)
     logger.info("End {} job {}, {} . Results {}".format('runtime', job.predictive_model.predictive_model, get_run(job), results))
-    results_dict = dict(zip(data_df['trace_id'], results))
+    results_dict = dict(zip(data_df['trace_id'], list(map(int, results))))
     events_for_trace = dict()
     data_encoder_decoder(job, data_df, EventLog())
     return results_dict, events_for_trace

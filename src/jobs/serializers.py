@@ -26,7 +26,8 @@ class JobSerializer(serializers.ModelSerializer):
             'evaluation': evaluation.get_full_dict() if job.evaluation is not None else None,
             'results': job.results if job.results is not None else None,
             'hyperparameter_optimizer': hyperparameter_optimizer.get_full_dict() if job.hyperparameter_optimizer is not None else None,
-            'incremental_train': job.incremental_train.to_dict() if job.incremental_train is not None else None
+            'incremental_train': job.incremental_train.to_dict() if job.incremental_train is not None else None,
+            'parent_job': job.parent_job.id if job.parent_job is not None else None
         }
 
     class Meta:

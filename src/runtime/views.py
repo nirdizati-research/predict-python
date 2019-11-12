@@ -48,9 +48,9 @@ def post_replay_prediction(request):
 
     try:
         training_initial_job = Job.objects.get(pk=training_initial_job_id)
-        replay_job = Job.objects.get(pk=job_id)
+        replay_job = Job.objects.filter(pk=job_id)[0]
         replay_prediction_job = duplicate_orm_row(replay_job)
-        replay_prediction_job.parent_job = replay_job
+        replay_prediction_job.parent_job = Job.objects.filter(pk=job_id)[0]
         replay_prediction_job.type = JobTypes.REPLAY_PREDICT.value
         replay_prediction_job.status = JobStatuses.CREATED.value
         replay_prediction_job.save()

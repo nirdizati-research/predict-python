@@ -1,9 +1,3 @@
-import os
-import signal
-import subprocess
-
-from time import sleep
-
 from django.test.testcases import TestCase
 from rest_framework.test import APIClient
 

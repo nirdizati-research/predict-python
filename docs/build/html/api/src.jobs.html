@@ -1,0 +1,941 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.jobs package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.labelling package" href="src.labelling.html" />
+    <link rel="prev" title="src.hyperparameter_optimization package" href="src.hyperparameter_optimization.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.jobs package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.jobs package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.jobs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-jobs-package">
+<h1>src.jobs package<a class="headerlink" href="#src-jobs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.jobs.admin">
+<span id="src-jobs-admin-module"></span><h2>src.jobs.admin module<a class="headerlink" href="#module-src.jobs.admin" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.jobs.apps">
+<span id="src-jobs-apps-module"></span><h2>src.jobs.apps module<a class="headerlink" href="#module-src.jobs.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.jobs.apps.JobsConfig">
+<em class="property">class </em><code class="descclassname">src.jobs.apps.</code><code class="descname">JobsConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.apps.JobsConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.jobs.apps.JobsConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.jobs'</em><a class="headerlink" href="#src.jobs.apps.JobsConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.job_creator">
+<span id="src-jobs-job-creator-module"></span><h2>src.jobs.job_creator module<a class="headerlink" href="#module-src.jobs.job_creator" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.jobs.job_creator.check_predictive_model_not_overwrite">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">check_predictive_model_not_overwrite</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.check_predictive_model_not_overwrite" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.job_creator.generate">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">generate</code><span class="sig-paren">(</span><em>split</em>, <em>payload</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.generate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.job_creator.generate_labelling">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">generate_labelling</code><span class="sig-paren">(</span><em>split</em>, <em>payload</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.generate_labelling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.job_creator.get_prediction_method_config">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">get_prediction_method_config</code><span class="sig-paren">(</span><em>predictive_model</em>, <em>prediction_method</em>, <em>payload</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.get_prediction_method_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.job_creator.set_model_name">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">set_model_name</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.set_model_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.job_creator.update">
+<code class="descclassname">src.jobs.job_creator.</code><code class="descname">update</code><span class="sig-paren">(</span><em>split</em>, <em>payload</em>, <em>generation_type='classification'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.job_creator.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.json_renderer">
+<span id="src-jobs-json-renderer-module"></span><h2>src.jobs.json_renderer module<a class="headerlink" href="#module-src.jobs.json_renderer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.jobs.json_renderer.CustomJSONEncoder">
+<em class="property">class </em><code class="descclassname">src.jobs.json_renderer.</code><code class="descname">CustomJSONEncoder</code><span class="sig-paren">(</span><em>*</em>, <em>skipkeys=False</em>, <em>ensure_ascii=True</em>, <em>check_circular=True</em>, <em>allow_nan=True</em>, <em>sort_keys=False</em>, <em>indent=None</em>, <em>separators=None</em>, <em>default=None</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.json_renderer.CustomJSONEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.utils.encoders.JSONEncoder</span></code></p>
+<dl class="method">
+<dt id="src.jobs.json_renderer.CustomJSONEncoder.iterencode">
+<code class="descname">iterencode</code><span class="sig-paren">(</span><em>o</em>, <em>_one_shot=False</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.json_renderer.CustomJSONEncoder.iterencode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the given object and yield each string
+representation as available.</p>
+<p>For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="n">iterencode</span><span class="p">(</span><span class="n">bigobject</span><span class="p">):</span>
+    <span class="n">mysocket</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.jobs.json_renderer.PalJSONRenderer">
+<em class="property">class </em><code class="descclassname">src.jobs.json_renderer.</code><code class="descname">PalJSONRenderer</code><a class="headerlink" href="#src.jobs.json_renderer.PalJSONRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.renderers.JSONRenderer</span></code></p>
+<dl class="attribute">
+<dt id="src.jobs.json_renderer.PalJSONRenderer.encoder_class">
+<code class="descname">encoder_class</code><a class="headerlink" href="#src.jobs.json_renderer.PalJSONRenderer.encoder_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.jobs.json_renderer.CustomJSONEncoder" title="src.jobs.json_renderer.CustomJSONEncoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomJSONEncoder</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.models">
+<span id="src-jobs-models-module"></span><h2>src.jobs.models module<a class="headerlink" href="#module-src.jobs.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.jobs.models.Job">
+<em class="property">class </em><code class="descclassname">src.jobs.models.</code><code class="descname">Job</code><span class="sig-paren">(</span><em>id</em>, <em>created_date</em>, <em>modified_date</em>, <em>error</em>, <em>status</em>, <em>type</em>, <em>create_models</em>, <em>case_id</em>, <em>event_number</em>, <em>gold_value</em>, <em>results</em>, <em>parent_job</em>, <em>split</em>, <em>encoding</em>, <em>labelling</em>, <em>clustering</em>, <em>predictive_model</em>, <em>evaluation</em>, <em>hyperparameter_optimizer</em>, <em>incremental_train</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<dl class="exception">
+<dt id="src.jobs.models.Job.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.jobs.models.Job.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.jobs.models.Job.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.jobs.models.Job.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.base_model">
+<code class="descname">base_model</code><a class="headerlink" href="#src.jobs.models.Job.base_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.case_id">
+<code class="descname">case_id</code><a class="headerlink" href="#src.jobs.models.Job.case_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.clustering">
+<code class="descname">clustering</code><a class="headerlink" href="#src.jobs.models.Job.clustering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.clustering_id">
+<code class="descname">clustering_id</code><a class="headerlink" href="#src.jobs.models.Job.clustering_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.create_models">
+<code class="descname">create_models</code><a class="headerlink" href="#src.jobs.models.Job.create_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.created_date">
+<code class="descname">created_date</code><a class="headerlink" href="#src.jobs.models.Job.created_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.encoding">
+<code class="descname">encoding</code><a class="headerlink" href="#src.jobs.models.Job.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.encoding_id">
+<code class="descname">encoding_id</code><a class="headerlink" href="#src.jobs.models.Job.encoding_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.error">
+<code class="descname">error</code><a class="headerlink" href="#src.jobs.models.Job.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.evaluation">
+<code class="descname">evaluation</code><a class="headerlink" href="#src.jobs.models.Job.evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.evaluation_id">
+<code class="descname">evaluation_id</code><a class="headerlink" href="#src.jobs.models.Job.evaluation_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.event_number">
+<code class="descname">event_number</code><a class="headerlink" href="#src.jobs.models.Job.event_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.explanation_set">
+<code class="descname">explanation_set</code><a class="headerlink" href="#src.jobs.models.Job.explanation_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_next_by_created_date">
+<code class="descname">get_next_by_created_date</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.DateTimeField: created_date&gt;</em>, <em>is_next=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_next_by_created_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_next_by_modified_date">
+<code class="descname">get_next_by_modified_date</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.DateTimeField: modified_date&gt;</em>, <em>is_next=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_next_by_modified_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_previous_by_created_date">
+<code class="descname">get_previous_by_created_date</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.DateTimeField: created_date&gt;</em>, <em>is_next=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_previous_by_created_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_previous_by_modified_date">
+<code class="descname">get_previous_by_modified_date</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.DateTimeField: modified_date&gt;</em>, <em>is_next=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_previous_by_modified_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_status_display">
+<code class="descname">get_status_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: status&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_status_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.get_type_display">
+<code class="descname">get_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.get_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.gold_value">
+<code class="descname">gold_value</code><a class="headerlink" href="#src.jobs.models.Job.gold_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.hyperparameter_optimizer">
+<code class="descname">hyperparameter_optimizer</code><a class="headerlink" href="#src.jobs.models.Job.hyperparameter_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.hyperparameter_optimizer_id">
+<code class="descname">hyperparameter_optimizer_id</code><a class="headerlink" href="#src.jobs.models.Job.hyperparameter_optimizer_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.id">
+<code class="descname">id</code><a class="headerlink" href="#src.jobs.models.Job.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.incremental_train">
+<code class="descname">incremental_train</code><a class="headerlink" href="#src.jobs.models.Job.incremental_train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.incremental_train_id">
+<code class="descname">incremental_train_id</code><a class="headerlink" href="#src.jobs.models.Job.incremental_train_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.labelling">
+<code class="descname">labelling</code><a class="headerlink" href="#src.jobs.models.Job.labelling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.labelling_id">
+<code class="descname">labelling_id</code><a class="headerlink" href="#src.jobs.models.Job.labelling_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.modified_date">
+<code class="descname">modified_date</code><a class="headerlink" href="#src.jobs.models.Job.modified_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.jobs.models.Job.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.parent_job">
+<code class="descname">parent_job</code><a class="headerlink" href="#src.jobs.models.Job.parent_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.parent_job_id">
+<code class="descname">parent_job_id</code><a class="headerlink" href="#src.jobs.models.Job.parent_job_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.predictive_model">
+<code class="descname">predictive_model</code><a class="headerlink" href="#src.jobs.models.Job.predictive_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.predictive_model_id">
+<code class="descname">predictive_model_id</code><a class="headerlink" href="#src.jobs.models.Job.predictive_model_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.replay_job">
+<code class="descname">replay_job</code><a class="headerlink" href="#src.jobs.models.Job.replay_job" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.results">
+<code class="descname">results</code><a class="headerlink" href="#src.jobs.models.Job.results" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.split">
+<code class="descname">split</code><a class="headerlink" href="#src.jobs.models.Job.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.split_id">
+<code class="descname">split_id</code><a class="headerlink" href="#src.jobs.models.Job.split_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.status">
+<code class="descname">status</code><a class="headerlink" href="#src.jobs.models.Job.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.models.Job.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.models.Job.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.Job.type">
+<code class="descname">type</code><a class="headerlink" href="#src.jobs.models.Job.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.jobs.models.JobStatuses">
+<em class="property">class </em><code class="descclassname">src.jobs.models.</code><code class="descname">JobStatuses</code><a class="headerlink" href="#src.jobs.models.JobStatuses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.jobs.models.JobStatuses.COMPLETED">
+<code class="descname">COMPLETED</code><em class="property"> = 'completed'</em><a class="headerlink" href="#src.jobs.models.JobStatuses.COMPLETED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobStatuses.CREATED">
+<code class="descname">CREATED</code><em class="property"> = 'created'</em><a class="headerlink" href="#src.jobs.models.JobStatuses.CREATED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobStatuses.ERROR">
+<code class="descname">ERROR</code><em class="property"> = 'error'</em><a class="headerlink" href="#src.jobs.models.JobStatuses.ERROR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobStatuses.RUNNING">
+<code class="descname">RUNNING</code><em class="property"> = 'running'</em><a class="headerlink" href="#src.jobs.models.JobStatuses.RUNNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.jobs.models.JobTypes">
+<em class="property">class </em><code class="descclassname">src.jobs.models.</code><code class="descname">JobTypes</code><a class="headerlink" href="#src.jobs.models.JobTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.LABELLING">
+<code class="descname">LABELLING</code><em class="property"> = 'labelling'</em><a class="headerlink" href="#src.jobs.models.JobTypes.LABELLING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.PREDICTION">
+<code class="descname">PREDICTION</code><em class="property"> = 'prediction'</em><a class="headerlink" href="#src.jobs.models.JobTypes.PREDICTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.REPLAY">
+<code class="descname">REPLAY</code><em class="property"> = 'replay'</em><a class="headerlink" href="#src.jobs.models.JobTypes.REPLAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.REPLAY_PREDICT">
+<code class="descname">REPLAY_PREDICT</code><em class="property"> = 'replay_predict'</em><a class="headerlink" href="#src.jobs.models.JobTypes.REPLAY_PREDICT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.RUNTIME">
+<code class="descname">RUNTIME</code><em class="property"> = 'runtime'</em><a class="headerlink" href="#src.jobs.models.JobTypes.RUNTIME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.JobTypes.UPDATE">
+<code class="descname">UPDATE</code><em class="property"> = 'update'</em><a class="headerlink" href="#src.jobs.models.JobTypes.UPDATE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.jobs.models.ModelType">
+<em class="property">class </em><code class="descclassname">src.jobs.models.</code><code class="descname">ModelType</code><a class="headerlink" href="#src.jobs.models.ModelType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.jobs.models.ModelType.CLASSIFIER">
+<code class="descname">CLASSIFIER</code><em class="property"> = 'classification'</em><a class="headerlink" href="#src.jobs.models.ModelType.CLASSIFIER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.ModelType.CLUSTERER">
+<code class="descname">CLUSTERER</code><em class="property"> = 'clusterer'</em><a class="headerlink" href="#src.jobs.models.ModelType.CLUSTERER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.ModelType.REGRESSOR">
+<code class="descname">REGRESSOR</code><em class="property"> = 'regression'</em><a class="headerlink" href="#src.jobs.models.ModelType.REGRESSOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.models.ModelType.TIME_SERIES_PREDICTOR">
+<code class="descname">TIME_SERIES_PREDICTOR</code><em class="property"> = 'time_series_prediction'</em><a class="headerlink" href="#src.jobs.models.ModelType.TIME_SERIES_PREDICTOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.serializers">
+<span id="src-jobs-serializers-module"></span><h2>src.jobs.serializers module<a class="headerlink" href="#module-src.jobs.serializers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.jobs.serializers.JobSerializer">
+<em class="property">class </em><code class="descclassname">src.jobs.serializers.</code><code class="descname">JobSerializer</code><span class="sig-paren">(</span><em>instance=None</em>, <em>data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.serializers.JobSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="class">
+<dt id="src.jobs.serializers.JobSerializer.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#src.jobs.serializers.JobSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="src.jobs.serializers.JobSerializer.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'created_date', 'modified_date', 'error', 'status', 'type', 'results', 'case_id', 'gold_value', 'event_number', 'config')</em><a class="headerlink" href="#src.jobs.serializers.JobSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.serializers.JobSerializer.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#src.jobs.serializers.JobSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.jobs.models.Job" title="src.jobs.models.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.jobs.models.Job</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.serializers.JobSerializer.get_config">
+<code class="descname">get_config</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.serializers.JobSerializer.get_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.tasks">
+<span id="src-jobs-tasks-module"></span><h2>src.jobs.tasks module<a class="headerlink" href="#module-src.jobs.tasks" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.jobs.tasks.hyperopt_task">
+<code class="descclassname">src.jobs.tasks.</code><code class="descname">hyperopt_task</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.tasks.hyperopt_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.tasks.prediction_task">
+<code class="descclassname">src.jobs.tasks.</code><code class="descname">prediction_task</code><span class="sig-paren">(</span><em>job_id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.tasks.prediction_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.tasks.save_models">
+<code class="descclassname">src.jobs.tasks.</code><code class="descname">save_models</code><span class="sig-paren">(</span><em>models</em>, <em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.tasks.save_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.urls">
+<span id="src-jobs-urls-module"></span><h2>src.jobs.urls module<a class="headerlink" href="#module-src.jobs.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.jobs.views">
+<span id="src-jobs-views-module"></span><h2>src.jobs.views module<a class="headerlink" href="#module-src.jobs.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.jobs.views.JobDetail">
+<em class="property">class </em><code class="descclassname">src.jobs.views.</code><code class="descname">JobDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.mixins.RetrieveModelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.GenericAPIView</span></code></p>
+<dl class="method">
+<dt id="src.jobs.views.JobDetail.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobDetail.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.jobs.views.JobDetail.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobDetail.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.views.JobDetail.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#src.jobs.views.JobDetail.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.views.JobDetail.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.jobs.views.JobDetail.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.jobs.serializers.JobSerializer" title="src.jobs.serializers.JobSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.jobs.serializers.JobSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.jobs.views.JobList">
+<em class="property">class </em><code class="descclassname">src.jobs.views.</code><code class="descname">JobList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.ListAPIView</span></code></p>
+<p>List all jobs, or create a new job.</p>
+<dl class="method">
+<dt id="src.jobs.views.JobList.get_queryset">
+<code class="descname">get_queryset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobList.get_queryset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of items for this view.
+This must be an iterable, and may be a queryset.
+Defaults to using <cite>self.queryset</cite>.</p>
+<p>This method should always be used rather than accessing <cite>self.queryset</cite>
+directly, as <cite>self.queryset</cite> gets evaluated only once, and those results
+are cached for all subsequent requests.</p>
+<p>You may want to override this if you need to provide different
+querysets depending on the incoming request.</p>
+<p>(Eg. return a list of items that is specific to the user)</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.jobs.views.JobList.post">
+<em class="property">static </em><code class="descname">post</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.JobList.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.jobs.views.JobList.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.jobs.views.JobList.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.jobs.serializers.JobSerializer" title="src.jobs.serializers.JobSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.jobs.serializers.JobSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="src.jobs.views.create_multiple">
+<code class="descclassname">src.jobs.views.</code><code class="descname">create_multiple</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.views.create_multiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>No request validation</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs.ws_publisher">
+<span id="src-jobs-ws-publisher-module"></span><h2>src.jobs.ws_publisher module<a class="headerlink" href="#module-src.jobs.ws_publisher" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.jobs.ws_publisher.publish">
+<code class="descclassname">src.jobs.ws_publisher.</code><code class="descname">publish</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="headerlink" href="#src.jobs.ws_publisher.publish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Publish an object to websocket listeners
+:param object: A Django predictive_model
+:return: {type: object class name, data: OBJECT}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.jobs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.jobs" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.labelling.html" class="btn btn-neutral float-right" title="src.labelling package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.hyperparameter_optimization.html" class="btn btn-neutral float-left" title="src.hyperparameter_optimization package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

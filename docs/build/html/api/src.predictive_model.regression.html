@@ -1,0 +1,903 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.predictive_model.regression package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.predictive_model.time_series_prediction package" href="src.predictive_model.time_series_prediction.html" />
+    <link rel="prev" title="src.predictive_model.classification package" href="src.predictive_model.classification.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.classification.html">src.predictive_model.classification package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.predictive_model.regression package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.time_series_prediction.html">src.predictive_model.time_series_prediction package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+          <li><a href="src.predictive_model.html">src.predictive_model package</a> &raquo;</li>
+        
+      <li>src.predictive_model.regression package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.predictive_model.regression.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-predictive-model-regression-package">
+<h1>src.predictive_model.regression package<a class="headerlink" href="#src-predictive-model-regression-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.predictive_model.regression.apps">
+<span id="src-predictive-model-regression-apps-module"></span><h2>src.predictive_model.regression.apps module<a class="headerlink" href="#module-src.predictive_model.regression.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.regression.apps.RegressionConfig">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.apps.</code><code class="descname">RegressionConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.apps.RegressionConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.apps.PredictiveModelConfig" title="src.predictive_model.apps.PredictiveModelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.apps.PredictiveModelConfig</span></code></a></p>
+<dl class="attribute">
+<dt id="src.predictive_model.regression.apps.RegressionConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.predictive_model.regression'</em><a class="headerlink" href="#src.predictive_model.regression.apps.RegressionConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.regression.custom_regression_models">
+<span id="src-predictive-model-regression-custom-regression-models-module"></span><h2>src.predictive_model.regression.custom_regression_models module<a class="headerlink" href="#module-src.predictive_model.regression.custom_regression_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.regression.custom_regression_models.NNRegressor">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.custom_regression_models.</code><code class="descname">NNRegressor</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.custom_regression_models.NNRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code></p>
+<p>Neural Network regressor, implements the same methods as the sklearn models to make it simple to add</p>
+<dl class="method">
+<dt id="src.predictive_model.regression.custom_regression_models.NNRegressor.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_data</em>, <em>targets</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.custom_regression_models.NNRegressor.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates and fits the predictive_model</p>
+<p>first the encoded data is parsed, then the predictive_model created and then trained</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>train_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded training dataset</li>
+<li><strong>targets</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – encoded target dataset</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.custom_regression_models.NNRegressor.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>test_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.custom_regression_models.NNRegressor.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns predictive_model predictions</p>
+<p>parses the encoded test dataset, then returns the predictive_model predictions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded test dataset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">predictive_model predictions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.custom_regression_models.NNRegressor.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.custom_regression_models.NNRegressor.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>placeholder to allow use with other sklearn algorithms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.regression.methods_default_config">
+<span id="src-predictive-model-regression-methods-default-config-module"></span><h2>src.predictive_model.regression.methods_default_config module<a class="headerlink" href="#module-src.predictive_model.regression.methods_default_config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.predictive_model.regression.methods_default_config.regression_lasso">
+<code class="descclassname">src.predictive_model.regression.methods_default_config.</code><code class="descname">regression_lasso</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.methods_default_config.regression_lasso" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.methods_default_config.regression_linear">
+<code class="descclassname">src.predictive_model.regression.methods_default_config.</code><code class="descname">regression_linear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.methods_default_config.regression_linear" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.methods_default_config.regression_nn">
+<code class="descclassname">src.predictive_model.regression.methods_default_config.</code><code class="descname">regression_nn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.methods_default_config.regression_nn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.methods_default_config.regression_random_forest">
+<code class="descclassname">src.predictive_model.regression.methods_default_config.</code><code class="descname">regression_random_forest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.methods_default_config.regression_random_forest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.methods_default_config.regression_xgboost">
+<code class="descclassname">src.predictive_model.regression.methods_default_config.</code><code class="descname">regression_xgboost</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.methods_default_config.regression_xgboost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.regression.models">
+<span id="src-predictive-model-regression-models-module"></span><h2>src.predictive_model.regression.models module<a class="headerlink" href="#module-src.predictive_model.regression.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.regression.models.Lasso">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">Lasso</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>regression_ptr</em>, <em>alpha</em>, <em>fit_intercept</em>, <em>normalize</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Lasso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.regression.models.Regression" title="src.predictive_model.regression.models.Regression"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.Regression</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Lasso.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Lasso.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Lasso.alpha">
+<code class="descname">alpha</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Lasso.fit_intercept">
+<code class="descname">fit_intercept</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.fit_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Lasso.normalize">
+<code class="descname">normalize</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Lasso.regression_ptr">
+<code class="descname">regression_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.regression_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Lasso.regression_ptr_id">
+<code class="descname">regression_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.regression_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.Lasso.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Lasso.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.Linear">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">Linear</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>regression_ptr</em>, <em>fit_intercept</em>, <em>normalize</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.regression.models.Regression" title="src.predictive_model.regression.models.Regression"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.Regression</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Linear.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Linear.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Linear.fit_intercept">
+<code class="descname">fit_intercept</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.fit_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Linear.normalize">
+<code class="descname">normalize</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Linear.regression_ptr">
+<code class="descname">regression_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.regression_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Linear.regression_ptr_id">
+<code class="descname">regression_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.Linear.regression_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.Linear.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Linear.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.NeuralNetwork">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">NeuralNetwork</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>regression_ptr</em>, <em>n_hidden_layers</em>, <em>n_hidden_units</em>, <em>activation</em>, <em>n_epochs</em>, <em>dropout_rate</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.regression.models.Regression" title="src.predictive_model.regression.models.Regression"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.Regression</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.activation">
+<code class="descname">activation</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.dropout_rate">
+<code class="descname">dropout_rate</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.dropout_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.get_activation_display">
+<code class="descname">get_activation_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: activation&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.get_activation_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.n_epochs">
+<code class="descname">n_epochs</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.n_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.n_hidden_layers">
+<code class="descname">n_hidden_layers</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.n_hidden_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.n_hidden_units">
+<code class="descname">n_hidden_units</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.n_hidden_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.regression_ptr">
+<code class="descname">regression_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.regression_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.regression_ptr_id">
+<code class="descname">regression_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.regression_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.NeuralNetwork.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.NeuralNetwork.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.RandomForest">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">RandomForest</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>regression_ptr</em>, <em>n_estimators</em>, <em>max_features</em>, <em>max_depth</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.regression.models.Regression" title="src.predictive_model.regression.models.Regression"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.Regression</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.RandomForest.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.RandomForest.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.RandomForest.get_max_features_display">
+<code class="descname">get_max_features_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: max_features&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.get_max_features_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.max_depth">
+<code class="descname">max_depth</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.max_features">
+<code class="descname">max_features</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.max_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.n_estimators">
+<code class="descname">n_estimators</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.n_estimators" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.random_state">
+<code class="descname">random_state</code><em class="property"> = 21</em><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.random_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.regression_ptr">
+<code class="descname">regression_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.regression_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RandomForest.regression_ptr_id">
+<code class="descname">regression_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.regression_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.RandomForest.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.RandomForest.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.Regression">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">Regression</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.models.PredictiveModel" title="src.predictive_model.models.PredictiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.PredictiveModel</span></code></a></p>
+<p>Container of Regression to be shown in frontend</p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Regression.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.Regression.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.predictive_model.regression.models.Regression.init">
+<em class="property">static </em><code class="descname">init</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.Regression.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.lasso">
+<code class="descname">lasso</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.lasso" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.linear">
+<code class="descname">linear</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.neuralnetwork">
+<code class="descname">neuralnetwork</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.neuralnetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.predictivemodel_ptr">
+<code class="descname">predictivemodel_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.predictivemodel_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.predictivemodel_ptr_id">
+<code class="descname">predictivemodel_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.predictivemodel_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.randomforest">
+<code class="descname">randomforest</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.randomforest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.Regression.xgboost">
+<code class="descname">xgboost</code><a class="headerlink" href="#src.predictive_model.regression.models.Regression.xgboost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.RegressionMethods">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">RegressionMethods</code><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RegressionMethods.LASSO">
+<code class="descname">LASSO</code><em class="property"> = 'lasso'</em><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods.LASSO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RegressionMethods.LINEAR">
+<code class="descname">LINEAR</code><em class="property"> = 'linear'</em><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods.LINEAR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RegressionMethods.NN">
+<code class="descname">NN</code><em class="property"> = 'nn'</em><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods.NN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RegressionMethods.RANDOM_FOREST">
+<code class="descname">RANDOM_FOREST</code><em class="property"> = 'randomForest'</em><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods.RANDOM_FOREST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.RegressionMethods.XGBOOST">
+<code class="descname">XGBOOST</code><em class="property"> = 'xgboost'</em><a class="headerlink" href="#src.predictive_model.regression.models.RegressionMethods.XGBOOST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.regression.models.XGBoost">
+<em class="property">class </em><code class="descclassname">src.predictive_model.regression.models.</code><code class="descname">XGBoost</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>regression_ptr</em>, <em>max_depth</em>, <em>n_estimators</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.regression.models.Regression" title="src.predictive_model.regression.models.Regression"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.Regression</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.XGBoost.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.regression.models.XGBoost.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.regression.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.XGBoost.max_depth">
+<code class="descname">max_depth</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.XGBoost.n_estimators">
+<code class="descname">n_estimators</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.n_estimators" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.XGBoost.regression_ptr">
+<code class="descname">regression_ptr</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.regression_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.regression.models.XGBoost.regression_ptr_id">
+<code class="descname">regression_ptr_id</code><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.regression_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.regression.models.XGBoost.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.models.XGBoost.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.regression.regression">
+<span id="src-predictive-model-regression-regression-module"></span><h2>src.predictive_model.regression.regression module<a class="headerlink" href="#module-src.predictive_model.regression.regression" title="Permalink to this headline">¶</a></h2>
+<p>regression methods and functionalities</p>
+<dl class="function">
+<dt id="src.predictive_model.regression.regression.predict">
+<code class="descclassname">src.predictive_model.regression.regression.</code><code class="descname">predict</code><span class="sig-paren">(</span><em>job</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.regression.predict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.regression.regression">
+<code class="descclassname">src.predictive_model.regression.regression.</code><code class="descname">regression</code><span class="sig-paren">(</span><em>training_df</em>, <em>test_df</em>, <em>clusterer</em>, <em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.regression.regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>main regression entry point</p>
+<p>train and tests the regressor using the provided data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clusterer</strong> (<a class="reference internal" href="src.clustering.html#src.clustering.clustering.Clustering" title="src.clustering.clustering.Clustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clustering</span></code></a>) – </li>
+<li><strong>training_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – training DataFrame</li>
+<li><strong>test_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – testing DataFrame</li>
+<li><strong>job</strong> (<a class="reference internal" href="src.jobs.html#src.jobs.models.Job" title="src.jobs.models.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – job configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">(&lt;class ‘dict’&gt;, &lt;class ‘dict’&gt;)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">predictive_model scores and split</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.regression.regression.regression_single_log">
+<code class="descclassname">src.predictive_model.regression.regression.</code><code class="descname">regression_single_log</code><span class="sig-paren">(</span><em>input_df</em>, <em>model</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.regression.regression.regression_single_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>single log regression</p>
+<p>classifies a single log using the provided TODO: complete</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – input DataFrame</li>
+<li><strong>model</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – TODO: complete</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">predictive_model scores</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.regression">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.predictive_model.regression" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.predictive_model.time_series_prediction.html" class="btn btn-neutral float-right" title="src.predictive_model.time_series_prediction package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.predictive_model.classification.html" class="btn btn-neutral float-left" title="src.predictive_model.classification package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.labelling package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.logs package" href="src.logs.html" />
+    <link rel="prev" title="src.jobs package" href="src.jobs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.labelling package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.labelling package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.labelling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-labelling-package">
+<h1>src.labelling package<a class="headerlink" href="#src-labelling-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.labelling.apps">
+<span id="src-labelling-apps-module"></span><h2>src.labelling.apps module<a class="headerlink" href="#module-src.labelling.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.labelling.apps.LabellingConfig">
+<em class="property">class </em><code class="descclassname">src.labelling.apps.</code><code class="descname">LabellingConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.apps.LabellingConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.labelling.apps.LabellingConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.labelling'</em><a class="headerlink" href="#src.labelling.apps.LabellingConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.labelling.common">
+<span id="src-labelling-common-module"></span><h2>src.labelling.common module<a class="headerlink" href="#module-src.labelling.common" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.labelling.common.add_labels">
+<code class="descclassname">src.labelling.common.</code><code class="descname">add_labels</code><span class="sig-paren">(</span><em>encoding</em>, <em>labelling</em>, <em>prefix_length</em>, <em>trace</em>, <em>attribute_classifier=None</em>, <em>executed_events=None</em>, <em>resources_used=None</em>, <em>new_traces=None</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.common.add_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds any number of label cells with last as label</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.labelling.common.compute_label_columns">
+<code class="descclassname">src.labelling.common.</code><code class="descname">compute_label_columns</code><span class="sig-paren">(</span><em>columns</em>, <em>encoding</em>, <em>labelling</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.common.compute_label_columns" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.labelling.common.get_intercase_attributes">
+<code class="descclassname">src.labelling.common.</code><code class="descname">get_intercase_attributes</code><span class="sig-paren">(</span><em>log</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.common.get_intercase_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dict of kwargs
+These intercase attributes are expensive operations!!!</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.labelling.common.next_event_name">
+<code class="descclassname">src.labelling.common.</code><code class="descname">next_event_name</code><span class="sig-paren">(</span><em>trace</em>, <em>prefix_length</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.common.next_event_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the event event name at prefix length or 0 if out of range.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.labelling.label_container">
+<span id="src-labelling-label-container-module"></span><h2>src.labelling.label_container module<a class="headerlink" href="#module-src.labelling.label_container" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.labelling.label_container.LabelContainer">
+<em class="property">class </em><code class="descclassname">src.labelling.label_container.</code><code class="descname">LabelContainer</code><a class="headerlink" href="#src.labelling.label_container.LabelContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.labelling.label_container.LabelContainer" title="src.labelling.label_container.LabelContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.labelling.label_container.LabelContainer</span></code></a></p>
+<p>Inner object describing labelling state.
+For no labelling use NO_LABEL</p>
+<p>This is a horrible hack and should be split into a label container and a container for encoding options, like
+what to add to the encoded log.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.labelling.models">
+<span id="src-labelling-models-module"></span><h2>src.labelling.models module<a class="headerlink" href="#module-src.labelling.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.labelling.models.LabelTypes">
+<em class="property">class </em><code class="descclassname">src.labelling.models.</code><code class="descname">LabelTypes</code><a class="headerlink" href="#src.labelling.models.LabelTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.ATTRIBUTE_NUMBER">
+<code class="descname">ATTRIBUTE_NUMBER</code><em class="property"> = 'attribute_number'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.ATTRIBUTE_NUMBER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.ATTRIBUTE_STRING">
+<code class="descname">ATTRIBUTE_STRING</code><em class="property"> = 'attribute_string'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.ATTRIBUTE_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.DURATION">
+<code class="descname">DURATION</code><em class="property"> = 'duration'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.DURATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.NEXT_ACTIVITY">
+<code class="descname">NEXT_ACTIVITY</code><em class="property"> = 'next_activity'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.NEXT_ACTIVITY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.NO_LABEL">
+<code class="descname">NO_LABEL</code><em class="property"> = 'no_label'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.NO_LABEL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.LabelTypes.REMAINING_TIME">
+<code class="descname">REMAINING_TIME</code><em class="property"> = 'remaining_time'</em><a class="headerlink" href="#src.labelling.models.LabelTypes.REMAINING_TIME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.labelling.models.Labelling">
+<em class="property">class </em><code class="descclassname">src.labelling.models.</code><code class="descname">Labelling</code><span class="sig-paren">(</span><em>id</em>, <em>type</em>, <em>attribute_name</em>, <em>threshold_type</em>, <em>threshold</em>, <em>results</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.models.Labelling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<dl class="exception">
+<dt id="src.labelling.models.Labelling.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.labelling.models.Labelling.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.labelling.models.Labelling.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.labelling.models.Labelling.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.attribute_name">
+<code class="descname">attribute_name</code><a class="headerlink" href="#src.labelling.models.Labelling.attribute_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.labelling.models.Labelling.get_threshold_type_display">
+<code class="descname">get_threshold_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: threshold_type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.models.Labelling.get_threshold_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.labelling.models.Labelling.get_type_display">
+<code class="descname">get_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.models.Labelling.get_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.id">
+<code class="descname">id</code><a class="headerlink" href="#src.labelling.models.Labelling.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.job_set">
+<code class="descname">job_set</code><a class="headerlink" href="#src.labelling.models.Labelling.job_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.labelledlog_set">
+<code class="descname">labelledlog_set</code><a class="headerlink" href="#src.labelling.models.Labelling.labelledlog_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.labelling.models.Labelling.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.results">
+<code class="descname">results</code><a class="headerlink" href="#src.labelling.models.Labelling.results" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.threshold">
+<code class="descname">threshold</code><a class="headerlink" href="#src.labelling.models.Labelling.threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.threshold_type">
+<code class="descname">threshold_type</code><a class="headerlink" href="#src.labelling.models.Labelling.threshold_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.labelling.models.Labelling.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.labelling.models.Labelling.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.Labelling.type">
+<code class="descname">type</code><a class="headerlink" href="#src.labelling.models.Labelling.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.labelling.models.ThresholdTypes">
+<em class="property">class </em><code class="descclassname">src.labelling.models.</code><code class="descname">ThresholdTypes</code><a class="headerlink" href="#src.labelling.models.ThresholdTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.labelling.models.ThresholdTypes.NONE">
+<code class="descname">NONE</code><em class="property"> = 'none'</em><a class="headerlink" href="#src.labelling.models.ThresholdTypes.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.ThresholdTypes.THRESHOLD_CUSTOM">
+<code class="descname">THRESHOLD_CUSTOM</code><em class="property"> = 'threshold_custom'</em><a class="headerlink" href="#src.labelling.models.ThresholdTypes.THRESHOLD_CUSTOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.labelling.models.ThresholdTypes.THRESHOLD_MEAN">
+<code class="descname">THRESHOLD_MEAN</code><em class="property"> = 'threshold_mean'</em><a class="headerlink" href="#src.labelling.models.ThresholdTypes.THRESHOLD_MEAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.labelling">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.labelling" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.logs.html" class="btn btn-neutral float-right" title="src.logs package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.jobs.html" class="btn btn-neutral float-left" title="src.jobs package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -112,9 +112,8 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                 'split': splits[dataset]['0-40_80-100'],
                 'encoding': {"value_encoding": encoding_method,
                              "padding": True,
-                             "generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
-                             "prefix_length": prefix_length,
-                             "features": []},
+                             "task_generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
+                             "prefix_length": prefix_length},
                 'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
                               "attribute_name": "label",
                               "add_remaining_time": False,
@@ -127,7 +126,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                                                 # "performance_metric": HyperOptLosses.AUC.value,
                                                 # "algorithm_type": HyperOptAlgorithms.TPE.value},
                 'predictive_model': {'predictive_model': 'classification',
-                                     'prediction_method': [classification_method]},
+                                     'prediction_method': classification_method},
                 'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
             })
         )

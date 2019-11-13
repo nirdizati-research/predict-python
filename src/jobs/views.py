@@ -86,19 +86,19 @@ class JobList(ListAPIView):
         if clustering_config is not None:
             clusterings = Clustering.objects.all()
             if 'clustering_method' in clustering_config:
-                clusterings.filter(clustering_method=clustering_config['clustering_method'])
+                clusterings = clusterings.filter(clustering_method=clustering_config['clustering_method'])
             jobs = jobs.filter(clustering__in=[element.id for element in clusterings])
         if predictive_model_config is not None:
             predictive_models = PredictiveModel.objects.all()
             if 'predictive_model' in predictive_model_config:
-                predictive_models.filter(predictive_model=predictive_model_config['predictive_model'])
+                predictive_models = predictive_models.filter(predictive_model=predictive_model_config['predictive_model'])
             if 'prediction_method' in predictive_model_config:
-                predictive_models.filter(prediction_method=predictive_model_config['prediction_method'])
+                predictive_models = predictive_models.filter(prediction_method=predictive_model_config['prediction_method'])
             jobs = jobs.filter(predictive_model__in=[element.id for element in predictive_models])
         if hyperparameter_optimization_config is not None:
             hyperparameter_optimizations = HyperparameterOptimization.objects.all()
             if 'optimization_method' in hyperparameter_optimization_config:
-                hyperparameter_optimizations.filter(optimization_method=hyperparameter_optimization_config['optimization_method'])
+                hyperparameter_optimizations = hyperparameter_optimizations.filter(optimization_method=hyperparameter_optimization_config['optimization_method'])
 
             # if 'max_evaluations' in hyperparameter_optimization_config: #TODO add support for inner parameters of hyperopt
             #     hyperparameter_optimizations.filter(max_evaluations=hyperparameter_optimization_config['max_evaluations'])

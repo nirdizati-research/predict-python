@@ -1,0 +1,469 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.predictive_model package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.predictive_model.classification package" href="src.predictive_model.classification.html" />
+    <link rel="prev" title="src.logs package" href="src.logs.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.predictive_model package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.classification.html">src.predictive_model.classification package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.regression.html">src.predictive_model.regression package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.time_series_prediction.html">src.predictive_model.time_series_prediction package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.predictive_model package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.predictive_model.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-predictive-model-package">
+<h1>src.predictive_model package<a class="headerlink" href="#src-predictive-model-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="src.predictive_model.classification.html">src.predictive_model.classification package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification.apps">src.predictive_model.classification.apps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification.classification">src.predictive_model.classification.classification module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification.custom_classification_models">src.predictive_model.classification.custom_classification_models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification.methods_default_config">src.predictive_model.classification.methods_default_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification.models">src.predictive_model.classification.models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.classification.html#module-src.predictive_model.classification">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.predictive_model.regression.html">src.predictive_model.regression package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression.apps">src.predictive_model.regression.apps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression.custom_regression_models">src.predictive_model.regression.custom_regression_models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression.methods_default_config">src.predictive_model.regression.methods_default_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression.models">src.predictive_model.regression.models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression.regression">src.predictive_model.regression.regression module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.regression.html#module-src.predictive_model.regression">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="src.predictive_model.time_series_prediction.html">src.predictive_model.time_series_prediction package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#subpackages">Subpackages</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin">src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.apps">src.predictive_model.time_series_prediction.apps module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.custom_time_series_prediction_models">src.predictive_model.time_series_prediction.custom_time_series_prediction_models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.methods_default_config">src.predictive_model.time_series_prediction.methods_default_config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.models">src.predictive_model.time_series_prediction.models module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction.time_series_prediction">src.predictive_model.time_series_prediction.time_series_prediction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="src.predictive_model.time_series_prediction.html#module-src.predictive_model.time_series_prediction">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.predictive_model.apps">
+<span id="src-predictive-model-apps-module"></span><h2>src.predictive_model.apps module<a class="headerlink" href="#module-src.predictive_model.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.apps.PredictiveModelConfig">
+<em class="property">class </em><code class="descclassname">src.predictive_model.apps.</code><code class="descname">PredictiveModelConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.apps.PredictiveModelConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.predictive_model.apps.PredictiveModelConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.predictive_model'</em><a class="headerlink" href="#src.predictive_model.apps.PredictiveModelConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.models">
+<span id="src-predictive-model-models-module"></span><h2>src.predictive_model.models module<a class="headerlink" href="#module-src.predictive_model.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.models.PredictiveModel">
+<em class="property">class </em><code class="descclassname">src.predictive_model.models.</code><code class="descname">PredictiveModel</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.models.PredictiveModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<p>Container of Classification to be shown in frontend</p>
+<dl class="exception">
+<dt id="src.predictive_model.models.PredictiveModel.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.models.PredictiveModel.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.classification">
+<code class="descname">classification</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.explanation_set">
+<code class="descname">explanation_set</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.explanation_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.models.PredictiveModel.get_predictive_model_display">
+<code class="descname">get_predictive_model_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: predictive_model&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.get_predictive_model_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.id">
+<code class="descname">id</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.predictive_model.models.PredictiveModel.init">
+<em class="property">static </em><code class="descname">init</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.job_set">
+<code class="descname">job_set</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.job_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.model_path">
+<code class="descname">model_path</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.model_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.objects">
+<code class="descname">objects</code><em class="property"> = &lt;model_utils.managers.InheritanceManager object&gt;</em><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.prediction_method">
+<code class="descname">prediction_method</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.prediction_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.predictive_model">
+<code class="descname">predictive_model</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.predictive_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.regression">
+<code class="descname">regression</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.regression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModel.timeseriesprediction">
+<code class="descname">timeseriesprediction</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.timeseriesprediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.models.PredictiveModel.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.models.PredictiveModel.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.models.PredictiveModels">
+<em class="property">class </em><code class="descclassname">src.predictive_model.models.</code><code class="descname">PredictiveModels</code><a class="headerlink" href="#src.predictive_model.models.PredictiveModels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModels.CLASSIFICATION">
+<code class="descname">CLASSIFICATION</code><em class="property"> = 'classification'</em><a class="headerlink" href="#src.predictive_model.models.PredictiveModels.CLASSIFICATION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModels.REGRESSION">
+<code class="descname">REGRESSION</code><em class="property"> = 'regression'</em><a class="headerlink" href="#src.predictive_model.models.PredictiveModels.REGRESSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.models.PredictiveModels.TIME_SERIES_PREDICTION">
+<code class="descname">TIME_SERIES_PREDICTION</code><em class="property"> = 'time_series_prediction'</em><a class="headerlink" href="#src.predictive_model.models.PredictiveModels.TIME_SERIES_PREDICTION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.predictive_model" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.predictive_model.classification.html" class="btn btn-neutral float-right" title="src.predictive_model.classification package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.logs.html" class="btn btn-neutral float-left" title="src.logs package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

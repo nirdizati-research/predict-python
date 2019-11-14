@@ -15,11 +15,22 @@ from src.jobs.models import JobStatuses, JobTypes
 from src.utils.experiments_utils import upload_split, send_job_request, create_payload, retrieve_job
 
 
-def retrieve_predictive_model_configuration(predictive_model_config):
+def retrieve_predictive_model_configuration(config):
+    if len(config) == 1:
+        config = config[0]['config']
+    elif len(config) > 1:
+        print('duplicate config')
+        config = config[0]['config']
+    else:
+        print('missing conf')
+        return {}
+    predictive_model_config = config['predictive_model']
     del predictive_model_config['model_path']
+    predictive_model = predictive_model_config['predictive_model']
     del predictive_model_config['predictive_model']
+    prediction_method = predictive_model_config['prediction_method']
     del predictive_model_config['prediction_method']
-    return predictive_model_config
+    return {predictive_model + '.' + prediction_method: predictive_model_config}
 
 
 def init_database(experimentation_type, splits, dataset, base_folder):
@@ -105,31 +116,31 @@ def std_experiments(dataset, prefix_length, models, splits, classification_metho
 
 def incremental_experiments(dataset, prefix_length, models, splits, classification_method, encoding_method):
     pretrained_model_parameters = retrieve_predictive_model_configuration(
-            retrieve_job(config={
-                'type': JobTypes.PREDICTION.value,
-                'status': JobStatuses.COMPLETED.value,
-                'create_models': True,
-                'split': splits[dataset]['0-40_80-100'],
-                'encoding': {"value_encoding": encoding_method,
-                             "padding": True,
-                             "task_generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
-                             "prefix_length": prefix_length},
-                'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
-                              "attribute_name": "label",
-                              "add_remaining_time": False,
-                              "add_elapsed_time": False,
-                              "add_executed_events": False,
-                              "add_resources_used": False,
-                              "add_new_traces": False},
-                'hyperparameter_optimization': {"optimization_method": HyperparameterOptimizationMethods.HYPEROPT.value},
-                                                # "max_evaluations": 1000, #TODO not yet supported
-                                                # "performance_metric": HyperOptLosses.AUC.value,
-                                                # "algorithm_type": HyperOptAlgorithms.TPE.value},
-                'predictive_model': {'predictive_model': 'classification',
-                                     'prediction_method': classification_method},
-                'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
-            })
-        )
+        retrieve_job(config={
+            'type': JobTypes.PREDICTION.value,
+            # 'status': JobStatuses.COMPLETED.value, # TODO sometimes some jobs hang in running while they are actually finished
+            'create_models': True,
+            'split': splits[dataset]['0-40_80-100'],
+            'encoding': {"value_encoding": encoding_method,
+                         "padding": True,
+                         "task_generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
+                         "prefix_length": prefix_length},
+            'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
+                          "attribute_name": "label",
+                          "add_remaining_time": False,
+                          "add_elapsed_time": False,
+                          "add_executed_events": False,
+                          "add_resources_used": False,
+                          "add_new_traces": False},
+            'hyperparameter_optimization': {"optimization_method": HyperparameterOptimizationMethods.HYPEROPT.value},
+                                            # "max_evaluations": 1000, #TODO not yet supported
+                                            # "performance_metric": HyperOptLosses.AUC.value,
+                                            # "algorithm_type": HyperOptAlgorithms.TPE.value},
+            'predictive_model': {'predictive_model': 'classification',
+                                 'prediction_method': classification_method},
+            'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
+        })
+    )
 
     payload = create_payload(
         split=splits[dataset]['0-80_80-100'],
@@ -148,9 +159,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
         hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value},
         classification=[classification_method]
     )
-
     payload.update(pretrained_model_parameters)
-
     models[dataset]['0-80_80-100'] = send_job_request(payload=payload)[0]['id']
 
     if classification_method != ClassificationMethods.RANDOM_FOREST.value:
@@ -171,9 +180,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                 classification=[classification_method],
                 hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value}
         )
-
         payload.update(pretrained_model_parameters)
-
         models[dataset]['40-80_80-100'] = send_job_request(payload=payload)[0]['id']
 
 
@@ -293,59 +300,59 @@ if __name__ == '__main__':
     # TODO load from memory
     splits = {
         'BPI11/f1/': {
-            '0-40_80-100': 1,
-            '0-80_80-100': 2,
-            '40-80_80-100': 3,
+            '0-40_80-100': 8,
+            '0-80_80-100': 9,
+            '40-80_80-100': 1111,
         },
         'BPI11/f2/': {
-            '0-40_80-100': 4,
-            '0-80_80-100': 5,
-            '40-80_80-100': 6,
-        },
-        'BPI11/f3/': {
-            '0-40_80-100': 7,
-            '0-80_80-100': 8,
-            '40-80_80-100': 9,
-        },
-        'BPI11/f4/': {
             '0-40_80-100': 10,
             '0-80_80-100': 11,
-            '40-80_80-100': 12,
+            '40-80_80-100': 1111,
+        },
+        'BPI11/f3/': {
+            '0-40_80-100': 12,
+            '0-80_80-100': 13,
+            '40-80_80-100': 1111,
+        },
+        'BPI11/f4/': {
+            '0-40_80-100': 14,
+            '0-80_80-100': 15,
+            '40-80_80-100': 1111,
         },
         'BPI15/f1/': {
-            '0-40_80-100': 13,
-            '0-80_80-100': 14,
-            '40-80_80-100': 15,
-        },
-        'BPI15/f2/': {
             '0-40_80-100': 16,
             '0-80_80-100': 17,
-            '40-80_80-100': 18,
+            '40-80_80-100': 1111,
+        },
+        'BPI15/f2/': {
+            '0-40_80-100': 18,
+            '0-80_80-100': 19,
+            '40-80_80-100': 1111,
         },
         'BPI15/f3/': {
-            '0-40_80-100': 19,
-            '0-80_80-100': 20,
-            '40-80_80-100': 21,
+            '0-40_80-100': 20,
+            '0-80_80-100': 21,
+            '40-80_80-100': 1111,
         },
         'Drift1/f1/': {
             '0-40_80-100': 22,
             '0-80_80-100': 23,
-            '40-80_80-100': 24,
+            '40-80_80-100': 1111,
 
-            '40-60_80-100': 28,
-            '0-60_80-100': 29,
-            '40-55_80-100': 30,
-            '0-55_80-100': 31
+            '40-60_80-100': 1111,
+            '0-60_80-100': 1111,
+            '40-55_80-100': 1111,
+            '0-55_80-100': 1111
         },
         'Drift2/f1/': {
-            '0-40_80-100': 25,
-            '0-80_80-100': 26,
-            '40-80_80-100': 27,
+            '0-40_80-100': 24,
+            '0-80_80-100': 25,
+            '40-80_80-100': 1111,
 
-            '40-60_80-100': 32,
-            '0-60_80-100': 33,
-            '40-55_80-100': 34,
-            '0-55_80-100': 35
+            '40-60_80-100': 1111,
+            '0-60_80-100': 1111,
+            '40-55_80-100': 1111,
+            '0-55_80-100': 1111
         }
     }
 
@@ -367,8 +374,8 @@ if __name__ == '__main__':
                 ValueEncodings.SIMPLE_INDEX.value,
                 ValueEncodings.COMPLEX.value]
         )
-        json.dump(splits, open("splits.json", 'w'))
-        json.dump(models, open("models.json", 'w'))
+        # json.dump(splits, open("splits.json", 'w'))
+        # json.dump(models, open("models.json", 'w'))
     elif experimentation == ExperimentationType.DRIFT_SIZE.value:
         launch_experimentation(
             ExperimentationType.DRIFT_SIZE.value,
@@ -386,11 +393,11 @@ if __name__ == '__main__':
                 ValueEncodings.SIMPLE_INDEX.value,
                 ValueEncodings.COMPLEX.value]
         )
-        json.dump(splits, open("splits.json", 'w'))
-        json.dump(models, open("models.json", 'w'))
+        # json.dump(splits, open("splits.json", 'w'))
+        # json.dump(models, open("models.json", 'w'))
     elif experimentation == ExperimentationType.INCREMENTAL.value:
-        splits = json.load(open("../splits.json", 'r'))
-        models = json.load(open("../models.json", 'r'))
+        # splits = json.load(open("../splits.json", 'r'))
+        # models = json.load(open("../models.json", 'r'))
 
         launch_experimentation(
             ExperimentationType.INCREMENTAL.value,

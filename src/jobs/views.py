@@ -27,6 +27,7 @@ class JobList(ListAPIView):
 
     def get_queryset(self):
         jobs = Job.objects.all()
+
         type = self.request.data.get('type', None)
         status = self.request.data.get('status', None)
         create_models = self.request.data.get('create_models', None)

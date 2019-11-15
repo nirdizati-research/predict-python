@@ -55,14 +55,15 @@ def init_database(experimentation_type, splits, dataset, base_folder):
                                                       test=base_folder + dataset + '80-100.xes')
 
 
-def get_pretrained_model_id(data, prefix, attribute_name, classification_method, dataset, encoding_method):
-    model_id = data.loc[
-        (data['predictive_model'] == classification_method) &
-        (data['encoding_value_encoding'] == encoding_method) &
-        (data['encoding_prefix_length'] == prefix) &
-        (data['labelling_attribute_name'] == attribute_name) &
-        (data['split_id'] == dataset)
-        ].filter(items=['predictive_model_id']).values[0][0]
+def get_pretrained_model_id(config):
+    if len(config) == 1:
+        model_id = config[0]['id']
+    elif len(config) > 1:
+        print('duplicate model')
+        model_id = config[0]['id']
+    else:
+        print('missing model')
+        return {}
     return model_id
 
 
@@ -178,7 +179,36 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                           "add_resources_used": False,
                           "add_new_traces": False},
                 classification=[classification_method],
-                hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value}
+                hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value},
+                incremental_train=[
+                    get_pretrained_model_id(
+                        config=retrieve_job(config={
+                            'type': JobTypes.PREDICTION.value,
+                            # 'status': JobStatuses.COMPLETED.value, # TODO sometimes some jobs hang in running while they are actually finished
+                            'create_models': True,
+                            'split': splits[dataset]['0-40_80-100'],
+                            'encoding': {"value_encoding": encoding_method,
+                                         "padding": True,
+                                         "task_generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
+                                         "prefix_length": prefix_length},
+                            'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
+                                          "attribute_name": "label",
+                                          "add_remaining_time": False,
+                                          "add_elapsed_time": False,
+                                          "add_executed_events": False,
+                                          "add_resources_used": False,
+                                          "add_new_traces": False},
+                            'hyperparameter_optimization': {
+                                "optimization_method": HyperparameterOptimizationMethods.HYPEROPT.value},
+                            # "max_evaluations": 1000, #TODO not yet supported
+                            # "performance_metric": HyperOptLosses.AUC.value,
+                            # "algorithm_type": HyperOptAlgorithms.TPE.value},
+                            'predictive_model': {'predictive_model': 'classification',
+                                                 'prediction_method': classification_method},
+                            'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
+                        })
+                    )
+                ]
         )
         payload.update(pretrained_model_parameters)
         models[dataset]['40-80_80-100'] = send_job_request(payload=payload)[0]['id']
@@ -203,13 +233,35 @@ def drift_size_experimentation(dataset, prefix_length, models, splits, classific
                           "add_new_traces": False},
                 classification=[classification_method],
                 hyperparameter_optimization={"type": HyperparameterOptimizationMethods.NONE.value},
-                incremental_train={
-                    "base_model": get_pretrained_model_id(data, prefix_length, 'label', classification_method,
-                                                          splits[dataset]['0-40_80-100'], encoding_method)}
-                # MODEL_HYPERPARAMETERS={
-                #     'classification_' + classification_method: Job.objects.filter(id=models[dataset]['0-40_80-100'])[0].predictive_model.to_dict()
-                # }
-            )
+                incremental_train=[
+                    get_pretrained_model_id(
+                        config=retrieve_job(config={
+                            'type': JobTypes.PREDICTION.value,
+                            # 'status': JobStatuses.COMPLETED.value, # TODO sometimes some jobs hang in running while they are actually finished
+                            'create_models': True,
+                            'split': splits[dataset]['0-40_80-100'],
+                            'encoding': {"value_encoding": encoding_method,
+                                         "padding": True,
+                                         "task_generation_type": TaskGenerationTypes.ALL_IN_ONE.value,
+                                         "prefix_length": prefix_length},
+                            'labelling': {"type": LabelTypes.ATTRIBUTE_STRING.value,
+                                          "attribute_name": "label",
+                                          "add_remaining_time": False,
+                                          "add_elapsed_time": False,
+                                          "add_executed_events": False,
+                                          "add_resources_used": False,
+                                          "add_new_traces": False},
+                            'hyperparameter_optimization': {"optimization_method": HyperparameterOptimizationMethods.HYPEROPT.value},
+                                                            # "max_evaluations": 1000, #TODO not yet supported
+                                                            # "performance_metric": HyperOptLosses.AUC.value,
+                                                            # "algorithm_type": HyperOptAlgorithms.TPE.value},
+                            'predictive_model': {'predictive_model': 'classification',
+                                                 'prediction_method': classification_method},
+                            'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
+                        })
+                    )
+                ]
+            ), server_port='50401', server_name='ashkin'
         )[0]['id']
 
     models[dataset]['0-55_80-100'] = send_job_request(
@@ -227,7 +279,11 @@ def drift_size_experimentation(dataset, prefix_length, models, splits, classific
                       "add_executed_events": False,
                       "add_resources_used": False,
                       "add_new_traces": False},
-            classification=[classification_method]
+            classification=[classification_method],
+            hyperparameter_optimization={"type": HyperparameterOptimizationMethods.HYPEROPT.value,
+                                         "max_evaluations": 1000,
+                                         "performance_metric": HyperOptLosses.AUC.value,
+                                         "algorithm_type": HyperOptAlgorithms.TPE.value},
         )
     )[0]['id']
 
@@ -302,52 +358,52 @@ if __name__ == '__main__':
         'BPI11/f1/': {
             '0-40_80-100': 8,
             '0-80_80-100': 9,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 38,
         },
         'BPI11/f2/': {
             '0-40_80-100': 10,
             '0-80_80-100': 11,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 39,
         },
         'BPI11/f3/': {
             '0-40_80-100': 12,
             '0-80_80-100': 13,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 40,
         },
         'BPI11/f4/': {
             '0-40_80-100': 14,
             '0-80_80-100': 15,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 41,
         },
         'BPI15/f1/': {
             '0-40_80-100': 16,
             '0-80_80-100': 17,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 42,
         },
         'BPI15/f2/': {
             '0-40_80-100': 18,
             '0-80_80-100': 19,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 43,
         },
         'BPI15/f3/': {
             '0-40_80-100': 20,
             '0-80_80-100': 21,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 44,
         },
         'Drift1/f1/': {
             '0-40_80-100': 22,
             '0-80_80-100': 23,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 45,
 
             '40-60_80-100': 1111,
             '0-60_80-100': 1111,
-            '40-55_80-100': 1111,
+            '40-55_80-100': 36, #+TANTO perche' uno e' stato ciccato
             '0-55_80-100': 1111
         },
         'Drift2/f1/': {
             '0-40_80-100': 24,
             '0-80_80-100': 25,
-            '40-80_80-100': 1111,
+            '40-80_80-100': 46,
 
             '40-60_80-100': 1111,
             '0-60_80-100': 1111,
@@ -365,6 +421,23 @@ if __name__ == '__main__':
             base_folder,
             models,
             prefixes=[30, 50, 70],
+            classification_methods=[
+                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                ClassificationMethods.SGDCLASSIFIER.value,
+                ClassificationMethods.PERCEPTRON.value,
+                ClassificationMethods.RANDOM_FOREST.value],
+            encodings=[
+                ValueEncodings.SIMPLE_INDEX.value,
+                ValueEncodings.COMPLEX.value]
+        )
+
+        launch_experimentation(
+            ExperimentationType.STD.value,
+            datasets2,
+            splits,
+            base_folder,
+            models,
+            prefixes=[3, 5, 7],
             classification_methods=[
                 ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
                 ClassificationMethods.SGDCLASSIFIER.value,
@@ -415,7 +488,25 @@ if __name__ == '__main__':
                 ValueEncodings.SIMPLE_INDEX.value,
                 ValueEncodings.COMPLEX.value]
         )
-        json.dump(splits, open("splits.json", 'w'))
-        json.dump(models, open("models.json", 'w'))
+
+        launch_experimentation(
+            ExperimentationType.INCREMENTAL.value,
+            datasets2,
+            splits,
+            base_folder,
+            models,
+            prefixes=[3, 5, 7],
+            classification_methods=[
+                ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                ClassificationMethods.SGDCLASSIFIER.value,
+                ClassificationMethods.PERCEPTRON.value,
+                ClassificationMethods.RANDOM_FOREST.value],
+            encodings=[
+                ValueEncodings.SIMPLE_INDEX.value,
+                ValueEncodings.COMPLEX.value]
+        )
+
+        # json.dump(splits, open("splits.json", 'w'))
+        # json.dump(models, open("models.json", 'w'))
 
     print("End of the experiments")

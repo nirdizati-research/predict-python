@@ -79,6 +79,7 @@ class Job(CommonModel):
 
     def to_dict(self) -> dict:
         return {
+            'id': self.pk,
             'created_date': self.created_date,
             'modified_date': self.modified_date,
             'error': self.error,

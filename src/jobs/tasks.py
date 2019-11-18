@@ -38,7 +38,7 @@ def prediction_task(job_id):
                 result, model_split = calculate(job)
             job_elapsed_time = time.time() - job_start_time
             if job.hyperparameter_optimizer is not None and \
-                job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE:
+                job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
                 job.hyperparameter_optimizer = duplicate_orm_row(HyperparameterOptimization.objects.filter(pk=job.hyperparameter_optimizer.id)[0])
                 job.hyperparameter_optimizer.elapsed_time = timedelta(seconds=job_elapsed_time)
                 job.hyperparameter_optimizer.save()

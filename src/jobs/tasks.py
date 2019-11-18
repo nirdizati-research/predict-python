@@ -9,10 +9,11 @@ from sklearn.externals import joblib
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
-from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
 from src.jobs.job_creator import set_model_name
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
+from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,7 @@ def prediction_task(job_id):
             job_elapsed_time = time.time() - job_start_time
             if job.hyperparameter_optimizer is not None and \
                 job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE:
+                job.hyperparameter_optimizer = duplicate_orm_row(HyperparameterOptimization.objects.filter(pk=job.hyperparameter_optimizer.id)[0])
                 job.hyperparameter_optimizer.elapsed_time = timedelta(seconds=job_elapsed_time)
                 job.hyperparameter_optimizer.save()
                 job.save()

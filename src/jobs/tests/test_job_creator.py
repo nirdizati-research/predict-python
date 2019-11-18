@@ -146,6 +146,7 @@ class TestJobCreator(TestCase):
                 'time_series_prediction.rnn': {}
             }
         })[0].to_dict()
+        del generated_job['id']
         del generated_job['created_date']
         del generated_job['modified_date']
         del generated_job['hyperparameter_optimizer']

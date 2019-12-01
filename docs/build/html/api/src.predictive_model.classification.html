@@ -1,0 +1,1528 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.predictive_model.classification package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.predictive_model.regression package" href="src.predictive_model.regression.html" />
+    <link rel="prev" title="src.predictive_model package" href="src.predictive_model.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.predictive_model.classification package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.regression.html">src.predictive_model.regression package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.time_series_prediction.html">src.predictive_model.time_series_prediction package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+          <li><a href="src.predictive_model.html">src.predictive_model package</a> &raquo;</li>
+        
+      <li>src.predictive_model.classification package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.predictive_model.classification.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-predictive-model-classification-package">
+<h1>src.predictive_model.classification package<a class="headerlink" href="#src-predictive-model-classification-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.predictive_model.classification.apps">
+<span id="src-predictive-model-classification-apps-module"></span><h2>src.predictive_model.classification.apps module<a class="headerlink" href="#module-src.predictive_model.classification.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.classification.apps.ClassificationConfig">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.apps.</code><code class="descname">ClassificationConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.apps.ClassificationConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.apps.PredictiveModelConfig" title="src.predictive_model.apps.PredictiveModelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.apps.PredictiveModelConfig</span></code></a></p>
+<dl class="attribute">
+<dt id="src.predictive_model.classification.apps.ClassificationConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.predictive_model.classification'</em><a class="headerlink" href="#src.predictive_model.classification.apps.ClassificationConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.classification.classification">
+<span id="src-predictive-model-classification-classification-module"></span><h2>src.predictive_model.classification.classification module<a class="headerlink" href="#module-src.predictive_model.classification.classification" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.predictive_model.classification.classification.classification">
+<code class="descclassname">src.predictive_model.classification.classification.</code><code class="descname">classification</code><span class="sig-paren">(</span><em>training_df</em>, <em>test_df</em>, <em>clusterer</em>, <em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.classification.classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>main classification entry point</p>
+<p>train and tests the classifier using the provided data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clusterer</strong> (<a class="reference internal" href="src.clustering.html#src.clustering.clustering.Clustering" title="src.clustering.clustering.Clustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clustering</span></code></a>) – </li>
+<li><strong>training_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – training DataFrame</li>
+<li><strong>test_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – testing DataFrame</li>
+<li><strong>job</strong> (<a class="reference internal" href="src.jobs.html#src.jobs.models.Job" title="src.jobs.models.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – job configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">(&lt;class ‘dict’&gt;, &lt;class ‘dict’&gt;)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">predictive_model scores and split</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.classification.predict">
+<code class="descclassname">src.predictive_model.classification.classification.</code><code class="descname">predict</code><span class="sig-paren">(</span><em>job</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.classification.predict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.classification.update_and_test">
+<code class="descclassname">src.predictive_model.classification.classification.</code><code class="descname">update_and_test</code><span class="sig-paren">(</span><em>training_df</em>, <em>test_df</em>, <em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.classification.update_and_test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.classification.custom_classification_models">
+<span id="src-predictive-model-classification-custom-classification-models-module"></span><h2>src.predictive_model.classification.custom_classification_models module<a class="headerlink" href="#module-src.predictive_model.classification.custom_classification_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.classification.custom_classification_models.NNClassifier">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.custom_classification_models.</code><code class="descname">NNClassifier</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.custom_classification_models.NNClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></p>
+<p>Neural Network classifier, implements the same methods as the sklearn models to make it simple to add</p>
+<dl class="method">
+<dt id="src.predictive_model.classification.custom_classification_models.NNClassifier.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_data</em>, <em>targets</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.custom_classification_models.NNClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates and fits the predictive_model</p>
+<p>first the encoded data is parsed, then the predictive_model created and then trained</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>train_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded training dataset</li>
+<li><strong>targets</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – encoded target dataset</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.custom_classification_models.NNClassifier.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>test_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.custom_classification_models.NNClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns predictive_model predictions</p>
+<p>parses the encoded test dataset, then returns the predictive_model predictions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded test dataset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">predictive_model predictions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.custom_classification_models.NNClassifier.predict_proba">
+<code class="descname">predict_proba</code><span class="sig-paren">(</span><em>test_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.custom_classification_models.NNClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the classification probability</p>
+<p>parses the test dataset and returns the raw prediction probabilities of the predictive_model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded test dataset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">predictive_model prediction probabilities</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.custom_classification_models.NNClassifier.reset">
+<code class="descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.custom_classification_models.NNClassifier.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>placeholder to allow use with other sklearn algorithms</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.classification.methods_default_config">
+<span id="src-predictive-model-classification-methods-default-config-module"></span><h2>src.predictive_model.classification.methods_default_config module<a class="headerlink" href="#module-src.predictive_model.classification.methods_default_config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_decision_tree">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_decision_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_decision_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_incremental_adaptive_tree">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_incremental_adaptive_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_incremental_adaptive_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_incremental_hoeffding_tree">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_incremental_hoeffding_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_incremental_hoeffding_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_incremental_naive_bayes">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_incremental_naive_bayes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_incremental_naive_bayes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_incremental_perceptron">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_incremental_perceptron</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_incremental_perceptron" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_incremental_sgd_classifier">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_incremental_sgd_classifier</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_incremental_sgd_classifier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_knn">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_knn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_knn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_nn">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_nn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_nn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_random_forest">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_random_forest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_random_forest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.classification.methods_default_config.classification_xgboost">
+<code class="descclassname">src.predictive_model.classification.methods_default_config.</code><code class="descname">classification_xgboost</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.methods_default_config.classification_xgboost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.classification.models">
+<span id="src-predictive-model-classification-models-module"></span><h2>src.predictive_model.classification.models module<a class="headerlink" href="#module-src.predictive_model.classification.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">AdaptiveHoeffdingTree</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>grace_period</em>, <em>split_criterion</em>, <em>split_confidence</em>, <em>tie_threshold</em>, <em>remove_poor_atts</em>, <em>leaf_prediction</em>, <em>nb_threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.get_leaf_prediction_display">
+<code class="descname">get_leaf_prediction_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: leaf_prediction&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.get_leaf_prediction_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.get_split_criterion_display">
+<code class="descname">get_split_criterion_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: split_criterion&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.get_split_criterion_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.grace_period">
+<code class="descname">grace_period</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.grace_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.leaf_prediction">
+<code class="descname">leaf_prediction</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.leaf_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.nb_threshold">
+<code class="descname">nb_threshold</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.nb_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.remove_poor_atts">
+<code class="descname">remove_poor_atts</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.remove_poor_atts" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.split_confidence">
+<code class="descname">split_confidence</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.split_confidence" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.split_criterion">
+<code class="descname">split_criterion</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.split_criterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.tie_threshold">
+<code class="descname">tie_threshold</code><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.tie_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.AdaptiveHoeffdingTree.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.AdaptiveHoeffdingTree.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.Classification">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">Classification</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.models.PredictiveModel" title="src.predictive_model.models.PredictiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.PredictiveModel</span></code></a></p>
+<p>Container of Classification to be shown in frontend</p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Classification.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Classification.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.adaptivehoeffdingtree">
+<code class="descname">adaptivehoeffdingtree</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.adaptivehoeffdingtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.decisiontree">
+<code class="descname">decisiontree</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.decisiontree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.hoeffdingtree">
+<code class="descname">hoeffdingtree</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.hoeffdingtree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.predictive_model.classification.models.Classification.init">
+<em class="property">static </em><code class="descname">init</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Classification.init" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.predictive_model.html#src.predictive_model.models.PredictiveModel" title="src.predictive_model.models.PredictiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredictiveModel</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.knn">
+<code class="descname">knn</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.knn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.naivebayes">
+<code class="descname">naivebayes</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.naivebayes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.neuralnetwork">
+<code class="descname">neuralnetwork</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.neuralnetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.perceptron">
+<code class="descname">perceptron</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.perceptron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.predictivemodel_ptr">
+<code class="descname">predictivemodel_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.predictivemodel_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.predictivemodel_ptr_id">
+<code class="descname">predictivemodel_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.predictivemodel_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.randomforest">
+<code class="descname">randomforest</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.randomforest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.sgdclassifier">
+<code class="descname">sgdclassifier</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.sgdclassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Classification.xgboost">
+<code class="descname">xgboost</code><a class="headerlink" href="#src.predictive_model.classification.models.Classification.xgboost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.ClassificationMethods">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">ClassificationMethods</code><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.ADAPTIVE_TREE">
+<code class="descname">ADAPTIVE_TREE</code><em class="property"> = 'adaptiveTree'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.ADAPTIVE_TREE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.DECISION_TREE">
+<code class="descname">DECISION_TREE</code><em class="property"> = 'decisionTree'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.DECISION_TREE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.HOEFFDING_TREE">
+<code class="descname">HOEFFDING_TREE</code><em class="property"> = 'hoeffdingTree'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.HOEFFDING_TREE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.KNN">
+<code class="descname">KNN</code><em class="property"> = 'knn'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.KNN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.MULTINOMIAL_NAIVE_BAYES">
+<code class="descname">MULTINOMIAL_NAIVE_BAYES</code><em class="property"> = 'multinomialNB'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.MULTINOMIAL_NAIVE_BAYES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.NN">
+<code class="descname">NN</code><em class="property"> = 'nn'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.NN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.PERCEPTRON">
+<code class="descname">PERCEPTRON</code><em class="property"> = 'perceptron'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.PERCEPTRON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.RANDOM_FOREST">
+<code class="descname">RANDOM_FOREST</code><em class="property"> = 'randomForest'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.RANDOM_FOREST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.SGDCLASSIFIER">
+<code class="descname">SGDCLASSIFIER</code><em class="property"> = 'SGDClassifier'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.SGDCLASSIFIER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.ClassificationMethods.XGBOOST">
+<code class="descname">XGBOOST</code><em class="property"> = 'xgboost'</em><a class="headerlink" href="#src.predictive_model.classification.models.ClassificationMethods.XGBOOST" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.DecisionTree">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">DecisionTree</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>max_depth</em>, <em>min_samples_split</em>, <em>min_samples_leaf</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.DecisionTree.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.DecisionTree.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.DecisionTree.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.DecisionTree.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.DecisionTree.max_depth">
+<code class="descname">max_depth</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.DecisionTree.min_samples_leaf">
+<code class="descname">min_samples_leaf</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.min_samples_leaf" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.DecisionTree.min_samples_split">
+<code class="descname">min_samples_split</code><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.min_samples_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.DecisionTree.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.DecisionTree.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.HoeffdingTree">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">HoeffdingTree</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>grace_period</em>, <em>split_criterion</em>, <em>split_confidence</em>, <em>tie_threshold</em>, <em>remove_poor_atts</em>, <em>leaf_prediction</em>, <em>nb_threshold</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.get_leaf_prediction_display">
+<code class="descname">get_leaf_prediction_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: leaf_prediction&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.get_leaf_prediction_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.get_split_criterion_display">
+<code class="descname">get_split_criterion_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: split_criterion&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.get_split_criterion_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.grace_period">
+<code class="descname">grace_period</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.grace_period" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.leaf_prediction">
+<code class="descname">leaf_prediction</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.leaf_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.nb_threshold">
+<code class="descname">nb_threshold</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.nb_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.remove_poor_atts">
+<code class="descname">remove_poor_atts</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.remove_poor_atts" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.split_confidence">
+<code class="descname">split_confidence</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.split_confidence" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.split_criterion">
+<code class="descname">split_criterion</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.split_criterion" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.tie_threshold">
+<code class="descname">tie_threshold</code><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.tie_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.HoeffdingTree.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.HoeffdingTree.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.Knn">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">Knn</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>n_neighbors</em>, <em>weights</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Knn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Knn.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Knn.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Knn.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Knn.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.Knn.get_weights_display">
+<code class="descname">get_weights_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: weights&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Knn.get_weights_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Knn.n_neighbors">
+<code class="descname">n_neighbors</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.n_neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.Knn.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Knn.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Knn.weights">
+<code class="descname">weights</code><a class="headerlink" href="#src.predictive_model.classification.models.Knn.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.NaiveBayes">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">NaiveBayes</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>alpha</em>, <em>fit_prior</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.NaiveBayes.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.NaiveBayes.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NaiveBayes.alpha">
+<code class="descname">alpha</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NaiveBayes.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NaiveBayes.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NaiveBayes.fit_prior">
+<code class="descname">fit_prior</code><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.fit_prior" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.NaiveBayes.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.NaiveBayes.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.NeuralNetwork">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">NeuralNetwork</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>n_hidden_layers</em>, <em>n_hidden_units</em>, <em>activation</em>, <em>n_epochs</em>, <em>dropout_rate</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.activation">
+<code class="descname">activation</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.dropout_rate">
+<code class="descname">dropout_rate</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.dropout_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.get_activation_display">
+<code class="descname">get_activation_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: activation&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.get_activation_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.n_epochs">
+<code class="descname">n_epochs</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.n_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.n_hidden_layers">
+<code class="descname">n_hidden_layers</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.n_hidden_layers" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.n_hidden_units">
+<code class="descname">n_hidden_units</code><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.n_hidden_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.NeuralNetwork.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.NeuralNetwork.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.Perceptron">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">Perceptron</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>penalty</em>, <em>alpha</em>, <em>fit_intercept</em>, <em>tol</em>, <em>shuffle</em>, <em>eta0</em>, <em>validation_fraction</em>, <em>n_iter_no_change</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Perceptron.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.Perceptron.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.alpha">
+<code class="descname">alpha</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.eta0">
+<code class="descname">eta0</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.eta0" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.fit_intercept">
+<code class="descname">fit_intercept</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.fit_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.Perceptron.get_penalty_display">
+<code class="descname">get_penalty_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: penalty&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.get_penalty_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.n_iter_no_change">
+<code class="descname">n_iter_no_change</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.n_iter_no_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.penalty">
+<code class="descname">penalty</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.penalty" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.shuffle">
+<code class="descname">shuffle</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.shuffle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.Perceptron.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.tol">
+<code class="descname">tol</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.Perceptron.validation_fraction">
+<code class="descname">validation_fraction</code><a class="headerlink" href="#src.predictive_model.classification.models.Perceptron.validation_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.RandomForest">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">RandomForest</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>n_estimators</em>, <em>max_depth</em>, <em>max_features</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.RandomForest.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.RandomForest.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.RandomForest.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.RandomForest.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.RandomForest.max_depth">
+<code class="descname">max_depth</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.RandomForest.max_features">
+<code class="descname">max_features</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.max_features" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.RandomForest.n_estimators">
+<code class="descname">n_estimators</code><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.n_estimators" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.RandomForest.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.RandomForest.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.SGDClassifier">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">SGDClassifier</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>loss</em>, <em>penalty</em>, <em>alpha</em>, <em>l1_ratio</em>, <em>fit_intercept</em>, <em>tol</em>, <em>epsilon</em>, <em>learning_rate</em>, <em>eta0</em>, <em>power_t</em>, <em>n_iter_no_change</em>, <em>validation_fraction</em>, <em>average</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.SGDClassifier.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.SGDClassifier.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.alpha">
+<code class="descname">alpha</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.average">
+<code class="descname">average</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.average" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.epsilon">
+<code class="descname">epsilon</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.epsilon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.eta0">
+<code class="descname">eta0</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.eta0" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.fit_intercept">
+<code class="descname">fit_intercept</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.fit_intercept" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.SGDClassifier.get_learning_rate_display">
+<code class="descname">get_learning_rate_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: learning_rate&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.get_learning_rate_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.SGDClassifier.get_loss_display">
+<code class="descname">get_loss_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: loss&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.get_loss_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.SGDClassifier.get_penalty_display">
+<code class="descname">get_penalty_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: penalty&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.get_penalty_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.l1_ratio">
+<code class="descname">l1_ratio</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.l1_ratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.learning_rate">
+<code class="descname">learning_rate</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.loss">
+<code class="descname">loss</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.n_iter_no_change">
+<code class="descname">n_iter_no_change</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.n_iter_no_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.penalty">
+<code class="descname">penalty</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.penalty" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.power_t">
+<code class="descname">power_t</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.power_t" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.SGDClassifier.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.tol">
+<code class="descname">tol</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.tol" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.SGDClassifier.validation_fraction">
+<code class="descname">validation_fraction</code><a class="headerlink" href="#src.predictive_model.classification.models.SGDClassifier.validation_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.classification.models.XGBoost">
+<em class="property">class </em><code class="descclassname">src.predictive_model.classification.models.</code><code class="descname">XGBoost</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>classification_ptr</em>, <em>n_estimators</em>, <em>max_depth</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.classification.models.Classification" title="src.predictive_model.classification.models.Classification"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.Classification</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.XGBoost.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.classification.models.XGBoost.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.classification.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.XGBoost.classification_ptr">
+<code class="descname">classification_ptr</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.classification_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.XGBoost.classification_ptr_id">
+<code class="descname">classification_ptr_id</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.classification_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.XGBoost.max_depth">
+<code class="descname">max_depth</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.max_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.classification.models.XGBoost.n_estimators">
+<code class="descname">n_estimators</code><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.n_estimators" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.classification.models.XGBoost.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.classification.models.XGBoost.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.classification">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.predictive_model.classification" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.predictive_model.regression.html" class="btn btn-neutral float-right" title="src.predictive_model.regression package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.predictive_model.html" class="btn btn-neutral float-left" title="src.predictive_model package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

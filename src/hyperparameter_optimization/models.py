@@ -41,6 +41,11 @@ class HyperparameterOptimization(CommonModel):
         else:
             raise ValueError('hyperparameter optimizer type {} not recognized'.format(hyperparameter_optimizer_type))
 
+    def to_dict(self) -> dict:
+        return {
+            'optimization_method': self.optimization_method
+        }
+
 
 class HyperOptAlgorithms(Enum):
     RANDOM_SEARCH = 'random_search'

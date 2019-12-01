@@ -12,6 +12,7 @@ class TestJobCreator(TestCase):
         job = create_test_job()
 
         initial_job = job.to_dict()
+        del initial_job['id']
         del initial_job['created_date']
         del initial_job['modified_date']
         del initial_job['hyperparameter_optimizer']
@@ -71,6 +72,7 @@ class TestJobCreator(TestCase):
                 'time_series_prediction.rnn': {}
             }
         })[0].to_dict()
+        del generated_job['id']
         del generated_job['created_date']
         del generated_job['modified_date']
         del generated_job['hyperparameter_optimizer']
@@ -83,6 +85,7 @@ class TestJobCreator(TestCase):
         job = create_test_job()
 
         initial_job = job.to_dict()
+        del initial_job['id']
         del initial_job['created_date']
         del initial_job['modified_date']
         del initial_job['hyperparameter_optimizer']
@@ -143,6 +146,7 @@ class TestJobCreator(TestCase):
                 'time_series_prediction.rnn': {}
             }
         })[0].to_dict()
+        del generated_job['id']
         del generated_job['created_date']
         del generated_job['modified_date']
         del generated_job['hyperparameter_optimizer']

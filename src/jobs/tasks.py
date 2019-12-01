@@ -1,5 +1,6 @@
 import logging
 import time
+from datetime import timedelta
 
 import django_rq
 from django_rq.decorators import job
@@ -8,9 +9,11 @@ from sklearn.externals import joblib
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
-from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
+from src.jobs.job_creator import set_model_name
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
+from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +36,7 @@ def prediction_task(job_id):
                 result, model_split = hyperopt_task(job)
             else:
                 result, model_split = calculate(job)
-            job_elapsed_time = time.time() - job_start_time #todo: this is not stored anywhere
+            job_elapsed_time = time.time() - job_start_time
             logger.info('\tJob took: {} in HH:MM:ss'.format(time.strftime("%H:%M:%S", time.gmtime(job_elapsed_time))))
             if job.create_models:
                 save_models(model_split, job)
@@ -52,6 +55,8 @@ def prediction_task(job_id):
 
 
 def save_models(models: dict, job: Job):
+    set_model_name(job)
+
     logger.info("\tStart saving models of JOB {}".format(job.id))
     if job.clustering.clustering_method != ClusteringMethods.NO_CLUSTER.value:
         joblib.dump(models[ModelType.CLUSTERER.value], job.clustering.model_path)

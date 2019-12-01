@@ -1,0 +1,532 @@
+<log xes.version="1.0" xes.features="nested-attributes" openxes.version="1.0RC7">
+	<trace>
+		<date key="Start date" value="2006-01-19T00:14:24.000+01:00"/>
+		<string key="concept:name" value="684"/>
+		<string key="Diagnosis code" value="M13"/>
+		<date key="End date" value="2007-01-18T23:45:36.000+01:00"/>
+		<string key="Specialism code" value="SC7"/>
+		<string key="Treatment code" value="TC503"/>
+		<string key="Diagnosis" value="maligniteit cervix"/>
+		<string key="Diagnosis Treatment Combination ID" value="DTC459361"/>
+		<string key="label" value="false"/>
+		<int key="Age" value="35"/>
+		<event>
+			<string key="Activity code" value="AC410100"/>
+			<string key="concept:name" value="First outpatient consultation"/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="SGNA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 2"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-04-19T01:00:00.000+02:00"/>
+			<string key="group" value="Obstetrics &amp; Gynaecology clinic"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC419100"/>
+			<string key="concept:name" value="administrative fee - the first pol"/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="SGNA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 2"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-04-19T01:00:00.000+02:00"/>
+			<string key="group" value="Obstetrics &amp; Gynaecology clinic"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC355111"/>
+			<string key="concept:name" value="compartment for inspection"/>
+			<string key="Specialism code" value="SC88"/>
+			<string key="Producer code" value="LVPT"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-04-21T01:00:00.000+02:00"/>
+			<string key="group" value="Pathology"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC359999"/>
+			<string key="concept:name" value="cito histological examination"/>
+			<string key="Specialism code" value="SC88"/>
+			<string key="Producer code" value="LVPT"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-04-21T01:00:00.000+02:00"/>
+			<string key="group" value="Pathology"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRLA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRLA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<float key="Activity code" value="370407.0"/>
+			<string key="concept:name" value="hemoglobin photoelectric"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="HAEM"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370604"/>
+			<string key="concept:name" value="ABO blood group and rhesus factor"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370606"/>
+			<string key="concept:name" value="rhesus factor d - Centrifuge method - email"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC378607"/>
+			<string key="concept:name" value="red cell antibody screening"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC379999"/>
+			<string key="concept:name" value="order rate"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRLA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2006-05-03T01:00:00.000+02:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+	</trace>
+	<trace>
+		<date key="Start date" value="2007-01-05T00:14:24.000+01:00"/>
+		<string key="concept:name" value="913"/>
+		<string key="Diagnosis code" value="M13"/>
+		<date key="End date" value="2008-01-03T23:45:36.000+01:00"/>
+		<string key="Specialism code" value="SC7"/>
+		<string key="Treatment code" value="TC803"/>
+		<string key="Diagnosis" value="Adenoca:  cervix st Ib"/>
+		<string key="Diagnosis Treatment Combination ID" value="DTC675876"/>
+		<string key="label" value="true"/>
+		<int key="Age" value="41"/>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRPO"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRPO"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRPO"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370401"/>
+			<string key="concept:name" value="unconjugated bilirubin"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370401C"/>
+			<string key="concept:name" value="bilirubin - total"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370402"/>
+			<string key="concept:name" value="glucose"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370403"/>
+			<string key="concept:name" value="urea"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<float key="Activity code" value="370407.0"/>
+			<string key="concept:name" value="hemoglobin photoelectric"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="HAEM"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370419"/>
+			<string key="concept:name" value="creatinine"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370423"/>
+			<string key="concept:name" value="alkaline phosphatase-kinetic-"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370442"/>
+			<string key="concept:name" value="sodium flame photometry"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370443"/>
+			<string key="concept:name" value="potassium potentiometrically"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370488E"/>
+			<string key="concept:name" value="SGOT - Asat kinetic"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370488G"/>
+			<string key="concept:name" value="SGPT - alat kinetic"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370488J"/>
+			<string key="concept:name" value="Milk acid dehydrogenase LDH kinetic"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370604"/>
+			<string key="concept:name" value="ABO blood group and rhesus factor"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370606"/>
+			<string key="concept:name" value="rhesus factor d - Centrifuge method - email"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370712B"/>
+			<string key="concept:name" value="leukocyte count electronic"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="HAEM"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="370715A"/>
+			<string key="concept:name" value="platelet count - Electronic"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="HAEM"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC372417"/>
+			<string key="concept:name" value="gammaglutamyltranspeptidase"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<float key="Activity code" value="376400.0"/>
+			<string key="concept:name" value="CEA - tumor marker using meia"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE1"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="376480A"/>
+			<string key="concept:name" value="squamous cell carcinoma using eia"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="LAKB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="Pharmacy Laboratory"/>
+		</event>
+		<event>
+			<string key="Activity code" value="377498A"/>
+			<string key="concept:name" value="calcium"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="378453A"/>
+			<string key="concept:name" value="albumin"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE2"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC378607"/>
+			<string key="concept:name" value="red cell antibody screening"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-05T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="378619A"/>
+			<string key="concept:name" value="ca-125 using meia"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CHE1"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-10T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC379999"/>
+			<string key="concept:name" value="order rate"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="CRLA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-10T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC386002"/>
+			<string key="concept:name" value="thorax"/>
+			<string key="Specialism code" value="SC62"/>
+			<string key="Producer code" value="SRA1"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 5"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-12T00:00:00.000+01:00"/>
+			<string key="group" value="Radiology"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC410100"/>
+			<string key="concept:name" value="First outpatient consultation"/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="SGNA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 2"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-13T00:00:00.000+01:00"/>
+			<string key="group" value="Obstetrics &amp; Gynaecology clinic"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC419100"/>
+			<string key="concept:name" value="administrative fee - the first pol"/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="SGNA"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 2"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-15T00:00:00.000+01:00"/>
+			<string key="group" value="Obstetrics &amp; Gynaecology clinic"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC40014"/>
+			<string key="concept:name" value="demurrage - all spec.beh.kinderg.-Reval."/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="H5ZU"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 2"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-20T00:00:00.000+01:00"/>
+			<string key="group" value="Nursing ward"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC337220"/>
+			<string key="concept:name" value="cervix - conisation"/>
+			<string key="Specialism code" value="SC7"/>
+			<string key="Producer code" value="OKU1"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 3"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-20T00:00:00.000+01:00"/>
+			<string key="group" value="Operating rooms"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC350503"/>
+			<string key="concept:name" value="immuno-pathology"/>
+			<string key="Specialism code" value="SC88"/>
+			<string key="Producer code" value="LVPT"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-20T00:00:00.000+01:00"/>
+			<string key="group" value="Pathology"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC356133"/>
+			<string key="concept:name" value="histological examination - big resectiep"/>
+			<string key="Specialism code" value="SC88"/>
+			<string key="Producer code" value="LVPT"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-20T00:00:00.000+01:00"/>
+			<string key="group" value="Pathology"/>
+		</event>
+		<event>
+			<string key="Activity code" value="AC370000"/>
+			<string key="concept:name" value="assumption laboratory"/>
+			<string key="Specialism code" value="SC86"/>
+			<string key="Producer code" value="BLOB"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="Section" value="Section 4"/>
+			<int key="Number of executions" value="1"/>
+			<date key="time:timestamp" value="2007-03-20T00:00:00.000+01:00"/>
+			<string key="group" value="General Lab Clinical Chemistry"/>
+		</event>
+	</trace>
+</log>

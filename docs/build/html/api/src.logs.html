@@ -1,0 +1,501 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.logs package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.predictive_model package" href="src.predictive_model.html" />
+    <link rel="prev" title="src.labelling package" href="src.labelling.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.logs package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.logs package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.logs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-logs-package">
+<h1>src.logs package<a class="headerlink" href="#src-logs-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.logs.admin">
+<span id="src-logs-admin-module"></span><h2>src.logs.admin module<a class="headerlink" href="#module-src.logs.admin" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.logs.apps">
+<span id="src-logs-apps-module"></span><h2>src.logs.apps module<a class="headerlink" href="#module-src.logs.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.logs.apps.LogsConfig">
+<em class="property">class </em><code class="descclassname">src.logs.apps.</code><code class="descname">LogsConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.apps.LogsConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.logs.apps.LogsConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.logs'</em><a class="headerlink" href="#src.logs.apps.LogsConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.logs.log_service">
+<span id="src-logs-log-service-module"></span><h2>src.logs.log_service module<a class="headerlink" href="#module-src.logs.log_service" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.logs.log_service.create_log">
+<code class="descclassname">src.logs.log_service.</code><code class="descname">create_log</code><span class="sig-paren">(</span><em>log</em>, <em>name</em>, <em>folder='cache/log_cache/'</em>, <em>import_in_cache=True</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.log_service.create_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.logs.log_service.create_properties">
+<code class="descclassname">src.logs.log_service.</code><code class="descname">create_properties</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.log_service.create_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create read-only dict with methods in this class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.logs.models">
+<span id="src-logs-models-module"></span><h2>src.logs.models module<a class="headerlink" href="#module-src.logs.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.logs.models.Log">
+<em class="property">class </em><code class="descclassname">src.logs.models.</code><code class="descname">Log</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.models.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<p>A XES log file on disk</p>
+<dl class="exception">
+<dt id="src.logs.models.Log.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.logs.models.Log.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.logs.models.Log.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.logs.models.Log.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.id">
+<code class="descname">id</code><a class="headerlink" href="#src.logs.models.Log.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.name">
+<code class="descname">name</code><a class="headerlink" href="#src.logs.models.Log.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.logs.models.Log.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.original_log">
+<code class="descname">original_log</code><a class="headerlink" href="#src.logs.models.Log.original_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.path">
+<code class="descname">path</code><a class="headerlink" href="#src.logs.models.Log.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.properties">
+<code class="descname">properties</code><a class="headerlink" href="#src.logs.models.Log.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.test_log">
+<code class="descname">test_log</code><a class="headerlink" href="#src.logs.models.Log.test_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.logs.models.Log.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.models.Log.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.models.Log.training_log">
+<code class="descname">training_log</code><a class="headerlink" href="#src.logs.models.Log.training_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.logs.serializers">
+<span id="src-logs-serializers-module"></span><h2>src.logs.serializers module<a class="headerlink" href="#module-src.logs.serializers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.logs.serializers.LogSerializer">
+<em class="property">class </em><code class="descclassname">src.logs.serializers.</code><code class="descname">LogSerializer</code><span class="sig-paren">(</span><em>instance=None</em>, <em>data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.serializers.LogSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="class">
+<dt id="src.logs.serializers.LogSerializer.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#src.logs.serializers.LogSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="src.logs.serializers.LogSerializer.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'name', 'properties')</em><a class="headerlink" href="#src.logs.serializers.LogSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.serializers.LogSerializer.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#src.logs.serializers.LogSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.logs.models.Log" title="src.logs.models.Log"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.logs.models.Log</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.logs.urls">
+<span id="src-logs-urls-module"></span><h2>src.logs.urls module<a class="headerlink" href="#module-src.logs.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.logs.views">
+<span id="src-logs-views-module"></span><h2>src.logs.views module<a class="headerlink" href="#module-src.logs.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.logs.views.LogDetail">
+<em class="property">class </em><code class="descclassname">src.logs.views.</code><code class="descname">LogDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.LogDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.mixins.RetrieveModelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.GenericAPIView</span></code></p>
+<dl class="method">
+<dt id="src.logs.views.LogDetail.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.LogDetail.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.LogDetail.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#src.logs.views.LogDetail.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.LogDetail.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.logs.views.LogDetail.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.logs.serializers.LogSerializer" title="src.logs.serializers.LogSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.logs.serializers.LogSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.logs.views.LogList">
+<em class="property">class </em><code class="descclassname">src.logs.views.</code><code class="descname">LogList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.LogList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.mixins.ListModelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.GenericAPIView</span></code></p>
+<dl class="method">
+<dt id="src.logs.views.LogList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.LogList.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.logs.views.LogList.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.LogList.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.LogList.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#src.logs.views.LogList.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.LogList.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.logs.views.LogList.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.logs.serializers.LogSerializer" title="src.logs.serializers.LogSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.logs.serializers.LogSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.logs.views.SplitDetail">
+<em class="property">class </em><code class="descclassname">src.logs.views.</code><code class="descname">SplitDetail</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.SplitDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.mixins.RetrieveModelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.GenericAPIView</span></code></p>
+<dl class="method">
+<dt id="src.logs.views.SplitDetail.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.SplitDetail.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.SplitDetail.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#src.logs.views.SplitDetail.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.logs.views.SplitDetail.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.logs.views.SplitDetail.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="src.split.html#src.split.serializers.SplitSerializer" title="src.split.serializers.SplitSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.split.serializers.SplitSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="src.logs.views.upload_multiple">
+<code class="descclassname">src.logs.views.</code><code class="descname">upload_multiple</code><span class="sig-paren">(</span><em>self</em>, <em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.logs.views.upload_multiple" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.logs">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.logs" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.predictive_model.html" class="btn btn-neutral float-right" title="src.predictive_model package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.labelling.html" class="btn btn-neutral float-left" title="src.labelling package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

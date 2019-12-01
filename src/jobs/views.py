@@ -7,11 +7,15 @@ from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
+from src.clustering.models import Clustering
+from src.encoding.models import Encoding
+from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.jobs import tasks
 from src.jobs.job_creator import generate, generate_labelling, update
 from src.jobs.models import Job, JobTypes
 from src.jobs.serializers import JobSerializer
-from src.predictive_model.models import PredictiveModels
+from src.labelling.models import Labelling
+from src.predictive_model.models import PredictiveModel, PredictiveModels
 from src.split.models import Split
 
 
@@ -23,12 +27,91 @@ class JobList(ListAPIView):
 
     def get_queryset(self):
         jobs = Job.objects.all()
-        type = self.request.query_params.get('type', None)
-        status = self.request.query_params.get('status', None)
+
+        type = self.request.data.get('type', None)
+        status = self.request.data.get('status', None)
+        create_models = self.request.data.get('create_models', None)
+        split = self.request.data.get('split', None)
+
+        encoding_config = self.request.data.get('encoding', None)
+        labelling_config = self.request.data.get('labelling', None)
+        clustering_config = self.request.data.get('clustering', None)
+        predictive_model_config = self.request.data.get('predictive_model', None)
+        hyperparameter_optimization_config = self.request.data.get('hyperparameter_optimization', None)
+        # incremental_train_config = self.request.data.get('incremental_train', None)
+
         if type is not None:
             jobs = jobs.filter(type=type)
-        elif type is not None:
+        if status is not None:
             jobs = jobs.filter(status=status)
+        if create_models is not None:
+            jobs = jobs.filter(create_models=create_models)
+        if split is not None:
+            jobs = jobs.filter(split=split)
+        if encoding_config is not None:
+            encodings = Encoding.objects.all()
+            if 'data_encoding' in encoding_config:
+                encodings = encodings.filter(data_encoding=encoding_config['data_encoding'])
+            if 'value_encoding' in encoding_config:
+                encodings = encodings.filter(value_encoding=encoding_config['value_encoding'])
+            if 'add_elapsed_time' in encoding_config:
+                encodings = encodings.filter(add_elapsed_time=encoding_config['add_elapsed_time'])
+            if 'add_remaining_time' in encoding_config:
+                encodings = encodings.filter(add_remaining_time=encoding_config['add_remaining_time'])
+            if 'add_executed_events' in encoding_config:
+                encodings = encodings.filter(add_executed_events=encoding_config['add_executed_events'])
+            if 'add_resources_used' in encoding_config:
+                encodings = encodings.filter(add_resources_used=encoding_config['add_resources_used'])
+            if 'add_new_traces' in encoding_config:
+                encodings = encodings.filter(add_new_traces=encoding_config['add_new_traces'])
+            if 'features' in encoding_config:
+                encodings = encodings.filter(features=encoding_config['features'])
+            if 'prefix_length' in encoding_config:
+                encodings = encodings.filter(prefix_length=encoding_config['prefix_length'])
+            if 'padding' in encoding_config:
+                encodings = encodings.filter(padding=encoding_config['padding'])
+            if 'task_generation_type' in encoding_config:
+                encodings = encodings.filter(task_generation_type=encoding_config['task_generation_type'])
+            jobs = jobs.filter(encoding__in=[element.id for element in encodings])
+        if labelling_config is not None:
+            labellings = Labelling.objects.all()
+            if 'type' in labelling_config:
+                labellings = labellings.filter(type=labelling_config['type'])
+            if 'attribute_name' in labelling_config:
+                labellings = labellings.filter(attribute_name=labelling_config['attribute_name'])
+            if 'threshold_type' in labelling_config:
+                labellings = labellings.filter(threshold_type=labelling_config['threshold_type'])
+            if 'threshold' in labelling_config:
+                labellings = labellings.filter(threshold=labelling_config['threshold'])
+            jobs = jobs.filter(labelling__in=[element.id for element in labellings])
+        if clustering_config is not None:
+            clusterings = Clustering.objects.all()
+            if 'clustering_method' in clustering_config:
+                clusterings = clusterings.filter(clustering_method=clustering_config['clustering_method'])
+            jobs = jobs.filter(clustering__in=[element.id for element in clusterings])
+        if predictive_model_config is not None:
+            predictive_models = PredictiveModel.objects.all()
+            if 'predictive_model' in predictive_model_config:
+                predictive_models = predictive_models.filter(predictive_model=predictive_model_config['predictive_model'])
+            if 'prediction_method' in predictive_model_config:
+                predictive_models = predictive_models.filter(prediction_method=predictive_model_config['prediction_method'])
+            jobs = jobs.filter(predictive_model__in=[element.id for element in predictive_models])
+        if hyperparameter_optimization_config is not None:
+            hyperparameter_optimizations = HyperparameterOptimization.objects.all()
+            if 'optimization_method' in hyperparameter_optimization_config:
+                hyperparameter_optimizations = hyperparameter_optimizations.filter(optimization_method=hyperparameter_optimization_config['optimization_method'])
+
+            # if 'max_evaluations' in hyperparameter_optimization_config: #TODO add support for inner parameters of hyperopt
+            #     hyperparameter_optimizations.filter(max_evaluations=hyperparameter_optimization_config['max_evaluations'])
+            # if 'performance_metric' in hyperparameter_optimization_config:
+            #     hyperparameter_optimizations.filter(performance_metric=hyperparameter_optimization_config['performance_metric'])
+            # if 'algorithm_type' in hyperparameter_optimization_config:
+            #     hyperparameter_optimizations.filter(algorithm_type=hyperparameter_optimization_config['algorithm_type'])
+            jobs = jobs.filter(hyperparameter_optimizer__in=[element.id for element in hyperparameter_optimizations])
+        # elif incremental_train_config is not None:
+        #     incremental_train = # TODO ADD RECURSION TO THIS FUNCTION
+        #     jobs = jobs.filter(incremental_train=incremental_train)
+
         return jobs
 
     # TODO remove?

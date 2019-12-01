@@ -22,7 +22,6 @@ def explanation(exp_id: int, explanation_target: int = 0):
     job = exp.job
     # load data
     training_df, test_df = get_encoded_logs(job)
-
     if int(explanation_target) > len(test_df):
         return 'True', len(test_df)
 

@@ -1,0 +1,575 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.hyperparameter_optimization package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.jobs package" href="src.jobs.html" />
+    <link rel="prev" title="src.evaluation package" href="src.evaluation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.hyperparameter_optimization package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.hyperparameter_optimization package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.hyperparameter_optimization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-hyperparameter-optimization-package">
+<h1>src.hyperparameter_optimization package<a class="headerlink" href="#src-hyperparameter-optimization-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.hyperparameter_optimization.apps">
+<span id="src-hyperparameter-optimization-apps-module"></span><h2>src.hyperparameter_optimization.apps module<a class="headerlink" href="#module-src.hyperparameter_optimization.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.apps.</code><code class="descname">HyperparameterOptimizationConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.hyperparameter_optimization'</em><a class="headerlink" href="#src.hyperparameter_optimization.apps.HyperparameterOptimizationConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.hyperparameter_optimization.hyperopt_spaces">
+<span id="src-hyperparameter-optimization-hyperopt-spaces-module"></span><h2>src.hyperparameter_optimization.hyperopt_spaces module<a class="headerlink" href="#module-src.hyperparameter_optimization.hyperopt_spaces" title="Permalink to this headline">¶</a></h2>
+<p>hyperopt search spaces for each prediction method</p>
+</div>
+<div class="section" id="module-src.hyperparameter_optimization.hyperopt_wrapper">
+<span id="src-hyperparameter-optimization-hyperopt-wrapper-module"></span><h2>src.hyperparameter_optimization.hyperopt_wrapper module<a class="headerlink" href="#module-src.hyperparameter_optimization.hyperopt_wrapper" title="Permalink to this headline">¶</a></h2>
+<p>hyperopt methods and functionalities</p>
+<dl class="function">
+<dt id="src.hyperparameter_optimization.hyperopt_wrapper.calculate_hyperopt">
+<code class="descclassname">src.hyperparameter_optimization.hyperopt_wrapper.</code><code class="descname">calculate_hyperopt</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.hyperopt_wrapper.calculate_hyperopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>main entry method for hyperopt calculations
+returns the predictive_model for the best trial</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>job</strong> (<a class="reference internal" href="src.jobs.html#src.jobs.models.Job" title="src.jobs.models.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – job configuration</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">(&lt;class ‘dict’&gt;, &lt;class ‘dict’&gt;, &lt;class ‘dict’&gt;)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">tuple containing the results, config and predictive_model split from the search</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.hyperparameter_optimization.methods_default_config">
+<span id="src-hyperparameter-optimization-methods-default-config-module"></span><h2>src.hyperparameter_optimization.methods_default_config module<a class="headerlink" href="#module-src.hyperparameter_optimization.methods_default_config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.hyperparameter_optimization.methods_default_config.hyperparameter_optimization_hyperopt">
+<code class="descclassname">src.hyperparameter_optimization.methods_default_config.</code><code class="descname">hyperparameter_optimization_hyperopt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.methods_default_config.hyperparameter_optimization_hyperopt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.hyperparameter_optimization.models">
+<span id="src-hyperparameter-optimization-models-module"></span><h2>src.hyperparameter_optimization.models module<a class="headerlink" href="#module-src.hyperparameter_optimization.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.hyperparameter_optimization.models.HyperOpt">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.models.</code><code class="descname">HyperOpt</code><span class="sig-paren">(</span><em>id</em>, <em>optimization_method</em>, <em>elapsed_time</em>, <em>hyperparameteroptimization_ptr</em>, <em>max_evaluations</em>, <em>performance_metric</em>, <em>algorithm_type</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.hyperparameter_optimization.models.HyperparameterOptimization" title="src.hyperparameter_optimization.models.HyperparameterOptimization"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.hyperparameter_optimization.models.HyperparameterOptimization</span></code></a></p>
+<dl class="exception">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.hyperparameter_optimization.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.hyperparameter_optimization.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.algorithm_type">
+<code class="descname">algorithm_type</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.algorithm_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.get_algorithm_type_display">
+<code class="descname">get_algorithm_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: algorithm_type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.get_algorithm_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.get_performance_metric_display">
+<code class="descname">get_performance_metric_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: performance_metric&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.get_performance_metric_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.hyperparameteroptimization_ptr">
+<code class="descname">hyperparameteroptimization_ptr</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.hyperparameteroptimization_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.hyperparameteroptimization_ptr_id">
+<code class="descname">hyperparameteroptimization_ptr_id</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.hyperparameteroptimization_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.max_evaluations">
+<code class="descname">max_evaluations</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.max_evaluations" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.performance_metric">
+<code class="descname">performance_metric</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.performance_metric" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.hyperparameter_optimization.models.HyperOpt.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOpt.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.hyperparameter_optimization.models.HyperOptAlgorithms">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.models.</code><code class="descname">HyperOptAlgorithms</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptAlgorithms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptAlgorithms.RANDOM_SEARCH">
+<code class="descname">RANDOM_SEARCH</code><em class="property"> = 'random_search'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptAlgorithms.RANDOM_SEARCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptAlgorithms.TPE">
+<code class="descname">TPE</code><em class="property"> = 'tpe'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptAlgorithms.TPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.models.</code><code class="descname">HyperOptLosses</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.ACC">
+<code class="descname">ACC</code><em class="property"> = 'acc'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.ACC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.AUC">
+<code class="descname">AUC</code><em class="property"> = 'auc'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.AUC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.F1SCORE">
+<code class="descname">F1SCORE</code><em class="property"> = 'f1score'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.F1SCORE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.FALSE_NEGATIVE">
+<code class="descname">FALSE_NEGATIVE</code><em class="property"> = 'false_negative'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.FALSE_NEGATIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.FALSE_POSITIVE">
+<code class="descname">FALSE_POSITIVE</code><em class="property"> = 'false_positive'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.FALSE_POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.MAE">
+<code class="descname">MAE</code><em class="property"> = 'mae'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.MAE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.MAPE">
+<code class="descname">MAPE</code><em class="property"> = 'mape'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.MAPE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.PRECISION">
+<code class="descname">PRECISION</code><em class="property"> = 'precision'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.PRECISION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.RECALL">
+<code class="descname">RECALL</code><em class="property"> = 'recall'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.RECALL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.RMSE">
+<code class="descname">RMSE</code><em class="property"> = 'rmse'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.RMSE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.RSCORE">
+<code class="descname">RSCORE</code><em class="property"> = 'rscore'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.RSCORE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.TRUE_NEGATIVE">
+<code class="descname">TRUE_NEGATIVE</code><em class="property"> = 'true_negative'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.TRUE_NEGATIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperOptLosses.TRUE_POSITIVE">
+<code class="descname">TRUE_POSITIVE</code><em class="property"> = 'true_positive'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperOptLosses.TRUE_POSITIVE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.models.</code><code class="descname">HyperparameterOptimization</code><span class="sig-paren">(</span><em>id</em>, <em>optimization_method</em>, <em>elapsed_time</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<dl class="exception">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.elapsed_time">
+<code class="descname">elapsed_time</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.elapsed_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.get_optimization_method_display">
+<code class="descname">get_optimization_method_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: optimization_method&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.get_optimization_method_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.hyperopt">
+<code class="descname">hyperopt</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.hyperopt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.id">
+<code class="descname">id</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.init">
+<em class="property">static </em><code class="descname">init</code><span class="sig-paren">(</span><em>configuration={'type': 'hyperopt'}</em><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.job_set">
+<code class="descname">job_set</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.job_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.objects">
+<code class="descname">objects</code><em class="property"> = &lt;model_utils.managers.InheritanceManager object&gt;</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.optimization_method">
+<code class="descname">optimization_method</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.optimization_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimization.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimization.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimizationMethods">
+<em class="property">class </em><code class="descclassname">src.hyperparameter_optimization.models.</code><code class="descname">HyperparameterOptimizationMethods</code><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimizationMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimizationMethods.HYPEROPT">
+<code class="descname">HYPEROPT</code><em class="property"> = 'hyperopt'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimizationMethods.HYPEROPT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.hyperparameter_optimization.models.HyperparameterOptimizationMethods.NONE">
+<code class="descname">NONE</code><em class="property"> = 'none'</em><a class="headerlink" href="#src.hyperparameter_optimization.models.HyperparameterOptimizationMethods.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.hyperparameter_optimization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.hyperparameter_optimization" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.jobs.html" class="btn btn-neutral float-right" title="src.jobs package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.evaluation.html" class="btn btn-neutral float-left" title="src.evaluation package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

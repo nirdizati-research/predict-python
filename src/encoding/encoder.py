@@ -19,6 +19,7 @@ class Encoder:
     def __init__(self, df: DataFrame, encoding: Encoding):
         self._encoder = {}
         self._label_dict = {}
+        self._label_dict_decoder = {}
         self._init_encoder(df, encoding)
 
     def _init_encoder(self, df: DataFrame, encoding: Encoding):
@@ -31,6 +32,7 @@ class Encoder:
                         classes = self._encoder[column].classes_
                         transforms = self._encoder[column].transform(classes)
                         self._label_dict[column] = dict(zip(classes, transforms))
+                        self._label_dict_decoder[column] = dict(zip(transforms, classes))
                     elif encoding.data_encoding == DataEncodings.ONE_HOT_ENCODER.value:
                         raise NotImplementedError('Onehot encoder not yet implemented')
                     else:
@@ -41,6 +43,16 @@ class Encoder:
             if column in self._encoder:
                 if encoding.data_encoding == DataEncodings.LABEL_ENCODER.value:
                     df[column] = df[column].apply(lambda x: self._label_dict[column].get(x, PADDING_VALUE))
+                elif encoding.data_encoding == DataEncodings.ONE_HOT_ENCODER.value:
+                    raise NotImplementedError('Onehot encoder not yet implemented')
+                else:
+                    raise ValueError('Please set the encoding technique!')
+
+    def decode(self, df: DataFrame, encoding: Encoding) -> None:
+        for column in df:
+            if column in self._encoder:
+                if encoding.data_encoding == DataEncodings.LABEL_ENCODER.value:
+                    df[column] = df[column].apply(lambda x: self._label_dict_decoder[column].get(x, PADDING_VALUE))
                 elif encoding.data_encoding == DataEncodings.ONE_HOT_ENCODER.value:
                     raise NotImplementedError('Onehot encoder not yet implemented')
                 else:

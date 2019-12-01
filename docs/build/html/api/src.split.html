@@ -1,0 +1,608 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.split package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.utils package" href="src.utils.html" />
+    <link rel="prev" title="src.runtime package" href="src.runtime.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.split package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.split package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.split.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-split-package">
+<h1>src.split package<a class="headerlink" href="#src-split-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.split.apps">
+<span id="src-split-apps-module"></span><h2>src.split.apps module<a class="headerlink" href="#module-src.split.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.split.apps.SplitConfig">
+<em class="property">class </em><code class="descclassname">src.split.apps.</code><code class="descname">SplitConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.apps.SplitConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.split.apps.SplitConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.split'</em><a class="headerlink" href="#src.split.apps.SplitConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.split.models">
+<span id="src-split-models-module"></span><h2>src.split.models module<a class="headerlink" href="#module-src.split.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.split.models.Split">
+<em class="property">class </em><code class="descclassname">src.split.models.</code><code class="descname">Split</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.models.Split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<p>Container of Split to be shown in frontend</p>
+<dl class="exception">
+<dt id="src.split.models.Split.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.split.models.Split.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.split.models.Split.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.split.models.Split.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.additional_columns">
+<code class="descname">additional_columns</code><a class="headerlink" href="#src.split.models.Split.additional_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.explanation_set">
+<code class="descname">explanation_set</code><a class="headerlink" href="#src.split.models.Split.explanation_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.split.models.Split.get_splitting_method_display">
+<code class="descname">get_splitting_method_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: splitting_method&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.models.Split.get_splitting_method_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.split.models.Split.get_type_display">
+<code class="descname">get_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.models.Split.get_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.id">
+<code class="descname">id</code><a class="headerlink" href="#src.split.models.Split.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.job_set">
+<code class="descname">job_set</code><a class="headerlink" href="#src.split.models.Split.job_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.labelledlog_set">
+<code class="descname">labelledlog_set</code><a class="headerlink" href="#src.split.models.Split.labelledlog_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.loadedlog_set">
+<code class="descname">loadedlog_set</code><a class="headerlink" href="#src.split.models.Split.loadedlog_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.split.models.Split.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.original_log">
+<code class="descname">original_log</code><a class="headerlink" href="#src.split.models.Split.original_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.original_log_id">
+<code class="descname">original_log_id</code><a class="headerlink" href="#src.split.models.Split.original_log_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.splitting_method">
+<code class="descname">splitting_method</code><a class="headerlink" href="#src.split.models.Split.splitting_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.test_log">
+<code class="descname">test_log</code><a class="headerlink" href="#src.split.models.Split.test_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.test_log_id">
+<code class="descname">test_log_id</code><a class="headerlink" href="#src.split.models.Split.test_log_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.test_size">
+<code class="descname">test_size</code><a class="headerlink" href="#src.split.models.Split.test_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.split.models.Split.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.split.models.Split.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.train_log">
+<code class="descname">train_log</code><a class="headerlink" href="#src.split.models.Split.train_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.train_log_id">
+<code class="descname">train_log_id</code><a class="headerlink" href="#src.split.models.Split.train_log_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.Split.type">
+<code class="descname">type</code><a class="headerlink" href="#src.split.models.Split.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.split.models.SplitOrderingMethods">
+<em class="property">class </em><code class="descclassname">src.split.models.</code><code class="descname">SplitOrderingMethods</code><a class="headerlink" href="#src.split.models.SplitOrderingMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.split.models.SplitOrderingMethods.SPLIT_RANDOM">
+<code class="descname">SPLIT_RANDOM</code><em class="property"> = 'random'</em><a class="headerlink" href="#src.split.models.SplitOrderingMethods.SPLIT_RANDOM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.SplitOrderingMethods.SPLIT_SEQUENTIAL">
+<code class="descname">SPLIT_SEQUENTIAL</code><em class="property"> = 'sequential'</em><a class="headerlink" href="#src.split.models.SplitOrderingMethods.SPLIT_SEQUENTIAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.SplitOrderingMethods.SPLIT_STRICT_TEMPORAL">
+<code class="descname">SPLIT_STRICT_TEMPORAL</code><em class="property"> = 'strict_temporal'</em><a class="headerlink" href="#src.split.models.SplitOrderingMethods.SPLIT_STRICT_TEMPORAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.SplitOrderingMethods.SPLIT_TEMPORAL">
+<code class="descname">SPLIT_TEMPORAL</code><em class="property"> = 'temporal'</em><a class="headerlink" href="#src.split.models.SplitOrderingMethods.SPLIT_TEMPORAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.split.models.SplitTypes">
+<em class="property">class </em><code class="descclassname">src.split.models.</code><code class="descname">SplitTypes</code><a class="headerlink" href="#src.split.models.SplitTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.split.models.SplitTypes.SPLIT_DOUBLE">
+<code class="descname">SPLIT_DOUBLE</code><em class="property"> = 'double'</em><a class="headerlink" href="#src.split.models.SplitTypes.SPLIT_DOUBLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.models.SplitTypes.SPLIT_SINGLE">
+<code class="descname">SPLIT_SINGLE</code><em class="property"> = 'single'</em><a class="headerlink" href="#src.split.models.SplitTypes.SPLIT_SINGLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.split.serializers">
+<span id="src-split-serializers-module"></span><h2>src.split.serializers module<a class="headerlink" href="#module-src.split.serializers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.split.serializers.CreateSplitSerializer">
+<em class="property">class </em><code class="descclassname">src.split.serializers.</code><code class="descname">CreateSplitSerializer</code><span class="sig-paren">(</span><em>instance=None</em>, <em>data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.serializers.CreateSplitSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="class">
+<dt id="src.split.serializers.CreateSplitSerializer.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#src.split.serializers.CreateSplitSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="src.split.serializers.CreateSplitSerializer.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('original_log', 'splitting_method', 'test_size')</em><a class="headerlink" href="#src.split.serializers.CreateSplitSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.serializers.CreateSplitSerializer.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#src.split.serializers.CreateSplitSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.split.models.Split" title="src.split.models.Split"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.split.models.Split</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.split.serializers.SplitSerializer">
+<em class="property">class </em><code class="descclassname">src.split.serializers.</code><code class="descname">SplitSerializer</code><span class="sig-paren">(</span><em>instance=None</em>, <em>data=&lt;class 'rest_framework.fields.empty'&gt;</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.serializers.SplitSerializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.serializers.ModelSerializer</span></code></p>
+<dl class="class">
+<dt id="src.split.serializers.SplitSerializer.Meta">
+<em class="property">class </em><code class="descname">Meta</code><a class="headerlink" href="#src.split.serializers.SplitSerializer.Meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="src.split.serializers.SplitSerializer.Meta.fields">
+<code class="descname">fields</code><em class="property"> = ('id', 'original_log', 'type', 'splitting_method', 'test_log', 'training_log', 'test_size')</em><a class="headerlink" href="#src.split.serializers.SplitSerializer.Meta.fields" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.serializers.SplitSerializer.Meta.model">
+<code class="descname">model</code><a class="headerlink" href="#src.split.serializers.SplitSerializer.Meta.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.split.models.Split" title="src.split.models.Split"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.split.models.Split</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="src.split.serializers.SplitSerializer.get_training_log">
+<code class="descname">get_training_log</code><span class="sig-paren">(</span><em>split</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.serializers.SplitSerializer.get_training_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.split.splitting">
+<span id="src-split-splitting-module"></span><h2>src.split.splitting module<a class="headerlink" href="#module-src.split.splitting" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.split.splitting.get_train_test_log">
+<code class="descclassname">src.split.splitting.</code><code class="descname">get_train_test_log</code><span class="sig-paren">(</span><em>split</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.splitting.get_train_test_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns training_log and test_log</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.split.urls">
+<span id="src-split-urls-module"></span><h2>src.split.urls module<a class="headerlink" href="#module-src.split.urls" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.split.views">
+<span id="src-split-views-module"></span><h2>src.split.views module<a class="headerlink" href="#module-src.split.views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.split.views.SplitList">
+<em class="property">class </em><code class="descclassname">src.split.views.</code><code class="descname">SplitList</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.views.SplitList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.mixins.ListModelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">rest_framework.generics.GenericAPIView</span></code></p>
+<dl class="method">
+<dt id="src.split.views.SplitList.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>request</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.views.SplitList.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.split.views.SplitList.post">
+<em class="property">static </em><code class="descname">post</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#src.split.views.SplitList.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.views.SplitList.queryset">
+<code class="descname">queryset</code><a class="headerlink" href="#src.split.views.SplitList.queryset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.split.views.SplitList.serializer_class">
+<code class="descname">serializer_class</code><a class="headerlink" href="#src.split.views.SplitList.serializer_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#src.split.serializers.SplitSerializer" title="src.split.serializers.SplitSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.split.serializers.SplitSerializer</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.split">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.split" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.utils.html" class="btn btn-neutral float-right" title="src.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.runtime.html" class="btn btn-neutral float-left" title="src.runtime package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

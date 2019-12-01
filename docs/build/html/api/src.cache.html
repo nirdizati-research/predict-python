@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.cache package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.clustering package" href="src.clustering.html" />
+    <link rel="prev" title="src package" href="src.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.cache package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.cache package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.cache.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-cache-package">
+<h1>src.cache package<a class="headerlink" href="#src-cache-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.cache.apps">
+<span id="src-cache-apps-module"></span><h2>src.cache.apps module<a class="headerlink" href="#module-src.cache.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.cache.apps.CacheConfig">
+<em class="property">class </em><code class="descclassname">src.cache.apps.</code><code class="descname">CacheConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.apps.CacheConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.cache.apps.CacheConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.cache'</em><a class="headerlink" href="#src.cache.apps.CacheConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.cache.cache">
+<span id="src-cache-cache-module"></span><h2>src.cache.cache module<a class="headerlink" href="#module-src.cache.cache" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.cache.cache.dump_to_cache">
+<code class="descclassname">src.cache.cache.</code><code class="descname">dump_to_cache</code><span class="sig-paren">(</span><em>path</em>, <em>obj</em>, <em>prefix=''</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.dump_to_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.get_digested">
+<code class="descclassname">src.cache.cache.</code><code class="descname">get_digested</code><span class="sig-paren">(</span><em>candidate_path</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.get_digested" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.get_labelled_logs">
+<code class="descclassname">src.cache.cache.</code><code class="descname">get_labelled_logs</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.get_labelled_logs" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(&lt;class ‘pandas.core.frame.DataFrame’&gt;, &lt;class ‘pandas.core.frame.DataFrame’&gt;)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.get_loaded_logs">
+<code class="descclassname">src.cache.cache.</code><code class="descname">get_loaded_logs</code><span class="sig-paren">(</span><em>split</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.get_loaded_logs" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(&lt;class ‘pandas.core.frame.DataFrame’&gt;, &lt;class ‘pandas.core.frame.DataFrame’&gt;, &lt;class ‘pandas.core.frame.DataFrame’&gt;)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.load_from_cache">
+<code class="descclassname">src.cache.cache.</code><code class="descname">load_from_cache</code><span class="sig-paren">(</span><em>path</em>, <em>prefix=''</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.load_from_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.put_labelled_logs">
+<code class="descclassname">src.cache.cache.</code><code class="descname">put_labelled_logs</code><span class="sig-paren">(</span><em>job</em>, <em>train_df</em>, <em>test_df</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.put_labelled_logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.cache.cache.put_loaded_logs">
+<code class="descclassname">src.cache.cache.</code><code class="descname">put_loaded_logs</code><span class="sig-paren">(</span><em>split</em>, <em>train_df</em>, <em>test_df</em>, <em>additional_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.cache.put_loaded_logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.cache.models">
+<span id="src-cache-models-module"></span><h2>src.cache.models module<a class="headerlink" href="#module-src.cache.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.cache.models.Cache">
+<em class="property">class </em><code class="descclassname">src.cache.models.</code><code class="descname">Cache</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.models.Cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<dl class="exception">
+<dt id="src.cache.models.Cache.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.cache.models.Cache.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.cache.models.Cache.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.cache.models.Cache.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.Cache.id">
+<code class="descname">id</code><a class="headerlink" href="#src.cache.models.Cache.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.Cache.labelledlog">
+<code class="descname">labelledlog</code><a class="headerlink" href="#src.cache.models.Cache.labelledlog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.Cache.loadedlog">
+<code class="descname">loadedlog</code><a class="headerlink" href="#src.cache.models.Cache.loadedlog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.Cache.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.cache.models.Cache.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.cache.models.LabelledLog">
+<em class="property">class </em><code class="descclassname">src.cache.models.</code><code class="descname">LabelledLog</code><span class="sig-paren">(</span><em>id</em>, <em>cache_ptr</em>, <em>train_log_path</em>, <em>test_log_path</em>, <em>split</em>, <em>encoding</em>, <em>labelling</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.models.LabelledLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.cache.models.Cache" title="src.cache.models.Cache"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.Cache</span></code></a></p>
+<dl class="exception">
+<dt id="src.cache.models.LabelledLog.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.cache.models.LabelledLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.cache.models.LabelledLog.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.cache.models.LabelledLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.cache_ptr">
+<code class="descname">cache_ptr</code><a class="headerlink" href="#src.cache.models.LabelledLog.cache_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.cache_ptr_id">
+<code class="descname">cache_ptr_id</code><a class="headerlink" href="#src.cache.models.LabelledLog.cache_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.encoding">
+<code class="descname">encoding</code><a class="headerlink" href="#src.cache.models.LabelledLog.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.encoding_id">
+<code class="descname">encoding_id</code><a class="headerlink" href="#src.cache.models.LabelledLog.encoding_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.labelling">
+<code class="descname">labelling</code><a class="headerlink" href="#src.cache.models.LabelledLog.labelling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.labelling_id">
+<code class="descname">labelling_id</code><a class="headerlink" href="#src.cache.models.LabelledLog.labelling_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.split">
+<code class="descname">split</code><a class="headerlink" href="#src.cache.models.LabelledLog.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.split_id">
+<code class="descname">split_id</code><a class="headerlink" href="#src.cache.models.LabelledLog.split_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.test_log_path">
+<code class="descname">test_log_path</code><a class="headerlink" href="#src.cache.models.LabelledLog.test_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LabelledLog.train_log_path">
+<code class="descname">train_log_path</code><a class="headerlink" href="#src.cache.models.LabelledLog.train_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.cache.models.LoadedLog">
+<em class="property">class </em><code class="descclassname">src.cache.models.</code><code class="descname">LoadedLog</code><span class="sig-paren">(</span><em>id</em>, <em>cache_ptr</em>, <em>train_log_path</em>, <em>test_log_path</em>, <em>additional_columns_path</em>, <em>split</em><span class="sig-paren">)</span><a class="headerlink" href="#src.cache.models.LoadedLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.cache.models.Cache" title="src.cache.models.Cache"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.Cache</span></code></a></p>
+<dl class="exception">
+<dt id="src.cache.models.LoadedLog.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.cache.models.LoadedLog.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.cache.models.LoadedLog.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.cache.models.LoadedLog.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.cache.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.additional_columns_path">
+<code class="descname">additional_columns_path</code><a class="headerlink" href="#src.cache.models.LoadedLog.additional_columns_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.cache_ptr">
+<code class="descname">cache_ptr</code><a class="headerlink" href="#src.cache.models.LoadedLog.cache_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.cache_ptr_id">
+<code class="descname">cache_ptr_id</code><a class="headerlink" href="#src.cache.models.LoadedLog.cache_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.split">
+<code class="descname">split</code><a class="headerlink" href="#src.cache.models.LoadedLog.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a many-to-one or
+one-to-one (via ForwardOneToOneDescriptor subclass) relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Child.parent</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardManyToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.split_id">
+<code class="descname">split_id</code><a class="headerlink" href="#src.cache.models.LoadedLog.split_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.test_log_path">
+<code class="descname">test_log_path</code><a class="headerlink" href="#src.cache.models.LoadedLog.test_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.cache.models.LoadedLog.train_log_path">
+<code class="descname">train_log_path</code><a class="headerlink" href="#src.cache.models.LoadedLog.train_log_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.cache">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.cache" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.clustering.html" class="btn btn-neutral float-right" title="src.clustering package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.html" class="btn btn-neutral float-left" title="src package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

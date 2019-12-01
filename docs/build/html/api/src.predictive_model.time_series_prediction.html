@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.predictive_model.time_series_prediction package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.runtime package" href="src.runtime.html" />
+    <link rel="prev" title="src.predictive_model.regression package" href="src.predictive_model.regression.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.classification.html">src.predictive_model.classification package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="src.predictive_model.regression.html">src.predictive_model.regression package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">src.predictive_model.time_series_prediction package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+          <li><a href="src.predictive_model.html">src.predictive_model package</a> &raquo;</li>
+        
+      <li>src.predictive_model.time_series_prediction package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.predictive_model.time_series_prediction.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-predictive-model-time-series-prediction-package">
+<h1>src.predictive_model.time_series_prediction package<a class="headerlink" href="#src-predictive-model-time-series-prediction-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin">
+<span id="src-predictive-model-time-series-prediction-timeseriespredictormixin-module"></span><h2>src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.TimeSeriesPredictorMixin">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.</code><code class="descname">TimeSeriesPredictorMixin</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.TimeSeriesPredictorMixin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.apps">
+<span id="src-predictive-model-time-series-prediction-apps-module"></span><h2>src.predictive_model.time_series_prediction.apps module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.apps.</code><code class="descname">TimeSeriesPredictionConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.apps.PredictiveModelConfig" title="src.predictive_model.apps.PredictiveModelConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.apps.PredictiveModelConfig</span></code></a></p>
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.predictive_model.time_series_prediction'</em><a class="headerlink" href="#src.predictive_model.time_series_prediction.apps.TimeSeriesPredictionConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.custom_time_series_prediction_models">
+<span id="src-predictive-model-time-series-prediction-custom-time-series-prediction-models-module"></span><h2>src.predictive_model.time_series_prediction.custom_time_series_prediction_models module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.custom_time_series_prediction_models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.custom_time_series_prediction_models.</code><code class="descname">RNNTimeSeriesPredictor</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.TimeSeriesPredictorMixin" title="src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.TimeSeriesPredictorMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.time_series_prediction.TimeSeriesPredictorMixin.TimeSeriesPredictorMixin</span></code></a></p>
+<p>Recurrent Neural Network Time Series predictor, implements the same methods as the sklearn models to make it simple
+to add.
+This architecture is of the seq2seq type, taking as input a sequence (0…t) and outputting a sequence (1…t+1)</p>
+<dl class="method">
+<dt id="src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>train_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates and fits the predictive_model</p>
+<p>first the encoded data is parsed, then the predictive_model created and then trained</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>train_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded training dataset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>test_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.custom_time_series_prediction_models.RNNTimeSeriesPredictor.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns predictive_model predictions</p>
+<p>parses the encoded test dataset, then returns the predictive_model predictions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>test_data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – encoded test dataset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">predictive_model predictions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.methods_default_config">
+<span id="src-predictive-model-time-series-prediction-methods-default-config-module"></span><h2>src.predictive_model.time_series_prediction.methods_default_config module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.methods_default_config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.predictive_model.time_series_prediction.methods_default_config.time_series_prediction_rnn">
+<code class="descclassname">src.predictive_model.time_series_prediction.methods_default_config.</code><code class="descname">time_series_prediction_rnn</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.methods_default_config.time_series_prediction_rnn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.models">
+<span id="src-predictive-model-time-series-prediction-models-module"></span><h2>src.predictive_model.time_series_prediction.models module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.models.</code><code class="descname">RecurrentNeuralNetwork</code><span class="sig-paren">(</span><em>id</em>, <em>model_path</em>, <em>predictive_model</em>, <em>prediction_method</em>, <em>predictivemodel_ptr</em>, <em>timeseriesprediction_ptr</em>, <em>n_units</em>, <em>rnn_type</em>, <em>n_epochs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction" title="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.time_series_prediction.models.TimeSeriesPrediction</span></code></a></p>
+<dl class="exception">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.time_series_prediction.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.time_series_prediction.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.get_rnn_type_display">
+<code class="descname">get_rnn_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: rnn_type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.get_rnn_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.n_epochs">
+<code class="descname">n_epochs</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.n_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.n_units">
+<code class="descname">n_units</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.n_units" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.rnn_type">
+<code class="descname">rnn_type</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.rnn_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.timeseriesprediction_ptr">
+<code class="descname">timeseriesprediction_ptr</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.timeseriesprediction_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.timeseriesprediction_ptr_id">
+<code class="descname">timeseriesprediction_ptr_id</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.timeseriesprediction_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.RecurrentNeuralNetwork.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.models.</code><code class="descname">TimeSeriesPrediction</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.predictive_model.html#src.predictive_model.models.PredictiveModel" title="src.predictive_model.models.PredictiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.PredictiveModel</span></code></a></p>
+<p>Container of Classification to be shown in frontend</p>
+<dl class="exception">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">src.predictive_model.models.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.init">
+<em class="property">static </em><code class="descname">init</code><span class="sig-paren">(</span><em>configuration</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.init" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.predictivemodel_ptr">
+<code class="descname">predictivemodel_ptr</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.predictivemodel_ptr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the forward side of a one-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Restaurant.place</span></code> is a <code class="docutils literal notranslate"><span class="pre">ForwardOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.predictivemodel_ptr_id">
+<code class="descname">predictivemodel_ptr_id</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.predictivemodel_ptr_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.recurrentneuralnetwork">
+<code class="descname">recurrentneuralnetwork</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPrediction.recurrentneuralnetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related object on the reverse side of a one-to-one
+relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Restaurant</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">place</span> <span class="o">=</span> <span class="n">OneToOneField</span><span class="p">(</span><span class="n">Place</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;restaurant&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Place.restaurant</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseOneToOneDescriptor</span></code> instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPredictionMethods">
+<em class="property">class </em><code class="descclassname">src.predictive_model.time_series_prediction.models.</code><code class="descname">TimeSeriesPredictionMethods</code><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPredictionMethods" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.predictive_model.time_series_prediction.models.TimeSeriesPredictionMethods.RNN">
+<code class="descname">RNN</code><em class="property"> = 'rnn'</em><a class="headerlink" href="#src.predictive_model.time_series_prediction.models.TimeSeriesPredictionMethods.RNN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction.time_series_prediction">
+<span id="src-predictive-model-time-series-prediction-time-series-prediction-module"></span><h2>src.predictive_model.time_series_prediction.time_series_prediction module<a class="headerlink" href="#module-src.predictive_model.time_series_prediction.time_series_prediction" title="Permalink to this headline">¶</a></h2>
+<p>time series prediction methods and functionalities</p>
+<dl class="function">
+<dt id="src.predictive_model.time_series_prediction.time_series_prediction.predict">
+<code class="descclassname">src.predictive_model.time_series_prediction.time_series_prediction.</code><code class="descname">predict</code><span class="sig-paren">(</span><em>job</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.time_series_prediction.predict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-data docutils literal notranslate"><span class="pre">Any</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.predictive_model.time_series_prediction.time_series_prediction.time_series_prediction">
+<code class="descclassname">src.predictive_model.time_series_prediction.time_series_prediction.</code><code class="descname">time_series_prediction</code><span class="sig-paren">(</span><em>training_df</em>, <em>test_df</em>, <em>clusterer</em>, <em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.predictive_model.time_series_prediction.time_series_prediction.time_series_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>main time series prediction entry point</p>
+<p>train and tests the time series predictor using the provided data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>clusterer</strong> (<a class="reference internal" href="src.clustering.html#src.clustering.clustering.Clustering" title="src.clustering.clustering.Clustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clustering</span></code></a>) – </li>
+<li><strong>training_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – training DataFrame</li>
+<li><strong>test_df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – testing DataFrame</li>
+<li><strong>job</strong> (<a class="reference internal" href="src.jobs.html#src.jobs.models.Job" title="src.jobs.models.Job"><code class="xref py py-class docutils literal notranslate"><span class="pre">Job</span></code></a>) – job configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">(&lt;class ‘dict’&gt;, &lt;class ‘dict’&gt;)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">predictive_model scores and split</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.predictive_model.time_series_prediction">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.predictive_model.time_series_prediction" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.runtime.html" class="btn btn-neutral float-right" title="src.runtime package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.predictive_model.regression.html" class="btn btn-neutral float-left" title="src.predictive_model.regression package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

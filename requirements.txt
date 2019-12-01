@@ -1,3 +1,4 @@
+requests
 lime
 shap
 Django==2.1.7
@@ -34,3 +35,4 @@ django-polymorphic
 psycopg2
 mock
 anchor_exp
+Cython

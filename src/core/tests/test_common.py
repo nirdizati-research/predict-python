@@ -9,7 +9,6 @@ from src.predictive_model.classification.models import ClassificationMethods
 from src.predictive_model.models import PredictiveModels
 from src.utils.tests_utils import create_test_job, create_test_predictive_model
 
-
 class TestCommon(TestCase):
     def test_get_method_config(self):
         job = create_test_job(

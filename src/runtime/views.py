@@ -14,7 +14,6 @@ from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
-
 @api_view(['POST'])
 def post_prediction(request):
     """ Post request to have a single static prediction

@@ -1,7 +1,7 @@
 import statistics
 from collections import defaultdict, OrderedDict
 
-from pm4py.objects.log.log import EventLog
+from pm4py.objects.log.log import EventLog, Trace
 
 TIMESTAMP_CLASSIFIER = "time:timestamp"
 NAME_CLASSIFIER = "concept:name"
@@ -122,3 +122,21 @@ def std_var_events_in_log(log: EventLog) -> int:
     :return 3
     """
     return statistics.stdev([len(trace) for trace in log])
+
+def trace_IDs(log: EventLog) -> list:
+    values = []
+    for trace in log:
+        values.append(trace.attributes[NAME_CLASSIFIER])
+    return values
+
+
+def traces(log: EventLog) -> list:
+    values = []
+    for trace in log:
+        trace: Trace = trace
+        list = []
+        for i in range(0, trace.__len__()):
+           list.append(trace.__getitem__(i))
+
+        values.append({'attributes': trace.attributes, 'events': list})
+    return values

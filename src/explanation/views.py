@@ -14,7 +14,7 @@ def get_lime(request, pk, explanation_target):
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
 
-    error, result =explanation(exp.id, int(explanation_target))
+    error, result = explanation(exp.id, int(explanation_target))
 
     if error == 'True':
         return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},

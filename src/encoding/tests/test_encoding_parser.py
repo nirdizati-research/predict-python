@@ -12,6 +12,7 @@ from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \
     create_test_labelling, create_test_encoding, general_example_test_filename, general_example_test_filepath
 
+
 class TestEncodingParser(TestCase):
 
     @staticmethod

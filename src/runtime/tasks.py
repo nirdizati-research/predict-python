@@ -1,5 +1,7 @@
+import json
 import logging
 
+import numpy
 from django_rq.decorators import job
 from rest_framework import status
 
@@ -8,6 +10,7 @@ from src.encoding.models import Encoding
 from src.jobs.models import JobStatuses, JobTypes, Job
 from src.jobs.tasks import prediction_task
 from src.jobs.ws_publisher import publish
+from src.logs.models import Log
 from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
 from .replay import replay_core
@@ -16,7 +19,11 @@ logger = logging.getLogger(__name__)
 
 
 @job("default", timeout='100h')
-def runtime_task(job):
+def runtime_task(job: Job):
+    """ The function create a runtime task to ask a single prediction to the server
+
+        :param job: job dictionary
+    """
     logger.info("Start runtime task ID {}".format(job.id))
     try:
         job.status = JobStatuses.RUNNING.value
@@ -32,13 +39,18 @@ def runtime_task(job):
         raise e
     finally:
         job.save()
-        publish(job)\
-
+        publish(job)
 
 
 @job("default", timeout='100h')
-def replay_prediction_task(replay_prediction_job, training_initial_job, log):
-    logger.info("Start runtime task ID {}".format(replay_prediction_job.id))
+def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job, log: Log):
+    """ The function create a replat prediction task to ask a single prediction to the server for a portion of a trace
+
+        :param replay_prediction_job: job dictionary
+        :param training_initial_job: job dictionary
+        :param log: job dictionary
+    """
+    logger.info("Start replay_prediction task ID {}".format(replay_prediction_job.id))
     try:
         replay_prediction_job.status = JobStatuses.RUNNING.value
         replay_prediction_job.save()
@@ -50,11 +62,13 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
             new_replay_prediction_job = duplicate_orm_row(prediction_job)
             new_replay_prediction_job.split = Split.objects.filter(pk=replay_prediction_job.split.id)[0]
             new_replay_prediction_job.type = JobTypes.REPLAY_PREDICT.value
+            new_replay_prediction_job.parent_job = replay_prediction_job.parent_job
             new_replay_prediction_job.status = JobStatuses.CREATED.value
             replay_prediction_task(new_replay_prediction_job, prediction_job, log)
             return
-        result = replay_prediction_calculate(replay_prediction_job, log)
-        replay_prediction_job.results = {'result': str(result)}
+        result_dict, events_for_trace = replay_prediction_calculate(replay_prediction_job, log)
+        replay_prediction_job.results = dict(result_dict)
+        replay_prediction_job.event_number = dict(events_for_trace)
         replay_prediction_job.status = JobStatuses.COMPLETED.value
         replay_prediction_job.error = ''
     except Exception as e:
@@ -68,8 +82,14 @@ def replay_prediction_task(replay_prediction_job, training_initial_job, log):
 
 
 @job("default", timeout='100h')
-def replay_task(replay_job, training_initial_job):
-    logger.info("Start replay task ID {}".format(replay_job.id))
+def replay_task(replay_job: Job, training_initial_job: Job) -> list:
+    """ The function create a replay task to ask the server to demo the arriving of events
+
+        :param replay_job: job dictionary
+        :param training_initial_job: job dictionary
+        :return: List of requests
+    """
+    logger.error("Start replay task ID {}".format(replay_job.id))
     requests = list()
     try:
         replay_job.status = JobStatuses.RUNNING.value
@@ -92,6 +112,12 @@ def replay_task(replay_job, training_initial_job):
 
 
 def create_prediction_job(job: Job, max_len: int) -> Job:
+    """ The function create a new prediction job to create a model when it isn't in the database
+
+        :param job: job dictionary
+        :param max_len: job dictionary
+        :return: Job
+    """
     new_job = duplicate_orm_row(job)
     new_job.type = JobTypes.PREDICTION.value
     new_job.status = JobStatuses.CREATED.value

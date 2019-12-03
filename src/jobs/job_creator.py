@@ -2,7 +2,7 @@ import time
 
 from src.clustering.models import Clustering, ClusteringMethods
 from src.encoding.encoding_container import UP_TO
-from src.encoding.models import Encoding, ValueEncodings
+from src.encoding.models import Encoding, ValueEncodings, DataEncodings
 from src.hyperparameter_optimization.models import HyperparameterOptimization, HyperparameterOptimizationMethods
 from src.jobs.models import Job, JobStatuses, JobTypes
 from src.labelling.models import Labelling
@@ -26,7 +26,7 @@ def generate(split, payload):
                 if encoding['generation_type'] == UP_TO:
                     for i in range(1, encoding['prefix_length'] + 1):
                         encoding = Encoding.objects.get_or_create(
-                            data_encoding='label_encoder',
+                            data_encoding=DataEncodings.LABEL_ENCODER.value,
                             value_encoding=encMethod,
                             add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                             add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -68,6 +68,9 @@ def generate(split, payload):
                             create_models=config.get('create_models', False)
                         )[0]
 
+                        check_predictive_model_not_overwrite(job)
+
+
                         jobs.append(job)
                 else:
                     predictive_model = PredictiveModel.init(
@@ -78,7 +81,7 @@ def generate(split, payload):
                         type=job_type,
                         split=split,
                         encoding=Encoding.objects.get_or_create(
-                            data_encoding='label_encoder',
+                            data_encoding=DataEncodings.LABEL_ENCODER.value,
                             value_encoding=encMethod,
                             add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                             add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -111,7 +114,6 @@ def generate(split, payload):
                     )[0]
 
                     check_predictive_model_not_overwrite(job)
-                    set_model_name(job)
 
                     jobs.append(job)
 
@@ -179,7 +181,7 @@ def generate_labelling(split, payload):
 
                 split=split,
                 encoding=Encoding.objects.get_or_create(  # TODO fixme
-                    data_encoding='label_encoder',
+                    data_encoding=DataEncodings.LABEL_ENCODER.value,
                     value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
                     add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                     add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -208,7 +210,7 @@ def generate_labelling(split, payload):
 
             split=split,
             encoding=Encoding.objects.get_or_create(  # TODO fixme
-                data_encoding='label_encoder',
+                data_encoding=DataEncodings.LABEL_ENCODER.value,
                 value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
                 add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                 add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -247,12 +249,12 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                     encoding = payload['config']['encoding']
                     if encoding['generation_type'] == UP_TO:
                         for i in range(1, encoding['prefix_length'] + 1):
-                            item, _ = Job.objects.get_or_create(
+                            job, _ = Job.objects.get_or_create(
                                 status=JobStatuses.CREATED.value,
                                 type=JobTypes.UPDATE.value,
                                 split=split,
                                 encoding=Encoding.objects.get_or_create(  # TODO fixme
-                                    data_encoding='label_encoder',
+                                    data_encoding=DataEncodings.LABEL_ENCODER.value,
                                     value_encoding=encMethod,
                                     add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                                     add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -283,15 +285,19 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                     pk=incremental_base_model
                                 )[0]
                             )
-                            jobs.append(item)
+
+                            check_predictive_model_not_overwrite(job)
+
+
+                            jobs.append(job)
                     else:
-                        item, _ = Job.objects.get_or_create(
+                        job, _ = Job.objects.get_or_create(
                             status=JobStatuses.CREATED.value,
                             type=JobTypes.UPDATE.value,
 
                             split=split,
                             encoding=Encoding.objects.get_or_create(  # TODO fixme
-                                data_encoding='label_encoder',
+                                data_encoding=DataEncodings.LABEL_ENCODER.value,
                                 value_encoding=encMethod,
                                 add_elapsed_time=labelling_config.get('add_elapsed_time', False),
                                 add_remaining_time=labelling_config.get('add_remaining_time', False),
@@ -322,5 +328,9 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 pk=incremental_base_model
                             )[0]
                         )
-                        jobs.append(item)
+
+                        check_predictive_model_not_overwrite(job)
+
+
+                        jobs.append(job)
     return jobs

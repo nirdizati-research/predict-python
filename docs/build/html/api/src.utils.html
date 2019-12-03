@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.utils package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="src.split package" href="src.split.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.encoding.html">src.encoding package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.utils package</a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.utils package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-utils-package">
+<h1>src.utils package<a class="headerlink" href="#src-utils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.utils.django_orm">
+<span id="src-utils-django-orm-module"></span><h2>src.utils.django_orm module<a class="headerlink" href="#module-src.utils.django_orm" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.django_orm.duplicate_orm_row">
+<code class="descclassname">src.utils.django_orm.</code><code class="descname">duplicate_orm_row</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.django_orm.duplicate_orm_row" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.event_attributes">
+<span id="src-utils-event-attributes-module"></span><h2>src.utils.event_attributes module<a class="headerlink" href="#module-src.utils.event_attributes" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.event_attributes.get_additional_columns">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">get_additional_columns</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.get_additional_columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.utils.event_attributes.get_event_attributes">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">get_event_attributes</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.get_event_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get log event attributes that are not name or time</p>
+<p>As log file is a list, it has no global event attributes. Getting from first event of first trace. This may be bad.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.event_attributes.get_global_event_attributes">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">get_global_event_attributes</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.get_global_event_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get log event attributes that are not name or time</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.event_attributes.get_global_trace_attributes">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">get_global_trace_attributes</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.get_global_trace_attributes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.utils.event_attributes.unique_events">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">unique_events</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.unique_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of unique events using event concept:name</p>
+<p>Adds all events into a list and removes duplicates while keeping order.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.event_attributes.unique_events2">
+<code class="descclassname">src.utils.event_attributes.</code><code class="descname">unique_events2</code><span class="sig-paren">(</span><em>training_log</em>, <em>test_log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.event_attributes.unique_events2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines unique events from two logs into one list.</p>
+<p>Renamed to 2 because Python doesn’t allow functions with same names.
+Python is objectively the worst language.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.file_service">
+<span id="src-utils-file-service-module"></span><h2>src.utils.file_service module<a class="headerlink" href="#module-src.utils.file_service" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.file_service.create_unique_name">
+<code class="descclassname">src.utils.file_service.</code><code class="descname">create_unique_name</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.file_service.create_unique_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.file_service.get_log">
+<code class="descclassname">src.utils.file_service.</code><code class="descname">get_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.file_service.get_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in event log from disk</p>
+<p>Uses xes_importer to parse log.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">EventLog</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.log_metrics">
+<span id="src-utils-log-metrics-module"></span><h2>src.utils.log_metrics module<a class="headerlink" href="#module-src.utils.log_metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.log_metrics.avg_events_in_log">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">avg_events_in_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.avg_events_in_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the average number of events in any trace</p>
+<p>:return 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.event_executions">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">event_executions</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.event_executions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dict of event execution count</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return {‘Event A’:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">7, ‘2011-01-06’: 8}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.events_by_date">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">events_by_date</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.events_by_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dict of events by date ordered by date</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return {‘2010-12-30’:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">7, ‘2011-01-06’: 8}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OrderedDict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.events_in_trace">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">events_in_trace</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.events_in_trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dict of number of events in trace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return {‘4’:</th><td class="field-body">11, ‘3’: 8}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.max_events_in_log">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">max_events_in_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.max_events_in_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the maximum number of events in any trace</p>
+<p>:return 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.new_trace_start">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">new_trace_start</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.new_trace_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dict of new traces by date</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Return {‘2010-12-30’:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">1, ‘2011-01-06’: 2}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.resources_by_date">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">resources_by_date</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.resources_by_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dict of used unique resources ordered by date</p>
+<p>Resource and timestamp delimited by &amp;&amp;. If this is in resources name, bad stuff will happen.
+Returns a dict with a date and the number of unique resources used on that day.
+:return {‘2010-12-30’: 7, ‘2011-01-06’: 8}</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.std_var_events_in_log">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">std_var_events_in_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.std_var_events_in_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the standard variation of the average number of events in any trace</p>
+<p>:return 3</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.log_metrics.trace_attributes">
+<code class="descclassname">src.utils.log_metrics.</code><code class="descname">trace_attributes</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.log_metrics.trace_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an array of dicts that describe trace attributes.
+Only looks at first trace. Filters out <cite>concept:name</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return [{name:</th><td class="field-body">‘name’, type: ‘string’, example: 34}]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.result_metrics">
+<span id="src-utils-result-metrics-module"></span><h2>src.utils.result_metrics module<a class="headerlink" href="#module-src.utils.result_metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.result_metrics.calculate_auc">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">calculate_auc</code><span class="sig-paren">(</span><em>actual</em>, <em>scores</em>, <em>auc</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.calculate_auc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.calculate_nlevenshtein">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">calculate_nlevenshtein</code><span class="sig-paren">(</span><em>actual</em>, <em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.calculate_nlevenshtein" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.calculate_results_classification">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">calculate_results_classification</code><span class="sig-paren">(</span><em>actual</em>, <em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.calculate_results_classification" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.calculate_results_regression">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">calculate_results_regression</code><span class="sig-paren">(</span><em>input_df</em>, <em>label</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.calculate_results_regression" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.calculate_results_time_series_prediction">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">calculate_results_time_series_prediction</code><span class="sig-paren">(</span><em>actual</em>, <em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.calculate_results_time_series_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.get_auc">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">get_auc</code><span class="sig-paren">(</span><em>actual</em>, <em>scores</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.get_auc" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.result_metrics.get_confusion_matrix">
+<code class="descclassname">src.utils.result_metrics.</code><code class="descname">get_confusion_matrix</code><span class="sig-paren">(</span><em>actual</em>, <em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.result_metrics.get_confusion_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.tests_utils">
+<span id="src-utils-tests-utils-module"></span><h2>src.utils.tests_utils module<a class="headerlink" href="#module-src.utils.tests_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_clustering">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_clustering</code><span class="sig-paren">(</span><em>clustering_type='noCluster'</em>, <em>configuration={}</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_clustering" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.clustering.html#src.clustering.models.Clustering" title="src.clustering.models.Clustering"><code class="xref py py-class docutils literal notranslate"><span class="pre">Clustering</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_encoding">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_encoding</code><span class="sig-paren">(</span><em>prefix_length=1</em>, <em>padding=False</em>, <em>value_encoding='simpleIndex'</em>, <em>add_elapsed_time=False</em>, <em>add_remaining_time=False</em>, <em>add_resources_used=False</em>, <em>add_new_traces=False</em>, <em>add_executed_events=False</em>, <em>task_generation_type='only'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.encoding.html#src.encoding.models.Encoding" title="src.encoding.models.Encoding"><code class="xref py py-class docutils literal notranslate"><span class="pre">Encoding</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_hyperparameter_optimizer">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_hyperparameter_optimizer</code><span class="sig-paren">(</span><em>hyperoptim_type='hyperopt'</em>, <em>performance_metric='acc'</em>, <em>max_evals=10</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_hyperparameter_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_job">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_job</code><span class="sig-paren">(</span><em>split=None</em>, <em>encoding=None</em>, <em>labelling=None</em>, <em>clustering=None</em>, <em>create_models=False</em>, <em>predictive_model=None</em>, <em>job_type='prediction'</em>, <em>hyperparameter_optimizer=None</em>, <em>incremental_train=None</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_job" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_labelling">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_labelling</code><span class="sig-paren">(</span><em>label_type='next_activity'</em>, <em>attribute_name=None</em>, <em>threshold_type='threshold_mean'</em>, <em>threshold=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_labelling" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.labelling.html#src.labelling.models.Labelling" title="src.labelling.models.Labelling"><code class="xref py py-class docutils literal notranslate"><span class="pre">Labelling</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_log">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_log</code><span class="sig-paren">(</span><em>log_name='general_example.xes'</em>, <em>log_path='cache/log_cache/test_logs/general_example.xes'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_log" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.logs.html#src.logs.models.Log" title="src.logs.models.Log"><code class="xref py py-class docutils literal notranslate"><span class="pre">Log</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_predictive_model">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_predictive_model</code><span class="sig-paren">(</span><em>predictive_model='classification'</em>, <em>prediction_method='randomForest'</em>, <em>configuration={}</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_predictive_model" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="src.predictive_model.html#src.predictive_model.models.PredictiveModel" title="src.predictive_model.models.PredictiveModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PredictiveModel</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.tests_utils.create_test_split">
+<code class="descclassname">src.utils.tests_utils.</code><code class="descname">create_test_split</code><span class="sig-paren">(</span><em>split_type='single'</em>, <em>split_ordering_method='sequential'</em>, <em>test_size=0.2</em>, <em>original_log=None</em>, <em>train_log=None</em>, <em>test_log=None</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.tests_utils.create_test_split" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-src.utils.time_metrics">
+<span id="src-utils-time-metrics-module"></span><h2>src.utils.time_metrics module<a class="headerlink" href="#module-src.utils.time_metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.utils.time_metrics.count_on_event_day">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">count_on_event_day</code><span class="sig-paren">(</span><em>trace</em>, <em>date_dict</em>, <em>event_id</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.count_on_event_day" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the date of event and returns the value from date_dict
+:param date_dict one of the dicts from log_metrics.py
+:param event_id Event id
+:param trace Log trace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.time_metrics.duration">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">duration</code><span class="sig-paren">(</span><em>trace</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the duration of a trace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.time_metrics.elapsed_time">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">elapsed_time</code><span class="sig-paren">(</span><em>trace</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.elapsed_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate elapsed time by event in trace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.time_metrics.elapsed_time_id">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">elapsed_time_id</code><span class="sig-paren">(</span><em>trace</em>, <em>event_index</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.elapsed_time_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate elapsed time by event index in trace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.time_metrics.remaining_time">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">remaining_time</code><span class="sig-paren">(</span><em>trace</em>, <em>event</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.remaining_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate remaining time by event in trace</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.utils.time_metrics.remaining_time_id">
+<code class="descclassname">src.utils.time_metrics.</code><code class="descname">remaining_time_id</code><span class="sig-paren">(</span><em>trace</em>, <em>event_index</em><span class="sig-paren">)</span><a class="headerlink" href="#src.utils.time_metrics.remaining_time_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate remaining time by event index in trace</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.utils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="src.split.html" class="btn btn-neutral float-left" title="src.split package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

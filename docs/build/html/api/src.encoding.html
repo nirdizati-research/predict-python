@@ -1,0 +1,926 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.encoding package &mdash; Nirdizati Research  documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src.evaluation package" href="src.evaluation.html" />
+    <link rel="prev" title="src.core package" href="src.core.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/nirdizati-logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">READMEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_backend.html">Nirdizati Research backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../readme/readme_frontend.html">Nirdizati Research frontend</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="src.html">src package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="src.cache.html">src.cache package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.clustering.html">src.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.common.html">src.common package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.core.html">src.core package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">src.encoding package</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="src.evaluation.html">src.evaluation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.hyperparameter_optimization.html">src.hyperparameter_optimization package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.jobs.html">src.jobs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.labelling.html">src.labelling package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.logs.html">src.logs package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.predictive_model.html">src.predictive_model package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.runtime.html">src.runtime package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.split.html">src.split package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="src.utils.html">src.utils package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Nirdizati Research</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">src</a> &raquo;</li>
+        
+          <li><a href="src.html">src package</a> &raquo;</li>
+        
+      <li>src.encoding package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/src.encoding.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="src-encoding-package">
+<h1>src.encoding package<a class="headerlink" href="#src-encoding-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-src.encoding.apps">
+<span id="src-encoding-apps-module"></span><h2>src.encoding.apps module<a class="headerlink" href="#module-src.encoding.apps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.encoding.apps.EncodingConfig">
+<em class="property">class </em><code class="descclassname">src.encoding.apps.</code><code class="descname">EncodingConfig</code><span class="sig-paren">(</span><em>app_name</em>, <em>app_module</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.apps.EncodingConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.apps.config.AppConfig</span></code></p>
+<dl class="attribute">
+<dt id="src.encoding.apps.EncodingConfig.name">
+<code class="descname">name</code><em class="property"> = 'src.encoding'</em><a class="headerlink" href="#src.encoding.apps.EncodingConfig.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.boolean_frequency">
+<span id="src-encoding-boolean-frequency-module"></span><h2>src.encoding.boolean_frequency module<a class="headerlink" href="#module-src.encoding.boolean_frequency" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.encoding.boolean_frequency.boolean">
+<code class="descclassname">src.encoding.boolean_frequency.</code><code class="descname">boolean</code><span class="sig-paren">(</span><em>log</em>, <em>event_names</em>, <em>label</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.boolean_frequency.boolean" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.encoding.boolean_frequency.frequency">
+<code class="descclassname">src.encoding.boolean_frequency.</code><code class="descname">frequency</code><span class="sig-paren">(</span><em>log</em>, <em>event_names</em>, <em>label</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.boolean_frequency.frequency" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.common">
+<span id="src-encoding-common-module"></span><h2>src.encoding.common module<a class="headerlink" href="#module-src.encoding.common" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.encoding.common.data_encoder_decoder">
+<code class="descclassname">src.encoding.common.</code><code class="descname">data_encoder_decoder</code><span class="sig-paren">(</span><em>job</em>, <em>training_log</em>, <em>test_log</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.common.data_encoder_decoder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.encoding.common.encode_label_logs">
+<code class="descclassname">src.encoding.common.</code><code class="descname">encode_label_logs</code><span class="sig-paren">(</span><em>training_log</em>, <em>test_log</em>, <em>job</em>, <em>additional_columns=None</em>, <em>encode=True</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.common.encode_label_logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="src.encoding.common.retrieve_proper_encoder">
+<code class="descclassname">src.encoding.common.</code><code class="descname">retrieve_proper_encoder</code><span class="sig-paren">(</span><em>job</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.common.retrieve_proper_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#src.encoding.encoder.Encoder" title="src.encoding.encoder.Encoder"><code class="xref py py-class docutils literal notranslate"><span class="pre">Encoder</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.complex_last_payload">
+<span id="src-encoding-complex-last-payload-module"></span><h2>src.encoding.complex_last_payload module<a class="headerlink" href="#module-src.encoding.complex_last_payload" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.encoding.complex_last_payload.complex">
+<code class="descclassname">src.encoding.complex_last_payload.</code><code class="descname">complex</code><span class="sig-paren">(</span><em>log</em>, <em>labelling</em>, <em>encoding</em>, <em>additional_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.complex_last_payload.complex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.encoding.complex_last_payload.last_payload">
+<code class="descclassname">src.encoding.complex_last_payload.</code><code class="descname">last_payload</code><span class="sig-paren">(</span><em>log</em>, <em>labelling</em>, <em>encoding</em>, <em>additional_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.complex_last_payload.last_payload" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.encoder">
+<span id="src-encoding-encoder-module"></span><h2>src.encoding.encoder module<a class="headerlink" href="#module-src.encoding.encoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.encoding.encoder.Encoder">
+<em class="property">class </em><code class="descclassname">src.encoding.encoder.</code><code class="descname">Encoder</code><span class="sig-paren">(</span><em>df</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoder.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="src.encoding.encoder.Encoder.decode">
+<code class="descname">decode</code><span class="sig-paren">(</span><em>df</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoder.Encoder.decode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoder.Encoder.encode">
+<code class="descname">encode</code><span class="sig-paren">(</span><em>df</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoder.Encoder.encode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.encoding_container">
+<span id="src-encoding-encoding-container-module"></span><h2>src.encoding.encoding_container module<a class="headerlink" href="#module-src.encoding.encoding_container" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.encoding.encoding_container.EncodingContainer">
+<em class="property">class </em><code class="descclassname">src.encoding.encoding_container.</code><code class="descname">EncodingContainer</code><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#src.encoding.encoding_container.EncodingContainer" title="src.encoding.encoding_container.EncodingContainer"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.encoding.encoding_container.EncodingContainer</span></code></a></p>
+<p>Inner object describing encoding configuration.</p>
+<dl class="staticmethod">
+<dt id="src.encoding.encoding_container.EncodingContainer.encode">
+<em class="property">static </em><code class="descname">encode</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.encode" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.encoding.encoding_container.EncodingContainer.init_label_encoder">
+<em class="property">static </em><code class="descname">init_label_encoder</code><span class="sig-paren">(</span><em>df</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.init_label_encoder" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_container.EncodingContainer.is_all_in_one">
+<code class="descname">is_all_in_one</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.is_all_in_one" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_container.EncodingContainer.is_boolean">
+<code class="descname">is_boolean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.is_boolean" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_container.EncodingContainer.is_complex">
+<code class="descname">is_complex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.is_complex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_container.EncodingContainer.is_zero_padding">
+<code class="descname">is_zero_padding</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_container.EncodingContainer.is_zero_padding" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.encoding_parser">
+<span id="src-encoding-encoding-parser-module"></span><h2>src.encoding.encoding_parser module<a class="headerlink" href="#module-src.encoding.encoding_parser" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.encoding.encoding_parser.DataEncoder">
+<em class="property">class </em><code class="descclassname">src.encoding.encoding_parser.</code><code class="descname">DataEncoder</code><span class="sig-paren">(</span><em>task</em>, <em>is_targets_dataset=False</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>support class for EncodingParser, tasked with actual parsing/one-hot encoding</p>
+<dl class="class">
+<dt id="src.encoding.encoding_parser.DataEncoder.DataTypes">
+<em class="property">class </em><code class="descname">DataTypes</code><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.DataTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>possible data types for each column</p>
+<dl class="attribute">
+<dt id="src.encoding.encoding_parser.DataEncoder.DataTypes.CATEGORICAL">
+<code class="descname">CATEGORICAL</code><em class="property"> = 'categorical'</em><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.DataTypes.CATEGORICAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.encoding_parser.DataEncoder.DataTypes.NUMERIC">
+<code class="descname">NUMERIC</code><em class="property"> = 'numeric'</em><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.DataTypes.NUMERIC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.DataEncoder.build_encoders">
+<code class="descname">build_encoders</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.build_encoders" title="Permalink to this definition">¶</a></dt>
+<dd><p>builds an encoder for each column</p>
+<p>first the base headers are extracted (prefix_1 -&gt; prefix, org:resources:Amount_1 -&gt; org_resources:Amount) and
+then a dictionary of LabelEncoders is built. Numerical data stores min and max instead of a LabelEncoder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – input dataframe</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.DataEncoder.encode_data">
+<code class="descname">encode_data</code><span class="sig-paren">(</span><em>data</em>, <em>train=True</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.encode_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>encodes the input data</p>
+<p>actual data encoding, using the built encoders. For each column type the right encoding is done
+(to class/normalization)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – input dataframe</li>
+<li><strong>train</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code>) – flag indicating whether the input is a train dataframe or a test one</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.DataEncoder.get_n_classes_x">
+<code class="descname">get_n_classes_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.get_n_classes_x" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the number of training/test classes</p>
+<p>returns the highest number of classes for the encoded dataframe, adding 1 if there are numerical values.
+The structure is [one-hot encoding, normalized_value] for each variable, such that a categorical variable
+becomes [0 0 0 1 0.0] where a numerical value becomes [0 0 0 0 0 0.263]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">number of training/test classes + 1 (for numerical values)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.DataEncoder.get_numerical_limits">
+<code class="descname">get_numerical_limits</code><span class="sig-paren">(</span><em>header='label'</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.get_numerical_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the numerical limits for the input header</p>
+<p>returns the min and max value from the stored LabelEncoders, using header as index</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>header</strong> – label associated with the data we want to extract min and max from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">min and max values associated with the column _header_</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.DataEncoder.to_one_hot">
+<code class="descname">to_one_hot</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.DataEncoder.to_one_hot" title="Permalink to this definition">¶</a></dt>
+<dd><p>one hot encoding</p>
+<p>transforms the encoded data into the one-hot representation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>) – input dataframe</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">one-hot encoded array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.encoding.encoding_parser.EncodingParser">
+<em class="property">class </em><code class="descclassname">src.encoding.encoding_parser.</code><code class="descname">EncodingParser</code><span class="sig-paren">(</span><em>encoding</em>, <em>binary_target</em>, <em>task</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>parses the encoded datasets into a suitable format for the keras models (0-1 float range, one-hot encodable classes
+etc.), plus minor utils</p>
+<dl class="method">
+<dt id="src.encoding.encoding_parser.EncodingParser.denormalize_predictions">
+<code class="descname">denormalize_predictions</code><span class="sig-paren">(</span><em>predictions</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser.denormalize_predictions" title="Permalink to this definition">¶</a></dt>
+<dd><p>denormalizes the predictive_model predictions</p>
+<p>denormalizes the predictions using the stored y min and max</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>predictions</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – predictive_model predictions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">denormalized predictions</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.EncodingParser.get_n_classes_x">
+<code class="descname">get_n_classes_x</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser.get_n_classes_x" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.EncodingParser.parse_targets">
+<code class="descname">parse_targets</code><span class="sig-paren">(</span><em>targets</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser.parse_targets" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses the target dataset</p>
+<p>encodes the target dataset based on the encoding given in the init method. Stores min and max value/classes
+number based on the encoding
+:type targets: <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>
+:param targets: input dataset
+:rtype: <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>
+:return: parsed input dataset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.EncodingParser.parse_testing_dataset">
+<code class="descname">parse_testing_dataset</code><span class="sig-paren">(</span><em>test_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser.parse_testing_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses the test dataset</p>
+<p>encodes the test dataset based on the encoding given in the init method
+:type test_data: <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>
+:param test_data: input dataset
+:rtype: <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>
+:return: parsed input dataset</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.encoding_parser.EncodingParser.parse_training_dataset">
+<code class="descname">parse_training_dataset</code><span class="sig-paren">(</span><em>train_data</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.encoding_parser.EncodingParser.parse_training_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses the training dataset</p>
+<p>encodes the training dataset based on the encoding given in the init method
+:type train_data: <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code>
+:param train_data: input dataset
+:rtype: <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>
+:return: parsed input dataset</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.models">
+<span id="src-encoding-models-module"></span><h2>src.encoding.models module<a class="headerlink" href="#module-src.encoding.models" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="src.encoding.models.DataEncodings">
+<em class="property">class </em><code class="descclassname">src.encoding.models.</code><code class="descname">DataEncodings</code><a class="headerlink" href="#src.encoding.models.DataEncodings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.encoding.models.DataEncodings.LABEL_ENCODER">
+<code class="descname">LABEL_ENCODER</code><em class="property"> = 'label_encoder'</em><a class="headerlink" href="#src.encoding.models.DataEncodings.LABEL_ENCODER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.DataEncodings.ONE_HOT_ENCODER">
+<code class="descname">ONE_HOT_ENCODER</code><em class="property"> = 'one_hot'</em><a class="headerlink" href="#src.encoding.models.DataEncodings.ONE_HOT_ENCODER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.encoding.models.Encoding">
+<em class="property">class </em><code class="descclassname">src.encoding.models.</code><code class="descname">Encoding</code><span class="sig-paren">(</span><em>id</em>, <em>data_encoding</em>, <em>value_encoding</em>, <em>add_elapsed_time</em>, <em>add_remaining_time</em>, <em>add_executed_events</em>, <em>add_resources_used</em>, <em>add_new_traces</em>, <em>features</em>, <em>prefix_length</em>, <em>padding</em>, <em>task_generation_type</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.models.Encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.common.html#src.common.models.CommonModel" title="src.common.models.CommonModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.common.models.CommonModel</span></code></a></p>
+<dl class="exception">
+<dt id="src.encoding.models.Encoding.DoesNotExist">
+<em class="property">exception </em><code class="descname">DoesNotExist</code><a class="headerlink" href="#src.encoding.models.Encoding.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="src.encoding.models.Encoding.MultipleObjectsReturned">
+<em class="property">exception </em><code class="descname">MultipleObjectsReturned</code><a class="headerlink" href="#src.encoding.models.Encoding.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">django.core.exceptions.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.add_elapsed_time">
+<code class="descname">add_elapsed_time</code><a class="headerlink" href="#src.encoding.models.Encoding.add_elapsed_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.add_executed_events">
+<code class="descname">add_executed_events</code><a class="headerlink" href="#src.encoding.models.Encoding.add_executed_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.add_new_traces">
+<code class="descname">add_new_traces</code><a class="headerlink" href="#src.encoding.models.Encoding.add_new_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.add_remaining_time">
+<code class="descname">add_remaining_time</code><a class="headerlink" href="#src.encoding.models.Encoding.add_remaining_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.add_resources_used">
+<code class="descname">add_resources_used</code><a class="headerlink" href="#src.encoding.models.Encoding.add_resources_used" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.data_encoding">
+<code class="descname">data_encoding</code><a class="headerlink" href="#src.encoding.models.Encoding.data_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.features">
+<code class="descname">features</code><a class="headerlink" href="#src.encoding.models.Encoding.features" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.models.Encoding.get_data_encoding_display">
+<code class="descname">get_data_encoding_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: data_encoding&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.models.Encoding.get_data_encoding_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.models.Encoding.get_task_generation_type_display">
+<code class="descname">get_task_generation_type_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: task_generation_type&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.models.Encoding.get_task_generation_type_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.models.Encoding.get_value_encoding_display">
+<code class="descname">get_value_encoding_display</code><span class="sig-paren">(</span><em>*</em>, <em>field=&lt;django.db.models.fields.CharField: value_encoding&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.models.Encoding.get_value_encoding_display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.id">
+<code class="descname">id</code><a class="headerlink" href="#src.encoding.models.Encoding.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.job_set">
+<code class="descname">job_set</code><a class="headerlink" href="#src.encoding.models.Encoding.job_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.labelledlog_set">
+<code class="descname">labelledlog_set</code><a class="headerlink" href="#src.encoding.models.Encoding.labelledlog_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accessor to the related objects manager on the reverse side of a
+many-to-one relation.</p>
+<p>In the example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Child</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">ForeignKey</span><span class="p">(</span><span class="n">Parent</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;children&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Parent.children</span></code> is a <code class="docutils literal notranslate"><span class="pre">ReverseManyToOneDescriptor</span></code> instance.</p>
+<p>Most of the implementation is delegated to a dynamically defined manager
+class built by <code class="docutils literal notranslate"><span class="pre">create_forward_many_to_many_manager()</span></code> defined below.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.objects">
+<code class="descname">objects</code><em class="property"> = &lt;django.db.models.manager.Manager object&gt;</em><a class="headerlink" href="#src.encoding.models.Encoding.objects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.padding">
+<code class="descname">padding</code><a class="headerlink" href="#src.encoding.models.Encoding.padding" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.prefix_length">
+<code class="descname">prefix_length</code><a class="headerlink" href="#src.encoding.models.Encoding.prefix_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.task_generation_type">
+<code class="descname">task_generation_type</code><a class="headerlink" href="#src.encoding.models.Encoding.task_generation_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.encoding.models.Encoding.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.models.Encoding.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.Encoding.value_encoding">
+<code class="descname">value_encoding</code><a class="headerlink" href="#src.encoding.models.Encoding.value_encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for a deferred-loading field. When the value is read from this
+object the first time, the query is executed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.encoding.models.TaskGenerationTypes">
+<em class="property">class </em><code class="descclassname">src.encoding.models.</code><code class="descname">TaskGenerationTypes</code><a class="headerlink" href="#src.encoding.models.TaskGenerationTypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.encoding.models.TaskGenerationTypes.ALL_IN_ONE">
+<code class="descname">ALL_IN_ONE</code><em class="property"> = 'all_in_one'</em><a class="headerlink" href="#src.encoding.models.TaskGenerationTypes.ALL_IN_ONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.TaskGenerationTypes.ONLY_THIS">
+<code class="descname">ONLY_THIS</code><em class="property"> = 'only'</em><a class="headerlink" href="#src.encoding.models.TaskGenerationTypes.ONLY_THIS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.TaskGenerationTypes.UP_TO">
+<code class="descname">UP_TO</code><em class="property"> = 'up_to'</em><a class="headerlink" href="#src.encoding.models.TaskGenerationTypes.UP_TO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="src.encoding.models.ValueEncodings">
+<em class="property">class </em><code class="descclassname">src.encoding.models.</code><code class="descname">ValueEncodings</code><a class="headerlink" href="#src.encoding.models.ValueEncodings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>An enumeration.</p>
+<dl class="attribute">
+<dt id="src.encoding.models.ValueEncodings.BOOLEAN">
+<code class="descname">BOOLEAN</code><em class="property"> = 'boolean'</em><a class="headerlink" href="#src.encoding.models.ValueEncodings.BOOLEAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.ValueEncodings.COMPLEX">
+<code class="descname">COMPLEX</code><em class="property"> = 'complex'</em><a class="headerlink" href="#src.encoding.models.ValueEncodings.COMPLEX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.ValueEncodings.FREQUENCY">
+<code class="descname">FREQUENCY</code><em class="property"> = 'frequency'</em><a class="headerlink" href="#src.encoding.models.ValueEncodings.FREQUENCY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.ValueEncodings.LAST_PAYLOAD">
+<code class="descname">LAST_PAYLOAD</code><em class="property"> = 'lastPayload'</em><a class="headerlink" href="#src.encoding.models.ValueEncodings.LAST_PAYLOAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="src.encoding.models.ValueEncodings.SIMPLE_INDEX">
+<code class="descname">SIMPLE_INDEX</code><em class="property"> = 'simpleIndex'</em><a class="headerlink" href="#src.encoding.models.ValueEncodings.SIMPLE_INDEX" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding.simple_index">
+<span id="src-encoding-simple-index-module"></span><h2>src.encoding.simple_index module<a class="headerlink" href="#module-src.encoding.simple_index" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="src.encoding.simple_index.add_trace_row">
+<code class="descclassname">src.encoding.simple_index.</code><code class="descname">add_trace_row</code><span class="sig-paren">(</span><em>trace</em>, <em>encoding</em>, <em>labelling</em>, <em>event_index</em>, <em>column_len</em>, <em>attribute_classifier=None</em>, <em>executed_events=None</em>, <em>resources_used=None</em>, <em>new_traces=None</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.simple_index.add_trace_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Row in data frame</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="src.encoding.simple_index.simple_index">
+<code class="descclassname">src.encoding.simple_index.</code><code class="descname">simple_index</code><span class="sig-paren">(</span><em>log</em>, <em>labelling</em>, <em>encoding</em><span class="sig-paren">)</span><a class="headerlink" href="#src.encoding.simple_index.simple_index" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-src.encoding">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src.encoding" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="src.evaluation.html" class="btn btn-neutral float-right" title="src.evaluation package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="src.core.html" class="btn btn-neutral float-left" title="src.core package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Stefano Branchi, Chiara Di Francescomarino, Tõnis Kasekamp, Santosh Kumar, Fabrizio Maggi, Williams Rizzi, Luca Simonetto
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

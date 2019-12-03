@@ -13,15 +13,20 @@ from src.utils.log_metrics import events_by_date, resources_by_date, max_events_
 logger = logging.getLogger(__name__)
 
 
-def create_log(log, name: str, folder='cache/log_cache/'):
+def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
     logger.info('\tCreating new file (' + name + ') in memory')
-    name = create_unique_name(name)
+    if import_in_cache:
+        name = create_unique_name(name)
     path = folder + name
-    if isinstance(log, EventLog):
-        export_log(log, path)
-    else:
-        default_storage.save(path, ContentFile(log.read()))
-        log = import_log(path)
+    if import_in_cache:
+        if isinstance(log, EventLog):
+            export_log(log, path)
+        else:
+            default_storage.save(path, ContentFile(log.read()))
+            log = import_log(path)
+    else:  # TODO: this might be risky
+        if not isinstance(log, EventLog):
+            log = import_log(path)
     properties = create_properties(log)
     return Log.objects.create(name=name, path=path, properties=properties)
 

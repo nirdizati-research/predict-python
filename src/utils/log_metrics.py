@@ -125,18 +125,10 @@ def std_var_events_in_log(log: EventLog) -> int:
 
 
 def trace_ids(log: EventLog) -> list:
-    values = []
-    for trace in log:
-        values.append(trace.attributes[NAME_CLASSIFIER])
-    return values
+    return [trace.attributes[NAME_CLASSIFIER] for trace in log]
 
 
 def traces(log: EventLog) -> list:
-    values = []
-    for trace in log:
-        trace: Trace = trace
-        list = []
-        for i in range(0, trace.__len__()):
-            list.append(trace.__getitem__(i))
-        values.append({'attributes': trace.attributes, 'events': list})
-    return values
+    return [{'attributes': trace.attributes, 'events': [event for event in trace]} for trace in log]
+
+

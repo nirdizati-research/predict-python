@@ -31,7 +31,6 @@ def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
     return Log.objects.create(name=name, path=path, properties=properties)
 
 
-# check it
 def create_properties(log: EventLog) -> dict:
     """Create read-only dict with methods in this class"""
     return {

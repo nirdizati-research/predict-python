@@ -233,6 +233,33 @@ def predict(job: Job, data: DataFrame) -> Any:
     return result
 
 
+def predict_proba(job: Job, data: DataFrame) -> Any:
+    data = data.drop(['trace_id'], 1)
+    clusterer = Clustering.load_model(job)
+    data = clusterer.cluster_data(data)
+
+    classifier = joblib.load(job.predictive_model.model_path)
+
+    non_empty_clusters = clusterer.n_clusters
+
+    result = None
+
+    for cluster in range(clusterer.n_clusters):
+        cluster_test_df = data[cluster]
+        if cluster_test_df.empty:
+            non_empty_clusters -= 1
+        else:
+            try:
+                result = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1))
+            except (NotImplementedError, KeyError):
+                try:
+                    result = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).T)
+                except (KeyError, ValueError):
+                    result = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).values)
+
+    return result
+
+
 def _prepare_results(results_df: DataFrame, auc: int) -> dict:
     actual = results_df['label'].values
     predicted = results_df['predicted'].values

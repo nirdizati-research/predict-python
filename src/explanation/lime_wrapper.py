@@ -18,7 +18,7 @@ def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
     exp = explainer.explain_instance(
         test_df.drop(['trace_id', 'label'], 1).iloc[explanation_target],
         # TODO probably the opposite would be way less computationally intesive
-        model[0].predict_proba,
+        model[0].predict_proba,  # TODO
         num_features=5
     )
     exp.as_list()

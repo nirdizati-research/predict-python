@@ -10,6 +10,7 @@ from src.hyperparameter_optimization.models import HyperparameterOptimization, H
     HyperOptAlgorithms, HyperOptLosses
 from src.jobs.job_creator import get_prediction_method_config
 from src.jobs.models import Job, JobStatuses, JobTypes
+from src.jobs.tasks import save_models
 from src.labelling.models import Labelling
 from src.logs.log_service import create_log
 from src.predictive_model.classification.models import ClassificationMethods
@@ -98,9 +99,13 @@ def progetto_padova():
         JOB
     )
 
+    if JOB.create_models:
+        save_models(model_split, JOB)
+
     # predict
     data_df = pd.concat([train_df, test_df])
     results = MODEL[JOB.predictive_model.predictive_model][ModelActions.PREDICT.value](JOB, data_df)
+    results = MODEL[JOB.predictive_model.predictive_model][ModelActions.PREDICT_PROBA.value](JOB, data_df)
 
     # lime
     exp = Explanation.objects.get_or_create(

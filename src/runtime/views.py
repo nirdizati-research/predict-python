@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from src.jobs.models import Job, JobTypes, JobStatuses
 from src.jobs.serializers import JobSerializer
-from src.runtime.tasks import runtime_task, replay_prediction_task, replay_task
+from src.runtime.tasks import runtime_task, replay_prediction_task, replay_task, replay_predictions
 from src.split.models import Split
 from src.utils.custom_parser import CustomXMLParser
 from src.utils.django_orm import duplicate_orm_row
@@ -69,6 +69,7 @@ def post_replay_prediction(request):
 
     logger.info("Enqueuing replay_prediction task ID {}".format(replay_prediction_job.id))
     log = import_log_from_string(request.data.decode('utf-8'))
+
     django_rq.enqueue(replay_prediction_task, replay_prediction_job, training_initial_job,  log)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -103,3 +104,21 @@ def post_replay(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['GET'])
+def get_prediction(request, pk, explanation_target):
+    """ Post request to start a demo of a log arriving to server
+
+        :param pk:
+        :param explanation_target:
+        :param request: json
+        :return: Response
+    """
+    try:
+        training_initial_job = Job.objects.get(pk=pk)
+        new_job = duplicate_orm_row(training_initial_job)
+        new_job.type = JobTypes.REPLAY.value
+        new_job.status = JobStatuses.CREATED.value
+        new_job.save()
+    except Job.DoesNotExist:
+        return Response({'error': 'Job ' + str(pk) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
+    return Response(replay_predictions(new_job, training_initial_job, explanation_target), status=status.HTTP_200_OK)

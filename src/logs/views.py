@@ -86,6 +86,7 @@ def get_log_traces_attributes(request, pk):
     log = Log.objects.get(pk=pk)
     try:
         log_file = get_log(log)
+
     except FileNotFoundError:
         logger.error("Log id: %s, path %s not found", log.id, log.path)
         return Response({'error': 'log file not found'}, status=status.HTTP_404_NOT_FOUND)

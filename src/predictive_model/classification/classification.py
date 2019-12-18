@@ -103,10 +103,7 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
             try:
                 classifier.fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
             except (NotImplementedError, KeyError):
-                try:
-                    classifier.partial_fit(cluster_train_df.drop('label', 1).T, cluster_targets_df.values.ravel())
-                except KeyError:
-                    classifier.partial_fit(cluster_train_df.drop('label', 1).values, cluster_targets_df.values.ravel())
+                classifier.partial_fit(cluster_train_df.drop('label', 1).values, cluster_targets_df.values.ravel())
             except Exception as exception:
                 raise exception
 
@@ -137,10 +134,7 @@ def _update(job: Job, data: DataFrame) -> dict:
             try:
                 models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
             except (NotImplementedError, KeyError):
-                try:
-                    models[cluster].partial_fit(x.drop('label', 1).T, y.values.ravel())
-                except KeyError:
-                    models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
+                models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
             except Exception as exception:
                 raise exception
 
@@ -173,28 +167,20 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
                         if np.size(scores, 1) >= 2:  # checks number of columns
                             scores = scores[:, 1]
                 except (NotImplementedError, KeyError):
-                    try:
-                        if hasattr(classifier[cluster], 'decision_function'):
-                            scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1).T)
-                        else:
-                            scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).T)
+                    if hasattr(classifier[cluster], 'decision_function'):
+                        scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1).values)
+                    else:
+                        scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).values)
+                        try:
                             if np.size(scores, 1) >= 2:  # checks number of columns
                                 scores = scores[:, 1]
-                    except KeyError:
-                        if hasattr(classifier[cluster], 'decision_function'):
-                            scores = classifier[cluster].decision_function(cluster_test_df.drop(['label'], 1).values)
-                        else:
-                            scores = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).values)
-                            if np.size(scores, 1) >= 2:  # checks number of columns
-                                scores = scores[:, 1]
+                        except Exception as exception:
+                            pass
                 auc += get_auc(cluster_targets_df, scores)
             try:
                 cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1))
             except (NotImplementedError, KeyError):
-                try:
-                    cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).T)
-                except (KeyError, ValueError):
-                    cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
+                cluster_test_df['predicted'] = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
 
             results_df = results_df.append(cluster_test_df)
 
@@ -225,10 +211,31 @@ def predict(job: Job, data: DataFrame) -> Any:
             try:
                 result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1))
             except (NotImplementedError, KeyError):
-                try:
-                    result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).T)
-                except (KeyError, ValueError):
-                    result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
+                result = classifier[cluster].predict(cluster_test_df.drop(['label'], 1).values)
+
+    return result
+
+
+def predict_proba(job: Job, data: DataFrame) -> Any:
+    data = data.drop(['trace_id'], 1)
+    clusterer = Clustering.load_model(job)
+    data = clusterer.cluster_data(data)
+
+    classifier = joblib.load(job.predictive_model.model_path)
+
+    non_empty_clusters = clusterer.n_clusters
+
+    result = None
+
+    for cluster in range(clusterer.n_clusters):
+        cluster_test_df = data[cluster]
+        if cluster_test_df.empty:
+            non_empty_clusters -= 1
+        else:
+            try:
+                result = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1))
+            except (NotImplementedError, KeyError):
+                result = classifier[cluster].predict_proba(cluster_test_df.drop(['label'], 1).values)
 
     return result
 

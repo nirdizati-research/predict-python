@@ -115,4 +115,3 @@ def progetto_padova():
         job=JOB
     )[0]
     error, result = explanation(exp.id, int(EXPLANATION_TARGET))
-

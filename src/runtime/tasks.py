@@ -13,7 +13,7 @@ from src.jobs.ws_publisher import publish
 from src.logs.models import Log
 from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
-from .replay import replay_core
+from .replay import replay_core, replay_prediction
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +109,21 @@ def replay_task(replay_job: Job, training_initial_job: Job) -> list:
         replay_job.save()
         publish(replay_job)
         return requests
+
+
+@job("default", timeout='100h')
+def replay_predictions(replay_job: Job, training_initial_job: Job, trace_id) -> list:
+    """ The function create a replay task to ask the server to demo the arriving of events
+
+        :param training_initial_job:
+        :param trace_id:
+        :param replay_job: job dictionary
+        :return: List of requests
+    """
+    logger.error("Start replay task ID {}".format(replay_job.id))
+    requests = replay_prediction(replay_job,training_initial_job, trace_id)
+
+    return requests
 
 
 def create_prediction_job(job: Job, max_len: int) -> Job:

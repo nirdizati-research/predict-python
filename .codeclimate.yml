@@ -1,0 +1,4 @@
+exclude_patterns:
+- "**/*.js"
+- "**/*.pyc"
+- "**/migrations/*.py"

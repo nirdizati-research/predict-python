@@ -15,9 +15,11 @@ from xgboost import XGBRegressor
 
 from src.clustering.clustering import Clustering
 from src.core.common import get_method_config
+from src.encoding.models import Encoding
 from src.jobs.models import Job, ModelType
 from src.predictive_model.regression.custom_regression_models import NNRegressor
 from src.predictive_model.regression.models import RegressionMethods
+from src.utils.django_orm import duplicate_orm_row
 from src.utils.result_metrics import calculate_results_regression
 
 pd.options.mode.chained_assignment = None
@@ -40,6 +42,11 @@ def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering
 
     """
     train_data, test_data = _prep_data(training_df, test_df)
+
+    job.encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.pk)[0])  # TODO: maybe here would be better an intelligent get_or_create...
+    job.encoding.features = list(train_data.columns.values)
+    job.encoding.save()
+    job.save()
 
     model_split = _train(train_data, _choose_regressor(job), clusterer)
     results_df = _test(model_split, test_data)

@@ -12,12 +12,15 @@ from src.core.core import get_encoded_logs, get_run, run_by_type
 from src.hyperparameter_optimization.hyperopt_spaces import _get_space
 from src.hyperparameter_optimization.models import HyperOptAlgorithms, HyperOptLosses
 from src.jobs.models import Job
+from src.predictive_model.classification.classification import _test, _check_is_binary_classifier, _prepare_results
 from src.predictive_model.models import PredictiveModel
 from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
 trial_number = 0
+
+holdout = False #TODO evaluate on validation set
 
 
 def calculate_hyperopt(job: Job) -> (dict, dict, dict):
@@ -38,6 +41,11 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     global training_df, test_df, global_job
     global_job = job
     training_df, test_df = get_encoded_logs(job)
+    #TODO evaluate on validation set
+    if holdout:
+        validation_df = test_df
+        test_df = training_df.sample(frac=.2)
+        training_df = training_df.drop(test_df.index)
 
     train_start_time = time.time()
 
@@ -77,8 +85,22 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     job.evaluation.elapsed_time = current_best['results']['elapsed_time']
     job.evaluation.save()
 
-    logger.info("End hyperopt job {}, {} . Results {}".format(job.type, get_run(job), current_best['results']))
-    return current_best['results'], current_best['config'], current_best['model_split']
+    #TODO evaluate on validation set
+    if holdout:
+        results_df, auc = _test(
+            current_best['model_split'],
+            validation_df.drop(['trace_id'], 1),
+            evaluation=True,
+            is_binary_classifier=_check_is_binary_classifier(job.labelling.type)
+        )
+        results = _prepare_results(results_df, auc)
+
+    if holdout:
+        logger.info("End hyperopt job {}, {}. \n\tResults on test {}. \n\tResults on validation {}.".format(job.type, get_run(job), current_best['results'], results))
+        return results, current_best['config'], current_best['model_split']
+    else:
+        logger.info("End hyperopt job {}, {}. \n\tResults on test {}.".format(job.type, get_run(job), current_best['results']))
+        return current_best['results'], current_best['config'], current_best['model_split']
 
 
 def _get_metric_multiplier(performance_metric: int) -> int:

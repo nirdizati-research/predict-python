@@ -12,7 +12,6 @@ from src.utils.tests_utils import create_test_job, create_test_split, create_tes
 class TestRuntime(TestCase):
 
     def test_replay(self):
-
         job = create_test_job()
         runtime_job = duplicate_orm_row(job)
 
@@ -33,7 +32,7 @@ class TestRuntime(TestCase):
         response = client.post('/runtime/replay/', {
             'jobId': job.id,
             'splitId': split.id,
-            }, format='json')
+        }, format='json')
 
         self.assertEqual(201, response.status_code)
 
@@ -44,7 +43,7 @@ class TestRuntime(TestCase):
         response = client.post('/runtime/prediction/', {
             'jobId': job.id,
             'splitId': split.id,
-            }, format='json')
+        }, format='json')
 
         self.assertEqual(201, response.status_code)
 

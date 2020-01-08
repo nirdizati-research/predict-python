@@ -13,7 +13,7 @@ from src.jobs.ws_publisher import publish
 from src.logs.models import Log
 from src.split.models import Split
 from src.utils.django_orm import duplicate_orm_row
-from .replay import replay_core, replay_prediction
+from .replay import replay_core
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,6 @@ logger = logging.getLogger(__name__)
 @job("default", timeout='100h')
 def runtime_task(job: Job):
     """ The function create a runtime task to ask a single prediction to the server
-
         :param job: job dictionary
     """
     logger.info("Start runtime task ID {}".format(job.id))
@@ -45,7 +44,6 @@ def runtime_task(job: Job):
 @job("default", timeout='100h')
 def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job, log: Log):
     """ The function create a replat prediction task to ask a single prediction to the server for a portion of a trace
-
         :param replay_prediction_job: job dictionary
         :param training_initial_job: job dictionary
         :param log: job dictionary
@@ -84,7 +82,6 @@ def replay_prediction_task(replay_prediction_job: Job, training_initial_job: Job
 @job("default", timeout='100h')
 def replay_task(replay_job: Job, training_initial_job: Job) -> list:
     """ The function create a replay task to ask the server to demo the arriving of events
-
         :param replay_job: job dictionary
         :param training_initial_job: job dictionary
         :return: List of requests
@@ -111,24 +108,8 @@ def replay_task(replay_job: Job, training_initial_job: Job) -> list:
         return requests
 
 
-@job("default", timeout='100h')
-def replay_predictions(replay_job: Job, training_initial_job: Job, trace_id) -> list:
-    """ The function create a replay task to ask the server to demo the arriving of events
-
-        :param training_initial_job:
-        :param trace_id:
-        :param replay_job: job dictionary
-        :return: List of requests
-    """
-    logger.error("Start replay task ID {}".format(replay_job.id))
-    requests = replay_prediction(replay_job,training_initial_job, trace_id)
-
-    return requests
-
-
 def create_prediction_job(job: Job, max_len: int) -> Job:
     """ The function create a new prediction job to create a model when it isn't in the database
-
         :param job: job dictionary
         :param max_len: job dictionary
         :return: Job

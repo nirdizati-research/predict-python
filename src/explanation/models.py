@@ -13,12 +13,14 @@ class ExplanationTypes(Enum):
     SHAP = 'shap'
     LIME = 'lime'
     ANCHOR = 'anchor'
+    PRED = 'pred'
 
 
 EXPLANATION_TYPE_MAPPINGS = (
     (ExplanationTypes.SHAP.value, 'shap'),
     (ExplanationTypes.LIME.value, 'lime'),
-    (ExplanationTypes.ANCHOR.value, 'anchor')
+    (ExplanationTypes.ANCHOR.value, 'anchor'),
+    (ExplanationTypes.PRED.value, 'pred')
 )
 
 

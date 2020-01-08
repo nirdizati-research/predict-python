@@ -89,21 +89,16 @@ def replay_prediction(replay_job: Job, training_initial_job: Job, trace_id) -> l
     log = get_log(split.train_log)
     requests_list = list()
     eventlog = EventLog()
+    trace = log[int(trace_id)]
     for key in log.attributes.keys():
         eventlog.attributes[key] = log.attributes[key]
-    for trace in log:
-        if trace.attributes[NAME_CLASSIFIER] == trace_id:
-            new_trace = Trace(trace)
-            for key in trace.attributes:
-                new_trace.attributes[key] = trace.attributes[key]
-            eventlog.append(new_trace)
-            break
-    trace_list = list()
-    event_number = dict()
-    trace_list.append(trace_id)
-    event_number[trace.attributes['concept:name']] = len(trace)
-    replay_job.case_id = trace_list
-    replay_job.event_number = event_number
+    for index in range(len(trace)):
+        new_trace = Trace(trace[0:index])
+        for key in trace.attributes:
+            new_trace.attributes[key] = trace.attributes[key]
+        eventlog.append(new_trace)
+    replay_job.case_id = trace_id
+    replay_job.event_number = len(trace)
     replay_job.save()
     try:
         logger.error("Sending request for replay_prediction task.")

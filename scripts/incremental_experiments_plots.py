@@ -90,55 +90,134 @@ splits = {
     }
 }
 
-prefixes = [30, 50, 70]
-classification_methods = ["multinomialNB", "SGDClassifier", "perceptron"]
-encodings = ["complex", "simpleIndex"]
-task_generation_type = ['all_in_one']
+
+def get_row_metrics(table):
+    curr_row = table['evaluation_f1_score']
+    f1_score_mean, f1_score_std, f1_score_max = curr_row.mean(), curr_row.std(), curr_row.max()
+
+    curr_row = table['evaluation_accuracy']
+    accuracy_mean, accuracy_std, accuracy_max = curr_row.mean(), curr_row.std(), curr_row.max()
+
+    curr_row = table['evaluation_precision']
+    precision_mean, precision_std, precision_max = curr_row.mean(), curr_row.std(), curr_row.max()
+
+    curr_row = table['evaluation_recall']
+    recall_mean, recall_std, recall_max = curr_row.mean(), curr_row.std(), curr_row.max()
+
+    curr_row = table['evaluation_auc']
+    auc_mean, auc_std, auc_max = curr_row.mean(), curr_row.std(), curr_row.max()
+
+    curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
+    elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = curr_row.mean(), curr_row.std(), curr_row.max(), curr_row.min()
+
+    return f1_score_mean, f1_score_std, f1_score_max, \
+           accuracy_mean, accuracy_std, accuracy_max, \
+           precision_mean, precision_std, precision_max, \
+           recall_mean, recall_std, recall_max, \
+           auc_mean, auc_std, auc_max, \
+           elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min
 
 
-def compute_done_stuff():
-    datasets_by_id = {}
+def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='quantitative_scores.csv'):
+    pd.set_option("display.precision", 4)
+    experiments_df = pd.read_csv(experiments_df_path)
+
+    splits_scores = {}
+
+    for split_id in list(set(experiments_df['split_id'].unique()) & set(splits[dataset]['0-40_80-100'] for dataset in datasets)):
+        table = experiments_df[(experiments_df['split_id'] == split_id) &
+                               (experiments_df['incremental_model_id'].isnull()) &
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                                (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M0
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-40_80-100'] == split_id][0]
+        if not table.empty:
+            table['model'] = 'M0'
+            table['dataset'] = m_dataset
+            table['size'] = '0-40_80-100'
+            if m_dataset not in splits_scores:
+                splits_scores[m_dataset] = table
+            else:
+                splits_scores[m_dataset] = pd.concat([splits_scores[m_dataset], table])
+
+    for split_id in list(set(experiments_df['split_id'].unique()) & set(splits[dataset]['0-80_80-100'] for dataset in datasets)):
+        table = experiments_df[(experiments_df['split_id'] == split_id) &
+                               (experiments_df['incremental_model_id'].isnull()) &
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                                (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M1
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
+        if not table.empty:
+            table['model'] = 'M1'
+            table['dataset'] = m_dataset
+            table['size'] = '0-80_80-100'
+            if m_dataset not in splits_scores:
+                splits_scores[m_dataset] = table
+            else:
+                splits_scores[m_dataset] = pd.concat([splits_scores[m_dataset], table])
+
+    for split_id in list(set(experiments_df['split_id'].unique()) & set(splits[dataset]['0-80_80-100'] for dataset in datasets)):
+        table = experiments_df[(experiments_df['split_id'] == split_id) &
+                               (experiments_df['incremental_model_id'].isnull()) &
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                                (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M2
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
+        if not table.empty:
+            table['model'] = 'M2'
+            table['dataset'] = m_dataset
+            table['size'] = '0-80_80-100'
+            if m_dataset not in splits_scores:
+                splits_scores[m_dataset] = table
+            else:
+                splits_scores[m_dataset] = pd.concat([splits_scores[m_dataset], table])
+
+    for split_id in list(set(experiments_df['split_id'].unique()) & set( splits[dataset]['40-80_80-100'] for dataset in datasets )):
+        table = experiments_df[(experiments_df['split_id'] == split_id) &
+                               (experiments_df['incremental_model_id'].notnull()) &
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                               (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                               (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M3
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['40-80_80-100'] == split_id][0]
+        if not table.empty:
+            table['model'] = 'M3'
+            table['dataset'] = m_dataset
+            table['size'] = '40-80_80-100'
+            if m_dataset not in splits_scores:
+                splits_scores[m_dataset] = table
+            else:
+                splits_scores[m_dataset] = pd.concat([splits_scores[m_dataset], table])
+
+    quantitative_scores = {}
     for dataset in datasets:
-        for split_size in split_sizes:
-            if dataset in splits and split_size in splits[dataset]:
-                datasets_by_id[splits[dataset][split_size]] = dataset + split_size
+        for encoding, prefix, predictive_model in itertools.product(*[
+            splits_scores[dataset]['encoding_value_encoding'].unique(),
+            splits_scores[dataset]['encoding_prefix_length'].unique(),
+            splits_scores[dataset]['predictive_model'].unique()
+        ]):
+            table = splits_scores[dataset][
+                (splits_scores[dataset]['encoding_value_encoding'] == encoding) &
+                (splits_scores[dataset]['encoding_prefix_length'] == prefix) &
+                (splits_scores[dataset]['predictive_model'] == predictive_model)
+            ]
+            if len(table) == 4:
+                max_conf = table.loc[table['evaluation_auc'].idxmax()]
+                if dataset not in quantitative_scores:
+                    quantitative_scores[dataset] = pd.DataFrame([max_conf])
+                else:
+                    quantitative_scores[dataset] = pd.concat([quantitative_scores[dataset], pd.DataFrame([max_conf])])
 
-    def retrieve_job(ID):
-        SERVER_NAME = "ashkin"
-        SERVER_PORT = '50401'
-        headers = {'Content-type': 'application/json'}
-        r = requests.get('http://' + SERVER_NAME + ':' + SERVER_PORT + '/jobs/' + str(ID), headers=headers)
-        return json.loads(r.text)
+    if where_save is not None:
+        for dataset in datasets:
+            splits_scores[dataset].sort_values(by=['evaluation_auc'], inplace=True, ascending=False)
+            splits_scores[dataset].to_csv(dataset.replace('/', '_') + '_' + where_save)
 
-    def get_dataset_by_id(ID):
-        if ID in datasets_by_id:
-            return datasets_by_id[ID]
-        else:
-            for dataset in datasets:
-                for split_size in split_sizes:
-                    if dataset in splits and split_size in splits[dataset] and splits[dataset][split_size] == ID:
-                        return dataset + split_size
-
-        return str(ID) + ' Not found'
-
-
-    experiments_already_done_list = []
-
-    for index in range(1300):
-        job_result = retrieve_job(ID=index)
-        if not('detail' in job_result and job_result['detail'] == 'Not found.'):
-            experiments_already_done_list += [(
-                    get_dataset_by_id(ID=job_result['config']['split']['id']),
-                    job_result['config']['encoding']['prefix_length'],
-                    job_result['config']['encoding']['task_generation_type'],
-                    job_result['config']['encoding']['value_encoding'],
-                    job_result['config']['predictive_model']['prediction_method'],
-                    'incremental' if job_result['config']['incremental_train'] is not None else 'traditional',
-                    'OK' if job_result['status'] == 'completed' else 'NOK'
-            )]
-
-    experiments_already_done = pd.DataFrame(experiments_already_done_list, columns=['dataset', 'prefix', 'sampling', 'encoding', 'classifier', 'train_type', 'status'])
-    experiments_already_done.to_csv('./incremental_experiments.csv')
+            quantitative_scores[dataset].to_csv(dataset.replace('/', '_') + 'models' + '_' + where_save)
+    # return aggregates_df
 
 
 def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='macro_table_avg_std_max.csv'):
@@ -148,146 +227,130 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
     for split_id in list(set(experiments_df['split_id'].unique()) & set( splits[dataset]['0-40_80-100'] for dataset in datasets )):
         table = experiments_df[(experiments_df['split_id'] == split_id) &
                                (experiments_df['incremental_model_id'].isnull()) &
-                               (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull())]  # M0
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                               (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                               (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M0
 
-        curr_row = table['evaluation_f1_score']
-        f1_score_mean, f1_score_std, f1_score_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        f1_score_mean, f1_score_std, f1_score_max, \
+        accuracy_mean, accuracy_std, accuracy_max, \
+        precision_mean, precision_std, precision_max, \
+        recall_mean, recall_std, recall_max, \
+        auc_mean, auc_std, auc_max, \
+        elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-        curr_row = table['evaluation_accuracy']
-        accuracy_mean, accuracy_std, accuracy_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-40_80-100'] == split_id][0]
 
-        curr_row = table['evaluation_precision']
-        precision_mean, precision_std, precision_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_recall']
-        recall_mean, recall_std, recall_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_auc']
-        auc_mean, auc_std, auc_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-        elapsed_time_mean, elapsed_time_std, elapsed_time_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        if curr_row.notnull().values.any():
+        if not table.empty:
             aggregates_list += [[
-                split_id,
-                f1_score_mean, f1_score_std, f1_score_max,
-                accuracy_mean, accuracy_std, accuracy_max,
-                precision_mean, precision_std, precision_max,
-                recall_mean, recall_std, recall_max,
-                auc_mean, auc_std, auc_max,
-                elapsed_time_mean, elapsed_time_std, elapsed_time_max
+                m_dataset, '0-40_80-100', 'M0',
+                split_id, f1_score_max, accuracy_max, precision_max, recall_max, auc_max,
+                elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min,
+                f1_score_mean, f1_score_std,
+                accuracy_mean, accuracy_std,
+                precision_mean, precision_std,
+                recall_mean, recall_std,
+                auc_mean, auc_std
             ]]
 
     for split_id in list(set(experiments_df['split_id'].unique()) & set( splits[dataset]['40-80_80-100'] for dataset in datasets )):
         table = experiments_df[(experiments_df['split_id'] == split_id) &
                                (experiments_df['incremental_model_id'].notnull()) &
-                               (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull())]  # M1
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                               (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                               (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M3
 
-        curr_row = table['evaluation_f1_score']
-        f1_score_mean, f1_score_std, f1_score_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        f1_score_mean, f1_score_std, f1_score_max, \
+        accuracy_mean, accuracy_std, accuracy_max, \
+        precision_mean, precision_std, precision_max, \
+        recall_mean, recall_std, recall_max, \
+        auc_mean, auc_std, auc_max, \
+        elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-        curr_row = table['evaluation_accuracy']
-        accuracy_mean, accuracy_std, accuracy_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['40-80_80-100'] == split_id][0]
 
-        curr_row = table['evaluation_precision']
-        precision_mean, precision_std, precision_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        custom_split_id = splits[m_dataset]['0-80_80-100']
 
-        curr_row = table['evaluation_recall']
-        recall_mean, recall_std, recall_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_auc']
-        auc_mean, auc_std, auc_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-        elapsed_time_mean, elapsed_time_std, elapsed_time_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        if curr_row.notnull().values.any():
+        if not table.empty:
             aggregates_list += [[
-                split_id,
-                f1_score_mean, f1_score_std, f1_score_max,
-                accuracy_mean, accuracy_std, accuracy_max,
-                precision_mean, precision_std, precision_max,
-                recall_mean, recall_std, recall_max,
-                auc_mean, auc_std, auc_max,
-                elapsed_time_mean, elapsed_time_std, elapsed_time_max
+                m_dataset, '40-80_80-100', 'M3',
+                custom_split_id + .3, f1_score_max, accuracy_max, precision_max, recall_max, auc_max,
+                elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min,
+                f1_score_mean, f1_score_std,
+                accuracy_mean, accuracy_std,
+                precision_mean, precision_std,
+                recall_mean, recall_std,
+                auc_mean, auc_std
             ]]
+
     for split_id in list(set(experiments_df['split_id'].unique()) & set( splits[dataset]['0-80_80-100'] for dataset in datasets )):
         table = experiments_df[(experiments_df['split_id'] == split_id) &
                                (experiments_df['incremental_model_id'].isnull()) &
-                               (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull())]  # M01
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                                (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M1
 
-        curr_row = table['evaluation_f1_score']
-        f1_score_mean, f1_score_std, f1_score_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        f1_score_mean, f1_score_std, f1_score_max, \
+        accuracy_mean, accuracy_std, accuracy_max, \
+        precision_mean, precision_std, precision_max, \
+        recall_mean, recall_std, recall_max, \
+        auc_mean, auc_std, auc_max, \
+        elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-        curr_row = table['evaluation_accuracy']
-        accuracy_mean, accuracy_std, accuracy_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
 
-        curr_row = table['evaluation_precision']
-        precision_mean, precision_std, precision_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_recall']
-        recall_mean, recall_std, recall_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_auc']
-        auc_mean, auc_std, auc_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-        elapsed_time_mean, elapsed_time_std, elapsed_time_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        if curr_row.notnull().values.any():
+        if not table.empty:
             aggregates_list += [[
-                split_id,
-                f1_score_mean, f1_score_std, f1_score_max,
-                accuracy_mean, accuracy_std, accuracy_max,
-                precision_mean, precision_std, precision_max,
-                recall_mean, recall_std, recall_max,
-                auc_mean, auc_std, auc_max,
-                elapsed_time_mean, elapsed_time_std, elapsed_time_max
+                m_dataset, '0-80_80-100', 'M1',
+                split_id + .1, f1_score_max, accuracy_max, precision_max, recall_max, auc_max,
+                elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min,
+                f1_score_mean, f1_score_std,
+                accuracy_mean, accuracy_std,
+                precision_mean, precision_std,
+                recall_mean, recall_std,
+                auc_mean, auc_std
             ]]
 
     for split_id in list(set(experiments_df['split_id'].unique()) & set(splits[dataset]['0-80_80-100'] for dataset in datasets)):
         table = experiments_df[(experiments_df['split_id'] == split_id) &
                                (experiments_df['incremental_model_id'].isnull()) &
-                               (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull())]  # M2
+                               ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                               (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                               (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                               (experiments_df['predictive_model'] != 'randomForest')]  # M2
 
-        curr_row = table['evaluation_f1_score']
-        f1_score_mean, f1_score_std, f1_score_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        f1_score_mean, f1_score_std, f1_score_max, \
+        accuracy_mean, accuracy_std, accuracy_max, \
+        precision_mean, precision_std, precision_max, \
+        recall_mean, recall_std, recall_max, \
+        auc_mean, auc_std, auc_max, \
+        elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-        curr_row = table['evaluation_accuracy']
-        accuracy_mean, accuracy_std, accuracy_max = curr_row.mean(), curr_row.std(), curr_row.max()
+        m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
 
-        curr_row = table['evaluation_precision']
-        precision_mean, precision_std, precision_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_recall']
-        recall_mean, recall_std, recall_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = table['evaluation_auc']
-        auc_mean, auc_std, auc_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-        elapsed_time_mean, elapsed_time_std, elapsed_time_max = curr_row.mean(), curr_row.std(), curr_row.max()
-
-        if curr_row.notnull().values.any():
+        if not table.empty:
             aggregates_list += [[
-                split_id,
-                f1_score_mean, f1_score_std, f1_score_max,
-                accuracy_mean, accuracy_std, accuracy_max,
-                precision_mean, precision_std, precision_max,
-                recall_mean, recall_std, recall_max,
-                auc_mean, auc_std, auc_max,
-                elapsed_time_mean, elapsed_time_std, elapsed_time_max
+                m_dataset, '0-80_80-100', 'M2',
+                split_id + .2, f1_score_max, accuracy_max, precision_max, recall_max, auc_max,
+                elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min,
+                f1_score_mean, f1_score_std,
+                accuracy_mean, accuracy_std,
+                precision_mean, precision_std,
+                recall_mean, recall_std,
+                auc_mean, auc_std
             ]]
 
     aggregates_df = pd.DataFrame(aggregates_list, columns=[
-        'split_id',
-        'f1_score_mean',  'f1_score_std',  'f1_score_max',
-        'accuracy_mean',  'accuracy_std',  'accuracy_max',
-        'precision_mean', 'precision_std', 'precision_max',
-        'recall_mean',    'recall_std',    'recall_max',
-        'auc_mean',       'auc_std',       'auc_max',
-        'elapsed_time_mean', 'elapsed_time_std', 'elapsed_time_max'
+        'dataset', 'size', 'model',
+        'split_id', 'f1_score_max', 'accuracy_max', 'precision_max', 'recall_max', 'auc_max',
+        'elapsed_time_mean', 'elapsed_time_std', 'elapsed_time_max', 'elapsed_time_min',
+        'f1_score_mean', 'f1_score_std',
+        'accuracy_mean', 'accuracy_std',
+        'precision_mean', 'precision_std',
+        'recall_mean', 'recall_std',
+        'auc_mean', 'auc_std'
     ])
 
     aggregates_df.sort_values(by=['split_id'], inplace=True)
@@ -306,29 +369,24 @@ def create_macro_obj_table(objective,
         for objective_id in experiments_df[experiments_df['split_id'] == split_id][objective].unique():
             table = experiments_df[(experiments_df['split_id'] == split_id) &
                                    (experiments_df['incremental_model_id'].isnull()) &
-                                   (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) &
-                                   (experiments_df[objective] == objective_id)]  # M0
+                                   ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                                    (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                                    (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                                   (experiments_df[objective] == objective_id) &
+                                   (experiments_df['predictive_model'] != 'randomForest')]  # M0
 
-            curr_row = table['evaluation_f1_score']
-            f1_score_mean, f1_score_std = curr_row.mean(), curr_row.std()
+            f1_score_mean, f1_score_std, f1_score_max, \
+            accuracy_mean, accuracy_std, accuracy_max, \
+            precision_mean, precision_std, precision_max, \
+            recall_mean, recall_std, recall_max, \
+            auc_mean, auc_std, auc_max, \
+            elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-            curr_row = table['evaluation_accuracy']
-            accuracy_mean, accuracy_std = curr_row.mean(), curr_row.std()
+            m_dataset = [dataset for dataset in datasets if splits[dataset]['0-40_80-100'] == split_id][0]
 
-            curr_row = table['evaluation_precision']
-            precision_mean, precision_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_recall']
-            recall_mean, recall_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_auc']
-            auc_mean, auc_std = curr_row.mean(), curr_row.std()
-
-            curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-            elapsed_time_mean, elapsed_time_std = curr_row.mean(), curr_row.std()
-
-            if curr_row.notnull().values.any():
+            if not table.empty:
                 aggregates_list += [[
+                    m_dataset, '0-40_80-100', 'M0',
                     split_id, objective_id,
                     f1_score_mean, f1_score_std,
                     accuracy_mean, accuracy_std,
@@ -341,30 +399,27 @@ def create_macro_obj_table(objective,
         for objective_id in experiments_df[experiments_df['split_id'] == split_id][objective].unique():
             table = experiments_df[(experiments_df['split_id'] == split_id) &
                                    (experiments_df['incremental_model_id'].notnull()) &
-                                   (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
-                                   (experiments_df[objective] == objective_id)]  # M1
+                                   ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                                    (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                                    (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                                   (experiments_df[objective] == objective_id) &
+                                   (experiments_df['predictive_model'] != 'randomForest')]  # M3
 
-            curr_row = table['evaluation_f1_score']
-            f1_score_mean, f1_score_std = curr_row.mean(), curr_row.std()
+            f1_score_mean, f1_score_std, f1_score_max, \
+            accuracy_mean, accuracy_std, accuracy_max, \
+            precision_mean, precision_std, precision_max, \
+            recall_mean, recall_std, recall_max, \
+            auc_mean, auc_std, auc_max, \
+            elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-            curr_row = table['evaluation_accuracy']
-            accuracy_mean, accuracy_std = curr_row.mean(), curr_row.std()
+            m_dataset = [dataset for dataset in datasets if splits[dataset]['40-80_80-100'] == split_id][0]
 
-            curr_row = table['evaluation_precision']
-            precision_mean, precision_std = curr_row.mean(), curr_row.std()
+            custom_split_id = splits[m_dataset]['0-80_80-100']
 
-            curr_row = table['evaluation_recall']
-            recall_mean, recall_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_auc']
-            auc_mean, auc_std = curr_row.mean(), curr_row.std()
-
-            curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-            elapsed_time_mean, elapsed_time_std = curr_row.mean(), curr_row.std()
-
-            if curr_row.notnull().values.any():
+            if not table.empty:
                 aggregates_list += [[
-                    split_id, objective_id,
+                    m_dataset, '40-80_80-100', 'M3',
+                    custom_split_id + .3, objective_id,
                     f1_score_mean, f1_score_std,
                     accuracy_mean, accuracy_std,
                     precision_mean, precision_std,
@@ -376,30 +431,25 @@ def create_macro_obj_table(objective,
         for objective_id in experiments_df[experiments_df['split_id'] == split_id][objective].unique():
             table = experiments_df[(experiments_df['split_id'] == split_id) &
                                    (experiments_df['incremental_model_id'].isnull()) &
-                                   (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
-                                   (experiments_df[objective] == objective_id)]  # M01
+                                   ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
+                                    (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
+                                    (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
+                                   (experiments_df[objective] == objective_id) &
+                                   (experiments_df['predictive_model'] != 'randomForest')]  # M1
 
-            curr_row = table['evaluation_f1_score']
-            f1_score_mean, f1_score_std = curr_row.mean(), curr_row.std()
+            f1_score_mean, f1_score_std, f1_score_max, \
+            accuracy_mean, accuracy_std, accuracy_max, \
+            precision_mean, precision_std, precision_max, \
+            recall_mean, recall_std, recall_max, \
+            auc_mean, auc_std, auc_max, \
+            elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-            curr_row = table['evaluation_accuracy']
-            accuracy_mean, accuracy_std = curr_row.mean(), curr_row.std()
+            m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
 
-            curr_row = table['evaluation_precision']
-            precision_mean, precision_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_recall']
-            recall_mean, recall_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_auc']
-            auc_mean, auc_std = curr_row.mean(), curr_row.std()
-
-            curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-            elapsed_time_mean, elapsed_time_std = curr_row.mean(), curr_row.std()
-
-            if curr_row.notnull().values.any():
+            if not table.empty:
                 aggregates_list += [[
-                    split_id, objective_id,
+                    m_dataset, '0-80_80-100', 'M1',
+                    split_id + .1, objective_id,
                     f1_score_mean, f1_score_std,
                     accuracy_mean, accuracy_std,
                     precision_mean, precision_std,
@@ -411,30 +461,25 @@ def create_macro_obj_table(objective,
         for objective_id in experiments_df[experiments_df['split_id'] == split_id][objective].unique():
             table = experiments_df[(experiments_df['split_id'] == split_id) &
                                    (experiments_df['incremental_model_id'].isnull()) &
-                                   (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) &
-                                   (experiments_df[objective] == objective_id)]  # M2
+                                   ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
+                                    (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
+                                    (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
+                                   (experiments_df[objective] == objective_id) &
+                                   (experiments_df['predictive_model'] != 'randomForest')]  # M2
 
-            curr_row = table['evaluation_f1_score']
-            f1_score_mean, f1_score_std = curr_row.mean(), curr_row.std()
+            f1_score_mean, f1_score_std, f1_score_max, \
+            accuracy_mean, accuracy_std, accuracy_max, \
+            precision_mean, precision_std, precision_max, \
+            recall_mean, recall_std, recall_max, \
+            auc_mean, auc_std, auc_max, \
+            elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min = get_row_metrics(table)
 
-            curr_row = table['evaluation_accuracy']
-            accuracy_mean, accuracy_std = curr_row.mean(), curr_row.std()
+            m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
 
-            curr_row = table['evaluation_precision']
-            precision_mean, precision_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_recall']
-            recall_mean, recall_std = curr_row.mean(), curr_row.std()
-
-            curr_row = table['evaluation_auc']
-            auc_mean, auc_std = curr_row.mean(), curr_row.std()
-
-            curr_row = pd.to_timedelta(table['evaluation_elapsed_time'])
-            elapsed_time_mean, elapsed_time_std = curr_row.mean(), curr_row.std()
-
-            if curr_row.notnull().values.any():
+            if not table.empty:
                 aggregates_list += [[
-                    split_id, objective_id,
+                    m_dataset, '0-80_80-100', 'M2',
+                    split_id + .2, objective_id,
                     f1_score_mean, f1_score_std,
                     accuracy_mean, accuracy_std,
                     precision_mean, precision_std,
@@ -443,6 +488,7 @@ def create_macro_obj_table(objective,
                     elapsed_time_mean, elapsed_time_std
                 ]]
     aggregates_df = pd.DataFrame(aggregates_list, columns=[
+        'dataset', 'size', 'model',
         'split_id', objective,
         'f1_score_mean',  'f1_score_std',
         'accuracy_mean',  'accuracy_std',
@@ -513,7 +559,8 @@ if __name__ == '__main__':
             where_save='macro_table_' + obj + '_avg_std.csv')
         for obj in [ 'predictive_model', 'encoding_prefix_length', 'encoding_value_encoding' ]
     ]
-    # compute_summary_table(aggregates_dfs)
+    quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='macro_table_avg_std_max.csv')
+
 
 
 def plot_unit():

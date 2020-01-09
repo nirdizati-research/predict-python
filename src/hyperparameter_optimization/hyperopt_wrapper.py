@@ -65,17 +65,8 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     current_best = {'loss': 100, 'results': {}, 'predictive_model_id': {}, 'model_split': {}, 'config': {}}
     for trial in trials:
         a = trial['result']
-        if job.hyperparameter_optimizer.__getattribute__(
-            job.hyperparameter_optimizer.optimization_method.lower()
-        ).performance_metric in [HyperOptLosses.RMSE.value,
-                                 HyperOptLosses.MAE.value,
-                                 HyperOptLosses.MAPE.value,
-                                 HyperOptLosses.RSCORE.value]:
-            if current_best['loss'] < a['loss']:
-                current_best = a
-        else:
-            if current_best['loss'] > a['loss']:
-                current_best = a
+        if current_best['loss'] > a['loss']:
+            current_best = a
 
     job.predictive_model = PredictiveModel.objects.filter(pk=current_best['predictive_model_id'])[0]
     job.predictive_model.save()

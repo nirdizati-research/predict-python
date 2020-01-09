@@ -21,7 +21,7 @@ HYPERPARAMETER_OPTIMIZATION_METHOD = (
 class HyperparameterOptimization(CommonModel):
     optimization_method = models.CharField(choices=HYPERPARAMETER_OPTIMIZATION_METHOD,
                                            default='hyperopt',
-                                           max_length=20)
+                                           max_length=max(len(el[1]) for el in HYPERPARAMETER_OPTIMIZATION_METHOD)+1)
     objects = InheritanceManager()
 
     @staticmethod

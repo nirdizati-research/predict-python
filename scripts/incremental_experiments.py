@@ -12,7 +12,7 @@ from src.labelling.models import LabelTypes
 from src.predictive_model.classification.models import ClassificationMethods
 from src.clustering.models import ClusteringMethods
 from src.jobs.models import JobStatuses, JobTypes
-from src.utils.experiments_utils import upload_split, send_job_request, create_payload, retrieve_job
+from src.utils.experiments_utils import upload_split, send_job_request, create_classification_payload, retrieve_job
 
 
 def retrieve_predictive_model_configuration(config):
@@ -69,7 +69,7 @@ def get_pretrained_model_id(config):
 
 def std_experiments(dataset, prefix_length, models, splits, classification_method, encoding_method):
     models[dataset]['0-40_80-100'] = send_job_request(
-        payload=create_payload(
+        payload=create_classification_payload(
             split=splits[dataset]['0-40_80-100'],
             encodings=[encoding_method],
             encoding={"padding": "zero_padding",
@@ -88,11 +88,11 @@ def std_experiments(dataset, prefix_length, models, splits, classification_metho
                                          "performance_metric": HyperOptLosses.AUC.value,
                                          "algorithm_type": HyperOptAlgorithms.TPE.value},
             classification=[classification_method]
-        )
+        ), server_port='50401', server_name='ashkin'
     )[0]['id']
 
     models[dataset]['0-80_80-100'] = send_job_request(
-        payload=create_payload(
+        payload=create_classification_payload(
             split=splits[dataset]['0-80_80-100'],
             encodings=[encoding_method],
             encoding={"padding": "zero_padding",
@@ -143,7 +143,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
         })
     )
 
-    payload = create_payload(
+    payload = create_classification_payload(
         split=splits[dataset]['0-80_80-100'],
         encodings=[encoding_method],
         encoding={"padding": "zero_padding",
@@ -164,7 +164,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
     models[dataset]['0-80_80-100'] = send_job_request(payload=payload)[0]['id']
 
     if classification_method != ClassificationMethods.RANDOM_FOREST.value:
-        payload = create_payload(
+        payload = create_classification_payload(
                 split=splits[dataset]['40-80_80-100'],
                 encodings=[encoding_method],
                 encoding={"padding": "zero_padding",
@@ -217,7 +217,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
 def drift_size_experimentation(dataset, prefix_length, models, splits, classification_method, encoding_method):
     if classification_method != "randomForest":
         models[dataset]['40-55_80-100'] = send_job_request(
-            payload=create_payload(
+            payload=create_classification_payload(
                 split=splits[dataset]['40-55_80-100'],
                 encodings=[encoding_method],
                 encoding={"padding": "zero_padding",
@@ -265,7 +265,7 @@ def drift_size_experimentation(dataset, prefix_length, models, splits, classific
         )[0]['id']
 
     models[dataset]['0-55_80-100'] = send_job_request(
-        payload=create_payload(
+        payload=create_classification_payload(
             split=splits[dataset]['0-55_80-100'],
             encodings=[encoding_method],
             encoding={"padding": "zero_padding",

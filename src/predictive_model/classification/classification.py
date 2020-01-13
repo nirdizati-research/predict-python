@@ -81,6 +81,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
             pd.DataFrame(columns=job.incremental_train.encoding.features), axis=1, join='right')
         test_data = test_data.fillna(0)
 
+    # TODO: UPDATE if incremental, otherwise just test
     model_split = _update(job, train_data)
 
     results_df, auc = _test(model_split, test_data, evaluation=True,

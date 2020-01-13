@@ -68,7 +68,7 @@ def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelli
     elif encoding.value_encoding == ValueEncodings.LAST_PAYLOAD.value:
         run_df = last_payload(log, labelling, encoding, additional_columns)
     else:
-        raise ValueError("Unknown value encoding method {}".format(encoding.value_encoding.value_encoding))
+        raise ValueError("Unknown value encoding method {}".format(encoding.value_encoding))
     return run_df, cols
 
 

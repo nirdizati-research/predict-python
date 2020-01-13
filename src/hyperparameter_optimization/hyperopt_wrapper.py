@@ -9,6 +9,7 @@ import hyperopt
 from hyperopt import Trials, STATUS_OK, fmin, STATUS_FAIL
 
 from src.core.core import get_encoded_logs, get_run, run_by_type
+from src.evaluation.models import Evaluation
 from src.hyperparameter_optimization.hyperopt_spaces import _get_space
 from src.hyperparameter_optimization.models import HyperOptAlgorithms, HyperOptLosses
 from src.jobs.models import Job
@@ -44,7 +45,8 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     #TODO evaluate on validation set
     if holdout:
         validation_df = test_df
-        test_df = training_df.sample(frac=.2)
+        # test_df = training_df.sample(frac=.2)
+        test_df = training_df.tail(int(len(training_df) * 20 / 100))
         training_df = training_df.drop(test_df.index)
 
     train_start_time = time.time()
@@ -85,6 +87,14 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
             is_binary_classifier=_check_is_binary_classifier(job.labelling.type)
         )
         results = _prepare_results(results_df, auc)
+        results['elapsed_time'] = job.evaluation.elapsed_time
+        job.evaluation = Evaluation.init(
+            job.predictive_model.predictive_model,
+            results,
+            len(set(test_df['label'])) <= 2
+        )
+        job.evaluation.save()
+        job.save()
 
     if holdout:
         logger.info("End hyperopt job {}, {}. \n\tResults on test {}. \n\tResults on validation {}.".format(job.type, get_run(job), current_best['results'], results))

@@ -10,6 +10,8 @@ from src.split.models import Split
 from src.split.serializers import SplitSerializer
 from .models import Log
 from .serializers import LogSerializer
+from src.logs.log_service import create_log, get_log_trace_attributes
+from ..utils.file_service import get_log
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +79,19 @@ class LogDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #         logger.info('stats error in get_log_stats, setting data to None')
 #         data = None
 #     return Response(data)
+
+
+@api_view(['GET'])
+def get_log_traces_attributes(request, pk):
+    log = Log.objects.get(pk=pk)
+    try:
+        log_file = get_log(log)
+
+    except FileNotFoundError:
+        logger.error("Log id: %s, path %s not found", log.id, log.path)
+        return Response({'error': 'log file not found'}, status=status.HTTP_404_NOT_FOUND)
+    value = get_log_trace_attributes(log_file)
+    return Response(value, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

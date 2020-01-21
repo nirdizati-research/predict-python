@@ -16,6 +16,30 @@ Development
 [![Build Status](https://travis-ci.org/nirdizati-research/predict-python.svg?branch=development)](https://travis-ci.org/nirdizati-research/predict-python)
 [![codecov](https://codecov.io/gh/nirdizati-research/predict-python/branch/development/graph/badge.svg)](https://codecov.io/gh/nirdizati-research/predict-python)
 
+## Reference
+If you use the code from this repository, please cite the original paper:
+```
+@inproceedings{DBLP:conf/bpm/RizziSFGKM19,
+  author    = {Williams Rizzi and
+               Luca Simonetto and
+               Chiara Di Francescomarino and
+               Chiara Ghidini and
+               T{\~{o}}nis Kasekamp and
+               Fabrizio Maria Maggi},
+  title     = {Nirdizati 2.0: New Features and Redesigned Backend},
+  booktitle = {Proceedings of the Dissertation Award, Doctoral Consortium, and Demonstration
+               Track at {BPM} 2019 co-located with 17th International Conference
+               on Business Process Management, {BPM} 2019, Vienna, Austria, September
+               1-6, 2019},
+  pages     = {154--158},
+  year      = {2019},
+  url       = {http://ceur-ws.org/Vol-2420/paperDT8.pdf},
+  timestamp = {Fri, 30 Aug 2019 13:15:06 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/bpm/RizziSFGKM19},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+} 
+```
+
 Django backend server for machine learning on event logs.
 
 ## Running in a new environment

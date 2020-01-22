@@ -1,10 +1,31 @@
 def classification_random_forest():
     return {
+        ### MANUALLY OPTIMISED PARAMS
         'n_estimators': 10,
         'max_depth': None,
         'max_features': 'auto',
         'n_jobs': -1,
         'random_state': 21
+
+        ### DEFAULT PARAMS
+        # 'n_estimators': 100,
+        # 'criterion': 'gini',
+        # 'min_samples': 2,
+        # 'min_samples_leaf': 1,
+        # 'min_weight_fraction_leaf': 0.,
+        # 'max_features': 'auto',
+        # 'max_leaf_nodes': None,
+        # 'min_impurity_decrease':0.,
+        # 'min_impurity_split': 1e-7,
+        # 'bootstrap': True,
+        # 'oob_score': False,
+        # 'n_jobs': None,
+        # 'random_state': None,
+        # 'verbose': 0,
+        # 'warm_start': False,
+        # 'class_weight': None,
+        # 'ccp_alpha': 0.,
+        # 'max_samples': None
     }
 
 

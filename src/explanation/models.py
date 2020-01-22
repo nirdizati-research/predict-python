@@ -12,18 +12,20 @@ from src.split.models import Split
 class ExplanationTypes(Enum):
     SHAP = 'shap'
     LIME = 'lime'
+    TEMPORAL_STABILITY = 'temporal_stability'
     ANCHOR = 'anchor'
 
 
 EXPLANATION_TYPE_MAPPINGS = (
     (ExplanationTypes.SHAP.value, 'shap'),
     (ExplanationTypes.LIME.value, 'lime'),
+    (ExplanationTypes.TEMPORAL_STABILITY.value, 'temporal_stability'),
     (ExplanationTypes.ANCHOR.value, 'anchor')
 )
 
 
 class Explanation(CommonModel):
-    type = models.CharField(choices=EXPLANATION_TYPE_MAPPINGS, default='shap',
+    type = models.CharField(choices=EXPLANATION_TYPE_MAPPINGS, default='lime',
                             max_length=max(len(el[1]) for el in EXPLANATION_TYPE_MAPPINGS) + 1, null=True, blank=True)
     split = models.ForeignKey(Split, on_delete=models.DO_NOTHING, null=True)
     predictive_model = models.ForeignKey(PredictiveModel, on_delete=models.DO_NOTHING, null=True)

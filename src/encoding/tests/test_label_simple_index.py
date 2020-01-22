@@ -87,9 +87,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 0])
+        self.assertListEqual(trace_5, ['5', 1, 2, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 2])
 
     def test_label_remaining_time_with_elapsed_time_custom_threshold(self):
         encoding = create_test_encoding(
@@ -112,9 +112,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 5))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'elapsed_time', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 0, 0])
+        self.assertListEqual(trace_5, ['5', 1, 2, 2, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 1, 1])
 
     def test_remaining_time_zero_padding(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -134,10 +134,10 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 13))
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0])
+                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0])
+                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 2, 2])
 
     def test_next_activity(self):
         labelling = create_test_labelling(label_type=LabelTypes.NEXT_ACTIVITY.value)
@@ -179,10 +179,10 @@ class TestLabelSimpleIndex(TestCase):
         self.assertTrue('elapsed_time' in df.columns.values.tolist())
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
         self.assertListEqual(trace_5,
-                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1])
+                             ['5', 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
         self.assertListEqual(trace_4,
-                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 0, 0])
+                             ['4', 1, 1, 2, 1, 2, 0, 0, 0, 0, 0, 2, 0])
 
     def test_attribute_string(self):
         encoding = create_test_encoding(
@@ -220,9 +220,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 0])
+        self.assertListEqual(trace_5, ['5', 1, 2, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 2])
 
     def test_duration(self):
         labelling = create_test_labelling(label_type=LabelTypes.DURATION.value)
@@ -240,9 +240,9 @@ class TestLabelSimpleIndex(TestCase):
         self.assertEqual(df.shape, (2, 4))
         self.assertListEqual(df.columns.values.tolist(), ['trace_id', 'prefix_1', 'prefix_2', 'label'])
         trace_5 = df[df.trace_id == '5'].iloc[0].values.tolist()
-        self.assertListEqual(trace_5, ['5', 1, 2, 0])
+        self.assertListEqual(trace_5, ['5', 1, 2, 1])
         trace_4 = df[df.trace_id == '4'].iloc[0].values.tolist()
-        self.assertListEqual(trace_4, ['4', 1, 1, 0])
+        self.assertListEqual(trace_4, ['4', 1, 1, 2])
 
     def test_add_executed_events(self):
         labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)

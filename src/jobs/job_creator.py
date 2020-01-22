@@ -22,23 +22,9 @@ def generate(split, payload):
     for method in config['methods']:
         for clustering in config['clusterings']:
             for encMethod in config['encodings']:
-                encoding = config['encoding']
-                if encoding['generation_type'] == UP_TO:
-                    for i in range(1, encoding['prefix_length'] + 1):
-                        encoding = Encoding.objects.get_or_create(
-                            data_encoding=DataEncodings.LABEL_ENCODER.value,
-                            value_encoding=encMethod,
-                            add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                            add_remaining_time=labelling_config.get('add_remaining_time', False),
-                            add_executed_events=labelling_config.get('add_executed_events', False),
-                            add_resources_used=labelling_config.get('add_resources_used', False),
-                            add_new_traces=labelling_config.get('add_new_traces', False),
-                            prefix_length=i,
-                            # TODO static check?
-                            padding=True if config['encoding']['padding'] == 'zero_padding' else False,
-                            task_generation_type=config['encoding'].get('generation_type', 'only_this'),
-                            features=config['encoding'].get('features', [])
-                        )[0]
+                encoding_dict = config['encoding']
+                if encoding_dict['generation_type'] == UP_TO:
+                    for i in range(1, encoding_dict['prefix_length'] + 1):
 
                         predictive_model = PredictiveModel.init(
                             get_prediction_method_config(prediction_type, method, config))
@@ -47,7 +33,20 @@ def generate(split, payload):
                             status=JobStatuses.CREATED.value,
                             type=job_type,
                             split=split,
-                            encoding=encoding,
+                            encoding=Encoding.objects.get_or_create(
+                                data_encoding=DataEncodings.LABEL_ENCODER.value,
+                                value_encoding=encMethod,
+                                add_elapsed_time=encoding_dict.get('add_elapsed_time', False),
+                                add_remaining_time=encoding_dict.get('add_remaining_time', False),
+                                add_executed_events=encoding_dict.get('add_executed_events', False),
+                                add_resources_used=encoding_dict.get('add_resources_used', False),
+                                add_new_traces=encoding_dict.get('add_new_traces', False),
+                                prefix_length=i,
+                                # TODO static check?
+                                padding=True if config['encoding']['padding'] == 'zero_padding' else False,
+                                task_generation_type=config['encoding'].get('generation_type', 'only_this'),
+                                features=config['encoding'].get('features', [])
+                            )[0],
                             labelling=Labelling.objects.get_or_create(
                                 type=labelling_config.get('type', None),
                                 # TODO static check?
@@ -70,7 +69,6 @@ def generate(split, payload):
 
                         check_predictive_model_not_overwrite(job)
 
-
                         jobs.append(job)
                 else:
                     predictive_model = PredictiveModel.init(
@@ -83,11 +81,11 @@ def generate(split, payload):
                         encoding=Encoding.objects.get_or_create(
                             data_encoding=DataEncodings.LABEL_ENCODER.value,
                             value_encoding=encMethod,
-                            add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                            add_remaining_time=labelling_config.get('add_remaining_time', False),
-                            add_executed_events=labelling_config.get('add_executed_events', False),
-                            add_resources_used=labelling_config.get('add_resources_used', False),
-                            add_new_traces=labelling_config.get('add_new_traces', False),
+                            add_elapsed_time=encoding_dict.get('add_elapsed_time', False),
+                            add_remaining_time=encoding_dict.get('add_remaining_time', False),
+                            add_executed_events=encoding_dict.get('add_executed_events', False),
+                            add_resources_used=encoding_dict.get('add_resources_used', False),
+                            add_new_traces=encoding_dict.get('add_new_traces', False),
                             prefix_length=config['encoding']['prefix_length'],
                             # TODO static check?
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
@@ -183,11 +181,11 @@ def generate_labelling(split, payload):
                 encoding=Encoding.objects.get_or_create(  # TODO fixme
                     data_encoding=DataEncodings.LABEL_ENCODER.value,
                     value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
-                    add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                    add_remaining_time=labelling_config.get('add_remaining_time', False),
-                    add_executed_events=labelling_config.get('add_executed_events', False),
-                    add_resources_used=labelling_config.get('add_resources_used', False),
-                    add_new_traces=labelling_config.get('add_new_traces', False),
+                    add_elapsed_time=encoding.get('add_elapsed_time', False),
+                    add_remaining_time=encoding.get('add_remaining_time', False),
+                    add_executed_events=encoding.get('add_executed_events', False),
+                    add_resources_used=encoding.get('add_resources_used', False),
+                    add_new_traces=encoding.get('add_new_traces', False),
                     prefix_length=i,
                     # TODO static check?
                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
@@ -212,11 +210,11 @@ def generate_labelling(split, payload):
             encoding=Encoding.objects.get_or_create(  # TODO fixme
                 data_encoding=DataEncodings.LABEL_ENCODER.value,
                 value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
-                add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                add_remaining_time=labelling_config.get('add_remaining_time', False),
-                add_executed_events=labelling_config.get('add_executed_events', False),
-                add_resources_used=labelling_config.get('add_resources_used', False),
-                add_new_traces=labelling_config.get('add_new_traces', False),
+                add_elapsed_time=encoding.get('add_elapsed_time', False),
+                add_remaining_time=encoding.get('add_remaining_time', False),
+                add_executed_events=encoding.get('add_executed_events', False),
+                add_resources_used=encoding.get('add_resources_used', False),
+                add_new_traces=encoding.get('add_new_traces', False),
                 prefix_length=config['encoding']['prefix_length'],
                 # TODO static check?
                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
@@ -256,11 +254,11 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 encoding=Encoding.objects.get_or_create(  # TODO fixme
                                     data_encoding=DataEncodings.LABEL_ENCODER.value,
                                     value_encoding=encMethod,
-                                    add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                                    add_remaining_time=labelling_config.get('add_remaining_time', False),
-                                    add_executed_events=labelling_config.get('add_executed_events', False),
-                                    add_resources_used=labelling_config.get('add_resources_used', False),
-                                    add_new_traces=labelling_config.get('add_new_traces', False),
+                                    add_elapsed_time=encoding.get('add_elapsed_time', False),
+                                    add_remaining_time=encoding.get('add_remaining_time', False),
+                                    add_executed_events=encoding.get('add_executed_events', False),
+                                    add_resources_used=encoding.get('add_resources_used', False),
+                                    add_new_traces=encoding.get('add_new_traces', False),
                                     prefix_length=i,
                                     # TODO static check?
                                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
@@ -299,11 +297,11 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             encoding=Encoding.objects.get_or_create(  # TODO fixme
                                 data_encoding=DataEncodings.LABEL_ENCODER.value,
                                 value_encoding=encMethod,
-                                add_elapsed_time=labelling_config.get('add_elapsed_time', False),
-                                add_remaining_time=labelling_config.get('add_remaining_time', False),
-                                add_executed_events=labelling_config.get('add_executed_events', False),
-                                add_resources_used=labelling_config.get('add_resources_used', False),
-                                add_new_traces=labelling_config.get('add_new_traces', False),
+                                add_elapsed_time=encoding.get('add_elapsed_time', False),
+                                add_remaining_time=encoding.get('add_remaining_time', False),
+                                add_executed_events=encoding.get('add_executed_events', False),
+                                add_resources_used=encoding.get('add_resources_used', False),
+                                add_new_traces=encoding.get('add_new_traces', False),
                                 prefix_length=config['encoding']['prefix_length'],
                                 # TODO static check?
                                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,

@@ -41,6 +41,10 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
     elif (labelling.threshold_type == ThresholdTypes.NONE.value) and (
           labelling.type in [LabelTypes.ATTRIBUTE_NUMBER.value, LabelTypes.DURATION.value,
                              LabelTypes.REMAINING_TIME.value]):
+        mask = training_log.applymap(type) != bool
+        d = {True: 'TRUE', False: 'FALSE'}
+
+        df = training_log.where(mask, training_log.replace(d))
         training_log['label'] = training_log['label'].astype(float)
         test_log['label'] = test_log['label'].astype(float)
 

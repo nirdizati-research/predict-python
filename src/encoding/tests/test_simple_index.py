@@ -72,8 +72,8 @@ class TestSplitLogExample(TestCase):
         self.assertEqual(1, row.prefix_1)
         self.assertEqual(2, row.prefix_2)
         self.assertEqual(1, row.prefix_3)
-        self.assertEqual(False, row.label)
-        self.assertEqual(0, row.elapsed_time)
+        self.assertEqual(1, row.label)
+        self.assertEqual(2, row.elapsed_time)
 
     def test_row_test(self):
         training_df, test_df = encode_label_logs(self.training_log, self.test_log, create_test_job(
@@ -85,8 +85,8 @@ class TestSplitLogExample(TestCase):
         row = test_df[(test_df.trace_id == '4')].iloc[0]
 
         self.assertEqual(1, row.prefix_1)
-        self.assertEqual(0, row.elapsed_time)
-        self.assertEqual(0, row.label)
+        self.assertEqual(1, row.elapsed_time)
+        self.assertEqual(2, row.label)
 
     def test_prefix0(self):
         encoding = create_test_encoding(

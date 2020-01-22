@@ -42,7 +42,7 @@ class Encoder:
         for column in df:
             if column in self._encoder:
                 if encoding.data_encoding == DataEncodings.LABEL_ENCODER.value:
-                    df[column] = df[column].apply(lambda x: self._label_dict[column].get(x, PADDING_VALUE))
+                    df[column] = df[column].apply(lambda x: self._label_dict[column].get(str(x), PADDING_VALUE))
                 elif encoding.data_encoding == DataEncodings.ONE_HOT_ENCODER.value:
                     raise NotImplementedError('Onehot encoder not yet implemented')
                 else:

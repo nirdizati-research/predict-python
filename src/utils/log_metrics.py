@@ -122,3 +122,13 @@ def std_var_events_in_log(log: EventLog) -> int:
     :return 3
     """
     return statistics.stdev([len(trace) for trace in log])
+
+
+def trace_ids_in_log(log: EventLog) -> list:
+    return [trace.attributes[NAME_CLASSIFIER] for trace in log]
+
+
+def traces_in_log(log: EventLog) -> list:
+    return [{'attributes': trace.attributes, 'events': [event for event in trace]} for trace in log]
+
+

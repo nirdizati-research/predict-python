@@ -103,3 +103,22 @@ def post_replay(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+@api_view(['GET'])
+def get_prediction(request, pk, explanation_target):
+    """ Post request to start a demo of a log arriving to server
+
+        :param pk:
+        :param explanation_target:
+        :param request: json
+        :return: Response
+    """
+    try:
+        training_initial_job = Job.objects.get(pk=pk)
+        new_job = duplicate_orm_row(training_initial_job)
+        new_job.type = JobTypes.REPLAY.value
+        new_job.status = JobStatuses.CREATED.value
+        new_job.save()
+    except Job.DoesNotExist:
+        return Response({'error': 'Job ' + str(pk) + ' not in database'}, status=status.HTTP_404_NOT_FOUND)
+    return Response(replay_predictions(new_job, Job.objects.get(pk=pk), explanation_target), status=status.HTTP_200_OK)
+

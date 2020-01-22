@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from src.utils.file_service import get_log
 from src.utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
-    trace_attributes, events_in_trace, max_events_in_log
+    trace_attributes, events_in_trace, max_events_in_log, trace_ids_in_log, traces_in_log
 from src.utils.tests_utils import general_example_filepath, financial_log_filepath, general_example_filename, \
     create_test_log, financial_log_filename
 
@@ -55,3 +55,15 @@ class LogTest(TestCase):
     def test_max_events_in_log(self):
         result = max_events_in_log(self.log)
         self.assertEqual(13, result)
+
+    def test_trace_ids_in_log(self):
+        result = trace_ids_in_log(self.log)
+        self.assertEqual(6, len(result))
+        self.assertEqual('4', result[5])
+
+    def test_traces_in_log(self):
+        result = traces_in_log(self.log)
+        self.assertEqual(6, len(result))
+        self.assertEqual({'concept:name': '3', 'creator': 'Fluxicon Nitro'}, result[0]['attributes'])
+        self.assertEqual('Pete',result[0]['events'][0]['Resource'])
+        self.assertEqual(9, len(result[0]['events']))

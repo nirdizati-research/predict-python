@@ -210,7 +210,7 @@ class TestClassification(TestCase):
         self.assertIn('false_positive', result)
         self.assertIn('auc', result)
 
-
+    @unittest.skip('needs refactoring')
     def test_class_nn_binary(self):
         job = create_test_job(
             predictive_model=create_test_predictive_model(prediction_method=ClassificationMethods.NN.value),

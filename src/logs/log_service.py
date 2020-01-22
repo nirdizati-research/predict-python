@@ -9,7 +9,7 @@ from pm4py.objects.log.log import EventLog
 from src.logs.models import Log
 from src.utils.file_service import create_unique_name
 from src.utils.log_metrics import events_by_date, resources_by_date, max_events_in_log, trace_attributes, \
-    new_trace_start, avg_events_in_log, std_var_events_in_log
+    new_trace_start, avg_events_in_log, std_var_events_in_log, trace_ids_in_log, traces_in_log
 
 logger = logging.getLogger(__name__)
 
@@ -42,5 +42,10 @@ def create_properties(log: EventLog) -> dict:
         'stdVarEventsInLog': std_var_events_in_log(log) if len(log) > 1 else -1,
         'traceAttributes': trace_attributes(log),
         'newTraces': new_trace_start(log),
+        'trace_IDs': trace_ids_in_log(log)
         # 'alpha_miner_result': vis_factory.apply(*alpha_miner.apply(log)) #TODO ADD alpha miner
     }
+
+
+def get_log_trace_attributes(log: EventLog) -> list:
+    return traces_in_log(log)

@@ -1,6 +1,4 @@
-import json
-
-import requests
+import itertools
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -34,54 +32,54 @@ split_sizes = [
 
 splits = {
     'BPI11/f1/': {
-        '0-40_80-100': 8,
-        '0-80_80-100': 9,
-        '40-80_80-100': 38,
+        '0-40_80-100': 138,
+        '0-80_80-100': 139,
+        '40-80_80-100': 140,
     },
     'BPI11/f2/': {
-        '0-40_80-100': 10,
-        '0-80_80-100': 11,
-        '40-80_80-100': 39,
+        '0-40_80-100': 141,
+        '0-80_80-100': 142,
+        '40-80_80-100': 143,
     },
     'BPI11/f3/': {
-        '0-40_80-100': 12,
-        '0-80_80-100': 13,
-        '40-80_80-100': 40,
+        '0-40_80-100': 144,
+        '0-80_80-100': 145,
+        '40-80_80-100': 146,
     },
     'BPI11/f4/': {
-        '0-40_80-100': 14,
-        '0-80_80-100': 15,
-        '40-80_80-100': 41,
+        '0-40_80-100': 147,
+        '0-80_80-100': 148,
+        '40-80_80-100': 149,
     },
     'BPI15/f1/': {
-        '0-40_80-100': 16,
-        '0-80_80-100': 17,
-        '40-80_80-100': 42,
+        '0-40_80-100': 150,
+        '0-80_80-100': 151,
+        '40-80_80-100': 152,
     },
     'BPI15/f2/': {
-        '0-40_80-100': 18,
-        '0-80_80-100': 19,
-        '40-80_80-100': 43,
+        '0-40_80-100': 153,
+        '0-80_80-100': 154,
+        '40-80_80-100': 155,
     },
     'BPI15/f3/': {
-        '0-40_80-100': 20,
-        '0-80_80-100': 21,
-        '40-80_80-100': 44,
+        '0-40_80-100': 156,
+        '0-80_80-100': 157,
+        '40-80_80-100': 158,
     },
     'Drift1/f1/': {
-        '0-40_80-100': 22,
-        '0-80_80-100': 23,
-        '40-80_80-100': 45,
+        '0-40_80-100': 159,
+        '0-80_80-100': 160,
+        '40-80_80-100': 161,
 
         '40-60_80-100': 1111,
         '0-60_80-100': 1111,
-        '40-55_80-100': 36,  # +TANTO perche' uno e' stato ciccato
+        '40-55_80-100': 1111,
         '0-55_80-100': 1111
     },
     'Drift2/f1/': {
-        '0-40_80-100': 24,
-        '0-80_80-100': 25,
-        '40-80_80-100': 46,
+        '0-40_80-100': 162,
+        '0-80_80-100': 163,
+        '40-80_80-100': 164,
 
         '40-60_80-100': 1111,
         '0-60_80-100': 1111,
@@ -89,6 +87,122 @@ splits = {
         '0-55_80-100': 1111
     }
 }
+# }
+# splits = {
+#     'BPI11/f1/': {
+#         '0-40_80-100': 101,
+#         '0-80_80-100': 102,
+#         '40-80_80-100': 103,
+#     },
+#     'BPI11/f2/': {
+#         '0-40_80-100': 104,
+#         '0-80_80-100': 105,
+#         '40-80_80-100': 106,
+#     },
+#     'BPI11/f3/': {
+#         '0-40_80-100': 107,
+#         '0-80_80-100': 108,
+#         '40-80_80-100': 109,
+#     },
+#     'BPI11/f4/': {
+#         '0-40_80-100': 110,
+#         '0-80_80-100': 111,
+#         '40-80_80-100': 112,
+#     },
+#     'BPI15/f1/': {
+#         '0-40_80-100': 113,
+#         '0-80_80-100': 114,
+#         '40-80_80-100': 115,
+#     },
+#     'BPI15/f2/': {
+#         '0-40_80-100': 116,
+#         '0-80_80-100': 117,
+#         '40-80_80-100': 118,
+#     },
+#     'BPI15/f3/': {
+#         '0-40_80-100': 119,
+#         '0-80_80-100': 120,
+#         '40-80_80-100': 121,
+#     },
+#     'Drift1/f1/': {
+#         '0-40_80-100': 122,
+#         '0-80_80-100': 123,
+#         '40-80_80-100': 124,
+#
+#         '40-60_80-100': 1111,
+#         '0-60_80-100': 1111,
+#         '40-55_80-100': 1111,
+#         '0-55_80-100': 1111
+#     },
+#     'Drift2/f1/': {
+#         '0-40_80-100': 125,
+#         '0-80_80-100': 126,
+#         '40-80_80-100': 127,
+#
+#         '40-60_80-100': 1111,
+#         '0-60_80-100': 1111,
+#         '40-55_80-100': 1111,
+#         '0-55_80-100': 1111
+#     }
+# }
+
+# splits = {
+#     'BPI11/f1/': {
+#         '0-40_80-100': 55,
+#         '0-80_80-100': 56,
+#         '40-80_80-100': 73,
+#     },
+#     'BPI11/f2/': {
+#         '0-40_80-100': 57,
+#         '0-80_80-100': 58,
+#         '40-80_80-100': 74,
+#     },
+#     'BPI11/f3/': {
+#         '0-40_80-100': 59,
+#         '0-80_80-100': 60,
+#         '40-80_80-100': 75,
+#     },
+#     'BPI11/f4/': {
+#         '0-40_80-100': 61,
+#         '0-80_80-100': 62,
+#         '40-80_80-100': 76,
+#     },
+#     'BPI15/f1/': {
+#         '0-40_80-100': 63,
+#         '0-80_80-100': 64,
+#         '40-80_80-100': 77,
+#     },
+#     'BPI15/f2/': {
+#         '0-40_80-100': 65,
+#         '0-80_80-100': 66,
+#         '40-80_80-100': 78,
+#     },
+#     'BPI15/f3/': {
+#         '0-40_80-100': 67,
+#         '0-80_80-100': 68,
+#         '40-80_80-100': 79,
+#     },
+#     'Drift1/f1/': {
+#         '0-40_80-100': 69,
+#         '0-80_80-100': 70,
+#         '40-80_80-100': 80,
+#
+#         '40-60_80-100': 1111,
+#         '0-60_80-100': 1111,
+#         '40-55_80-100': 1111,
+#         '0-55_80-100': 1111
+#     },
+#     'Drift2/f1/': {
+#         '0-40_80-100': 90,#71,
+#         '0-80_80-100': 91,#72,
+#         '40-80_80-100': 92,#81,
+#
+#         '40-60_80-100': 1111,
+#         '0-60_80-100': 1111,
+#         '40-55_80-100': 1111,
+#         '0-55_80-100': 1111
+#     }
+# }
 
 
 def get_row_metrics(table):
@@ -118,7 +232,7 @@ def get_row_metrics(table):
            elapsed_time_mean, elapsed_time_std, elapsed_time_max, elapsed_time_min
 
 
-def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='quantitative_scores.csv'):
+def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv', where_save='quantitative_scores.csv'):
     pd.set_option("display.precision", 4)
     experiments_df = pd.read_csv(experiments_df_path)
 
@@ -129,8 +243,8 @@ def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_sav
                                (experiments_df['incremental_model_id'].isnull()) &
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
                                 (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
-                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M0
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull()))&
+                                (experiments_df['predictive_model'] != 'randomForest')]  # M0
         m_dataset = [dataset for dataset in datasets if splits[dataset]['0-40_80-100'] == split_id][0]
         if not table.empty:
             table['model'] = 'M0'
@@ -146,8 +260,8 @@ def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_sav
                                (experiments_df['incremental_model_id'].isnull()) &
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
                                 (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
-                                (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M1
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull()))]# &
+                               # (experiments_df['predictive_model'] != 'randomForest')]  # M1
         m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
         if not table.empty:
             table['model'] = 'M1'
@@ -163,8 +277,8 @@ def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_sav
                                (experiments_df['incremental_model_id'].isnull()) &
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
                                 (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
-                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M2
+                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull()))]# &
+                               # (experiments_df['predictive_model'] != 'randomForest')]  # M2
         m_dataset = [dataset for dataset in datasets if splits[dataset]['0-80_80-100'] == split_id][0]
         if not table.empty:
             table['model'] = 'M2'
@@ -180,8 +294,8 @@ def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_sav
                                (experiments_df['incremental_model_id'].notnull()) &
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
                                (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
-                               (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M3
+                               (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull()))]# &
+                                # (experiments_df['predictive_model'] != 'randomForest')]  # M3
         m_dataset = [dataset for dataset in datasets if splits[dataset]['40-80_80-100'] == split_id][0]
         if not table.empty:
             table['model'] = 'M3'
@@ -220,7 +334,7 @@ def quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_sav
     # return aggregates_df
 
 
-def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='macro_table_avg_std_max.csv'):
+def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv', where_save='macro_table_avg_std_max_NO_rf.csv'):
     pd.set_option("display.precision", 4)
     experiments_df = pd.read_csv(experiments_df_path)
     aggregates_list = []
@@ -230,7 +344,7 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
                                (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M0
+                                (experiments_df['predictive_model'] != 'randomForest')]  # M0
 
         f1_score_mean, f1_score_std, f1_score_max, \
         accuracy_mean, accuracy_std, accuracy_max, \
@@ -259,7 +373,7 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
                                (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
                                (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M3
+                                (experiments_df['predictive_model'] != 'randomForest')]  # M3
 
         f1_score_mean, f1_score_std, f1_score_max, \
         accuracy_mean, accuracy_std, accuracy_max, \
@@ -290,7 +404,7 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].isnull()) &
                                 (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
                                 (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M1
+                                (experiments_df['predictive_model'] != 'randomForest')]  # M1
 
         f1_score_mean, f1_score_std, f1_score_max, \
         accuracy_mean, accuracy_std, accuracy_max, \
@@ -319,7 +433,7 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
                                ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
                                (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
                                (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
-                               (experiments_df['predictive_model'] != 'randomForest')]  # M2
+                                (experiments_df['predictive_model'] != 'randomForest')]  # M2
 
         f1_score_mean, f1_score_std, f1_score_max, \
         accuracy_mean, accuracy_std, accuracy_max, \
@@ -360,8 +474,8 @@ def create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save
 
 
 def create_macro_obj_table(objective,
-                           experiments_df_path='../DUMP_INCREMENTAL.csv',
-                           where_save='macro_table_avg_std.csv'):
+                           experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv',
+                           where_save='macro_table_avg_std_NO_rf.csv'):
     pd.set_option("display.precision", 4)
     experiments_df = pd.read_csv(experiments_df_path)
     aggregates_list = []
@@ -373,7 +487,7 @@ def create_macro_obj_table(objective,
                                     (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
                                     (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
                                    (experiments_df[objective] == objective_id) &
-                                   (experiments_df['predictive_model'] != 'randomForest')]  # M0
+                                    (experiments_df['predictive_model'] != 'randomForest')]  # M0
 
             f1_score_mean, f1_score_std, f1_score_max, \
             accuracy_mean, accuracy_std, accuracy_max, \
@@ -403,7 +517,7 @@ def create_macro_obj_table(objective,
                                     (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
                                     (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
                                    (experiments_df[objective] == objective_id) &
-                                   (experiments_df['predictive_model'] != 'randomForest')]  # M3
+                                    (experiments_df['predictive_model'] != 'randomForest')]  # M3
 
             f1_score_mean, f1_score_std, f1_score_max, \
             accuracy_mean, accuracy_std, accuracy_max, \
@@ -435,7 +549,7 @@ def create_macro_obj_table(objective,
                                     (experiments_df['hyperparameter_optimizer_max_evaluations'].isnull()) &
                                     (experiments_df['hyperparameter_optimizer_elapsed_time'].isnull())) &
                                    (experiments_df[objective] == objective_id) &
-                                   (experiments_df['predictive_model'] != 'randomForest')]  # M1
+                                    (experiments_df['predictive_model'] != 'randomForest')]  # M1
 
             f1_score_mean, f1_score_std, f1_score_max, \
             accuracy_mean, accuracy_std, accuracy_max, \
@@ -464,8 +578,7 @@ def create_macro_obj_table(objective,
                                    ((experiments_df['hyperparameter_optimizer_performance_metric'].notnull()) |
                                     (experiments_df['hyperparameter_optimizer_max_evaluations'].notnull()) |
                                     (experiments_df['hyperparameter_optimizer_elapsed_time'].notnull())) &
-                                   (experiments_df[objective] == objective_id) &
-                                   (experiments_df['predictive_model'] != 'randomForest')]  # M2
+                                   (experiments_df[objective] == objective_id) ]  # M2
 
             f1_score_mean, f1_score_std, f1_score_max, \
             accuracy_mean, accuracy_std, accuracy_max, \
@@ -504,62 +617,21 @@ def create_macro_obj_table(objective,
     return aggregates_df
 
 
-def compute_summary_table(aggregates_df):
-    filtered_aggregates_df = [
-        table[
-            (table['split_id'] == 1) |
-            (table['split_id'] == 3) |
-            (table['split_id'] == 5)
-        ] for table in aggregates_df
-    ]
-
-    d = {}
-
-    # d[1] =
-    # d[2] =
-    # d[3] =
-
-    index = [
-        tuple(x)
-        for key, val in [
-            (1, 'predictive_model'),
-            (2, 'encoding_prefix_length'),
-            (3, 'encoding_value_encoding')]
-        for x in filtered_aggregates_df[key].get(['split_id', val]).values
-    ]
-
-    populations = [
-        tuple(x)
-        for key, val in [
-            (1, 'predictive_model'),
-            (2, 'encoding_prefix_length'),
-            (3, 'encoding_value_encoding')]
-        for x in filtered_aggregates_df[key].drop(['split_id', val], axis=1).values
-    ]
-
-    pop = pd.Series(populations, index=index)
-
-    midx = pd.MultiIndex.from_tuples(index)
-
-    pop = pop.reindex(midx)
-
-
 if __name__ == '__main__':
 
     #TODO: read in the model object in memory to ease the analysis
     # models = json.load(open("created_jobs.txt"))
 
-
     aggregates_dfs = []
-    aggregates_dfs += [create_macro_table(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='macro_table_avg_std_max.csv')]
+    aggregates_dfs += [create_macro_table(experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv', where_save='macro_table_avg_std_max_NO_rf.csv')]
     aggregates_dfs += [
         create_macro_obj_table(
             objective=obj,
-            experiments_df_path='../DUMP_INCREMENTAL.csv',
-            where_save='macro_table_' + obj + '_avg_std.csv')
+            experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv',
+            where_save='macro_table_' + obj + '_avg_std_NO_rf.csv')
         for obj in [ 'predictive_model', 'encoding_prefix_length', 'encoding_value_encoding' ]
     ]
-    quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL.csv', where_save='macro_table_avg_std_max.csv')
+    quantitative_scores(experiments_df_path='../DUMP_INCREMENTAL_hyper_last_train.csv', where_save='macro_table_avg_std_max_NO_rf.csv')
 
 
 
@@ -592,3 +664,34 @@ def plot_unit():
     plt.suptitle('Categorical Plotting')
     plt.show()
 
+
+def avg_std_plot():
+    plt.clf()
+    plt.hold(1)
+
+    x = np.linspace(0, 30, 30)
+    y = np.sin(x / 6 * np.pi)
+    error = np.random.normal(0.1, 0.02, size=y.shape) + .1
+    y += np.random.normal(0, 0.1, size=y.shape)
+
+    plt.plot(x, y, 'k', color='#CC4F1B')
+    plt.fill_between(x, y - error, y + error,
+                     alpha=0.5, edgecolor='#CC4F1B', facecolor='#FF9848')
+
+    y = np.cos(x / 6 * np.pi)
+    error = np.random.rand(len(y)) * 0.5
+    y += np.random.normal(0, 0.1, size=y.shape)
+    plt.plot(x, y, 'k', color='#1B2ACC')
+    plt.fill_between(x, y - error, y + error,
+                     alpha=0.2, edgecolor='#1B2ACC', facecolor='#089FFF',
+                     linewidth=4, linestyle='dashdot', antialiased=True)
+
+    y = np.cos(x / 6 * np.pi) + np.sin(x / 3 * np.pi)
+    error = np.random.rand(len(y)) * 0.5
+    y += np.random.normal(0, 0.1, size=y.shape)
+    plt.plot(x, y, 'k', color='#3F7F4C')
+    plt.fill_between(x, y - error, y + error,
+                     alpha=1, edgecolor='#3F7F4C', facecolor='#7EFF99',
+                     linewidth=0)
+
+    plt.show()

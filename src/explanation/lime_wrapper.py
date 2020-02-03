@@ -2,6 +2,8 @@
 import lime
 from sklearn.externals import joblib
 
+import pandas as pd
+
 from src.encoding.common import retrieve_proper_encoder
 from src.explanation.models import Explanation
 
@@ -102,7 +104,7 @@ def _multi_trace_lime_temporal_stability(lime_exp: Explanation, training_df, tes
         trace_id : {
             index: {
                 el[0].split('=')[0]: {
-                    'value': test_df.tail(1)[el[0].split('=')[0]].values[0] if el[0].split('=')[1] != '0' else '',
+                    'value': test_df[test_df['trace_id'] == trace_id].tail(1)[el[0].split('=')[0]].values[0] if el[0].split('=')[1] != '0' else '',
                     'importance': el[1]}
                 for el in exp[trace_id][index]
             }

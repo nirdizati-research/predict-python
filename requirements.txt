@@ -36,3 +36,4 @@ psycopg2
 mock
 anchor_exp
 Cython
+pdpbox==0.2.0

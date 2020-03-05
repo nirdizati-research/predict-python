@@ -25,11 +25,11 @@ class Command(BaseCommand):
 
         # load data
         training_df, test_df = get_encoded_logs(job)
-        enc = sklearn.preprocessing.OneHotEncoder()
-        enc.fit(training_df)
-        onehotlabels_train = enc.transform(training_df).toarray()
-        enc.fit(test_df);
-        onehotlabels_test = enc.transform(test_df).toarray()
+        # enc = sklearn.preprocessing.OneHotEncoder()
+        # enc.fit(training_df)
+        # onehotlabels_train = enc.transform(training_df).toarray()
+        # enc.fit(test_df);
+        # onehotlabels_test = enc.transform(test_df).toarray()
         # get radom point in evaluation set
         EXPLANATION_TARGET = 1
         FEATURE_TARGET = 2
@@ -39,23 +39,20 @@ class Command(BaseCommand):
         # explainer
         # shap_values = explainer.shap_values(onehotlabels_train)
         shap_values = explainer.shap_values(training_df)
-        # shap_values
-        # shap_values1
-        # visualize the first prediction's explanation (use matplotlib=True to avoid Javascript)
+
         # z = shap.force_plot(explainer.expected_value[0], shap_values[0][1, :], training_df.iloc[1, :],show=False,matplotlib=True).savefig('scratch.png')
         # shap.summary_plot(shap_values, onehotlabels_train,plot_type="bar")
         #
         # shap.force_plot(explainer.expected_value[0], shap_values[0])
         # plt.savefig('force_plot.png')
-        shap.initjs()
-        a = shap.force_plot(explainer.expected_value[1], shap_values[0], training_df)
-        shap.save_html('explainer.html', a)
-        a
-        html = a.data
-        with open('html_file.html', 'w') as f:
-            f.write(html)
-        plt.savefig('force_plot.png')
-
+        # a = shap.force_plot(explainer.expected_value[1], shap_values[0], training_df)
+        # shap.save_html('explainer.html', a)
+        # a
+        # html = a.data
+        # with open('html_file.html', 'w') as f:
+        #     f.write(html)
+        shap.summary_plot(shap_values, training_df.iloc[111], plot_type="bar")
+        plt.savefig('summary_plot.png')
         # show plot
         # shap.summary_plot(shap_values, training_df)
         # shap.force_plot(explainer.expected_value, shap_values[0], training_df)
@@ -83,3 +80,11 @@ class Command(BaseCommand):
         # shap.dependence_plot("RM", shap_values, X)
         # plt.savefig('scratch.png')
         # print('done')
+        X_test = training_df.drop(['trace_id', 'label'], 1)
+
+        X_output = X_test.copy()
+
+        X_output.loc[:,'predict'] = np.round(model.predict(X_output),2)
+
+        S = X_output.iloc[1]
+        S

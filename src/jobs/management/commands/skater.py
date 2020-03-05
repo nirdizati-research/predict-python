@@ -102,6 +102,5 @@ class Command(BaseCommand):
                        ticks_fontsize=ticks_fontsize,
                        fontname=fontname)
 
-
         print(viz.dot)
         return viz

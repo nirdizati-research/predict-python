@@ -36,7 +36,7 @@ class Command(BaseCommand):
         fig, axes, summary_df = info_plots.target_plot(
             df=training_df,
             feature=feature,
-            feature_name='prefix_2_name',
+            feature_name='prefix_1_name',
             cust_grid_points=custom_grids,
             target='label', show_percentile=False
         )

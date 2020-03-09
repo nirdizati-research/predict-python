@@ -37,7 +37,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        self.viz_breast_cancer();
         TARGET_MODEL = 5
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
@@ -48,28 +47,41 @@ class Command(BaseCommand):
         interpreter = Interpretation(training_df, feature_names=features)
         X_train = training_df.drop(['trace_id', 'label'], 1)
         Y_train = training_df.drop(
-            ['trace_id', 'prefix_1', 'prefix_2', 'prefix_3', 'label'], 1)
+            ['trace_id', 'prefix_1', 'prefix_2', 'prefix_3', 'prefix_4'], 1).values
+        y = sum(Y_train.tolist(), [])
 
         model_inst = InMemoryModel(model.predict, examples=X_train, model_type='classifier', unique_values=[0, 1],
-                                   feature_names=features, target_names=['prefix_1'])
+                                   feature_names=features, target_names=['label'])
         surrogate_explainer = interpreter.tree_surrogate(model_inst, seed=5)
         surrogate_explainer.fit(X_train, Y_train, use_oracle=True, prune='post', scorer_type='default')
         surrogate_explainer.class_names = features
+        surrogate_explainer
+
+        viz = dtreeviz(surrogate_explainer.estimator_,
+                       X_train.iloc[1, :],
+                       np.array(y),
+                       target_name='label',
+                       feature_names=features,
+                       orientation="TD",
+                       class_names=list(surrogate_explainer.class_names),
+                       fancy=True,
+                       X=None,
+                       label_fontsize=12,
+                       ticks_fontsize=8,
+                       fontname="Arial")
+        viz.save("viz.svg")
 
         # graph_inst = plot_tree(surrogate_explainer._TreeSurrogate__model, 'classifier', feature_names=features,
         #                        color_list=['coral', 'lightsteelblue', 'darkkhaki'],
         #                        class_names=surrogate_explainer.class_names, enable_node_id=True, seed=0)
         # ss = surrogate_explainer.decisions_as_txt(scope='local',
         #                                           X=test_df.drop(['trace_id', 'label'], 1).iloc[12])
-        graph = _generate_graph(surrogate_explainer._TreeSurrogate__model, 'classifier', enable_node_id=True, coverage=True)
+        graph = _generate_graph(surrogate_explainer._TreeSurrogate__model, 'classifier', enable_node_id=True,
+                                coverage=True)
 
         graph.write_raw("sss.raw")
 
-        print(self.dot_to_json());
-
         # graph_inst.write_raw("ss.raw")
-        print('done')
-
 
     def viz_breast_cancer(orientation="TD",
                           max_depth=3,
@@ -88,7 +100,7 @@ class Command(BaseCommand):
         X = None
         if pickX:
             X = cancer.data[np.random.randint(0, len(cancer)), :]
-
+        clf
         viz = dtreeviz(clf,
                        cancer.data,
                        cancer.target,
@@ -101,6 +113,5 @@ class Command(BaseCommand):
                        label_fontsize=label_fontsize,
                        ticks_fontsize=ticks_fontsize,
                        fontname=fontname)
-
-        print(viz.dot)
+        viz.save("viz.svg")
         return viz

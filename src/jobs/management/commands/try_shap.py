@@ -17,13 +17,11 @@ class Command(BaseCommand):
     help = 'tries to deliver an explanation of a random prediction of the trained model'
 
     def handle(self, *args, **kwargs):
-        # get model
+
         TARGET_MODEL = 5
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
         model = model[0]
-
-        # load data
         training_df, test_df = get_encoded_logs(job)
         # enc = sklearn.preprocessing.OneHotEncoder()
         # enc.fit(training_df)
@@ -32,59 +30,37 @@ class Command(BaseCommand):
         # onehotlabels_test = enc.transform(test_df).toarray()
         # get radom point in evaluation set
         EXPLANATION_TARGET = 1
-        FEATURE_TARGET = 2
+        FEATURE_TARGET = 1
         shap.initjs()
 
         explainer = shap.TreeExplainer(model)
-        # explainer
-        # shap_values = explainer.shap_values(onehotlabels_train)
+        training_df = training_df.drop(['trace_id'], 1)
+        test_df = test_df.drop(['trace_id'], 1)
+
         shap_values = explainer.shap_values(training_df)
 
-        # z = shap.force_plot(explainer.expected_value[0], shap_values[0][1, :], training_df.iloc[1, :],show=False,matplotlib=True).savefig('scratch.png')
-        # shap.summary_plot(shap_values, onehotlabels_train,plot_type="bar")
-        #
-        # shap.force_plot(explainer.expected_value[0], shap_values[0])
-        # plt.savefig('force_plot.png')
-        # a = shap.force_plot(explainer.expected_value[1], shap_values[0], training_df)
-        # shap.save_html('explainer.html', a)
-        # a
-        # html = a.data
-        # with open('html_file.html', 'w') as f:
-        #     f.write(html)
-        shap.summary_plot(shap_values, training_df.iloc[111], plot_type="bar")
-        plt.savefig('summary_plot.png')
+        shap.force_plot(explainer.expected_value[0], shap_values[0][EXPLANATION_TARGET, :], training_df.iloc[EXPLANATION_TARGET, :],
+                                       show=False, matplotlib=True).savefig('scratch.png')
+
+        # shap.dependence_plot("prefix_1", shap_values[0], training_df)
+        # plt.savefig('dependence_plot.png')
+        a = shap.force_plot(explainer.expected_value[0], shap_values[0], training_df)
+        shap.save_html('explainer.html', a)
+        a
+        # shap.summary_plot(shap_values, training_df.iloc[111], plot_type="bar")
+        # plt.savefig('summary_plot.png')
         # show plot
         # shap.summary_plot(shap_values, training_df)
         # shap.force_plot(explainer.expected_value, shap_values[0], training_df)
-        # shap.embedding_plot(FEATURE_TARGET, shap_values=shap_values[FEATURE_TARGET])
+        shap.embedding_plot(FEATURE_TARGET, shap_values=shap_values[FEATURE_TARGET])
+        plt.savefig('embedding_plot.png')
 
+
+        # X_test = training_df.drop(['trace_id', 'label'], 1)
         #
-        # #TODO not yet working
-        # shap.force_plot(explainer.expected_value, shap_values[EXPLANATION_TARGET, :], training_df.iloc[EXPLANATION_TARGET, :])
-        # shap.force_plot(explainer.expected_value, shap_values, training_df)
-        # shap.dependence_plot("RM", shap_values, training_df)
-        # shap.force_plot(explainer.expected_value[0], shap_values[0][0, :], test_df.iloc[0, :], link="logit") #TODO subst with EXPLANATION_TARGET
-        # shap.force_plot(explainer.expected_value[0], shap_values[0], test_df, link="logit")
-
-        # train XGBoost model
-        # X, y = shap.datasets.boston()
-        # model = xgboost.train({"learning_rate": 0.01}, xgboost.DMatrix(X, label=y), 100)
-        # #
-        # explainer = shap.TreeExplainer(model)
-        # shap_values = explainer.shap_values(X)
-        # print(explainer.expected_value)
-        # explainer
-        # # shap.force_plot(explainer.expected_value, shap_values, X)
-        # # plt.savefig('force_plost.png')
-        # # shap.force_plot(explainer.expected_value, shap_values[0, :], X.iloc[0, :],show=False,matplotlib=True).savefig('scratch.png')
-        # shap.dependence_plot("RM", shap_values, X)
-        # plt.savefig('scratch.png')
-        # print('done')
-        X_test = training_df.drop(['trace_id', 'label'], 1)
-
-        X_output = X_test.copy()
-
-        X_output.loc[:,'predict'] = np.round(model.predict(X_output),2)
-
-        S = X_output.iloc[1]
-        S
+        # X_output = X_test.copy()
+        #
+        # X_output.loc[:,'predict'] = np.round(model.predict(X_output),2)
+        #
+        # S = X_output.iloc[1]
+        # S

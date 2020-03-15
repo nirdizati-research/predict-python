@@ -13,6 +13,9 @@ EXPLANATION = {
     ExplanationTypes.SHAP.value: {
         'explain': shap_wrapper.explain
     },
+    ExplanationTypes.ICE.value: {
+        'explain': shap_wrapper.explain
+    },
     ExplanationTypes.ANCHOR.value: {
         'explain': anchor_wrapper.explain
     },

@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        TARGET_MODEL = 5
+        TARGET_MODEL = 54
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
         # load data
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         features = list(training_df.drop(
             ['trace_id', 'label'],
             1).columns.values)
-        feature = 'prefix_1'
+        feature = 'CType_1'
         feature_grids, percentile_info = _get_grids(
             feature_values=training_df[feature].values, num_grid_points=10, grid_type=None,
             percentile_range='percentile', grid_range=None)
@@ -32,16 +32,15 @@ class Command(BaseCommand):
         indexs = []
         for x in range(int(feature_grids.min()), int(feature_grids.max() - 1)):
             custom_grids.append(x);
-
+        print(features)
         fig, axes, summary_df = info_plots.target_plot(
             df=training_df,
             feature=feature,
-            feature_name='prefix_1_name',
+            feature_name='feature value',
             cust_grid_points=custom_grids,
             target='label', show_percentile=False
         )
-        print(summary_df)
-        fig.savefig('target_plot.png')
+        fig.savefig('ice_plot_train_1_3_CType.png')
 
         lists = list(training_df[feature].values)
         for x in range(int(feature_grids.min()), int(feature_grids.max() - 1)):
@@ -50,7 +49,7 @@ class Command(BaseCommand):
         encoder.decode(training_df, job.encoding)
         values = training_df[feature].values
         lst = []
-        summary_df
+        print(summary_df)
         for x in range(len(indexs) - 1):
             lst.append({'value': values[indexs[x]],
                         'label': summary_df.label.values[x],

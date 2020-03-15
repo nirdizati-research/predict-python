@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        TARGET_MODEL = 5
+        TARGET_MODEL = 52
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
         # load data
@@ -46,20 +46,19 @@ class Command(BaseCommand):
         features = list(training_df.drop(['trace_id', 'label'], 1).columns.values)
         interpreter = Interpretation(training_df, feature_names=features)
         X_train = training_df.drop(['trace_id', 'label'], 1)
-        Y_train = training_df.drop(
-            ['trace_id', 'prefix_1', 'prefix_2', 'prefix_3', 'prefix_4'], 1).values
-        y = sum(Y_train.tolist(), [])
+        Y_train = training_df['label'].values
 
-        model_inst = InMemoryModel(model.predict, examples=X_train, model_type='classifier', unique_values=[0, 1],
+        model_inst = InMemoryModel(model.predict, examples=X_train, model_type='classifier', unique_values=[1, 2],
                                    feature_names=features, target_names=['label'])
         surrogate_explainer = interpreter.tree_surrogate(model_inst, seed=5)
-        surrogate_explainer.fit(X_train, Y_train, use_oracle=True, prune='post', scorer_type='default')
-        surrogate_explainer.class_names = features
         surrogate_explainer
 
+        surrogate_explainer.fit(X_train, Y_train, use_oracle=True, prune='post', scorer_type='default')
+        surrogate_explainer.class_names = features
+
         viz = dtreeviz(surrogate_explainer.estimator_,
-                       X_train.iloc[1, :],
-                       np.array(y),
+                       X_train,
+                       Y_train,
                        target_name='label',
                        feature_names=features,
                        orientation="TD",
@@ -69,17 +68,17 @@ class Command(BaseCommand):
                        label_fontsize=12,
                        ticks_fontsize=8,
                        fontname="Arial")
-        viz.save("viz.svg")
+        viz.save("skater_plot_train_2_2.svg")
 
         # graph_inst = plot_tree(surrogate_explainer._TreeSurrogate__model, 'classifier', feature_names=features,
         #                        color_list=['coral', 'lightsteelblue', 'darkkhaki'],
         #                        class_names=surrogate_explainer.class_names, enable_node_id=True, seed=0)
         # ss = surrogate_explainer.decisions_as_txt(scope='local',
         #                                           X=test_df.drop(['trace_id', 'label'], 1).iloc[12])
-        graph = _generate_graph(surrogate_explainer._TreeSurrogate__model, 'classifier', enable_node_id=True,
-                                coverage=True)
-
-        graph.write_raw("sss.raw")
+        # graph = _generate_graph(surrogate_explainer._TreeSurrogate__model, 'classifier', enable_node_id=True,
+        #                         coverage=True)
+        #
+        # graph.write_raw("sss.raw")
 
         # graph_inst.write_raw("ss.raw")
 

@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as numpy
 from src.core.core import get_encoded_logs
 from src.encoding.common import retrieve_proper_encoder
+from src.encoding.models import ValueEncodings
 from src.jobs.models import Job
 
 
@@ -14,17 +15,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        TARGET_MODEL = 54
+        TARGET_MODEL = 4
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
         # load data
         training_df, test_df = get_encoded_logs(job)
+        training_df['label'] = training_df['label'].astype(bool).astype(int)
         columns = list(training_df.columns.values)
-
+        print(training_df['label'].dtype)
         features = list(training_df.drop(
             ['trace_id', 'label'],
             1).columns.values)
-        feature = 'CType_1'
+        feature = 'creatinine'
         feature_grids, percentile_info = _get_grids(
             feature_values=training_df[feature].values, num_grid_points=10, grid_type=None,
             percentile_range='percentile', grid_range=None)
@@ -48,35 +50,20 @@ class Command(BaseCommand):
         encoder = retrieve_proper_encoder(job)
         encoder.decode(training_df, job.encoding)
         values = training_df[feature].values
+        training_df
         lst = []
         print(summary_df)
-        for x in range(len(indexs) - 1):
-            lst.append({'value': values[indexs[x]],
-                        'label': summary_df.label.values[x],
-                        'count': summary_df.values[x][4],
-                        })
+        if job.encoding.value_encoding != ValueEncodings.BOOLEAN.value:
+            for x in range(len(indexs) - 1):
+                lst.append({'value': values[indexs[x]],
+                            'label': summary_df['label'][x],
+                            'count': summary_df['count'][x],
+                            })
+        else:
+            for x in range(summary_df.shape[0]):
+                lst.append({'value': summary_df['display_column'][x],
+                            'label': summary_df['label'][x],
+                            'count': summary_df['count'][x],
+                            })
         print(lst)
-
-    # explanation_target_df
-    # # print(test_df)
-    # print(explanation_target_df.tail(1)['prefix_1'][0])
-
-    # pdp_fare = pdp.pdp_isolate(
-    #     model=model, dataset=training_df, model_features=features, feature='prefix_1'
-    # )
-    # fig, axes = pdp.pdp_plot(pdp_fare, 'prefix_1')
-    # fig.savefig('label.png')
-    #
-    # inter1 = pdp.pdp_interact(
-    #     model=model, dataset=training_df, model_features=features, features=['prefix_1', 'prefix_2']
-    # )
-    # fig, axes = pdp.pdp_interact_plot(inter1, ['prefix_1', 'prefix_2'], plot_type='grid', x_quantile=True,
-    #                                   plot_pdp=False)
-    # fig.savefig('pdp_interact_plot.png')
-    #
-    # fig, axes, summary_df = info_plots.actual_plot_interact(
-    #     model=model, X=training_df[features], features=['prefix_6', 'prefix_1'],
-    #     feature_names=['prefix_6', 'prefix_1']
-    # )
-    # fig.savefig('actual_plot_interact.png')
 

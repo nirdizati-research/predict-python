@@ -1,5 +1,5 @@
 from src.core.core import get_encoded_logs
-from src.explanation import lime_wrapper, shap_wrapper, anchor_wrapper, temporal_stability
+from src.explanation import lime_wrapper, shap_wrapper, anchor_wrapper, temporal_stability, ice_wrapper, skater_wrapper
 from src.explanation.models import Explanation, ExplanationTypes
 
 EXPLAIN = 'explain'
@@ -14,7 +14,10 @@ EXPLANATION = {
         'explain': shap_wrapper.explain
     },
     ExplanationTypes.ICE.value: {
-        'explain': shap_wrapper.explain
+        'explain': ice_wrapper.explain
+    },
+    ExplanationTypes.SKATER.value: {
+        'explain': skater_wrapper.explain
     },
     ExplanationTypes.ANCHOR.value: {
         'explain': anchor_wrapper.explain

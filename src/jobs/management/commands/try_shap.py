@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        TARGET_MODEL = 53
+        TARGET_MODEL = 4
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
         model = model[0]

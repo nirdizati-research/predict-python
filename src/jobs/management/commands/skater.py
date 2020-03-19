@@ -51,7 +51,6 @@ class Command(BaseCommand):
         model_inst = InMemoryModel(model.predict, examples=X_train, model_type='classifier', unique_values=[1, 2],
                                    feature_names=features, target_names=['label'])
         surrogate_explainer = interpreter.tree_surrogate(model_inst, seed=5)
-        surrogate_explainer
 
         surrogate_explainer.fit(X_train, Y_train, use_oracle=True, prune='post', scorer_type='default')
         surrogate_explainer.class_names = features

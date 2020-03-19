@@ -66,6 +66,26 @@ def get_shap(request, pk, explanation_target):
 
 
 @api_view(['GET'])
+def get_skater(request, pk):
+    job = Job.objects.filter(pk=pk)[0]
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.SKATER.value, split=job.split,
+                                               predictive_model=job.predictive_model, job=job)
+    exp.save()
+    result = explanation(exp.id, explanation_target = None)
+    return Response(result, status=200)
+
+
+@api_view(['GET'])
+def get_ice(request, pk, explanation_target):
+    job = Job.objects.filter(pk=pk)[0]
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.ICE.value, split=job.split,
+                                               predictive_model=job.predictive_model, job=job)
+    exp.save()
+    result = explanation(exp.id, explanation_target)
+    return Response(result, status=200)
+
+
+@api_view(['GET'])
 def get_anchor(request, pk):
     job = Job.objects.filter(pk=pk)[0]
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.ANCHOR.value, split=job.split,

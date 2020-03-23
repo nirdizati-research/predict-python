@@ -38,6 +38,6 @@ anchor_exp
 Cython
 PDPbox==0.2.0
 skater==1.1.2
-fairml==0.1.1.5
+fairml
 dtreeviz==0.8.1
 RuleFit==0.3

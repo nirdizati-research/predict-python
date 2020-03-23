@@ -8,10 +8,14 @@ from src.explanation.models import Explanation
 from sklearn.externals import joblib
 import os
 
+from src.predictive_model.models import PredictiveModels
+
+
 def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
     job = skater_exp.job
     model = joblib.load(job.predictive_model.model_path)
     model = model[0]
+
     shap.initjs()
 
     features = list(training_df.drop(['trace_id', 'label'], 1).columns.values)
@@ -19,7 +23,7 @@ def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
     X_train = training_df.drop(['trace_id', 'label'], 1)
     Y_train = training_df['label'].values
 
-    model_inst = InMemoryModel(model.predict, examples=X_train, model_type='classifier', unique_values=[1, 2],
+    model_inst = InMemoryModel(model.predict, examples=X_train, model_type=model._estimator_type, unique_values=[1, 2],
                                feature_names=features, target_names=['label'])
     surrogate_explainer = interpreter.tree_surrogate(model_inst, seed=5)
 

@@ -81,3 +81,11 @@ class TestViews(APITestCase):
             }}, format='json')
 
         self.assertEqual(3, len(response.data))
+
+    def test_decode_df(self):
+        jobs = Job.objects.all()
+        if (len(jobs) > 0):
+            job = jobs.first()
+            client = APIClient()
+            response = client.get('/jobs/'+job.id)
+            self.assertIsNotNone(response.data)

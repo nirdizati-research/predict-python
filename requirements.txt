@@ -1,6 +1,9 @@
 requests
 lime
 shap
+PDPbox==0.2.0
+skater==1.1.2
+dtreeviz==0.8.1
 Django==2.1.7
 djangorestframework==3.7.1
 pytz==2017.3
@@ -36,6 +39,3 @@ psycopg2
 mock
 anchor_exp
 Cython
-PDPbox==0.2.0
-skater==1.1.2
-dtreeviz==0.8.1

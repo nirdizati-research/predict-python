@@ -28,11 +28,11 @@ class RefactorProof(TestCase):
         )
         result, _ = calculate(job)
         del result['elapsed_time']
-        # print(result)
-        # self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
-        #                               'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
-        #                               'precision': 1.0, 'recall': 1.0,
-        #                               'auc': 0.0})
+        print(result)
+        self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
+                                      'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
+                                      'precision': 1.0, 'recall': 1.0,
+                                      'auc': 0.0})
  # self.assertDictEqual(result, {'f1score': 0.67690058479532156, 'acc': 0.68325791855203621, 'true_positive': 91,
  #                                      'true_negative': 60, 'false_negative': 36, 'false_positive': 34,
  #                                      'precision': 0.67649999999999999, 'recall': 0.67741665270564577,
@@ -49,10 +49,10 @@ class RefactorProof(TestCase):
         )
         result, _ = calculate(job)
         del result['elapsed_time']
-        # self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
-        #                               'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
-        #                               'precision': 1.0, 'recall': 1.0,
-        #                               'auc': 0})
+        self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
+                                      'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
+                                      'precision': 1.0, 'recall': 1.0,
+                                      'auc': 0})
 # self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': 91,
 #                                       'true_negative': 60, 'false_negative': 36, 'false_positive': '--',
 #                                       'precision': 1.0, 'recall': 0.67741665270564577,

@@ -110,29 +110,6 @@ def upload_multiple(request):
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-@api_view(['GET'])
-def get_split_train_logs(request, pk):
-    value = Split.objects.get(pk=pk)
-    with open(value.train_log.path, 'r') as f:
-        data = f.read()
-    response = HttpResponse(data, content_type='application/xes')
-    response['Content-Disposition'] = 'attachment; filename=' + value.train_log.name
-    return response
-
-
-@api_view(['GET'])
-def get_split_test_logs(request, pk):
-    try:
-        value = Split.objects.get(pk=pk)
-    except:
-        return Response("No file found by the given id", status=status.HTTP_404_NOT_FOUND)
-    with open(value.test_log.path, 'r') as f:
-        data = f.read()
-    response = HttpResponse(data, content_type='application/xes')
-    response['Content-Disposition'] = 'attachment; filename=' + value.test_log.name
-    return response
-
-
 class SplitDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
     queryset = Split.objects.all()
     serializer_class = SplitSerializer

@@ -1,6 +1,7 @@
 import logging
 
 # from pm4py.algo.discovery.alpha import factory as alpha_miner
+from django.http import HttpResponse
 from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,6 +13,7 @@ from .models import Log
 from .serializers import LogSerializer
 from src.logs.log_service import create_log, get_log_trace_attributes
 from ..utils.file_service import get_log
+from pm4py.objects.log.importer.xes import factory as xes_importer
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +108,29 @@ def upload_multiple(request):
         test_log=test_log)
     serializer = SplitSerializer(item)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@api_view(['GET'])
+def get_split_train_logs(request, pk):
+    value = Split.objects.get(pk=pk)
+    with open(value.train_log.path, 'r') as f:
+        data = f.read()
+    response = HttpResponse(data, content_type='application/xes')
+    response['Content-Disposition'] = 'attachment; filename=' + value.train_log.name
+    return response
+
+
+@api_view(['GET'])
+def get_split_test_logs(request, pk):
+    try:
+        value = Split.objects.get(pk=pk)
+    except:
+        return Response("No file found by the given id", status=status.HTTP_404_NOT_FOUND)
+    with open(value.test_log.path, 'r') as f:
+        data = f.read()
+    response = HttpResponse(data, content_type='application/xes')
+    response['Content-Disposition'] = 'attachment; filename=' + value.test_log.name
+    return response
 
 
 class SplitDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):

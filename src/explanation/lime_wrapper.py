@@ -19,7 +19,7 @@ def _get_explanation(explainer, explanation_target_vector, model, features):
     return explainer.explain_instance(
         explanation_target_vector,
         # TODO probably the opposite would be way less computationally intesive
-        model[0].predict,  # TODO if we have clustering this is using only first model
+        model[0].predict if explainer.mode == 'regression' else model[0].predict_proba,  # TODO if we have clustering this is using only first model
         num_features=len(features)
     )
 

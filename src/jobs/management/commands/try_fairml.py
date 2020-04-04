@@ -28,7 +28,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         plt.style.use('ggplot')
         plt.figure(figsize=(6, 6))
-        TARGET_MODEL = 53
+        TARGET_MODEL = 59
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
 
         training_df, test_df = get_encoded_logs(job)
@@ -47,7 +47,7 @@ class Command(BaseCommand):
         fig = plot_dependencies(
             importancies.median(),
             reverse_values=False,
-            title="FairML feature dependence Random forest model"
+            title="FairML feature dependence plot"
         )
 
         file_name = "fairml_plot_train_1_3_decision_tree.png"

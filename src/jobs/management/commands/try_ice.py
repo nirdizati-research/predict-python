@@ -15,18 +15,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        TARGET_MODEL = 4
+        TARGET_MODEL = 59
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
         # load data
         training_df, test_df = get_encoded_logs(job)
         training_df['label'] = training_df['label'].astype(bool).astype(int)
         columns = list(training_df.columns.values)
-        print(training_df['label'].dtype)
         features = list(training_df.drop(
             ['trace_id', 'label'],
             1).columns.values)
-        feature = 'creatinine'
+        feature = 'Age_1'
         feature_grids, percentile_info = _get_grids(
             feature_values=training_df[feature].values, num_grid_points=10, grid_type=None,
             percentile_range='percentile', grid_range=None)

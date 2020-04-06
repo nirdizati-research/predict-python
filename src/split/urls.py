@@ -6,5 +6,5 @@ from src.split.views import SplitList
 urlpatterns = [
     url(r'^$', SplitList.as_view()),
     url(r'^(?P<pk>[0-9]+)$', SplitDetail.as_view()),
-    url(r'multiple$', upload_multiple),
+    url(r'multiple$', upload_multiple)
 ]

@@ -8,6 +8,8 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
 from src.clustering.models import Clustering
+from src.core.core import get_encoded_logs
+from src.encoding.common import retrieve_proper_encoder
 from src.encoding.models import Encoding
 from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.jobs import tasks
@@ -161,3 +163,13 @@ def create_multiple(request):
         django_rq.enqueue(tasks.prediction_task, job.id)
     serializer = JobSerializer(jobs, many=True)
     return Response(serializer.data, status=201)
+
+
+@api_view(['GET'])
+def get_decoded_df(request, pk):
+    job = Job.objects.filter(pk=pk)[0]
+    training_df, test_df = get_encoded_logs(job)
+    training_df = training_df.drop(['trace_id'], 1)
+    encoder = retrieve_proper_encoder(job)
+    encoder.decode(training_df, job.encoding)
+    return Response(training_df, status=200)

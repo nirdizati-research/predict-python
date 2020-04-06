@@ -1,21 +1,20 @@
-
 import lime
 from sklearn.externals import joblib
-
 import pandas as pd
 
+import numpy as np
 from src.encoding.common import retrieve_proper_encoder
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
 
 
-def _init_explainer(df, features, columns):
+def _init_explainer(df, features, columns, mode):
     return lime.lime_tabular.LimeTabularExplainer(
         df,
         feature_names=features,
         categorical_features=[i for i in range(len(columns))],
         verbose=True,
-        mode='classification',
+        mode=mode,
     )
 
 
@@ -23,10 +22,9 @@ def _get_explanation(explainer, explanation_target_vector, model, features):
     return explainer.explain_instance(
         explanation_target_vector,
         # TODO probably the opposite would be way less computationally intesive
-        model[0].predict_proba,  # TODO if we have clustering this is using only first model
+        model[0].predict if explainer.mode == 'regression' else model[0].predict_proba,  # TODO if we have clustering this is using only first model
         num_features=len(features)
     )
-
 
 def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
     model = joblib.load(lime_exp.predictive_model.model_path)
@@ -38,20 +36,22 @@ def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
     explainer = _init_explainer(
         df=training_df.drop(['trace_id', 'label'], 1).as_matrix(),
         features=features,
-        columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values)
+        columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
+        mode=getModeType(model[0])
     )
 
-    explanation_target_vector = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1).tail(1).squeeze()
+    explanation_target_vector = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1).tail(
+        1).squeeze()
     exp = _get_explanation(
-        explainer,
+        explainer=explainer,
         explanation_target_vector=explanation_target_vector,
         model=model,
         features=features
     )
 
     # show plot
-    #exp.show_in_notebook(show_table=True)
-    #exp.as_pyplot_figure().show()
+    # exp.show_in_notebook(show_table=True)
+    # exp.as_pyplot_figure().show()
     # exp.save_to_file('/tmp/oi.html')
 
     # alternative visualisation
@@ -80,7 +80,8 @@ def _multi_trace_lime_temporal_stability(lime_exp: Explanation, training_df, tes
     explainer = _init_explainer(
         df=training_df.drop(['trace_id', 'label'], 1).as_matrix(),
         features=features,
-        columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values)
+        columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
+        mode=getModeType(model[0])
     )
 
     #TODO: FILTER TO BE REMOVED BEFORE DEPLOY
@@ -150,7 +151,7 @@ def _multi_trace_lime_temporal_stability(lime_exp: Explanation, training_df, tes
             test_df[col] = test_df[col].apply(lambda x: 'False' if x == '0' else x)
 
     return {
-        trace_id : {
+        trace_id: {
             index: {
                 el[0].split('=')[0]: {
                     'value': str(test_df[test_df['trace_id'] == trace_id].tail(1)[el[0].split('=')[0]].values[0]) if el[0].split('=')[1] != '0' else '',
@@ -175,7 +176,8 @@ def lime_temporal_stability(lime_exp: Explanation, training_df, test_df, explana
         explainer = _init_explainer(
             df=training_df.drop(['trace_id', 'label'], 1).as_matrix(),
             features=features,
-            columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values)
+            columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
+            mode=getModeType(model[0])
         )
 
         explanation_target_df = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1)
@@ -199,10 +201,15 @@ def lime_temporal_stability(lime_exp: Explanation, training_df, test_df, explana
         return {
             explanation_target: {
                 index: {el[0].split('=')[0]: {
-                    'value': explanation_target_df.tail(1)[el[0].split('=')[0]].values[0] if el[0].split('=')[1] != '0' else '',
+                    'value': explanation_target_df.tail(1)[el[0].split('=')[0]].values[0] if el[0].split('=')[
+                                                                                                 1] != '0' else '',
                     'importance': el[1]}
                     for el in exp[index]
                 }
                 for index in exp
             }
         }
+
+
+def getModeType(model):
+    return 'regression' if model._estimator_type == 'regressor' else 'classification'

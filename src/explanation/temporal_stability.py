@@ -47,7 +47,6 @@ def temporal_stability(temporal_stability_exp: Explanation, training_df, test_df
         return _multi_trace_temporal_stability(temporal_stability_exp, training_df, test_df)
     else:
         explanation_target_df = test_df[test_df['trace_id'] == explanation_target]
-
         exp = MODEL[PredictiveModels.CLASSIFICATION.value][ModelActions.PREDICT.value](temporal_stability_exp.job, explanation_target_df)
 
         encoder = retrieve_proper_encoder(temporal_stability_exp.job)

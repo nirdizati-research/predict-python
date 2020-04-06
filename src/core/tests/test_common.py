@@ -26,4 +26,5 @@ class TestCommon(TestCase):
             'max_depth': None,
             'max_features': 'auto',
             'n_estimators': 10,
+            'random_state': 123
         }, config)

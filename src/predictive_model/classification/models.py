@@ -82,7 +82,8 @@ class Classification(PredictiveModel):
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
-                max_features=configuration.get('max_features', default_configuration['max_features'])
+                max_features=configuration.get('max_features', default_configuration['max_features']),
+                random_state=123
             )[0]
         elif classifier_type == ClassificationMethods.XGBOOST.value:
             default_configuration = classification_xgboost()
@@ -210,12 +211,13 @@ class RandomForest(Classification):
     n_estimators = models.PositiveIntegerField()
     max_depth = models.PositiveIntegerField(null=True)
     max_features = models.CharField(null=True, default='auto', max_length=10)
-
+    random_state = models.PositiveIntegerField(null=True)
     def to_dict(self):
         return {
             'n_estimators': self.n_estimators,
             'max_depth': self.max_depth,
-            'max_features': self.max_features
+            'max_features': self.max_features,
+            'random_state': self.random_state
         }
 
 

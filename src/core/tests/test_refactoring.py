@@ -13,12 +13,14 @@ from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.tests_utils import create_test_clustering, create_test_job, create_test_encoding, \
     create_test_predictive_model, create_test_labelling
+import random
 
 
 class RefactorProof(TestCase):
 
     def test_class_kmeans(self):
         self.max_diff = None
+        random.seed(10)
         job = create_test_job(
             clustering=create_test_clustering(clustering_type=ClusteringMethods.KMEANS.value),
             split=repair_example(),
@@ -39,6 +41,7 @@ class RefactorProof(TestCase):
 
     def test_class_no_cluster(self):
         self.max_diff = None
+        random.seed(10)
         job = create_test_job(
             clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value),
             split=repair_example(),
@@ -48,9 +51,10 @@ class RefactorProof(TestCase):
         )
         result, _ = calculate(job)
         del result['elapsed_time']
-        self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': '--',
+        print(result)
+        self.assertDictEqual(result, {'f1score': 0.748898678414097, 'acc': 0.995475113122172, 'true_positive': '--',
                                       'true_negative': '--', 'false_negative': '--', 'false_positive': '--',
-                                      'precision': 1.0, 'recall': 1.0,
+                                      'precision': 0.75, 'recall': 0.7478070175438596,
                                       'auc': 0})
 # self.assertDictEqual(result, {'f1score': 1.0, 'acc': 1.0, 'true_positive': 91,
 #                                       'true_negative': 60, 'false_negative': 36, 'false_positive': '--',

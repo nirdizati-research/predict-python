@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from sklearn.externals import joblib
 
 from src.core.core import get_encoded_logs
+from src.encoding.common import retrieve_proper_encoder
 from src.jobs.models import Job
 
 
@@ -14,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
 
         #get model
-        TARGET_MODEL=23
+        TARGET_MODEL=5
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
 
@@ -22,8 +23,7 @@ class Command(BaseCommand):
         training_df, test_df = get_encoded_logs(job)
 
         #get radom point in evaluation set
-        EXPLANATION_TARGET = 1
-
+        EXPLANATION_TARGET = 3
         #get the actual explanation
         explainer = lime.lime_tabular.LimeTabularExplainer(
             training_df.drop(['trace_id', 'label'], 1).as_matrix(),
@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
         #show plot
         #exp.show_in_notebook(show_table=True)
-        exp.as_pyplot_figure().show()
-        # exp.save_to_file('/tmp/oi.html')
+        # exp.as_pyplot_figure().show()
+        exp.save_to_file('oi.html')
 
         print('done')

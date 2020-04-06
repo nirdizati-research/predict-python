@@ -212,6 +212,7 @@ class RandomForest(Classification):
     max_depth = models.PositiveIntegerField(null=True)
     max_features = models.CharField(null=True, default='auto', max_length=10)
     random_state = models.PositiveIntegerField(null=True)
+
     def to_dict(self):
         return {
             'n_estimators': self.n_estimators,

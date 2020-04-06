@@ -112,7 +112,10 @@ def upload_multiple(request):
 
 @api_view(['GET'])
 def get_split_train_logs(request, pk):
-    value = Split.objects.get(pk=pk)
+    try:
+        value = Split.objects.get(pk=pk)
+    except:
+        return Response("No file found by the given id", status=status.HTTP_404_NOT_FOUND)
     with open(value.train_log.path, 'r') as f:
         data = f.read()
     response = HttpResponse(data, content_type='application/xes')

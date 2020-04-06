@@ -35,7 +35,6 @@ def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
         features=features,
         columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
         mode=getModeType(model[0])
-
     )
 
     explanation_target_vector = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1).tail(
@@ -80,7 +79,6 @@ def _multi_trace_lime_temporal_stability(lime_exp: Explanation, training_df, tes
         features=features,
         columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
         mode=getModeType(model[0])
-
     )
 
     exp = {}
@@ -129,7 +127,6 @@ def lime_temporal_stability(lime_exp: Explanation, training_df, test_df, explana
             features=features,
             columns=list(training_df.drop(['trace_id', 'label'], 1).columns.values),
             mode=getModeType(model[0])
-
         )
 
         explanation_target_df = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1)

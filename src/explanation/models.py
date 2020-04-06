@@ -14,8 +14,8 @@ class ExplanationTypes(Enum):
     LIME = 'lime'
     TEMPORAL_STABILITY = 'temporal_stability'
     ANCHOR = 'anchor'
-    ICE = 'ICE'
-    SKATER = 'SKATER'
+    ICE = 'ice'
+    SKATER = 'skater'
 
 
 EXPLANATION_TYPE_MAPPINGS = (

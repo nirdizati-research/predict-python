@@ -227,3 +227,4 @@ As this project detects when a compatible GPU is present in the system and tries
 - [@fmmaggi](https://github.com/fmmaggi) Fabrizio Maggi
 - [@WilliamsRizzi](https://github.com/WilliamsRizzi) Williams Rizzi
 - [@HitLuca](https://github.com/HitLuca) Luca Simonetto
+- [@Musacca](https://github.com/Musacca) Musabir Musabayli

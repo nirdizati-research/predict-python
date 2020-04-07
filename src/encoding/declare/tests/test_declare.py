@@ -3,7 +3,7 @@ Testing functions used in deviance mining process and that all the templates met
 """
 
 
-import unittest
+from django.test import TestCase
 from src.encoding.declare.declaretemplates import *
 from src.encoding.declare.declarecommon import *
 
@@ -66,7 +66,7 @@ def unit_split(trace):
     return lists
 
 
-class TestDeclareTemplates(unittest.TestCase):
+class TestDeclareTemplates(TestCase):
     def test_init(self):
         """
         2 traces, one with init first, second with not
@@ -136,8 +136,8 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(one, 1)
         self.assertEqual(two, 1)
         self.assertEqual(three, 1)
-        self.assertEqual(two_f, 0)
-        self.assertEqual(three_f, 0)
+        self.assertEqual(two_f, -1)
+        self.assertEqual(three_f, -1)
 
 
 
@@ -198,7 +198,7 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, -1)
         self.assertEqual(one, 1)
         self.assertEqual(two, 1)
-        self.assertEqual(vac, 0)
+        self.assertEqual(vac, -1)
 
 
 
@@ -227,8 +227,8 @@ class TestDeclareTemplates(unittest.TestCase):
 
         self.assertEqual(zero, 1)
         self.assertEqual(one, -1)
-        self.assertEqual(two, 0)
-        self.assertEqual(vac, 1)
+        self.assertEqual(two, -1)
+        self.assertEqual(vac, 0)
         self.assertEqual(t, True) # With vacuity check..
 
 
@@ -261,8 +261,8 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 1)
         self.assertEqual(one, -1)
         self.assertEqual(two, 3)
-        self.assertEqual(vac, 0)
-        self.assertEqual(vac2, 0)
+        self.assertEqual(vac, -1)
+        self.assertEqual(vac2, -1)
 
     def test_alternate_response(self):
         """
@@ -292,9 +292,9 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 1)
         self.assertEqual(one, 0) # 1 and 0 by vacuity
         self.assertEqual(vact1, True) # 1 and 0 by vacuity
-        self.assertEqual(two, 0) # too many A in row
+        self.assertEqual(two, -1) # too many A in row
         self.assertEqual(vac, 3) # true, no 2 A in row
-        self.assertEqual(vac2, 0)  # no response
+        self.assertEqual(vac2, -1)  # no response
 
 
     def test_alternate_succession(self):
@@ -326,10 +326,10 @@ class TestDeclareTemplates(unittest.TestCase):
 
         self.assertEqual(zero, 1) # true
         self.assertEqual(one, -1) # false
-        self.assertEqual(two, 0) # too many A in row
-        self.assertEqual(vac, 0) # too many B in a row
+        self.assertEqual(two, -1) # too many A in row
+        self.assertEqual(vac, -1) # too many B in a row
         self.assertEqual(vac2, 4)  # true, 4
-        self.assertEqual(vac3, 0)  # false
+        self.assertEqual(vac3, -1)  # false
 
 
 
@@ -360,10 +360,10 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 1) # true
         self.assertEqual(one, -1) # false
         self.assertEqual(two, 3) #  true, 3 B's have A before it
-        self.assertEqual(vac, 0) # too many B in a row
-        self.assertEqual(vac2, 0)  # false, last B has C instead of A before it
-        self.assertEqual(vac3, 0)  # false
-        self.assertEqual(vac4, 0)  # false, C before B
+        self.assertEqual(vac, -1) # too many B in a row
+        self.assertEqual(vac2, -1)  # false, last B has C instead of A before it
+        self.assertEqual(vac3, -1)  # false
+        self.assertEqual(vac4, -1)  # false, C before B
 
 
     def test_chain_response(self):
@@ -392,10 +392,10 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 1) # true
         self.assertEqual(one, 0) # true by vacuity
         self.assertEqual(vact1, True) # true
-        self.assertEqual(vac, 0) # Last A's not followed by B
+        self.assertEqual(vac, -1) # Last A's not followed by B
         self.assertEqual(vac2, 4)  # true
-        self.assertEqual(vac3, 0)  # false
-        self.assertEqual(vac4, 0)  # false, A not straight followed by B
+        self.assertEqual(vac3, -1)  # false
+        self.assertEqual(vac4, -1)  # false, A not straight followed by B
 
 
     def test_chain_succession(self):
@@ -427,11 +427,11 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 0) # true by vacuity
         self.assertEqual(vact1, True) # true
         self.assertEqual(one, 1) # true
-        self.assertEqual(vac, 0) # false, B alone
+        self.assertEqual(vac, -1) # false, B alone
         self.assertEqual(vac2, 5)  # true
-        self.assertEqual(vac3, 0)  # false
+        self.assertEqual(vac3, -1)  # false
         self.assertEqual(vac4, 4)  # true
-        self.assertEqual(vac5, 0) # false, A not straight followed by B
+        self.assertEqual(vac5, -1) # false, A not straight followed by B
 
 
 
@@ -465,10 +465,10 @@ class TestDeclareTemplates(unittest.TestCase):
 
         self.assertEqual(zero, 0) # true by vacuity
         self.assertEqual(vact1, True) # true
-        self.assertEqual(one, 0) # false
-        self.assertEqual(vac, 1) # false, B alone, not sure on vacuity..
-        self.assertEqual(vac2, 0)  # false
-        self.assertEqual(vac3, 0)  # false
+        self.assertEqual(one, -1) # false
+        self.assertEqual(vac, 0) # false, B alone, not sure on vacuity..
+        self.assertEqual(vac2, -1)  # false
+        self.assertEqual(vac3, -1)  # false
         self.assertEqual(vac4, 1)  # true
         self.assertEqual(vac5, 1) # true, A not straight followed by B
 
@@ -500,11 +500,11 @@ class TestDeclareTemplates(unittest.TestCase):
 
         self.assertEqual(zero, 0)  # true by vacuity
         self.assertEqual(vact1, True)  # true
-        self.assertEqual(one, 0)  # false
+        self.assertEqual(one, -1)  # false
         self.assertEqual(vac, 1)  # true
         self.assertEqual(vac2, 1)  # true
-        self.assertEqual(vac3, 0)  # false
-        self.assertEqual(vac4, 0)  # false
+        self.assertEqual(vac3, -1)  # false
+        self.assertEqual(vac4, -1)  # false
         self.assertEqual(vac5, 1)  # true, B, but not A
 
     def test_not_succession(self):
@@ -537,13 +537,13 @@ class TestDeclareTemplates(unittest.TestCase):
 
         self.assertEqual(zero, 0)  # true by vacuity
         self.assertEqual(vact1, True)  # not sure
-        self.assertEqual(one, 0)  # A followed by B, false
+        self.assertEqual(one, -1)  # A followed by B, false
         self.assertEqual(vact2, True)  # true not sure..
-        self.assertEqual(vac, 1)  # true
+        self.assertEqual(vac, 0)  # true
         self.assertEqual(vac2, 1)  # true
-        self.assertEqual(vac3, 0)  # false
-        self.assertEqual(vac4, 0)  # false
-        self.assertEqual(vac5, 0)  # false, A eventually followed by B
+        self.assertEqual(vac3, -1)  # false
+        self.assertEqual(vac4, -1)  # false
+        self.assertEqual(vac5, -1)  # false, A eventually followed by B
 
     def test_precedence(self):
         """
@@ -577,11 +577,11 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 0)  # true, no B at all
         self.assertTrue(vact1)
         self.assertEqual(one, 1)  #
-        self.assertEqual(vac, 0)
-        self.assertEqual(vac2, 1)
+        self.assertEqual(vac, -1)
+        self.assertEqual(vac2, 0)
         self.assertTrue(vact2)
         self.assertEqual(vac3, 5)
-        self.assertEqual(vac4, 0)
+        self.assertEqual(vac4, -1)
         self.assertEqual(vac5, 1)
 
     def test_response(self):
@@ -616,10 +616,10 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 0)  # true by vacuity
         self.assertTrue(vact1)
         self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, 1)  # true vacuity
+        self.assertEqual(two, 0)  # true vacuity
         self.assertTrue(vact2)
-        self.assertEqual(three, 0)  # false
-        self.assertEqual(four, 0) # fasle
+        self.assertEqual(three, -1)  # false
+        self.assertEqual(four, -1) # fasle
         self.assertEqual(five, 3)  # true
         self.assertEqual(six, 1)  # true
 
@@ -654,9 +654,9 @@ class TestDeclareTemplates(unittest.TestCase):
         self.assertEqual(zero, 0)  # true by vacuity
         self.assertTrue(vact1)
         self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, 1)  # true vacuity
+        self.assertEqual(two, 0)  # true vacuity
         self.assertTrue(vact2)
-        self.assertEqual(three, 0)  # false
+        self.assertEqual(three, -1)  # false
         self.assertEqual(four, 5) # true
         self.assertEqual(five, 3)  # true
         self.assertEqual(six, 1)  # true
@@ -689,13 +689,13 @@ class TestDeclareTemplates(unittest.TestCase):
         five, _ = template_succession(pos[5], ("A", "B"))
         six, _ = template_succession(pos[6], ("A", "B"))
 
-        self.assertEqual(zero, 1)  # true by vacuity
-        self.assertFalse(vact1)
+        self.assertEqual(zero, 0)  # true by vacuity
+        self.assertTrue(vact1)
         self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, 0)  # false
-        self.assertEqual(three, 0)  # false
-        self.assertEqual(four, 0) # false
-        self.assertEqual(five, 0)  # false
+        self.assertEqual(two, -1)  # false
+        self.assertEqual(three, -1)  # false
+        self.assertEqual(four, -1) # false
+        self.assertEqual(five, -1)  # false
         self.assertEqual(six, 2)  # true
 
 
@@ -733,9 +733,3 @@ def test_thorough():
     assert (res2 == 0)
 """
 
-
-
-
-
-if __name__ == "__main__":
-    unittest.main()

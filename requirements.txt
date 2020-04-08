@@ -1,6 +1,7 @@
 requests
 lime
 shap
+pymining
 PDPbox==0.2.0
 skater==1.1.2
 multiprocess==0.70.9

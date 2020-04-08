@@ -39,20 +39,20 @@ def init_database(experimentation_type, splits, dataset, base_folder):
 
     if experimentation_type == ExperimentationType.STD.value:
         splits[dataset]['0-40_80-100'] = upload_split(train=base_folder + dataset + '0-40.xes',
-                                                      test=base_folder + dataset + '80-100.xes')
+                                                      test=base_folder + dataset + '80-100.xes', server_name='ashkin', server_port='50401')
 
         splits[dataset]['0-80_80-100'] = upload_split(train=base_folder + dataset + '0-80.xes',
-                                                      test=base_folder + dataset + '80-100.xes')
+                                                      test=base_folder + dataset + '80-100.xes', server_name='ashkin', server_port='50401')
 
     elif experimentation_type == ExperimentationType.INCREMENTAL.value:
         splits[dataset]['40-80_80-100'] = upload_split(train=base_folder + dataset + '40-80.xes',
-                                                       test=base_folder + dataset + '80-100.xes')
+                                                       test=base_folder + dataset + '80-100.xes', server_name='ashkin', server_port='50401')
 
     elif experimentation_type == ExperimentationType.DRIFT_SIZE.value:
         splits[dataset]['40-55_80-100'] = upload_split(train=base_folder + dataset + '40-55.xes',
-                                                       test=base_folder + dataset + '80-100.xes')
+                                                       test=base_folder + dataset + '80-100.xes', server_name='ashkin', server_port='50401')
         splits[dataset]['0-55_80-100'] = upload_split(train=base_folder + dataset + '0-55.xes',
-                                                      test=base_folder + dataset + '80-100.xes')
+                                                      test=base_folder + dataset + '80-100.xes', server_name='ashkin', server_port='50401')
 
 
 def get_pretrained_model_id(config):
@@ -111,7 +111,7 @@ def std_experiments(dataset, prefix_length, models, splits, classification_metho
                                          "performance_metric": HyperOptLosses.AUC.value,
                                          "algorithm_type": HyperOptAlgorithms.TPE.value},
             classification=[classification_method]
-        )
+        ), server_port='50401', server_name='ashkin'
     )[0]['id']
 
 
@@ -140,7 +140,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
             'predictive_model': {'predictive_model': 'classification',
                                  'prediction_method': classification_method},
             'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
-        })
+        }, server_name='ashkin', server_port='50401')
     )
 
     payload = create_classification_payload(
@@ -161,7 +161,7 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
         classification=[classification_method]
     )
     payload.update(pretrained_model_parameters)
-    models[dataset]['0-80_80-100'] = send_job_request(payload=payload)[0]['id']
+    models[dataset]['0-80_80-100'] = send_job_request(payload=payload, server_port='50401', server_name='ashkin')[0]['id']
 
     if classification_method != ClassificationMethods.RANDOM_FOREST.value:
         payload = create_classification_payload(
@@ -206,12 +206,12 @@ def incremental_experiments(dataset, prefix_length, models, splits, classificati
                             'predictive_model': {'predictive_model': 'classification',
                                                  'prediction_method': classification_method},
                             'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
-                        })
+                        }, server_name='ashkin', server_port='50401')
                     )
                 ]
         )
         payload.update(pretrained_model_parameters)
-        models[dataset]['40-80_80-100'] = send_job_request(payload=payload)[0]['id']
+        models[dataset]['40-80_80-100'] = send_job_request(payload=payload, server_port='50401', server_name='ashkin')[0]['id']
 
 
 def drift_size_experimentation(dataset, prefix_length, models, splits, classification_method, encoding_method):
@@ -258,7 +258,7 @@ def drift_size_experimentation(dataset, prefix_length, models, splits, classific
                             'predictive_model': {'predictive_model': 'classification',
                                                  'prediction_method': classification_method},
                             'clustering': {'clustering_method': ClusteringMethods.NO_CLUSTER.value}
-                        })
+                        }, server_name='ashkin', server_port='50401')
                     )
                 ]
             ), server_port='50401', server_name='ashkin'
@@ -284,7 +284,7 @@ def drift_size_experimentation(dataset, prefix_length, models, splits, classific
                                          "max_evaluations": 1000,
                                          "performance_metric": HyperOptLosses.AUC.value,
                                          "algorithm_type": HyperOptAlgorithms.TPE.value},
-        )
+        ), server_port='50401', server_name='ashkin'
     )[0]['id']
 
 
@@ -323,9 +323,9 @@ if __name__ == '__main__':
     print("Starting experiments")
 
     base_folder = '/home/wrizzi/Documents/datasets/'
-    base_folder = '/Users/Brisingr/Desktop/TEMP/dataset/prom_labeled_data/CAiSE18/'
+    # base_folder = '/Users/Brisingr/Desktop/TEMP/dataset/prom_labeled_data/CAiSE18/'
 
-    experimentation = ExperimentationType.INCREMENTAL.value
+    experimentation = ExperimentationType.DRIFT_SIZE.value
 
     datasets1 = [
         'BPI11/f1/',
@@ -356,53 +356,53 @@ if __name__ == '__main__':
     # TODO load from memory
     splits = {
         'BPI11/f1/': {
-            '0-40_80-100': 8,
-            '0-80_80-100': 9,
+            '0-40_80-100': 55,
+            '0-80_80-100': 56,
             '40-80_80-100': 38,
         },
         'BPI11/f2/': {
-            '0-40_80-100': 10,
-            '0-80_80-100': 11,
+            '0-40_80-100': 57,
+            '0-80_80-100': 58,
             '40-80_80-100': 39,
         },
         'BPI11/f3/': {
-            '0-40_80-100': 12,
-            '0-80_80-100': 13,
+            '0-40_80-100': 59,
+            '0-80_80-100': 60,
             '40-80_80-100': 40,
         },
         'BPI11/f4/': {
-            '0-40_80-100': 14,
-            '0-80_80-100': 15,
+            '0-40_80-100': 61,
+            '0-80_80-100': 62,
             '40-80_80-100': 41,
         },
         'BPI15/f1/': {
-            '0-40_80-100': 16,
-            '0-80_80-100': 17,
+            '0-40_80-100': 63,
+            '0-80_80-100': 64,
             '40-80_80-100': 42,
         },
         'BPI15/f2/': {
-            '0-40_80-100': 18,
-            '0-80_80-100': 19,
+            '0-40_80-100': 65,
+            '0-80_80-100': 66,
             '40-80_80-100': 43,
         },
         'BPI15/f3/': {
-            '0-40_80-100': 20,
-            '0-80_80-100': 21,
+            '0-40_80-100': 67,
+            '0-80_80-100': 68,
             '40-80_80-100': 44,
         },
         'Drift1/f1/': {
-            '0-40_80-100': 22,
-            '0-80_80-100': 23,
+            '0-40_80-100': 69,
+            '0-80_80-100': 70,
             '40-80_80-100': 45,
 
             '40-60_80-100': 1111,
             '0-60_80-100': 1111,
-            '40-55_80-100': 36, #+TANTO perche' uno e' stato ciccato
+            '40-55_80-100': 36,  # +TANTO perche' uno e' stato ciccato
             '0-55_80-100': 1111
         },
         'Drift2/f1/': {
-            '0-40_80-100': 24,
-            '0-80_80-100': 25,
+            '0-40_80-100': 71,
+            '0-80_80-100': 72,
             '40-80_80-100': 46,
 
             '40-60_80-100': 1111,
@@ -447,8 +447,8 @@ if __name__ == '__main__':
                 ValueEncodings.SIMPLE_INDEX.value,
                 ValueEncodings.COMPLEX.value]
         )
-        # json.dump(splits, open("splits.json", 'w'))
-        # json.dump(models, open("models.json", 'w'))
+        json.dump(splits, open("splits_1.json", 'w'))
+        json.dump(models, open("models_1.json", 'w'))
     elif experimentation == ExperimentationType.DRIFT_SIZE.value:
         launch_experimentation(
             ExperimentationType.DRIFT_SIZE.value,
@@ -466,8 +466,8 @@ if __name__ == '__main__':
                 ValueEncodings.SIMPLE_INDEX.value,
                 ValueEncodings.COMPLEX.value]
         )
-        # json.dump(splits, open("splits.json", 'w'))
-        # json.dump(models, open("models.json", 'w'))
+        json.dump(splits, open("splits_2.json", 'w'))
+        json.dump(models, open("models_2.json", 'w'))
     elif experimentation == ExperimentationType.INCREMENTAL.value:
         # splits = json.load(open("../splits.json", 'r'))
         # models = json.load(open("../models.json", 'r'))
@@ -506,7 +506,7 @@ if __name__ == '__main__':
                 ValueEncodings.COMPLEX.value]
         )
 
-        # json.dump(splits, open("splits.json", 'w'))
-        # json.dump(models, open("models.json", 'w'))
+        json.dump(splits, open("splits_3.json", 'w'))
+        json.dump(models, open("models_3.json", 'w'))
 
     print("End of the experiments")

@@ -21,6 +21,8 @@ class ValueEncodings(Enum):
     FREQUENCY = 'frequency'
     COMPLEX = 'complex'
     LAST_PAYLOAD = 'lastPayload'
+    # SEQUENCES = 'sequences' #TODO JONAS
+    DEVIANCE = 'deviance' #TODO JONAS
 
 
 class TaskGenerationTypes(Enum):
@@ -39,7 +41,9 @@ VALUE_ENCODING_MAPPINGS = (
     (ValueEncodings.BOOLEAN.value, 'boolean'),
     (ValueEncodings.FREQUENCY.value, 'frequency'),
     (ValueEncodings.COMPLEX.value, 'complex'),
-    (ValueEncodings.LAST_PAYLOAD.value, 'lastPayload')
+    (ValueEncodings.LAST_PAYLOAD.value, 'lastPayload'),
+    # (ValueEncodings.SEQUENCES.value, 'sequences'), #TODO JONAS
+    (ValueEncodings.DEVIANCE.value, 'deviance') #TODO JONAS
 )
 
 TASK_GENERATION_TYPE_MAPPINGS = (

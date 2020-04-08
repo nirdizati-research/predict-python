@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 @job("default", timeout='100h')
-def prediction_task(job_id):
+def prediction_task(job_id, do_publish_result=True):
     logger.info("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
 
@@ -51,7 +51,8 @@ def prediction_task(job_id):
         raise e
     finally:
         job.save()
-        publish(job)
+        if do_publish_result:
+            publish(job)
 
 
 def save_models(models: dict, job: Job):

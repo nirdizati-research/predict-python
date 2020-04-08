@@ -27,11 +27,14 @@ def _multi_trace_temporal_stability(temporal_stability_exp: Explanation, trainin
         df = test_df[test_df['trace_id'] == trace_id].drop(['trace_id', 'label'], 1)
         exp = list(df['predicted'])
         last_row = df.tail(1)
-        exp_list_1 = [(feat, str(last_row[feat].values[0])) for feat in last_row]
+        exp_list_1 = [(feat, str(last_row[feat].values[0])) for feat in last_row if feat.startswith('prefix')]
         exp_list[trace_id] = {
-            exp_list_1[index][0]: {'value': exp_list_1[index][1], 'predicted': exp[index]}
-            for index in range(len(exp))
+            exp_list_1[index][0]: {'value': exp_list_1[index][1], 'predicted': exp[index] if len(exp) > index else exp[0]} #TODO: BAD WORKAROUND if len(exp) > index else exp[0]
+            for index in range(len(exp_list_1))
         }
+
+        if len(exp_list[trace_id]) == 0 and len(exp_list_1) == 0 and last_row['predicted'] is not None:
+            exp_list[trace_id] = {'prefix_': {'value': 'prefix_', 'predicted': exp[0]}}
 
     return exp_list
 

@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # get model
-        TARGET_MODEL = 64
+        TARGET_MODEL = 71
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)[0]
         # load data

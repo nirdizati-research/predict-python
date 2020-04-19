@@ -1,3 +1,5 @@
+import time
+
 import shap
 
 from src.encoding.common import retrieve_proper_encoder
@@ -9,7 +11,6 @@ import pandas as pd
 
 def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
     job = shap_exp.job
-    job
     model = joblib.load(job.predictive_model.model_path)
     model = model[0]
     shap.initjs()
@@ -27,11 +28,17 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
 
     explanation_target_vector = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1)
     expected_value = explainer.expected_value[0] if explainer.expected_value.size > 1 else explainer.expected_value
-    shap_value = shap_values[explanation_target_int, :] if hasattr(shap_values,"size") else shap_values[0][
-                                                                                          explanation_target_int, :]
+    shap_value = shap_values[explanation_target_int, :] if hasattr(shap_values, "size") else shap_values[0][
+                                                                                             explanation_target_int, :]
+    name = create_unique_name("temporal_shap.svg")
     shap.force_plot(expected_value, shap_value, explanation_target_vector,
-                    show=False, matplotlib=True).savefig("temporal_shap.svg")
-    f = open("temporal_shap.svg", "r")
+                    show=False, matplotlib=True).savefig(name)
+    f = open(name, "r")
     response = f.read()
-    os.remove("temporal_shap.svg")
+    os.remove(name)
+    os.remove(name.split('.svg')[0])
     return response
+
+
+def create_unique_name(name: str) -> str:
+    return name.replace('.', '_' + str(time.time()).replace('.', '') + '.')

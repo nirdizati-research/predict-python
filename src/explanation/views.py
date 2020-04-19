@@ -86,6 +86,27 @@ def get_ice(request, pk, explanation_target):
 
 
 @api_view(['GET'])
+def get_cffeedback(request, pk, top_k):
+    job = Job.objects.filter(pk=pk)[0]
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.CFFEEDBACK.value, split=job.split,
+                                               predictive_model=job.predictive_model, job=job)
+    exp.save()
+    result = explanation(exp.id, int(top_k))
+    return Response(result, status=200)
+
+
+@api_view(['POST'])
+def get_retrain(request, pk):
+    job = Job.objects.filter(pk=pk)[0]
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.RETRAIN.value, split=job.split,
+                                               predictive_model=job.predictive_model, job=job)
+    exp.save()
+    target = request.data
+    result = explanation(exp.id, target)
+    return Response(result, status=200)
+
+
+@api_view(['GET'])
 def get_anchor(request, pk):
     job = Job.objects.filter(pk=pk)[0]
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.ANCHOR.value, split=job.split,

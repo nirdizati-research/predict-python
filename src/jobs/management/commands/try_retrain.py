@@ -35,12 +35,12 @@ class Command(BaseCommand):
             target_values2 = list(set(m_col['prefix_4']))
             df[["prefix_2", "prefix_4"]] = m_col.apply(
                 lambda x:
-                    x
-                        if ((x[0] != 2) and (x[1] != 3)) else
-                    Series({
-                        "prefix_2": random.choice(target_values1),
-                        "prefix_4": random.choice(target_values2)
-                    }),
+                x
+                if ((x[0] != 2) and (x[1] != 3)) else
+                Series({
+                    "prefix_2": random.choice(target_values1),
+                    "prefix_4": random.choice(target_values2)
+                }),
                 axis=1
             )
         TARGETS = [
@@ -93,6 +93,5 @@ class Command(BaseCommand):
 
         # todo: return performances
         print('Retrain Job:', prediction_job.evaluation.classificationmetrics)
-
 
         print('Done, cheers!')

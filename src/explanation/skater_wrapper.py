@@ -7,6 +7,8 @@ from sklearn.externals import joblib
 import os
 import time
 
+from src.utils.file_service import create_unique_name
+
 
 def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
     job = skater_exp.job
@@ -49,7 +51,3 @@ def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
     os.remove(name.split('.svg')[0])
 
     return response
-
-
-def create_unique_name(name: str) -> str:
-    return name.replace('.', '_' + str(time.time()).replace('.', '') + '.')

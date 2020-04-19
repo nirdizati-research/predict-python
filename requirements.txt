@@ -41,3 +41,4 @@ psycopg2
 mock
 anchor_exp
 Cython
+prettyjson==1.0.3

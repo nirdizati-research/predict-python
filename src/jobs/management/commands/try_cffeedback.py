@@ -10,15 +10,14 @@ from src.explanation.models import Explanation, ExplanationTypes
 from src.explanation.temporal_stability import temporal_stability
 from src.jobs.models import Job
 from src.split.models import Split
-from src.utils.prettyjson import prettyjson
-
+import prettyjson
 
 class Command(BaseCommand):
     help = 'tries to deliver an explanation of a random prediction of the trained model'
 
     def handle(self, *args, **kwargs):
-        TARGET_JOB = 439
-        SPLITID = 155
+        TARGET_JOB = 71
+        SPLITID = 12
         job_obj = Job.objects.filter(pk=TARGET_JOB)[0]
         split_obj = Split.objects.filter(pk=SPLITID)[0]
 
@@ -370,7 +369,7 @@ class Command(BaseCommand):
         print('Absence computed.')
         print(
             'The absence AFTER filtering is:\n',
-            prettyjson(characterised_attributes_occurrences)
+            characterised_attributes_occurrences
         )
 
         print('RE-computing the sequence pattern result after applying the thresholds...')
@@ -502,7 +501,7 @@ class Command(BaseCommand):
             printout_freq_seqs(filtered_freq_seqs_after_filter, FREQ_SEQS['RECOMPUTEDoutputfile'], maxlinelength=200)
             print('Results saved.')
         else:
-            print('RECOMPUTED_FREQ_SEQS:\n', prettyjson(filtered_freq_seqs_after_filter, maxlinelength=200))
+            print('RECOMPUTED_FREQ_SEQS:\n', filtered_freq_seqs_after_filter)
 
         print('Done, cheers!')
-        # return confusion_matrix, data, freq_seqs_after_filter, filtered_freq_seqs_after_filter
+        return confusion_matrix, data, freq_seqs_after_filter, filtered_freq_seqs_after_filter

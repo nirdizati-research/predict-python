@@ -11,5 +11,8 @@ urlpatterns = [
     url(r'^shap/(?P<pk>[0-9]+)&(?P<explanation_target>[0-9_]+)', views.get_shap),
     url(r'^skater/(?P<pk>[0-9]+)', views.get_skater),
     url(r'^ice/(?P<pk>[0-9]+)&(?P<explanation_target>[^/]+)', views.get_ice),
+    url(r'^cffeedback/(?P<pk>[0-9]+)&(?P<top_k>[0-9]+)', views.get_cffeedback),
+    url(r'^retrain/(?P<pk>[0-9]+)', views.get_retrain),
+
     url(r'^anchor/(?P<pk>[0-9]+)', views.get_anchor),
 ]

@@ -1,7 +1,7 @@
 from enum import Enum
 
-from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.db import models
 
 from src.common.models import CommonModel
 from src.jobs.models import Job
@@ -16,6 +16,8 @@ class ExplanationTypes(Enum):
     ANCHOR = 'anchor'
     ICE = 'ice'
     SKATER = 'skater'
+    CFFEEDBACK = 'cffeedback'
+    RETRAIN = 'retrain'
 
 
 EXPLANATION_TYPE_MAPPINGS = (
@@ -24,7 +26,10 @@ EXPLANATION_TYPE_MAPPINGS = (
     (ExplanationTypes.TEMPORAL_STABILITY.value, 'temporal_stability'),
     (ExplanationTypes.ANCHOR.value, 'anchor'),
     (ExplanationTypes.SKATER.value, 'skater'),
-    (ExplanationTypes.ICE.value, 'ice')
+    (ExplanationTypes.ICE.value, 'ice'),
+    (ExplanationTypes.CFFEEDBACK.value, 'cffeedback'),
+    (ExplanationTypes.RETRAIN.value, 'retrain'),
+
 )
 
 

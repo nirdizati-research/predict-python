@@ -1,12 +1,11 @@
-import shap
 from pdpbox import info_plots
 from pdpbox.utils import _get_grids
+from sklearn.externals import joblib
 
 from src.encoding.common import retrieve_proper_encoder
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
-from sklearn.externals import joblib
-import os
+
 
 def explain(ice_exp: Explanation, training_df, test_df, explanation_target):
     job = ice_exp.job

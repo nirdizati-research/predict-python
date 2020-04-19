@@ -19,26 +19,25 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
 
-        TARGET_MODEL = 4
+        TARGET_MODEL = 68
         job = Job.objects.filter(pk=TARGET_MODEL)[0]
         model = joblib.load(job.predictive_model.model_path)
         model = model[0]
         training_df, test_df = get_encoded_logs(job)
 
-        EXPLANATION_TARGET = 12
+        EXPLANATION_TARGET = 2_3300
         FEATURE_TARGET = 1
         shap.initjs()
 
         explainer = shap.TreeExplainer(model)
         training_df = training_df.drop(['trace_id','label'], 1)
-        test_df = test_df.drop(['trace_id'], 1)
 
         shap_values = explainer.shap_values(training_df)
 
         encoder = retrieve_proper_encoder(job)
         encoder.decode(training_df, job.encoding)
 
-        shap.force_plot(explainer.expected_value[1], shap_values[0][EXPLANATION_TARGET, :],training_df.iloc[EXPLANATION_TARGET, :],
+        shap.force_plot(explainer.expected_value, shap_values[EXPLANATION_TARGET, :],training_df.iloc[EXPLANATION_TARGET, :],
                                        show=False, matplotlib=True).savefig('shap_plot_train_1_3.png')
 
         # encoder.encode(training_df, job.encoding)

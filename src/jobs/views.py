@@ -173,3 +173,25 @@ def get_decoded_df(request, pk):
     encoder = retrieve_proper_encoder(job)
     encoder.decode(training_df, job.encoding)
     return Response(training_df, status=200)
+
+
+@api_view(['GET'])
+def get_unique_values(request, pk):
+    job = Job.objects.filter(pk=pk)[0]
+    training_df, test_df = get_encoded_logs(job)
+    training_df = training_df.drop(['trace_id'], 1)
+    decoded_training_df = training_df.copy()
+    decoded_testing_df = test_df.copy()
+
+    encoder = retrieve_proper_encoder(job)
+    encoder.decode(df=decoded_training_df, encoding=job.encoding)
+    encoder.decode(df=decoded_testing_df, encoding=job.encoding)
+
+    result_df = {}
+    for key in training_df.keys():
+        result_decoded_df = list(set(list(training_df[key]) + list(test_df[key])))
+        result_encoded_df= list(set(list(decoded_training_df[key]) + list(decoded_testing_df[key])))
+        result_df[key] = {}
+        for k in range(len(result_decoded_df)):
+            result_df[key][result_encoded_df[k]] = result_decoded_df[k]
+    return Response(result_df, status=200)

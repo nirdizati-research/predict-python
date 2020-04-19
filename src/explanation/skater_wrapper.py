@@ -1,12 +1,12 @@
+import os
+
 import shap
 from dtreeviz.trees import dtreeviz
 from skater.core.explanations import Interpretation
 from skater.model import InMemoryModel
-from src.explanation.models import Explanation
 from sklearn.externals import joblib
-import os
-import time
 
+from src.explanation.models import Explanation
 from src.utils.file_service import create_unique_name
 
 

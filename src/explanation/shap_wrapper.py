@@ -1,13 +1,11 @@
-import time
+import os
 
+import pandas as pd
 import shap
+from sklearn.externals import joblib
 
 from src.encoding.common import retrieve_proper_encoder
 from src.explanation.models import Explanation
-from sklearn.externals import joblib
-import os
-import pandas as pd
-
 from src.utils.file_service import create_unique_name
 
 

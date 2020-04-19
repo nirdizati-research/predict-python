@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from src.explanation.explanation import explanation, EXPLAIN, TEMPORAL_STABILITY, explanation_temporal_stability
+from src.explanation.explanation import explanation, explanation_temporal_stability
 from src.explanation.models import Explanation, ExplanationTypes
 from src.jobs.models import Job
 

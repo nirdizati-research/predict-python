@@ -36,7 +36,7 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
     shap.force_plot(expected_value, shap_value, explanation_target_vector,
                     show=False, matplotlib=True).savefig(name)
     f = open(name, "r")
-    response = f.read() 
+    response = f.read()
     os.remove(name)
     os.remove(name.split('.svg')[0])
     return response

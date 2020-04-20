@@ -13,12 +13,14 @@ from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.tests_utils import create_test_clustering, create_test_job, create_test_encoding, \
     create_test_predictive_model, create_test_labelling
+import random
 
 
 class RefactorProof(TestCase):
 
     def test_class_kmeans(self):
         self.max_diff = None
+        random.seed(10)
         job = create_test_job(
             clustering=create_test_clustering(clustering_type=ClusteringMethods.KMEANS.value),
             split=repair_example(),
@@ -40,6 +42,7 @@ class RefactorProof(TestCase):
 
     def test_class_no_cluster(self):
         self.max_diff = None
+        random.seed(10)
         job = create_test_job(
             clustering=create_test_clustering(clustering_type=ClusteringMethods.NO_CLUSTER.value),
             split=repair_example(),

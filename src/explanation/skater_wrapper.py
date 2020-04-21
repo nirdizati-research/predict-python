@@ -1,14 +1,13 @@
+import os
+
 import shap
 from dtreeviz.trees import dtreeviz
 from skater.core.explanations import Interpretation
 from skater.model import InMemoryModel
-
-from src.encoding.common import retrieve_proper_encoder
-from src.explanation.models import Explanation
 from sklearn.externals import joblib
-import os
 
-from src.predictive_model.models import PredictiveModels
+from src.explanation.models import Explanation
+from src.utils.file_service import create_unique_name
 
 
 def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
@@ -42,8 +41,13 @@ def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
                    label_fontsize=12,
                    ticks_fontsize=8,
                    fontname="Arial")
-    viz.save("skater_plot.svg")
-    f = open("skater_plot.svg", "r")
+    name = create_unique_name("skater_plot.svg");
+    viz.save(name)
+    if os.path.getsize(name) > 15000000:
+        return 'The file size is too big';
+    f = open(name, "r")
     response = f.read()
-    os.remove("skater_plot.svg")
+    os.remove(name)
+    os.remove(name.split('.svg')[0])
+
     return response

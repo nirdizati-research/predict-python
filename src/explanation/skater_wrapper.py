@@ -1,6 +1,5 @@
 import os
 
-import shap
 from dtreeviz.trees import dtreeviz
 from skater.core.explanations import Interpretation
 from skater.model import InMemoryModel
@@ -14,8 +13,6 @@ def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
     job = skater_exp.job
     model = joblib.load(job.predictive_model.model_path)
     model = model[0]
-
-    shap.initjs()
 
     features = list(training_df.drop(['trace_id', 'label'], 1).columns.values)
     interpreter = Interpretation(training_df, feature_names=features)

@@ -38,4 +38,5 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
     os.remove(name)
     if os.path.isfile(name.split('.svg')[0]):
         os.remove(name.split('.svg')[0])
+
     return response

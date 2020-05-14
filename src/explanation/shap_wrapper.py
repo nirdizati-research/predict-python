@@ -36,5 +36,7 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
     f = open(name, "r")
     response = f.read()
     os.remove(name)
-    os.remove(name.split('.svg')[0])
+    if os.path.isfile(name.split('.svg')[0]):
+        os.remove(name.split('.svg')[0])
+
     return response

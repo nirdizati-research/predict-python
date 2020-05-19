@@ -42,3 +42,4 @@ mock
 anchor_exp
 Cython
 prettyjson==1.0.3
+ansible

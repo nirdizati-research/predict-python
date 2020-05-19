@@ -14,6 +14,8 @@ ZERO_PADDING = 'zero_padding'
 NO_PADDING = 'no_padding'
 PADDING_VALUE = 0
 
+PREFIX_ = 'prefix_'
+
 
 class Encoder:
     def __init__(self, df: DataFrame, encoding: Encoding):

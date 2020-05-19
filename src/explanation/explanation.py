@@ -1,6 +1,6 @@
 from src.core.core import get_encoded_logs
 from src.explanation import lime_wrapper, shap_wrapper, anchor_wrapper, temporal_stability, \
-    ice_wrapper, skater_wrapper, cffedback_wrapper, retrain_wrapper
+    ice_wrapper, skater_wrapper, cm_feedback_wrapper, retrain_wrapper
 from src.explanation.models import Explanation, ExplanationTypes
 
 EXPLAIN = 'explain'
@@ -21,7 +21,7 @@ EXPLANATION = {
         'explain': skater_wrapper.explain
     },
     ExplanationTypes.CFFEEDBACK.value: {
-        'explain': cffedback_wrapper.explain
+        'explain': cm_feedback_wrapper.explain
     },
     ExplanationTypes.RETRAIN.value: {
         'explain': retrain_wrapper.explain

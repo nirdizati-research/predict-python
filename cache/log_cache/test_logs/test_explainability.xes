@@ -1,0 +1,1749 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file has been generated with the OpenXES library. It conforms -->
+<!-- to the XML serialization of the XES standard for log storage and -->
+<!-- management. -->
+<!-- XES standard version: 1.0 -->
+<!-- OpenXES library version: 1.0RC7 -->
+<!-- OpenXES is available from http://www.openxes.org/ -->
+<log xes.version="1.0" xes.features="nested-attributes" openxes.version="1.0RC7">
+	<string key="concept:name" value="merge_ba"/>
+	<trace>
+		<string key="concept:name" value="2_100"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T05:21:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T06:20:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T07:39:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T09:02:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T14:09:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-06T14:09:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-08T21:51:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-04-09T06:16:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-08-04T22:51:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-08-05T02:52:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="944.128875155"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="52.0"/>
+			<date key="time:timestamp" value="2003-08-06T09:44:00.000+02:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_101"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T08:46:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T10:35:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T11:13:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T13:17:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T13:17:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-02-16T16:55:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-07T13:46:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-08T11:30:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="817.270529603"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-08T14:28:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_102"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T07:15:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T07:42:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T10:00:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T10:14:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T11:11:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T11:11:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-13T11:58:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-07-17T09:08:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-09-06T04:42:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-09-07T13:00:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="974.824793632"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="68.0"/>
+			<date key="time:timestamp" value="1988-11-19T16:13:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_103"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T11:56:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T14:44:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T16:11:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T16:11:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T22:26:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-11T22:39:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-12T04:53:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-16T07:04:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-08-17T19:24:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="831.421393972"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="40.0"/>
+			<date key="time:timestamp" value="1982-09-07T15:03:00.000+02:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_104"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-13T15:44:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-13T18:16:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-13T18:39:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-13T18:39:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-14T06:47:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-14T09:26:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-08-17T20:17:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-09-18T23:00:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-09-19T15:19:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="928.992002274"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="43.0"/>
+			<date key="time:timestamp" value="1974-09-20T01:10:00.000+02:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_105"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-28T19:34:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-28T21:54:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-28T23:23:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-29T01:38:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-29T01:38:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-29T16:02:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-30T03:21:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-07-31T13:06:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-08-25T14:12:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-08-26T02:28:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="972.071444906"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1988-09-09T21:19:00.000+02:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_106"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T02:43:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T04:40:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T04:42:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T05:10:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T06:01:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T06:01:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-10T09:34:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-11T01:45:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-07-13T21:49:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-08-16T19:29:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-08-17T04:09:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="978.597050341"/>
+			<string key="CType" value="VIP"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="57.0"/>
+			<date key="time:timestamp" value="1992-12-28T23:01:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_107"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-06T17:57:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-06T19:57:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-06T20:40:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-06T21:12:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-06T21:12:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-10T04:38:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-10T08:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by Post"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-02-11T17:07:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-03-15T18:18:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-03-16T00:29:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="1092.87735373"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H12"/>
+			<float key="Age" value="34.0"/>
+			<date key="time:timestamp" value="1975-04-06T16:33:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_108"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-10T16:29:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-10T19:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-10T22:09:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-10T22:09:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-11T08:47:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-11T16:05:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Notification by Post"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-11T19:19:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-03-12T18:17:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-04-13T08:01:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-04-13T19:36:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="1022.984191"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="42.0"/>
+			<date key="time:timestamp" value="1972-04-20T17:11:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_109"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T12:16:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T13:21:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T14:40:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T14:43:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T15:39:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T15:39:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T15:53:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T18:20:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Notification by Post"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-02T21:47:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-13T08:46:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-15T16:04:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="1034.55160014"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H14"/>
+			<float key="Age" value="56.0"/>
+			<date key="time:timestamp" value="1972-05-16T12:46:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_126"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T02:19:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T02:40:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB1"/>
+			<string key="concept:name" value="Low Medical History"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T05:06:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IB2"/>
+			<string key="concept:name" value="Low Insurance Check"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T05:12:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T05:12:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-04-25T07:21:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-09-16T12:27:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-09-16T16:11:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="986.57676638"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="46.0"/>
+			<date key="time:timestamp" value="1982-10-21T01:40:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_124"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-28T21:55:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-28T21:58:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-28T23:47:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-29T00:32:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-29T00:38:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-29T00:38:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-29T00:54:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-30T02:45:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-05-30T10:45:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-06-09T05:50:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Skip Questionnaire"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-06-10T05:25:00.000+02:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="No"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="983.696726338"/>
+			<string key="CType" value="Gold"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H13"/>
+			<float key="Age" value="50.0"/>
+			<date key="time:timestamp" value="1972-06-17T16:17:00.000+02:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_122"/>
+		<string key="label" value="true"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-13T11:01:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-13T13:37:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-13T15:39:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-13T16:14:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Accept Claim"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-13T16:14:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-14T09:39:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-14T10:32:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Notification by Post"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-14T21:37:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-15T00:02:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-22T21:36:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR4"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1986-12-24T01:27:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="1029.17095475"/>
+			<string key="CType" value="Silver"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H15"/>
+			<float key="Age" value="55.0"/>
+			<date key="time:timestamp" value="1987-02-01T18:18:00.000+01:00"/>
+		</event>
+	</trace>
+	<trace>
+		<string key="concept:name" value="2_123"/>
+		<string key="label" value="false"/>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Register"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T01:57:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Insurance Check"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T04:04:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA1"/>
+			<string key="concept:name" value="High Medical History"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T04:23:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="IA2"/>
+			<string key="concept:name" value="Contact Hospital"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T04:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="null"/>
+			<string key="concept:name" value="Reject Claim"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T04:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Create Questionnaire"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T05:48:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="Mgr1"/>
+			<string key="concept:name" value="Prepare Notification Content"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-05T21:50:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR1"/>
+			<string key="concept:name" value="Send Notification by e-mail"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-06T09:04:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR2"/>
+			<string key="concept:name" value="Send Notification by Phone"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-01-06T20:42:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Send Questionnaire"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-03-01T00:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Receive Questionnaire Response"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-03-02T04:41:00.000+01:00"/>
+		</event>
+		<event>
+			<string key="PClaims" value="Yes"/>
+			<string key="org:resource" value="PR3"/>
+			<string key="concept:name" value="Archive"/>
+			<float key="ClaimValue" value="800.043139821"/>
+			<string key="CType" value="Regular"/>
+			<string key="lifecycle:transition" value="complete"/>
+			<string key="ClType" value="H11"/>
+			<float key="Age" value="60.0"/>
+			<date key="time:timestamp" value="1972-03-04T00:57:00.000+01:00"/>
+		</event>
+	</trace>
+</log>

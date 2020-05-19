@@ -4,6 +4,7 @@ import pandas as pd
 from pandas import DataFrame
 from pm4py.objects.log.log import Trace, EventLog
 
+from src.encoding.encoder import PREFIX_
 from src.encoding.models import Encoding, TaskGenerationTypes
 from src.encoding.simple_index import compute_label_columns, add_labels, get_intercase_attributes
 from src.labelling.models import Labelling
@@ -50,7 +51,7 @@ def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
-        columns.append("prefix_" + str(i))
+        columns.append(PREFIX_ + str(i))
         for additional_column in additional_columns['event_attributes']:
             columns.append(additional_column + "_" + str(i))
     return columns
@@ -60,7 +61,7 @@ def _columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
     columns = ['trace_id']
     i = 0
     for i in range(1, prefix_length + 1):
-        columns.append("prefix_" + str(i))
+        columns.append(PREFIX_ + str(i))
     for additional_column in additional_columns['event_attributes']:
         columns.append(additional_column + "_" + str(i))
     return columns

@@ -88,7 +88,7 @@ def get_ice(request, pk, explanation_target):
 @api_view(['GET'])
 def get_cffeedback(request, pk, top_k):
     job = Job.objects.filter(pk=pk)[0]
-    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.CFFEEDBACK.value, split=job.split,
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.CMFEEDBACK.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
     exp.save()
     result = explanation(exp.id, int(top_k))

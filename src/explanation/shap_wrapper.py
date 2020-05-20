@@ -27,7 +27,7 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
                              training_df.drop(['trace_id', 'label'], 1).shape[0]
 
     explanation_target_vector = test_df[test_df['trace_id'] == explanation_target].drop(['trace_id', 'label'], 1)
-    expected_value = explainer.expected_value[0] if explainer.expected_value.size > 1 else explainer.expected_value
+    expected_value = explainer.expected_value[0] if len(explainer.expected_value) > 1 else explainer.expected_value
     shap_value = shap_values[explanation_target_int, :] if hasattr(shap_values, "size") else shap_values[0][
                                                                                              explanation_target_int, :]
     name = create_unique_name("temporal_shap.svg")

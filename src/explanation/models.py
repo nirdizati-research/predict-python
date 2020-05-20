@@ -16,7 +16,7 @@ class ExplanationTypes(Enum):
     ANCHOR = 'anchor'
     ICE = 'ice'
     SKATER = 'skater'
-    CFFEEDBACK = 'cffeedback'
+    CMFEEDBACK = 'cffeedback'
     RETRAIN = 'retrain'
 
 
@@ -27,7 +27,7 @@ EXPLANATION_TYPE_MAPPINGS = (
     (ExplanationTypes.ANCHOR.value, 'anchor'),
     (ExplanationTypes.SKATER.value, 'skater'),
     (ExplanationTypes.ICE.value, 'ice'),
-    (ExplanationTypes.CFFEEDBACK.value, 'cffeedback'),
+    (ExplanationTypes.CMFEEDBACK.value, 'cmfeedback'),
     (ExplanationTypes.RETRAIN.value, 'retrain'),
 
 )

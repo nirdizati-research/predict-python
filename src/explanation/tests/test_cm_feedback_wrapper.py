@@ -63,7 +63,7 @@ class TestCmFeedbackWrapper(TestCase):
         self.job.refresh_from_db()
 
         self.exp = Explanation.objects.get_or_create(
-            type=ExplanationTypes.RETRAIN.value,
+            type=ExplanationTypes.CMFEEDBACK.value,
             split=split,
             predictive_model=predictive_model,
             job=self.job,

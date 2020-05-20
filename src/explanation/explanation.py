@@ -20,7 +20,7 @@ EXPLANATION = {
     ExplanationTypes.SKATER.value: {
         'explain': skater_wrapper.explain
     },
-    ExplanationTypes.CFFEEDBACK.value: {
+    ExplanationTypes.CMFEEDBACK.value: {
         'explain': cm_feedback_wrapper.explain
     },
     ExplanationTypes.RETRAIN.value: {

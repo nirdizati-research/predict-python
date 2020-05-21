@@ -1,735 +1,94 @@
-"""
-Testing functions used in deviance mining process and that all the templates methods work as intended
-"""
-
-
 from django.test import TestCase
-from src.encoding.declare.declaretemplates import *
-from src.encoding.declare.declarecommon import *
 
-config_2 = {
-    "label" : "Label",
-    "deviant" : str(1),
-    "nondeviant" : str(0),
-    "type" : "string",
-    "shuffle" : False
-}
-
-
-def el_to_pos_events(event_list):
-
-    events = defaultdict(list)
-    for pos, event in enumerate(event_list):
-        # transition? not for now
-        events[event].append(pos)
-
-    return events
-
-def el_to_pos_events_list(event_lists):
-
-    lst = []
-
-    for event_list in event_lists:
-        events = defaultdict(list)
-        for pos, event in enumerate(event_list):
-            # transition? not for now
-            events[event].append(pos)
-        lst.append(events)
-
-    return lst
-
-
-
-def split_to_list(event_lists):
-    """
-    like unit split, but input has True, False as well
-    :param event_lists:
-    :return:
-    """
-    lists = []
-    for event_list, deviant in event_lists:
-        lists.append((event_list.split("-"), deviant))
-
-    return lists
-
-
-def unit_split(trace):
-    """
-    Takes trace in form of["A-B-C", "A"], splits into list [["A","B","C"], ["A"]]
-    :param trace:
-    :return:
-    """
-    lists = []
-    for event_list in trace:
-        lists.append(event_list.split("-"))
-
-    return lists
-
-
-class TestDeclareTemplates(TestCase):
-    def test_init(self):
-        """
-        2 traces, one with init first, second with not
-        Tests if init template works correctly
-        """
-
-        traces = [
-            "A-B", # dev
-            "B-A" # nondev
-        ]
-        event_lists = unit_split(traces)
-        pos0 = el_to_pos_events(event_lists[0])
-        pos1 = el_to_pos_events(event_lists[1])
-
-        res, _ = template_init(pos0, ("A",))
-        res2, _ = template_init(pos1, ("A",))
-
-        self.assertEqual(res, 1)
-        self.assertEqual(res2, -1)
-
-
-    def test_absence(self):
-        """
-        Tests absence template
-        :return:
-        """
-
-        traces = [
-            "A-B",
-            "B",
-            "B-A"
-        ]
-
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        not_abs_1, _ = template_absence1(pos[0], ("A", ))
-
-    def test_exactly(self):
-        """
-        Three traces:
-        no event, 1 event, 2 event, 3 event, 4 event.
-        :return:
-        """
-
-        traces = [
-            "B", # 0
-            "A-B", # 1
-            "A-A-B", # 2
-            "A-A-A-B", # 3
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-
-
-        zero, _ = template_exactly1(pos[0], ("A",))
-        one, _ = template_exactly1(pos[1], ("A",))
-        two, _ = template_exactly2(pos[2], ("A",))
-        three, _ = template_exactly3(pos[3], ("A",))
-        two_f, _ = template_exactly2(pos[3], ("A"))
-        three_f, _ = template_exactly3(pos[2], ("A"))
-
-        self.assertEqual(zero, -1)
-        self.assertEqual(one, 1)
-        self.assertEqual(two, 1)
-        self.assertEqual(three, 1)
-        self.assertEqual(two_f, -1)
-        self.assertEqual(three_f, -1)
-
-
-
-    def test_existence(self):
-        """
-        Three traces:
-        no event, 1 event, 2 event, 3 event, 4 event.
-        :return:
-        """
-
-        traces = [
-            "B", # 0
-            "A-B", # 1
-            "A-A-B", # 2
-            "A-A-A-B", # 3
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-
-
-        zero, _ = template_exist(pos[0], ("A",))
-        one, _ = template_exist(pos[1], ("A",))
-        two, _ = template_exist(pos[2], ("A",))
-
-        self.assertEqual(zero, -1)
-        self.assertEqual(one, 1)
-        self.assertEqual(two, 2)
-
-
-
-
-    def test_choice(self):
-        """
-=       Only one of two events exist and not both.
-        :return:
-        """
-
-        traces = [
-            "B-C-A", # 0
-            "A-C-D", # 1
-            "B-D-C", # 2
-            "D-C"
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-
-
-        zero, _ = template_choice(pos[0], ("A","B"))
-        one, _ = template_choice(pos[1], ("A","B"))
-        two, _ = template_choice(pos[2], ("A","B"))
-        vac, _ = template_choice(pos[3], ("A","B"))
-
-
-        self.assertEqual(zero, -1)
-        self.assertEqual(one, 1)
-        self.assertEqual(two, 1)
-        self.assertEqual(vac, -1)
-
-
-
-    def test_coexistence(self):
-        """
-        Only one of two events exist and not both.
-        :return:
-        """
-
-        traces = [
-            "B-C-A", # 0
-            "A-C-D", # 1
-            "B-D-C", # 2
-            "D-C"
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-
-        zero, _ = template_coexistence(pos[0], ("A","B"))
-        one, _ = template_coexistence(pos[1], ("A","B"))
-        two, _ = template_coexistence(pos[2], ("A","B"))
-        vac, t = template_coexistence(pos[3], ("A","B"))
-
-
-        self.assertEqual(zero, 1)
-        self.assertEqual(one, -1)
-        self.assertEqual(two, -1)
-        self.assertEqual(vac, 0)
-        self.assertEqual(t, True) # With vacuity check..
-
-
-
-    def test_alternate_precedence(self):
-        """
-        If B, then it must be preceded by A, and before A (backwards), there cant be any more B's
-
-        :return:
-        """
-        """
-        Every B is preceded by A.
-        """
-        traces = [
-            "A-B",  # true
-            "B",  # false
-            "A-B-A-B-A-A-A-B",  # true
-            "A-B-A-B-B-A-A" #false
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, _ = template_alternate_precedence(pos[0], ("A", "B"))
-        one, _ = template_alternate_precedence(pos[1], ("A", "B"))
-        two, _ = template_alternate_precedence(pos[2], ("A", "B"))
-        vac, t = template_alternate_precedence(pos[3], ("A", "B"))
-        vac2, t = template_alternate_precedence(pos[0], ("B", "A"))
-
-        self.assertEqual(zero, 1)
-        self.assertEqual(one, -1)
-        self.assertEqual(two, 3)
-        self.assertEqual(vac, -1)
-        self.assertEqual(vac2, -1)
-
-    def test_alternate_response(self):
-        """
-        If A, then it must be followed by B, meanwhile there cant be any extra A
-
-        :return:
-        """
-        """
-        Every B is preceded by A.
-        """
-        traces = [
-            "A-B",  # true
-            "B",  # false
-            "A-B-A-B-A-A-A-B",  # false
-            "A-B-A-B-B-A-B-B" # true
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, _ = template_alternate_response(pos[0], ("A", "B"))
-        one, vact1 = template_alternate_response(pos[1], ("A", "B"))
-        two, _ = template_alternate_response(pos[2], ("A", "B"))
-        vac, _ = template_alternate_response(pos[3], ("A", "B"))
-        vac2, _ = template_alternate_response(pos[0], ("B", "A"))
-
-        self.assertEqual(zero, 1)
-        self.assertEqual(one, 0) # 1 and 0 by vacuity
-        self.assertEqual(vact1, True) # 1 and 0 by vacuity
-        self.assertEqual(two, -1) # too many A in row
-        self.assertEqual(vac, 3) # true, no 2 A in row
-        self.assertEqual(vac2, -1)  # no response
-
-
-    def test_alternate_succession(self):
-        """
-        If B, then it must be preceded by A, and before A (backwards), there cant be any more B's
-
-        :return:
-        """
-        """
-        Every B is preceded by A.
-        """
-        traces = [
-            "A-B",  # true
-            "B",  # false
-            "A-B-A-B-A-A-A-B",  # false
-            "A-B-A-B-B-A-B-B-A-A", # false,
-            "A-B-C-A-B-D-D-D-A-B-D-A-C-B" # true
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, _ = template_alternate_succession(pos[0], ("A", "B"))
-        one, vact1 = template_alternate_succession(pos[1], ("A", "B"))
-        two, _ = template_alternate_succession(pos[2], ("A", "B"))
-        vac, _ = template_alternate_succession(pos[3], ("A", "B"))
-        vac2, _ = template_alternate_succession(pos[4], ("A", "B"))
-        vac3, _ = template_alternate_succession(pos[4], ("B", "A"))
-
-        self.assertEqual(zero, 1) # true
-        self.assertEqual(one, -1) # false
-        self.assertEqual(two, -1) # too many A in row
-        self.assertEqual(vac, -1) # too many B in a row
-        self.assertEqual(vac2, 4)  # true, 4
-        self.assertEqual(vac3, -1)  # false
-
-
-
-    def test_chain_precedence(self):
-        """
-        Every B must be next of an A.
-        """
-        traces = [
-            "A-B",  # true
-            "B",  # false
-            "A-B-A-B-A-A-A-B",  # false
-            "A-B-A-B-B-A-B-B-A-A", # false,
-            "A-B-C-A-B-D-D-D-A-B-D-A-C-B", # false,
-            "A-C-B",
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, _ = template_chain_precedence(pos[0], ("A", "B"))
-        one, vact1 = template_chain_precedence(pos[1], ("A", "B"))
-        two, _ = template_chain_precedence(pos[2], ("A", "B"))
-        vac, _ = template_chain_precedence(pos[3], ("A", "B"))
-        vac2, _ = template_chain_precedence(pos[4], ("A", "B"))
-        vac3, _ = template_chain_precedence(pos[4], ("B", "A"))
-        vac4, _ = template_chain_precedence(pos[5], ("A", "B"))
-
-        self.assertEqual(zero, 1) # true
-        self.assertEqual(one, -1) # false
-        self.assertEqual(two, 3) #  true, 3 B's have A before it
-        self.assertEqual(vac, -1) # too many B in a row
-        self.assertEqual(vac2, -1)  # false, last B has C instead of A before it
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, -1)  # false, C before B
-
-
-    def test_chain_response(self):
-        """
-        Every A must be next straight followed by B.
-        """
-        traces = [
-            "A-B",  # true
-            "B",  # true, false by vacuity
-            "A-B-A-B-A-A-A-B",  # false
-            "A-B-A-B-B-A-B-B-A-A", # false,
-            "A-B-C-A-B-D-D-D-A-B-D-A-B", # true,
-            "A-C-B", # false
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, _ = template_chain_response(pos[0], ("A", "B"))
-        one, vact1 = template_chain_response(pos[1], ("A", "B"))
-        vac, _ = template_chain_response(pos[3], ("A", "B"))
-        vac2, _ = template_chain_response(pos[4], ("A", "B"))
-        vac3, _ = template_chain_response(pos[4], ("B", "A"))
-        vac4, _ = template_chain_response(pos[5], ("A", "B"))
-
-        self.assertEqual(zero, 1) # true
-        self.assertEqual(one, 0) # true by vacuity
-        self.assertEqual(vact1, True) # true
-        self.assertEqual(vac, -1) # Last A's not followed by B
-        self.assertEqual(vac2, 4)  # true
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, -1)  # false, A not straight followed by B
-
-
-    def test_chain_succession(self):
-        """
-        Every A must be next straight followed by B
-        Every B must be instantly preceded by A
-        """
-        traces = [
-            "C-D", # true by vacuity
-            "A-B",  # true
-            "B",  # false
-            "A-B-A-B-A-B-C-D-C-A-B-A-B",  # true
-            "A-B-A-B-B-A-B-B-A-A", # false,
-            "A-B-C-A-B-D-D-D-A-B-D-A-B", # true,
-            "A-C-B", # false
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_chain_succession(pos[0], ("A", "B"))
-        one, _ = template_chain_succession(pos[1], ("A", "B"))
-        vac, _ = template_chain_succession(pos[2], ("A", "B"))
-        vac2, _ = template_chain_succession(pos[3], ("A", "B"))
-        vac3, _ = template_chain_succession(pos[4], ("A", "B"))
-        vac4, _ = template_chain_succession(pos[5], ("A", "B"))
-        vac5, _ = template_chain_succession(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0) # true by vacuity
-        self.assertEqual(vact1, True) # true
-        self.assertEqual(one, 1) # true
-        self.assertEqual(vac, -1) # false, B alone
-        self.assertEqual(vac2, 5)  # true
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, 4)  # true
-        self.assertEqual(vac5, -1) # false, A not straight followed by B
-
-
-
-    def test_not_chain_succession(self):
-        """
-        B must not be preceded by A and A must not be followed by B,
-        B-A is ok, A-B is not
-        :return:
-        """
-
-        traces = [
-            "C-D", # true by vacuity
-            "A-B",  # false
-            "B",  # true, true by vacuity?
-            "A-B-A-B-A-B-C-D-C-A-B-A-B",  # false
-            "A-B-A-B-B-A-B-B-A-A", # false,
-            "B-A-C-B-A-D-D-D-B-A-D-B-A", # true,
-            "A-C-B", # true
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_not_chain_succession(pos[0], ("A", "B"))
-        one, _ = template_not_chain_succession(pos[1], ("A", "B"))
-        vac, _ = template_not_chain_succession(pos[2], ("A", "B"))
-        vac2, _ = template_not_chain_succession(pos[3], ("A", "B"))
-        vac3, _ = template_not_chain_succession(pos[4], ("A", "B"))
-        vac4, _ = template_not_chain_succession(pos[5], ("A", "B"))
-        vac5, _ = template_not_chain_succession(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0) # true by vacuity
-        self.assertEqual(vact1, True) # true
-        self.assertEqual(one, -1) # false
-        self.assertEqual(vac, 0) # false, B alone, not sure on vacuity..
-        self.assertEqual(vac2, -1)  # false
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, 1)  # true
-        self.assertEqual(vac5, 1) # true, A not straight followed by B
-
-
-    def test_not_coexistence(self):
-        """
-        A and B must not exist together in same trace
-        """
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # false
-            "B",  # true
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # true
-            "A-B-A-B-B-A-B-B-A-A",  # false,
-            "B-A-C-B-A-D-D-D-B-A-D-B-A",  # false,
-            "B-C",  # true
-        ]
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_not_coexistence(pos[0], ("A", "B"))
-        one, _ = template_not_coexistence(pos[1], ("A", "B"))
-        vac, _ = template_not_coexistence(pos[2], ("A", "B"))
-        vac2, _ = template_not_coexistence(pos[3], ("A", "B"))
-        vac3, _ = template_not_coexistence(pos[4], ("A", "B"))
-        vac4, _ = template_not_coexistence(pos[5], ("A", "B"))
-        vac5, _ = template_not_coexistence(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true by vacuity
-        self.assertEqual(vact1, True)  # true
-        self.assertEqual(one, -1)  # false
-        self.assertEqual(vac, 1)  # true
-        self.assertEqual(vac2, 1)  # true
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, -1)  # false
-        self.assertEqual(vac5, 1)  # true, B, but not A
-
-    def test_not_succession(self):
-        """
-        A must not eventually be followed by B, B-C-A is ok, A-B-C is not
-        """
-
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # false
-            "B",  # true by vacuity, yes or no?
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # true, no B at all, is it vac or not_
-            "A-B-A-B-B-A-B-B-A-A",  # false, a followed by b
-            "B-A-C-B-A-D-D-D-B-A-D-B-A",  # false
-            "A-C-D-E-F-G-B" # false
-            ]
-
-        event_lists = unit_split(traces)
-
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_not_succession(pos[0], ("A", "B"))
-        one,  _ = template_not_succession(pos[1], ("A", "B"))
-        vac, vact2 = template_not_succession(pos[2], ("A", "B"))
-        vac2, _ = template_not_succession(pos[3], ("A", "B"))
-        vac3, _ = template_not_succession(pos[4], ("A", "B"))
-        vac4, _ = template_not_succession(pos[5], ("A", "B"))
-        vac5, _ = template_not_succession(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true by vacuity
-        self.assertEqual(vact1, True)  # not sure
-        self.assertEqual(one, -1)  # A followed by B, false
-        self.assertEqual(vact2, True)  # true not sure..
-        self.assertEqual(vac, 0)  # true
-        self.assertEqual(vac2, 1)  # true
-        self.assertEqual(vac3, -1)  # false
-        self.assertEqual(vac4, -1)  # false
-        self.assertEqual(vac5, -1)  # false, A eventually followed by B
-
-    def test_precedence(self):
-        """
-        B must be preceded by A
-        :return:
-        """
-
-
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # true
-            "B",  # false, no A before
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # True by Vacuity
-            "A-B-A-B-B-A-B-B-A-A",  # true, exists B where it is preceded by A
-            "B-A-C-B-A-D-D-D-B-A-D-B-A",  # false, first B is not preceded
-            "A-C-D-E-F-G-B"  # true
-        ]
-
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_precedence(pos[0], ("A", "B"))
-        one, _ = template_precedence(pos[1], ("A", "B"))
-        vac, _ = template_precedence(pos[2], ("A", "B"))
-        vac2, vact2 = template_precedence(pos[3], ("A", "B"))
-        vac3, _ = template_precedence(pos[4], ("A", "B"))
-        vac4, _ = template_precedence(pos[5], ("A", "B"))
-        vac5, _ = template_precedence(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true, no B at all
-        self.assertTrue(vact1)
-        self.assertEqual(one, 1)  #
-        self.assertEqual(vac, -1)
-        self.assertEqual(vac2, 0)
-        self.assertTrue(vact2)
-        self.assertEqual(vac3, 5)
-        self.assertEqual(vac4, -1)
-        self.assertEqual(vac5, 1)
-
-    def test_response(self):
-        """
-        A must be followed by B
-        :return:
-        """
-
-
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # true
-            "B",  # true by vacuity
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # false
-            "A-B-A-B-B-A-B-B-A-A",  # false, last A is not followed by B
-            "B-A-C-B-A-D-D-D-B-A-D-B",  # true, every A followed by B
-            "A-C-D-E-F-G-B"  # true
-        ]
-
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_response(pos[0], ("A", "B"))
-        one, _ = template_response(pos[1], ("A", "B"))
-        two, vact2 = template_response(pos[2], ("A", "B"))
-        three, _ = template_response(pos[3], ("A", "B"))
-        four, _ = template_response(pos[4], ("A", "B"))
-        five, _ = template_response(pos[5], ("A", "B"))
-        six, _ = template_response(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true by vacuity
-        self.assertTrue(vact1)
-        self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, 0)  # true vacuity
-        self.assertTrue(vact2)
-        self.assertEqual(three, -1)  # false
-        self.assertEqual(four, -1) # fasle
-        self.assertEqual(five, 3)  # true
-        self.assertEqual(six, 1)  # true
-
-
-    def test_responded_existence(self):
-        """
-        If A exists, then B must exist. Other way around doesnt have to be ture
-        :return:
-        """
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # true
-            "B",  # true by vacuity
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # false
-            "A-B-A-B-B-A-B-B-A-A",  # true
-            "B-A-C-B-A-D-D-D-B-A-D-B",  # true
-            "A-C-D-E-F-G-B"  # true
-        ]
-
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_responded_existence(pos[0], ("A", "B"))
-        one, _ = template_responded_existence(pos[1], ("A", "B"))
-        two, vact2 = template_responded_existence(pos[2], ("A", "B"))
-        three, _ = template_responded_existence(pos[3], ("A", "B"))
-        four, _ = template_responded_existence(pos[4], ("A", "B"))
-        five, _ = template_responded_existence(pos[5], ("A", "B"))
-        six, _ = template_responded_existence(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true by vacuity
-        self.assertTrue(vact1)
-        self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, 0)  # true vacuity
-        self.assertTrue(vact2)
-        self.assertEqual(three, -1)  # false
-        self.assertEqual(four, 5) # true
-        self.assertEqual(five, 3)  # true
-        self.assertEqual(six, 1)  # true
-
-    def test_succession(self):
-        """
-        If A exists, it must be followed by B, if B exists it must be followed by A
-        :return:
-        """
-
-        traces = [
-            "C-D",  # true by vacuity
-            "A-B",  # true
-            "B",  # false
-            "A-C-A-C-A-G-C-C-C-F-G-A-G",  # false
-            "A-B-A-B-B-A-B-B-A-A",  # false
-            "B-A-C-B-A-D-D-D-B-A-D-B",  # false
-            "A-C-D-E-F-G-B-A-B"  # true
-        ]
-
-        event_lists = unit_split(traces)
-
-        pos = el_to_pos_events_list(event_lists)
-
-        zero, vact1 = template_succession(pos[0], ("A", "B"))
-        one, _ = template_succession(pos[1], ("A", "B"))
-        two, vact2 = template_succession(pos[2], ("A", "B"))
-        three, _ = template_succession(pos[3], ("A", "B"))
-        four, _ = template_succession(pos[4], ("A", "B"))
-        five, _ = template_succession(pos[5], ("A", "B"))
-        six, _ = template_succession(pos[6], ("A", "B"))
-
-        self.assertEqual(zero, 0)  # true by vacuity
-        self.assertTrue(vact1)
-        self.assertEqual(one, 1)  # A followed by
-        self.assertEqual(two, -1)  # false
-        self.assertEqual(three, -1)  # false
-        self.assertEqual(four, -1) # false
-        self.assertEqual(five, -1)  # false
-        self.assertEqual(six, 2)  # true
-
-
-
-"""
-templates:
-
-"""
-
-
-
-"""
-def test_thorough():
-    filepath = "tests/"+ "test_exactly.xes"
-    lg = LogGenerator(config_2)
-
-    traces = [
-        ("B", True),
-        ("A-B", False),
-        ("B-A-A", False)
-    ]
-    event_lists = split_to_list(traces)
-
-    lg.create_from_event_lists(event_lists)
-
-    xes = lg.convert_to_xes()
-    open(filepath, "w").write(str(xes))
-    log = read_XES_log(filepath)
-    positional = xes_to_positional(log)
-
-    res, _ = template_init(positional[0]["events"], ("A",))
-    res2, _ = template_init(positional[1]["events"], ("A",))
-
-    assert (res == 1)
-    assert (res2 == 0)
-"""
+from src.core.core import get_encoded_logs
+from src.encoding.declare.declare import declare_encoding, xes_to_positional
+from src.encoding.declare.declare_mining import apply_template_to_log
+from src.encoding.declare.declare_templates import template_sizes
+from src.encoding.models import ValueEncodings
+from src.jobs.models import JobTypes
+from src.labelling.models import LabelTypes
+from src.predictive_model.classification.models import ClassificationMethods
+from src.predictive_model.models import PredictiveModels
+from src.split.models import SplitTypes, SplitOrderingMethods
+from src.split.splitting import get_train_test_log
+from src.utils.tests_utils import create_test_split, create_test_log, create_test_encoding, create_test_job, \
+    create_test_labelling, create_test_predictive_model
+
+
+def generate_test_candidate_constraints(candidates, templates, test_log, train_results):
+    all_results = {}
+    for template in templates:
+        print("Started working on {}".format(template))
+        for candidate in candidates:
+            if len(candidate) == template_sizes[template]:
+                candidate_name = template + ":" + str(candidate)
+                if candidate_name in train_results:
+                    constraint_result = apply_template_to_log(template, candidate, test_log)
+
+                    all_results[candidate_name] = constraint_result
+
+    return all_results
+
+
+class TestDeclare(TestCase):
+    """Proof of concept tests"""
+
+    def setUp(self) -> None:
+
+        self.split = create_test_split(
+            split_type=SplitTypes.SPLIT_DOUBLE.value,
+            split_ordering_method=SplitOrderingMethods.SPLIT_SEQUENTIAL.value,
+            test_size=0.2,
+            original_log=None,
+            train_log=create_test_log(
+                log_name='general_example.xes',
+                log_path='cache/log_cache/test_logs/train_explainability.xes'
+            ),
+            test_log=create_test_log(
+                log_name='general_example_train.xes',
+                log_path='cache/log_cache/test_logs/test_explainability.xes'
+            )
+        )
+
+        self.encoding = create_test_encoding(
+            prefix_length=4,
+            padding=True,
+            value_encoding=ValueEncodings.DECLARE.value
+        )
+
+        self.job = create_test_job(
+            split=self.split,
+            encoding=self.encoding,
+            labelling=create_test_labelling(
+                label_type=LabelTypes.ATTRIBUTE_STRING.value,
+                attribute_name='label'
+            ),
+            clustering=None,
+            create_models=False,
+            predictive_model=create_test_predictive_model(
+                predictive_model=PredictiveModels.CLASSIFICATION.value,
+                prediction_method=ClassificationMethods.DECISION_TREE.value
+            ),
+            job_type=JobTypes.PREDICTION.value,
+            hyperparameter_optimizer=None,
+            incremental_train=None
+        )
+
+        self.training_df_old, self.test_df_old = get_encoded_logs(self.job)
+
+    def test_xes_to_positional(self):
+        training_log, test_log, additional_columns = get_train_test_log(self.job.split)
+        transformed_log = xes_to_positional(test_log)
+        expected = {'2_100': {'Archive': [10], 'Contact Hospital': [3], 'Create Questionnaire': [1], 'High Insurance Check': [2], 'High Medical History': [4], 'Prepare Notification Content': [6], 'Register': [0], 'Reject Claim': [5], 'Send Notification by Phone': [7], 'Send Questionnaire': [8], 'Skip Questionnaire': [9]}, '2_101': {'Accept Claim': [4], 'Archive': [8], 'Create Questionnaire': [2], 'Low Insurance Check': [3], 'Low Medical History': [1], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [7], 'Register': [0], 'Send Questionnaire': [6]}, '2_102': {'Archive': [10], 'Contact Hospital': [4], 'Create Questionnaire': [1], 'High Insurance Check': [2], 'High Medical History': [3], 'Prepare Notification Content': [6], 'Register': [0], 'Reject Claim': [5], 'Send Notification by Phone': [7], 'Send Questionnaire': [8], 'Skip Questionnaire': [9]}, '2_103': {'Accept Claim': [3], 'Archive': [9], 'Create Questionnaire': [4], 'Low Insurance Check': [2], 'Low Medical History': [1], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [8], 'Register': [0], 'Send Notification by e-mail': [6], 'Send Questionnaire': [7]}, '2_104': {'Accept Claim': [3], 'Archive': [9], 'Create Questionnaire': [5], 'Low Insurance Check': [2], 'Low Medical History': [1], 'Prepare Notification Content': [4], 'Register': [0], 'Send Notification by e-mail': [6], 'Send Questionnaire': [7], 'Skip Questionnaire': [8]}, '2_105': {'Archive': [10], 'Contact Hospital': [1], 'Create Questionnaire': [6], 'High Insurance Check': [3], 'High Medical History': [2], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [9], 'Register': [0], 'Reject Claim': [4], 'Send Notification by Phone': [7], 'Send Questionnaire': [8]}, '2_106': {'Archive': [11], 'Contact Hospital': [1], 'Create Questionnaire': [3], 'High Insurance Check': [2], 'High Medical History': [4], 'Prepare Notification Content': [6], 'Receive Questionnaire Response': [10], 'Register': [0], 'Reject Claim': [5], 'Send Notification by Phone': [8], 'Send Notification by e-mail': [7], 'Send Questionnaire': [9]}, '2_107': {'Archive': [10], 'Create Questionnaire': [1], 'Low Insurance Check': [3], 'Low Medical History': [2], 'Prepare Notification Content': [5], 'Register': [0], 'Reject Claim': [4], 'Send Notification by Post': [7], 'Send Notification by e-mail': [6], 'Send Questionnaire': [8], 'Skip Questionnaire': [9]}, '2_108': {'Accept Claim': [3], 'Archive': [10], 'Create Questionnaire': [4], 'Low Insurance Check': [2], 'Low Medical History': [1], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [9], 'Register': [0], 'Send Notification by Post': [6], 'Send Notification by e-mail': [7], 'Send Questionnaire': [8]}, '2_109': {'Accept Claim': [5], 'Archive': [11], 'Contact Hospital': [4], 'Create Questionnaire': [1], 'High Insurance Check': [3], 'High Medical History': [2], 'Prepare Notification Content': [6], 'Register': [0], 'Send Notification by Phone': [7], 'Send Notification by Post': [8], 'Send Questionnaire': [9], 'Skip Questionnaire': [10]}, '2_126': {'Archive': [8], 'Create Questionnaire': [1], 'Low Insurance Check': [3], 'Low Medical History': [2], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [7], 'Register': [0], 'Reject Claim': [4], 'Send Questionnaire': [6]}, '2_124': {'Accept Claim': [5], 'Archive': [11], 'Contact Hospital': [3], 'Create Questionnaire': [1], 'High Insurance Check': [4], 'High Medical History': [2], 'Prepare Notification Content': [6], 'Register': [0], 'Send Notification by Phone': [8], 'Send Notification by e-mail': [7], 'Send Questionnaire': [9], 'Skip Questionnaire': [10]}, '2_122': {'Accept Claim': [4], 'Archive': [11], 'Contact Hospital': [3], 'Create Questionnaire': [6], 'High Insurance Check': [1], 'High Medical History': [2], 'Prepare Notification Content': [5], 'Receive Questionnaire Response': [10], 'Register': [0], 'Send Notification by Phone': [8], 'Send Notification by Post': [7], 'Send Questionnaire': [9]}, '2_123': {'Archive': [11], 'Contact Hospital': [3], 'Create Questionnaire': [5], 'High Insurance Check': [1], 'High Medical History': [2], 'Prepare Notification Content': [6], 'Receive Questionnaire Response': [10], 'Register': [0], 'Reject Claim': [4], 'Send Notification by Phone': [8], 'Send Notification by e-mail': [7], 'Send Questionnaire': [9]}}
+        self.assertDictEqual(expected, transformed_log)
+
+    def test_declare_encoding(self):
+        training_log, test_log, additional_columns = get_train_test_log(self.job.split)
+        labelling = None
+        cols = None
+        run_df = declare_encoding(test_log, labelling, self.job.encoding, additional_columns, cols=cols)
+        expected_shape = (14, 906)
+        expected_columns = ["init:('Low Insurance Check',)", "init:('Create Questionnaire',)", "init:('Register',)", "init:('High Insurance Check',)", "init:('Accept Claim',)", "init:('High Medical History',)", "init:('Low Medical History',)", "init:('Contact Hospital',)", "exist:('Low Insurance Check',)", "exist:('Create Questionnaire',)", "exist:('Register',)", "exist:('High Insurance Check',)", "exist:('Accept Claim',)", "exist:('High Medical History',)", "exist:('Low Medical History',)", "exist:('Contact Hospital',)", "absence1:('Low Insurance Check',)", "absence1:('Create Questionnaire',)", "absence1:('Register',)", "absence1:('High Insurance Check',)", "absence1:('Accept Claim',)", "absence1:('High Medical History',)", "absence1:('Low Medical History',)", "absence1:('Contact Hospital',)", "absence2:('Low Insurance Check',)", "absence2:('Create Questionnaire',)", "absence2:('Register',)", "absence2:('High Insurance Check',)", "absence2:('Accept Claim',)", "absence2:('High Medical History',)", "absence2:('Low Medical History',)", "absence2:('Contact Hospital',)", "absence3:('Low Insurance Check',)", "absence3:('Create Questionnaire',)", "absence3:('Register',)", "absence3:('High Insurance Check',)", "absence3:('Accept Claim',)", "absence3:('High Medical History',)", "absence3:('Low Medical History',)", "absence3:('Contact Hospital',)", "choice:('Low Insurance Check', 'Create Questionnaire')", "choice:('Low Insurance Check', 'Register')", "choice:('Low Insurance Check', 'High Insurance Check')", "choice:('Low Insurance Check', 'Accept Claim')", "choice:('Low Insurance Check', 'High Medical History')", "choice:('Low Insurance Check', 'Low Medical History')", "choice:('Low Insurance Check', 'Contact Hospital')", "choice:('Create Questionnaire', 'Low Insurance Check')", "choice:('Create Questionnaire', 'Register')", "choice:('Create Questionnaire', 'High Insurance Check')", "choice:('Create Questionnaire', 'Accept Claim')", "choice:('Create Questionnaire', 'High Medical History')", "choice:('Create Questionnaire', 'Low Medical History')", "choice:('Create Questionnaire', 'Contact Hospital')", "choice:('Register', 'Low Insurance Check')", "choice:('Register', 'Create Questionnaire')", "choice:('Register', 'High Insurance Check')", "choice:('Register', 'Accept Claim')", "choice:('Register', 'High Medical History')", "choice:('Register', 'Low Medical History')", "choice:('Register', 'Contact Hospital')", "choice:('High Insurance Check', 'Low Insurance Check')", "choice:('High Insurance Check', 'Create Questionnaire')", "choice:('High Insurance Check', 'Register')", "choice:('High Insurance Check', 'Accept Claim')", "choice:('High Insurance Check', 'High Medical History')", "choice:('High Insurance Check', 'Low Medical History')", "choice:('High Insurance Check', 'Contact Hospital')", "choice:('Accept Claim', 'Low Insurance Check')", "choice:('Accept Claim', 'Create Questionnaire')", "choice:('Accept Claim', 'Register')", "choice:('Accept Claim', 'High Insurance Check')", "choice:('Accept Claim', 'High Medical History')", "choice:('Accept Claim', 'Low Medical History')", "choice:('Accept Claim', 'Contact Hospital')", "choice:('High Medical History', 'Low Insurance Check')", "choice:('High Medical History', 'Create Questionnaire')", "choice:('High Medical History', 'Register')", "choice:('High Medical History', 'High Insurance Check')", "choice:('High Medical History', 'Accept Claim')", "choice:('High Medical History', 'Low Medical History')", "choice:('High Medical History', 'Contact Hospital')", "choice:('Low Medical History', 'Low Insurance Check')", "choice:('Low Medical History', 'Create Questionnaire')", "choice:('Low Medical History', 'Register')", "choice:('Low Medical History', 'High Insurance Check')", "choice:('Low Medical History', 'Accept Claim')", "choice:('Low Medical History', 'High Medical History')", "choice:('Low Medical History', 'Contact Hospital')", "choice:('Contact Hospital', 'Low Insurance Check')", "choice:('Contact Hospital', 'Create Questionnaire')", "choice:('Contact Hospital', 'Register')", "choice:('Contact Hospital', 'High Insurance Check')", "choice:('Contact Hospital', 'Accept Claim')", "choice:('Contact Hospital', 'High Medical History')", "choice:('Contact Hospital', 'Low Medical History')", "coexistence:('Low Insurance Check', 'Create Questionnaire')", "coexistence:('Low Insurance Check', 'Register')", "coexistence:('Low Insurance Check', 'High Insurance Check')", "coexistence:('Low Insurance Check', 'Accept Claim')", "coexistence:('Low Insurance Check', 'High Medical History')", "coexistence:('Low Insurance Check', 'Low Medical History')", "coexistence:('Low Insurance Check', 'Contact Hospital')", "coexistence:('Create Questionnaire', 'Low Insurance Check')", "coexistence:('Create Questionnaire', 'Register')", "coexistence:('Create Questionnaire', 'High Insurance Check')", "coexistence:('Create Questionnaire', 'Accept Claim')", "coexistence:('Create Questionnaire', 'High Medical History')", "coexistence:('Create Questionnaire', 'Low Medical History')", "coexistence:('Create Questionnaire', 'Contact Hospital')", "coexistence:('Register', 'Low Insurance Check')", "coexistence:('Register', 'Create Questionnaire')", "coexistence:('Register', 'High Insurance Check')", "coexistence:('Register', 'Accept Claim')", "coexistence:('Register', 'High Medical History')", "coexistence:('Register', 'Low Medical History')", "coexistence:('Register', 'Contact Hospital')", "coexistence:('High Insurance Check', 'Low Insurance Check')", "coexistence:('High Insurance Check', 'Create Questionnaire')", "coexistence:('High Insurance Check', 'Register')", "coexistence:('High Insurance Check', 'Accept Claim')", "coexistence:('High Insurance Check', 'High Medical History')", "coexistence:('High Insurance Check', 'Low Medical History')", "coexistence:('High Insurance Check', 'Contact Hospital')", "coexistence:('Accept Claim', 'Low Insurance Check')", "coexistence:('Accept Claim', 'Create Questionnaire')", "coexistence:('Accept Claim', 'Register')", "coexistence:('Accept Claim', 'High Insurance Check')", "coexistence:('Accept Claim', 'High Medical History')", "coexistence:('Accept Claim', 'Low Medical History')", "coexistence:('Accept Claim', 'Contact Hospital')", "coexistence:('High Medical History', 'Low Insurance Check')", "coexistence:('High Medical History', 'Create Questionnaire')", "coexistence:('High Medical History', 'Register')", "coexistence:('High Medical History', 'High Insurance Check')", "coexistence:('High Medical History', 'Accept Claim')", "coexistence:('High Medical History', 'Low Medical History')", "coexistence:('High Medical History', 'Contact Hospital')", "coexistence:('Low Medical History', 'Low Insurance Check')", "coexistence:('Low Medical History', 'Create Questionnaire')", "coexistence:('Low Medical History', 'Register')", "coexistence:('Low Medical History', 'High Insurance Check')", "coexistence:('Low Medical History', 'Accept Claim')", "coexistence:('Low Medical History', 'High Medical History')", "coexistence:('Low Medical History', 'Contact Hospital')", "coexistence:('Contact Hospital', 'Low Insurance Check')", "coexistence:('Contact Hospital', 'Create Questionnaire')", "coexistence:('Contact Hospital', 'Register')", "coexistence:('Contact Hospital', 'High Insurance Check')", "coexistence:('Contact Hospital', 'Accept Claim')", "coexistence:('Contact Hospital', 'High Medical History')", "coexistence:('Contact Hospital', 'Low Medical History')", "exactly1:('Low Insurance Check',)", "exactly1:('Create Questionnaire',)", "exactly1:('Register',)", "exactly1:('High Insurance Check',)", "exactly1:('Accept Claim',)", "exactly1:('High Medical History',)", "exactly1:('Low Medical History',)", "exactly1:('Contact Hospital',)", "exactly2:('Low Insurance Check',)", "exactly2:('Create Questionnaire',)", "exactly2:('Register',)", "exactly2:('High Insurance Check',)", "exactly2:('Accept Claim',)", "exactly2:('High Medical History',)", "exactly2:('Low Medical History',)", "exactly2:('Contact Hospital',)", "exactly3:('Low Insurance Check',)", "exactly3:('Create Questionnaire',)", "exactly3:('Register',)", "exactly3:('High Insurance Check',)", "exactly3:('Accept Claim',)", "exactly3:('High Medical History',)", "exactly3:('Low Medical History',)", "exactly3:('Contact Hospital',)", "alternate_precedence:('Low Insurance Check', 'Create Questionnaire')", "alternate_precedence:('Low Insurance Check', 'Register')", "alternate_precedence:('Low Insurance Check', 'High Insurance Check')", "alternate_precedence:('Low Insurance Check', 'Accept Claim')", "alternate_precedence:('Low Insurance Check', 'High Medical History')", "alternate_precedence:('Low Insurance Check', 'Low Medical History')", "alternate_precedence:('Low Insurance Check', 'Contact Hospital')", "alternate_precedence:('Create Questionnaire', 'Low Insurance Check')", "alternate_precedence:('Create Questionnaire', 'Register')", "alternate_precedence:('Create Questionnaire', 'High Insurance Check')", "alternate_precedence:('Create Questionnaire', 'Accept Claim')", "alternate_precedence:('Create Questionnaire', 'High Medical History')", "alternate_precedence:('Create Questionnaire', 'Low Medical History')", "alternate_precedence:('Create Questionnaire', 'Contact Hospital')", "alternate_precedence:('Register', 'Low Insurance Check')", "alternate_precedence:('Register', 'Create Questionnaire')", "alternate_precedence:('Register', 'High Insurance Check')", "alternate_precedence:('Register', 'Accept Claim')", "alternate_precedence:('Register', 'High Medical History')", "alternate_precedence:('Register', 'Low Medical History')", "alternate_precedence:('Register', 'Contact Hospital')", "alternate_precedence:('High Insurance Check', 'Low Insurance Check')", "alternate_precedence:('High Insurance Check', 'Create Questionnaire')", "alternate_precedence:('High Insurance Check', 'Register')", "alternate_precedence:('High Insurance Check', 'Accept Claim')", "alternate_precedence:('High Insurance Check', 'High Medical History')", "alternate_precedence:('High Insurance Check', 'Low Medical History')", "alternate_precedence:('High Insurance Check', 'Contact Hospital')", "alternate_precedence:('Accept Claim', 'Low Insurance Check')", "alternate_precedence:('Accept Claim', 'Create Questionnaire')", "alternate_precedence:('Accept Claim', 'Register')", "alternate_precedence:('Accept Claim', 'High Insurance Check')", "alternate_precedence:('Accept Claim', 'High Medical History')", "alternate_precedence:('Accept Claim', 'Low Medical History')", "alternate_precedence:('Accept Claim', 'Contact Hospital')", "alternate_precedence:('High Medical History', 'Low Insurance Check')", "alternate_precedence:('High Medical History', 'Create Questionnaire')", "alternate_precedence:('High Medical History', 'Register')", "alternate_precedence:('High Medical History', 'High Insurance Check')", "alternate_precedence:('High Medical History', 'Accept Claim')", "alternate_precedence:('High Medical History', 'Low Medical History')", "alternate_precedence:('High Medical History', 'Contact Hospital')", "alternate_precedence:('Low Medical History', 'Low Insurance Check')", "alternate_precedence:('Low Medical History', 'Create Questionnaire')", "alternate_precedence:('Low Medical History', 'Register')", "alternate_precedence:('Low Medical History', 'High Insurance Check')", "alternate_precedence:('Low Medical History', 'Accept Claim')", "alternate_precedence:('Low Medical History', 'High Medical History')", "alternate_precedence:('Low Medical History', 'Contact Hospital')", "alternate_precedence:('Contact Hospital', 'Low Insurance Check')", "alternate_precedence:('Contact Hospital', 'Create Questionnaire')", "alternate_precedence:('Contact Hospital', 'Register')", "alternate_precedence:('Contact Hospital', 'High Insurance Check')", "alternate_precedence:('Contact Hospital', 'Accept Claim')", "alternate_precedence:('Contact Hospital', 'High Medical History')", "alternate_precedence:('Contact Hospital', 'Low Medical History')", "alternate_succession:('Low Insurance Check', 'Create Questionnaire')", "alternate_succession:('Low Insurance Check', 'Register')", "alternate_succession:('Low Insurance Check', 'High Insurance Check')", "alternate_succession:('Low Insurance Check', 'Accept Claim')", "alternate_succession:('Low Insurance Check', 'High Medical History')", "alternate_succession:('Low Insurance Check', 'Low Medical History')", "alternate_succession:('Low Insurance Check', 'Contact Hospital')", "alternate_succession:('Create Questionnaire', 'Low Insurance Check')", "alternate_succession:('Create Questionnaire', 'Register')", "alternate_succession:('Create Questionnaire', 'High Insurance Check')", "alternate_succession:('Create Questionnaire', 'Accept Claim')", "alternate_succession:('Create Questionnaire', 'High Medical History')", "alternate_succession:('Create Questionnaire', 'Low Medical History')", "alternate_succession:('Create Questionnaire', 'Contact Hospital')", "alternate_succession:('Register', 'Low Insurance Check')", "alternate_succession:('Register', 'Create Questionnaire')", "alternate_succession:('Register', 'High Insurance Check')", "alternate_succession:('Register', 'Accept Claim')", "alternate_succession:('Register', 'High Medical History')", "alternate_succession:('Register', 'Low Medical History')", "alternate_succession:('Register', 'Contact Hospital')", "alternate_succession:('High Insurance Check', 'Low Insurance Check')", "alternate_succession:('High Insurance Check', 'Create Questionnaire')", "alternate_succession:('High Insurance Check', 'Register')", "alternate_succession:('High Insurance Check', 'Accept Claim')", "alternate_succession:('High Insurance Check', 'High Medical History')", "alternate_succession:('High Insurance Check', 'Low Medical History')", "alternate_succession:('High Insurance Check', 'Contact Hospital')", "alternate_succession:('Accept Claim', 'Low Insurance Check')", "alternate_succession:('Accept Claim', 'Create Questionnaire')", "alternate_succession:('Accept Claim', 'Register')", "alternate_succession:('Accept Claim', 'High Insurance Check')", "alternate_succession:('Accept Claim', 'High Medical History')", "alternate_succession:('Accept Claim', 'Low Medical History')", "alternate_succession:('Accept Claim', 'Contact Hospital')", "alternate_succession:('High Medical History', 'Low Insurance Check')", "alternate_succession:('High Medical History', 'Create Questionnaire')", "alternate_succession:('High Medical History', 'Register')", "alternate_succession:('High Medical History', 'High Insurance Check')", "alternate_succession:('High Medical History', 'Accept Claim')", "alternate_succession:('High Medical History', 'Low Medical History')", "alternate_succession:('High Medical History', 'Contact Hospital')", "alternate_succession:('Low Medical History', 'Low Insurance Check')", "alternate_succession:('Low Medical History', 'Create Questionnaire')", "alternate_succession:('Low Medical History', 'Register')", "alternate_succession:('Low Medical History', 'High Insurance Check')", "alternate_succession:('Low Medical History', 'Accept Claim')", "alternate_succession:('Low Medical History', 'High Medical History')", "alternate_succession:('Low Medical History', 'Contact Hospital')", "alternate_succession:('Contact Hospital', 'Low Insurance Check')", "alternate_succession:('Contact Hospital', 'Create Questionnaire')", "alternate_succession:('Contact Hospital', 'Register')", "alternate_succession:('Contact Hospital', 'High Insurance Check')", "alternate_succession:('Contact Hospital', 'Accept Claim')", "alternate_succession:('Contact Hospital', 'High Medical History')", "alternate_succession:('Contact Hospital', 'Low Medical History')", "alternate_response:('Low Insurance Check', 'Create Questionnaire')", "alternate_response:('Low Insurance Check', 'Register')", "alternate_response:('Low Insurance Check', 'High Insurance Check')", "alternate_response:('Low Insurance Check', 'Accept Claim')", "alternate_response:('Low Insurance Check', 'High Medical History')", "alternate_response:('Low Insurance Check', 'Low Medical History')", "alternate_response:('Low Insurance Check', 'Contact Hospital')", "alternate_response:('Create Questionnaire', 'Low Insurance Check')", "alternate_response:('Create Questionnaire', 'Register')", "alternate_response:('Create Questionnaire', 'High Insurance Check')", "alternate_response:('Create Questionnaire', 'Accept Claim')", "alternate_response:('Create Questionnaire', 'High Medical History')", "alternate_response:('Create Questionnaire', 'Low Medical History')", "alternate_response:('Create Questionnaire', 'Contact Hospital')", "alternate_response:('Register', 'Low Insurance Check')", "alternate_response:('Register', 'Create Questionnaire')", "alternate_response:('Register', 'High Insurance Check')", "alternate_response:('Register', 'Accept Claim')", "alternate_response:('Register', 'High Medical History')", "alternate_response:('Register', 'Low Medical History')", "alternate_response:('Register', 'Contact Hospital')", "alternate_response:('High Insurance Check', 'Low Insurance Check')", "alternate_response:('High Insurance Check', 'Create Questionnaire')", "alternate_response:('High Insurance Check', 'Register')", "alternate_response:('High Insurance Check', 'Accept Claim')", "alternate_response:('High Insurance Check', 'High Medical History')", "alternate_response:('High Insurance Check', 'Low Medical History')", "alternate_response:('High Insurance Check', 'Contact Hospital')", "alternate_response:('Accept Claim', 'Low Insurance Check')", "alternate_response:('Accept Claim', 'Create Questionnaire')", "alternate_response:('Accept Claim', 'Register')", "alternate_response:('Accept Claim', 'High Insurance Check')", "alternate_response:('Accept Claim', 'High Medical History')", "alternate_response:('Accept Claim', 'Low Medical History')", "alternate_response:('Accept Claim', 'Contact Hospital')", "alternate_response:('High Medical History', 'Low Insurance Check')", "alternate_response:('High Medical History', 'Create Questionnaire')", "alternate_response:('High Medical History', 'Register')", "alternate_response:('High Medical History', 'High Insurance Check')", "alternate_response:('High Medical History', 'Accept Claim')", "alternate_response:('High Medical History', 'Low Medical History')", "alternate_response:('High Medical History', 'Contact Hospital')", "alternate_response:('Low Medical History', 'Low Insurance Check')", "alternate_response:('Low Medical History', 'Create Questionnaire')", "alternate_response:('Low Medical History', 'Register')", "alternate_response:('Low Medical History', 'High Insurance Check')", "alternate_response:('Low Medical History', 'Accept Claim')", "alternate_response:('Low Medical History', 'High Medical History')", "alternate_response:('Low Medical History', 'Contact Hospital')", "alternate_response:('Contact Hospital', 'Low Insurance Check')", "alternate_response:('Contact Hospital', 'Create Questionnaire')", "alternate_response:('Contact Hospital', 'Register')", "alternate_response:('Contact Hospital', 'High Insurance Check')", "alternate_response:('Contact Hospital', 'Accept Claim')", "alternate_response:('Contact Hospital', 'High Medical History')", "alternate_response:('Contact Hospital', 'Low Medical History')", "chain_precedence:('Low Insurance Check', 'Create Questionnaire')", "chain_precedence:('Low Insurance Check', 'Register')", "chain_precedence:('Low Insurance Check', 'High Insurance Check')", "chain_precedence:('Low Insurance Check', 'Accept Claim')", "chain_precedence:('Low Insurance Check', 'High Medical History')", "chain_precedence:('Low Insurance Check', 'Low Medical History')", "chain_precedence:('Low Insurance Check', 'Contact Hospital')", "chain_precedence:('Create Questionnaire', 'Low Insurance Check')", "chain_precedence:('Create Questionnaire', 'Register')", "chain_precedence:('Create Questionnaire', 'High Insurance Check')", "chain_precedence:('Create Questionnaire', 'Accept Claim')", "chain_precedence:('Create Questionnaire', 'High Medical History')", "chain_precedence:('Create Questionnaire', 'Low Medical History')", "chain_precedence:('Create Questionnaire', 'Contact Hospital')", "chain_precedence:('Register', 'Low Insurance Check')", "chain_precedence:('Register', 'Create Questionnaire')", "chain_precedence:('Register', 'High Insurance Check')", "chain_precedence:('Register', 'Accept Claim')", "chain_precedence:('Register', 'High Medical History')", "chain_precedence:('Register', 'Low Medical History')", "chain_precedence:('Register', 'Contact Hospital')", "chain_precedence:('High Insurance Check', 'Low Insurance Check')", "chain_precedence:('High Insurance Check', 'Create Questionnaire')", "chain_precedence:('High Insurance Check', 'Register')", "chain_precedence:('High Insurance Check', 'Accept Claim')", "chain_precedence:('High Insurance Check', 'High Medical History')", "chain_precedence:('High Insurance Check', 'Low Medical History')", "chain_precedence:('High Insurance Check', 'Contact Hospital')", "chain_precedence:('Accept Claim', 'Low Insurance Check')", "chain_precedence:('Accept Claim', 'Create Questionnaire')", "chain_precedence:('Accept Claim', 'Register')", "chain_precedence:('Accept Claim', 'High Insurance Check')", "chain_precedence:('Accept Claim', 'High Medical History')", "chain_precedence:('Accept Claim', 'Low Medical History')", "chain_precedence:('Accept Claim', 'Contact Hospital')", "chain_precedence:('High Medical History', 'Low Insurance Check')", "chain_precedence:('High Medical History', 'Create Questionnaire')", "chain_precedence:('High Medical History', 'Register')", "chain_precedence:('High Medical History', 'High Insurance Check')", "chain_precedence:('High Medical History', 'Accept Claim')", "chain_precedence:('High Medical History', 'Low Medical History')", "chain_precedence:('High Medical History', 'Contact Hospital')", "chain_precedence:('Low Medical History', 'Low Insurance Check')", "chain_precedence:('Low Medical History', 'Create Questionnaire')", "chain_precedence:('Low Medical History', 'Register')", "chain_precedence:('Low Medical History', 'High Insurance Check')", "chain_precedence:('Low Medical History', 'Accept Claim')", "chain_precedence:('Low Medical History', 'High Medical History')", "chain_precedence:('Low Medical History', 'Contact Hospital')", "chain_precedence:('Contact Hospital', 'Low Insurance Check')", "chain_precedence:('Contact Hospital', 'Create Questionnaire')", "chain_precedence:('Contact Hospital', 'Register')", "chain_precedence:('Contact Hospital', 'High Insurance Check')", "chain_precedence:('Contact Hospital', 'Accept Claim')", "chain_precedence:('Contact Hospital', 'High Medical History')", "chain_precedence:('Contact Hospital', 'Low Medical History')", "chain_response:('Low Insurance Check', 'Create Questionnaire')", "chain_response:('Low Insurance Check', 'Register')", "chain_response:('Low Insurance Check', 'High Insurance Check')", "chain_response:('Low Insurance Check', 'Accept Claim')", "chain_response:('Low Insurance Check', 'High Medical History')", "chain_response:('Low Insurance Check', 'Low Medical History')", "chain_response:('Low Insurance Check', 'Contact Hospital')", "chain_response:('Create Questionnaire', 'Low Insurance Check')", "chain_response:('Create Questionnaire', 'Register')", "chain_response:('Create Questionnaire', 'High Insurance Check')", "chain_response:('Create Questionnaire', 'Accept Claim')", "chain_response:('Create Questionnaire', 'High Medical History')", "chain_response:('Create Questionnaire', 'Low Medical History')", "chain_response:('Create Questionnaire', 'Contact Hospital')", "chain_response:('Register', 'Low Insurance Check')", "chain_response:('Register', 'Create Questionnaire')", "chain_response:('Register', 'High Insurance Check')", "chain_response:('Register', 'Accept Claim')", "chain_response:('Register', 'High Medical History')", "chain_response:('Register', 'Low Medical History')", "chain_response:('Register', 'Contact Hospital')", "chain_response:('High Insurance Check', 'Low Insurance Check')", "chain_response:('High Insurance Check', 'Create Questionnaire')", "chain_response:('High Insurance Check', 'Register')", "chain_response:('High Insurance Check', 'Accept Claim')", "chain_response:('High Insurance Check', 'High Medical History')", "chain_response:('High Insurance Check', 'Low Medical History')", "chain_response:('High Insurance Check', 'Contact Hospital')", "chain_response:('Accept Claim', 'Low Insurance Check')", "chain_response:('Accept Claim', 'Create Questionnaire')", "chain_response:('Accept Claim', 'Register')", "chain_response:('Accept Claim', 'High Insurance Check')", "chain_response:('Accept Claim', 'High Medical History')", "chain_response:('Accept Claim', 'Low Medical History')", "chain_response:('Accept Claim', 'Contact Hospital')", "chain_response:('High Medical History', 'Low Insurance Check')", "chain_response:('High Medical History', 'Create Questionnaire')", "chain_response:('High Medical History', 'Register')", "chain_response:('High Medical History', 'High Insurance Check')", "chain_response:('High Medical History', 'Accept Claim')", "chain_response:('High Medical History', 'Low Medical History')", "chain_response:('High Medical History', 'Contact Hospital')", "chain_response:('Low Medical History', 'Low Insurance Check')", "chain_response:('Low Medical History', 'Create Questionnaire')", "chain_response:('Low Medical History', 'Register')", "chain_response:('Low Medical History', 'High Insurance Check')", "chain_response:('Low Medical History', 'Accept Claim')", "chain_response:('Low Medical History', 'High Medical History')", "chain_response:('Low Medical History', 'Contact Hospital')", "chain_response:('Contact Hospital', 'Low Insurance Check')", "chain_response:('Contact Hospital', 'Create Questionnaire')", "chain_response:('Contact Hospital', 'Register')", "chain_response:('Contact Hospital', 'High Insurance Check')", "chain_response:('Contact Hospital', 'Accept Claim')", "chain_response:('Contact Hospital', 'High Medical History')", "chain_response:('Contact Hospital', 'Low Medical History')", "chain_succession:('Low Insurance Check', 'Create Questionnaire')", "chain_succession:('Low Insurance Check', 'Register')", "chain_succession:('Low Insurance Check', 'High Insurance Check')", "chain_succession:('Low Insurance Check', 'Accept Claim')", "chain_succession:('Low Insurance Check', 'High Medical History')", "chain_succession:('Low Insurance Check', 'Low Medical History')", "chain_succession:('Low Insurance Check', 'Contact Hospital')", "chain_succession:('Create Questionnaire', 'Low Insurance Check')", "chain_succession:('Create Questionnaire', 'Register')", "chain_succession:('Create Questionnaire', 'High Insurance Check')", "chain_succession:('Create Questionnaire', 'Accept Claim')", "chain_succession:('Create Questionnaire', 'High Medical History')", "chain_succession:('Create Questionnaire', 'Low Medical History')", "chain_succession:('Create Questionnaire', 'Contact Hospital')", "chain_succession:('Register', 'Low Insurance Check')", "chain_succession:('Register', 'Create Questionnaire')", "chain_succession:('Register', 'High Insurance Check')", "chain_succession:('Register', 'Accept Claim')", "chain_succession:('Register', 'High Medical History')", "chain_succession:('Register', 'Low Medical History')", "chain_succession:('Register', 'Contact Hospital')", "chain_succession:('High Insurance Check', 'Low Insurance Check')", "chain_succession:('High Insurance Check', 'Create Questionnaire')", "chain_succession:('High Insurance Check', 'Register')", "chain_succession:('High Insurance Check', 'Accept Claim')", "chain_succession:('High Insurance Check', 'High Medical History')", "chain_succession:('High Insurance Check', 'Low Medical History')", "chain_succession:('High Insurance Check', 'Contact Hospital')", "chain_succession:('Accept Claim', 'Low Insurance Check')", "chain_succession:('Accept Claim', 'Create Questionnaire')", "chain_succession:('Accept Claim', 'Register')", "chain_succession:('Accept Claim', 'High Insurance Check')", "chain_succession:('Accept Claim', 'High Medical History')", "chain_succession:('Accept Claim', 'Low Medical History')", "chain_succession:('Accept Claim', 'Contact Hospital')", "chain_succession:('High Medical History', 'Low Insurance Check')", "chain_succession:('High Medical History', 'Create Questionnaire')", "chain_succession:('High Medical History', 'Register')", "chain_succession:('High Medical History', 'High Insurance Check')", "chain_succession:('High Medical History', 'Accept Claim')", "chain_succession:('High Medical History', 'Low Medical History')", "chain_succession:('High Medical History', 'Contact Hospital')", "chain_succession:('Low Medical History', 'Low Insurance Check')", "chain_succession:('Low Medical History', 'Create Questionnaire')", "chain_succession:('Low Medical History', 'Register')", "chain_succession:('Low Medical History', 'High Insurance Check')", "chain_succession:('Low Medical History', 'Accept Claim')", "chain_succession:('Low Medical History', 'High Medical History')", "chain_succession:('Low Medical History', 'Contact Hospital')", "chain_succession:('Contact Hospital', 'Low Insurance Check')", "chain_succession:('Contact Hospital', 'Create Questionnaire')", "chain_succession:('Contact Hospital', 'Register')", "chain_succession:('Contact Hospital', 'High Insurance Check')", "chain_succession:('Contact Hospital', 'Accept Claim')", "chain_succession:('Contact Hospital', 'High Medical History')", "chain_succession:('Contact Hospital', 'Low Medical History')", "not_chain_succession:('Low Insurance Check', 'Create Questionnaire')", "not_chain_succession:('Low Insurance Check', 'Register')", "not_chain_succession:('Low Insurance Check', 'High Insurance Check')", "not_chain_succession:('Low Insurance Check', 'Accept Claim')", "not_chain_succession:('Low Insurance Check', 'High Medical History')", "not_chain_succession:('Low Insurance Check', 'Low Medical History')", "not_chain_succession:('Low Insurance Check', 'Contact Hospital')", "not_chain_succession:('Create Questionnaire', 'Low Insurance Check')", "not_chain_succession:('Create Questionnaire', 'Register')", "not_chain_succession:('Create Questionnaire', 'High Insurance Check')", "not_chain_succession:('Create Questionnaire', 'Accept Claim')", "not_chain_succession:('Create Questionnaire', 'High Medical History')", "not_chain_succession:('Create Questionnaire', 'Low Medical History')", "not_chain_succession:('Create Questionnaire', 'Contact Hospital')", "not_chain_succession:('Register', 'Low Insurance Check')", "not_chain_succession:('Register', 'Create Questionnaire')", "not_chain_succession:('Register', 'High Insurance Check')", "not_chain_succession:('Register', 'Accept Claim')", "not_chain_succession:('Register', 'High Medical History')", "not_chain_succession:('Register', 'Low Medical History')", "not_chain_succession:('Register', 'Contact Hospital')", "not_chain_succession:('High Insurance Check', 'Low Insurance Check')", "not_chain_succession:('High Insurance Check', 'Create Questionnaire')", "not_chain_succession:('High Insurance Check', 'Register')", "not_chain_succession:('High Insurance Check', 'Accept Claim')", "not_chain_succession:('High Insurance Check', 'High Medical History')", "not_chain_succession:('High Insurance Check', 'Low Medical History')", "not_chain_succession:('High Insurance Check', 'Contact Hospital')", "not_chain_succession:('Accept Claim', 'Low Insurance Check')", "not_chain_succession:('Accept Claim', 'Create Questionnaire')", "not_chain_succession:('Accept Claim', 'Register')", "not_chain_succession:('Accept Claim', 'High Insurance Check')", "not_chain_succession:('Accept Claim', 'High Medical History')", "not_chain_succession:('Accept Claim', 'Low Medical History')", "not_chain_succession:('Accept Claim', 'Contact Hospital')", "not_chain_succession:('High Medical History', 'Low Insurance Check')", "not_chain_succession:('High Medical History', 'Create Questionnaire')", "not_chain_succession:('High Medical History', 'Register')", "not_chain_succession:('High Medical History', 'High Insurance Check')", "not_chain_succession:('High Medical History', 'Accept Claim')", "not_chain_succession:('High Medical History', 'Low Medical History')", "not_chain_succession:('High Medical History', 'Contact Hospital')", "not_chain_succession:('Low Medical History', 'Low Insurance Check')", "not_chain_succession:('Low Medical History', 'Create Questionnaire')", "not_chain_succession:('Low Medical History', 'Register')", "not_chain_succession:('Low Medical History', 'High Insurance Check')", "not_chain_succession:('Low Medical History', 'Accept Claim')", "not_chain_succession:('Low Medical History', 'High Medical History')", "not_chain_succession:('Low Medical History', 'Contact Hospital')", "not_chain_succession:('Contact Hospital', 'Low Insurance Check')", "not_chain_succession:('Contact Hospital', 'Create Questionnaire')", "not_chain_succession:('Contact Hospital', 'Register')", "not_chain_succession:('Contact Hospital', 'High Insurance Check')", "not_chain_succession:('Contact Hospital', 'Accept Claim')", "not_chain_succession:('Contact Hospital', 'High Medical History')", "not_chain_succession:('Contact Hospital', 'Low Medical History')", "not_coexistence:('Low Insurance Check', 'Create Questionnaire')", "not_coexistence:('Low Insurance Check', 'Register')", "not_coexistence:('Low Insurance Check', 'High Insurance Check')", "not_coexistence:('Low Insurance Check', 'Accept Claim')", "not_coexistence:('Low Insurance Check', 'High Medical History')", "not_coexistence:('Low Insurance Check', 'Low Medical History')", "not_coexistence:('Low Insurance Check', 'Contact Hospital')", "not_coexistence:('Create Questionnaire', 'Low Insurance Check')", "not_coexistence:('Create Questionnaire', 'Register')", "not_coexistence:('Create Questionnaire', 'High Insurance Check')", "not_coexistence:('Create Questionnaire', 'Accept Claim')", "not_coexistence:('Create Questionnaire', 'High Medical History')", "not_coexistence:('Create Questionnaire', 'Low Medical History')", "not_coexistence:('Create Questionnaire', 'Contact Hospital')", "not_coexistence:('Register', 'Low Insurance Check')", "not_coexistence:('Register', 'Create Questionnaire')", "not_coexistence:('Register', 'High Insurance Check')", "not_coexistence:('Register', 'Accept Claim')", "not_coexistence:('Register', 'High Medical History')", "not_coexistence:('Register', 'Low Medical History')", "not_coexistence:('Register', 'Contact Hospital')", "not_coexistence:('High Insurance Check', 'Low Insurance Check')", "not_coexistence:('High Insurance Check', 'Create Questionnaire')", "not_coexistence:('High Insurance Check', 'Register')", "not_coexistence:('High Insurance Check', 'Accept Claim')", "not_coexistence:('High Insurance Check', 'High Medical History')", "not_coexistence:('High Insurance Check', 'Low Medical History')", "not_coexistence:('High Insurance Check', 'Contact Hospital')", "not_coexistence:('Accept Claim', 'Low Insurance Check')", "not_coexistence:('Accept Claim', 'Create Questionnaire')", "not_coexistence:('Accept Claim', 'Register')", "not_coexistence:('Accept Claim', 'High Insurance Check')", "not_coexistence:('Accept Claim', 'High Medical History')", "not_coexistence:('Accept Claim', 'Low Medical History')", "not_coexistence:('Accept Claim', 'Contact Hospital')", "not_coexistence:('High Medical History', 'Low Insurance Check')", "not_coexistence:('High Medical History', 'Create Questionnaire')", "not_coexistence:('High Medical History', 'Register')", "not_coexistence:('High Medical History', 'High Insurance Check')", "not_coexistence:('High Medical History', 'Accept Claim')", "not_coexistence:('High Medical History', 'Low Medical History')", "not_coexistence:('High Medical History', 'Contact Hospital')", "not_coexistence:('Low Medical History', 'Low Insurance Check')", "not_coexistence:('Low Medical History', 'Create Questionnaire')", "not_coexistence:('Low Medical History', 'Register')", "not_coexistence:('Low Medical History', 'High Insurance Check')", "not_coexistence:('Low Medical History', 'Accept Claim')", "not_coexistence:('Low Medical History', 'High Medical History')", "not_coexistence:('Low Medical History', 'Contact Hospital')", "not_coexistence:('Contact Hospital', 'Low Insurance Check')", "not_coexistence:('Contact Hospital', 'Create Questionnaire')", "not_coexistence:('Contact Hospital', 'Register')", "not_coexistence:('Contact Hospital', 'High Insurance Check')", "not_coexistence:('Contact Hospital', 'Accept Claim')", "not_coexistence:('Contact Hospital', 'High Medical History')", "not_coexistence:('Contact Hospital', 'Low Medical History')", "not_succession:('Low Insurance Check', 'Create Questionnaire')", "not_succession:('Low Insurance Check', 'Register')", "not_succession:('Low Insurance Check', 'High Insurance Check')", "not_succession:('Low Insurance Check', 'Accept Claim')", "not_succession:('Low Insurance Check', 'High Medical History')", "not_succession:('Low Insurance Check', 'Low Medical History')", "not_succession:('Low Insurance Check', 'Contact Hospital')", "not_succession:('Create Questionnaire', 'Low Insurance Check')", "not_succession:('Create Questionnaire', 'Register')", "not_succession:('Create Questionnaire', 'High Insurance Check')", "not_succession:('Create Questionnaire', 'Accept Claim')", "not_succession:('Create Questionnaire', 'High Medical History')", "not_succession:('Create Questionnaire', 'Low Medical History')", "not_succession:('Create Questionnaire', 'Contact Hospital')", "not_succession:('Register', 'Low Insurance Check')", "not_succession:('Register', 'Create Questionnaire')", "not_succession:('Register', 'High Insurance Check')", "not_succession:('Register', 'Accept Claim')", "not_succession:('Register', 'High Medical History')", "not_succession:('Register', 'Low Medical History')", "not_succession:('Register', 'Contact Hospital')", "not_succession:('High Insurance Check', 'Low Insurance Check')", "not_succession:('High Insurance Check', 'Create Questionnaire')", "not_succession:('High Insurance Check', 'Register')", "not_succession:('High Insurance Check', 'Accept Claim')", "not_succession:('High Insurance Check', 'High Medical History')", "not_succession:('High Insurance Check', 'Low Medical History')", "not_succession:('High Insurance Check', 'Contact Hospital')", "not_succession:('Accept Claim', 'Low Insurance Check')", "not_succession:('Accept Claim', 'Create Questionnaire')", "not_succession:('Accept Claim', 'Register')", "not_succession:('Accept Claim', 'High Insurance Check')", "not_succession:('Accept Claim', 'High Medical History')", "not_succession:('Accept Claim', 'Low Medical History')", "not_succession:('Accept Claim', 'Contact Hospital')", "not_succession:('High Medical History', 'Low Insurance Check')", "not_succession:('High Medical History', 'Create Questionnaire')", "not_succession:('High Medical History', 'Register')", "not_succession:('High Medical History', 'High Insurance Check')", "not_succession:('High Medical History', 'Accept Claim')", "not_succession:('High Medical History', 'Low Medical History')", "not_succession:('High Medical History', 'Contact Hospital')", "not_succession:('Low Medical History', 'Low Insurance Check')", "not_succession:('Low Medical History', 'Create Questionnaire')", "not_succession:('Low Medical History', 'Register')", "not_succession:('Low Medical History', 'High Insurance Check')", "not_succession:('Low Medical History', 'Accept Claim')", "not_succession:('Low Medical History', 'High Medical History')", "not_succession:('Low Medical History', 'Contact Hospital')", "not_succession:('Contact Hospital', 'Low Insurance Check')", "not_succession:('Contact Hospital', 'Create Questionnaire')", "not_succession:('Contact Hospital', 'Register')", "not_succession:('Contact Hospital', 'High Insurance Check')", "not_succession:('Contact Hospital', 'Accept Claim')", "not_succession:('Contact Hospital', 'High Medical History')", "not_succession:('Contact Hospital', 'Low Medical History')", "responded_existence:('Low Insurance Check', 'Create Questionnaire')", "responded_existence:('Low Insurance Check', 'Register')", "responded_existence:('Low Insurance Check', 'High Insurance Check')", "responded_existence:('Low Insurance Check', 'Accept Claim')", "responded_existence:('Low Insurance Check', 'High Medical History')", "responded_existence:('Low Insurance Check', 'Low Medical History')", "responded_existence:('Low Insurance Check', 'Contact Hospital')", "responded_existence:('Create Questionnaire', 'Low Insurance Check')", "responded_existence:('Create Questionnaire', 'Register')", "responded_existence:('Create Questionnaire', 'High Insurance Check')", "responded_existence:('Create Questionnaire', 'Accept Claim')", "responded_existence:('Create Questionnaire', 'High Medical History')", "responded_existence:('Create Questionnaire', 'Low Medical History')", "responded_existence:('Create Questionnaire', 'Contact Hospital')", "responded_existence:('Register', 'Low Insurance Check')", "responded_existence:('Register', 'Create Questionnaire')", "responded_existence:('Register', 'High Insurance Check')", "responded_existence:('Register', 'Accept Claim')", "responded_existence:('Register', 'High Medical History')", "responded_existence:('Register', 'Low Medical History')", "responded_existence:('Register', 'Contact Hospital')", "responded_existence:('High Insurance Check', 'Low Insurance Check')", "responded_existence:('High Insurance Check', 'Create Questionnaire')", "responded_existence:('High Insurance Check', 'Register')", "responded_existence:('High Insurance Check', 'Accept Claim')", "responded_existence:('High Insurance Check', 'High Medical History')", "responded_existence:('High Insurance Check', 'Low Medical History')", "responded_existence:('High Insurance Check', 'Contact Hospital')", "responded_existence:('Accept Claim', 'Low Insurance Check')", "responded_existence:('Accept Claim', 'Create Questionnaire')", "responded_existence:('Accept Claim', 'Register')", "responded_existence:('Accept Claim', 'High Insurance Check')", "responded_existence:('Accept Claim', 'High Medical History')", "responded_existence:('Accept Claim', 'Low Medical History')", "responded_existence:('Accept Claim', 'Contact Hospital')", "responded_existence:('High Medical History', 'Low Insurance Check')", "responded_existence:('High Medical History', 'Create Questionnaire')", "responded_existence:('High Medical History', 'Register')", "responded_existence:('High Medical History', 'High Insurance Check')", "responded_existence:('High Medical History', 'Accept Claim')", "responded_existence:('High Medical History', 'Low Medical History')", "responded_existence:('High Medical History', 'Contact Hospital')", "responded_existence:('Low Medical History', 'Low Insurance Check')", "responded_existence:('Low Medical History', 'Create Questionnaire')", "responded_existence:('Low Medical History', 'Register')", "responded_existence:('Low Medical History', 'High Insurance Check')", "responded_existence:('Low Medical History', 'Accept Claim')", "responded_existence:('Low Medical History', 'High Medical History')", "responded_existence:('Low Medical History', 'Contact Hospital')", "responded_existence:('Contact Hospital', 'Low Insurance Check')", "responded_existence:('Contact Hospital', 'Create Questionnaire')", "responded_existence:('Contact Hospital', 'Register')", "responded_existence:('Contact Hospital', 'High Insurance Check')", "responded_existence:('Contact Hospital', 'Accept Claim')", "responded_existence:('Contact Hospital', 'High Medical History')", "responded_existence:('Contact Hospital', 'Low Medical History')", "response:('Low Insurance Check', 'Create Questionnaire')", "response:('Low Insurance Check', 'Register')", "response:('Low Insurance Check', 'High Insurance Check')", "response:('Low Insurance Check', 'Accept Claim')", "response:('Low Insurance Check', 'High Medical History')", "response:('Low Insurance Check', 'Low Medical History')", "response:('Low Insurance Check', 'Contact Hospital')", "response:('Create Questionnaire', 'Low Insurance Check')", "response:('Create Questionnaire', 'Register')", "response:('Create Questionnaire', 'High Insurance Check')", "response:('Create Questionnaire', 'Accept Claim')", "response:('Create Questionnaire', 'High Medical History')", "response:('Create Questionnaire', 'Low Medical History')", "response:('Create Questionnaire', 'Contact Hospital')", "response:('Register', 'Low Insurance Check')", "response:('Register', 'Create Questionnaire')", "response:('Register', 'High Insurance Check')", "response:('Register', 'Accept Claim')", "response:('Register', 'High Medical History')", "response:('Register', 'Low Medical History')", "response:('Register', 'Contact Hospital')", "response:('High Insurance Check', 'Low Insurance Check')", "response:('High Insurance Check', 'Create Questionnaire')", "response:('High Insurance Check', 'Register')", "response:('High Insurance Check', 'Accept Claim')", "response:('High Insurance Check', 'High Medical History')", "response:('High Insurance Check', 'Low Medical History')", "response:('High Insurance Check', 'Contact Hospital')", "response:('Accept Claim', 'Low Insurance Check')", "response:('Accept Claim', 'Create Questionnaire')", "response:('Accept Claim', 'Register')", "response:('Accept Claim', 'High Insurance Check')", "response:('Accept Claim', 'High Medical History')", "response:('Accept Claim', 'Low Medical History')", "response:('Accept Claim', 'Contact Hospital')", "response:('High Medical History', 'Low Insurance Check')", "response:('High Medical History', 'Create Questionnaire')", "response:('High Medical History', 'Register')", "response:('High Medical History', 'High Insurance Check')", "response:('High Medical History', 'Accept Claim')", "response:('High Medical History', 'Low Medical History')", "response:('High Medical History', 'Contact Hospital')", "response:('Low Medical History', 'Low Insurance Check')", "response:('Low Medical History', 'Create Questionnaire')", "response:('Low Medical History', 'Register')", "response:('Low Medical History', 'High Insurance Check')", "response:('Low Medical History', 'Accept Claim')", "response:('Low Medical History', 'High Medical History')", "response:('Low Medical History', 'Contact Hospital')", "response:('Contact Hospital', 'Low Insurance Check')", "response:('Contact Hospital', 'Create Questionnaire')", "response:('Contact Hospital', 'Register')", "response:('Contact Hospital', 'High Insurance Check')", "response:('Contact Hospital', 'Accept Claim')", "response:('Contact Hospital', 'High Medical History')", "response:('Contact Hospital', 'Low Medical History')", "succession:('Low Insurance Check', 'Create Questionnaire')", "succession:('Low Insurance Check', 'Register')", "succession:('Low Insurance Check', 'High Insurance Check')", "succession:('Low Insurance Check', 'Accept Claim')", "succession:('Low Insurance Check', 'High Medical History')", "succession:('Low Insurance Check', 'Low Medical History')", "succession:('Low Insurance Check', 'Contact Hospital')", "succession:('Create Questionnaire', 'Low Insurance Check')", "succession:('Create Questionnaire', 'Register')", "succession:('Create Questionnaire', 'High Insurance Check')", "succession:('Create Questionnaire', 'Accept Claim')", "succession:('Create Questionnaire', 'High Medical History')", "succession:('Create Questionnaire', 'Low Medical History')", "succession:('Create Questionnaire', 'Contact Hospital')", "succession:('Register', 'Low Insurance Check')", "succession:('Register', 'Create Questionnaire')", "succession:('Register', 'High Insurance Check')", "succession:('Register', 'Accept Claim')", "succession:('Register', 'High Medical History')", "succession:('Register', 'Low Medical History')", "succession:('Register', 'Contact Hospital')", "succession:('High Insurance Check', 'Low Insurance Check')", "succession:('High Insurance Check', 'Create Questionnaire')", "succession:('High Insurance Check', 'Register')", "succession:('High Insurance Check', 'Accept Claim')", "succession:('High Insurance Check', 'High Medical History')", "succession:('High Insurance Check', 'Low Medical History')", "succession:('High Insurance Check', 'Contact Hospital')", "succession:('Accept Claim', 'Low Insurance Check')", "succession:('Accept Claim', 'Create Questionnaire')", "succession:('Accept Claim', 'Register')", "succession:('Accept Claim', 'High Insurance Check')", "succession:('Accept Claim', 'High Medical History')", "succession:('Accept Claim', 'Low Medical History')", "succession:('Accept Claim', 'Contact Hospital')", "succession:('High Medical History', 'Low Insurance Check')", "succession:('High Medical History', 'Create Questionnaire')", "succession:('High Medical History', 'Register')", "succession:('High Medical History', 'High Insurance Check')", "succession:('High Medical History', 'Accept Claim')", "succession:('High Medical History', 'Low Medical History')", "succession:('High Medical History', 'Contact Hospital')", "succession:('Low Medical History', 'Low Insurance Check')", "succession:('Low Medical History', 'Create Questionnaire')", "succession:('Low Medical History', 'Register')", "succession:('Low Medical History', 'High Insurance Check')", "succession:('Low Medical History', 'Accept Claim')", "succession:('Low Medical History', 'High Medical History')", "succession:('Low Medical History', 'Contact Hospital')", "succession:('Contact Hospital', 'Low Insurance Check')", "succession:('Contact Hospital', 'Create Questionnaire')", "succession:('Contact Hospital', 'Register')", "succession:('Contact Hospital', 'High Insurance Check')", "succession:('Contact Hospital', 'Accept Claim')", "succession:('Contact Hospital', 'High Medical History')", "succession:('Contact Hospital', 'Low Medical History')", "precedence:('Low Insurance Check', 'Create Questionnaire')", "precedence:('Low Insurance Check', 'Register')", "precedence:('Low Insurance Check', 'High Insurance Check')", "precedence:('Low Insurance Check', 'Accept Claim')", "precedence:('Low Insurance Check', 'High Medical History')", "precedence:('Low Insurance Check', 'Low Medical History')", "precedence:('Low Insurance Check', 'Contact Hospital')", "precedence:('Create Questionnaire', 'Low Insurance Check')", "precedence:('Create Questionnaire', 'Register')", "precedence:('Create Questionnaire', 'High Insurance Check')", "precedence:('Create Questionnaire', 'Accept Claim')", "precedence:('Create Questionnaire', 'High Medical History')", "precedence:('Create Questionnaire', 'Low Medical History')", "precedence:('Create Questionnaire', 'Contact Hospital')", "precedence:('Register', 'Low Insurance Check')", "precedence:('Register', 'Create Questionnaire')", "precedence:('Register', 'High Insurance Check')", "precedence:('Register', 'Accept Claim')", "precedence:('Register', 'High Medical History')", "precedence:('Register', 'Low Medical History')", "precedence:('Register', 'Contact Hospital')", "precedence:('High Insurance Check', 'Low Insurance Check')", "precedence:('High Insurance Check', 'Create Questionnaire')", "precedence:('High Insurance Check', 'Register')", "precedence:('High Insurance Check', 'Accept Claim')", "precedence:('High Insurance Check', 'High Medical History')", "precedence:('High Insurance Check', 'Low Medical History')", "precedence:('High Insurance Check', 'Contact Hospital')", "precedence:('Accept Claim', 'Low Insurance Check')", "precedence:('Accept Claim', 'Create Questionnaire')", "precedence:('Accept Claim', 'Register')", "precedence:('Accept Claim', 'High Insurance Check')", "precedence:('Accept Claim', 'High Medical History')", "precedence:('Accept Claim', 'Low Medical History')", "precedence:('Accept Claim', 'Contact Hospital')", "precedence:('High Medical History', 'Low Insurance Check')", "precedence:('High Medical History', 'Create Questionnaire')", "precedence:('High Medical History', 'Register')", "precedence:('High Medical History', 'High Insurance Check')", "precedence:('High Medical History', 'Accept Claim')", "precedence:('High Medical History', 'Low Medical History')", "precedence:('High Medical History', 'Contact Hospital')", "precedence:('Low Medical History', 'Low Insurance Check')", "precedence:('Low Medical History', 'Create Questionnaire')", "precedence:('Low Medical History', 'Register')", "precedence:('Low Medical History', 'High Insurance Check')", "precedence:('Low Medical History', 'Accept Claim')", "precedence:('Low Medical History', 'High Medical History')", "precedence:('Low Medical History', 'Contact Hospital')", "precedence:('Contact Hospital', 'Low Insurance Check')", "precedence:('Contact Hospital', 'Create Questionnaire')", "precedence:('Contact Hospital', 'Register')", "precedence:('Contact Hospital', 'High Insurance Check')", "precedence:('Contact Hospital', 'Accept Claim')", "precedence:('Contact Hospital', 'High Medical History')", "precedence:('Contact Hospital', 'Low Medical History')", 'trace_id', 'label']
+        self.assertEqual(expected_shape, run_df.values.shape)
+        self.assertEqual(sorted(expected_columns), sorted(list(run_df.columns)))
 

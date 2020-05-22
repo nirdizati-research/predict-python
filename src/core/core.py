@@ -107,20 +107,32 @@ def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame)
             else:
                 training_log, test_log, additional_columns = get_train_test_log(job.split)
                 if job.split.type == SplitTypes.SPLIT_SINGLE.value:
-                    job.split = duplicate_orm_row(Split.objects.filter(pk=job.split.pk)[0])
-                    job.split.type = SplitTypes.SPLIT_DOUBLE.value
-                    train_name = '0-' + str(int(100 - (job.split.test_size * 100)))
-                    job.split.train_log = create_log(
-                        EventLog(training_log),
-                        train_name + '.xes'
+                    search_for_already_existing_split = Split.objects.filter(
+                        type=SplitTypes.SPLIT_DOUBLE.value,
+                        original_log=job.split.original_log,
+                        test_size=job.split.test_size,
+                        splitting_method=job.split.splitting_method
                     )
-                    test_name = str(int(100 - (job.split.test_size * 100))) + '-100'
-                    job.split.test_log = create_log(
-                        EventLog(test_log),
-                        test_name + '.xes'
-                    )
-                    job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
-                    job.split.save()
+                    if len(search_for_already_existing_split) >= 1:
+                        job.split = search_for_already_existing_split[0]
+                        job.split.save()
+                        job.save()
+                        return get_encoded_logs(job, use_cache=use_cache)
+                    else:
+                        job.split = duplicate_orm_row(Split.objects.filter(pk=job.split.pk)[0])
+                        job.split.type = SplitTypes.SPLIT_DOUBLE.value
+                        train_name = 'SPLITTED_' + job.split.original_log.name.split('.')[0] + '_0-' + str(int(100 - (job.split.test_size * 100)))
+                        job.split.train_log = create_log(
+                            EventLog(training_log),
+                            train_name + '.xes'
+                        )
+                        test_name = 'SPLITTED_' + job.split.original_log.name.split('.')[0] + '_' + str(int(100 - (job.split.test_size * 100))) + '-100'
+                        job.split.test_log = create_log(
+                            EventLog(test_log),
+                            test_name + '.xes'
+                        )
+                        job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
+                        job.split.save()
 
                 put_loaded_logs(job.split, training_log, test_log, additional_columns)
 

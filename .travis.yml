@@ -16,6 +16,10 @@ jobs:
       services:
         - redis-server
         - postgresql
+      addons:
+        apt:
+          packages:
+            - graphviz
       install:
         - pip install -r requirements.txt
         - pip install git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow

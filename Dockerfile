@@ -3,7 +3,7 @@ FROM python:3.6-stretch
 #Install git & graphviz
 RUN apt-get update \
     && apt-get install -y git \
-    && apt-get install graphviz
+    && apt-get install -y graphviz
 
 # Add requirements file used by pip install
 ADD ./requirements.txt /predict-python/

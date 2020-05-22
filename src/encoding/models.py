@@ -22,7 +22,7 @@ class ValueEncodings(Enum):
     COMPLEX = 'complex'
     LAST_PAYLOAD = 'lastPayload'
     # SEQUENCES = 'sequences' #TODO JONAS
-    DEVIANCE = 'deviance' #TODO JONAS
+    DECLARE = 'declare'
 
 
 class TaskGenerationTypes(Enum):
@@ -43,7 +43,7 @@ VALUE_ENCODING_MAPPINGS = (
     (ValueEncodings.COMPLEX.value, 'complex'),
     (ValueEncodings.LAST_PAYLOAD.value, 'lastPayload'),
     # (ValueEncodings.SEQUENCES.value, 'sequences'), #TODO JONAS
-    (ValueEncodings.DEVIANCE.value, 'deviance') #TODO JONAS
+    (ValueEncodings.DECLARE.value, 'declare')
 )
 
 TASK_GENERATION_TYPE_MAPPINGS = (

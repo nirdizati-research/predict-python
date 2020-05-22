@@ -29,11 +29,11 @@ class TestCmFeedbackWrapper(TestCase):
             test_size=0.2,
             original_log=None,
             train_log=create_test_log(
-                log_name='general_example.xes',
+                log_name='train_explainability.xes',
                 log_path='cache/log_cache/test_logs/train_explainability.xes'
             ),
             test_log=create_test_log(
-                log_name='general_example_train.xes',
+                log_name='test_explainability.xes',
                 log_path='cache/log_cache/test_logs/test_explainability.xes'
             )
         )

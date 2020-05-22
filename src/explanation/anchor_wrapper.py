@@ -8,7 +8,7 @@ from src.jobs.models import Job
 
 
 def explain(anchor_exp: Explanation, training_df, test_df, explanation_target):
-    job = Job.objects.filter(pk=anchor_exp.job)[0]
+    job = Job.objects.filter(pk=anchor_exp.job.id)[0]
 
     explainer = anchor_tabular.AnchorTabularExplainer(
         [True, False],  # dataset.class_names

@@ -1,58 +1,8 @@
 """
 Main file for deviance mining
 """
-from random import shuffle
 import numpy as np
-from src.encoding.declare.declaretemplates import *
-from src.encoding.declare.declarecommon import *
-import pandas as pd
-
-import shutil
-import os
-
-
-def reencode_map(val):
-    if val == -1:
-        return "violation"
-    elif val == 0:
-        return "vacuous"
-    elif val == 1:
-        return "single"
-    elif val == 2:
-        return "multi"
-
-
-def reencode_declare_results(df):
-    """
-    Given declare results dataframe, reencode the results such that they are one-hot encodable
-    If Frequency is -1, it means that there was a violation, therefore it will be one class
-    If Frequency is 0, it means that the constraint was vacuously filled, it will be second class
-    If Frequency is 1, then it will be class of single activation
-    If Frequency is 2... then it will be a class of multiple activation
-
-    In total there will be 4 classes
-    :param df:
-    :return:
-    """
-
-    df_size = len(df)
-
-    # First, change all where > 2 to 2.
-    df[df > 2] = 2
-    # All -1's to "VIOLATION"
-    df.replace({
-        -1: "violation",
-        0: "vacuous",
-        1: "single",
-        2: "multi"
-    }, inplace=True)
-
-    df = pd.get_dummies(data=df, columns=df.columns)
-    # Put together and get_dummies for one-encoded features
-
-    df = df.iloc[:df_size, :]
-
-    return df
+from src.encoding.declare.declare_templates import *
 
 
 def apply_template_to_log(template, candidate, log):
@@ -63,26 +13,6 @@ def apply_template_to_log(template, candidate, log):
         results.append(result)
 
     return results
-
-
-def generate_candidate_constraints(candidates, templates, train_log, constraint_support=None):
-    all_results = {}
-
-    for template in templates:
-        print("Started working on {}".format(template))
-        for candidate in candidates:
-            if len(candidate) == template_sizes[template]:
-                constraint_result = apply_template_to_log(template, candidate, train_log)
-
-                if constraint_support:
-                    satisfaction_count = len([v for v in constraint_result if v != 0])
-                    if satisfaction_count >= constraint_support:
-                        all_results[template + ":" + str(candidate)] = constraint_result
-
-                else:
-                    all_results[template + ":" + str(candidate)] = constraint_result
-
-    return all_results
 
 
 def find_if_satisfied_by_class(constraint_result, transformed_log, labels, support_true, support_false):

@@ -1,14 +1,34 @@
+from itertools import groupby
+
 import pandas as pd
 from ast import literal_eval as make_tuple
 
 from pm4py.objects.log.log import Trace
 
-from src.encoding.declare.declaremining import filter_candidates_by_support, generate_train_candidate_constraints, transform_results_to_numpy, reencode_declare_results
-from src.encoding.declare.declaretemplates import template_sizes
-from src.encoding.declare.declarecommon import xes_to_positional
+from src.encoding.declare.declare_mining import filter_candidates_by_support, generate_train_candidate_constraints, transform_results_to_numpy
+from src.encoding.declare.declare_templates import template_sizes
 
 
-def declare_deviance_mining(log, labelling, encoding, additional_columns, cols=None): #TODO JONAS
+def xes_to_positional(log, label=True):
+    """
+    [
+        {tracename:name, tracelabel:label,
+         events:{event_a : [1,2,3], event_b : [4,5,6], event_c : [7,8,9]} }
+    ]
+
+    :param log:
+    :return:
+    """
+    return {
+        trace.attributes['concept:name']: {
+            key: [item[0] for item in group]
+            for key, group in groupby(sorted(enumerate([event['concept:name'] for event in trace]), key=lambda x: x[1]), lambda x: x[1])
+        }
+        for trace in log
+    }
+
+
+def declare_encoding(log, labelling, encoding, additional_columns, cols=None): #TODO JONAS
     filter_t = True
     print("Filter_t", filter_t)
     templates = template_sizes.keys()
@@ -63,12 +83,6 @@ def declare_deviance_mining(log, labelling, encoding, additional_columns, cols=N
 
     df = pd.DataFrame(data, columns=featurenames)
 
-    # Reencoding data into one-hot encoding
-    # if reencode:
-    #     print("Reencoding data")
-    #     df, _ = reencode_declare_results(df) #TODO JONAS to be used with only one df
-
     df["trace_id"] = train_names
     df["label"] = labels.tolist()
-
     return df

@@ -7,7 +7,7 @@ from pm4py.objects.log.log import EventLog
 from src.encoding.boolean_frequency import frequency, boolean
 from src.encoding.complex_last_payload import complex, last_payload
 # from src.encoding.declare.sequence import sequences
-from src.encoding.declare.declare import declare_deviance_mining
+from src.encoding.declare.declare import declare_encoding
 from src.encoding.encoder import Encoder
 from src.encoding.models import Encoding, ValueEncodings
 from src.jobs.models import JobTypes, Job
@@ -74,8 +74,8 @@ def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelli
         run_df = last_payload(log, labelling, encoding, additional_columns)
     # elif encoding.value_encoding == ValueEncodings.SEQUENCES.value: #TODO JONAS
     #     run_df = sequences(log, labelling, encoding, additional_columns)
-    elif encoding.value_encoding == ValueEncodings.DEVIANCE.value: #TODO JONAS
-        run_df = declare_deviance_mining(log, labelling, encoding, additional_columns, cols=cols)
+    elif encoding.value_encoding == ValueEncodings.DECLARE.value:
+        run_df = declare_encoding(log, labelling, encoding, additional_columns, cols=cols)
         if cols is None:
             cols = list(run_df.columns)
     else:

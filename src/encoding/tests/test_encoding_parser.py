@@ -8,9 +8,9 @@ from src.encoding.models import ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \
-    create_test_labelling, create_test_encoding, general_example_test_filename, general_example_test_filepath
+    create_test_labelling, create_test_encoding, general_example_test_filename, general_example_test_filepath_xes
 
 
 class TestEncodingParser(TestCase):
@@ -31,7 +31,7 @@ class TestEncodingParser(TestCase):
         self.train_add_col = get_additional_columns(self.train_log)
 
         self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                                log_path=general_example_test_filepath))
+                                                log_path=general_example_test_filepath_xes))
         self.test_event_names = unique_events(self.test_log)
         self.test_add_col = get_additional_columns(self.test_log)
 

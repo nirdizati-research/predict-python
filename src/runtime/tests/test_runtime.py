@@ -5,7 +5,7 @@ from src.jobs.tasks import prediction_task
 from src.runtime.tasks import runtime_task, replay_task, replay_prediction_task
 from src.split.models import SplitTypes, SplitOrderingMethods
 from src.utils.django_orm import duplicate_orm_row
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 from src.utils.tests_utils import create_test_job, create_test_split, create_test_log
 
 

@@ -9,4 +9,5 @@ ignore:
   - "./nirdizati_research/wsgi.py"
   - "./scripts/**"
   - "./src/jobs/management/commands/**.py"
+  - "./nirdizati-research/wsgi.py"
 #  TEMPORARY EXCLUSIONS

@@ -4,8 +4,8 @@ from src.encoding.boolean_frequency import frequency
 from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.utils.event_attributes import unique_events
-from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_test_filepath, general_example_train_filepath, create_test_log, \
+from src.logs.log_service import get_log
+from src.utils.tests_utils import general_example_test_filepath_xes, general_example_train_filepath, create_test_log, \
     general_example_test_filename, general_example_train_filename, create_test_encoding, create_test_labelling, \
     create_test_job
 
@@ -13,7 +13,7 @@ from src.utils.tests_utils import general_example_test_filepath, general_example
 class TestFrequencySplit(TestCase):
     def setUp(self):
         test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                           log_path=general_example_test_filepath))
+                                           log_path=general_example_test_filepath_xes))
         training_log = get_log(create_test_log(log_name=general_example_train_filename,
                                                log_path=general_example_train_filepath))
         self.encoding = create_test_encoding(
@@ -48,7 +48,7 @@ class TestGeneralTest(TestCase):
 
     def setUp(self):
         self.log = get_log(create_test_log(log_name=general_example_test_filename,
-                                           log_path=general_example_test_filepath))
+                                           log_path=general_example_test_filepath_xes))
         self.event_names = unique_events(self.log)
         self.encoding = create_test_encoding(
             value_encoding=ValueEncodings.FREQUENCY.value,

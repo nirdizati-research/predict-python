@@ -10,7 +10,7 @@ from src.encoding.common import encode_label_logs
 from src.jobs.models import Job, JobTypes
 from src.split.splitting import get_train_test_log
 from src.utils.django_orm import duplicate_orm_row
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 
 logger = logging.getLogger(__name__)
 

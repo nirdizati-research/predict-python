@@ -5,10 +5,9 @@ from typing import Union
 from pm4py.objects.log.log import EventLog
 from sklearn.model_selection import train_test_split
 
-from src.logs.log_service import create_log
+from src.logs.log_service import create_log, get_log
 from src.split.models import Split, SplitTypes, SplitOrderingMethods
 from src.utils.event_attributes import get_additional_columns
-from src.utils.file_service import get_log
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,8 @@
 from rest_framework.test import APITestCase, APIClient
+
 from src.logs.tests.test_split import split_double
-from src.utils.tests_utils import create_test_split, create_test_log, general_example_train_filepath, general_example_test_filepath
+from src.utils.tests_utils import create_test_split, create_test_log, general_example_train_filepath, \
+    general_example_test_filepath_xes
 
 
 class TestViews(APITestCase):
@@ -33,5 +35,6 @@ class TestViews(APITestCase):
         split = split_double()
         client = APIClient()
         response = client.get('/splits/' + str(split.id) + "/logs/test")
-        f = open(general_example_test_filepath, "r")
+        f = open(general_example_test_filepath_xes, "r")
         self.assertEqual(f.read(), response.content.decode())
+

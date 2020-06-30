@@ -126,18 +126,22 @@ def _update(job: Job, data: DataFrame) -> dict:
     update_data = clusterer.cluster_data(data)
 
     models = joblib.load(previous_job.predictive_model.model_path)
-
-    for cluster in range(clusterer.n_clusters):
-        x = update_data[cluster]
-        if not x.empty:
-            y = x['label']
-
-            try:
-                models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
-            except (NotImplementedError, KeyError):
-                models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
-            except Exception as exception:
-                raise exception
+    if job.predictive_model.prediction_method in [ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value,
+                                                  ClassificationMethods.ADAPTIVE_TREE.value,
+                                                  ClassificationMethods.HOEFFDING_TREE.value,
+                                                  ClassificationMethods.SGDCLASSIFIER.value,
+                                                  ClassificationMethods.PERCEPTRON.value]:  # TODO: workaround
+        print('entered update')
+        for cluster in range(clusterer.n_clusters):
+            x = update_data[cluster]
+            if not x.empty:
+                y = x['label']
+                try:
+                    models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
+                except (NotImplementedError, KeyError):
+                    models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
+                except Exception as exception:
+                    raise exception
 
     return {ModelType.CLUSTERER.value: clusterer, ModelType.CLASSIFIER.value: models}
 

@@ -6,13 +6,12 @@ from rest_framework import status, mixins, generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from src.logs.log_service import create_log
+from src.logs.log_service import create_log, get_log
 from src.split.models import Split
 from src.split.serializers import SplitSerializer
 from .models import Log
 from .serializers import LogSerializer
 from src.logs.log_service import create_log, get_log_trace_attributes
-from ..utils.file_service import get_log
 from pm4py.objects.log.importer.xes import factory as xes_importer
 
 logger = logging.getLogger(__name__)

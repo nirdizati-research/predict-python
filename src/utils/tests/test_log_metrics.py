@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 from src.utils.log_metrics import events_by_date, resources_by_date, event_executions, new_trace_start, \
     trace_attributes, events_in_trace, max_events_in_log, trace_ids_in_log, traces_in_log
 from src.utils.tests_utils import general_example_filepath, financial_log_filepath, general_example_filename, \

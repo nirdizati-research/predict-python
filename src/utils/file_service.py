@@ -1,22 +1,7 @@
 import logging
 import time
 
-from pm4py.objects.log.importer.xes import factory as xes_importer
-from pm4py.objects.log.log import EventLog
-
-from src.logs.models import Log
-
 logger = logging.getLogger(__name__)
-
-
-def get_log(log: Log) -> EventLog:
-    """Read in event log from disk
-
-    Uses xes_importer to parse log.
-    """
-    filepath = log.path
-    logger.info("\t\tReading in log from {}".format(filepath))
-    return xes_importer.import_log(filepath)
 
 
 def create_unique_name(name: str) -> str:

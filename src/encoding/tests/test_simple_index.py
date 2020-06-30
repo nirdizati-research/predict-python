@@ -4,9 +4,9 @@ from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.models import TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.predictive_model.models import PredictiveModels
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
-    general_example_test_filepath, general_example_test_filename, create_test_log, general_example_train_filename, \
+    general_example_test_filepath_xes, general_example_test_filename, create_test_log, general_example_train_filename, \
     create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling, general_example_filename
 from django.test import TestCase
 
@@ -14,16 +14,15 @@ from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.models import TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.predictive_model.models import PredictiveModels
-from src.utils.file_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
-    general_example_test_filepath, general_example_test_filename, create_test_log, general_example_train_filename, \
+    general_example_test_filepath_xes, general_example_test_filename, create_test_log, general_example_train_filename, \
     create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling, general_example_filename
 
 
 class TestSplitLogExample(TestCase):
     def setUp(self):
         self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                                log_path=general_example_test_filepath))
+                                                log_path=general_example_test_filepath_xes))
         self.training_log = get_log(create_test_log(log_name=general_example_train_filename,
                                                     log_path=general_example_train_filepath))
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
@@ -108,7 +107,7 @@ class TestGeneralTest(TestCase):
 
     def setUp(self):
         self.log = get_log(create_test_log(log_name=general_example_test_filename,
-                                           log_path=general_example_test_filepath))
+                                           log_path=general_example_test_filepath_xes))
         self.labelling = create_test_labelling(label_type=LabelTypes.REMAINING_TIME.value)
         self.encoding = create_test_encoding(
             value_encoding=ValueEncodings.SIMPLE_INDEX.value,

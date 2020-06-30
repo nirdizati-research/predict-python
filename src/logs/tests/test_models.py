@@ -8,8 +8,9 @@ from rest_framework.test import APITestCase, APIClient
 
 from src.logs.models import Log
 from src.split.models import Split
-from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_filepath, general_example_test_filepath
+from src.logs.log_service import get_log
+from src.utils.tests_utils import general_example_filepath, general_example_test_filepath_xes, \
+    general_example_test_filepath_csv
 
 
 class LogModelTest(TestCase):
@@ -57,13 +58,19 @@ class FileUploadTests(APITestCase):
             remove('cache/log_cache/file2.xes')
 
     @staticmethod
-    def _create_test_file(path):
-        copyfile(general_example_test_filepath, path)
+    def _create_test_file_xes(path):
+        copyfile(general_example_test_filepath_xes, path)
         f = open(path, 'rb')
         return f
 
-    def test_upload_file(self):
-        f = self._create_test_file('/tmp/test_upload.xes')
+    @staticmethod
+    def _create_test_file_csv(path):
+        copyfile(general_example_test_filepath_csv, path)
+        f = open(path, 'rb')
+        return f
+
+    def test_upload_file_xes(self):
+        f = self._create_test_file_xes('/tmp/test_upload.xes')
 
         client = APIClient()
         response = client.post('/logs/', {'single': f}, format='multipart')
@@ -76,9 +83,36 @@ class FileUploadTests(APITestCase):
         self.assertIsNotNone(response.data['properties']['maxEventsInLog'])
         self.assertIsNotNone(response.data['properties']['newTraces'])
 
-    def test_upload_multiple_files(self):
-        f1 = self._create_test_file('/tmp/file1.xes')
-        f2 = self._create_test_file('/tmp/file2.xes')
+    def test_upload_file_csv(self):
+        f = self._create_test_file_csv('/tmp/test_upload.csv')
+
+        client = APIClient()
+        response = client.post('/logs/', {'single': f}, format='multipart')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['name'][:11], 'test_upload')
+        self.assertEqual(response.data['name'][-4:], '.csv')
+        self.assertIsNotNone(response.data['properties']['events'])
+        self.assertIsNotNone(response.data['properties']['resources'])
+        self.assertIsNotNone(response.data['properties']['traceAttributes'])
+        self.assertIsNotNone(response.data['properties']['maxEventsInLog'])
+        self.assertIsNotNone(response.data['properties']['newTraces'])
+
+    def test_upload_multiple_files_xes(self):
+        f1 = self._create_test_file_xes('/tmp/file1.xes')
+        f2 = self._create_test_file_xes('/tmp/file2.xes')
+
+        client = APIClient()
+        response = client.post('/splits/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')
+        self.assertEqual(response.data['type'], 'double')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIsNotNone(response.data['test_log'])
+        self.assertIsNotNone(response.data['training_log'])
+        self.assertIsNone(response.data['original_log'])
+
+    def test_upload_multiple_files_csv(self):
+        f1 = self._create_test_file_csv('/tmp/file1.csv')
+        f2 = self._create_test_file_csv('/tmp/file2.csv')
 
         client = APIClient()
         response = client.post('/splits/multiple', {'testSet': f1, 'trainingSet': f2}, format='multipart')

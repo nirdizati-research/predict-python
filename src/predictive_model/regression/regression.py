@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.externals import joblib
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_validate
 from xgboost import XGBRegressor
 
 from src.clustering.clustering import Clustering
@@ -77,7 +78,7 @@ def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
     return results_df
 
 
-def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clustering) -> dict:
+def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clustering, do_cv=False) -> dict:
     models = dict()
 
     train_data = clusterer.cluster_data(train_data)
@@ -87,7 +88,21 @@ def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clusteri
         cluster_train_df = train_data[cluster]
         if not cluster_train_df.empty:
             cluster_targets_df = cluster_train_df['label']
-            regressor.fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
+
+            if do_cv:
+                cross_validation_result = cross_validate(
+                    regressor,
+                    cluster_train_df.drop('label', 1),
+                    cluster_targets_df.values.ravel(),
+                    return_estimator=True,
+                    cv=10 #TODO per Chiara check se vuoi 10 cv
+                )
+
+                validation_scores = cross_validation_result['test_score']
+                regressors = cross_validation_result['estimator']
+                regressor = regressors[dict(zip(validation_scores,range(len(validation_scores))))[max(validation_scores)]] #TODO per Chiara check se vuoi il max o min o quello che sta in mezzo
+            else:
+                regressor.fit(cluster_train_df.drop('label', 1), cluster_targets_df.values.ravel())
 
             models[cluster] = regressor
             try:

@@ -12,10 +12,10 @@ from src.encoding.simple_index import simple_index
 from src.labelling.models import LabelTypes, ThresholdTypes
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.utils.file_service import get_log
+from src.logs.log_service import get_log
 from src.utils.tests_utils import create_test_encoding, create_test_labelling, create_test_log, \
     general_example_train_filename, \
-    general_example_train_filepath, general_example_test_filename, general_example_test_filepath
+    general_example_train_filepath, general_example_test_filename, general_example_test_filepath_xes
 
 
 class TestNNClassifier(TestCase):
@@ -26,7 +26,7 @@ class TestNNClassifier(TestCase):
         self.train_add_col = get_additional_columns(self.train_log)
 
         self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                                log_path=general_example_test_filepath))
+                                                log_path=general_example_test_filepath_xes))
         self.test_event_names = unique_events(self.test_log)
         self.test_add_col = get_additional_columns(self.test_log)
 

@@ -9,7 +9,7 @@ from src.clustering.methods_default_config import clustering_kmeans
 from src.core.common import CONF_MAP
 from src.jobs.models import Job
 from src.split.models import SplitTypes
-from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath, \
+from src.utils.tests_utils import general_example_filepath, repair_example_filepath, general_example_test_filepath_xes, \
     general_example_train_filepath, create_test_log, create_test_split, general_example_test_filename, \
     general_example_train_filename, general_example_filename
 
@@ -50,7 +50,7 @@ def split_double():
     return create_test_split(
         split_type=SplitTypes.SPLIT_DOUBLE.value,
         train_log=create_test_log(log_name=general_example_train_filename, log_path=general_example_train_filepath),
-        test_log=create_test_log(log_name=general_example_test_filename, log_path=general_example_test_filepath)
+        test_log=create_test_log(log_name=general_example_test_filename, log_path=general_example_test_filepath_xes)
     )
 
 

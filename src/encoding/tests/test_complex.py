@@ -5,15 +5,15 @@ from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.labelling.label_container import LabelContainer
 from src.labelling.models import LabelTypes
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_test_filepath, create_test_log, general_example_test_filename, \
+from src.logs.log_service import get_log
+from src.utils.tests_utils import general_example_test_filepath_xes, create_test_log, general_example_test_filename, \
     create_test_encoding, create_test_labelling
 
 
 class Complex(TestCase):
     def setUp(self):
         self.log = get_log(create_test_log(log_name=general_example_test_filename,
-                                           log_path=general_example_test_filepath))
+                                           log_path=general_example_test_filepath_xes))
         self.event_names = unique_events(self.log)
         self.add_col = get_additional_columns(self.log)
         self.encoding = create_test_encoding(

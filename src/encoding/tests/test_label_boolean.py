@@ -4,8 +4,8 @@ from src.encoding.common import encode_label_logs
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.labelling.label_container import *
 from src.predictive_model.models import PredictiveModels
-from src.utils.file_service import get_log
-from src.utils.tests_utils import general_example_test_filepath, create_test_log, general_example_test_filename, \
+from src.logs.log_service import get_log
+from src.utils.tests_utils import general_example_test_filepath_xes, create_test_log, general_example_test_filename, \
     create_test_encoding, create_test_labelling, general_example_train_filename, general_example_train_filepath, \
     create_test_job, create_test_predictive_model
 
@@ -15,7 +15,7 @@ class TestLabelBoolean(TestCase):
         self.train_log = get_log(create_test_log(log_name=general_example_train_filename,
                                                  log_path=general_example_train_filepath))
         self.test_log = get_log(create_test_log(log_name=general_example_test_filename,
-                                                log_path=general_example_test_filepath))
+                                                log_path=general_example_test_filepath_xes))
         self.encoding = create_test_encoding(
             value_encoding=ValueEncodings.BOOLEAN.value,
             prefix_length=2,

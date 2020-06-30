@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from src.split.models import SplitTypes, SplitOrderingMethods
 from src.split.splitting import get_train_test_log
-from src.utils.tests_utils import general_example_filepath, general_example_test_filepath, \
+from src.utils.tests_utils import general_example_filepath, general_example_test_filepath_xes, \
     general_example_train_filepath, create_test_split, create_test_log, general_example_filename, \
     general_example_train_filename, general_example_test_filename
 
@@ -89,4 +89,4 @@ def split_double():
             log_path=general_example_train_filepath),
         test_log=create_test_log(
             log_name=general_example_test_filename,
-            log_path=general_example_test_filepath))
+            log_path=general_example_test_filepath_xes))

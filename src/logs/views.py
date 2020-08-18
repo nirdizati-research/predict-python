@@ -7,12 +7,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from src.logs.log_service import create_log, get_log
-from src.split.models import Split
+from src.split.models import Split, SplitTypes
 from src.split.serializers import SplitSerializer
 from .models import Log
 from .serializers import LogSerializer
 from src.logs.log_service import create_log, get_log_trace_attributes
 from pm4py.objects.log.importer.xes import factory as xes_importer
+
+from ..split.splitting import get_train_test_log
 
 logger = logging.getLogger(__name__)
 
@@ -112,26 +114,52 @@ def upload_multiple(request):
 @api_view(['GET'])
 def get_split_train_logs(request, pk):
     try:
-        value = Split.objects.get(pk=pk)
+        split = Split.objects.get(pk=pk)
     except:
         return Response("No file found by the given id", status=status.HTTP_404_NOT_FOUND)
-    with open(value.train_log.path, 'r') as f:
+    if split.test_log is None and split.type == SplitTypes.SPLIT_SINGLE.value and not Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    ).exists():
+        _ = get_train_test_log(split)
+    split = Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    )[0]
+    with open(split.train_log.path, 'r') as f:
         data = f.read()
     response = HttpResponse(data, content_type='application/xes')
-    response['Content-Disposition'] = 'attachment; filename=' + value.train_log.name
+    response['Content-Disposition'] = 'attachment; filename=' + split.train_log.name
     return response
 
 
 @api_view(['GET'])
 def get_split_test_logs(request, pk):
     try:
-        value = Split.objects.get(pk=pk)
+        split = Split.objects.get(pk=pk)
     except:
         return Response("No file found by the given id", status=status.HTTP_404_NOT_FOUND)
-    with open(value.test_log.path, 'r') as f:
+    if split.test_log is None and split.type == SplitTypes.SPLIT_SINGLE.value and not Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    ).exists():
+        _ = get_train_test_log(split)
+    split = Split.objects.filter(
+        type=SplitTypes.SPLIT_DOUBLE.value,
+        original_log=split.original_log,
+        test_size=split.test_size,
+        splitting_method=split.splitting_method
+    )[0]
+    with open(split.test_log.path, 'r') as f:
         data = f.read()
     response = HttpResponse(data, content_type='application/xes')
-    response['Content-Disposition'] = 'attachment; filename=' + value.test_log.name
+    response['Content-Disposition'] = 'attachment; filename=' + split.test_log.name
     return response
 
 

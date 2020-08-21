@@ -44,3 +44,4 @@ Cython
 prettyjson==1.0.3
 ansible
 jsonpickle
+certifi>=2020.06.20

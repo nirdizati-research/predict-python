@@ -3,7 +3,7 @@ lime
 shap
 pymining
 PDPbox==0.2.0
-skater==1.1.2
+# skater==1.1.2
 multiprocess==0.70.9
 dtreeviz==0.8.1
 Django==2.1.7

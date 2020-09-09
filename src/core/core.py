@@ -191,8 +191,10 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
             )
         job.evaluation.save()
     elif job.type == JobTypes.LABELLING.value:
+        job.labelling = duplicate_orm_row(job.labelling)
         job.labelling.results = results
         job.labelling.save()
+        job.save()
 
     # if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
     #     save_result(results, job, start_time)

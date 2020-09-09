@@ -6,7 +6,7 @@ RUN apt-get update \
     && apt-get install -y graphviz
 
 #Downgrade pip until https://github.com/oracle/Skater/issues/292 is closed
-RUN python3 -m pip3 install --force-reinstall pip==20.1
+RUN python3 -m pip install --force-reinstall pip==20.1
 
 # Add requirements file used by pip install
 ADD ./requirements.txt /predict-python/

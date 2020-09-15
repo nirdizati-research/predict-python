@@ -64,7 +64,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         fmin(_calculate_and_evaluate, space, algo=algorithm.suggest, max_evals=max_evaluations, trials=trials)
     except ValueError:
         raise ValueError("All jobs failed, cannot find best configuration")
-    current_best = {'loss': 100, 'results': {}, 'predictive_model_id': {}, 'model_split': {}, 'config': {}}
+    current_best = list(trials)[0]['result']
     for trial in trials:
         a = trial['result']
         if current_best['loss'] > a['loss']:

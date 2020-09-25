@@ -50,6 +50,7 @@ class HyperparameterOptimization(CommonModel):
 class HyperOptAlgorithms(Enum):
     RANDOM_SEARCH = 'random_search'
     TPE = 'tpe'
+    ADAPTIVE_TPE = 'adaptive_tpe'
 
 
 class HyperOptLosses(Enum):
@@ -70,7 +71,8 @@ class HyperOptLosses(Enum):
 
 HYPEROPT_ALGORITHM_MAPPINGS = (
     (HyperOptAlgorithms.RANDOM_SEARCH.value, 'random_search'),
-    (HyperOptAlgorithms.TPE.value, 'tpe')
+    (HyperOptAlgorithms.TPE.value, 'tpe'),
+    (HyperOptAlgorithms.ADAPTIVE_TPE.value, 'adaptive_tpe')
 )
 
 HYPEROPT_LOSS_MAPPINGS = (

@@ -23,6 +23,52 @@ trial_number = 0
 
 holdout = False #TODO evaluate on validation set
 
+OPTIMISATION_ALGORITHM = {
+    HyperOptAlgorithms.RANDOM_SEARCH.value: hyperopt.rand,
+    HyperOptAlgorithms.TPE.value: hyperopt.tpe,
+    HyperOptAlgorithms.ADAPTIVE_TPE.value: hyperopt.atpe,
+}
+
+
+def run_hyperopt(job, original_training_df, original_test_df):
+    global training_df, test_df, global_job
+    global_job = job
+    training_df, test_df = original_training_df.copy(), original_test_df.copy()
+
+    validation_df = test_df
+    # test_df = training_df.sample(frac=.2)
+    test_df = training_df.tail(int(len(training_df) * 20 / 100))
+    training_df = training_df.drop(test_df.index)
+
+    space = _get_space(job)
+
+    max_evaluations = 1000
+    trials = Trials()
+
+    algorithm = OPTIMISATION_ALGORITHM[
+        job.hyperparameter_optimizer.__getattribute__(
+            job.hyperparameter_optimizer.optimization_method.lower()
+        ).algorithm_type
+    ]
+
+    try:
+        fmin(_calculate_and_evaluate, space, algo=algorithm.suggest, max_evals=max_evaluations, trials=trials)
+    except ValueError:
+        raise ValueError("All jobs failed, cannot find best configuration")
+    current_best = list(trials)[0]['result']
+    for trial in trials:
+        a = trial['result']
+        if current_best['loss'] > a['loss']:
+            current_best = a
+
+    results_df, auc = _test(
+        current_best['model_split'],
+        validation_df.drop(['trace_id'], 1),
+        evaluation=True,
+        is_binary_classifier=_check_is_binary_classifier(job.labelling.type)
+    )
+    return _prepare_results(results_df, auc)
+
 
 def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     """main entry method for hyperopt calculations
@@ -58,7 +104,11 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         ).max_evaluations #Todo: WHY DO I NEED TO GET HYPEROPT?
     trials = Trials()
 
-    algorithm = _choose_algorithm(job)
+    algorithm = algorithm = OPTIMISATION_ALGORITHM[
+        job.hyperparameter_optimizer.__getattribute__(
+            job.hyperparameter_optimizer.optimization_method.lower()
+        ).algorithm_type
+    ]
 
     try:
         fmin(_calculate_and_evaluate, space, algo=algorithm.suggest, max_evals=max_evaluations, trials=trials)
@@ -126,17 +176,6 @@ def _get_metric_multiplier(performance_metric: int) -> int:
     return metric_map[performance_metric]
 
 
-def _choose_algorithm(job: Job):
-    job_algorithm = job.hyperparameter_optimizer.__getattribute__(
-            job.hyperparameter_optimizer.optimization_method.lower()
-        ).algorithm_type
-
-    if job_algorithm == HyperOptAlgorithms.RANDOM_SEARCH.value:
-        return hyperopt.rand
-    elif job_algorithm == HyperOptAlgorithms.TPE.value:
-        return hyperopt.tpe
-
-
 def _calculate_and_evaluate(args) -> dict:
     global trial_number
     if trial_number % 20 == 0:
@@ -160,8 +199,12 @@ def _calculate_and_evaluate(args) -> dict:
     ).performance_metric
     multiplier = _get_metric_multiplier(performance_metric)
 
+    current_training_df, current_test_df = training_df.copy(), test_df.copy()
+
     try:
-        results, model_split = run_by_type(training_df.copy(), test_df.copy(), local_job)
+        results, model_split = run_by_type(current_training_df, current_test_df, local_job)
+        del current_training_df
+        del current_test_df
         return {
             'loss': -results[performance_metric] * multiplier,
             'status': STATUS_OK,

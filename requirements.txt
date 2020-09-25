@@ -17,7 +17,7 @@ django-rq==1.0.0
 django-cors-headers==2.0.0
 django-websocket-redis==0.5.2
 python-dateutil==2.8.1
-hyperopt==0.1.1
+hyperopt==0.2.4
 networkx==2.4
 xgboost==0.81
 rq-scheduler==0.9

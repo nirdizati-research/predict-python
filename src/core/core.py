@@ -199,6 +199,9 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     # if job.type == PredictiveModels.CLASSIFICATION.value: #todo this is an old workaround I should remove this
     #     save_result(results, job, start_time)
 
+    del training_df
+    del test_df
+
     logger.info("End job {}, {} .".format(job.type, get_run(job)))
     logger.info("\tResults {} .".format(results))
     return results, model_split

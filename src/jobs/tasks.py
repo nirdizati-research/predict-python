@@ -33,7 +33,7 @@ def prediction_task(job_id, do_publish_result=True):
             job_start_time = time.time()
             if job.hyperparameter_optimizer is not None and \
                 job.hyperparameter_optimizer.optimization_method != HyperparameterOptimizationMethods.NONE.value:
-                result, model_split = hyperopt_task(job)
+                result, _, model_split = calculate_hyperopt(job)
             else:
                 result, model_split = calculate(job)
             job_elapsed_time = time.time() - job_start_time
@@ -68,10 +68,3 @@ def save_models(models: dict, job: Job):
     job.predictive_model.save()
     job.save()
 
-
-def hyperopt_task(job):
-    # job_dict = job.to_dict()
-    results, config, model_split = calculate_hyperopt(job)
-    # method_conf_name = "{}.{}".format(job_dict['type'], job_dict['method'])
-    # job.config[method_conf_name] = config
-    return results, model_split

@@ -45,3 +45,5 @@ prettyjson==1.0.3
 ansible
 jsonpickle
 certifi>=2020.06.20
+scikit-multiflow @ git+git://github.com/scikit-multiflow/scikit-multiflow.git@8d642d5f5041287087172ae8f584c86d08a2a01a
+lightgbm==3.0.0

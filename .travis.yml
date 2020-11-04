@@ -2,55 +2,56 @@ git:
   depth: 1
 env:
   global:
-    - REDIS_HOST=localhost REDIS_PORT=6379
+  - REDIS_HOST=localhost REDIS_PORT=6379
 jobs:
   include:
-    - language: python
-      python: '3.6'
-      cache: pip
-      env:
-        - DB_USER=postgres
-        - DB_PASSWORD=""
-        - DB_NAME=travis_ci_test
-        - DB_HOST=localhost
-      services:
-        - redis-server
-        - postgresql
-      addons:
-        apt:
-          packages:
-            - graphviz
-      install:
-        - pip install -r requirements.txt
-        - pip install git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
-        - pip install codecov
-      before_script:
-        - psql -c 'create database travis_ci_test;' -U postgres
-      script:
-        - python manage.py makemigrations
-        - python manage.py test
-        - coverage run --source=. manage.py test
-      after_success:
-        - codecov
-
-    - stage: before_deploy
-      if: repo = nirdizati-research/predict-python AND branch = master AND type = push
-      language: minimal
-      name: Build Docker image and push to Docker Hub registry
-      services: docker
-      script:
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        - docker build -t nirdizatiresearch/predict-python:$TRAVIS_COMMIT .
-        - docker build -t nirdizatiresearch/predict-python .
-        - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
-        - docker push nirdizatiresearch/predict-python
-
-    - stage: deploy
-      if: repo = nirdizati-research/predict-python AND branch = master AND type = push
-      dist: xenial
-      name: Server deployment
-      language: minimal
-      deploy:
-        provider: script
-        skip_cleanup: true
-        script: bash deploy.sh
+  - language: python
+    python: '3.6'
+    cache: pip
+    env:
+    - DB_USER=postgres
+    - DB_PASSWORD=""
+    - DB_NAME=travis_ci_test
+    - DB_HOST=localhost
+    services:
+    - redis-server
+    - postgresql
+    addons:
+      apt:
+        packages:
+        - graphviz
+    install:
+    - pip install -r requirements.txt
+    - pip install git+git://github.com/scikit-multiflow/scikit-multiflow.git#egg=scikit-multiflow
+    - pip install codecov
+    before_script:
+    - psql -c 'create database travis_ci_test;' -U postgres
+    script:
+    - python manage.py makemigrations
+    - python manage.py test
+    - coverage run --source=. manage.py test
+    after_success:
+    - codecov
+  - stage: before_deploy
+    if: repo = nirdizati-research/predict-python AND branch = master AND type = push
+    language: minimal
+    name: Build Docker image and push to Docker Hub registry
+    services: docker
+    script:
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker build -t nirdizatiresearch/predict-python:$TRAVIS_COMMIT .
+    - docker build -t nirdizatiresearch/predict-python .
+    - docker push nirdizatiresearch/predict-python:$TRAVIS_COMMIT
+    - docker push nirdizatiresearch/predict-python
+  - stage: deploy
+    if: repo = nirdizati-research/predict-python AND branch = master AND type = push
+    dist: xenial
+    name: Server deployment
+    language: minimal
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script: bash deploy.sh
+before_install:
+- openssl aes-256-cbc -K $encrypted_9b7253ae8d55_key -iv $encrypted_9b7253ae8d55_iv
+  -in cloud.key.enc -out cloud.key -d

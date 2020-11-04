@@ -169,6 +169,7 @@ def create_multiple(request):
 def get_decoded_df(request, pk):
     job = Job.objects.filter(pk=pk)[0]
     training_df, test_df = get_encoded_logs(job)
+    training_df = training_df[:100]
     training_df = training_df.drop(['trace_id'], 1)
     encoder = retrieve_proper_encoder(job)
     encoder.decode(training_df, job.encoding)

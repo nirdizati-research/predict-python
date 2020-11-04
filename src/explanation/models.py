@@ -41,6 +41,9 @@ class Explanation(CommonModel):
     job = models.ForeignKey(Job, on_delete=models.DO_NOTHING, null=True, default=None)
     results = JSONField(default=dict)
 
+    class Meta:
+        unique_together = ('type', 'split', 'predictive_model', 'job')
+
     def to_dict(self):
         return {
             'type': self.type,

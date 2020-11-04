@@ -35,12 +35,12 @@ def explain(ice_exp: Explanation, training_df, test_df, explanation_target):
         for x in range(len(indexs) - 1):
             lst.append({'value': values[indexs[x]],
                         'label': summary_df['label'][x],
-                        'count': summary_df['count'][x],
+                        'count': int(summary_df['count'][x]),
                         })
     else:
         for x in range(summary_df.shape[0]):
             lst.append({'value': summary_df['display_column'][x],
                         'label': summary_df['label'][x],
-                        'count': summary_df['count'][x],
+                        'count': int(summary_df['count'][x]),
                         })
     return lst

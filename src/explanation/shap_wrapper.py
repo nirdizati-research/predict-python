@@ -9,14 +9,14 @@ from src.explanation.models import Explanation
 from src.utils.file_service import create_unique_name
 
 
-def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
+def explain(shap_exp: Explanation, training_df, test_df, explanation_target, prefix_target):
     job = shap_exp.job
     model = joblib.load(job.predictive_model.model_path)
     model = model[0]
-    shap.initjs()
+    prefix_int = int(prefix_target.strip('/').split('_')[1])-1
 
     explainer = shap.TreeExplainer(model)
-    target_df = test_df[test_df['trace_id'] == explanation_target].iloc[job.encoding.prefix_length - 1]
+    target_df = test_df[test_df['trace_id'] == explanation_target].iloc[prefix_int]
     #if explanation_target is None:
     #    shap_values = explainer.shap_values(test_df.drop(['trace_id', 'label'], 1))
     #else:
@@ -26,7 +26,7 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target):
 
     encoder = retrieve_proper_encoder(job)
     encoder.decode(test_df, job.encoding)
-    target_df = test_df[test_df['trace_id'] == explanation_target].iloc[job.encoding.prefix_length - 1]
+    target_df = test_df[test_df['trace_id'] == explanation_target].iloc[prefix_int]
     response = {explanation_target: [(target_df.keys()[index+1] + ' = ' + target_df[target_df.keys()[index+1]], shap_values[1][index]) for index in range(len(shap_values[1]))]}
 
     return response

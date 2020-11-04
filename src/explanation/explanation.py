@@ -35,13 +35,13 @@ EXPLANATION = {
 }
 
 
-def explanation(exp_id: int, explanation_target: str = None):
+def explanation(exp_id: int, explanation_target: str = None, prefix_target: str = None):
     exp = Explanation.objects.filter(pk=exp_id)[0]
     job = exp.job
     # load data
     training_df, test_df = get_encoded_logs(job)
 
-    result = EXPLANATION[exp.type][EXPLAIN](exp, training_df, test_df, explanation_target)
+    result = EXPLANATION[exp.type][EXPLAIN](exp, training_df, test_df, explanation_target, prefix_target)
 
     return 'False', result
 

@@ -106,7 +106,7 @@ def get_temporal_stability(request, pk, explanation_target=None):
 
 
 @api_view(['GET'])
-def get_shap(request, pk, explanation_target):
+def get_shap(request, pk, explanation_target, prefix_target):
     job = Job.objects.filter(pk=pk)[0]
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.SHAP.value, split=job.split,
                                                predictive_model=job.predictive_model, job=job)
@@ -116,13 +116,15 @@ def get_shap(request, pk, explanation_target):
     if 'shap' not in exp.results:
         exp.results.update({'shap': dict()})
 
-    if explanation_target in exp.results['shap']:
-        return Response(pd.read_json(exp.results['shap'][explanation_target], typ='series', orient='records'), status=200)
+    if explanation_target not in exp.results['shap']:
+        exp.results['shap'] = {explanation_target: dict()}
+
+    if explanation_target in exp.results['shap'] and prefix_target in exp.results['shap'][explanation_target].keys():
+        return Response(pd.read_json(exp.results['shap'][explanation_target][prefix_target], typ='series', orient='records'), status=200)
 
     else:
-        result = explanation(exp.id, explanation_target)
-
-        exp.results['shap'].update({explanation_target: pd.Series(result).to_json(orient='values')})
+        result = explanation(exp.id, explanation_target, prefix_target)
+        exp.results['shap'][explanation_target].update({prefix_target: pd.Series(result).to_json(orient='values')})
         exp.save()
         return Response(result, status=200)
 

@@ -67,7 +67,8 @@ class TestSHAPWrapper(TestCase):
         training_df_old, test_df_old = get_encoded_logs(job)
 
         explanation_target = '2_101'
+        prefix_target = 'prefix_1'
 
-        explanation = explain(exp, training_df_old, test_df_old, explanation_target)
+        explanation = explain(exp, training_df_old, test_df_old, explanation_target, prefix_target)
 
-        self.assertTrue(type(explanation) is str)
+        self.assertTrue(type(explanation) is dict)

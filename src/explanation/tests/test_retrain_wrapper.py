@@ -128,5 +128,5 @@ class TestRetrainWrapper(TestCase):
             'recall': 0.8333333333333334
         }
         explanation_target = [[['prefix_1', 1], ['prefix_2', 1], ['prefix_3', 1], ['prefix_4', 1]]]
-        explanation = explain(self.exp, self.training_df_old, self.test_df_old, explanation_target)
+        explanation = explain(self.exp, self.training_df_old, self.test_df_old, explanation_target, prefix_target=None)
         self.assertTrue(any([initial_result[key] != explanation['Retrain result'][key] for key in initial_result]))

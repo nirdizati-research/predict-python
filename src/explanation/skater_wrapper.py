@@ -9,7 +9,7 @@ from src.explanation.models import Explanation
 from src.utils.file_service import create_unique_name
 
 
-def explain(skater_exp: Explanation, training_df, test_df, explanation_target):
+def explain(skater_exp: Explanation, training_df, test_df, explanation_target, prefix_target):
     job = skater_exp.job
     model = joblib.load(job.predictive_model.model_path)
     model = model[0]

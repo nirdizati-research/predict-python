@@ -25,7 +25,7 @@ def _get_explanation(explainer, explanation_target_vector, model, features):
     )
 
 
-def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1):
+def explain(lime_exp: Explanation, training_df, test_df, explanation_target=1, prefix_target=None):
     model = joblib.load(lime_exp.predictive_model.model_path)
     if len(model) > 1:
         raise NotImplementedError('Models with cluster-based approach are not yet supported')

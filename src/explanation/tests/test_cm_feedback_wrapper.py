@@ -410,7 +410,7 @@ class TestCmFeedbackWrapper(TestCase):
     #     self.assertFalse(True)
 
     def test_explain(self):
-        mined_patterns = explain(self.exp, self.training_df_old, self.test_df_old, top_k=3)
+        mined_patterns = explain(self.exp, self.training_df_old, self.test_df_old, top_k=3, prefix_target=None)
         expected = {
             'confusion_matrix': {
                 'tp': ['2_108', '2_103', '2_101', '2_104'],

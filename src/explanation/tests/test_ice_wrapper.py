@@ -68,7 +68,7 @@ class TestICEWrapper(TestCase):
 
         explanation_target = 'prefix_2'
 
-        explanation = explain(exp, training_df_old, test_df_old, explanation_target)
+        explanation = explain(exp, training_df_old, test_df_old, explanation_target, prefix_target=None)
 
         expected = [
             {'value': 'Contact Hospital', 'label': 1.2962962962962963, 'count': 351},

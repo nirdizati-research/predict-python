@@ -7,7 +7,7 @@ from src.explanation.models import Explanation
 from src.jobs.models import Job
 
 
-def explain(anchor_exp: Explanation, training_df, test_df, explanation_target):
+def explain(anchor_exp: Explanation, training_df, test_df, explanation_target, prefix_target):
     job = Job.objects.filter(pk=anchor_exp.job.id)[0]
 
     explainer = anchor_tabular.AnchorTabularExplainer(

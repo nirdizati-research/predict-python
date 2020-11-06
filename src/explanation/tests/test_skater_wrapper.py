@@ -66,6 +66,6 @@ class TestSkaterWrapper(TestCase):
         )[0]
         training_df_old, test_df_old = get_encoded_logs(job)
 
-        explanation = explain(exp, training_df_old, test_df_old, None)
+        explanation = explain(exp, training_df_old, test_df_old, None, prefix_target=None)
 
         self.assertTrue(type(explanation) is str)  # todo: just syntactic check

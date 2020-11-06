@@ -6,7 +6,7 @@ from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
 
 
-def explain(ice_exp: Explanation, training_df, test_df, explanation_target):
+def explain(ice_exp: Explanation, training_df, test_df, explanation_target, prefix_target):
     job = ice_exp.job
     training_df = training_df.drop(['trace_id'], 1)
     if job.encoding.value_encoding == ValueEncodings.BOOLEAN.value:

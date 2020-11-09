@@ -12,7 +12,8 @@ EXPLANATION = {
         'temporal_stability': lime_wrapper.lime_temporal_stability
     },
     ExplanationTypes.SHAP.value: {
-        'explain': shap_wrapper.explain
+        'explain': shap_wrapper.explain,
+        'temporal_stability': shap_wrapper.shap_temporal_stability
     },
     ExplanationTypes.ICE.value: {
         'explain': ice_wrapper.explain

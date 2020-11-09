@@ -71,6 +71,42 @@ def get_lime_temporal_stability(request, pk, explanation_target=None):
 
 
 @api_view(['GET'])
+def get_shap_temporal_stability(request, pk, explanation_target=None):
+    job = Job.objects.filter(pk=pk)[0]
+    exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.SHAP.value, split=job.split,
+                                               predictive_model=job.predictive_model, job=job)
+    exp.save()
+
+    if 'shap_temporal' not in exp.results:
+        exp.results.update({'shap_temporal': dict()})
+
+    if explanation_target:
+        if explanation_target in exp.results['shap_temporal']:
+            return Response(exp.results['shap_temporal'][explanation_target], status=200)
+        else:
+            error, result = explanation_temporal_stability(exp.id, explanation_target=explanation_target)
+
+            #exp.results['shap_temporal'].update({explanation_target: pd.Series(result).to_json(orient='values')})
+            #exp.save()
+            if error == 'True':
+                return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
+                                status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+            else:
+                return Response(result, status=200)
+    elif 'no_target' in explanation_target:
+        return Response(exp.results['shap_temporal']['no_target'], status=200)
+    else:
+        error, result = explanation_temporal_stability(exp.id, explanation_target=explanation_target)
+        #exp.results['shap_temporal'].update({'no_target': pd.Series(result).to_json(orient='values')})
+        #exp.save()
+        if error == 'True':
+            return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
+                            status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+        else:
+            return Response(result, status=200)
+
+
+@api_view(['GET'])
 def get_temporal_stability(request, pk, explanation_target=None):
     job = Job.objects.filter(pk=pk)[0]
     exp, _ = Explanation.objects.get_or_create(type=ExplanationTypes.TEMPORAL_STABILITY.value, split=job.split,
@@ -81,7 +117,9 @@ def get_temporal_stability(request, pk, explanation_target=None):
 
     if explanation_target:
         if explanation_target in exp.results['temporal']:
-            return Response(exp.results['temporal'][explanation_target],status=200)
+            return Response(pd.read_json(exp.results['temporal'][explanation_target], typ='series',
+                     orient='records'), status = 200)
+
         else:
             error, result = explanation_temporal_stability(exp.id, explanation_target=explanation_target)
 

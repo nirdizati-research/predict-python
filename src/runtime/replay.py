@@ -39,7 +39,7 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
 
     times = sorted(set([event['time:timestamp'] for trace in eventlog for event in trace]))
 
-    for t in times[2::5]:
+    for t in times[2::int((len(times)-2)/5)]:
         filtered_eventlog = timestamp_filter.apply_events(eventlog, times[0].replace(tzinfo=None),
                                                           t.replace(tzinfo=None))
         trace_list = list()

@@ -3,7 +3,7 @@ from django.test import TestCase
 from src.core.core import get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation, ExplanationTypes
-from src.explanation.shap_wrapper import explain
+from src.explanation.shap_wrapper import explain, shap_temporal_stability
 from src.jobs.models import JobTypes
 from src.jobs.tasks import prediction_task
 from src.labelling.models import LabelTypes
@@ -70,5 +70,8 @@ class TestSHAPWrapper(TestCase):
         prefix_target = 'prefix_1'
 
         explanation = explain(exp, training_df_old, test_df_old, explanation_target, prefix_target)
+        training_df_old, test_df_old = get_encoded_logs(job)
+        explanation_temp = shap_temporal_stability(exp, training_df_old, test_df_old, explanation_target)
 
         self.assertTrue(type(explanation) is dict)
+        self.assertTrue(type(explanation_temp) is dict)

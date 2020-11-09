@@ -24,7 +24,7 @@ class TestRuntime(TestCase):
                                               test_log=runtime_log)
 
         requests = replay_task(runtime_job, job)
-        self.assertEqual(len(requests), 2)
+        self.assertEqual(len(requests), 6)
 
     def test_create_replay(self):
         job = create_test_job()

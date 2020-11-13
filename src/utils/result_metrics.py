@@ -92,7 +92,7 @@ def calculate_auc(actual, scores, auc: int) -> float:
     return auc
 
 
-def calculate_results_regression(input_df: DataFrame, label: Labelling) -> dict:
+def _prepare_results(input_df: DataFrame, label: Labelling) -> dict:
     if label.type == LabelTypes.REMAINING_TIME.value:
         # TODO is the remaining time in seconds or hours?
         input_df['label'] = input_df['label'] / 3600

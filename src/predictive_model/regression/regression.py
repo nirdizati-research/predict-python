@@ -21,7 +21,7 @@ from src.jobs.models import Job, ModelType
 from src.predictive_model.regression.custom_regression_models import NNRegressor
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.django_orm import duplicate_orm_row
-from src.utils.result_metrics import calculate_results_regression
+from src.utils.result_metrics import _prepare_results
 
 pd.options.mode.chained_assignment = None
 
@@ -52,7 +52,7 @@ def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering
     model_split = _train(train_data, _choose_regressor(job), clusterer)
     results_df = _test(model_split, test_data)
 
-    results = calculate_results_regression(results_df, job.labelling)
+    results = _prepare_results(results_df, job.labelling)
 
     return results, model_split
 

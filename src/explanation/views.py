@@ -24,11 +24,11 @@ def get_lime(request, pk, explanation_target):
 
     else:
         error, result = explanation(exp.id, explanation_target)
-
-        exp.results['lime'].update({explanation_target: result})
-        exp.save()
+        if error == "false":
+            exp.results['lime'].update({explanation_target: result})
+            exp.save()
         if error == 'True':
-            return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
+            return Response({'error': str(result)},
                             status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
         else:
             return Response(result, status=200)
@@ -53,19 +53,20 @@ def get_lime_temporal_stability(request, pk, explanation_target=None):
             exp.results['lime_temporal'].update({explanation_target: result})
             exp.save()
             if error == 'True':
-                return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                                status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+                return Response({'error': str(result)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 return Response(result, status=200)
     elif 'no_target' in explanation_target:
         return Response(exp.results['lime_temporal']['no_target'], status=200)
     else:
         error, result = explanation_temporal_stability(exp.id, explanation_target=explanation_target)
-        exp.results['lime_temporal'].update({'no_target': result})
-        exp.save()
+        if error == "false":
+            exp.results['lime_temporal'].update({'no_target': result})
+            exp.save()
         if error == 'True':
-            return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                            status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+            return Response({'error': str(result)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(result, status=200)
 
@@ -89,8 +90,8 @@ def get_shap_temporal_stability(request, pk, explanation_target=None):
             #exp.results['shap_temporal'].update({explanation_target: pd.Series(result).to_json(orient='values')})
             #exp.save()
             if error == 'True':
-                return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                                status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+                return Response({'error': str(result)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 return Response(result, status=200)
     elif 'no_target' in explanation_target:
@@ -100,8 +101,8 @@ def get_shap_temporal_stability(request, pk, explanation_target=None):
         #exp.results['shap_temporal'].update({'no_target': pd.Series(result).to_json(orient='values')})
         #exp.save()
         if error == 'True':
-            return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                            status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+            return Response({'error': str(result)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(result, status=200)
 
@@ -126,19 +127,20 @@ def get_temporal_stability(request, pk, explanation_target=None):
             exp.results['temporal'].update({explanation_target: result})
             exp.save()
             if error == 'True':
-                return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                                status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+                return Response({'error': str(result)},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
                 return Response(result, status=200)
     elif 'no_target' in explanation_target:
         return Response(exp.results['temporal']['no_target'], status=200)
     else:
         error, result = explanation_temporal_stability(exp.id, explanation_target=explanation_target)
-        exp.results['temporal'].update({'no_target': result})
-        exp.save()
+        if error == "false":
+            exp.results['temporal'].update({'no_target': result})
+            exp.save()
         if error == 'True':
-            return Response({'error': 'Explanation Target cannot be greater than ' + str(result)},
-                            status=status.HTTP_416_REQUESTED_RANGE_NOT_SATISFIABLE)
+            return Response({'error': str(result)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(result, status=200)
 

@@ -86,3 +86,9 @@ class Clustering:
         else:
             raise ValueError("Unexpected clustering method {}".format(job.clustering.clustering_method))
         return clusterer
+
+
+def init_clusterer(clustering: Clustering, train_data: DataFrame):
+    clusterer = Clustering(clustering)
+    clusterer.fit(train_data.drop(['trace_id', 'label'], 1))
+    return clusterer

@@ -25,6 +25,7 @@ from src.split.models import SplitTypes, Split
 from src.split.splitting import get_train_test_log
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.event_attributes import get_additional_columns
+from src.clustering.clustering import init_clusterer
 
 logger = logging.getLogger(__name__)
 
@@ -161,7 +162,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 
     start_time = time.time()
     if job.type == JobTypes.PREDICTION.value:
-        clusterer = _init_clusterer(job.clustering, training_df)
+        clusterer = init_clusterer(job.clustering, training_df)
         results, model_split = MODEL[job.predictive_model.predictive_model][ModelActions.BUILD_MODEL_AND_TEST.value](training_df, test_df, clusterer, job)
     elif job.type == JobTypes.LABELLING.value:
         results = _label_task(training_df)
@@ -205,12 +206,6 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
     logger.info("End job {}, {} .".format(job.type, get_run(job)))
     logger.info("\tResults {} .".format(results))
     return results, model_split
-
-
-def _init_clusterer(clustering: Clustering, train_data: DataFrame):
-    clusterer = Clustering(clustering)
-    clusterer.fit(train_data.drop(['trace_id', 'label'], 1))
-    return clusterer
 
 
 def runtime_calculate(job: Job) -> dict:

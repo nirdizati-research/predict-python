@@ -130,16 +130,23 @@ def _update(job: Job, data: DataFrame) -> dict:
                                                   ClassificationMethods.ADAPTIVE_TREE.value,
                                                   ClassificationMethods.HOEFFDING_TREE.value,
                                                   ClassificationMethods.SGDCLASSIFIER.value,
-                                                  ClassificationMethods.PERCEPTRON.value]:  # TODO: workaround
+                                                  ClassificationMethods.PERCEPTRON.value,
+                                                  ClassificationMethods.RANDOM_FOREST.value]:  # TODO: workaround
         print('entered update')
         for cluster in range(clusterer.n_clusters):
             x = update_data[cluster]
             if not x.empty:
                 y = x['label']
                 try:
-                    models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
+                    if previous_job.predictive_model.prediction_method == ClassificationMethods.RANDOM_FOREST.value:
+                        models[cluster].fit(x.drop('label', 1), y.values.ravel())
+                    else:
+                        models[cluster].partial_fit(x.drop('label', 1), y.values.ravel())
                 except (NotImplementedError, KeyError):
-                    models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
+                    if previous_job.predictive_model.prediction_method == ClassificationMethods.RANDOM_FOREST.value:
+                        models[cluster].fit(x.drop('label', 1).values, y.values.ravel())
+                    else:
+                        models[cluster].partial_fit(x.drop('label', 1).values, y.values.ravel())
                 except Exception as exception:
                     raise exception
 

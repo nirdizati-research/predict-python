@@ -1,10 +1,10 @@
 import numpy as np
-
 from anchor import anchor_tabular
 
-from src.core.core import MODEL, ModelActions
+from src.encoding.common import get_encoded_logs
 from src.explanation.models import Explanation
 from src.jobs.models import Job
+from src.predictive_model.common import ModelActions, MODEL
 
 
 def explain(anchor_exp: Explanation, training_df, test_df, explanation_target, prefix_target):

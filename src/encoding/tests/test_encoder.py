@@ -9,9 +9,9 @@ from src.utils.tests_utils import create_test_encoding
 class TestEncoder(TestCase):
     def setUp(self):
         self.df = DataFrame({
-            'literal_feature': [ str(item) for item in ['a', 'b', None]],
-            'numeric_feature':  [ str(item) for item in [.1, 1, -.99]],
-            'misc_feature':  [ str(item) for item in ['a', None, -.99]]
+            'literal_feature': [ str(item) for item in ['a', 'b', None] ],
+            'numeric_feature':  [ str(item) for item in [.1, 1, -.99] ],
+            'misc_feature':  [ str(item) for item in ['a', None, -.99] ]
         })
         self.how_it_should_be = DataFrame({
             'literal_feature': [2, 3, 1],

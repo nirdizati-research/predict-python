@@ -1,12 +1,10 @@
-import os
 
-import pandas as pd
 import shap
 from sklearn.externals import joblib
 
-from src.encoding.common import retrieve_proper_encoder
+from src.encoding.common import retrieve_proper_encoder, get_encoded_logs
+from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
-from src.utils.file_service import create_unique_name
 
 
 def _init_explainer(model):

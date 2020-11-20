@@ -5,6 +5,7 @@ from skater.core.explanations import Interpretation
 from skater.model import InMemoryModel
 from sklearn.externals import joblib
 
+from src.encoding.common import get_encoded_logs
 from src.explanation.models import Explanation
 from src.utils.file_service import create_unique_name
 

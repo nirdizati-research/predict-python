@@ -8,7 +8,8 @@ from datetime import timedelta
 import hyperopt
 from hyperopt import Trials, STATUS_OK, fmin, STATUS_FAIL
 
-from src.core.core import get_encoded_logs, get_run, run_by_type
+from src.core.core import get_run, run_by_type
+from src.encoding.common import get_encoded_logs
 from src.evaluation.models import Evaluation
 from src.hyperparameter_optimization.hyperopt_spaces import _get_space
 from src.hyperparameter_optimization.models import HyperOptAlgorithms, HyperOptLosses

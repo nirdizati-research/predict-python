@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from src.core.core import get_encoded_logs
+from src.encoding.common import get_encoded_logs
 from src.encoding.declare.declare import declare_encoding, xes_to_positional
 from src.encoding.declare.declare_mining import apply_template_to_log
 from src.encoding.declare.declare_templates import template_sizes

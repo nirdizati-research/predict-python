@@ -1,7 +1,5 @@
-import json
 import logging
 
-import numpy
 from django_rq.decorators import job
 from rest_framework import status
 

@@ -8,8 +8,7 @@ from rest_framework.mixins import RetrieveModelMixin
 from rest_framework.response import Response
 
 from src.clustering.models import Clustering
-from src.core.core import get_encoded_logs
-from src.encoding.common import retrieve_proper_encoder
+from src.encoding.common import retrieve_proper_encoder, get_encoded_logs
 from src.encoding.models import Encoding
 from src.hyperparameter_optimization.models import HyperparameterOptimization
 from src.jobs import tasks

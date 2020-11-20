@@ -17,6 +17,11 @@ from src.predictive_model.models import PredictiveModels
 from src.split.splitting import get_train_test_log
 from src.utils.event_attributes import unique_events
 from .simple_index import simple_index
+from ..cache.cache import get_labelled_logs, get_loaded_logs, put_loaded_logs, put_labelled_logs
+from ..cache.models import LabelledLog, LoadedLog
+from ..logs.log_service import create_log
+from ..split.models import SplitTypes, Split
+from ..utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
@@ -139,22 +144,90 @@ def _label_boolean(df: DataFrame, label: LabelContainer) -> DataFrame:
 def _categorical_encode(df: DataFrame) -> DataFrame:
     """Encodes every column except trace_id and label as int
 
-    Encoders module puts event name in cell, which can't be used by machine learning methods directly.
+def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame):
+    """returns the encoded logs
+
+    returns the training and test DataFrames encoded using the given job configuration, loading from cache if possible
+    :param job: job configuration
+    :param use_cache: load or not saved datasets from cache
+    :return: training and testing DataFrame
+
     """
-    for column in df.columns:
-        if column == 'trace_id':
-            continue
-        elif df[column].dtype == type(str):
-            df[column] = df[column].map(lambda s: _convert(s))
-    return df
+    logger.info('\tGetting Dataset')
 
+    if use_cache and \
+        (job.predictive_model is not None and
+         job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value):
 
-def _convert(s):
-    if isinstance(s, float) or isinstance(s, int):
-        return s
-    if s is None:
-        # Next activity resources
-        s = '0'
-    # TODO this potentially generates collisions and in general is a clever solution for another problem
-    # see https://stackoverflow.com/questions/16008670/how-to-hash-a-string-into-8-digits
-    return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8
+        if LabelledLog.objects.filter(split=job.split,
+                                      encoding=job.encoding,
+                                      labelling=job.labelling).exists():
+            try:
+                training_df, test_df = get_labelled_logs(job)
+            except FileNotFoundError: #cache invalidation
+                LabelledLog.objects.filter(split=job.split,
+                                           encoding=job.encoding,
+                                           labelling=job.labelling).delete()
+                logger.info('\t\tError pre-labeled cache invalidated!')
+                return get_encoded_logs(job, use_cache)
+        else:
+            if job.split.train_log is not None and \
+               job.split.test_log is not None and \
+               LoadedLog.objects.filter(split=job.split).exists():
+                try:
+                    training_log, test_log, additional_columns = get_loaded_logs(job.split)
+                except FileNotFoundError:  # cache invalidation
+                    LoadedLog.objects.filter(split=job.split).delete()
+                    logger.info('\t\tError pre-loaded cache invalidated!')
+                    return get_encoded_logs(job, use_cache)
+            else:
+                training_log, test_log, additional_columns = get_train_test_log(job.split)
+                if job.split.type == SplitTypes.SPLIT_SINGLE.value:
+                    search_for_already_existing_split = Split.objects.filter(
+                        type=SplitTypes.SPLIT_DOUBLE.value,
+                        original_log=job.split.original_log,
+                        test_size=job.split.test_size,
+                        splitting_method=job.split.splitting_method
+                    )
+                    if len(search_for_already_existing_split) >= 1:
+                        job.split = search_for_already_existing_split[0]
+                        job.split.save()
+                        job.save()
+                        return get_encoded_logs(job, use_cache=use_cache)
+                    else:
+                        # job.split = duplicate_orm_row(Split.objects.filter(pk=job.split.pk)[0])  #todo: replace with simple CREATE
+                        job.split = Split.objects.create(
+                            type=job.split.type,
+                            original_log=job.split.original_log,
+                            test_size=job.split.test_size,
+                            splitting_method=job.split.splitting_method,
+                            train_log=job.split.train_log,
+                            test_log=job.split.test_log,
+                            additional_columns=job.split.additional_columns
+                        ) #todo: futurebug if object changes
+                        job.split.type = SplitTypes.SPLIT_DOUBLE.value
+                        train_name = 'SPLITTED_' + job.split.original_log.name.split('.')[0] + '_0-' + str(int(100 - (job.split.test_size * 100)))
+                        job.split.train_log = create_log(
+                            EventLog(training_log),
+                            train_name + '.xes'
+                        )
+                        test_name = 'SPLITTED_' + job.split.original_log.name.split('.')[0] + '_' + str(int(100 - (job.split.test_size * 100))) + '-100'
+                        job.split.test_log = create_log(
+                            EventLog(test_log),
+                            test_name + '.xes'
+                        )
+                        job.split.additional_columns = str(train_name + test_name)  # TODO: find better naming policy
+                        job.split.save()
+
+                put_loaded_logs(job.split, training_log, test_log, additional_columns)
+
+            training_df, test_df = encode_label_logs(
+                training_log,
+                test_log,
+                job,
+                additional_columns=additional_columns)
+            put_labelled_logs(job, training_df, test_df)
+    else:
+        training_log, test_log, additional_columns = get_train_test_log(job.split)
+        training_df, test_df = encode_label_logs(training_log, test_log, job, additional_columns=additional_columns)
+    return training_df, test_df

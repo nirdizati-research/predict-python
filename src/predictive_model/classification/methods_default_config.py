@@ -5,7 +5,8 @@ def classification_random_forest():
         'max_depth': None,
         'max_features': 'auto',
         'n_jobs': -1,
-        'random_state': 21
+        'random_state': 21,
+        'warm_start': True
 
         ### DEFAULT PARAMS
         # 'n_estimators': 100,

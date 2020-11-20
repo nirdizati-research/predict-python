@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from src.core.core import get_encoded_logs
+from src.encoding.common import get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation, ExplanationTypes
 from src.explanation.shap_wrapper import explain, shap_temporal_stability

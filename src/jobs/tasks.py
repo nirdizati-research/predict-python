@@ -1,6 +1,5 @@
 import logging
 import time
-from datetime import timedelta
 
 import django_rq
 from django_rq.decorators import job
@@ -9,11 +8,10 @@ from sklearn.externals import joblib
 from src.clustering.models import ClusteringMethods
 from src.core.core import calculate
 from src.hyperparameter_optimization.hyperopt_wrapper import calculate_hyperopt
-from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods, HyperparameterOptimization
+from src.hyperparameter_optimization.models import HyperparameterOptimizationMethods
 from src.jobs.job_creator import set_model_name
 from src.jobs.models import Job, JobStatuses, JobTypes, ModelType
 from src.jobs.ws_publisher import publish
-from src.utils.django_orm import duplicate_orm_row
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +39,10 @@ def prediction_task(job_id, do_publish_result=True):
             if job.create_models:
                 save_models(model_split, job)
             job.result = result
+            # Evaluation.init(
+            #     job.predictive_model.predictive_model,
+            #     results
+            # )
             job.status = JobStatuses.COMPLETED.value
         elif job.status in [JobStatuses.COMPLETED.value, JobStatuses.ERROR.value, JobStatuses.RUNNING.value]:
             django_rq.enqueue(prediction_task, job.id)

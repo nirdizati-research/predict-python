@@ -1,9 +1,9 @@
 from pandas import DataFrame
 
 from src.clustering.models import ClusteringMethods
-from src.core.core import MODEL, ModelActions
 from src.encoding.common import retrieve_proper_encoder
 from src.explanation.models import Explanation
+from src.predictive_model.common import ModelActions, MODEL
 from src.predictive_model.models import PredictiveModels
 
 

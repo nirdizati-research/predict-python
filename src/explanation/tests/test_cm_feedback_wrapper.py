@@ -1,10 +1,11 @@
 
 from django.test import TestCase
+from pandas import DataFrame
 
-from src.core.core import get_encoded_logs
+from src.encoding.common import get_encoded_logs
 from src.encoding.models import ValueEncodings
-from src.explanation.cm_feedback_wrapper import explain, compute_confusion_matrix, retrieve_temporal_stability, \
-    retrieve_lime_ts, process_lime_features, filter_lime_features, compute_data, mine_patterns, tassellate_numbers
+from src.explanation.cm_feedback_wrapper import explain, compute_confusion_matrix, retrieve_predictions, \
+    retrieve_explanations, process_explanations_in_feature_value_importance, filter_feature_value_importance, compute_data, mine_patterns, tassellate_numbers
 from src.explanation.models import Explanation, ExplanationTypes
 from src.jobs.models import JobTypes
 from src.jobs.tasks import prediction_task
@@ -14,8 +15,6 @@ from src.predictive_model.models import PredictiveModels
 from src.split.models import SplitTypes, SplitOrderingMethods
 from src.utils.tests_utils import create_test_split, create_test_log, create_test_predictive_model, create_test_job, \
     create_test_encoding, create_test_labelling
-
-from pandas import DataFrame
 
 
 class TestCmFeedbackWrapper(TestCase):

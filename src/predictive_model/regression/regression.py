@@ -57,6 +57,34 @@ def regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering
     return results, model_split
 
 
+def cross_validated_regression(training_df: DataFrame, test_df: DataFrame, clusterer: Clustering, job: Job, cv=2) -> (dict, dict):
+    """main regression entry point
+
+    train and tests the regressor using the provided data
+
+    :param clusterer:
+    :param training_df: training DataFrame
+    :param test_df: testing DataFrame
+    :param job: job configuration
+    :param cv: cross validation amount
+    :return: predictive_model scores and split
+
+    """
+    train_data, test_data = _prep_data(training_df, test_df)
+
+    job.encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.pk)[0])  # TODO: maybe here would be better an intelligent get_or_create...
+    job.encoding.features = list(train_data.columns.values)
+    job.encoding.save()
+    job.save()
+
+    model_split = _train(train_data, _choose_regressor(job), clusterer, do_cv=True)
+    results_df = _test(model_split, test_data)
+
+    results = calculate_results_regression(results_df, job.labelling)
+
+    return results, model_split
+
+
 def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
     """single log regression
 

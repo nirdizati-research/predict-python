@@ -1,7 +1,7 @@
 from pdpbox import info_plots
 from pdpbox.utils import _get_grids
 
-from src.encoding.common import retrieve_proper_encoder
+from src.encoding.common import retrieve_proper_encoder, get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
 

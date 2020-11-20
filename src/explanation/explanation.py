@@ -1,4 +1,4 @@
-from src.core.core import get_encoded_logs
+from src.encoding.common import get_encoded_logs
 from src.explanation import lime_wrapper, shap_wrapper, anchor_wrapper, temporal_stability, \
     ice_wrapper, skater_wrapper, cm_feedback_wrapper, retrain_wrapper
 from src.explanation.models import Explanation, ExplanationTypes
@@ -56,4 +56,3 @@ def explanation_temporal_stability(exp_id: int, explanation_target: str = None):
     result = EXPLANATION[exp.type][TEMPORAL_STABILITY](exp, training_df, test_df, explanation_target)
 
     return 'False', result
-

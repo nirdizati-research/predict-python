@@ -3,16 +3,7 @@ from django.test import TestCase
 from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.models import TaskGenerationTypes, ValueEncodings
 from src.encoding.simple_index import simple_index
-from src.predictive_model.models import PredictiveModels
 from src.logs.log_service import get_log
-from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
-    general_example_test_filepath_xes, general_example_test_filename, create_test_log, general_example_train_filename, \
-    create_test_predictive_model, create_test_job, create_test_encoding, create_test_labelling, general_example_filename
-from django.test import TestCase
-
-from src.encoding.common import encode_label_logs, LabelTypes
-from src.encoding.models import TaskGenerationTypes, ValueEncodings
-from src.encoding.simple_index import simple_index
 from src.predictive_model.models import PredictiveModels
 from src.utils.tests_utils import general_example_filepath, general_example_train_filepath, \
     general_example_test_filepath_xes, general_example_test_filename, create_test_log, general_example_train_filename, \

@@ -2,6 +2,8 @@
 refactoring tests
 """
 
+import random
+
 from django.test import TestCase
 
 from src.clustering.models import ClusteringMethods
@@ -13,7 +15,6 @@ from src.predictive_model.models import PredictiveModels
 from src.predictive_model.regression.models import RegressionMethods
 from src.utils.tests_utils import create_test_clustering, create_test_job, create_test_encoding, \
     create_test_predictive_model, create_test_labelling
-import random
 
 
 class RefactorProof(TestCase):

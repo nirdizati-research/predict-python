@@ -3,9 +3,9 @@ from django.test import TestCase
 from src.encoding.common import encode_label_logs
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.labelling.label_container import *
+from src.logs.log_service import get_log
 from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import get_additional_columns
-from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_test_filepath_xes, create_test_log, general_example_test_filename, \
     create_test_encoding, create_test_labelling, general_example_train_filename, general_example_train_filepath, \
     create_test_job, create_test_predictive_model

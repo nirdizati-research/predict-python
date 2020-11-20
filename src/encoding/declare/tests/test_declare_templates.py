@@ -4,6 +4,7 @@ Testing functions used in deviance mining process and that all the templates met
 from collections import defaultdict
 
 from django.test import TestCase
+
 from src.encoding.declare.declare_templates import *
 
 config_2 = {

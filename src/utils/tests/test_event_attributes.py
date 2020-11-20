@@ -1,8 +1,8 @@
 from django.test import TestCase
 
+from src.logs.log_service import get_log
 from src.utils.event_attributes import unique_events, unique_events2, get_event_attributes, \
     get_additional_columns
-from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_test_filepath_xes, \
     general_example_train_filepath, general_example_test_filename, create_test_log, general_example_train_filename
 

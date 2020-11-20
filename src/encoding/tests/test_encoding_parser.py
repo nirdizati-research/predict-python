@@ -6,9 +6,9 @@ from src.encoding.complex_last_payload import complex
 from src.encoding.encoding_parser import EncodingParser
 from src.encoding.models import ValueEncodings
 from src.encoding.simple_index import simple_index
+from src.logs.log_service import get_log
 from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_train_filepath, create_test_log, general_example_train_filename, \
     create_test_labelling, create_test_encoding, general_example_test_filename, general_example_test_filepath_xes
 

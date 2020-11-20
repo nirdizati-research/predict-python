@@ -8,6 +8,7 @@ from pm4py.algo.filtering.log.timestamp import timestamp_filter
 
 from src.encoding.common import encode_label_logs
 from src.jobs.models import Job, JobTypes
+from src.logs.log_service import get_log
 from src.split.splitting import get_train_test_log
 from src.utils.django_orm import duplicate_orm_row
 from src.logs.log_service import get_log

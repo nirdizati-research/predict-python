@@ -3,8 +3,8 @@ from django.test import TestCase
 from src.encoding.complex_last_payload import last_payload
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
 from src.labelling.models import LabelTypes
-from src.utils.event_attributes import unique_events, get_additional_columns
 from src.logs.log_service import get_log
+from src.utils.event_attributes import unique_events, get_additional_columns
 from src.utils.tests_utils import general_example_test_filepath_xes, general_example_test_filename, create_test_log, \
     create_test_encoding, create_test_labelling
 

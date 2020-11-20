@@ -10,9 +10,9 @@ from src.encoding.complex_last_payload import complex
 from src.encoding.models import ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.labelling.models import LabelTypes, ThresholdTypes
+from src.logs.log_service import get_log
 from src.predictive_model.time_series_prediction.custom_time_series_prediction_models import RNNTimeSeriesPredictor
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.logs.log_service import get_log
 from src.utils.tests_utils import create_test_encoding, create_test_labelling, create_test_log, \
     general_example_train_filename, \
     general_example_train_filepath, general_example_test_filename, general_example_test_filepath_xes

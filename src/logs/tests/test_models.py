@@ -6,9 +6,9 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
+from src.logs.log_service import get_log
 from src.logs.models import Log
 from src.split.models import Split
-from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_filepath, general_example_test_filepath_xes, \
     general_example_test_filepath_csv
 

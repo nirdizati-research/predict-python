@@ -4,9 +4,9 @@ from src.encoding.boolean_frequency import boolean
 from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.encoding_container import ALL_IN_ONE
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
+from src.logs.log_service import get_log
 from src.predictive_model.models import PredictiveModels
 from src.utils.event_attributes import unique_events
-from src.logs.log_service import get_log
 from src.utils.tests_utils import general_example_test_filepath_xes, general_example_train_filepath, create_test_log, \
     general_example_test_filename, general_example_train_filename, create_test_job, create_test_encoding, \
     create_test_predictive_model, create_test_labelling

@@ -1,11 +1,11 @@
+from ast import literal_eval as make_tuple
 from itertools import groupby
 
 import pandas as pd
-from ast import literal_eval as make_tuple
-
 from pm4py.objects.log.log import Trace
 
-from src.encoding.declare.declare_mining import filter_candidates_by_support, generate_train_candidate_constraints, transform_results_to_numpy
+from src.encoding.declare.declare_mining import filter_candidates_by_support, generate_train_candidate_constraints, \
+    transform_results_to_numpy
 from src.encoding.declare.declare_templates import template_sizes
 
 

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from src.utils import log_metrics
 from src.logs.log_service import get_log
+from src.utils import log_metrics
 from src.utils.tests_utils import general_example_filepath, create_test_log, general_example_filename
 from src.utils.time_metrics import *
 

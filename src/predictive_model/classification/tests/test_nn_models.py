@@ -10,9 +10,9 @@ from src.core.tests.test_utils import HidePrints
 from src.encoding.models import ValueEncodings
 from src.encoding.simple_index import simple_index
 from src.labelling.models import LabelTypes, ThresholdTypes
+from src.logs.log_service import get_log
 from src.predictive_model.classification.custom_classification_models import NNClassifier
 from src.utils.event_attributes import unique_events, get_additional_columns
-from src.logs.log_service import get_log
 from src.utils.tests_utils import create_test_encoding, create_test_labelling, create_test_log, \
     general_example_train_filename, \
     general_example_train_filepath, general_example_test_filename, general_example_test_filepath_xes

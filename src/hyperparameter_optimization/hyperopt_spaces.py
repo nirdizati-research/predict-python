@@ -25,7 +25,8 @@ def _classification_random_forest() -> dict:
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
-        'max_features': hp.choice('max_features', ['sqrt', 'log2', 'auto', None])
+        'max_features': hp.choice('max_features', ['sqrt', 'log2', 'auto', None]),
+        'warm_start': True
     }
 
 

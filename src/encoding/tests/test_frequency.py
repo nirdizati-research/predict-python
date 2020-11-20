@@ -3,8 +3,8 @@ from django.test import TestCase
 from src.encoding.boolean_frequency import frequency
 from src.encoding.common import encode_label_logs, LabelTypes
 from src.encoding.models import ValueEncodings, TaskGenerationTypes
-from src.utils.event_attributes import unique_events
 from src.logs.log_service import get_log
+from src.utils.event_attributes import unique_events
 from src.utils.tests_utils import general_example_test_filepath_xes, general_example_train_filepath, create_test_log, \
     general_example_test_filename, general_example_train_filename, create_test_encoding, create_test_labelling, \
     create_test_job

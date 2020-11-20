@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from src.core.core import get_encoded_logs
+from src.encoding.common import get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.jobs.models import JobTypes
 from src.labelling.models import LabelTypes

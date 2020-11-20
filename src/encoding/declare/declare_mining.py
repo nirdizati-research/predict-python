@@ -2,6 +2,7 @@
 Main file for deviance mining
 """
 import numpy as np
+
 from src.encoding.declare.declare_templates import *
 
 

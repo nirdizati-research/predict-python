@@ -1,7 +1,7 @@
 from enum import Enum
 
-from django.db import models
 from django.contrib.postgres.fields import JSONField
+from django.db import models
 
 from src.common.models import CommonModel
 

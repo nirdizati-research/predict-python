@@ -141,8 +141,29 @@ def _label_boolean(df: DataFrame, label: LabelContainer) -> DataFrame:
     return df
 
 
-def _categorical_encode(df: DataFrame) -> DataFrame:
-    """Encodes every column except trace_id and label as int
+# def _categorical_encode(df: DataFrame) -> DataFrame:
+#     """Encodes every column except trace_id and label as int
+#
+#     Encoders module puts event name in cell, which can't be used by machine learning methods directly.
+#     """
+#     for column in df.columns:
+#         if column == 'trace_id':
+#             continue
+#         elif df[column].dtype == type(str):
+#             df[column] = df[column].map(lambda s: _convert(s))
+#     return df
+#
+#
+# def _convert(s):
+#     if isinstance(s, float) or isinstance(s, int):
+#         return s
+#     if s is None:
+#         # Next activity resources
+#         s = '0'
+#     # TODO this potentially generates collisions and in general is a clever solution for another problem
+#     # see https://stackoverflow.com/questions/16008670/how-to-hash-a-string-into-8-digits
+#     return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16) % 10 ** 8
+
 
 def get_encoded_logs(job: Job, use_cache: bool = True) -> (DataFrame, DataFrame):
     """returns the encoded logs

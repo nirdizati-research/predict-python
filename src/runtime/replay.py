@@ -67,7 +67,28 @@ def replay_core(replay_job: Job, training_initial_job: Job) -> list:
 
     gold_values = dict(zip(training_df['trace_id'], training_df['label']))
     parent_id = replay_job.id
-    final_job = duplicate_orm_row(replay_job)
+    # final_job = duplicate_orm_row(replay_job)  #todo: replace with simple CREATE
+    final_job = Job.objects.create(
+        created_date=replay_job.created_date,
+        modified_date=replay_job.modified_date,
+        error=replay_job.error,
+        status=replay_job.status,
+        type=replay_job.type,
+        create_models=replay_job.create_models,
+        case_id=replay_job.case_id,
+        event_number=replay_job.event_number,
+        gold_value=replay_job.gold_value,
+        results=replay_job.results,
+        parent_job=replay_job.parent_job,
+        split=replay_job.split,
+        encoding=replay_job.encoding,
+        labelling=replay_job.labelling,
+        clustering=replay_job.clustering,
+        predictive_model=replay_job.predictive_model,
+        evaluation=replay_job.evaluation,
+        hyperparameter_optimizer=replay_job.hyperparameter_optimizer,
+        incremental_train=replay_job.incremental_train
+    )
     final_job.parent_job = Job.objects.filter(pk=parent_id)[0]
     final_job.gold_value = gold_values
     final_job.type = JobTypes.REPLAY_PREDICT.value

@@ -29,11 +29,11 @@ def generate(split, payload):
                         predictive_model = PredictiveModel.init(
                             get_prediction_method_config(prediction_type, method, config))
 
-                        job = Job.objects.get_or_create(
+                        job = Job.objects.create(
                             status=JobStatuses.CREATED.value,
                             type=job_type,
                             split=split,
-                            encoding=Encoding.objects.get_or_create(
+                            encoding=Encoding.objects.create(
                                 data_encoding=DataEncodings.LABEL_ENCODER.value,
                                 value_encoding=encMethod,
                                 add_elapsed_time=encoding_dict.get('add_elapsed_time', False),
@@ -46,15 +46,15 @@ def generate(split, payload):
                                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                                 task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                                 features=config['encoding'].get('features', [])
-                            )[0],
-                            labelling=Labelling.objects.get_or_create(
+                            ),
+                            labelling=Labelling.objects.create(
                                 type=labelling_config.get('type', None),
                                 # TODO static check?
                                 attribute_name=labelling_config.get('attribute_name', None),
                                 threshold_type=labelling_config.get('threshold_type', None),
                                 threshold=labelling_config.get('threshold', None),
                                 results={}
-                            )[0] if labelling_config != {} else None,
+                            ) if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
                             if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
                             else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
@@ -66,20 +66,20 @@ def generate(split, payload):
                             # TODO TEMPORARY workaround
                             predictive_model=predictive_model,
                             create_models=config.get('create_models', False)
-                        )[0]
+                        )
 
-                        check_predictive_model_not_overwrite(job)
+                        # check_predictive_model_not_overwrite(job)
 
                         jobs.append(job)
                 else:
                     predictive_model = PredictiveModel.init(
                         get_prediction_method_config(prediction_type, method, config))
 
-                    job = Job.objects.get_or_create(
+                    job = Job.objects.create(
                         status=JobStatuses.CREATED.value,
                         type=job_type,
                         split=split,
-                        encoding=Encoding.objects.get_or_create(
+                        encoding=Encoding.objects.create(
                             data_encoding=DataEncodings.LABEL_ENCODER.value,
                             value_encoding=encMethod,
                             add_elapsed_time=encoding_dict.get('add_elapsed_time', False),
@@ -92,15 +92,15 @@ def generate(split, payload):
                             padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                             task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                             features=config['encoding'].get('features', [])
-                        )[0],
-                        labelling=Labelling.objects.get_or_create(
+                        ),
+                        labelling=Labelling.objects.create(
                             type=labelling_config.get('type', None),
                             # TODO static check?
                             attribute_name=labelling_config.get('attribute_name', None),
                             threshold_type=labelling_config.get('threshold_type', None),
                             threshold=labelling_config.get('threshold', None),
                             results={}
-                        )[0] if labelling_config != {} else None,
+                        ) if labelling_config != {} else None,
                         clustering=Clustering.init(clustering, configuration=config.get(clustering, {}))
                         if predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value
                         else Clustering.init(ClusteringMethods.NO_CLUSTER.value, configuration={}),
@@ -111,9 +111,9 @@ def generate(split, payload):
                         # TODO TEMPORARY workaround
                         predictive_model=predictive_model,
                         create_models=config.get('create_models', False)
-                    )[0]
+                    )
 
-                    check_predictive_model_not_overwrite(job)
+                    # check_predictive_model_not_overwrite(job)
 
                     jobs.append(job)
 
@@ -138,7 +138,10 @@ def get_prediction_method_config(predictive_model, prediction_method, payload):
 def set_model_name(job: Job) -> None:
     if job.create_models:
         if job.predictive_model.model_path != '':
-            job.predictive_model = duplicate_orm_row(PredictiveModel.objects.filter(pk=job.predictive_model.pk)[0])
+            # job.predictive_model = duplicate_orm_row(PredictiveModel.objects.filter(pk=job.predictive_model.pk)[0])  #todo: replace with simple CREATE
+            job.predictive_model = PredictiveModel.init(
+                job.predictive_model.get_full_dict() #todo: doublecheck me, are you sure get_full_dict is returning everything needed?
+            ) #todo: futurebug if object changes
             job.predictive_model.save()
             job.save()
 
@@ -175,12 +178,12 @@ def generate_labelling(split, payload):
 
     if encoding['generation_type'] == UP_TO:
         for i in range(1, encoding['prefix_length'] + 1):
-            item, _ = Job.objects.get_or_create(
+            item = Job.objects.create(
                 status=JobStatuses.CREATED.value,
                 type=JobTypes.LABELLING.value,
 
                 split=split,
-                encoding=Encoding.objects.get_or_create(  # TODO fixme
+                encoding=Encoding.objects.create(  # TODO fixme
                     data_encoding=DataEncodings.LABEL_ENCODER.value,
                     value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
                     add_elapsed_time=encoding.get('add_elapsed_time', False),
@@ -193,24 +196,24 @@ def generate_labelling(split, payload):
                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                     task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                     features=config['encoding'].get('features', [])
-                )[0],
-                labelling=Labelling.objects.get_or_create(
+                ),
+                labelling=Labelling.objects.create(
                     type=labelling_config.get('type', None),
                     # TODO static check?
                     attribute_name=labelling_config.get('attribute_name', None),
                     threshold_type=labelling_config.get('threshold_type', None),
                     threshold=labelling_config.get('threshold', None),
                     results={}
-                )[0] if labelling_config != {} else None
+                ) if labelling_config != {} else None
             )
             jobs.append(item)
     else:
-        item, _ = Job.objects.get_or_create(
+        item = Job.objects.create(
             status=JobStatuses.CREATED.value,
             type=JobTypes.LABELLING.value,
 
             split=split,
-            encoding=Encoding.objects.get_or_create(  # TODO fixme
+            encoding=Encoding.objects.create(  # TODO fixme
                 data_encoding=DataEncodings.LABEL_ENCODER.value,
                 value_encoding=encoding.get('encodings', ValueEncodings.SIMPLE_INDEX.value),
                 add_elapsed_time=encoding.get('add_elapsed_time', False),
@@ -223,15 +226,15 @@ def generate_labelling(split, payload):
                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                 task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                 features=config['encoding'].get('features', [])
-            )[0],
-            labelling=Labelling.objects.get_or_create(
+            ),
+            labelling=Labelling.objects.create(
                 type=labelling_config.get('type', None),
                 # TODO static check?
                 attribute_name=labelling_config.get('attribute_name', None),
                 threshold_type=labelling_config.get('threshold_type', None),
                 threshold=labelling_config.get('threshold', None),
                 results={}
-            )[0] if labelling_config != {} else None
+            ) if labelling_config != {} else None
         )
         jobs.append(item)
 
@@ -251,11 +254,11 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                     encoding = payload['config']['encoding']
                     if encoding['generation_type'] == UP_TO:
                         for i in range(1, encoding['prefix_length'] + 1):
-                            job, _ = Job.objects.get_or_create(
+                            job = Job.objects.create(
                                 status=JobStatuses.CREATED.value,
                                 type=JobTypes.UPDATE.value,
                                 split=split,
-                                encoding=Encoding.objects.get_or_create(  # TODO fixme
+                                encoding=Encoding.objects.create(  # TODO fixme
                                     data_encoding=DataEncodings.LABEL_ENCODER.value,
                                     value_encoding=encMethod,
                                     add_elapsed_time=encoding.get('add_elapsed_time', False),
@@ -268,15 +271,15 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                     padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                                     task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                                     features=config['encoding'].get('features', [])
-                                )[0],
-                                labelling=Labelling.objects.get_or_create(
+                                ),
+                                labelling=Labelling.objects.create(
                                     type=labelling_config.get('type', None),
                                     # TODO static check?
                                     attribute_name=labelling_config.get('attribute_name', None),
                                     threshold_type=labelling_config.get('threshold_type', None),
                                     threshold=labelling_config.get('threshold', None),
                                     results={}
-                                )[0] if labelling_config != {} else None,
+                                ) if labelling_config != {} else None,
                                 clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                                 predictive_model=PredictiveModel.init(
                                     get_prediction_method_config(generation_type, method, payload)
@@ -289,17 +292,17 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 )[0]
                             )
 
-                            check_predictive_model_not_overwrite(job)
+                            # check_predictive_model_not_overwrite(job)
 
 
                             jobs.append(job)
                     else:
-                        job, _ = Job.objects.get_or_create(
+                        job = Job.objects.create(
                             status=JobStatuses.CREATED.value,
                             type=JobTypes.UPDATE.value,
 
                             split=split,
-                            encoding=Encoding.objects.get_or_create(  # TODO fixme
+                            encoding=Encoding.objects.create(  # TODO fixme
                                 data_encoding=DataEncodings.LABEL_ENCODER.value,
                                 value_encoding=encMethod,
                                 add_elapsed_time=encoding.get('add_elapsed_time', False),
@@ -312,15 +315,15 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                                 padding=True if config['encoding']['padding'] == 'zero_padding' else False,
                                 task_generation_type=config['encoding'].get('generation_type', 'only_this'),
                                 features=config['encoding'].get('features', [])
-                            )[0],
-                            labelling=Labelling.objects.get_or_create(
+                            ),
+                            labelling=Labelling.objects.create(
                                 type=labelling_config.get('type', None),
                                 # TODO static check?
                                 attribute_name=labelling_config.get('attribute_name', None),
                                 threshold_type=labelling_config.get('threshold_type', None),
                                 threshold=labelling_config.get('threshold', None),
                                 results={}
-                            )[0] if labelling_config != {} else None,
+                            ) if labelling_config != {} else None,
                             clustering=Clustering.init(clustering, configuration=config.get(clustering, {})),
                             predictive_model=PredictiveModel.init(
                                 get_prediction_method_config(generation_type, method, payload)
@@ -333,7 +336,7 @@ def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value
                             )[0]
                         )
 
-                        check_predictive_model_not_overwrite(job)
+                        # check_predictive_model_not_overwrite(job)
 
 
                         jobs.append(job)

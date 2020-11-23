@@ -1,6 +1,7 @@
 from django.test.testcases import TestCase
 from rest_framework.test import APIClient
 
+from src.jobs.models import Job
 from src.jobs.tasks import prediction_task
 from src.logs.log_service import get_log
 from src.runtime.tasks import runtime_task, replay_task, replay_prediction_task
@@ -14,7 +15,28 @@ class TestRuntime(TestCase):
     def test_replay(self):
 
         job = create_test_job()
-        runtime_job = duplicate_orm_row(job)
+        # runtime_job = duplicate_orm_row(job)  #todo: replace with simple CREATE
+        runtime_job = Job.objects.create(
+            created_date=job.created_date,
+            modified_date=job.modified_date,
+            error=job.error,
+            status=job.status,
+            type=job.type,
+            create_models=job.create_models,
+            case_id=job.case_id,
+            event_number=job.event_number,
+            gold_value=job.gold_value,
+            results=job.results,
+            parent_job=job.parent_job,
+            split=job.split,
+            encoding=job.encoding,
+            labelling=job.labelling,
+            clustering=job.clustering,
+            predictive_model=job.predictive_model,
+            evaluation=job.evaluation,
+            hyperparameter_optimizer=job.hyperparameter_optimizer,
+            incremental_train=job.incremental_train
+        )
 
         runtime_log = create_test_log(log_name='runtime_example.xes',
                                       log_path='cache/log_cache/test_logs/runtime_test.xes')

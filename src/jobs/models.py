@@ -90,7 +90,7 @@ class Job(CommonModel):
             'encoding': self.encoding.to_dict(),
             'labelling': self.labelling.to_dict(),
             'clustering': self.clustering.to_dict(),
-            'predictive_model': self.predictive_model.to_dict(),
+            'predictive_model': self.predictive_model.get_full_dict(),
             'evaluation': [self.evaluation.to_dict() if self.evaluation is not None else None],
             'hyperparameter_optimizer': [
                 self.hyperparameter_optimizer.to_dict() if self.hyperparameter_optimizer is not None else None],

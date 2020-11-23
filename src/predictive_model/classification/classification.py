@@ -46,7 +46,20 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
-    job.encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.pk)[0])  # TODO: maybe here would be better an intelligent get_or_create...
+    # job.encoding = duplicate_orm_row(Encoding.objects.filter(pk=job.encoding.pk)[0])  # TODO: maybe here would be better an intelligent get_or_create...
+    job.encoding = Encoding.objects.create(
+        data_encoding=job.encoding.data_encoding,
+        value_encoding=job.encoding.value_encoding,
+        add_elapsed_time=job.encoding.add_elapsed_time,
+        add_remaining_time=job.encoding.add_remaining_time,
+        add_executed_events=job.encoding.add_executed_events,
+        add_resources_used=job.encoding.add_resources_used,
+        add_new_traces=job.encoding.add_new_traces,
+        features=job.encoding.features,
+        prefix_length=job.encoding.prefix_length,
+        padding=job.encoding.padding,
+        task_generation_type=job.encoding.task_generation_type
+    )
     job.encoding.features = list(train_data.columns.values)
     job.encoding.save()
     job.save()

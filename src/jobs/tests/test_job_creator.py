@@ -1,7 +1,7 @@
 from django.test.testcases import TestCase
 
 from src.jobs.job_creator import generate, generate_labelling, update
-from src.jobs.models import JobTypes
+from src.jobs.models import JobTypes, Job
 from src.jobs.tasks import prediction_task
 from src.utils.django_orm import duplicate_orm_row
 from src.utils.tests_utils import create_test_job
@@ -246,7 +246,28 @@ class TestJobCreator(TestCase):
         job = create_test_job()
         prediction_task(job.id)
 
-        job2 = duplicate_orm_row(job)
+        # job2 = duplicate_orm_row(job) #todo: replace with simple CREATE
+        job2 = Job.objects.create(
+            created_date=job.created_date,
+            modified_date=job.modified_date,
+            error=job.error,
+            status=job.status,
+            type=job.type,
+            create_models=job.create_models,
+            case_id=job.case_id,
+            event_number=job.event_number,
+            gold_value=job.gold_value,
+            results=job.results,
+            parent_job=job.parent_job,
+            split=job.split,
+            encoding=job.encoding,
+            labelling=job.labelling,
+            clustering=job.clustering,
+            predictive_model=job.predictive_model,
+            evaluation=job.evaluation,
+            hyperparameter_optimizer=job.hyperparameter_optimizer,
+            incremental_train=job.incremental_train
+        )
         job.refresh_from_db()
         job2.incremental_train = job
         job2.type = JobTypes.UPDATE.value

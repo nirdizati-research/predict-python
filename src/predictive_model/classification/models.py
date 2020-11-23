@@ -60,50 +60,50 @@ class Classification(PredictiveModel):
         classifier_type = configuration['prediction_method']
         if classifier_type == ClassificationMethods.DECISION_TREE.value:
             default_configuration = classification_decision_tree()
-            return DecisionTree.objects.get_or_create(
+            return DecisionTree.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 min_samples_split=configuration.get('min_samples_split', default_configuration['min_samples_split']),
                 min_samples_leaf=configuration.get('min_samples_leaf', default_configuration['min_samples_leaf'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.KNN.value:
             default_configuration = classification_knn()
-            return Knn.objects.get_or_create(
+            return Knn.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 n_neighbors=configuration.get('n_neighbors', default_configuration['n_neighbors']),
                 weights=configuration.get('weights', default_configuration['weights'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.RANDOM_FOREST.value:
             default_configuration = classification_random_forest()
-            return RandomForest.objects.get_or_create(
+            return RandomForest.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth']),
                 max_features=configuration.get('max_features', default_configuration['max_features']),
                 random_state=123
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.XGBOOST.value:
             default_configuration = classification_xgboost()
-            return XGBoost.objects.get_or_create(
+            return XGBoost.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 n_estimators=configuration.get('n_estimators', default_configuration['n_estimators']),
                 max_depth=configuration.get('max_depth', default_configuration['max_depth'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.MULTINOMIAL_NAIVE_BAYES.value:
             default_configuration = classification_incremental_naive_bayes()
-            return NaiveBayes.objects.get_or_create(
+            return NaiveBayes.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 alpha=configuration.get('alpha', default_configuration['alpha']),
                 fit_prior=configuration.get('fit_prior', default_configuration['fit_prior'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.HOEFFDING_TREE.value:
             default_configuration = classification_incremental_hoeffding_tree()
-            return HoeffdingTree.objects.get_or_create(
+            return HoeffdingTree.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
@@ -113,10 +113,10 @@ class Classification(PredictiveModel):
                 remove_poor_atts=configuration.get('remove_poor_atts', default_configuration['remove_poor_atts']),
                 leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
                 nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.ADAPTIVE_TREE.value:
             default_configuration = classification_incremental_adaptive_tree()
-            return AdaptiveHoeffdingTree.objects.get_or_create(
+            return AdaptiveHoeffdingTree.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 grace_period=configuration.get('grace_period', default_configuration['grace_period']),
@@ -126,10 +126,10 @@ class Classification(PredictiveModel):
                 remove_poor_atts=configuration.get('remove_poor_atts', default_configuration['remove_poor_atts']),
                 leaf_prediction=configuration.get('leaf_prediction', default_configuration['leaf_prediction']),
                 nb_threshold=configuration.get('nb_threshold', default_configuration['nb_threshold'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.SGDCLASSIFIER.value:
             default_configuration = classification_incremental_sgd_classifier()
-            return SGDClassifier.objects.get_or_create(
+            return SGDClassifier.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 loss=configuration.get('loss', default_configuration['loss']),
@@ -146,10 +146,10 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction',
                                                       default_configuration['validation_fraction']),
                 average=configuration.get('average', default_configuration['average'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.PERCEPTRON.value:
             default_configuration = classification_incremental_perceptron()
-            return Perceptron.objects.get_or_create(
+            return Perceptron.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 penalty=configuration.get('penalty', default_configuration['penalty']),
@@ -161,10 +161,10 @@ class Classification(PredictiveModel):
                 validation_fraction=configuration.get('validation_fraction',
                                                       default_configuration['validation_fraction']),
                 n_iter_no_change=configuration.get('n_iter_no_change', default_configuration['n_iter_no_change'])
-            )[0]
+            )
         elif classifier_type == ClassificationMethods.NN.value:
             default_configuration = classification_nn()
-            return NeuralNetwork.objects.get_or_create(
+            return NeuralNetwork.objects.create(
                 prediction_method=classifier_type,
                 predictive_model=PredictiveModels.CLASSIFICATION.value,
                 n_hidden_layers=configuration.get('n_hidden_layers', default_configuration['n_hidden_layers']),
@@ -172,7 +172,7 @@ class Classification(PredictiveModel):
                 activation=configuration.get('activation', default_configuration['activation']),
                 n_epochs=configuration.get('n_epochs', default_configuration['n_epochs']),
                 dropout_rate=configuration.get('dropout_rate', default_configuration['dropout_rate']),
-            )[0]
+            )
         else:
             raise ValueError('classifier type {} not recognized'.format(classifier_type))
 

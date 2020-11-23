@@ -4,7 +4,7 @@ from django.test import TestCase
 from src.encoding.common import get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation, ExplanationTypes
-from src.explanation.retrain_wrapper import randomise_features, save_randomised_set, retrain
+from src.explanation.retrain_wrapper import randomise_features, save_randomised_set, explain
 from src.jobs.models import JobTypes
 from src.jobs.tasks import prediction_task
 from src.labelling.models import LabelTypes

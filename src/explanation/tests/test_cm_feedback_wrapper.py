@@ -4,7 +4,7 @@ from pandas import DataFrame
 
 from src.encoding.common import get_encoded_logs
 from src.encoding.models import ValueEncodings
-from src.explanation.cm_feedback_wrapper import explain, compute_confusion_matrix, retrieve_predictions, \
+from src.explanation.cm_feedback_wrapper import explain, compute_confusion_matrix, retrieve_temporal_stability, \
     retrieve_explanations, process_explanations_in_feature_value_importance, filter_feature_value_importance, compute_data, mine_patterns, tassellate_numbers
 from src.explanation.models import Explanation, ExplanationTypes
 from src.jobs.models import JobTypes

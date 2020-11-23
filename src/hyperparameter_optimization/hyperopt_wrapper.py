@@ -25,8 +25,6 @@ logger = logging.getLogger(__name__)
 
 trial_number = 0
 
-holdout = False #TODO evaluate on validation set
-
 OPTIMISATION_ALGORITHM = {
     HyperOptAlgorithms.RANDOM_SEARCH.value: hyperopt.rand,
     HyperOptAlgorithms.TPE.value: hyperopt.tpe,
@@ -35,10 +33,10 @@ OPTIMISATION_ALGORITHM = {
 
 
 def _retrieve_train_validate_test(local_train_df, local_test_df):
-    validation_df = local_test_df
-    # test_df = training_df.sample(frac=.2)
-    local_test_df = local_test_df.tail(int(len(local_train_df) * 20 / 100))
-    local_train_df = local_train_df.drop(local_test_df.index)
+    validation_df = local_train_df.tail(# uses last 20% of train set to validate result or at least one trace
+        max( int(len(local_train_df) * 20 / 100), 1 )
+    )
+    local_train_df = local_train_df.drop(validation_df.index)
     return local_train_df, validation_df, local_test_df
 
 
@@ -51,10 +49,10 @@ def _run_hyperoptimisation(space, algorithm_suggest, max_evaluations, trials):
 
 def _test_best_candidate(current_best, job_labelling_type, job_type):
     if job_type == PredictiveModels.CLASSIFICATION.value:
-        return classification_test(current_best['model_split'], validation_df.drop(['trace_id'], 1),
+        return classification_test(current_best['model_split'], test_df.drop(['trace_id'], 1),
                      evaluation=True, is_binary_classifier=_check_is_binary_classifier(job_labelling_type))
     elif job_type == PredictiveModels.REGRESSION.value:
-        return regression_test(current_best['model_split'], validation_df.drop(['trace_id'], 1)), 0
+        return regression_test(current_best['model_split'], test_df.drop(['trace_id'], 1)), 0
 
 
 def run_hyperopt(job, original_training_df, original_test_df):
@@ -101,7 +99,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
         ).performance_metric) #Todo: WHY DO I NEED TO GET HYPEROPT?
     )
 
-    global train_df, test_df, global_job, validation_df
+    global train_df, validation_df, test_df, global_job
     global_job = job
     train_df, test_df = get_encoded_logs(job)
     train_df, validation_df, test_df = _retrieve_train_validate_test(train_df, test_df)
@@ -146,7 +144,7 @@ def calculate_hyperopt(job: Job) -> (dict, dict, dict):
     job.evaluation.save()
     job.save()
 
-    logger.info("End hyperopt job {}, {}. \n\tResults on test {}. \n\tResults on validation {}.".format(job.type, get_run(job), best_candidate['results'], results))
+    logger.info("End hyperopt job {}, {}. \n\tResults on validation {}. \n\tResults on test {}.".format(job.type, get_run(job), best_candidate['results'], results)) #
     return results, best_candidate['config'], best_candidate['model_split']
 
 
@@ -184,8 +182,6 @@ def _calculate_and_evaluate(args) -> dict:
 
     model_config = {'predictive_model': predictive_model, 'prediction_method': prediction_method, **args}
 
-    new_predictive_model = PredictiveModel.init(model_config)
-    local_job.predictive_model = duplicate_orm_row(new_predictive_model)
     local_job.predictive_model.save()
     local_job.save()
     # local_job = duplicate_orm_row(local_job) #TODO not sure it is ok to have this here.

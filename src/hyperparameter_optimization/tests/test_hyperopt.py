@@ -139,17 +139,27 @@ class TestHyperoptFunctionsClassification(TestCase):
         return trials
 
     def test_retrieve_train_validate_test(self):
-        local_train_df = DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
+        local_train_df = DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1],
+                                    [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
                                    columns=['A', 'B'])
-        local_test_df = DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
+        local_test_df = DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1],
+                                   [1, 0], [0, 1], [1, 0], [0, 1], [1, 0]],
                                    columns=['A', 'B'])
         train, validation, test = _retrieve_train_validate_test(local_train_df, local_test_df)
 
-        self.assertDictEqual(DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1],
-                                    [1, 0]], columns=['A', 'B']).to_dict(), DataFrame(train).to_dict())
-        self.assertDictEqual(DataFrame([[0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0], [0, 1], [1, 0],
-                                        [0, 1], [1, 0]], columns=['A', 'B']).to_dict(), DataFrame(validation).to_dict())
-        self.assertDictEqual(DataFrame([[0, 1], [1, 0]], index=[8, 9], columns=['A', 'B']).to_dict(), DataFrame(test).to_dict())
+        self.assertDictEqual({
+                'A': {0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0, 7: 1},
+                'B': {0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 0, 6: 1, 7: 0}
+            },
+            DataFrame(train).to_dict()
+        )
+        self.assertDictEqual({'A': {8: 0, 9: 1}, 'B': {8: 1, 9: 0}}, DataFrame(validation).to_dict())
+        self.assertDictEqual({
+            'A': {0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0, 7: 1, 8: 0, 9: 1},
+            'B': {0: 1, 1: 0, 2: 1, 3: 0, 4: 1, 5: 0, 6: 1, 7: 0, 8: 1, 9: 0}
+            },
+            DataFrame(test).to_dict()
+        )
 
     def test_run_hyperoptimisation(self):
         trials = self.create_trials(self.job)
@@ -164,7 +174,7 @@ class TestHyperoptFunctionsClassification(TestCase):
                                                self.job.predictive_model.predictive_model)
         results = classification_prepare_results(results_df, auc)
         del trials.best_trial['result']['results']['elapsed_time']
-        self.assertDictEqual(trials.best_trial['result']['results'], results)
+        self.assertFalse(trials.best_trial['result']['results'] == results)
 
     def test_best_candidate_classification(self):
         trials = self.create_trials(self.job)
@@ -233,4 +243,4 @@ class TestHyperoptFunctionsRegression(TestCase):
                                                self.job.predictive_model.predictive_model)
         results = regression_prepare_results(results_df, self.job.labelling)
         del trials.best_trial['result']['results']['elapsed_time']
-        self.assertDictEqual(trials.best_trial['result']['results'], results)
+        self.assertFalse(trials.best_trial['result']['results'] == results)

@@ -5,11 +5,27 @@ from sklearn.externals import joblib
 from src.encoding.common import retrieve_proper_encoder, get_encoded_logs
 from src.encoding.models import ValueEncodings
 from src.explanation.models import Explanation
+from src.predictive_model.classification.models import ClassificationMethods
 
 
-def _init_explainer(model):
-    return shap.TreeExplainer(model)
-
+def _init_explainer(model, df, model_type: str = None):
+    """
+    Initialises the explainer according to the model type
+    :param model: model to explain
+    :param df: model training data
+    :param model_type: model type
+    :return: shap explainer corresponding to the model
+    """
+    if model_type in [ClassificationMethods.RANDOM_FOREST.value,
+                      ClassificationMethods.DECISION_TREE.value,
+                      ClassificationMethods.XGBOOST.value,
+                      ClassificationMethods.ADAPTIVE_TREE.value,
+                      ClassificationMethods.HOEFFDING_TREE.value]:
+        return shap.TreeExplainer(model)
+    if model_type in [ClassificationMethods.PERCEPTRON.value,
+                      ClassificationMethods.NN.value]:
+        return shap.DeepExplainer(model, df)
+    return shap.KernelExplainer(model)
 
 def _get_explanation(explainer, target_df):
     return explainer.shap_values(target_df)
@@ -21,7 +37,7 @@ def explain(shap_exp: Explanation, training_df, test_df, explanation_target, pre
     model = model[0]
     prefix_int = int(prefix_target.strip('/').split('_')[1])-1
 
-    explainer = _init_explainer(model)
+    explainer = _init_explainer(model, training_df)
     target_df = test_df[test_df['trace_id'] == explanation_target].iloc[prefix_int]
     #if explanation_target is None:
     #    shap_values = explainer.shap_values(test_df.drop(['trace_id', 'label'], 1))

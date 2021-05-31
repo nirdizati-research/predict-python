@@ -27,6 +27,16 @@ logger = logging.getLogger(__name__)
 
 
 def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, additional_columns=None, encode=True):
+    """returns the encoded label logs
+
+    returns the training and test DataFrames with encoded column 'label' using the given job configuration
+    :param training_log:
+    :param test_log:
+    :param job:
+    :param additional_columns:
+    :param encode:
+    :return:
+    """
     logger.info('\tDataset not found in cache, building..')
     training_log, cols = _eventlog_to_dataframe(training_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=None)
     test_log, _ = _eventlog_to_dataframe(test_log, job.encoding, job.labelling, additional_columns=additional_columns, cols=cols)
@@ -61,6 +71,15 @@ def encode_label_logs(training_log: EventLog, test_log: EventLog, job: Job, addi
 
 
 def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelling, additional_columns=None, cols=None):
+    """converting eventlog into a DataFrame
+
+    :param training_log:
+    :param test_log:
+    :param job:
+    :param additional_columns:
+    :param encode:
+    :return:
+    """
     if encoding.prefix_length < 1:
         raise ValueError("Prefix length must be greater than 1")
     if encoding.value_encoding == ValueEncodings.SIMPLE_INDEX.value:
@@ -88,7 +107,16 @@ def _eventlog_to_dataframe(log: EventLog, encoding: Encoding, labelling: Labelli
     return run_df, cols
 
 
-def _data_encoder_encoder(job: Job, training_log, test_log) -> Encoder:
+def _data_encoder_encoder(job: Job, training_log: EventLog, test_log: EventLog) -> Encoder:
+    """uses data_encoder to encoder DataFrame
+
+    :param training_log:
+    :param test_log:
+    :param job:
+    :param additional_columns:
+    :param encode:
+    :return:
+    """
     if job.type != JobTypes.LABELLING.value and \
        job.encoding.value_encoding != ValueEncodings.BOOLEAN.value and \
        job.predictive_model.predictive_model != PredictiveModels.TIME_SERIES_PREDICTION.value:
@@ -107,12 +135,24 @@ def _data_encoder_encoder(job: Job, training_log, test_log) -> Encoder:
         return encoder
 
 
-def data_encoder_decoder(job: Job, training_log, test_log) -> None:
+def data_encoder_decoder(job: Job, training_log: EventLog, test_log: EventLog) -> None:
+    """uses data_encoder to decoder DataFrame
+
+    :param training_log:
+    :param test_log:
+    :param job:
+    :return:
+    """
     encoder = retrieve_proper_encoder(job)
     encoder.decode(training_log, job.encoding), encoder.decode(test_log, job.encoding)
 
 
 def retrieve_proper_encoder(job: Job) -> Encoder:
+    """find the proper encoder
+
+    :param job:
+    :return:
+    """
     if job.incremental_train is not None:
         return retrieve_proper_encoder(job.incremental_train)
     else:

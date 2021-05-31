@@ -69,6 +69,11 @@ class Clustering:
         }
 
     def _choose_clusterer(self, clustering: src.clustering.models.Clustering):
+        """chooses the clustering method
+
+        chooses the clustering method using the given clustering
+        :param clustering:
+        """
         self.config.pop('clustering_method', None)
         if clustering.clustering_method == ClusteringMethods.KMEANS.value:
             self.clusterer = KMeans(**self.config)
@@ -79,6 +84,12 @@ class Clustering:
 
     @classmethod
     def load_model(cls, job: Job):
+        """returns the clustering method from a model
+
+        returns the clustering method using the given job configuration
+        :param job:
+        :return:
+        """
         if job.clustering.clustering_method == ClusteringMethods.KMEANS.value:
             clusterer = joblib.load(job.clustering.model_path)
         elif job.clustering.clustering_method == ClusteringMethods.NO_CLUSTER.value:
@@ -89,6 +100,13 @@ class Clustering:
 
 
 def init_clusterer(clustering: Clustering, train_data: DataFrame):
+    """returns a new cluster
+
+    returns a new cluster, fitted on the train_data DataFrame
+    :param clustering:
+    :param train_data:
+    :return:
+    """
     clusterer = Clustering(clustering)
     clusterer.fit(train_data.drop(['trace_id', 'label'], 1))
     return clusterer

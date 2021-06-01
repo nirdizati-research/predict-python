@@ -25,7 +25,7 @@ class Encoder:
         self._init_encoder(df, encoding)
 
     def _init_encoder(self, df: DataFrame, encoding: Encoding):
-        """TODO: complete commit description
+        """initializes the encoder object, creating label encoder for each column in the DataFrame
 
         :param df:
         :param encoding:

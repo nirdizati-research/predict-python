@@ -112,7 +112,7 @@ def _create_columns(event_names: list, encoding: Encoding, labelling: Labelling)
 
 def _trace_to_row(trace: Trace, encoding: Encoding, event_index: int, labelling: Labelling = None, executed_events=None,
                   resources_used=None, new_traces=None, event_names=None, atr_classifier=None):
-    """Transforms trace into a raw
+    """Transforms trace into a list comprehension
 
     :param trace:
     :param encoding:

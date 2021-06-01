@@ -11,8 +11,7 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def simple_index(log: EventLog, labelling: Labelling, encoding: Encoding) -> DataFrame:
-    """TODO: complete commit description
-
+    """Creates list in form [event1[concept:name], event2[concept:name], ..., eventN[concept:name]]
     :param log:
     :param encoding:
     :param labelling:

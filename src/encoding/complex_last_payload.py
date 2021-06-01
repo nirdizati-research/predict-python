@@ -74,7 +74,7 @@ def _encode_complex_latest(log: EventLog, labelling: Labelling, encoding: Encodi
 
 
 def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
-    """Creates list in form [1, value1, value2, 2, ...]
+    """Creates list in form [event1[concept:name], event1[attributes], event2[concept:name], event2[attributes], ..., eventN[concept:name], eventN[attributes]]
 
     Appends values in additional_columns
     :param prefix_length:
@@ -91,7 +91,7 @@ def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
 
 
 def _columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
-    """Creates list in form [1, 2, value1, value2,]
+    """Creates list in form [event1[concept:name], event2[concept:name], ..., eventN[concept:name], eventN[attributes]]
 
     Appends values in additional_columns
     :param prefix_length:
@@ -160,7 +160,7 @@ def _trace_to_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_
                   columns_len: int,
                   atr_classifier=None, executed_events=None, resources_used=None, new_traces=None,
                   additional_columns: dict = None) -> list:
-    """Transforms trace into a raw
+    """Transforms trace into a list comprehension
 
     :param trace:
     :param encoding:

@@ -71,7 +71,7 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
 
     @staticmethod
     def init_label_encoder(df: DataFrame) -> None:
-        """TODO: complete commit description
+        """creates the encoder
 
         :param df:
         """

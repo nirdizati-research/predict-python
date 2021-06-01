@@ -17,11 +17,20 @@ from src.predictive_model.time_series_prediction.models import TIME_SERIES_PREDI
 
 
 def _get_space(job: Job) -> dict:
+    """Returns the specific space for the used machine learning algorithm for the given job configuration
+
+    :param job:
+    :return:
+    """
     method_conf_name = "{}.{}".format(job.predictive_model.predictive_model, job.predictive_model.prediction_method)
     return HYPEROPT_SPACE_MAP[method_conf_name]()
 
 
 def _classification_random_forest() -> dict:
+    """Returns the random forest prediction classification method
+
+    :return:
+    """
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
@@ -31,6 +40,10 @@ def _classification_random_forest() -> dict:
 
 
 def _classification_knn() -> dict:
+    """Returns the KNN prediction classification method
+
+    :return:
+    """
     return {
         'n_neighbors': hp.choice('n_neighbors', np.arange(1, 20, dtype=int)),
         'weights': hp.choice('weights', ['uniform', 'distance']),
@@ -38,6 +51,10 @@ def _classification_knn() -> dict:
 
 
 def _classification_decision_tree() -> dict:
+    """Returns the decision tree prediction classification method
+
+    :return:
+    """
     return {
         'max_depth': scope.int(hp.quniform('max_depth', 4, 30, 1)),
         'min_samples_split': hp.choice('min_samples_split', np.arange(2, 10, dtype=int)),
@@ -46,6 +63,10 @@ def _classification_decision_tree() -> dict:
 
 
 def _classification_xgboost() -> dict:
+    """Returns the XGBoost prediction classification method
+
+    :return:
+    """
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_depth': scope.int(hp.quniform('max_depth', 3, 30, 1)),
@@ -53,6 +74,10 @@ def _classification_xgboost() -> dict:
 
 
 def _classification_incremental_naive_bayes() -> dict:
+    """Returns the incremental naive bayes prediction classification method
+
+    :return:
+    """
     return {
         'alpha': hp.uniform('alpha', 0, 10),
         'fit_prior': True
@@ -60,6 +85,10 @@ def _classification_incremental_naive_bayes() -> dict:
 
 
 def _classification_incremental_adaptive_tree() -> dict:
+    """Returns the incremental adaptive tree prediction classification method
+
+    :return:
+    """
     return {
         'grace_period': hp.uniform('grace_period', 1, 5),
         'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
@@ -75,6 +104,10 @@ def _classification_incremental_adaptive_tree() -> dict:
 
 
 def _classification_incremental_hoeffding_tree() -> dict:
+    """Returns the incremental hoeffding tree prediction classification method
+
+    :return:
+    """
     return {
         'grace_period': hp.uniform('grace_period', 3, 8),
         'split_criterion': hp.choice('split_criterion', ['gini', 'info_gain']),
@@ -90,6 +123,10 @@ def _classification_incremental_hoeffding_tree() -> dict:
 
 
 def _classification_incremental_sgd_classifier() -> dict:
+    """Returns the incremental sgd classifier prediction classification method
+
+    :return:
+    """
     return {
         'loss': hp.choice('loss', ['hinge', 'log', 'modified_huber', 'squared_hinge', 'perceptron', 'squared_loss',
                                    'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive']),
@@ -110,6 +147,10 @@ def _classification_incremental_sgd_classifier() -> dict:
 
 
 def _classification_incremental_perceptron() -> dict:
+    """Returns the incremental perceptron prediction classification method
+
+    :return:
+    """
     return {
         'penalty': hp.choice('penalty', [None, 'l1', 'l2', 'elasticnet']),
         'alpha': hp.uniform('alpha', 0.0001, 0.5),
@@ -124,6 +165,10 @@ def _classification_incremental_perceptron() -> dict:
 
 
 def _classification_nn() -> dict:
+    """Returns the NN prediction classification method
+
+    :return:
+    """
     return {
         'hidden_layers': hp.quniform('hidden_layers', 1, 10, 1),
         'hidden_units': hp.quniform('hidden_units', 1, 100, 1),
@@ -134,6 +179,10 @@ def _classification_nn() -> dict:
 
 
 def _regression_random_forest() -> dict:
+    """Returns the random forest prediction regression method
+
+    :return:
+    """
     return {
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
         'max_features': hp.choice('max_features', ['sqrt', 'log2', 'auto', None]),
@@ -142,6 +191,10 @@ def _regression_random_forest() -> dict:
 
 
 def _regression_lasso() -> dict:
+    """Returns the lasso prediction regression method
+
+    :return:
+    """
     return {
         'alpha': hp.uniform('alpha', 0.01, 2.0),
         'fit_intercept': hp.choice('fit_intercept', [True, False]),
@@ -150,6 +203,10 @@ def _regression_lasso() -> dict:
 
 
 def _regression_linear() -> dict:
+    """Returns the linear prediction regression method
+
+    :return:
+    """
     return {
         'fit_intercept': hp.choice('fit_intercept', [True, False]),
         'normalize': hp.choice('normalize', [True, False])
@@ -157,6 +214,10 @@ def _regression_linear() -> dict:
 
 
 def _regression_xgboost() -> dict:
+    """Returns the XGBoost prediction regression method
+
+    :return:
+    """
     return {
         'max_depth': scope.int(hp.quniform('max_depth', 3, 100, 1)),
         'n_estimators': hp.choice('n_estimators', np.arange(150, 1000, dtype=int)),
@@ -164,6 +225,10 @@ def _regression_xgboost() -> dict:
 
 
 def _regression_nn() -> dict:
+    """Returns the NN prediction regression method
+
+    :return:
+    """
     return {
         'hidden_layers': hp.quniform('hidden_layers', 1, 10, 1),
         'hidden_units': hp.quniform('hidden_units', 1, 100, 1),
@@ -174,6 +239,10 @@ def _regression_nn() -> dict:
 
 
 def _time_series_prediction_rnn() -> dict:
+    """TODO: complete commit description
+
+    :return:
+    """
     raise NotImplementedError
 
 

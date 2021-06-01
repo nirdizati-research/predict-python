@@ -10,6 +10,11 @@ class JobSerializer(serializers.ModelSerializer):
     config = serializers.SerializerMethodField()
 
     def get_config(self, job):
+        """Returns the the parameter of the given job configuration, converted into dictionary
+
+        :param job:
+        :return
+        """
         evaluation = Evaluation.objects.filter(pk=job.evaluation.pk).select_subclasses()[
             0] if job.evaluation is not None else None
         hyperparameter_optimizer = \

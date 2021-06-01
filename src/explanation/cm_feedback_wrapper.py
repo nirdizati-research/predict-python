@@ -13,7 +13,15 @@ from src.explanation.temporal_stability import temporal_stability
 
 
 
-def retrieve_temporal_stability(training_df, test_df, job_obj, split_obj):
+def retrieve_temporal_stability(training_df: DataFrame, test_df: DataFrame, job_obj: Job, split_obj: Job):
+    """
+
+    :param training_df:
+    :param test_df:
+    :param job_obj:
+    :param split_obj:
+    :return:
+    """
     ts_exp_job, _ = Explanation.objects.get_or_create(
         type=ExplanationTypes.TEMPORAL_STABILITY.value,
         split=split_obj,

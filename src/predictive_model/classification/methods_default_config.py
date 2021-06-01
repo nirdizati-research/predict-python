@@ -1,4 +1,7 @@
 def classification_random_forest():
+    """"
+    Returns the default parameters for classification random forest
+    """
     return {
         ### MANUALLY OPTIMISED PARAMS
         'n_estimators': 10,
@@ -31,6 +34,9 @@ def classification_random_forest():
 
 
 def classification_knn():
+    """"
+    Returns the default parameters for classification KNN
+    """
     return {
         'n_neighbors': 3,
         'n_jobs': -1,
@@ -39,6 +45,9 @@ def classification_knn():
 
 
 def classification_decision_tree():
+    """"
+    Returns the default parameters for classification decision tree
+    """
     return {
         'max_depth': None,
         'min_samples_split': 2,
@@ -48,6 +57,9 @@ def classification_decision_tree():
 
 
 def classification_incremental_naive_bayes():
+    """"
+    Returns the default parameters for classification incremental naive bayes
+    """
     return {
         'alpha': 1.0,
         'fit_prior': True,
@@ -56,6 +68,9 @@ def classification_incremental_naive_bayes():
 
 
 def classification_incremental_adaptive_tree():
+    """"
+    Returns the default parameters for classification incremental adaptive tree
+    """
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
@@ -74,6 +89,9 @@ def classification_incremental_adaptive_tree():
 
 
 def classification_incremental_hoeffding_tree():
+    """"
+    Returns the default parameters for classification incremental hoeffding tree
+    """
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
@@ -92,6 +110,9 @@ def classification_incremental_hoeffding_tree():
 
 
 def classification_incremental_sgd_classifier():
+    """"
+    Returns the default parameters for classification incremental sgd classifier
+    """
     return {
         'loss': 'hinge',
         'penalty': 'l2',
@@ -112,6 +133,9 @@ def classification_incremental_sgd_classifier():
 
 
 def classification_incremental_perceptron():
+    """"
+    Returns the default parameters for classification incremental perceptron
+    """
     return {
         'penalty': None,
         'alpha': 0.0001,
@@ -127,6 +151,9 @@ def classification_incremental_perceptron():
 
 
 def classification_xgboost():
+    """"
+    Returns the default parameters for classification XGBoost
+    """
     return {
         'max_depth': 3,
         'learning_rate': 0.1,
@@ -135,6 +162,9 @@ def classification_xgboost():
 
 
 def classification_nn():
+    """"
+    Returns the default parameters for classification NN
+    """
     return {
         'n_hidden_layers': 1,
         'n_hidden_units': 10,
@@ -145,6 +175,9 @@ def classification_nn():
 
 
 def _update_incremental_naive_bayes():
+    """"
+    Returns the updated parameters for classification incremental naive bayes
+    """
     return {
         'alpha': 1.0,
         'fit_prior': True,
@@ -153,6 +186,9 @@ def _update_incremental_naive_bayes():
 
 
 def _update_incremental_adaptive_tree():
+    """"
+    Returns the updated parameters for classification incremental adaptive tree
+    """
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,
@@ -171,6 +207,9 @@ def _update_incremental_adaptive_tree():
 
 
 def _update_incremental_hoeffding_tree():
+    """"
+    Returns the updated parameters for classification incremental hoeffding tree
+    """
     return {
         'max_byte_size': 33554432,
         'memory_estimate_period': 1000000,

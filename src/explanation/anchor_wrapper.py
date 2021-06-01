@@ -8,6 +8,15 @@ from src.predictive_model.common import ModelActions, MODEL
 
 
 def explain(anchor_exp: Explanation, training_df, test_df, explanation_target, prefix_target):
+    """
+
+    :param anchor_exp:
+    :param training_df:
+    :param test_df:
+    :param explanation_target:
+    :param prefix_target:
+    :return:
+    """
     job = Job.objects.filter(pk=anchor_exp.job.id)[0]
 
     explainer = anchor_tabular.AnchorTabularExplainer(

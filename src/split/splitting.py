@@ -13,7 +13,11 @@ logger = logging.getLogger(__name__)
 
 
 def get_train_test_log(split: Split):
-    """Returns training_log and test_log"""
+    """Returns training_log and test_log
+
+    :param split:
+    :return:
+    """
     if split.type == SplitTypes.SPLIT_SINGLE.value and Split.objects.filter(
         type=SplitTypes.SPLIT_DOUBLE.value,
         original_log=split.original_log,
@@ -63,6 +67,11 @@ def get_train_test_log(split: Split):
 
 
 def _split_single_log(split: Split):
+    """Returns training_log and test_log, create from log taken using the given split
+
+    :param split:
+    :return:
+    """
     log = get_log(split.original_log)
     logger.info("\t\tExecute single split ID {}, split_type {}, test_size {}".format(split.id, split.type, split.test_size))
     if split.splitting_method == SplitOrderingMethods.SPLIT_TEMPORAL.value:
@@ -78,14 +87,24 @@ def _split_single_log(split: Split):
 
 
 def _temporal_split(log: EventLog, test_size: float):
-    """sort log by first event timestamp to enforce temporal order"""
+    """sort log by first event timestamp to enforce temporal order
+
+    :param log:
+    :param test_size:
+    :return:
+    """
     log = sorted(log, key=functools.cmp_to_key(_compare_trace_starts))
     training_log, test_log = train_test_split(log, test_size=test_size, shuffle=False)
     return training_log, test_log
 
 
 def _temporal_split_strict(log: EventLog, test_size: float):
-    """Includes only training traces where it's last event ends before the first in test trace"""
+    """Includes only training traces where it's last event ends before the first in test trace
+
+    :param log:
+    :param test_size:
+    :return:
+    """
     training_log, test_log = _temporal_split(log, test_size)
     test_first_time = _trace_event_time(test_log[0])
     training_log = filter(lambda x: _trace_event_time(x, event_index=-1) < test_first_time, training_log)
@@ -93,11 +112,23 @@ def _temporal_split_strict(log: EventLog, test_size: float):
 
 
 def _split_log(log: EventLog, test_size: float, random_state: Union[int, None] = 4, shuffle=True):
+    """Split a log in training_log and test_log
+
+    :param item1:
+    :param item2:
+    :return:
+    """
     training_log, test_log = train_test_split(log, test_size=test_size, random_state=random_state, shuffle=shuffle)
     return training_log, test_log
 
 
 def _compare_trace_starts(item1, item2):
+    """Compare 2 traces, taken using the given item
+
+    :param item1:
+    :param item2:
+    :return:
+    """
     first = _trace_event_time(item1)
     second = _trace_event_time(item2)
     if first < second:
@@ -109,5 +140,10 @@ def _compare_trace_starts(item1, item2):
 
 
 def _trace_event_time(trace, event_index=0):
-    """Event time as Date. By default first event."""
+    """Event time as Date. By default first event.
+
+    :param trace:
+    :param event_index:
+    :return:
+    """
     return trace[event_index]['time:timestamp']

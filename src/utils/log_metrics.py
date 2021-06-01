@@ -10,6 +10,7 @@ NAME_CLASSIFIER = "concept:name"
 def events_by_date(log: EventLog) -> OrderedDict:
     """Creates dict of events by date ordered by date
 
+    :param log:
     :return {'2010-12-30': 7, '2011-01-06': 8}
     :rtype: OrderedDict
     """
@@ -27,6 +28,8 @@ def resources_by_date(log: EventLog) -> OrderedDict:
 
     Resource and timestamp delimited by &&. If this is in resources name, bad stuff will happen.
     Returns a dict with a date and the number of unique resources used on that day.
+
+    :param log:
     :return {'2010-12-30': 7, '2011-01-06': 8}
     """
     stamp_dict = defaultdict(lambda: [])
@@ -45,6 +48,7 @@ def resources_by_date(log: EventLog) -> OrderedDict:
 def event_executions(log: EventLog) -> OrderedDict:
     """Creates dict of event execution count
 
+    :param log:
     :return {'Event A': 7, '2011-01-06': 8}
     """
     executions = defaultdict(lambda: 0)
@@ -57,6 +61,7 @@ def event_executions(log: EventLog) -> OrderedDict:
 def new_trace_start(log: EventLog) -> OrderedDict:
     """Creates dict of new traces by date
 
+    :param log:
     :return {'2010-12-30': 1, '2011-01-06': 2}
     """
     executions = defaultdict(lambda: 0)
@@ -70,6 +75,7 @@ def trace_attributes(log: EventLog) -> list:
     """Creates an array of dicts that describe trace attributes.
     Only looks at first trace. Filters out `concept:name`.
 
+    :param log:
     :return [{name: 'name', type: 'string', example: 34}]
     """
     values = []
@@ -84,6 +90,11 @@ def trace_attributes(log: EventLog) -> list:
 
 
 def _is_number(s) -> str:
+    """Returns whether the parameter is a number or string
+
+    :param s:
+    :return:
+    """
     if (isinstance(s, (float, int)) or (s.isdigit() if hasattr(s, 'isdigit') else False)) and not isinstance(s, bool):
         return 'number'
     return 'string'
@@ -92,6 +103,7 @@ def _is_number(s) -> str:
 def events_in_trace(log: EventLog) -> OrderedDict:
     """Creates dict of number of events in trace
 
+    :param log:
     :return {'4': 11, '3': 8}
     """
     stamp_dict = defaultdict(lambda: 0)
@@ -103,6 +115,7 @@ def events_in_trace(log: EventLog) -> OrderedDict:
 def max_events_in_log(log: EventLog) -> int:
     """Returns the maximum number of events in any trace
 
+    :param log:
     :return 3
     """
     return max([len(trace) for trace in log])
@@ -111,6 +124,7 @@ def max_events_in_log(log: EventLog) -> int:
 def avg_events_in_log(log: EventLog) -> int:
     """Returns the average number of events in any trace
 
+    :param log:
     :return 3
     """
     return statistics.mean([len(trace) for trace in log])
@@ -119,16 +133,27 @@ def avg_events_in_log(log: EventLog) -> int:
 def std_var_events_in_log(log: EventLog) -> int:
     """Returns the standard variation of the average number of events in any trace
 
+    :param log:
     :return 3
     """
     return statistics.stdev([len(trace) for trace in log])
 
 
 def trace_ids_in_log(log: EventLog) -> list:
+    """Returns a list of trace's name classifier in the given log
+
+    :param log:
+    :return:
+    """
     return [trace.attributes[NAME_CLASSIFIER] for trace in log]
 
 
 def traces_in_log(log: EventLog) -> list:
+    """Returns a list of dict, of traces in the given log
+
+    :param log:
+    :return:
+    """
     return [{'attributes': trace.attributes, 'events': [event for event in trace]} for trace in log]
 
 

@@ -13,16 +13,42 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def complex(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
+    """Encodes the log using complex encoding
+
+    :param log:
+    :param labelling:
+    :param encoding:
+    :param additional_columns:
+    :return:
+    """
     return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_complex, _data_complex)
 
 
 def last_payload(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict) -> DataFrame:
+    """Encodes the log using last_payload encoding
+
+    :param log:
+    :param labelling:
+    :param encoding:
+    :param additional_columns:
+    :return:
+    """
     return _encode_complex_latest(log, labelling, encoding, additional_columns, _columns_last_payload,
                                   _data_last_payload)
 
 
 def _encode_complex_latest(log: EventLog, labelling: Labelling, encoding: Encoding, additional_columns: dict,
                            column_fun: Callable, data_fun: Callable) -> DataFrame:
+    """Encodes the log by complex or last_payload
+
+    :param log:
+    :param labelling:
+    :param encoding:
+    :param additional_columns:
+    :param column_fun:
+    :param data_fun:
+    :return:
+    """
     columns = column_fun(encoding.prefix_length, additional_columns)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, encoding, labelling)
@@ -48,6 +74,13 @@ def _encode_complex_latest(log: EventLog, labelling: Labelling, encoding: Encodi
 
 
 def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
+    """Creates list in form [event1[concept:name], event1[attributes], event2[concept:name], event2[attributes], ..., eventN[concept:name], eventN[attributes]]
+
+    Appends values in additional_columns
+    :param prefix_length:
+    :param additional_columns:
+    :return:
+    """
     columns = ['trace_id']
     columns += additional_columns['trace_attributes']
     for i in range(1, prefix_length + 1):
@@ -58,6 +91,13 @@ def _columns_complex(prefix_length: int, additional_columns: dict) -> list:
 
 
 def _columns_last_payload(prefix_length: int, additional_columns: dict) -> list:
+    """Creates list in form [event1[concept:name], event2[concept:name], ..., eventN[concept:name], eventN[attributes]]
+
+    Appends values in additional_columns
+    :param prefix_length:
+    :param additional_columns:
+    :return:
+    """
     columns = ['trace_id']
     i = 0
     for i in range(1, prefix_length + 1):
@@ -71,6 +111,10 @@ def _data_complex(trace: Trace, prefix_length: int, additional_columns: dict) ->
     """Creates list in form [1, value1, value2, 2, ...]
 
     Appends values in additional_columns
+    :param trace:
+    :param prefix_length:
+    :param additional_columns:
+    :return:
     """
     data = [trace.attributes.get(att, 0) for att in additional_columns['trace_attributes']]
     for idx, event in enumerate(trace):
@@ -90,6 +134,10 @@ def _data_last_payload(trace: list, prefix_length: int, additional_columns: dict
 
     Event name index of the position they are in event_names
     Appends values in additional_columns
+    :param trace:
+    :param prefix_length:
+    :param additional_columns:
+    :return:
     """
     data = list()
     for idx, event in enumerate(trace):
@@ -112,6 +160,21 @@ def _trace_to_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_
                   columns_len: int,
                   atr_classifier=None, executed_events=None, resources_used=None, new_traces=None,
                   additional_columns: dict = None) -> list:
+    """Transforms trace into a list comprehension
+
+    :param trace:
+    :param encoding:
+    :param labelling:
+    :param event_index:
+    :param data_fun:
+    :param columns_len:
+    :param atr_classifier:
+    :param executed_events:
+    :param resources_used:
+    :param new_traces:
+    :param additional_columns
+    :return:
+    """
     trace_row = [trace.attributes["concept:name"]]
     # prefix_length - 1 == index
     trace_row += data_fun(trace, event_index, additional_columns)

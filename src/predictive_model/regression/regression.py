@@ -133,6 +133,14 @@ def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
 
 
 def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clustering, do_cv=False) -> dict:
+    """Initializes and train the predictive model with the given data
+
+    :param train_data:
+    :param regressor:
+    :param clusterer:
+    :param do_cv:
+    :return:
+    """
     models = dict()
 
     train_data = clusterer.cluster_data(train_data)
@@ -168,6 +176,12 @@ def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clusteri
 
 
 def _test(model_split: dict, data: DataFrame) -> DataFrame:
+    """Tests the given predictive model with the given data
+
+    :param model_split:
+    :param data:
+    :return:
+    """
     clusterer = model_split[ModelType.CLUSTERER.value]
     regressor = model_split[ModelType.REGRESSOR.value]
 
@@ -184,6 +198,12 @@ def _test(model_split: dict, data: DataFrame) -> DataFrame:
 
 
 def predict(job: Job, data: DataFrame) -> Any:
+    """Returns the predicted results whit regression
+
+    :param job:
+    :param data:
+    :return:
+    """
     data = data.drop(['trace_id'], 1)
     clusterer = Clustering.load_model(job)
     test_data = clusterer.cluster_data(data)
@@ -201,6 +221,12 @@ def predict(job: Job, data: DataFrame) -> Any:
 
 
 def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
+    """Drops the column trace_id of given DataFrame
+
+    :param training_df:
+    :param test_df:
+    :return:
+    """
     train_data = training_df
     test_data = test_df
 
@@ -210,6 +236,11 @@ def _prep_data(training_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFr
 
 
 def _choose_regressor(job: Job) -> RegressorMixin:
+    """Chooses the regressor predictive method using the given job configuration
+
+    :param job:
+    :return:
+    """
     method, config = get_method_config(job)
     config.pop('regression_method', None)
     logger.info("Using method {} with config {}".format(method, config))

@@ -11,6 +11,12 @@ ATTRIBUTE_CLASSIFIER = None
 
 
 def simple_index(log: EventLog, labelling: Labelling, encoding: Encoding) -> DataFrame:
+    """Creates list in form [event1[concept:name], event2[concept:name], ..., eventN[concept:name]]
+    :param log:
+    :param encoding:
+    :param labelling:
+    :return:
+    """
     columns = _compute_columns(encoding.prefix_length)
     normal_columns_number = len(columns)
     columns = compute_label_columns(columns, encoding, labelling)
@@ -33,7 +39,19 @@ def simple_index(log: EventLog, labelling: Labelling, encoding: Encoding) -> Dat
 
 def add_trace_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_index: int, column_len: int,
                   attribute_classifier=None, executed_events=None, resources_used=None, new_traces=None):
-    """Row in data frame"""
+    """Row in data frame
+
+    :param trace:
+    :param encoding:
+    :param labelling:
+    :param event_index:
+    :param column_len:
+    :param attribute_classifier:
+    :param executed_events:
+    :param resources_used:
+    :param new_traces:
+    :return:
+    """
     trace_row = [trace.attributes['concept:name']]
     trace_row += _trace_prefixes(trace, event_index)
     if encoding.padding or encoding.task_generation_type == TaskGenerationTypes.ALL_IN_ONE.value:
@@ -46,6 +64,9 @@ def add_trace_row(trace: Trace, encoding: Encoding, labelling: Labelling, event_
 def _trace_prefixes(trace: Trace, prefix_length: int) -> list:
     """List of indexes of the position they are in event_names
 
+    :param trace:
+    :param prefix_length:
+    :return:
     """
     prefixes = []
     for idx, event in enumerate(trace):
@@ -59,5 +80,7 @@ def _trace_prefixes(trace: Trace, prefix_length: int) -> list:
 def _compute_columns(prefix_length: int) -> list:
     """trace_id, prefixes, any other columns, label
 
+    :param prefix_length:
+    :return:
     """
     return ["trace_id"] + [PREFIX_ + str(i + 1) for i in range(0, prefix_length)]

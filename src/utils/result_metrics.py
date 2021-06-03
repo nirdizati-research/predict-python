@@ -11,6 +11,12 @@ from src.labelling.models import LabelTypes, Labelling
 
 
 def calculate_results_classification(actual: list, predicted: list) -> dict:
+    """Returns the results of classification predictive model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     return {**{'f1score': _get_f1(actual, predicted),
                'acc': accuracy_score(actual, predicted),
                'precision': _get_precision(actual, predicted),
@@ -19,10 +25,22 @@ def calculate_results_classification(actual: list, predicted: list) -> dict:
 
 
 def calculate_results_time_series_prediction(actual: ndarray, predicted: ndarray) -> dict:
+    """Returns the results of classification predictive model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     return {}
 
 
 def get_confusion_matrix(actual, predicted) -> dict:
+    """Returns the confusion matrix of model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     true_negatives, false_positives, false_negatives, true_positives = '--', '--', '--', '--'
     actual_set = list(sorted(set(actual)))
     if len(actual_set) <= 2:
@@ -41,6 +59,12 @@ def get_confusion_matrix(actual, predicted) -> dict:
 
 
 def _get_f1(actual, predicted) -> float:
+    """Returns the f1_score of model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     try:
         f1score = f1_score(actual, predicted, average='macro')
     except ZeroDivisionError:
@@ -49,6 +73,12 @@ def _get_f1(actual, predicted) -> float:
 
 
 def _get_recall(actual, predicted) -> float:
+    """Returns the recall of the model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     try:
         recall = recall_score(actual, predicted, average='macro')
     except ZeroDivisionError:
@@ -57,6 +87,12 @@ def _get_recall(actual, predicted) -> float:
 
 
 def _get_precision(actual, predicted) -> float:
+    """Returns the precision of model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     try:
         precision = precision_score(actual, predicted, average='macro')
     except ZeroDivisionError:
@@ -65,6 +101,12 @@ def _get_precision(actual, predicted) -> float:
 
 
 def calculate_nlevenshtein(actual: ndarray, predicted: ndarray) -> float:
+    """Returns the nlevenshtein of model
+
+    :param actual:
+    :param predicted:
+    :return:
+    """
     distances = []
 
     for row in range(actual.shape[0]):
@@ -74,6 +116,12 @@ def calculate_nlevenshtein(actual: ndarray, predicted: ndarray) -> float:
 
 
 def get_auc(actual, scores) -> float:
+    """Returns the roc_auc_score of model
+
+    :param actual:
+    :param scores:
+    :return:
+    """
     try:
         auc = roc_auc_score(actual, scores)
     except ValueError:
@@ -82,6 +130,13 @@ def get_auc(actual, scores) -> float:
 
 
 def calculate_auc(actual, scores, auc: int) -> float:
+    """Calculate and returns the roc_auc_score of model
+
+    :param actual:
+    :param scores:
+    :param auc:
+    :return:
+    """
     if scores.shape[1] == 1:
         auc += 0
     else:
@@ -93,6 +148,12 @@ def calculate_auc(actual, scores, auc: int) -> float:
 
 
 def _prepare_results(input_df: DataFrame, label: Labelling) -> dict:
+    """Prepares the result
+
+    :param input_df:
+    :param label:
+    :return:
+    """
     if label.type == LabelTypes.REMAINING_TIME.value:
         # TODO is the remaining time in seconds or hours?
         input_df['label'] = input_df['label'] / 3600
@@ -107,6 +168,12 @@ def _prepare_results(input_df: DataFrame, label: Labelling) -> dict:
 
 
 def _mean_absolute_percentage_error(y_true, y_pred):
+    """Calculates and returns the mean absolute percentage error
+
+    :param y_true:
+    :param y_pred:
+    :return:
+    """
     y_true, y_pred = np.array(y_true), np.array(y_pred)
     if 0 in y_true:
         return -1

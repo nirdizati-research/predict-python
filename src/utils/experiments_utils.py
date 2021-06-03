@@ -40,7 +40,20 @@ def create_classification_payload(
     },
     incremental_train=[],
     model_hyperparameters={}):
+    """
+    Returns a default configuration to create a classification model
 
+    :param split:
+    :param encodings:
+    :param encoding:
+    :param labeling:
+    :param clustering:
+    :param classification:
+    :param hyperparameter_optimization:
+    :param incremental_train:
+    :param model_hyperparameters:
+    :return:
+    """
     config = {
         "clusterings": clustering,
         "labelling": labeling,
@@ -86,6 +99,20 @@ def create_regression_payload(
     },
     incremental_train=[],
     model_hyperparameters={}):
+    """
+    Returns a default configuration to create a regression model
+
+    :param split:
+    :param encodings:
+    :param encoding:
+    :param labeling:
+    :param clustering:
+    :param regression:
+    :param hyperparameter_optimization:
+    :param incremental_train:
+    :param model_hyperparameters:
+    :return:
+    """
 
     config = {
         "clusterings": clustering,
@@ -108,6 +135,14 @@ def upload_split(
     server_name="0.0.0.0",
     server_port='8000'
 ):
+    """Uploads train and test event_log
+
+    :param train:
+    :param test:
+    :param server_name:
+    :param server_port:
+    :return:
+    """
     r = requests.post(
         'http://' + server_name + ':' + server_port + '/splits/multiple',
         files={'trainingSet': open(train, 'r+'), 'testSet': open(test, 'r+')}
@@ -120,6 +155,13 @@ def send_job_request(
     server_name="0.0.0.0",
     server_port='8000'
 ):
+    """Sends to the server request to schedule a job using given the payload and returns the job id and status
+
+    :param payload:
+    :param server_name:
+    :param server_port:
+    :return:
+    """
     r = requests.post(
         'http://' + server_name + ':' + server_port + '/jobs/multiple',
         json=payload,
@@ -133,6 +175,13 @@ def retrieve_job(
     server_name="0.0.0.0",
     server_port='8000'
 ):
+    """Retrieves a job on the server using the given config and returns the job result
+
+    :param config:
+    :param server_name:
+    :param server_port:
+    :return:
+    """
     r = requests.get(
         'http://' + server_name + ':' + server_port + '/jobs/',
         headers={'Content-type': 'application/json'},

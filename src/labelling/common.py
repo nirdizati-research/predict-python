@@ -9,6 +9,10 @@ from src.utils.time_metrics import elapsed_time_id, remaining_time_id, count_on_
 def get_intercase_attributes(log: EventLog, encoding: Encoding):
     """Dict of kwargs
     These intercase attributes are expensive operations!!!
+
+    :param log:
+    :param encoding:
+    :return:
     """
     # Expensive operations
     executed_events = events_by_date(log) if encoding.add_executed_events else None
@@ -20,6 +24,13 @@ def get_intercase_attributes(log: EventLog, encoding: Encoding):
 
 
 def compute_label_columns(columns: list, encoding: Encoding, labelling: Labelling) -> list:
+    """Compute the label columns
+
+    :param columns:
+    :param encoding:
+    :param labelling:
+    :return:
+    """
     if labelling.type == LabelTypes.NO_LABEL.value:
         return columns
     if encoding.add_elapsed_time:
@@ -40,6 +51,16 @@ def add_labels(encoding: Encoding, labelling: Labelling, prefix_length: int, tra
                executed_events=None, resources_used=None, new_traces=None):
     """
     Adds any number of label cells with last as label
+
+    :param encoding:
+    :param labelling:
+    :param prefix_length:
+    :param trace:
+    :param attribute_classifier:
+    :param executed_events:
+    :param resources_used:
+    :param new_traces:
+    :return:
     """
     labels = []
     if labelling.type == LabelTypes.NO_LABEL.value:
@@ -70,6 +91,9 @@ def add_labels(encoding: Encoding, labelling: Labelling, prefix_length: int, tra
 def next_event_name(trace: list, prefix_length: int):
     """Return the event event name at prefix length or 0 if out of range.
 
+    :param trace:
+    :param prefix_length:
+    :return:
     """
     if prefix_length < len(trace):
         next_event = trace[prefix_length]

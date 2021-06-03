@@ -78,6 +78,13 @@ def classification(training_df: DataFrame, test_df: DataFrame, clusterer: Cluste
 
 
 def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
+    """
+
+    :param training_df:
+    :param test_df:
+    :param job:
+    :return:
+    """
     train_data = _drop_columns(training_df)
     test_data = _drop_columns(test_df)
 
@@ -106,6 +113,13 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
 
 
 def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Clustering) -> dict:
+    """Initializes and train the predictive model with the given data
+
+    :param train_data:
+    :param classifier:
+    :param clusterer:
+    :return:
+    """
     models = dict()
 
     train_data = clusterer.cluster_data(train_data)
@@ -132,6 +146,12 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
 
 
 def _update(job: Job, data: DataFrame) -> dict:
+    """Updates the existing model
+
+    :param job:
+    :param data:
+    :return:
+    """
     previous_job = job.incremental_train
 
     clusterer = Clustering.load_model(previous_job)
@@ -167,6 +187,14 @@ def _update(job: Job, data: DataFrame) -> dict:
 
 
 def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (DataFrame, float):
+    """Tests the given predictive model with the given data
+
+    :param model_split:
+    :param test_data:
+    :param evaluation:
+    :param is_binary_classifier:
+    :return:
+    """
     clusterer = model_split[ModelType.CLUSTERER.value]
     classifier = model_split[ModelType.CLASSIFIER.value]
 
@@ -218,6 +246,12 @@ def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_c
 
 
 def predict(job: Job, data: DataFrame) -> Any:
+    """Returns the predicted results whit classification
+
+    :param job:
+    :param data:
+    :return:
+    """
     data = data.drop(['trace_id'], 1)
     clusterer = Clustering.load_model(job)
     data = clusterer.cluster_data(data)
@@ -242,6 +276,12 @@ def predict(job: Job, data: DataFrame) -> Any:
 
 
 def predict_proba(job: Job, data: DataFrame) -> Any:
+    """Returns the probability of predicted results whit classification
+
+    :param job:
+    :param data:
+    :return:
+    """
     data = data.drop(['trace_id'], 1)
     clusterer = Clustering.load_model(job)
     data = clusterer.cluster_data(data)
@@ -266,6 +306,12 @@ def predict_proba(job: Job, data: DataFrame) -> Any:
 
 
 def _prepare_results(results_df: DataFrame, auc: int) -> dict:
+    """Calculates and returns the results
+
+    :param results_df:
+    :param auc:
+    :return:
+    """
     actual = results_df['label'].values
     predicted = results_df['predicted'].values
 
@@ -275,11 +321,21 @@ def _prepare_results(results_df: DataFrame, auc: int) -> dict:
 
 
 def _drop_columns(df: DataFrame) -> DataFrame:
+    """Drops the column trace_id of given DataFrame
+
+    :param df:
+    :return:
+    """
     df = df.drop('trace_id', 1)
     return df
 
 
 def _choose_classifier(job: Job):
+    """Chooses the classifier predictive method using the given job configuration
+
+    :param job:
+    :return:
+    """
     method, config = get_method_config(job)
     config.pop('classification_method', None)
     logger.info("Using method {} with config {}".format(method, config))

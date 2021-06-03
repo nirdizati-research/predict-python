@@ -11,6 +11,7 @@ from rest_framework.renderers import JSONRenderer  # TODO: check module import n
 def publish(object):
     """
     Publish an object to websocket listeners
+
     :param object: A Django predictive_model
     :return: {type: object class name, data: OBJECT}
     """
@@ -19,7 +20,11 @@ def publish(object):
 
 
 def _serializer(object):
-    """Assumed to be Django models"""
+    """Assumed to be Django models
+
+    :param object:
+    :return:
+    """
     name = object.__class__.__name__
     if name == 'Log':
         data = LogSerializer(object).data

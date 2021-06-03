@@ -5,6 +5,11 @@ logger = logging.getLogger(__name__)
 
 
 def create_unique_name(name: str) -> str:
+    """Returns a unique name, using the given name and the time
+
+    :param name:
+    :return:
+    """
     return name.replace('.', '_' + str(time.time()).replace('.', '') + '.')
 
 

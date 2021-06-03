@@ -20,6 +20,11 @@ logger = logging.getLogger(__name__)
 
 
 def import_log_csv(path):
+    """Returns the log, took from the given path
+
+    :param path:
+    :return:
+    """
     return conversion_factory.apply(
         import_event_stream(path),                           # https://pm4py.fit.fraunhofer.de/documentation/1.2
         parameters={constants.PARAMETER_CONSTANT_CASEID_KEY: "case:concept:name",     # this tells the importer
@@ -39,6 +44,14 @@ export_log = {
 
 
 def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
+    """Creates new file log in memory
+
+    :param log:
+    :param name:
+    :param folder:
+    :param import_in_cache:
+    :return:
+    """
     logger.info('\tCreating new file (' + name + ') in memory')
     if import_in_cache:
         name = create_unique_name(name)
@@ -57,7 +70,11 @@ def create_log(log, name: str, folder='cache/log_cache/', import_in_cache=True):
 
 
 def create_properties(log: EventLog) -> dict:
-    """Create read-only dict with methods in this class"""
+    """Create read-only dict with methods in this class
+
+    :param log:
+    :return:
+    """
     return {
         'events': events_by_date(log),
         'resources': resources_by_date(log),
@@ -72,6 +89,11 @@ def create_properties(log: EventLog) -> dict:
 
 
 def get_log_trace_attributes(log: EventLog) -> list:
+    """Returns a list of dict, of traces in the given log
+
+    :param log:
+    :return:
+    """
     return traces_in_log(log)
 
 
@@ -79,6 +101,8 @@ def get_log(log: Log) -> EventLog:
     """Read in event log from disk
 
     Uses xes_importer to parse log.
+    :param log:
+    :return:
     """
     filepath = log.path
     logger.info("\t\tReading in log from {}".format(filepath))

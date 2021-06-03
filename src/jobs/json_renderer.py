@@ -12,6 +12,10 @@ class CustomJSONEncoder(JSONEncoder):
         """Encode the given object and yield each string
         representation as available.
 
+        :param o:
+        :param _one_shot:
+        :return:
+
         For example::
 
             for chunk in JSONEncoder().iterencode(bigobject):
@@ -30,6 +34,15 @@ class CustomJSONEncoder(JSONEncoder):
             _encoder = encode_basestring
 
         def floatstr(o, allow_nan=True, _repr=lambda o: format(o, '.4f'), _inf=INFINITY, _neginf=-INFINITY):
+            """Convert float number into a string
+
+            :param o:
+            :param allow_nan:
+            :param _repr:
+            :param _inf:
+            :param _neginf:
+            :return:
+            """
             # Check for specials.  Note that this type of test is processor
             # and/or platform-specific, so do tests which don't depend on the
             # internals.

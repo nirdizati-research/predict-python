@@ -18,6 +18,12 @@ logger = logging.getLogger(__name__)
 
 @job("default", timeout='100h')
 def prediction_task(job_id, do_publish_result=True):
+    """Predict the task using the given job id
+
+    :param job_id:
+    :param do_publish_result:
+    """
+
     logger.info("Start prediction task ID {}".format(job_id))
     job = Job.objects.get(id=job_id)
 
@@ -58,6 +64,11 @@ def prediction_task(job_id, do_publish_result=True):
 
 
 def save_models(models: dict, job: Job):
+    """Saves the given models in the given job configuration
+
+    :param models:
+    :param job:
+    """
     set_model_name(job)
 
     logger.info("\tStart saving models of JOB {}".format(job.id))

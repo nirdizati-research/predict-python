@@ -7,6 +7,13 @@ from src.encoding.declare.declare_templates import *
 
 
 def apply_template_to_log(template, candidate, log):
+    """returns the log with template applied
+
+    :param template:
+    :param candidate:
+    :param log:
+    :return:
+    """
     results = []
     for trace in log:
         result, vacuity = apply_template(template, log[trace], candidate)
@@ -17,6 +24,15 @@ def apply_template_to_log(template, candidate, log):
 
 
 def find_if_satisfied_by_class(constraint_result, transformed_log, labels, support_true, support_false):
+    """returns two boolean variable show if class is trusted
+
+    :param constraint_result:
+    :param transformed_log:
+    :param labels:
+    :param support_true:
+    :param support_false:
+    :return:
+    """
     fulfill_true = 0
     fulfill_false = 0
     for i, trace in enumerate(transformed_log):
@@ -36,6 +52,17 @@ def find_if_satisfied_by_class(constraint_result, transformed_log, labels, suppo
 
 def generate_train_candidate_constraints(candidates, templates, transformed_log, labels, constraint_support_true,
                                          constraint_support_false, filter_t=True):
+    """returns the train-candidate's constraints
+
+    :param candidates:
+    :param templates:
+    :param transformed_log:
+    :param labels:
+    :param constraint_support_true:
+    :param constraint_support_false:
+    :param filter_t:
+    :return:
+    """
     all_results = {}
     for template in templates:
         print("Started working on {}".format(template))
@@ -57,7 +84,9 @@ def transform_results_to_numpy(results, labels, transformed_log, cols):
     """
     Transforms results structure into numpy arrays
     :param results:
+    :param labels:
     :param transformed_log:
+    :param cols:
     :return:
     """
     labels = [labels[trace] for trace in transformed_log]
@@ -85,6 +114,15 @@ def transform_results_to_numpy(results, labels, transformed_log, cols):
 
 
 def filter_candidates_by_support(candidates, transformed_log, labels, support_true, support_false): #TODO JONAS, no idea what this does
+    """returns candidates filtered using given support_true and support_false
+
+    :param candidates:
+    :param transformed_log:
+    :param labels:
+    :param support_true:
+    :param support_false:
+    :return:
+    """
     filtered_candidates = []
     for candidate in candidates:
         count_false = 0

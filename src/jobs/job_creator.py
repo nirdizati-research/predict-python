@@ -12,6 +12,12 @@ from src.utils.django_orm import duplicate_orm_row
 
 
 def generate(split, payload):
+    """Returns a list of job
+
+    :param split:
+    :param payload:
+    :return:
+    """
     jobs = []
 
     config = payload['config']
@@ -128,6 +134,13 @@ def check_predictive_model_not_overwrite(job: Job) -> None:
 
 
 def get_prediction_method_config(predictive_model, prediction_method, payload):
+    """Returns a dict contain the configuration of prediction method
+
+    :param predictive_model:
+    :param prediction_method:
+    :param payload:
+    :return:
+    """
     return {
         'predictive_model': predictive_model,
         'prediction_method': prediction_method,
@@ -136,6 +149,10 @@ def get_prediction_method_config(predictive_model, prediction_method, payload):
 
 
 def set_model_name(job: Job) -> None:
+    """Sets the model using the given job configuration
+
+    :param job:
+    """
     if job.create_models:
         if job.predictive_model.model_path != '':
             # job.predictive_model = duplicate_orm_row(PredictiveModel.objects.filter(pk=job.predictive_model.pk)[0])  #todo: replace with simple CREATE
@@ -170,6 +187,12 @@ def set_model_name(job: Job) -> None:
 
 
 def generate_labelling(split, payload):
+    """Returns a list of job
+
+    :param split:
+    :param payload:
+    :return:
+    """
     jobs = []
 
     encoding = payload['config']['encoding']
@@ -242,6 +265,13 @@ def generate_labelling(split, payload):
 
 
 def update(split, payload, generation_type=PredictiveModels.CLASSIFICATION.value):  # TODO adapt to allow selecting the predictive_model to update
+    """Returns a list of job
+
+    :param split:
+    :param payload:
+    :param generation_type:
+    :return:
+    """
     jobs = []
 
     config = payload['config']

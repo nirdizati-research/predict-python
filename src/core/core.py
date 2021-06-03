@@ -101,7 +101,7 @@ def run_by_type(training_df: DataFrame, test_df: DataFrame, job: Job) -> (dict, 
 def runtime_calculate(job: Job) -> dict:
     """calculate the prediction for traces in the uncompleted logs
 
-    :param job: job idctionary
+    :param job: job dictionary
     :return: runtime results
     """
 
@@ -112,7 +112,7 @@ def runtime_calculate(job: Job) -> dict:
     return results
 
 
-def replay_prediction_calculate(job: Job, log) -> (dict, dict):
+def replay_prediction_calculate(job: Job, log: EventLog) -> (dict, dict):
     """calculate the prediction for the log coming from replayers
 
     :param job: job dictionary
@@ -146,6 +146,7 @@ def get_run(job: Job) -> str:
 def _label_task(input_dataframe: DataFrame) -> dict:
     """calculates the distribution of labels in the data frame
 
+    :param input_dataframe:
     :return: Dict of string and int {'label1': label1_count, 'label2': label2_count}
 
     """

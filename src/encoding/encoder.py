@@ -25,6 +25,11 @@ class Encoder:
         self._init_encoder(df, encoding)
 
     def _init_encoder(self, df: DataFrame, encoding: Encoding):
+        """initializes the encoder object, creating label encoder for each column in the DataFrame
+
+        :param df:
+        :param encoding:
+        """
         for column in df:
             if column != 'trace_id':
                 if df[column].dtype != int or (df[column].dtype == int and np.any(df[column] < 0)):
@@ -41,6 +46,11 @@ class Encoder:
                         raise ValueError('Please set the encoding technique!')
 
     def encode(self, df: DataFrame, encoding: Encoding) -> None:
+        """Encodes the Dataframe using given encoding technique
+
+        :param df:
+        :param encoding:
+        """
         for column in df:
             if column in self._encoder:
                 if encoding.data_encoding == DataEncodings.LABEL_ENCODER.value:
@@ -51,6 +61,11 @@ class Encoder:
                     raise ValueError('Please set the encoding technique!')
 
     def decode(self, df: DataFrame, encoding: Encoding) -> None:
+        """Decodes the Dataframe using given encoding technique
+
+        :param df:
+        :param encoding:
+        """
         for column in df:
             if column in self._encoder:
                 if encoding.data_encoding == DataEncodings.LABEL_ENCODER.value:

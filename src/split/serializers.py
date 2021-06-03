@@ -13,6 +13,11 @@ class SplitSerializer(serializers.ModelSerializer):
     training_log = serializers.SerializerMethodField()
 
     def get_training_log(self, split):
+        """Returns the training log using the given split
+
+        :param split:
+        :return:
+        """
         return split.train_log.pk if split.train_log is not None else None
 
     class Meta:

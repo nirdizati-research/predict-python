@@ -33,6 +33,14 @@ OPTIMISATION_ALGORITHM = {
 
 
 def _retrieve_train_validate_test(local_train_df, local_test_df):
+    """returns the train validate test
+
+    :param space:
+    :param algorithm_suggest:
+    :param max_evaluations:
+    :param trials:
+    :return:
+    """
     validation_df = local_train_df.tail(# uses last 20% of train set to validate result or at least one trace
         max( int(len(local_train_df) * 20 / 100), 1 )
     )
@@ -41,6 +49,14 @@ def _retrieve_train_validate_test(local_train_df, local_test_df):
 
 
 def _run_hyperoptimisation(space, algorithm_suggest, max_evaluations, trials):
+    """optimizes the given hyperparameter space
+
+    :param space:
+    :param algorithm_suggest:
+    :param max_evaluations:
+    :param trials:
+    :return:
+    """
     try:
         return fmin(_calculate_and_evaluate, space, algo=algorithm_suggest, max_evals=max_evaluations, trials=trials)
     except ValueError:
@@ -48,6 +64,13 @@ def _run_hyperoptimisation(space, algorithm_suggest, max_evaluations, trials):
 
 
 def _test_best_candidate(current_best, job_labelling_type, job_type):
+    """finds the best candidate
+
+    :param current_best:
+    :param job_labelling_type:
+    :param job_type:
+    :return:
+    """
     if job_type == PredictiveModels.CLASSIFICATION.value:
         return classification_test(current_best['model_split'], test_df.drop(['trace_id'], 1),
                      evaluation=True, is_binary_classifier=_check_is_binary_classifier(job_labelling_type))
@@ -56,6 +79,13 @@ def _test_best_candidate(current_best, job_labelling_type, job_type):
 
 
 def run_hyperopt(job, original_training_df, original_test_df):
+    """optimizes the given job configuration
+
+    :param job:
+    :param original_training_df:
+    :param original_test_df:
+    :return:
+    """
     global train_df, test_df, global_job, validation_df
     global_job = job
     train_df, test_df = original_training_df.copy(), original_test_df.copy()

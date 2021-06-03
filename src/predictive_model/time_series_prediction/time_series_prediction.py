@@ -52,6 +52,13 @@ def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer
 
 
 def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Clustering) -> dict:
+    """Initializes and train the predictive model with the given data
+
+    :param train_data:
+    :param time_series_predictor:
+    :param clusterer:
+    :return:
+    """
     models = dict()
 
     train_data = clusterer.cluster_data(train_data)
@@ -68,6 +75,13 @@ def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Cluster
 
 
 def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, float):
+    """Tests the given predictive model with the given data
+
+    :param model_split:
+    :param data:
+    :param evaluation:
+    :return:
+    """
     clusterer = model_split[ModelType.CLUSTERER.value]
     time_series_predictor = model_split[ModelType.TIME_SERIES_PREDICTOR.value]
 
@@ -101,6 +115,12 @@ def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, f
 
 
 def predict(job: Job, data: DataFrame) -> Any:
+    """Returns the predicted results whit time series prediction
+
+    :param job:
+    :param data:
+    :return:
+    """
     model_split = joblib.load(job.predictive_model.model_path)
     clusterer = model_split[ModelType.CLUSTERER.value]
     test_data = clusterer.cluster_data(data)
@@ -122,6 +142,12 @@ def predict(job: Job, data: DataFrame) -> Any:
 
 
 def _prepare_results(df: DataFrame, nlevenshtein: float) -> dict:
+    """Creates the list of results
+
+    :param df:
+    :param nlevenshtein:
+    :return:
+    """
     actual = np.array(df['actual'].values.tolist())
     predicted = np.array(df['predicted'].values.tolist())
     row = calculate_results_time_series_prediction(actual, predicted)
@@ -130,12 +156,23 @@ def _prepare_results(df: DataFrame, nlevenshtein: float) -> dict:
 
 
 def _drop_columns(train_df: DataFrame, test_df: DataFrame) -> (DataFrame, DataFrame):
+    """Drops the column trace_id of given DataFrame
+
+    :param training_df:
+    :param test_df:
+    :return:
+    """
     train_df = train_df.drop(['trace_id', 'label'], 1)
     test_df = test_df.drop(['trace_id', 'label'], 1)
     return train_df, test_df
 
 
 def _choose_time_series_predictor(job: Job) -> TimeSeriesPredictorMixin:
+    """Chooses the time series predictor predictive method using the given job configuration
+
+    :param job:
+    :return:
+    """
     method, config = get_method_config(job)
     config.pop('time_series_prediction_method', None)
     logger.info("Using method {} with config {}".format(method, config))

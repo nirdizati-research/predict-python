@@ -26,6 +26,13 @@ repair_example_filepath = 'cache/log_cache/test_logs/repair_example.xes'
 
 def create_test_log(log_name: str = 'general_example.xes',
                     log_path: str = 'cache/log_cache/test_logs/general_example.xes') -> Log:
+    """
+    Gets or creates a new log
+
+    :param log_name:
+    :param log_path:
+    :return:
+    """
     log = Log.objects.get_or_create(name=log_name, path=log_path)[0]
     return log
 
@@ -36,6 +43,17 @@ def create_test_split(split_type: str = SplitTypes.SPLIT_SINGLE.value,
                       original_log: Log = None,
                       train_log: Log = None,
                       test_log: Log = None):
+    """
+    Gets or creates a test split
+
+    :param split_type:
+    :param split_ordering_method:
+    :param test_size:
+    :param original_log:
+    :param train_log:
+    :param test_log:
+    :return:
+    """
     if split_type == SplitTypes.SPLIT_SINGLE.value:
         if original_log is None:
             original_log = create_test_log()
@@ -66,6 +84,21 @@ def create_test_encoding(prefix_length: int = 1,
                          add_executed_events: bool = False,
                          task_generation_type: str = TaskGenerationTypes.ONLY_THIS.value,
                          data_encoding: str = DataEncodings.LABEL_ENCODER.value) -> Encoding:
+    """
+    Gets or creates the test encoding
+
+    :param prefix_length:
+    :param padding:
+    :param value_encoding:
+    :param add_elapsed_time:
+    :param add_remaining_time:
+    :param add_resources_used:
+    :param add_new_traces:
+    :param add_executed_events:
+    :param task_generation_type:
+    :param data_encoding:
+    :return:
+    """
     encoding = Encoding.objects.get_or_create(
         data_encoding=data_encoding,
         value_encoding=value_encoding,
@@ -84,6 +117,15 @@ def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
                           attribute_name: str = None,
                           threshold_type: str = ThresholdTypes.THRESHOLD_MEAN.value,
                           threshold: float = 0.0) -> Labelling:
+    """
+    Gets or creates test labelling
+
+    :param label_type:
+    :param attribute_name:
+    :param threshold:
+    :param threshold_type:
+    :return:
+    """
     labelling = Labelling.objects.get_or_create(
         type=label_type,
         attribute_name=attribute_name,
@@ -95,6 +137,13 @@ def create_test_labelling(label_type: str = LabelTypes.NEXT_ACTIVITY.value,
 
 def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.value,
                            configuration: dict = {}) -> Clustering:
+    """
+    Gets or creates the test clustering
+
+    :param clustering_type:
+    :param configuration:
+    :return:
+    """
     clustering = Clustering.init(clustering_type, configuration)
     return clustering
 
@@ -102,6 +151,14 @@ def create_test_clustering(clustering_type: str = ClusteringMethods.NO_CLUSTER.v
 def create_test_predictive_model(predictive_model: str = PredictiveModels.CLASSIFICATION.value,
                                  prediction_method: str = ClassificationMethods.RANDOM_FOREST.value,
                                  configuration: dict = {}) -> PredictiveModel:
+    """
+    Gets or creates the test predictive model
+
+    :param predictive_model:
+    :param prediction_method:
+    :param configuration:
+    :return:
+    """
     pred_model = PredictiveModel.init(get_prediction_method_config(predictive_model, prediction_method, configuration))
     return pred_model
 
@@ -109,6 +166,14 @@ def create_test_predictive_model(predictive_model: str = PredictiveModels.CLASSI
 def create_test_hyperparameter_optimizer(hyperoptim_type: str = HyperparameterOptimizationMethods.HYPEROPT.value,
                                          performance_metric: HyperOptLosses = HyperOptLosses.ACC.value,
                                          max_evals: int = 10):
+    """
+    Gets or creates the test hyperparemeter optimizer
+
+    :param hyperoptim_type:
+    :param performance_metric:
+    :param max_evals:
+    :return:
+    """
     hyperparameter_optimization = HyperparameterOptimization.init({'type': hyperoptim_type,
                                                                    'performance_metric': performance_metric,
                                                                    'max_evals': max_evals})
@@ -124,6 +189,20 @@ def create_test_job(split: Split = None,
                     job_type=JobTypes.PREDICTION.value,
                     hyperparameter_optimizer: HyperparameterOptimization = None,
                     incremental_train : Job = None):
+    """
+    Gets or creates the test job
+
+    :param split:
+    :param encoding:
+    :param labelling:
+    :param clustering:
+    :param create_models:
+    :param predictive_model:
+    :param job_type:
+    :param hyperparameter_optimizer:
+    :param incremental_train:
+    :return:
+    """
     job, _ = Job.objects.get_or_create(
         status=JobStatuses.CREATED.value,
         type=job_type,

@@ -9,10 +9,26 @@ from src.labelling.models import Labelling
 
 
 def boolean(log: EventLog, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
+    """Encodes the log using boolean encoding
+
+    :param log:
+    :param event_names:
+    :param label:
+    :param encoding:
+    :return:
+    """
     return _encode_boolean_frequency(log, event_names, label, encoding)
 
 
 def frequency(log: EventLog, event_names: list, label: Labelling, encoding: Encoding) -> DataFrame:
+    """Encodes the log using frequency encoding
+
+    :param log:
+    :param event_names:
+    :param label:
+    :param encoding:
+    :return:
+    """
     return _encode_boolean_frequency(log, event_names, label, encoding)
 
 
@@ -21,6 +37,10 @@ def _encode_boolean_frequency(log: EventLog, event_names: list, labelling: Label
     """Encodes the log by boolean or frequency
 
     trace_id, event_nr, event_names, label stuff
+    :param log:
+    :param event_names:
+    :param label:
+    :param encoding:
     :return pandas DataFrame
     """
     columns = _create_columns(event_names, encoding, labelling)
@@ -46,7 +66,12 @@ def _encode_boolean_frequency(log: EventLog, event_names: list, labelling: Label
 
 
 def _create_event_happened(event_names: list, encoding: Encoding) -> list:
-    """Creates list of event happened placeholders"""
+    """Creates list of event happened placeholders
+
+    :param event_names:
+    :param encoding:
+    :return:
+    """
     if encoding.value_encoding == ValueEncodings.BOOLEAN.value:
         return [False] * len(event_names)
     return [0] * len(event_names)
@@ -57,6 +82,11 @@ def _update_event_happened(event, event_names: list, event_happened: list, encod
 
     For boolean set happened to True.
     For frequency updates happened count.
+    :param event
+    :param event_names:
+    :param event_happened:
+    :param encoding:
+    :return:
     """
     event_name = event['concept:name']
     if event_name in event_names:
@@ -68,6 +98,13 @@ def _update_event_happened(event, event_names: list, event_happened: list, encod
 
 
 def _create_columns(event_names: list, encoding: Encoding, labelling: Labelling) -> list:
+    """Returns a new columns
+
+    :param event_names:
+    :param encoding:
+    :param labelling:
+    :return:
+    """
     columns = ["trace_id"]
     columns = list(np.append(columns, event_names).tolist())
     return compute_label_columns(columns, encoding, labelling)
@@ -75,6 +112,21 @@ def _create_columns(event_names: list, encoding: Encoding, labelling: Labelling)
 
 def _trace_to_row(trace: Trace, encoding: Encoding, event_index: int, labelling: Labelling = None, executed_events=None,
                   resources_used=None, new_traces=None, event_names=None, atr_classifier=None):
+    """Transforms trace into a list comprehension
+
+    :param trace:
+    :param encoding:
+    :param labelling:
+    :param event_index:
+    :param data_fun:
+    :param columns_len:
+    :param atr_classifier:
+    :param executed_events:
+    :param resources_used:
+    :param new_traces:
+    :param additional_columns
+    :return:
+    """
     # starts with all False, changes to event
     event_happened = _create_event_happened(event_names, encoding)
     trace_row = []

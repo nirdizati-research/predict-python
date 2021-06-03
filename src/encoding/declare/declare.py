@@ -29,6 +29,15 @@ def xes_to_positional(log, label=True):
 
 
 def declare_encoding(log, labelling, encoding, additional_columns, cols=None): #TODO JONAS
+    """creates and returns the DataFrame encoded using the declare encoding
+
+    :param log:
+    :param labelling:
+    :param encoding:
+    :param additional_columns:
+    :param cols:
+    :return:
+    """
     filter_t = True
     print("Filter_t", filter_t)
     templates = template_sizes.keys()

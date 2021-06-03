@@ -10,5 +10,10 @@ class CustomXMLParser(BaseParser):
     def parse(self, stream, media_type=None, parser_context=None):
         """
         Simply return a string representing the body of the request.
+
+        :param stream:
+        :param media_type:
+        :param parser_context:
+        :return:
         """
         return stream.read()

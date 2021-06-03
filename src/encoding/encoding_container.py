@@ -53,6 +53,10 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
 
     @staticmethod
     def encode(df: DataFrame) -> None:
+        """Encodes the Dataframe
+
+        :param df:
+        """
         for column in df:
             if column in encoder:
                 if ENCODING == DataEncodings.LABEL_ENCODER.value:
@@ -67,6 +71,10 @@ class EncodingContainer(namedtuple('EncodingContainer', ['method', 'prefix_lengt
 
     @staticmethod
     def init_label_encoder(df: DataFrame) -> None:
+        """creates the encoder
+
+        :param df:
+        """
         for column in df:
             if column != 'trace_id':
                 if df[column].dtype != int or (df[column].dtype == int and pd.np.any(df[column] < 0)):

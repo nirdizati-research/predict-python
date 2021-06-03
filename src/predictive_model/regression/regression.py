@@ -133,7 +133,7 @@ def regression_single_log(input_df: DataFrame, model: dict) -> DataFrame:
 
 
 def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clustering, do_cv=False) -> dict:
-    """
+    """Initializes and train the predictive model with the given data
 
     :param train_data:
     :param regressor:
@@ -176,7 +176,7 @@ def _train(train_data: DataFrame, regressor: RegressorMixin, clusterer: Clusteri
 
 
 def _test(model_split: dict, data: DataFrame) -> DataFrame:
-    """
+    """Tests the given predictive model with the given data
 
     :param model_split:
     :param data:

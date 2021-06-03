@@ -113,7 +113,7 @@ def update_and_test(training_df: DataFrame, test_df: DataFrame, job: Job):
 
 
 def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Clustering) -> dict:
-    """
+    """Initializes and train the predictive model with the given data
 
     :param train_data:
     :param classifier:
@@ -146,7 +146,7 @@ def _train(train_data: DataFrame, classifier: ClassifierMixin, clusterer: Cluste
 
 
 def _update(job: Job, data: DataFrame) -> dict:
-    """
+    """Updates the existing model
 
     :param job:
     :param data:
@@ -187,7 +187,7 @@ def _update(job: Job, data: DataFrame) -> dict:
 
 
 def _test(model_split: dict, test_data: DataFrame, evaluation: bool, is_binary_classifier: bool) -> (DataFrame, float):
-    """
+    """Tests the given predictive model with the given data
 
     :param model_split:
     :param test_data:

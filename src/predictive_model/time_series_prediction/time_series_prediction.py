@@ -52,7 +52,7 @@ def time_series_prediction(training_df: DataFrame, test_df: DataFrame, clusterer
 
 
 def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Clustering) -> dict:
-    """
+    """Initializes and train the predictive model with the given data
 
     :param train_data:
     :param time_series_predictor:
@@ -75,7 +75,7 @@ def _train(train_data: DataFrame, time_series_predictor: Any, clusterer: Cluster
 
 
 def _test(model_split: dict, data: DataFrame, evaluation: bool) -> (DataFrame, float):
-    """
+    """Tests the given predictive model with the given data
 
     :param model_split:
     :param data:
